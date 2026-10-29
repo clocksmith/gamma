@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68c4484970268e95f5f43d5e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "edges"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minActivatedServers",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "edges",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "compute every reachable set by breadth-first search; a server is needed in a source class when every server reaching it is reachable from it; count those mutual-reachability classes",
+  "candidate_design": "iterative Tarjan strongly connected components, then count components with no incoming edge from another component",
+  "complexity_target": "O(n + e) time/O(n + e) space"
+ },
+ "source_sha256": "4ef55885e11fd7d85d96e942e2b24f513d753919497308c35972b8a8e4e8bcf4",
+ "wrapper": "Solution.minActivatedServers"
+}

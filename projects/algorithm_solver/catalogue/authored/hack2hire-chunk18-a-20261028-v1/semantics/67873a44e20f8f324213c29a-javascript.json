@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67873a44e20f8f324213c29a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "power"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minimalIncreaseSum",
+  "params": [
+   {
+    "name": "power",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every non-decreasing target array between power and max(power), price the increments d by sum of max(0, d[i] - d[i - 1]) and keep the cheapest",
+  "candidate_design": "every drop power[i - 1] > power[i] needs operations starting at i worth at least the drop, and raising suffixes achieves exactly that; sum the drops",
+  "complexity_target": "O(n) time/O(1) space"
+ },
+ "source_sha256": "0ea4e0c28a322d0b5b8d6836239131310e41818a6df6447b0d10bcaf42cf8e04",
+ "wrapper": "named export minimalIncreaseSum"
+}

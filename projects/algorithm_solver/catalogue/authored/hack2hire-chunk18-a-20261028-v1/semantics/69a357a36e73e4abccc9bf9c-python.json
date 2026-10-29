@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a357a36e73e4abccc9bf9c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "matrix",
+  "commands"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "transformMatrix",
+  "params": [
+   {
+    "name": "matrix",
+    "type": "integer[][]"
+   },
+   {
+    "name": "commands",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "copy the matrix and apply every command directly: slice-reverse a row or exchange two rows",
+  "candidate_design": "keep a row order permutation and one reversed flag per original row; a swap exchanges two permutation entries and a reversal flips a flag, then build the result once at the end",
+  "complexity_target": "O(n * m + commands) time/O(n * m) space for the output"
+ },
+ "source_sha256": "83f9e50ad4197517f47524741cc22f6551552950818828d7c34ebacd8ec3cf00",
+ "wrapper": "Solution.transformMatrix"
+}

@@ -1,0 +1,414 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68f5af2ca269f53ea0eff89f:68f5af31a269f53ea0eff8a0:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+   "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68f5af2ca269f53ea0eff89f.json",
+   "sha256": "3ee555a46da6f65e3e9bd047b5ce24668bc26ba554aa71638f1318718bc557de",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+   "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+   "selector": "/variants/hack2hire:68f5af31a269f53ea0eff8a0"
+  }
+ ],
+ "problemId": "hack2hire:68f5af2ca269f53ea0eff89f",
+ "variantId": "68f5af31a269f53ea0eff8a0",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: group with the largest top-k similarity sum",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:68f5af31a269f53ea0eff8a0/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "similarityScores is a non-empty list of non-negative integers; similarityScores[i] is the similarity of target movie i. groups is a non-empty list of non-empty lists of distinct movie ids in range. k is a positive integer. The score of a group is the sum of its k highest similarity scores (all of them when the group has fewer than k movies). Return the index of the group with the highest score; on equal scores return the smallest index.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "similarityScores is a non-empty list of non-negative integers; similarityScores[i] is the similarity of target movie i.",
+   "groups is a non-empty list of non-empty lists of distinct movie ids in range.",
+   "k is a positive integer.",
+   "The score of a group is the sum of its k highest similarity scores (all of them when the group has fewer than k movies).",
+   "Return the index of the group with the highest score; on equal scores return the smallest index."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= similarityScores.length <= 1e5",
+   "0 <= similarityScores[i] <= 1e9",
+   "1 <= groups.length <= 1e5, total group size <= 2e5",
+   "each group is non-empty with distinct ids in [0, similarityScores.length - 1]",
+   "1 <= k <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:68f5af31a269f53ea0eff8a0/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: a recommender has a liked source movie, a similarity score per target movie (index i), a list of groups of target movie ids and an integer k saying how many top movies of each group to consider (the preview stops before the scoring rule and the output); algorithmTags: HEAP; preview response sha256 b128da8bf52f23933351688c351a688d38d732406f6c7fb53e7e748d17162555"
+   },
+   {
+    "statement": "Uncertainty: high: the inputs are in the preview; the group score as the sum of the top k scores, returning a group index, the smallest-index tie rule, integer scores, the function name and the bounds are inferred because the preview stops before the rule and the output",
+    "basis": "the public group preview is partial (400 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is a group scored: the sum, the average or the minimum of its top k scores?",
+   "What if a group has fewer than k movies?",
+   "Is the answer a group index, the group itself or its score, and how are ties broken?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:68f5af31a269f53ea0eff8a0/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      7
+     ],
+     [
+      [
+       0
+      ]
+     ],
+     1
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      7,
+      0,
+      6,
+      4,
+      2,
+      7,
+      5,
+      7,
+      1,
+      7,
+      4
+     ],
+     [
+      [
+       8,
+       6,
+       4,
+       1,
+       0,
+       7,
+       5
+      ],
+      [
+       4,
+       8,
+       1,
+       10,
+       6,
+       7,
+       2,
+       3,
+       0,
+       9,
+       5
+      ],
+      [
+       9,
+       3,
+       1,
+       10,
+       0,
+       6,
+       4,
+       5,
+       2
+      ],
+      [
+       7,
+       4,
+       8,
+       1,
+       0,
+       5,
+       2,
+       6
+      ],
+      [
+       6,
+       1,
+       2,
+       8,
+       5,
+       4,
+       10,
+       3,
+       9,
+       7,
+       0
+      ],
+      [
+       1,
+       2,
+       7
+      ]
+     ],
+     4
+    ],
+    "output": 1,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:68f5af31a269f53ea0eff8a0/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/oracles.py",
+    "sha256": "27eec77be3897b1b39845d98790d308219285bbb24c1b6b602441df5d37dcf85",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findHighestScoringGroup(similarityScores, groups, k) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/68f5af31a269f53ea0eff8a0-python.json",
+     "inferredInterface": {
+      "name": "findHighestScoringGroup",
+      "params": [
+       {
+        "name": "similarityScores",
+        "type": "integer[]"
+       },
+       {
+        "name": "groups",
+        "type": "integer[][]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/68f5af31a269f53ea0eff8a0-python.json",
+      "sha256": "c766814b0d19236d3f74bbd911dd7164e239546a28387c4c2911ad29e9dc68ae",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findHighestScoringGroup(similarityScores, groups, k) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/68f5af31a269f53ea0eff8a0-javascript.json",
+     "inferredInterface": {
+      "name": "findHighestScoringGroup",
+      "params": [
+       {
+        "name": "similarityScores",
+        "type": "integer[]"
+       },
+       {
+        "name": "groups",
+        "type": "integer[][]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/68f5af31a269f53ea0eff8a0-javascript.json",
+      "sha256": "4a607e141f550c91615a7a274fce00f2b19682177858ff172fd35024732f9b35",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

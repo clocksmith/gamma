@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+   "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+   "selector": "/problems/hack2hire:67873a44e20f8f324213c29a"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+   "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+   "selector": "/variants/hack2hire:67873a44e20f8f324213c29a"
+  }
+ ],
+ "problemId": "hack2hire:678738d8e20f8f324213c299",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/contract--contract_hack2hire_678738d8e20f8f324213c299_67873a44e20f8f324213c29a_authored-v1.json",
+  "sha256": "cfeccb76c5d3d00991dd589b3dfc7bb0180156861d3a0ec2adba4f99f06a1a8b"
+ },
+ "title": {
+  "status": "present",
+  "value": "every drop power[i - 1] > power[i] needs operations starting at i worth at least the drop, and raising suffixes achieves exactly that; sum the drops",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+    "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+    "selector": "/problems/hack2hire:67873a44e20f8f324213c29a/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "every drop power[i - 1] > power[i] needs operations starting at i worth at least the drop, and raising suffixes achieves exactly that; sum the drops. Complexity target: O(n) time/O(1) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+    "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+    "selector": "/problems/hack2hire:67873a44e20f8f324213c29a"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Range-increment problems that reduce to adjacent differences"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:67873a44e20f8f324213c29a/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "The drop sum is linear; searching over target arrays is exponential and only serves as a check"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:67873a44e20f8f324213c29a/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "after fixing drops 1..i by raising suffixes, the prefix 0..i is non-decreasing",
+   "each drop contributes exactly its size"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:67873a44e20f8f324213c29a/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Look at each adjacent pair where the power drops.",
+   "An operation that starts exactly at i can close the drop before i; an operation covering both servers cannot.",
+   "Raise the whole suffix from i by the drop power[i - 1] - power[i]; the sum of all drops is both achievable and necessary."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:67873a44e20f8f324213c29a/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "every drop power[i - 1] > power[i] needs operations starting at i worth at least the drop, and raising suffixes achieves exactly that; sum the drops",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:67873a44e20f8f324213c29a/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) time/O(1) space; the independent reference (enumerate every non-decreasing target array between power and max(power), price the increments d by sum of max(0, d[i] - d[i - 1]) and keep the cheapest) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look at each adjacent pair where the power drops.",
+     "An operation that starts exactly at i can close the drop before i; an operation covering both servers cannot."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_678738d8e20f8f324213c299_67873a44e20f8f324213c29a_approach-native_v1.json",
+    "sha256": "99501a5dbfd65a0e0b71cd0122fe4b91c294821e9cc744f616dba6b1db512a82"
+   }
+  },
+  {
+   "id": "approach:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper minimalIncreaseSum, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Raise the whole suffix from i by the drop power[i - 1] - power[i]; the sum of all drops is both achievable and necessary."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_678738d8e20f8f324213c299_67873a44e20f8f324213c29a_python_v1.json",
+     "sha256": "05d836104125397c8b34e445bb70067d7b5500b2948e0355ff33deeca81f534e"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_678738d8e20f8f324213c299_67873a44e20f8f324213c29a_javascript_v1.json",
+     "sha256": "2b849311d963570c4ae62062c7d34f4fa946e5889a6df135f742e7e139619f4f"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_678738d8e20f8f324213c299_67873a44e20f8f324213c29a_approach-native_v1.json",
+    "sha256": "99501a5dbfd65a0e0b71cd0122fe4b91c294821e9cc744f616dba6b1db512a82"
+   }
+  },
+  {
+   "id": "approach:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (enumerate every non-decreasing target array between power and max(power), price the increments d by sum of max(0, d[i] - d[i - 1]) and keep the cheapest) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:67873a44e20f8f324213c29a/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/3/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare the inferred wrapper with solve on every case.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/test_oracles.py",
+      "sha256": "01524d795d31eeeb79dcab2e66b1bcaca727d03c7be98b13fe1a78b81e4a16dc",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67873a44e20f8f324213c29a"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_678738d8e20f8f324213c299_67873a44e20f8f324213c29a_approach-native_v1.json",
+    "sha256": "99501a5dbfd65a0e0b71cd0122fe4b91c294821e9cc744f616dba6b1db512a82"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:678738d8e20f8f324213c299:67873a44e20f8f324213c29a:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_678738d8e20f8f324213c299_67873a44e20f8f324213c29a_approach-native_v1.json",
+  "sha256": "99501a5dbfd65a0e0b71cd0122fe4b91c294821e9cc744f616dba6b1db512a82"
+ }
+}

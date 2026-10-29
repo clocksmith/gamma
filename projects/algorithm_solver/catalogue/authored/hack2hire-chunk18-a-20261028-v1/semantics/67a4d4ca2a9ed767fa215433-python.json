@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67a4d4ca2a9ed767fa215433",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "a"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maximizeNegativeSigns",
+  "params": [
+   {
+    "name": "a",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every sign assignment (a[0] must be plus) and keep the largest number of minus signs whose prefix sums all stay positive",
+  "candidate_design": "scan left to right, tentatively negate every element and push it on a max-heap; while the running sum is not positive, flip the largest negated value back to plus; the heap size at the end is the answer",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "f93b7e5bb6945e14da4276caa4235e560e565c18d52cfa70153c765bf191b7b1",
+ "wrapper": "Solution.maximizeNegativeSigns"
+}

@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:677de038052a260e01657067:677de134052a260e01657068:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+   "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+   "selector": "/problems/hack2hire:677de134052a260e01657068"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+   "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+   "selector": "/variants/hack2hire:677de134052a260e01657068"
+  }
+ ],
+ "problemId": "hack2hire:677de038052a260e01657067",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:677de038052a260e01657067:677de134052a260e01657068:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/contract--contract_hack2hire_677de038052a260e01657067_677de134052a260e01657068_authored-v1.json",
+  "sha256": "b0966ba815d4514a50dc653b8b739af65b30f50c6387b17680ffb62381f01941"
+ },
+ "title": {
+  "status": "present",
+  "value": "the largest peak at c is min(c + 1, n - c, min over i of arr[i] + |i - c|); compute the inner minimum with one left-to-right and one right-to-left pass and subtract the best k * k from sum(arr)",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+    "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+    "selector": "/problems/hack2hire:677de134052a260e01657068/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "the largest peak at c is min(c + 1, n - c, min over i of arr[i] + |i - c|); compute the inner minimum with one left-to-right and one right-to-left pass and subtract the best k * k from sum(arr). Complexity target: O(n) time/O(n) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+    "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+    "selector": "/problems/hack2hire:677de134052a260e01657068"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Fitting the largest pyramid under a skyline"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:677de134052a260e01657068/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Two linear passes replace trying every peak and height"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:677de134052a260e01657068/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "left[c] = min(arr[c], left[c - 1] + 1) is the minimum of arr[i] + c - i over i <= c",
+   "a peak k fits at c exactly when k <= min(c + 1, n - c, left[c], right[c])"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:677de134052a260e01657068/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Only lowering is allowed, so the cost is sum(arr) minus the sum of the target, and a 1..k..1 block sums to k * k.",
+   "A peak k at position c fits when arr[i] >= k - |i - c| for every i in the block, that is k <= arr[i] + |i - c|.",
+   "Compute min over i of arr[i] + |i - c| for every c with a forward pass and a backward pass, cap by the distance to both ends, and take the best k."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:677de134052a260e01657068/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:677de038052a260e01657067:677de134052a260e01657068:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "the largest peak at c is min(c + 1, n - c, min over i of arr[i] + |i - c|); compute the inner minimum with one left-to-right and one right-to-left pass and subtract the best k * k from sum(arr)",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:677de134052a260e01657068/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) time/O(n) space; the independent reference (for every peak position, try every peak height from the largest that fits the array ends downwards and check every block cell directly) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Only lowering is allowed, so the cost is sum(arr) minus the sum of the target, and a 1..k..1 block sums to k * k.",
+     "A peak k at position c fits when arr[i] >= k - |i - c| for every i in the block, that is k <= arr[i] + |i - c|."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:677de038052a260e01657067:677de134052a260e01657068:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677de038052a260e01657067_677de134052a260e01657068_approach-native_v1.json",
+    "sha256": "7c9f4c19f535b612f1490715034be6883d1e83c00ba955800e10278b8c5773c4"
+   }
+  },
+  {
+   "id": "approach:hack2hire:677de038052a260e01657067:677de134052a260e01657068:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper minOperationsToBitonic, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Compute min over i of arr[i] + |i - c| for every c with a forward pass and a backward pass, cap by the distance to both ends, and take the best k."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:677de038052a260e01657067:677de134052a260e01657068:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677de038052a260e01657067_677de134052a260e01657068_python_v1.json",
+     "sha256": "efa7c964b6c8f41391cbeb5beffe9bf8f08123dbbb2e756ecc7506db90a42503"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:677de038052a260e01657067:677de134052a260e01657068:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677de038052a260e01657067_677de134052a260e01657068_javascript_v1.json",
+     "sha256": "81efc56629b71458de552af88a9e78c63a665afbda757afdf9fb7b610fd428cd"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:677de038052a260e01657067:677de134052a260e01657068:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677de038052a260e01657067_677de134052a260e01657068_approach-native_v1.json",
+    "sha256": "7c9f4c19f535b612f1490715034be6883d1e83c00ba955800e10278b8c5773c4"
+   }
+  },
+  {
+   "id": "approach:hack2hire:677de038052a260e01657067:677de134052a260e01657068:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (for every peak position, try every peak height from the largest that fits the array ends downwards and check every block cell directly) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:677de134052a260e01657068/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/2/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare the inferred wrapper with solve on every case.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/test_oracles.py",
+      "sha256": "01524d795d31eeeb79dcab2e66b1bcaca727d03c7be98b13fe1a78b81e4a16dc",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:677de134052a260e01657068"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:677de038052a260e01657067:677de134052a260e01657068:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677de038052a260e01657067_677de134052a260e01657068_approach-native_v1.json",
+    "sha256": "7c9f4c19f535b612f1490715034be6883d1e83c00ba955800e10278b8c5773c4"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:677de038052a260e01657067:677de134052a260e01657068:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677de038052a260e01657067_677de134052a260e01657068_approach-native_v1.json",
+  "sha256": "7c9f4c19f535b612f1490715034be6883d1e83c00ba955800e10278b8c5773c4"
+ }
+}
