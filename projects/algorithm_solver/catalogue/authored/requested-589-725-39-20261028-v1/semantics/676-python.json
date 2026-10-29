@@ -1,0 +1,61 @@
+{
+  "candidate_design": "wildcard-position patterns store a26-letter bitset; exclude the unchanged letter",
+  "comparison": "exact typed result under documented object transport",
+  "complexity_target": "build O(sum L^2), search O(L^2), O(sum L^2) character storage",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "classname": "MagicDictionary",
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "buildDict",
+        "params": [
+          {
+            "name": "dictionary",
+            "type": "string[]"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "search",
+        "params": [
+          {
+            "name": "searchWord",
+            "type": "string"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 676,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "wildcard-position patterns store a26-letter bitset; exclude the unchanged letter",
+    "complexity_target": "build O(sum L^2), search O(L^2), O(sum L^2) character storage",
+    "reference": "all dictionary words, count positional mismatches"
+  },
+  "source_sha256": "9762ff3ef72ad02898ed46da06e2a55eb37c048117214b44870d326326286e9e",
+  "transport": "class operation trace preserving constructor/method parameter order"
+}

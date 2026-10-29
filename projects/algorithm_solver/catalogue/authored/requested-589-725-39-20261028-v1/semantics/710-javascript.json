@@ -1,0 +1,71 @@
+{
+  "candidate_design": "bijection from compact uniform ticket range onto allowed values; remap only blocked low tickets",
+  "comparison": "valid random support; exhaustive small injected-ticket bijection, no cross-language random-sequence comparison",
+  "complexity_target": "O(B) expected construction/storage, O(1) expected pick; assumes uniform runtime RNG",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "classname": "Solution",
+    "constructor": {
+      "params": [
+        {
+          "name": "n",
+          "type": "integer"
+        },
+        {
+          "name": "blacklist",
+          "type": "integer[]"
+        },
+        {
+          "lang": "c",
+          "name": "blacklistSize",
+          "type": "integer",
+          "value": "size_2"
+        }
+      ]
+    },
+    "maxbytesperline": 200000,
+    "methods": [
+      {
+        "name": "pick",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "params": [
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      },
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "dealloc": true,
+      "type": "list<String>"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 710,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "bijection from compact uniform ticket range onto allowed values; remap only blocked low tickets",
+    "complexity_target": "O(B) expected construction/storage, O(1) expected pick; assumes uniform runtime RNG",
+    "reference": "literal allowed support and exhaustive small ticket bijection checks"
+  },
+  "source_sha256": "b624173a484e28d925de5ece8de97bdc7f4b61e06c9b7ca5002777c40724640c",
+  "transport": "class operation trace preserving constructor/method parameter order"
+}

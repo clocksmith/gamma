@@ -1,0 +1,77 @@
+{
+  "candidate_design": "direct-address signed integer storage with absent sentinel; no built-in hash table used",
+  "comparison": "exact typed result under documented object transport",
+  "complexity_target": "O(U) initialization/storage, O(1) per method; U=1000001",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "classname": "MyHashMap",
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "put",
+        "params": [
+          {
+            "name": "key",
+            "type": "integer"
+          },
+          {
+            "name": "value",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "key",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      },
+      {
+        "name": "remove",
+        "params": [
+          {
+            "name": "key",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 706,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "direct-address signed integer storage with absent sentinel; no built-in hash table used",
+    "complexity_target": "O(U) initialization/storage, O(1) per method; U=1000001",
+    "reference": "independent built-in dictionary model"
+  },
+  "source_sha256": "67e733422a3bf652baadc9bae444bb3226b9aa80a333cafb4961e87f6cbdffad",
+  "transport": "class operation trace preserving constructor/method parameter order"
+}

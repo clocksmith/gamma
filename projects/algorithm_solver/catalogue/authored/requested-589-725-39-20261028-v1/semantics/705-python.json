@@ -1,0 +1,73 @@
+{
+  "candidate_design": "direct-address byte storage; no built-in hash table used",
+  "comparison": "exact typed result under documented object transport",
+  "complexity_target": "O(U) initialization/storage, O(1) per method; U=1000001",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "classname": "MyHashSet",
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "add",
+        "params": [
+          {
+            "name": "key",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "remove",
+        "params": [
+          {
+            "name": "key",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "contains",
+        "params": [
+          {
+            "name": "key",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 705,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "direct-address byte storage; no built-in hash table used",
+    "complexity_target": "O(U) initialization/storage, O(1) per method; U=1000001",
+    "reference": "independent built-in set model"
+  },
+  "source_sha256": "5826e13282d0fa7e4c0168e91dcc6e65eaf483dd2ecd9baaf03d7e907bea6b75",
+  "transport": "class operation trace preserving constructor/method parameter order"
+}

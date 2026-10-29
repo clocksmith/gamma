@@ -1,0 +1,59 @@
+{
+  "candidate_design": "ID lookup and iterative reachability sum",
+  "comparison": "exact typed result under documented object transport",
+  "complexity_target": "O(n) expected time/O(n) space",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "python",
+  "manual_metadata_type_note": "Official metaData uses a manual placeholder type; native object ABI follows the pinned official code stub and documented transport.",
+  "official_interface": {
+    "languages": [
+      "cpp",
+      "java",
+      "python",
+      "ruby",
+      "python3",
+      "kotlin",
+      "scala",
+      "csharp",
+      "javascript",
+      "swift",
+      "golang",
+      "php",
+      "typescript"
+    ],
+    "manual": true,
+    "name": "getImportance",
+    "params": [
+      {
+        "name": "employees",
+        "type": "list<string>"
+      },
+      {
+        "name": "id",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    },
+    "typescriptCustomType": "class Employee {\n    id: number;\n    importance: number;\n    subordinates: number[];\n    constructor(id: number, importance: number, subordinates: number[]) {\n        this.id = (id === undefined) ? 0 : id;\n        this.importance = (importance === undefined) ? 0 : importance;\n        this.subordinates = (subordinates === undefined) ? [] : subordinates;\n    }\n}"
+  },
+  "parameters": [
+    "employees",
+    "id"
+  ],
+  "problem_id": 690,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "ID lookup and iterative reachability sum",
+    "complexity_target": "O(n) expected time/O(n) space",
+    "reference": "fixed-point subordinate reachability"
+  },
+  "source_sha256": "9558b5e94040f74bb74881147ceadf39c0d2a63fbb3b0b09012c35f408a8ea45",
+  "transport": "employee triples converted to native .id/.importance/.subordinates objects"
+}

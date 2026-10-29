@@ -1,0 +1,46 @@
+{
+  "candidate_design": "clone input tree, then insert row under the selected parent level",
+  "comparison": "exact typed result under documented object transport",
+  "complexity_target": "O(n) time/O(n) space including fresh output",
+  "effects": "arguments unchanged; fresh output nodes, disjoint from input and other output parts",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "addOneRow",
+    "params": [
+      {
+        "name": "root",
+        "type": "TreeNode"
+      },
+      {
+        "name": "val",
+        "type": "integer"
+      },
+      {
+        "name": "depth",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "TreeNode"
+    }
+  },
+  "parameters": [
+    "root",
+    "val",
+    "depth"
+  ],
+  "problem_id": 623,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "clone input tree, then insert row under the selected parent level",
+    "complexity_target": "O(n) time/O(n) space including fresh output",
+    "reference": "recursive tuple-tree insertion and explicit maximum node-table construction"
+  },
+  "source_sha256": "8805a3cd0a83351744fb9be5c1471746779624a6d5b5f6e459163def87dfede1",
+  "transport": "binary tree: queue-order nullable array; solve receives native .val/.left/.right nodes"
+}

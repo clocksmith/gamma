@@ -1,0 +1,96 @@
+{
+  "candidate_design": "sorted disjoint half-open intervals, merging on add and splitting on remove",
+  "comparison": "exact typed result under documented object transport",
+  "complexity_target": "O(m) per operation/O(m) storage for m tracked intervals",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "classname": "RangeModule",
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "addRange",
+        "params": [
+          {
+            "name": "left",
+            "type": "integer"
+          },
+          {
+            "name": "right",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "queryRange",
+        "params": [
+          {
+            "name": "left",
+            "type": "integer"
+          },
+          {
+            "name": "right",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "removeRange",
+        "params": [
+          {
+            "name": "left",
+            "type": "integer"
+          },
+          {
+            "name": "right",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      }
+    ],
+    "params": [
+      {
+        "name": "lefts",
+        "type": "integer[]"
+      },
+      {
+        "name": "rights",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "dealloc": true,
+      "type": "list<String>"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 715,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "sorted disjoint half-open intervals, merging on add and splitting on remove",
+    "complexity_target": "O(m) per operation/O(m) storage for m tracked intervals",
+    "reference": "set of covered unit cells on bounded domains"
+  },
+  "source_sha256": "87fb70ecb812bc5e5c48b975df9b448d350d49831dc528ef525d99340dbe3244",
+  "transport": "class operation trace preserving constructor/method parameter order"
+}

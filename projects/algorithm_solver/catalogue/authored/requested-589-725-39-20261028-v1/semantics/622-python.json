@@ -1,0 +1,89 @@
+{
+  "candidate_design": "fixed-capacity ring buffer, head offset and live size",
+  "comparison": "exact typed result under documented object transport",
+  "complexity_target": "O(1) per method/O(k) storage",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "classname": "MyCircularQueue",
+    "constructor": {
+      "params": [
+        {
+          "name": "k",
+          "type": "integer"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "enQueue",
+        "params": [
+          {
+            "name": "value",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "deQueue",
+        "params": [],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "Front",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      },
+      {
+        "name": "Rear",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      },
+      {
+        "name": "isEmpty",
+        "params": [],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "isFull",
+        "params": [],
+        "return": {
+          "type": "boolean"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 622,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "fixed-capacity ring buffer, head offset and live size",
+    "complexity_target": "O(1) per method/O(k) storage",
+    "reference": "literal list queue model"
+  },
+  "source_sha256": "c868ba40739d3773ed7afda5813ed483e588eaa6cfb8dd4ad921b3024ee18eee",
+  "transport": "class operation trace preserving constructor/method parameter order"
+}
