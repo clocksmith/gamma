@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a32d45b65569fa70cc7eb97",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "population",
+  "unit"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxProtectedPopulation",
+  "params": [
+   {
+    "name": "population",
+    "type": "integer[]"
+   },
+   {
+    "name": "unit",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every stay/move choice for the movable units and score the protected cities",
+  "candidate_design": "greedy over maximal runs of 1s: a run of L units starting at s > 0 protects any L of the L + 1 cities s - 1 .. s + L - 1, so add their sum minus the minimum; a run at s = 0 protects all its cities",
+  "complexity_target": "O(n) time/O(1) extra space"
+ },
+ "source_sha256": "0f729333d00034cf942a84ebea0d8fc0f92c3ee66b0fcc008117d4fcbf3f3334",
+ "wrapper": "named export maxProtectedPopulation"
+}

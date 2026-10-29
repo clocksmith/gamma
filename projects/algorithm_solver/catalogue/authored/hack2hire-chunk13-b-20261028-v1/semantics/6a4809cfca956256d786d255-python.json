@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a4809cfca956256d786d255",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "segments"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "reconstructSequence",
+  "params": [
+   {
+    "name": "segments",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "repeated quadratic scans: find the segment whose start is no segment end, then repeatedly search the whole list for the segment that starts at the current end",
+  "candidate_design": "hash map from startId to segment and a set of endIds; the head is the only start that is not an end; follow the map and join payloads once",
+  "complexity_target": "O(total length) time/O(n) space"
+ },
+ "source_sha256": "bb65510ebf940c2c4b2b569fd96dfa19747668c0c7d8e6391fdfd0417a7326bc",
+ "wrapper": "Solution.reconstructSequence"
+}

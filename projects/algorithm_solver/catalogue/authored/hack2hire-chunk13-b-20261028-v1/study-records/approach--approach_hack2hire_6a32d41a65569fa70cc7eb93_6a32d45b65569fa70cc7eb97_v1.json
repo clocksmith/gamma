@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+   "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+   "selector": "/problems/hack2hire:6a32d45b65569fa70cc7eb97"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+   "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+   "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97"
+  }
+ ],
+ "problemId": "hack2hire:6a32d41a65569fa70cc7eb93",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/contract--contract_hack2hire_6a32d41a65569fa70cc7eb93_6a32d45b65569fa70cc7eb97_authored-v1.json",
+  "sha256": "bf03d64a5b95fe09eb0503d8b84739ff681769e4a636530891ae2328349abcc4"
+ },
+ "title": {
+  "status": "present",
+  "value": "greedy over maximal runs of 1s: a run of L units starting at s > 0 protects any L of the L + 1 cities s - 1 .. s + L - 1, so add their sum minus the minimum; a run at s = 0 protects all its cities",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+    "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+    "selector": "/problems/hack2hire:6a32d45b65569fa70cc7eb97/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "greedy over maximal runs of 1s: a run of L units starting at s > 0 protects any L of the L + 1 cities s - 1 .. s + L - 1, so add their sum minus the minimum; a run at s = 0 protects all its cities. Complexity target: O(n) time/O(1) extra space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+    "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+    "selector": "/problems/hack2hire:6a32d45b65569fa70cc7eb97"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Assignment problems on a line with one-step moves"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "The run argument is O(n) and exact; a two-state DP generalises to other costs"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "each run is handled once",
+   "the answer never exceeds the total population"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "A unit can only reach its own city or the one to its left, so runs of consecutive units act independently.",
+   "A run of L units starting at s can cover L of the cities s - 1 .. s + L - 1: units left of the skipped city move left, the others stay.",
+   "For each run skip the least populated of those L + 1 cities; a run starting at city 0 has no city to its left and covers itself."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "greedy over maximal runs of 1s: a run of L units starting at s > 0 protects any L of the L + 1 cities s - 1 .. s + L - 1, so add their sum minus the minimum; a run at s = 0 protects all its cities",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+      "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+      "selector": "/problems/hack2hire:6a32d45b65569fa70cc7eb97/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) time/O(1) extra space; the independent reference (enumerate every stay/move choice for the movable units and score the protected cities) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+      "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+      "selector": "/problems/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "A unit can only reach its own city or the one to its left, so runs of consecutive units act independently.",
+     "A run of L units starting at s can cover L of the cities s - 1 .. s + L - 1: units left of the skipped city move left, the others stay."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a32d41a65569fa70cc7eb93_6a32d45b65569fa70cc7eb97_approach-native_v1.json",
+    "sha256": "205f1a21af48dcbb85af6f0539f3d87172076f471131cfb21575a829dd04a0f5"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper maxProtectedPopulation, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+      "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+      "selector": "/problems/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "For each run skip the least populated of those L + 1 cities; a run starting at city 0 has no city to its left and covers itself."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a32d41a65569fa70cc7eb93_6a32d45b65569fa70cc7eb97_python_v1.json",
+     "sha256": "56bd55ace7eefde4ed0a33a72e07668432811834cbbe6a96049066a1a7111caf"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a32d41a65569fa70cc7eb93_6a32d45b65569fa70cc7eb97_javascript_v1.json",
+     "sha256": "b072d432720ad182182b9d4c3ff75d500903018ebffd339f55f38c6e401a3e93"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a32d41a65569fa70cc7eb93_6a32d45b65569fa70cc7eb97_approach-native_v1.json",
+    "sha256": "205f1a21af48dcbb85af6f0539f3d87172076f471131cfb21575a829dd04a0f5"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (enumerate every stay/move choice for the movable units and score the protected cities) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+      "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+      "selector": "/problems/hack2hire:6a32d45b65569fa70cc7eb97/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/14/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/test_oracles.py",
+      "sha256": "ea295763e3d64eef0ef96ff979c95147944426ad9935647c3e3b3a22a3008d51",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:6a32d45b65569fa70cc7eb97"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a32d41a65569fa70cc7eb93_6a32d45b65569fa70cc7eb97_approach-native_v1.json",
+    "sha256": "205f1a21af48dcbb85af6f0539f3d87172076f471131cfb21575a829dd04a0f5"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6a32d41a65569fa70cc7eb93:6a32d45b65569fa70cc7eb97:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a32d41a65569fa70cc7eb93_6a32d45b65569fa70cc7eb97_approach-native_v1.json",
+  "sha256": "205f1a21af48dcbb85af6f0539f3d87172076f471131cfb21575a829dd04a0f5"
+ }
+}

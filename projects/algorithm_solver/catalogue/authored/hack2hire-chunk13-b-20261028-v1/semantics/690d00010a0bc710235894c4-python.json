@@ -1,0 +1,106 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:690d00010a0bc710235894c4",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "SparseMatrix",
+  "constructor": {
+   "params": [
+    {
+     "name": "matrix",
+     "type": "integer[][]"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "get",
+    "params": [
+     {
+      "name": "row",
+      "type": "integer"
+     },
+     {
+      "name": "col",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "set",
+    "params": [
+     {
+      "name": "row",
+      "type": "integer"
+     },
+     {
+      "name": "col",
+      "type": "integer"
+     },
+     {
+      "name": "value",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "add",
+    "params": [
+     {
+      "name": "other",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   {
+    "name": "multiply",
+    "params": [
+     {
+      "name": "other",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "dense copy of the matrix updated on set; add and multiply by full nested loops",
+  "candidate_design": "per-row hash maps of non-zero columns; add merges the other matrix's non-zeros into a copy of the touched rows; multiply converts the operand to per-row non-zero lists and accumulates only non-zero products",
+  "complexity_target": "O(1) get/set, O(rows cols) add, O(rows cols + nnz(A) * row nnz(B)) multiply/O(nnz) space"
+ },
+ "source_sha256": "a36d313b832fb24e940153bf52ad9ebe286bce04c166eda2751440b5a0cee5a5",
+ "native_class": "SparseMatrix",
+ "native_symbol": "module global SparseMatrix",
+ "void_methods": [
+  "set"
+ ]
+}

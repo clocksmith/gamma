@@ -1,0 +1,395 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69cae7d8ff3ebde766ceda53:69cae7e2ff3ebde766ceda54:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+   "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69cae7d8ff3ebde766ceda53.json",
+   "sha256": "d856f98bdf64b5c1f0d5f0401e4428d8d4a8538802026707ee5826b369ca0ce6",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+   "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+   "selector": "/variants/hack2hire:69cae7e2ff3ebde766ceda54"
+  }
+ ],
+ "problemId": "hack2hire:69cae7d8ff3ebde766ceda53",
+ "variantId": "69cae7e2ff3ebde766ceda54",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: nearest waypoint index at each travelled distance",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69cae7e2ff3ebde766ceda54/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "coordinates lists the route waypoints [x, y] (integers); consecutive waypoints are distinct and every segment has an integer length (this keeps positions exact). For each d in distances, the position is the point reached after travelling d along the polyline from the first waypoint; when d is at least the route length the position is the last waypoint. Return, for each d, the index of the waypoint nearest to that position by Euclidean distance (any waypoint of the route, not only the segment ends), the smallest index on a tie.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "coordinates lists the route waypoints [x, y] (integers); consecutive waypoints are distinct and every segment has an integer length (this keeps positions exact).",
+   "For each d in distances, the position is the point reached after travelling d along the polyline from the first waypoint; when d is at least the route length the position is the last waypoint.",
+   "Return, for each d, the index of the waypoint nearest to that position by Euclidean distance (any waypoint of the route, not only the segment ends), the smallest index on a tie."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= coordinates.length <= 500",
+   "0 <= x, y <= 1000",
+   "consecutive waypoints distinct with integer segment length",
+   "0 <= distances.length <= 500",
+   "0 <= distances[i] <= 1e7"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69cae7e2ff3ebde766ceda54/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: GPS route as a sequence of 2D waypoints and a list of cumulative travel distances along straight segments from the first waypoint; determine the exact position for each distance and how close it is to any waypoint (the output is cut off); algorithmTags: SIMULATION; preview response sha256 79770835d3f8378e0c619a3af40dc0d2f6a2cbd4bf20e50be8d90d38b9b0ecb2"
+   },
+   {
+    "statement": "Uncertainty: very high: the route, the cumulative distances and the nearness question are in the preview; returning the nearest waypoint index (suggested by the title) rather than a distance, the smallest-index tie rule, clamping past the end and the integer-length segments are inferred so that results are exact",
+    "basis": "the public group preview is partial (475 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is returned per distance: a distance value, a waypoint index or a coordinate?",
+   "Is nearness measured to every waypoint or only the current segment ends?",
+   "What happens past the end of the route?",
+   "How are ties broken?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69cae7e2ff3ebde766ceda54/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       0,
+       0
+      ]
+     ],
+     [
+      0,
+      5
+     ]
+    ],
+    "output": [
+     0,
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       821,
+       857
+      ],
+      [
+       821,
+       858
+      ],
+      [
+       809,
+       863
+      ],
+      [
+       811,
+       863
+      ],
+      [
+       811,
+       861
+      ],
+      [
+       815,
+       864
+      ],
+      [
+       819,
+       861
+      ],
+      [
+       825,
+       869
+      ],
+      [
+       829,
+       866
+      ],
+      [
+       828,
+       866
+      ]
+     ],
+     [
+      27,
+      37,
+      44,
+      5,
+      14,
+      44,
+      48,
+      38,
+      20
+     ]
+    ],
+    "output": [
+     6,
+     7,
+     9,
+     6,
+     2,
+     9,
+     9,
+     7,
+     3
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69cae7e2ff3ebde766ceda54/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/oracles.py",
+    "sha256": "d793c4b27910a76fa38a612efa95625b518db8e86a2af524b0a0395b6dc6abf9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def nearestCheckpoints(coordinates, distances) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69cae7e2ff3ebde766ceda54-python.json",
+     "inferredInterface": {
+      "name": "nearestCheckpoints",
+      "params": [
+       {
+        "name": "coordinates",
+        "type": "integer[][]"
+       },
+       {
+        "name": "distances",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69cae7e2ff3ebde766ceda54-python.json",
+      "sha256": "aac2407e85cc21c45b29911834037c1b1245105e1876dab75d4cd3e86704d2db",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function nearestCheckpoints(coordinates, distances) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69cae7e2ff3ebde766ceda54-javascript.json",
+     "inferredInterface": {
+      "name": "nearestCheckpoints",
+      "params": [
+       {
+        "name": "coordinates",
+        "type": "integer[][]"
+       },
+       {
+        "name": "distances",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69cae7e2ff3ebde766ceda54-javascript.json",
+      "sha256": "8c9b29b8cf27887bdaa4360b1091edbeb34c3b39e8c08ad0b7fde9ce37e977b2",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

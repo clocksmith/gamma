@@ -1,0 +1,392 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a4809beca956256d786d254:6a480bbbca956256d786d279:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+   "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a4809beca956256d786d254.json",
+   "sha256": "06548a3f6974d7bf48c101852ea5d601628d3c8c2e4828b994b845fe08b7fdad",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+   "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+   "selector": "/variants/hack2hire:6a480bbbca956256d786d279"
+  }
+ ],
+ "problemId": "hack2hire:6a4809beca956256d786d254",
+ "variantId": "6a480bbbca956256d786d279",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 3: reconstruct several disjoint chains",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6a480bbbca956256d786d279/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "segments lists [startId, endId, payload] triples given in any order; start ids are distinct among starts and end ids are distinct among ends. Level 3 (inferred extension): the segments (possibly none) form one or more disjoint directed chains and no cycle. Reconstruct each chain's string and return the strings ordered by the startId of each chain's first segment (code-point order).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "segments lists [startId, endId, payload] triples given in any order; start ids are distinct among starts and end ids are distinct among ends.",
+   "Level 3 (inferred extension): the segments (possibly none) form one or more disjoint directed chains and no cycle.",
+   "Reconstruct each chain's string and return the strings ordered by the startId of each chain's first segment (code-point order)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= segments.length <= 1e5",
+   "ids match [a-z0-9]{1,8}",
+   "payloads match [a-z]{0,10}",
+   "no cycles"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6a480bbbca956256d786d279/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: segments [startId, endId, payload] form a single directed chain where one segment endId equals the next startId; start ids unique among starts and end ids unique among ends; given segments in any order, concatenate payloads in chain order; algorithmTags: GRAPH; preview response sha256 dfc319ef349d7a93ffbc189e112b167c1f1f48d2ba8f45ccea40b4ed735d34ad"
+   },
+   {
+    "statement": "Uncertainty: very high: level 3 has no public text; multiple chains and the order by head id are inferred",
+    "basis": "the public group preview is partial (710 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 3 of 3 allows several chains",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/11/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/11/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the input always one valid chain?",
+   "What is returned when segments form a cycle or several chains?",
+   "Can a segment start and end at the same id?",
+   "May payloads be empty?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6a480bbbca956256d786d279/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "bv",
+       "ar",
+       "r"
+      ],
+      [
+       "ao",
+       "cb",
+       "qqq"
+      ],
+      [
+       "bs",
+       "bp",
+       "r"
+      ],
+      [
+       "cf",
+       "aq",
+       "qq"
+      ],
+      [
+       "cb",
+       "as",
+       ""
+      ],
+      [
+       "al",
+       "ba",
+       "rpp"
+      ],
+      [
+       "bd",
+       "cf",
+       ""
+      ],
+      [
+       "bl",
+       "bs",
+       ""
+      ],
+      [
+       "ar",
+       "ap",
+       ""
+      ],
+      [
+       "ba",
+       "av",
+       ""
+      ],
+      [
+       "av",
+       "z9",
+       "pp"
+      ],
+      [
+       "y22",
+       "at",
+       "q"
+      ],
+      [
+       "z9",
+       "y22",
+       "r"
+      ],
+      [
+       "as",
+       "bd",
+       ""
+      ],
+      [
+       "ap",
+       "bl",
+       "rpp"
+      ]
+     ]
+    ],
+    "output": [
+     "rpppprq",
+     "qqqqq",
+     "rrppr"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6a480bbbca956256d786d279/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/oracles.py",
+    "sha256": "d793c4b27910a76fa38a612efa95625b518db8e86a2af524b0a0395b6dc6abf9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def reconstructAllSequences(segments) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/6a480bbbca956256d786d279-python.json",
+     "inferredInterface": {
+      "name": "reconstructAllSequences",
+      "params": [
+       {
+        "name": "segments",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/6a480bbbca956256d786d279-python.json",
+      "sha256": "5363c30714690d329cefd47ffae0efb714ac33c88f470811c981064c40b27294",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function reconstructAllSequences(segments) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/6a480bbbca956256d786d279-javascript.json",
+     "inferredInterface": {
+      "name": "reconstructAllSequences",
+      "params": [
+       {
+        "name": "segments",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/6a480bbbca956256d786d279-javascript.json",
+      "sha256": "e07bb1c17cc40fb73e836dc1cf933ebbb7fc294d7371e1d9abd66fa1dbac96d8",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

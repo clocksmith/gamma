@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697692bb5ed12b33b05f0f34",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "routes",
+  "source",
+  "target"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "cheapestShippingCost",
+  "params": [
+   {
+    "name": "routes",
+    "type": "string[]"
+   },
+   {
+    "name": "source",
+    "type": "string"
+   },
+   {
+    "name": "target",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "Bellman-Ford relaxation over all routes until no distance changes",
+  "candidate_design": "Dijkstra with a binary heap over parsed adjacency lists",
+  "complexity_target": "O(R log R) time/O(R) space"
+ },
+ "source_sha256": "bf0ecadda3d8c40a972215019226094354033d0069613ebdb8685015fbd6f683",
+ "wrapper": "named export cheapestShippingCost"
+}

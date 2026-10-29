@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69cae7e2ff3ebde766ceda54",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "coordinates",
+  "distances"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "nearestCheckpoints",
+  "params": [
+   {
+    "name": "coordinates",
+    "type": "integer[][]"
+   },
+   {
+    "name": "distances",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "walk the segments from the start for each query and compare squared distances as exact fractions",
+  "candidate_design": "prefix sums of segment lengths with binary search for the segment, then integer squared distances scaled by the segment length squared compared over all waypoints",
+  "complexity_target": "O(N + Q (log N + N)) time/O(N + Q) space"
+ },
+ "source_sha256": "b61592b2c936f5dc7673e5d6c85a4c56a3e24ca02c0447974879aee808fb72a0",
+ "wrapper": "named export nearestCheckpoints"
+}

@@ -1,0 +1,406 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69557d994a0202df9569e981:69557daa4a0202df9569e982:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+   "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69557d994a0202df9569e981.json",
+   "sha256": "47febc8fd8b44f091464ff6f9a85c1d27b7c8af4e23597b04ebdbda4d1284594",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+   "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+   "selector": "/variants/hack2hire:69557daa4a0202df9569e982"
+  }
+ ],
+ "problemId": "hack2hire:69557d994a0202df9569e981",
+ "variantId": "69557daa4a0202df9569e982",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: direct shared-follower communities",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69557daa4a0202df9569e982/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "communityToFollowers[i] lists the distinct follower ids \"F<j>\" following community \"C<i>\", and followerToCommunities[j] lists the distinct community ids \"C<i>\" followed by \"F<j>\"; the two lists describe the same relation (F<j> is in communityToFollowers[i] exactly when C<i> is in followerToCommunities[j]) and ids are written without leading zeros. If communityIdx is outside [0, communityToFollowers.length) or community communityIdx has no followers, return []. Level 1: return every community other than communityIdx that shares at least one follower with it (direct relationships only), as ids \"C<i>\" ordered by increasing i.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "communityToFollowers[i] lists the distinct follower ids \"F<j>\" following community \"C<i>\", and followerToCommunities[j] lists the distinct community ids \"C<i>\" followed by \"F<j>\"; the two lists describe the same relation (F<j> is in communityToFollowers[i] exactly when C<i> is in followerToCommunities[j]) and ids are written without leading zeros.",
+   "If communityIdx is outside [0, communityToFollowers.length) or community communityIdx has no followers, return [].",
+   "Level 1: return every community other than communityIdx that shares at least one follower with it (direct relationships only), as ids \"C<i>\" ordered by increasing i."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= communityToFollowers.length <= 2e4",
+   "0 <= followerToCommunities.length <= 2e4",
+   "total memberships <= 1e5 in each list",
+   "-10 <= communityIdx <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69557daa4a0202df9569e982/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: two 2D lists (community -> follower ids \"F<j>\", follower -> community ids \"C<i>\"); given communityIdx return the distinct community ids sharing at least one follower, excluding itself; chains of relationships do not count; out-of-bounds index or no followers gives an empty list; algorithmTags: GRAPH; preview response sha256 b23b606374978928c77d0d32a1075bd723435901ce466f907e19f05be202f66e"
+   },
+   {
+    "statement": "Uncertainty: medium: the inputs, the direct-only rule and the empty cases are in the preview; the output order (increasing community index) and the assumption that both lists agree are inferred",
+    "basis": "the public group preview is partial (924 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 1 of 2 is the direct shared-follower query the preview describes",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "In which order should the community ids be returned?",
+   "Can the two lists disagree with each other?",
+   "What does the second part change: are chains of shared followers counted?",
+   "Can communityIdx be negative?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69557daa4a0202df9569e982/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [],
+     0
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "F2",
+       "F0",
+       "F1",
+       "F6"
+      ],
+      [
+       "F1",
+       "F3"
+      ],
+      [
+       "F0",
+       "F1",
+       "F6"
+      ],
+      [
+       "F0",
+       "F4",
+       "F2",
+       "F5"
+      ],
+      [
+       "F1",
+       "F3"
+      ],
+      [
+       "F4",
+       "F2",
+       "F6",
+       "F3",
+       "F5"
+      ]
+     ],
+     [
+      [
+       "C0",
+       "C3",
+       "C2"
+      ],
+      [
+       "C0",
+       "C2",
+       "C1",
+       "C4"
+      ],
+      [
+       "C3",
+       "C5",
+       "C0"
+      ],
+      [
+       "C5",
+       "C1",
+       "C4"
+      ],
+      [
+       "C5",
+       "C3"
+      ],
+      [
+       "C3",
+       "C5"
+      ],
+      [
+       "C0",
+       "C2",
+       "C5"
+      ]
+     ],
+     5
+    ],
+    "output": [
+     "C0",
+     "C1",
+     "C2",
+     "C3",
+     "C4"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69557daa4a0202df9569e982/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/oracles.py",
+    "sha256": "d793c4b27910a76fa38a612efa95625b518db8e86a2af524b0a0395b6dc6abf9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findRelatedCommunities(communityToFollowers, followerToCommunities, communityIdx) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69557daa4a0202df9569e982-python.json",
+     "inferredInterface": {
+      "name": "findRelatedCommunities",
+      "params": [
+       {
+        "name": "communityToFollowers",
+        "type": "string[][]"
+       },
+       {
+        "name": "followerToCommunities",
+        "type": "string[][]"
+       },
+       {
+        "name": "communityIdx",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69557daa4a0202df9569e982-python.json",
+      "sha256": "42f75ab34b41628ac2fa23d69dac9f83defc13a51767e791af24ea0efbcaca0e",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findRelatedCommunities(communityToFollowers, followerToCommunities, communityIdx) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69557daa4a0202df9569e982-javascript.json",
+     "inferredInterface": {
+      "name": "findRelatedCommunities",
+      "params": [
+       {
+        "name": "communityToFollowers",
+        "type": "string[][]"
+       },
+       {
+        "name": "followerToCommunities",
+        "type": "string[][]"
+       },
+       {
+        "name": "communityIdx",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69557daa4a0202df9569e982-javascript.json",
+      "sha256": "51e4ae6a9fc45d813511f383f109815ebd00d6d0add5f12889b946da7bc73d59",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

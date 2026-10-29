@@ -1,0 +1,404 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:684db91acab8e9bb7ea93b44:684dee4b5e4cf21833c0611f:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+   "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/684db91acab8e9bb7ea93b44.json",
+   "sha256": "1c6de12367221c0a0cb18b4a2dfd041304bff9c3cf9b02c4592e053f445aa0e2",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+   "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+   "selector": "/variants/hack2hire:684dee4b5e4cf21833c0611f"
+  }
+ ],
+ "problemId": "hack2hire:684db91acab8e9bb7ea93b44",
+ "variantId": "684dee4b5e4cf21833c0611f",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: remove the idx-th covered point and return remaining intervals",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:684dee4b5e4cf21833c0611f/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "intervals is a list of non-overlapping half-open integer intervals [start, end) with start < end, in arbitrary order; the flattened sequence lists the integers of the first interval in increasing order, then those of the second, and so on. Remove the point at 0-based position idx of that sequence and return the intervals that remain, in input order: the interval holding the point is replaced by [start, p) and [p + 1, end) in that order, omitting either piece when it is empty. When idx is at least the number of covered points, return the intervals unchanged (as a fresh list).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "intervals is a list of non-overlapping half-open integer intervals [start, end) with start < end, in arbitrary order; the flattened sequence lists the integers of the first interval in increasing order, then those of the second, and so on.",
+   "Remove the point at 0-based position idx of that sequence and return the intervals that remain, in input order: the interval holding the point is replaced by [start, p) and [p + 1, end) in that order, omitting either piece when it is empty.",
+   "When idx is at least the number of covered points, return the intervals unchanged (as a fresh list)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= intervals.length <= 1e5",
+   "-1e9 <= start < end <= 1e9",
+   "intervals do not overlap",
+   "0 <= idx <= 4e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:684dee4b5e4cf21833c0611f/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: non-overlapping half-open intervals [start, end) of integers; idx is a 0-based index into the flattened sequence of covered integers taken in input interval order; that point is removed (the output format is cut off); algorithmTags: ARRAY; preview response sha256 97a5c0a579ece3feb5fb9c835dad45f19c8b3761aa3cd4f380a6447976d26d38"
+   },
+   {
+    "statement": "Uncertainty: high: the interval meaning, the flattening order and the removal are in the preview; returning the remaining intervals, the split into two pieces in place, dropping empty pieces and the out-of-range rule are inferred",
+    "basis": "the public group preview is partial (502 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is returned: the remaining intervals, the removed value, or the new flattened list?",
+   "Are the input intervals sorted?",
+   "What happens when idx is past the last covered point?",
+   "Should an emptied interval be kept?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:684dee4b5e4cf21833c0611f/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     0
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       -8,
+       1
+      ],
+      [
+       5,
+       9
+      ],
+      [
+       -27,
+       -26
+      ],
+      [
+       -14,
+       -8
+      ],
+      [
+       19,
+       24
+      ],
+      [
+       -26,
+       -14
+      ],
+      [
+       24,
+       26
+      ],
+      [
+       16,
+       19
+      ],
+      [
+       26,
+       27
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     19
+    ],
+    "output": [
+     [
+      -8,
+      1
+     ],
+     [
+      5,
+      9
+     ],
+     [
+      -27,
+      -26
+     ],
+     [
+      -14,
+      -9
+     ],
+     [
+      19,
+      24
+     ],
+     [
+      -26,
+      -14
+     ],
+     [
+      24,
+      26
+     ],
+     [
+      16,
+      19
+     ],
+     [
+      26,
+      27
+     ],
+     [
+      1,
+      5
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:684dee4b5e4cf21833c0611f/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/oracles.py",
+    "sha256": "d793c4b27910a76fa38a612efa95625b518db8e86a2af524b0a0395b6dc6abf9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def removeCoveredPoint(intervals, idx) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/684dee4b5e4cf21833c0611f-python.json",
+     "inferredInterface": {
+      "name": "removeCoveredPoint",
+      "params": [
+       {
+        "name": "intervals",
+        "type": "integer[][]"
+       },
+       {
+        "name": "idx",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/684dee4b5e4cf21833c0611f-python.json",
+      "sha256": "ef959b421a33316ba296fac0efd9764cfa89950fc756b5a54910000044a7f242",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function removeCoveredPoint(intervals, idx) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/684dee4b5e4cf21833c0611f-javascript.json",
+     "inferredInterface": {
+      "name": "removeCoveredPoint",
+      "params": [
+       {
+        "name": "intervals",
+        "type": "integer[][]"
+       },
+       {
+        "name": "idx",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/684dee4b5e4cf21833c0611f-javascript.json",
+      "sha256": "2dd3d0f2344254a2c170b9e6307a03959a03eb980bac418a3f59cec1cbb36c3f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

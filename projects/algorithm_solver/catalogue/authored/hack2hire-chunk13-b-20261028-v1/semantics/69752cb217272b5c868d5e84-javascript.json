@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69752cb217272b5c868d5e84",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "planes",
+  "orders"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "scheduleOrders",
+  "params": [
+   {
+    "name": "planes",
+    "type": "integer[][]"
+   },
+   {
+    "name": "orders",
+    "type": "[integer, integer[]][]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sort planes by departure and scan linearly for every item, copying capacities before each order for rollback",
+  "candidate_design": "segment tree of remaining capacities over planes sorted by departure; a binary search finds the first eligible index and a descent finds the first plane with enough room; changes are logged and undone on rejection",
+  "complexity_target": "O(P log P + items log P) time/O(P) space"
+ },
+ "source_sha256": "ff45f622f0ef0c4f57b6e9161a8ff48bcb13001f1efb28f969f1a14a89d5403d",
+ "wrapper": "named export scheduleOrders"
+}

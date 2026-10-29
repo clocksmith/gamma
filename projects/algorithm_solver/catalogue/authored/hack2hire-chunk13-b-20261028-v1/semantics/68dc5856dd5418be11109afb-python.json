@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68dc5856dd5418be11109afb",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "grid",
+  "fuelCapacity"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "shortestPathWithFuel",
+  "params": [
+   {
+    "name": "grid",
+    "type": "string[]"
+   },
+   {
+    "name": "fuelCapacity",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "breadth-first search over (cell, fuel) states with a full visited table",
+  "candidate_design": "breadth-first search by move count keeping the best fuel seen per cell; a state is expanded only when it arrives with strictly more fuel than any earlier state at that cell",
+  "complexity_target": "O(m n (F + 1)) time worst case/O(m n) space"
+ },
+ "source_sha256": "c0f1faec7e74666694e6bb5df9f7fb9ab0c365d8579284b8aa4dfde1d0482950",
+ "wrapper": "Solution.shortestPathWithFuel"
+}

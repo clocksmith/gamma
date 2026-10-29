@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69557daa4a0202df9569e982",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "communityToFollowers",
+  "followerToCommunities",
+  "communityIdx"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findRelatedCommunities",
+  "params": [
+   {
+    "name": "communityToFollowers",
+    "type": "string[][]"
+   },
+   {
+    "name": "followerToCommunities",
+    "type": "string[][]"
+   },
+   {
+    "name": "communityIdx",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every other community, test whether its follower list and the target follower list share an element by nested list scans",
+  "candidate_design": "walk the target community followers, and for each follower its community list, marking community indices in a boolean array; collect marked indices in increasing order",
+  "complexity_target": "O(n + memberships reachable in two steps) time/O(n) space"
+ },
+ "source_sha256": "19d31632a07184d8ada9a9df678e9c04d0d13a62a69ff611918bed299dc0b545",
+ "wrapper": "named export findRelatedCommunities"
+}

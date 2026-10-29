@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697690985ed12b33b05f0f2c",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "routes",
+  "source",
+  "target"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "pathsWithOneTransfer",
+  "params": [
+   {
+    "name": "routes",
+    "type": "string[]"
+   },
+   {
+    "name": "source",
+    "type": "string"
+   },
+   {
+    "name": "target",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "[string, integer][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every route and every ordered pair of routes, keep those forming a path, then sort",
+  "candidate_design": "adjacency lists by source; for each route out of source, either it reaches target or extend with routes from its target that reach target",
+  "complexity_target": "O(R + paths log paths) time/O(R + paths) space"
+ },
+ "source_sha256": "2dcd6e8e837559e8e328ac507a4d579cc3f67057ea70be48971069b8076c237e",
+ "wrapper": "named export pathsWithOneTransfer"
+}

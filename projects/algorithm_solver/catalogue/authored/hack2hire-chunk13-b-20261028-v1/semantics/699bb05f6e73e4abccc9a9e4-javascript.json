@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:699bb05f6e73e4abccc9a9e4",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "wordSet",
+  "sentences"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "sentenceVariations",
+  "params": [
+   {
+    "name": "wordSet",
+    "type": "string[]"
+   },
+   {
+    "name": "sentences",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "generate the Cartesian product of the option sets for each sentence, de-duplicate and sort the joined strings",
+  "candidate_design": "group wordSet by sorted-letter signature; for each word take its sorted option list, then expand the product position by position in order; because anagrams have equal length the product order is already sorted",
+  "complexity_target": "O(sum of output length + wordSet letters log) time/O(output) space"
+ },
+ "source_sha256": "f75417982333ce1df95542d6c29e2b1e7980dfde7dddfd8b488f4392aba1e623",
+ "wrapper": "named export sentenceVariations"
+}

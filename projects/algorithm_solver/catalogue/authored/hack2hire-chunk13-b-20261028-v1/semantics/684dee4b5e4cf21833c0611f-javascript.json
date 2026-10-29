@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:684dee4b5e4cf21833c0611f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "intervals",
+  "idx"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "removeCoveredPoint",
+  "params": [
+   {
+    "name": "intervals",
+    "type": "integer[][]"
+   },
+   {
+    "name": "idx",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate covered points one by one with a counter until the counter reaches idx",
+  "candidate_design": "subtract interval lengths from idx until it falls inside an interval, then split that interval arithmetically",
+  "complexity_target": "O(n) time/O(n) output space"
+ },
+ "source_sha256": "e3fa0c615bd84ad19cfe1640ca1a3a1b58ae25eaf9378fa6608ab7cb5dc96c5c",
+ "wrapper": "named export removeCoveredPoint"
+}

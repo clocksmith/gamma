@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a480ba0ca956256d786d277",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "segments"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "reconstructSequence",
+  "params": [
+   {
+    "name": "segments",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "repeated quadratic scans: find the segment whose start is no segment end, then repeatedly search the whole list for the segment that starts at the current end; invalid when no head, several heads, or the walk misses segments",
+  "candidate_design": "hash map walk from the unique head with a step count; invalid when the number of heads is not one or the walk does not visit every segment",
+  "complexity_target": "O(total length) time/O(n) space"
+ },
+ "source_sha256": "8abd8ec9e6f260e764b03b5308d99c4bd7c2e8793e112f0e92fbb324e880a2b8",
+ "wrapper": "Solution.reconstructSequence"
+}
