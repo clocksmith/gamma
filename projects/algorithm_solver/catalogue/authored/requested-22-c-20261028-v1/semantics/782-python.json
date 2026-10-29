@@ -1,0 +1,33 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "board rows unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "movesToChessboard",
+    "params": [
+      {
+        "name": "board",
+        "type": "integer[][]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "parameters": [
+    "board"
+  ],
+  "problem_id": 782,
+  "qualification": {
+    "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "rectangle parity check against first row/column, balanced row/column counts, then per-axis misplaced count with odd/even parity choice",
+    "complexity_target": "O(n**2) time/O(1) space",
+    "reference": "every row permutation x column permutation; minimum (n-cycles(rows))+(n-cycles(cols)) over chessboard results"
+  },
+  "source_sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+}

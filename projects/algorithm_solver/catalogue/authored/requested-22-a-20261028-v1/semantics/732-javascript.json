@@ -1,0 +1,67 @@
+{
+  "comparison": "exact typed JSON trace result; no bool/int coercion",
+  "effects": {
+    "native_state": "changes only through book",
+    "returned_mutable_containers": "fresh trace list",
+    "trace_inputs": "unchanged including nested argument lists"
+  },
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "classname": "MyCalendarThree",
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "book",
+        "params": [
+          {
+            "type": "integer",
+            "name": "startTime"
+          },
+          {
+            "type": "integer",
+            "name": "endTime"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "systemdesign": true,
+    "params": [
+      {
+        "name": "starts",
+        "type": "integer[]"
+      },
+      {
+        "name": "ends",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "list<boolean>",
+      "dealloc": true
+    }
+  },
+  "parameters": [
+    "operationNames",
+    "argumentLists"
+  ],
+  "problem_id": 732,
+  "qualification": {
+    "reason": "Author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-native-trace-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "on-demand segment tree on [0,1e9) with range add and lazy subtree maximum",
+    "complexity_target": "O(log C) per book, C=1e9/O(q log C) nodes",
+    "reference": "after each book, maximum direct cover count over all accepted starts"
+  },
+  "source_sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff",
+  "native_class": "MyCalendarThree",
+  "native_symbol": "module.exports.MyCalendarThree"
+}

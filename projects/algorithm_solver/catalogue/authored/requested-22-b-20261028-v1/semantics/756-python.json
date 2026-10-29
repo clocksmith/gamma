@@ -1,0 +1,38 @@
+{
+  "comparison": "exact typed JSON result (boolean; no numeric truthiness)",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "pyramidTransition",
+    "params": [
+      {
+        "name": "bottom",
+        "type": "string"
+      },
+      {
+        "name": "allowed",
+        "type": "list<string>"
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    }
+  },
+  "parameters": [
+    "bottom",
+    "allowed"
+  ],
+  "problem_id": 756,
+  "qualification": {
+    "reason": "Not qualified: author-local development runs only (oracles cases, python3 and node); no independent isolated execution or qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "DFS building next row cell by cell from pair top bitmasks; prune a new adjacent pair with no top; memoize row outcomes",
+    "complexity_target": "O(sum over L<=6 of 6**L*6**(L-1)) worst bound; O(6**6) memo",
+    "reference": "memoized literal Cartesian product of every next row"
+  },
+  "source_sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+}

@@ -1,0 +1,36 @@
+{
+  "comparison": {
+    "absolute_tolerance": 1e-05,
+    "policy": "finite float absolute tolerance"
+  },
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "soupServings",
+    "params": [
+      {
+        "name": "n",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "double"
+    }
+  },
+  "parameters": [
+    "n"
+  ],
+  "problem_id": 808,
+  "qualification": {
+    "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "units=ceil(n/25); units>=200 returns 1.0 (table error there <=3.3e-6); else float bottom-up DP",
+    "complexity_target": "O(min(units,200)**2) time/space",
+    "reference": "45-digit Decimal bottom-up table over 25 mL units up to 1000 units; Hoeffding certificate (tail<1e-6) returns 1.0 beyond; exact Fraction millilitre recursion cross-check for n<=1500"
+  },
+  "source_sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+}

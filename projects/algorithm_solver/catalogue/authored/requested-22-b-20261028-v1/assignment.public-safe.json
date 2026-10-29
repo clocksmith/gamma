@@ -1,0 +1,435 @@
+{
+  "authorization": "Owner-requested IDs 745,749,753,756,757,761,765 (requested-22-b); official statements read on the private executor only; repository holds hashes, official metaData and own-words summaries",
+  "problems": [
+    {
+      "comparison": {
+        "binding": "native-bindings.json",
+        "native_receiver": "one original class instance per trace; new instance between traces",
+        "policy": "exact typed values in call order"
+      },
+      "external_interface": {
+        "argument_order": [
+          "operations",
+          "arguments"
+        ],
+        "canonical": "WordFilter",
+        "constructor_argument_order": [
+          "words"
+        ],
+        "language_parameter_names": {
+          "javascript": [
+            "words"
+          ],
+          "python": [
+            "words"
+          ]
+        },
+        "native_class": "WordFilter",
+        "native_route": "direct-word-filter-v1",
+        "observer_profile": "native-bindings.json",
+        "official": {
+          "classname": "WordFilter",
+          "constructor": {
+            "params": [
+              {
+                "name": "words",
+                "type": "string[]"
+              }
+            ]
+          },
+          "methods": [
+            {
+              "name": "f",
+              "params": [
+                {
+                  "name": "pref",
+                  "type": "string"
+                },
+                {
+                  "name": "suff",
+                  "type": "string"
+                }
+              ],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ],
+          "params": [
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            },
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "dealloc": true,
+            "type": "list<String>"
+          },
+          "systemdesign": true
+        },
+        "solve_fallback": false
+      },
+      "id": 745,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "scalar method results; receiver state private to one trace"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "native WordFilter class; hash map from every prefix+separator+suffix key of each word to its latest index, query is one lookup",
+        "complexity_target": "O(N*L**3) construction, O(L) per query; O(N*L**3) space; L<=7",
+        "reference": "reverse linear scan of words testing startswith/endswith per query"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "native ordered trace: null constructor, integer f results"
+      },
+      "slug": "prefix-and-suffix-search",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private executor requested-22 statement snapshot",
+        "official_response_sha256": "2e8c60d9c6582a7a60be3b15f6832b57773b3003d2d7556660c9636a8fb8fb3f",
+        "statement_html_sha256": "33683cb1b2036d7c4ab54858f84316a1e829e9ac040a8ebeac0c486d373b56c2"
+      },
+      "title": "Prefix and Suffix Search"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "isInfected"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "isInfected"
+          ],
+          "python": [
+            "isInfected"
+          ]
+        },
+        "official": {
+          "name": "containVirus",
+          "params": [
+            {
+              "name": "isInfected",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 749,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "daily DFS over active infected cells collecting threatened cells and boundary edges; wall maximum-threat region by marking it inert; other regions spread",
+        "complexity_target": "O(D*m*n) time with D days (D<=m*n); O(m*n) space",
+        "reference": "explicit wall-edge set simulation; regions connected through unwalled edges; enforces public no-tie guarantee"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "contain-virus",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private executor requested-22 statement snapshot",
+        "official_response_sha256": "ae7cb9bc21205710b5e35dc50bb9da79ebdfc444d67d120a1aa4d4ed66ebc59d",
+        "statement_html_sha256": "13ce16e55ce6f4b32c37e8402281cb1e0f6f6a66aaa86ceb9dc5ba0066ddc98e"
+      },
+      "title": "Contain Virus"
+    },
+    {
+      "comparison": {
+        "owner": "oracles.compare",
+        "policy": "any string of exactly k**n+n-1 digits below k whose length-n windows cover all k**n passwords"
+      },
+      "external_interface": {
+        "argument_order": [
+          "n",
+          "k"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "n",
+            "k"
+          ],
+          "python": [
+            "n",
+            "k"
+          ]
+        },
+        "official": {
+          "name": "crackSafe",
+          "params": [
+            {
+              "name": "n",
+              "type": "integer"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "string"
+          }
+        }
+      },
+      "id": 753,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "iterative Hierholzer Eulerian circuit over k-ary (n-1)-digit suffix nodes",
+        "complexity_target": "O(k**n) time/space",
+        "reference": "Fredricksen-Kessler-Maiorana Lyndon-word de Bruijn construction, validity-checked"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "string"
+      },
+      "slug": "cracking-the-safe",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private executor requested-22 statement snapshot",
+        "official_response_sha256": "3f902df8fac0e0fd44511b236ebc5ba27702e7e948cbf95c0cbd158163bfae83",
+        "statement_html_sha256": "fbd8d0c8ac9360e0b2625d5c5c7c6f442a245da86c88fa05284cb0444d442918"
+      },
+      "title": "Cracking the Safe"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "bottom",
+          "allowed"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "bottom",
+            "allowed"
+          ],
+          "python": [
+            "bottom",
+            "allowed"
+          ]
+        },
+        "official": {
+          "name": "pyramidTransition",
+          "params": [
+            {
+              "name": "bottom",
+              "type": "string"
+            },
+            {
+              "name": "allowed",
+              "type": "list<string>"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        }
+      },
+      "id": 756,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "DFS building next row cell by cell from pair top bitmasks; prune a new adjacent pair with no top; memoize row outcomes",
+        "complexity_target": "O(sum over L<=6 of 6**L*6**(L-1)) worst bound; O(6**6) memo",
+        "reference": "memoized literal Cartesian product of every next row"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "pyramid-transition-matrix",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private executor requested-22 statement snapshot",
+        "official_response_sha256": "3151d0f31e3b8117d77a2062446aee55ddab25a311bf41b8f9d971763a44df37",
+        "statement_html_sha256": "ee119c152f6aad4e4cf67363018cf617ab053c643871bfb1a5cdfed482839119"
+      },
+      "title": "Pyramid Transition Matrix"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "intervals"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "intervals"
+          ],
+          "python": [
+            "intervals"
+          ]
+        },
+        "official": {
+          "name": "intersectionSizeTwo",
+          "params": [
+            {
+              "name": "intervals",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 757,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "sort by end ascending, start descending; keep two largest chosen points; add zero, one or two right-end points",
+        "complexity_target": "O(n log n) time/O(n) space",
+        "reference": "increasing-size combination search over the integer span"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "set-intersection-size-at-least-two",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private executor requested-22 statement snapshot",
+        "official_response_sha256": "94db72f3bf6d3da6675755babde3371c922d6984a8db5d4ef9d26eb6fdc860d6",
+        "statement_html_sha256": "1d9c52a2edde4a6d0a0514a1a1d4e7f9d42f23132a3e404613c1083820464837"
+      },
+      "title": "Set Intersection Size At Least Two"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "s"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "s"
+          ],
+          "python": [
+            "s"
+          ]
+        },
+        "official": {
+          "name": "makeLargestSpecial",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "string"
+          }
+        }
+      },
+      "id": 761,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "split into primitive special blocks, recurse on each block interior, sort blocks descending, concatenate",
+        "complexity_target": "O(n**2 log n) time/O(n**2) space",
+        "reference": "BFS over all strings reachable by literal swaps of consecutive special substrings; component maximum"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "string"
+      },
+      "slug": "special-binary-string",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private executor requested-22 statement snapshot",
+        "official_response_sha256": "fe48837f8fd9b785dbbf0750d6a823e743e7f5ed74b90c5da5293bf86452d176",
+        "statement_html_sha256": "f8f11042ae94d2dd95b3882b89349fb5c568be9b949ee71e8990e3497c1fac1d"
+      },
+      "title": "Special Binary String"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "row"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "row"
+          ],
+          "python": [
+            "row"
+          ]
+        },
+        "official": {
+          "name": "minSwapsCouples",
+          "params": [
+            {
+              "name": "row",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 765,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "scan seat pairs left to right; swap partner into neighbouring seat on a copy using a position index",
+        "complexity_target": "O(n) time/O(n) space",
+        "reference": "BFS over canonical unordered seat-pair multisets with literal cross-pair swaps"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "couples-holding-hands",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private executor requested-22 statement snapshot",
+        "official_response_sha256": "21a3343dc8a917c6e4dc056a15f1238232d70ea8776091cff1a5d94d59eec781",
+        "statement_html_sha256": "19a31841224b93b1644bcafc088d722237dc34d84a8ffe216a530ea7510b6d40"
+      },
+      "title": "Couples Holding Hands"
+    }
+  ],
+  "schema": "gamma.authored-assignment-public-safe.v1",
+  "status": "new development variants only; independent isolated qualification pending"
+}

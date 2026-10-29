@@ -1,0 +1,33 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "minSwapsCouples",
+    "params": [
+      {
+        "name": "row",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "parameters": [
+    "row"
+  ],
+  "problem_id": 765,
+  "qualification": {
+    "reason": "Not qualified: author-local development runs only (oracles cases, python3 and node); no independent isolated execution or qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "scan seat pairs left to right; swap partner into neighbouring seat on a copy using a position index",
+    "complexity_target": "O(n) time/O(n) space",
+    "reference": "BFS over canonical unordered seat-pair multisets with literal cross-pair swaps"
+  },
+  "source_sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+}

@@ -1,0 +1,41 @@
+{
+ "problems": {
+  "745": {
+   "reference": "reverse linear scan of words testing startswith/endswith per query",
+   "candidate_design": "native WordFilter class; hash map from every prefix+separator+suffix key of each word to its latest index, query is one lookup",
+   "complexity_target": "O(N*L**3) construction, O(L) per query; O(N*L**3) space; L<=7"
+  },
+  "749": {
+   "reference": "explicit wall-edge set simulation; regions connected through unwalled edges; enforces public no-tie guarantee",
+   "candidate_design": "daily DFS over active infected cells collecting threatened cells and boundary edges; wall maximum-threat region by marking it inert; other regions spread",
+   "complexity_target": "O(D*m*n) time with D days (D<=m*n); O(m*n) space"
+  },
+  "753": {
+   "reference": "Fredricksen-Kessler-Maiorana Lyndon-word de Bruijn construction, validity-checked",
+   "candidate_design": "iterative Hierholzer Eulerian circuit over k-ary (n-1)-digit suffix nodes",
+   "complexity_target": "O(k**n) time/space"
+  },
+  "756": {
+   "reference": "memoized literal Cartesian product of every next row",
+   "candidate_design": "DFS building next row cell by cell from pair top bitmasks; prune a new adjacent pair with no top; memoize row outcomes",
+   "complexity_target": "O(sum over L<=6 of 6**L*6**(L-1)) worst bound; O(6**6) memo"
+  },
+  "757": {
+   "reference": "increasing-size combination search over the integer span",
+   "candidate_design": "sort by end ascending, start descending; keep two largest chosen points; add zero, one or two right-end points",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "761": {
+   "reference": "BFS over all strings reachable by literal swaps of consecutive special substrings; component maximum",
+   "candidate_design": "split into primitive special blocks, recurse on each block interior, sort blocks descending, concatenate",
+   "complexity_target": "O(n**2 log n) time/O(n**2) space"
+  },
+  "765": {
+   "reference": "BFS over canonical unordered seat-pair multisets with literal cross-pair swaps",
+   "candidate_design": "scan seat pairs left to right; swap partner into neighbouring seat on a copy using a position index",
+   "complexity_target": "O(n) time/O(n) space"
+  }
+ },
+ "numeric": "all results small exact integers, booleans or strings; 753 any valid minimum-length string accepted by oracles.compare; 757 coordinates <=1e8 exact in JS numbers",
+ "effects": "input arrays, nested grids, word lists and strings unchanged; 745 native receiver per trace, scalar method results"
+}

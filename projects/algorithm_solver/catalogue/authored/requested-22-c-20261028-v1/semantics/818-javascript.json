@@ -1,0 +1,33 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "racecar",
+    "params": [
+      {
+        "name": "target",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "parameters": [
+    "target"
+  ],
+  "problem_id": 818,
+  "qualification": {
+    "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "dp over targets: exact 2**k-1 hits; else overshoot k accelerations and reverse, or k-1 accelerations, reverse, j back accelerations, reverse",
+    "complexity_target": "O(target log target) time/O(target) space",
+    "reference": "single BFS over (position,speed) with bounds position in [-2*10**4-2,4*10**4+4], |speed|<=2**16 (wider than the usual 2*target prune; bound assumed, not proved); first distance per position"
+  },
+  "source_sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+}

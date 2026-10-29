@@ -1,0 +1,478 @@
+{
+  "authorization": "Owner request 2026-10-28 for exactly these eight IDs; official statements read on the executor only; hashes and official metaData kept here; no protected or unknown payload reads",
+  "problems": [
+    {
+      "comparison": {
+        "policy": "exact ordered string list"
+      },
+      "external_interface": {
+        "argument_order": [
+          "expression",
+          "evalvars",
+          "evalints"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "expression",
+            "evalvars",
+            "evalints"
+          ],
+          "python": [
+            "expression",
+            "evalvars",
+            "evalints"
+          ]
+        },
+        "official": {
+          "name": "basicCalculatorIV",
+          "params": [
+            {
+              "name": "expression",
+              "type": "string"
+            },
+            {
+              "name": "evalvars",
+              "type": "string[]"
+            },
+            {
+              "name": "evalints",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "list<string>"
+          }
+        }
+      },
+      "id": 770,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "character tokenizer and recursive-descent expression/term/factor parser over polynomial maps keyed by sorted variable lists; evalvars substituted at leaf; zero terms dropped; ordered by degree desc then variable sequence",
+        "complexity_target": "O(L + sum over multiplications of |P|*|Q|*d log d) time/O(output terms*d) space",
+        "reference": "shunting-yard postfix evaluation into Counter polynomials keyed by sorted variable tuples; every intermediate coefficient checked against int32"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "list<string>"
+      },
+      "slug": "basic-calculator-iv",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; paraphrased public bounds",
+        "full_text_location": "private requested-22 statement snapshot on the executor",
+        "official_response_sha256": "bfd6d2f18f0f2f3737ee8577bc6751864d8f91913dceb1f7395af904324fb72e",
+        "statement_html_sha256": "5eaa3fcda2e29bf0761f2e542f511496379e82eb763e37b7ad371da8c979ed66"
+      },
+      "title": "Basic Calculator IV"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "board"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "board"
+          ],
+          "python": [
+            "board"
+          ]
+        },
+        "official": {
+          "name": "movesToChessboard",
+          "params": [
+            {
+              "name": "board",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 782,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "rectangle parity check against first row/column, balanced row/column counts, then per-axis misplaced count with odd/even parity choice",
+        "complexity_target": "O(n**2) time/O(1) space",
+        "reference": "every row permutation x column permutation; minimum (n-cycles(rows))+(n-cycles(cols)) over chessboard results"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "transform-to-chessboard",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; paraphrased public bounds",
+        "full_text_location": "private requested-22 statement snapshot on the executor",
+        "official_response_sha256": "96761b490c6db9e21bd6617f148afb472f19f19b0fb844e566e8f0ef1ab8bc76",
+        "statement_html_sha256": "92e2adaca5a6bb4b959c4ce0c4fe1ac1acc281568434b21a13e363d245817e55"
+      },
+      "title": "Transform to Chessboard"
+    },
+    {
+      "comparison": {
+        "absolute_tolerance": 1e-05,
+        "policy": "finite float absolute tolerance"
+      },
+      "external_interface": {
+        "argument_order": [
+          "poured",
+          "query_row",
+          "query_glass"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "poured",
+            "query_row",
+            "query_glass"
+          ],
+          "python": [
+            "poured",
+            "query_row",
+            "query_glass"
+          ]
+        },
+        "official": {
+          "name": "champagneTower",
+          "params": [
+            {
+              "name": "poured",
+              "type": "integer"
+            },
+            {
+              "name": "query_row",
+              "type": "integer"
+            },
+            {
+              "name": "query_glass",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "double"
+          }
+        }
+      },
+      "id": 799,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "float row-by-row overflow simulation down to the queried row only",
+        "complexity_target": "O(query_row**2) time/O(query_row) space",
+        "reference": "exact Fraction top-down inflow per glass, capped at one"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "double"
+      },
+      "slug": "champagne-tower",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; paraphrased public bounds",
+        "full_text_location": "private requested-22 statement snapshot on the executor",
+        "official_response_sha256": "e160ecb20b183bf5464cb3b4c4c14f68add512f817104abaf7296f99d144233c",
+        "statement_html_sha256": "88b301804cefe2a388fc532d80a8d236d5af79d4c65d4d79be12c8bbafc1a629"
+      },
+      "title": "Champagne Tower"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "grid",
+          "hits"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "grid",
+            "hits"
+          ],
+          "python": [
+            "grid",
+            "hits"
+          ]
+        },
+        "official": {
+          "name": "hitBricks",
+          "params": [
+            {
+              "name": "grid",
+              "type": "integer[][]"
+            },
+            {
+              "name": "hits",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "id": 803,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "reverse-time union-find with virtual roof node and component sizes; restored brick reports roof-size growth minus one",
+        "complexity_target": "O((m*n+hits) alpha) time/O(m*n) space",
+        "reference": "literal per-hit erase then BFS from top row; drop every unreached brick"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "slug": "bricks-falling-when-hit",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; paraphrased public bounds",
+        "full_text_location": "private requested-22 statement snapshot on the executor",
+        "official_response_sha256": "616de092f80ad5ccbac72700c820577de3b5eee804881fe5f3f476f0b5da35b9",
+        "statement_html_sha256": "173db5c63a42033ba31f16d50a899fe6dbeaa6c8f33b34358a43cfa8a5c84b94"
+      },
+      "title": "Bricks Falling When Hit"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "nums"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "nums"
+          ],
+          "python": [
+            "nums"
+          ]
+        },
+        "official": {
+          "name": "splitArraySameAverage",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        }
+      },
+      "id": 805,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "scale each value to n*x-total; meet-in-the-middle subset sums of two halves, excluding the full array via complement argument",
+        "complexity_target": "O(2**(n/2)) time/O(2**(n/2)) space",
+        "reference": "proper nonempty subsets with exact Fraction averages for n<=12; per-size sum bitsets otherwise"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "split-array-with-same-average",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; paraphrased public bounds",
+        "full_text_location": "private requested-22 statement snapshot on the executor",
+        "official_response_sha256": "a785fbba7df4140d3b9c09a8ea57e6f076a5db910f8ea784ab5691f5ae14ab2f",
+        "statement_html_sha256": "b52135bcbf52bb099aa51b07154b2e8c208a9d68833faa0663d417a07261cf27"
+      },
+      "title": "Split Array With Same Average"
+    },
+    {
+      "comparison": {
+        "absolute_tolerance": 1e-05,
+        "policy": "finite float absolute tolerance"
+      },
+      "external_interface": {
+        "argument_order": [
+          "n"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "n"
+          ],
+          "python": [
+            "n"
+          ]
+        },
+        "official": {
+          "name": "soupServings",
+          "params": [
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "double"
+          }
+        }
+      },
+      "id": 808,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "units=ceil(n/25); units>=200 returns 1.0 (table error there <=3.3e-6); else float bottom-up DP",
+        "complexity_target": "O(min(units,200)**2) time/space",
+        "reference": "45-digit Decimal bottom-up table over 25 mL units up to 1000 units; Hoeffding certificate (tail<1e-6) returns 1.0 beyond; exact Fraction millilitre recursion cross-check for n<=1500"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "double"
+      },
+      "slug": "soup-servings",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; paraphrased public bounds",
+        "full_text_location": "private requested-22 statement snapshot on the executor",
+        "official_response_sha256": "3cf144c5490498c679c4da05a7bd8b11c286cfcda6a17f8c8e2f628b5e7b2dd2",
+        "statement_html_sha256": "166bb66745a4756502f751dd8a461419a61b9b690a02cefce4feb33d624edfa2"
+      },
+      "title": "Soup Servings"
+    },
+    {
+      "comparison": {
+        "binding": "native-bindings.json",
+        "policy": "native ListNode input; exact integer result; serialized model alone insufficient"
+      },
+      "external_interface": {
+        "argument_order": [
+          "head",
+          "nums"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "head",
+            "nums"
+          ],
+          "python": [
+            "head",
+            "nums"
+          ]
+        },
+        "native_profile_required": true,
+        "official": {
+          "name": "numComponents",
+          "params": [
+            {
+              "name": "head",
+              "type": "ListNode"
+            },
+            {
+              "name": "nums",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 817,
+      "mutation_alias_contract": {
+        "arguments": "all original fields/edges/containers unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "native ListNode walk counting member nodes whose successor is null or nonmember, using a set of nums",
+        "complexity_target": "O(n+len(nums)) time/O(len(nums)) space",
+        "reference": "indexed values list membership groupby run count"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "linked-list-components",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; paraphrased public bounds",
+        "full_text_location": "private requested-22 statement snapshot on the executor",
+        "official_response_sha256": "552c646cbc73d75fc7346abdc246a1431d10232b98dc95eac8ca46c936682670",
+        "statement_html_sha256": "b8b4bcd92770964026380cebaf769e74ac74aa207704a5835f58a63c6cc0b896"
+      },
+      "title": "Linked List Components"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "target"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "target"
+          ],
+          "python": [
+            "target"
+          ]
+        },
+        "official": {
+          "name": "racecar",
+          "params": [
+            {
+              "name": "target",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 818,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "dp over targets: exact 2**k-1 hits; else overshoot k accelerations and reverse, or k-1 accelerations, reverse, j back accelerations, reverse",
+        "complexity_target": "O(target log target) time/O(target) space",
+        "reference": "single BFS over (position,speed) with bounds position in [-2*10**4-2,4*10**4+4], |speed|<=2**16 (wider than the usual 2*target prune; bound assumed, not proved); first distance per position"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "race-car",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; paraphrased public bounds",
+        "full_text_location": "private requested-22 statement snapshot on the executor",
+        "official_response_sha256": "75738f077ce073d99609af5e7350a31fd0f864952db9629d8b6d7b4dec4fa2b9",
+        "statement_html_sha256": "effaf1962c3a950baf8bf0b71934534fdca322e24680bdc42797b77b332b4f55"
+      },
+      "title": "Race Car"
+    }
+  ],
+  "schema": "gamma.authored-assignment-public-safe.v1",
+  "status": "new development variants only; author-run local checks; independent isolated qualification pending"
+}

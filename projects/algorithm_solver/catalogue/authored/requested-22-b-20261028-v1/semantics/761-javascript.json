@@ -1,0 +1,33 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "makeLargestSpecial",
+    "params": [
+      {
+        "name": "s",
+        "type": "string"
+      }
+    ],
+    "return": {
+      "type": "string"
+    }
+  },
+  "parameters": [
+    "s"
+  ],
+  "problem_id": 761,
+  "qualification": {
+    "reason": "Not qualified: author-local development runs only (oracles cases, python3 and node); no independent isolated execution or qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "split into primitive special blocks, recurse on each block interior, sort blocks descending, concatenate",
+    "complexity_target": "O(n**2 log n) time/O(n**2) space",
+    "reference": "BFS over all strings reachable by literal swaps of consecutive special substrings; component maximum"
+  },
+  "source_sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+}

@@ -1,0 +1,33 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "countPalindromicSubsequences",
+    "params": [
+      {
+        "name": "s",
+        "type": "string"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "parameters": [
+    "s"
+  ],
+  "problem_id": 730,
+  "qualification": {
+    "reason": "Author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "interval DP: unequal ends inclusion-exclusion; equal ends double inner count adjusted by nearest inner equal-letter positions",
+    "complexity_target": "O(n**2) time/O(n**2) space",
+    "reference": "set of all palindromic subsequences for n<=12; separate outermost-letter interval classification for n<=300"
+  },
+  "source_sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+}

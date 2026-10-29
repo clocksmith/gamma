@@ -1,0 +1,75 @@
+{
+  "comparison": "exact typed values in call order; native observer per native-bindings.json",
+  "effects": "constructor words and method arguments unchanged; fresh receiver per trace, same receiver within trace",
+  "entrypoint": "WordFilter",
+  "language": "python",
+  "native_class": "WordFilter",
+  "native_methods": {
+    "f": {
+      "arity": 2,
+      "returns": "integer"
+    }
+  },
+  "native_route": "direct-word-filter-v1",
+  "observer_profile": "native-bindings.json",
+  "official_interface": {
+    "classname": "WordFilter",
+    "constructor": {
+      "params": [
+        {
+          "name": "words",
+          "type": "string[]"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "f",
+        "params": [
+          {
+            "name": "pref",
+            "type": "string"
+          },
+          {
+            "name": "suff",
+            "type": "string"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "params": [
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      },
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "dealloc": true,
+      "type": "list<String>"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "words"
+  ],
+  "problem_id": 745,
+  "qualification": {
+    "reason": "Not qualified: author-local development runs only (oracles cases, python3 and node); no independent isolated execution or qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_fallback": false,
+  "source_reasoning": {
+    "candidate_design": "native WordFilter class; hash map from every prefix+separator+suffix key of each word to its latest index, query is one lookup",
+    "complexity_target": "O(N*L**3) construction, O(L) per query; O(N*L**3) space; L<=7",
+    "reference": "reverse linear scan of words testing startswith/endswith per query"
+  },
+  "source_sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+}

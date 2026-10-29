@@ -1,0 +1,18 @@
+# Requested 22 C: eight newly authored development pairs
+
+IDs 770,782,799,803,805,808,817,818. Scope: authored, NOT qualified (catalogue status value "unknown"). Owner request 2026-10-28. Official statement responses were read on the executor only; this directory keeps sha256 of each raw response and of its content field, the official metaData interface, and paraphrased constraints in validators. No statement text or examples are copied here. No Git operation.
+
+Independent reference code, domain validators, contracts, design and case generator were frozen in pre-source-reference-freeze.json before any candidate source existed. References: shunting-yard Counter polynomials (770), every row x column permutation with cycle counts (782), exact Fraction top-down inflow (799), literal per-hit top-row flood (803), exact Fraction subset averages for n<=12 and per-size sum bitsets above (805), 45-digit Decimal unit table plus Hoeffding certificate and exact millilitre Fraction cross-check (808), indexed-value run count (817), loose-bound (position,speed) BFS (818). No language-agreement oracle.
+
+Post-freeze amendments, all after the author ran candidates locally (these files are no longer the frozen bytes; case-design-summary.json records frozen and current hashes):
+- cases.py: 799 maximum rows had a wrong hand expectation of 1.0 for edge glasses at row 99. Those glasses get about 1e9/2**99, so they now use the exact reference.
+- oracles.py: 803 reference originally counted bricks that were already unstable in the initial grid as falling at the first hit. Interpretation now adopted: bricks unstable before any hit are never counted, and a hit on one drops nothing. The statement does not settle this; the adopted reading matches the reverse union-find model.
+- cases.py: 770 maximum rows dropped a 249-char product of 21 distinct two-variable factors. Its 2**21-term answer needed ~1.4 GB and ~20 CPU s in both runtimes, which is beyond the qualification sandbox (1 GiB, 3 CPU s), so no correct program could pass it. That case is replaced by a 14-factor distinct product (2**14 terms) and a 247-char 25-fold (a + b) power (26 terms, coefficients up to 5200300). This is an output-size bound inferred from the sandbox limits, not a statement constraint.
+
+Float answers: 799 and 808 compare finite doubles with absolute tolerance 1e-5 (oracles.compare; assignment, semantics and case rows bind it). The 808 statement states this tolerance. The 799 statement states none; 1e-5 is inferred from its five-decimal outputs. 808 candidates return 1.0 once ceil(n/25)>=200; the Decimal table puts the error there at <=3.3e-6 and decreasing through 1000 units, and the Hoeffding tail bound is <1e-6 beyond.
+
+770 output: terms ordered by degree descending, then variable sequence; coefficient always printed; zero terms omitted; constant last. JS uses BigInt coefficients. Duplicate evalvars names are not excluded by the constraints. Both languages let the last binding win, and generated cases contain no duplicates.
+
+817 is native: Python defines ListNode(val=0,next=None) and Solution; JS defines and exports function ListNode(val,next) with the official defaults, numComponents and Solution. native-bindings.json fixes the route; the indexed {'values':[...]} packet is a reference/transport model, not the native API.
+
+All inputs (strings, arrays, nested grids, hit lists, list nodes) stay unchanged; results are fresh. Author-local candidate runs and timings are in checks.json; they are the author's own checks, not independent qualification. Isolated official ABI, effect, resource and independent result checks remain pending. Generated cases stay private.
