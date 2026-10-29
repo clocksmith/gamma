@@ -1,0 +1,84 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6a14a84c7b0582b352787d44",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "ALSWrapper",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "record",
+    "params": [
+     {
+      "name": "status",
+      "type": "integer"
+     },
+     {
+      "name": "lux",
+      "type": "integer"
+     },
+     {
+      "name": "timestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getLatestLux",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "getAverageLux",
+    "params": [
+     {
+      "name": "startTime",
+      "type": "integer"
+     },
+     {
+      "name": "endTime",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview (blocked in hack2hire-chunk05-v1), not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep every valid reading in arrival order and rescan all of them for each query",
+  "candidate_design": "sparse Fenwick trees (hash maps keyed by tree index over timestamps 0..1e6) holding the lux sum and the reading count, plus the latest (timestamp, lux) pair updated with >= so later arrivals win ties; a range query subtracts two prefix queries",
+  "complexity_target": "O(log T) per call, T = 1e6 + 1 timestamp slots/O(r log T) space, r = valid readings"
+ },
+ "source_sha256": "dc89beda7079614f4dff9489188f18656f4630a3cddbdb47b1f40fcbbb74088b",
+ "native_class": "ALSWrapper",
+ "native_symbol": "module-global class ALSWrapper",
+ "void_methods": [
+  "record"
+ ]
+}

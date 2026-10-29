@@ -1,0 +1,50 @@
+{
+ "active_adoption": 0,
+ "independent_qualification": 0,
+ "spec_basis": "inferred by claude-opus-5-5 subagent 2026-10-29 from partial public previews and recalled public versions; all nine variants were blocked in hack2hire-chunk05-v1; most rules are invented; no official statement, interface or constraints",
+ "author_local_candidate_runs": {
+  "scope": "Author ran own candidates locally after the pre-source freeze against own generated cases for INFERRED specs; this is not isolated or independent qualification and cannot establish correctness against the official problems",
+  "python_cases_passed": 2302,
+  "javascript_cases_passed": 2302,
+  "cases_total_per_language": 2302,
+  "inferred_wrappers_and_native_classes_checked": true,
+  "inputs_unchanged_all_cases": true,
+  "extra_python_reference_fuzz_rows_passed": 36000,
+  "extra_python_reference_fuzz_rows_skipped_over_budget": 0,
+  "native_observer_self_check": "4 native-class variants (ALSWrapper, CardGame x2, DualCircuitBreaker): python and javascript candidates passed native_harness.observe + native_protocol.check on all 1017 of their cases each with the unchanged easy16 transport (javascript under node --jitless)",
+  "heaviest_case_cpu_seconds": {
+   "python3": {
+    "hack2hire:68f82cd8d7ff180d0ab950c7": 0.0257,
+    "hack2hire:678472f60e1dbb6a09385781": 0.0052,
+    "hack2hire:678478d50e1dbb6a09385782": 0.008,
+    "hack2hire:6784b4640e1dbb6a09385784": 0.0086,
+    "hack2hire:6a14a84c7b0582b352787d44": 0.0419,
+    "hack2hire:67842117d0faf7ec64cc3add": 0.0013,
+    "hack2hire:6784211bd0faf7ec64cc3ade": 0.0013,
+    "hack2hire:694609632c048134ada83559": 0.0341,
+    "hack2hire:688bd5423867670cfb894188": 0.0233
+   },
+   "node_jitless": {
+    "hack2hire:68f82cd8d7ff180d0ab950c7": 0.0625,
+    "hack2hire:678472f60e1dbb6a09385781": 0.0082,
+    "hack2hire:678478d50e1dbb6a09385782": 0.0178,
+    "hack2hire:6784b4640e1dbb6a09385784": 0.0185,
+    "hack2hire:6a14a84c7b0582b352787d44": 0.0276,
+    "hack2hire:67842117d0faf7ec64cc3add": 0.001,
+    "hack2hire:6784211bd0faf7ec64cc3ade": 0.001,
+    "hack2hire:694609632c048134ada83559": 0.0218,
+    "hack2hire:688bd5423867670cfb894188": 0.0339
+   }
+  },
+  "timing_note": "per case, (solve or trace adapter + inferred wrapper/direct-class execution)/2 CPU seconds, python3 time.process_time and node --jitless process.cpuUsage; not resource qualification",
+  "resource_note": "author-local peak RSS: 267 MB for the whole python3 test_oracles run including case generation; 76 MB for node --jitless on the heaviest single maximum row; largest argument JSON 3.8 MB (Dasher Payment Model, 2e4 activity rows)",
+  "concurrency_note": "ALSWrapper thread safety and non-blocking queries are part of the inferred contract but are not exercised; all runs are sequential"
+ },
+ "javascript_candidate_syntax_checks": 9,
+ "python_candidate_compiles": 9,
+ "ruff_fatal_subset": "E9,F63,F7,F82 passed",
+ "source_free_reference_contract_tests": 10,
+ "native_observer_toy_controls": 4,
+ "study_record_tests": 6,
+ "study_records": 45
+}

@@ -1,0 +1,378 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:688bd4593867670cfb894187:688bd5423867670cfb894188:authored-inferred-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+   "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+   "selector": "/problems/8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/688bd4593867670cfb894187.json",
+   "sha256": "ca1431ccd64208e1e660ea857c772e305a3ca028ad83c1871a8eb5d2b818c955",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+   "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+   "selector": "/variants/hack2hire:688bd5423867670cfb894188"
+  }
+ ],
+ "problemId": "hack2hire:688bd4593867670cfb894187",
+ "variantId": "688bd5423867670cfb894188",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: tokens that decode to an abusive word",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:688bd5423867670cfb894188/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "words lists the abusive words (lowercase). substitutions lists [symbol, letter] pairs; a symbol may stand for up to three letters. comment is tokens separated by single spaces. A token is abusive when it has the same length as some abusive word and, position by position, either the token letter equals the word letter or the token symbol has a substitution pair to the word letter; letters stand only for themselves and a symbol without a pair matches nothing. Return the 0-based indexes of abusive tokens in increasing order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "words lists the abusive words (lowercase).",
+   "substitutions lists [symbol, letter] pairs; a symbol may stand for up to three letters.",
+   "comment is tokens separated by single spaces.",
+   "A token is abusive when it has the same length as some abusive word and, position by position, either the token letter equals the word letter or the token symbol has a substitution pair to the word letter; letters stand only for themselves and a symbol without a pair matches nothing.",
+   "Return the 0-based indexes of abusive tokens in increasing order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 to 500 abusive words of 1 to 20 lowercase letters, at most 2000 letters in total",
+   "at most 60 substitution pairs, at most 3 letters per symbol",
+   "symbols come from 0-9 and @$!|+#%&*?",
+   "comment is at most 1e4 characters, tokens of 1 to 20 lowercase letters or symbols separated by single spaces"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:688bd5423867670cfb894188/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: users disguise abusive words with symbols, numbers or alternate characters to bypass moderation, for example \"@\" standing for \"a\"; substitution rules, matching boundaries and the required output are cut off; algorithmTags: TRIE; companies: AMAZON; stage ONSITE; difficulty 3; preview response sha256 a820317486f7c24d38551afe35378101ec02b73e766c4e8e83fba70b40932e07"
+   },
+   {
+    "statement": "Uncertainty: very high: disguising words with symbols and digits is in the preview; the substitution table as input, multiple letters per symbol, whole-token matching, lowercase only, index output and the bounds are invented",
+    "basis": "the public group preview is partial (253 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "hack2hire-chunk05-v1 blocked this variant: The preview gives one disguised word but omits the substitution rules, matching boundaries and required output. No exact moderation predicate is available.",
+    "basis": "owner direction 2026-10-28: infer blocked problems and label every inference; this row is an inference, not the accessible exact statement or owner-supplied rules that chunk05 asked for"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/8/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/8/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/8/variant_split_inference"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/8/prior_blocker"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the substitution table given or fixed?",
+   "Can one symbol stand for several letters?",
+   "Do matches need whole tokens, or can they be substrings?",
+   "Return the flagged tokens, their positions, or a boolean?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:688bd5423867670cfb894188/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ass",
+      "hell"
+     ],
+     [
+      [
+       "@",
+       "a"
+      ],
+      [
+       "$",
+       "s"
+      ],
+      [
+       "3",
+       "e"
+      ],
+      [
+       "1",
+       "l"
+      ],
+      [
+       "1",
+       "i"
+      ]
+     ],
+     "@$$ is h3ll and he11o sh1t a$s"
+    ],
+    "output": [
+     0,
+     2,
+     6
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ab"
+     ],
+     [],
+     "a@ ab ab"
+    ],
+    "output": [
+     1,
+     2
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:688bd5423867670cfb894188/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/oracles.py",
+    "sha256": "bde6928fb5631e62c797fd48ae0cc23e2966f2212522c8b63eb0056cdeb8ba1c",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def detectAbusiveWords(words, substitutions, comment) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/688bd5423867670cfb894188-python.json",
+     "inferredInterface": {
+      "name": "detectAbusiveWords",
+      "params": [
+       {
+        "name": "words",
+        "type": "string[]"
+       },
+       {
+        "name": "substitutions",
+        "type": "string[][]"
+       },
+       {
+        "name": "comment",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/688bd5423867670cfb894188-python.json",
+      "sha256": "a1b97ca4f39683e23f9f40e7c8a4d8af3408e53b6790d5563045e0b120154672",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function detectAbusiveWords(words, substitutions, comment) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/688bd5423867670cfb894188-javascript.json",
+     "inferredInterface": {
+      "name": "detectAbusiveWords",
+      "params": [
+       {
+        "name": "words",
+        "type": "string[]"
+       },
+       {
+        "name": "substitutions",
+        "type": "string[][]"
+       },
+       {
+        "name": "comment",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/688bd5423867670cfb894188-javascript.json",
+      "sha256": "06a2eab8c9c680a2164f3f5edaa74127cb8665d9ba1e9b8e846a1bdd7bea7581",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/8/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/8/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

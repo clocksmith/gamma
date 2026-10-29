@@ -1,0 +1,520 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Owner direction 2026-10-28: infer the nine variants blocked in hack2hire-chunk05-v1/blockers.json and label every inference; public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:68f82cd8d7ff180d0ab950c7",
+   "title": "Count of Stable Subarrays",
+   "variant_ordinal": 1,
+   "group_post_id": "68f561de577eec16d6b9c926",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countStableSegments",
+     "params": [
+      {
+       "name": "capacity",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every left end, extend the right end while keeping a running sum of the strict middle and compare it with both ends",
+    "candidate_design": "with prefix sums P, segment l..r is stable when capacity[l] == capacity[r] and P[r] - P[l + 1] == capacity[r]; scan r from left to right, make left end l = r - 2 available by counting the key (capacity[l], P[l + 1]) in a hash map, and add the count of key (capacity[r], P[r] - capacity[r])",
+    "complexity_target": "O(n) expected time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4c568ffb851a22405657b29514d41e8c25e7a1355867fa5dbb19b6c8f5b503f5",
+    "full_text_location": "none held; official full statement not accessed"
+   },
+   "prior_blocker_cohort": "hack2hire-chunk05-v1"
+  },
+  {
+   "uid": "hack2hire:678472f60e1dbb6a09385781",
+   "title": "Dasher Payment Model",
+   "variant_ordinal": 1,
+   "group_post_id": "678470750e1dbb6a09385780",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "calculatePay",
+     "params": [
+      {
+       "name": "activities",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate every minute of the day, counting the paid orders ongoing in that minute and its weight",
+    "candidate_design": "sweep the rows once with a running count of ongoing paid orders; between consecutive row times add 30 * count * (W(t) - W(previous)), where W(t) is the closed-form weighted minute count before t",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "da33857c58a1849b3aa4cd69d283bbc3436c3af15884f2a65043770e3d621aef",
+    "full_text_location": "none held; official full statement not accessed"
+   },
+   "prior_blocker_cohort": "hack2hire-chunk05-v1"
+  },
+  {
+   "uid": "hack2hire:678478d50e1dbb6a09385782",
+   "title": "Dasher Payment Model",
+   "variant_ordinal": 2,
+   "group_post_id": "678470750e1dbb6a09385780",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "calculatePay",
+     "params": [
+      {
+       "name": "activities",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate every minute of the day, counting the paid orders ongoing in that minute and its weight",
+    "candidate_design": "sweep the rows once with a running count of ongoing paid orders; between consecutive row times add 30 * count * (W(t) - W(previous)), where W(t) is the closed-form weighted minute count before t with peak minutes weighted 2",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "da33857c58a1849b3aa4cd69d283bbc3436c3af15884f2a65043770e3d621aef",
+    "full_text_location": "none held; official full statement not accessed"
+   },
+   "prior_blocker_cohort": "hack2hire-chunk05-v1"
+  },
+  {
+   "uid": "hack2hire:6784b4640e1dbb6a09385784",
+   "title": "Dasher Payment Model",
+   "variant_ordinal": 3,
+   "group_post_id": "678470750e1dbb6a09385780",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "calculatePay",
+     "params": [
+      {
+       "name": "activities",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate every minute of the day, counting the paid orders ongoing in that minute and its weight",
+    "candidate_design": "sweep the rows once with a running count of ongoing paid orders; between consecutive row times add 30 * count * (W(t) - W(previous)), where W(t) is the closed-form weighted minute count before t with peak minutes weighted 2; a first pass marks cancelled orders, which never enter the count",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "da33857c58a1849b3aa4cd69d283bbc3436c3af15884f2a65043770e3d621aef",
+    "full_text_location": "none held; official full statement not accessed"
+   },
+   "prior_blocker_cohort": "hack2hire-chunk05-v1"
+  },
+  {
+   "uid": "hack2hire:6a14a84c7b0582b352787d44",
+   "title": "Design Ambient Light Sensor System",
+   "variant_ordinal": 1,
+   "group_post_id": "6a14a8477b0582b352787d43",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "ALSWrapper",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "record",
+       "params": [
+        {
+         "name": "status",
+         "type": "integer"
+        },
+        {
+         "name": "lux",
+         "type": "integer"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getLatestLux",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getAverageLux",
+       "params": [
+        {
+         "name": "startTime",
+         "type": "integer"
+        },
+        {
+         "name": "endTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "ALSWrapper"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep every valid reading in arrival order and rescan all of them for each query",
+    "candidate_design": "sparse Fenwick trees (hash maps keyed by tree index over timestamps 0..1e6) holding the lux sum and the reading count, plus the latest (timestamp, lux) pair updated with >= so later arrivals win ties; a range query subtracts two prefix queries",
+    "complexity_target": "O(log T) per call, T = 1e6 + 1 timestamp slots/O(r log T) space, r = valid readings"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5eb4ce075f91d3b5768f5d7c76d1813fd647defc5c3ccda7e361f60b27efe82e",
+    "full_text_location": "none held; official full statement not accessed"
+   },
+   "prior_blocker_cohort": "hack2hire-chunk05-v1"
+  },
+  {
+   "uid": "hack2hire:67842117d0faf7ec64cc3add",
+   "title": "Design Card Game",
+   "variant_ordinal": 1,
+   "group_post_id": "67841e26d0faf7ec64cc3adc",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "CardGame",
+     "constructor": {
+      "params": [
+       {
+        "name": "deck",
+        "type": "integer[]"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "playRound",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "getScore",
+       "params": [
+        {
+         "name": "player",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getWinner",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "CardGame"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "count the rounds played and replay every played round from the start of the deck on each query",
+    "candidate_design": "a draw pointer into the given order plus two running scores updated once per round",
+    "complexity_target": "O(1) per call/O(1) extra space beyond the deck"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "fbcd4aed279e255ffdde4498b5e73c91a8ac687a2207c991ddb0b4afbc986976",
+    "full_text_location": "none held; official full statement not accessed"
+   },
+   "prior_blocker_cohort": "hack2hire-chunk05-v1"
+  },
+  {
+   "uid": "hack2hire:6784211bd0faf7ec64cc3ade",
+   "title": "Design Card Game",
+   "variant_ordinal": 2,
+   "group_post_id": "67841e26d0faf7ec64cc3adc",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "CardGame",
+     "constructor": {
+      "params": [
+       {
+        "name": "deck",
+        "type": "integer[]"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "playRound",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "getScore",
+       "params": [
+        {
+         "name": "player",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getWinner",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "CardGame"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "count the rounds played and replay every played round from the start of the deck on each query",
+    "candidate_design": "a draw pointer into the given order plus two running scores updated once per round",
+    "complexity_target": "O(1) per call/O(1) extra space beyond the deck"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "fbcd4aed279e255ffdde4498b5e73c91a8ac687a2207c991ddb0b4afbc986976",
+    "full_text_location": "none held; official full statement not accessed"
+   },
+   "prior_blocker_cohort": "hack2hire-chunk05-v1"
+  },
+  {
+   "uid": "hack2hire:694609632c048134ada83559",
+   "title": "Design Dual Circuit Breakers",
+   "variant_ordinal": 1,
+   "group_post_id": "6946090c2c048134ada83558",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "DualCircuitBreaker",
+     "constructor": {
+      "params": [
+       {
+        "name": "failureThreshold",
+        "type": "integer"
+       },
+       {
+        "name": "cooldown",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "request",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "primaryOk",
+         "type": "boolean"
+        },
+        {
+         "name": "secondaryOk",
+         "type": "boolean"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "DualCircuitBreaker"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "store every attempt per server and, for each request, replay that server's whole attempt history to decide whether it is open",
+    "candidate_design": "two small state records (open flag, opened time, consecutive failures) updated in O(1) per attempt",
+    "complexity_target": "O(1) per request/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "efd50c1326e5ad236208e4c2a5cf17fd9e34da276a2c0096e8b0da329e94a330",
+    "full_text_location": "none held; official full statement not accessed"
+   },
+   "prior_blocker_cohort": "hack2hire-chunk05-v1"
+  },
+  {
+   "uid": "hack2hire:688bd5423867670cfb894188",
+   "title": "Detect Abusive Words",
+   "variant_ordinal": 1,
+   "group_post_id": "688bd4593867670cfb894187",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "detectAbusiveWords",
+     "params": [
+      {
+       "name": "words",
+       "type": "string[]"
+      },
+      {
+       "name": "substitutions",
+       "type": "string[][]"
+      },
+      {
+       "name": "comment",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "compare every token with every abusive word of the same length, position by position",
+    "candidate_design": "build a trie of the abusive words; for each token keep the set of trie nodes reachable so far, advancing through the child equal to a letter or the children named by a symbol's substitutions, and report the token when a reached node ends a word",
+    "complexity_target": "O(total token length * reachable trie nodes) worst case, O(total word length) to build/O(total word length) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a820317486f7c24d38551afe35378101ec02b73e766c4e8e83fba70b40932e07",
+    "full_text_location": "none held; official full statement not accessed"
+   },
+   "prior_blocker_cohort": "hack2hire-chunk05-v1"
+  }
+ ]
+}

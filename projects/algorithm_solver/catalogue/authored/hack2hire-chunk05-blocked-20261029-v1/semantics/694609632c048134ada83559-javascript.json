@@ -1,0 +1,68 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:694609632c048134ada83559",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "DualCircuitBreaker",
+  "constructor": {
+   "params": [
+    {
+     "name": "failureThreshold",
+     "type": "integer"
+    },
+    {
+     "name": "cooldown",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "request",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "primaryOk",
+      "type": "boolean"
+     },
+     {
+      "name": "secondaryOk",
+      "type": "boolean"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview (blocked in hack2hire-chunk05-v1), not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "store every attempt per server and, for each request, replay that server's whole attempt history to decide whether it is open",
+  "candidate_design": "two small state records (open flag, opened time, consecutive failures) updated in O(1) per attempt",
+  "complexity_target": "O(1) per request/O(1) space"
+ },
+ "source_sha256": "d3d39c5399726b30b8dc12cf271629cd643b61db0bd00948fba071698e5a6741",
+ "native_class": "DualCircuitBreaker",
+ "native_symbol": "property DualCircuitBreaker of the CommonJS solve export",
+ "void_methods": []
+}

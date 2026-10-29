@@ -1,0 +1,502 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a14a8477b0582b352787d43:6a14a84c7b0582b352787d44:authored-inferred-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+   "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+   "selector": "/problems/4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a14a8477b0582b352787d43.json",
+   "sha256": "0a2e730cd423b931c2d02c133be6e562aed35e9fdc5fdf157cd44716e1b6ea7a",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+   "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+   "selector": "/variants/hack2hire:6a14a84c7b0582b352787d44"
+  }
+ ],
+ "problemId": "hack2hire:6a14a8477b0582b352787d43",
+ "variantId": "6a14a84c7b0582b352787d44",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: latest and windowed average lux over valid readings",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6a14a84c7b0582b352787d44/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "ALSWrapper() starts with no readings. record(status, lux, timestamp) stores the reading (timestamp, lux) when status is 1 and ignores it completely when status is 0; readings from several sensors may arrive out of timestamp order. getLatestLux() returns the lux of the stored reading with the largest timestamp, the most recently recorded one among equal timestamps, or -1 when nothing is stored. getAverageLux(startTime, endTime) returns the floor of the mean lux over stored readings with startTime <= timestamp <= endTime, or -1 when there are none. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "ALSWrapper() starts with no readings.",
+   "record(status, lux, timestamp) stores the reading (timestamp, lux) when status is 1 and ignores it completely when status is 0; readings from several sensors may arrive out of timestamp order.",
+   "getLatestLux() returns the lux of the stored reading with the largest timestamp, the most recently recorded one among equal timestamps, or -1 when nothing is stored.",
+   "getAverageLux(startTime, endTime) returns the floor of the mean lux over stored readings with startTime <= timestamp <= endTime, or -1 when there are none.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "at most 2e4 calls",
+   "status is 0 or 1",
+   "0 <= lux <= 1e5",
+   "0 <= timestamp <= 1e6",
+   "0 <= startTime <= endTime <= 1e6"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6a14a84c7b0582b352787d44/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: an ALSWrapper receives readings with status, lux and timestamp from a polling thread; status 1 records the (timestamp, lux) reading, status 0 is ignored completely; queries from other threads must be thread-safe and non-blocking; the query methods are cut off; algorithmTags: DESIGN, CONCURRENCY; companies: VERKADA; stage SCREENING; preview response sha256 5eb4ce075f91d3b5768f5d7c76d1813fd647defc5c3ccda7e361f60b27efe82e"
+   },
+   {
+    "statement": "Uncertainty: very high: the class name, the reading fields and the status 1/0 rule are in the preview; both query methods, their names, tie and empty rules, floor averaging, out-of-order arrival and the bounds are invented. The thread-safe, non-blocking contract is NOT modelled or tested: candidates and traces are sequential, so nothing here establishes concurrent behaviour",
+    "basis": "the public group preview is partial (742 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "hack2hire-chunk05-v1 blocked this variant: The preview supplies input records but omits query methods, ordering/staleness rules and the actual concurrent-access contract. A sequential mock cannot establish non-blocking multi-thread behavior.",
+    "basis": "owner direction 2026-10-28: infer blocked problems and label every inference; this row is an inference, not the accessible exact statement or owner-supplied rules that chunk05 asked for"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/4/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/4/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/4/variant_split_inference"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/4/prior_blocker"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which queries does the wrapper expose, and what do they return when no reading exists?",
+   "Can readings arrive out of timestamp order?",
+   "Is the average rounded, floored or returned as a fraction?",
+   "What exactly must be non-blocking: queries only, or recording too?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6a14a84c7b0582b352787d44/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ALSWrapper",
+      "record",
+      "record",
+      "getLatestLux",
+      "record",
+      "getLatestLux",
+      "getAverageLux",
+      "getAverageLux",
+      "record",
+      "getLatestLux",
+      "getAverageLux"
+     ],
+     [
+      [],
+      [
+       1,
+       50,
+       10
+      ],
+      [
+       0,
+       999,
+       20
+      ],
+      [],
+      [
+       1,
+       30,
+       5
+      ],
+      [],
+      [
+       0,
+       10
+      ],
+      [
+       11,
+       100
+      ],
+      [
+       1,
+       7,
+       10
+      ],
+      [],
+      [
+       10,
+       10
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     50,
+     null,
+     50,
+     40,
+     -1,
+     null,
+     7,
+     28
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ALSWrapper",
+      "getLatestLux",
+      "getAverageLux"
+     ],
+     [
+      [],
+      [],
+      [
+       0,
+       0
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     -1,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6a14a84c7b0582b352787d44/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/oracles.py",
+    "sha256": "bde6928fb5631e62c797fd48ae0cc23e2966f2212522c8b63eb0056cdeb8ba1c",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ALSWrapper:\n    def __init__(self)\n    def record(self, status, lux, timestamp) -> void\n    def getLatestLux(self) -> integer\n    def getAverageLux(self, startTime, endTime) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/6a14a84c7b0582b352787d44-python.json",
+     "inferredInterface": {
+      "classname": "ALSWrapper",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "record",
+        "params": [
+         {
+          "name": "status",
+          "type": "integer"
+         },
+         {
+          "name": "lux",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getLatestLux",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getAverageLux",
+        "params": [
+         {
+          "name": "startTime",
+          "type": "integer"
+         },
+         {
+          "name": "endTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/6a14a84c7b0582b352787d44-python.json",
+      "sha256": "a91c9f22d2d81e643db82b839f5a96bd71b985fd67eb1a39564f7feb7bdbaa57",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ALSWrapper {\n  constructor()\n  record(status, lux, timestamp) /* -> void */\n  getLatestLux() /* -> integer */\n  getAverageLux(startTime, endTime) /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/6a14a84c7b0582b352787d44-javascript.json",
+     "inferredInterface": {
+      "classname": "ALSWrapper",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "record",
+        "params": [
+         {
+          "name": "status",
+          "type": "integer"
+         },
+         {
+          "name": "lux",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getLatestLux",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getAverageLux",
+        "params": [
+         {
+          "name": "startTime",
+          "type": "integer"
+         },
+         {
+          "name": "endTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/6a14a84c7b0582b352787d44-javascript.json",
+      "sha256": "187dc91862a9539e70f272981aca933b6102f6bf6744d7a533b2106bc0022b65",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/4/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/4/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

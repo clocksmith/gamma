@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+   "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+   "selector": "/problems/hack2hire:6784b4640e1dbb6a09385784"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+   "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+   "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784"
+  }
+ ],
+ "problemId": "hack2hire:678470750e1dbb6a09385780",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:authored-inferred-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/contract--contract_hack2hire_678470750e1dbb6a09385780_6784b4640e1dbb6a09385784_authored-inferred-v1.json",
+  "sha256": "a9344337c2c9bea3897171eaf968517ac91c8bfcf65d459a29cff533af5136aa"
+ },
+ "title": {
+  "status": "present",
+  "value": "sweep the rows once with a running count of ongoing paid orders; between consecutive row times add 30 * count * (W(t) - W(previous)), where W(t) is the closed-form weighted minute count before t with peak minutes weighted 2; a first pass marks cancelled orders, which never enter the count",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+    "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+    "selector": "/problems/hack2hire:6784b4640e1dbb6a09385784/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "sweep the rows once with a running count of ongoing paid orders; between consecutive row times add 30 * count * (W(t) - W(previous)), where W(t) is the closed-form weighted minute count before t with peak minutes weighted 2; a first pass marks cancelled orders, which never enter the count. Complexity target: O(n) time/O(n) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+    "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+    "selector": "/problems/hack2hire:6784b4640e1dbb6a09385784"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Piecewise-constant rate accumulation over a timeline"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "The event sweep is linear in rows; the minute-by-minute simulation is simpler but costs 1440 times the number of orders"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "after processing a row, count equals the number of paid orders accepted and not yet finished",
+   "pay is accumulated in integer cents"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Pay changes only when an order starts or finishes, so only row times matter.",
+   "Between two consecutive row times the number of ongoing orders is constant; multiply it by the paid minutes in between.",
+   "Precompute the weighted minutes before t so a gap costs O(1) even when it crosses peak boundaries."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "sweep the rows once with a running count of ongoing paid orders; between consecutive row times add 30 * count * (W(t) - W(previous)), where W(t) is the closed-form weighted minute count before t with peak minutes weighted 2; a first pass marks cancelled orders, which never enter the count",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+      "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+      "selector": "/problems/hack2hire:6784b4640e1dbb6a09385784/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) time/O(n) space; the independent reference (simulate every minute of the day, counting the paid orders ongoing in that minute and its weight) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+      "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+      "selector": "/problems/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Pay changes only when an order starts or finishes, so only row times matter.",
+     "Between two consecutive row times the number of ongoing orders is constant; multiply it by the paid minutes in between."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_678470750e1dbb6a09385780_6784b4640e1dbb6a09385784_approach-native_v1.json",
+    "sha256": "ef73b7f3e3b91e371a6bbb77b5b7728564616c61a4254f93bb8c2905056361b1"
+   }
+  },
+  {
+   "id": "approach:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper calculatePay, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+      "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+      "selector": "/problems/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Precompute the weighted minutes before t so a gap costs O(1) even when it crosses peak boundaries."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_678470750e1dbb6a09385780_6784b4640e1dbb6a09385784_python_v1.json",
+     "sha256": "3632a2908377624a1eb7331088dc6ad3b3b27d353ffc29f714b2508697fb59a1"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_678470750e1dbb6a09385780_6784b4640e1dbb6a09385784_javascript_v1.json",
+     "sha256": "619b8dcfcb72c5ee8a63ab311eb45f5d4c4d64e99858f8a81b170caf515de5d8"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_678470750e1dbb6a09385780_6784b4640e1dbb6a09385784_approach-native_v1.json",
+    "sha256": "ef73b7f3e3b91e371a6bbb77b5b7728564616c61a4254f93bb8c2905056361b1"
+   }
+  },
+  {
+   "id": "approach:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (simulate every minute of the day, counting the paid orders ongoing in that minute and its weight) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+      "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+      "selector": "/problems/hack2hire:6784b4640e1dbb6a09385784/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/3/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/test_oracles.py",
+      "sha256": "f2c4be72773fe8fd62e6dab57fa59d8b292f5e2071024728c76514a19df9a021",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:6784b4640e1dbb6a09385784"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_678470750e1dbb6a09385780_6784b4640e1dbb6a09385784_approach-native_v1.json",
+    "sha256": "ef73b7f3e3b91e371a6bbb77b5b7728564616c61a4254f93bb8c2905056361b1"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:678470750e1dbb6a09385780:6784b4640e1dbb6a09385784:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_678470750e1dbb6a09385780_6784b4640e1dbb6a09385784_approach-native_v1.json",
+  "sha256": "ef73b7f3e3b91e371a6bbb77b5b7728564616c61a4254f93bb8c2905056361b1"
+ }
+}
