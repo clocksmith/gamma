@@ -97,8 +97,19 @@ Caveats recorded by the reviewers:
 - **3862:** the "two balanced indices" gap is impossible in the domain (values are at least 1), so it was closed by proof, not cases.
 - **3937:** the circular-residue reading was adopted by the lane operator on third-party evidence (the doocs reference). It is not an owner decision.
 
+## Observer-cost reruns: 234, 235, 236 and 222 JavaScript
+
+The [v2 observers](../continuation-t-observers-20261028-v2/README.md) ([S](../continuation-s-observers-20261028-v2/README.md)) perform the same checks as v1 with byte-identical verdicts on every equivalence test, at about a quarter of the CPU cost on 100,000-node inputs. An independent review found one Proxy-on-class-chain divergence, which was fixed and re-reviewed (129,360 fuzz cases, 0 mismatches). Independent source, observer and controller reviews were pinned in the [T v3](../continuation-t-qualification-20261028-v3/README.md) and [S v3](../continuation-s-qualification-20261028-v3/README.md) controllers. Limits are unchanged.
+
+| Lane | Programs | Qualified | Calls | Batches | Freeze | Report | Host replay |
+|---|---:|---:|---:|---:|---|---|---|
+| T v3 | 3 | 3 | 731 | 31 | `cee0a50771a8f71554d2dc477009f0ed26255a8bdc1999a798e4c6e70b0d5098` | `40517a65a442ba9a19be54419a9edc7b630b673b82273e96f19f3dd990a0ab83` | `44e9dbc231f893a85c0147b95779f7d4ba1d4d2b284ea47eee9518f1cbe9bbca` |
+| S v3 | 1 | 1 | 146 | 8 | `42a9174e01eca3360d194fe1335c0e04f2f2caf754ecfdbb83b95113a59fe524` | `16fe5c73be8629bfb12b646b363e74a69f1984fab58c7f21e001c333131598eb` | `329be0027beb606d8970fa79e225c8c0ae40fb46143cfb68b4cc0b9696dbcf58` |
+
+All four programs qualified and both replays matched. **174 of the 176 continuation programs are now qualified.** The two remaining are 208 in Python and JavaScript, blocked by the transport envelope.
+
 ## Next
 
 1. Done: see the boundary repair section above.
-2. Reduce observer cost for large trees and lists, keeping the same checks, then rerun 234, 235, 236 and 222 in JavaScript.
+2. Done: see the observer-cost reruns above.
 3. 208 needs a transport profile that can carry the 20 MB witness without the forbidden workarounds.
