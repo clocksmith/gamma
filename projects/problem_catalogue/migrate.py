@@ -37,7 +37,7 @@ def source_metadata_files(root):
  for p in sorted(authored.glob('source-completion*/manifest.json')):yield p,'gamma-paired-manifest'
  for p in sorted(authored.glob('hack2hire-worklists-*/*')):
   if p.is_file() and (p.suffix in ('.txt','.md')):yield p,'hack-worklist'
- for name in ('manifest.json','design.json','semantics.json','contracts.json'):
+ for name in ('manifest.json','design.json','semantics.json','contracts.json','study-content.json','study-examples.json'):
   for p in sorted(authored.glob('*/'+name)):
    if name=='manifest.json' and p.parent.name.startswith('source-completion'):continue
    yield p,'gamma-source-metadata'

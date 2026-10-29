@@ -49,6 +49,8 @@ class MigrationTests(unittest.TestCase):
   for language,suffix in (('python','py'),('javascript','js')):
    p=batch/language/(variant+'.'+suffix);p.parent.mkdir(parents=True);p.write_text('UNOPENED CANDIDATE');paths.append(p)
   (batch/'semantics.json').write_text('{"status":"unknown"}')
+  (batch/'study-content.json').write_text('{"hints":["Authored teaching content"]}')
+  (batch/'study-examples.json').write_text('{"examples":[]}')
   work=authored/'hack2hire-worklists-fixture/chunk03.txt';work.parent.mkdir();work.write_text('post\tImplement itoa()\t'+variant+'\n')
   original=Path.read_bytes
   def guarded(path):
@@ -58,7 +60,7 @@ class MigrationTests(unittest.TestCase):
   self.assertEqual(len([k for k in records if k[0]=='problem']),1)
   self.assertFalse(any(k[0]=='admission' for k in records))
   artifacts=[v for (k,_),(r,v) in records.items() if k=='artifact'];self.assertEqual(len([v for v in artifacts if v['type']=='implementation']),2)
-  self.assertEqual(len([v for v in artifacts if v['nativeMetadata']['status']=='present' and v['nativeMetadata']['value'].get('role') in ('hack-worklist','gamma-source-metadata')]),2)
+  self.assertEqual(len([v for v in artifacts if v['nativeMetadata']['status']=='present' and v['nativeMetadata']['value'].get('role') in ('hack-worklist','gamma-source-metadata')]),4)
   claims=self.run.phase('resolve-identities')['proposedRelationships'];self.assertTrue(all(c['candidateExternalId']=='hack2hire:'+variant and not c['mergeAllowed'] for c in claims))
  def test_new_assignment_metadata_is_reported_after_snapshot(self):
   self.fixture();self.through_convert();M.validate(self.run,self.args);M.build_catalogue(self.run,self.args);M.build_embeddings(self.run,self.args)
