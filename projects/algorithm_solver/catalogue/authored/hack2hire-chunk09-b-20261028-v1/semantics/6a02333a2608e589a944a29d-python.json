@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a02333a2608e589a944a29d",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "board"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "calculateScore",
+  "params": [
+   {
+    "name": "board",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "label propagation: every tile repeatedly takes the smallest label of its same-terrain neighbours until nothing changes, then sum size x crowns per label",
+  "candidate_design": "one BFS per unvisited tile with an explicit queue over the flattened grid, accumulating size and crowns per region",
+  "complexity_target": "O(R * C) time/O(R * C) space"
+ },
+ "source_sha256": "86974176d9635d07504c75df0e2750f5556a206d36e6b1d1c5759c8bb2a28de0",
+ "wrapper": "Solution.calculateScore"
+}

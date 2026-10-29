@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69fa8ff5661bab75bbca3e10",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "requestTime"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "droppedRequests",
+  "params": [
+   {
+    "name": "requestTime",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every request count the earlier requests in each window by scanning all of them",
+  "candidate_design": "because times are sorted, compare requestTime[i] with requestTime[i-3], requestTime[i-20] and requestTime[i-60]",
+  "complexity_target": "O(n) time/O(1) extra space"
+ },
+ "source_sha256": "4a5f6e2a529e2ada6c0da7ea24adacb2ea45859ba1923ba22821b362f35e2d5c",
+ "wrapper": "Solution.droppedRequests"
+}

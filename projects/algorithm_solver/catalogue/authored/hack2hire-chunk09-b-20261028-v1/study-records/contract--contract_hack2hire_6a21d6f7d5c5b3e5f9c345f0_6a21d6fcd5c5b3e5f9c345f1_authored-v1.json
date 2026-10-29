@@ -1,0 +1,390 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a21d6f7d5c5b3e5f9c345f0.json",
+   "sha256": "17c6376592934c7742085e0d28be4665e580ddc7e7c5c9150131f5d113756b7f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+  }
+ ],
+ "problemId": "hack2hire:6a21d6f7d5c5b3e5f9c345f0",
+ "variantId": "6a21d6fcd5c5b3e5f9c345f1",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: per-singer role co-occurrence counts",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "performances is a list of [singer, role, year] string triples (year is a decimal integer string); period >= 0. For each singer and each unordered pair of different roles A and B, the pair co-occurs for that singer when the singer has a performance of A and a performance of B whose years differ by at most period. Each singer for which a pair co-occurs adds 1 to the count of (A, B) and 1 to the count of (B, A). Return [A, B, count as a decimal string] for every ordered pair with a positive count, ordered by A then B in code-point order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "performances is a list of [singer, role, year] string triples (year is a decimal integer string); period >= 0.",
+   "For each singer and each unordered pair of different roles A and B, the pair co-occurs for that singer when the singer has a performance of A and a performance of B whose years differ by at most period.",
+   "Each singer for which a pair co-occurs adds 1 to the count of (A, B) and 1 to the count of (B, A).",
+   "Return [A, B, count as a decimal string] for every ordered pair with a positive count, ordered by A then B in code-point order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= performances.length <= 1e4",
+   "at most 200 distinct roles",
+   "names match [A-Za-z0-9_]{1,20}",
+   "years are decimal strings in [0, 9999]",
+   "0 <= period <= 10000"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: performances of [singer, role, yearString], period, two different roles co-occur when the same singer performed both within period years (inclusive), counted per singer in both directions, rows [role, otherRole, countString]; algorithmTags: HASH_TABLE; preview response sha256 87a7f7b8fffb08a6b49c60b4b949d75ad9ac1976e597be1aff0f1f4368e53524"
+   },
+   {
+    "statement": "Uncertainty: medium: the co-occurrence rule, the per-singer counting and the row format are in the preview; counting a singer once per role pair (not once per pair of performances) and the output order are inferred",
+    "basis": "the public group preview is partial (960 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does a singer count once per role pair or once per pair of performances?",
+   "How are the rows ordered?",
+   "Are performances of the same role by the same singer paired with each other?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     0
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "s2",
+       "B",
+       "0"
+      ],
+      [
+       "s1",
+       "B",
+       "2001"
+      ],
+      [
+       "s1",
+       "A",
+       "9999"
+      ],
+      [
+       "s1",
+       "B",
+       "2001"
+      ],
+      [
+       "s2",
+       "A",
+       "1999"
+      ],
+      [
+       "s2",
+       "A",
+       "2003"
+      ],
+      [
+       "s1",
+       "B",
+       "1999"
+      ],
+      [
+       "s2",
+       "A",
+       "2000"
+      ],
+      [
+       "s1",
+       "A",
+       "9999"
+      ],
+      [
+       "s2",
+       "A",
+       "2003"
+      ],
+      [
+       "s1",
+       "B",
+       "2001"
+      ]
+     ],
+     10000
+    ],
+    "output": [
+     [
+      "A",
+      "B",
+      "2"
+     ],
+     [
+      "B",
+      "A",
+      "2"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def roleCooccurrences(performances, period) -> list<string[3]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a21d6fcd5c5b3e5f9c345f1-python.json",
+     "inferredInterface": {
+      "name": "roleCooccurrences",
+      "params": [
+       {
+        "name": "performances",
+        "type": "list<string[3]>"
+       },
+       {
+        "name": "period",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "list<string[3]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a21d6fcd5c5b3e5f9c345f1-python.json",
+      "sha256": "448e894f09f6ffc8c0d928dd8625d152def2ba58652fa0f7a94f9828e62cf4b6",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function roleCooccurrences(performances, period) /* -> list<string[3]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a21d6fcd5c5b3e5f9c345f1-javascript.json",
+     "inferredInterface": {
+      "name": "roleCooccurrences",
+      "params": [
+       {
+        "name": "performances",
+        "type": "list<string[3]>"
+       },
+       {
+        "name": "period",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "list<string[3]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a21d6fcd5c5b3e5f9c345f1-javascript.json",
+      "sha256": "f4348c0bd9fc56331874ae42100af52c218bf375fed350d92d46c1dcc7c8b426",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

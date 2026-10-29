@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67e08fffa59c3d249d3625e0",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countDistinct",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "build a set of every window slice",
+  "candidate_design": "a hash map from value to count in the current window and a running distinct counter updated by the entering and leaving value",
+  "complexity_target": "O(n) expected time/O(k) space"
+ },
+ "source_sha256": "7e7068d91fd1dff066e02b4a64c0a2e558b2a0a4f523e2d78a31dbdcce897a13",
+ "wrapper": "Solution.countDistinct"
+}

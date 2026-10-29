@@ -1,0 +1,373 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a1a0a12c81f779dc6a23752:6a1a0a79c81f779dc6a23756:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/16"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a1a0a12c81f779dc6a23752.json",
+   "sha256": "c644d8352996ed52d08395c0c24e69d3cf12de5d7bbdacce149d35034bac656c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:6a1a0a79c81f779dc6a23756"
+  }
+ ],
+ "problemId": "hack2hire:6a1a0a12c81f779dc6a23752",
+ "variantId": "6a1a0a79c81f779dc6a23756",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred part 2: static card, merchant and amount rules",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a79c81f779dc6a23756/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "As in part 1, plus rules: a list of strings \"field,value\" where field is card_number, merchant or max_amount. A request is declined when its card_number equals the value of a card_number rule, its merchant equals the value of a merchant rule, or its amount is greater than the value of a max_amount rule; otherwise it is approved. Return [unique_id, \"APPROVE\" or \"DECLINE\"] per request in timestamp order (ties keep input order).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "As in part 1, plus rules: a list of strings \"field,value\" where field is card_number, merchant or max_amount.",
+   "A request is declined when its card_number equals the value of a card_number rule, its merchant equals the value of a merchant rule, or its amount is greater than the value of a max_amount rule; otherwise it is approved.",
+   "Return [unique_id, \"APPROVE\" or \"DECLINE\"] per request in timestamp order (ties keep input order)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= requests.length <= 1e5",
+   "timestamp and amount are decimal integers in [0, 1e9]",
+   "unique_id matches [A-Za-z0-9_]{1,20} and is unique",
+   "card_number matches [0-9]{4,19}",
+   "merchant matches [a-z0-9_]{1,20}",
+   "0 <= rules.length <= 1e5",
+   "rule values follow the matching field format; max_amount values are decimal integers in [0, 1e9]"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a79c81f779dc6a23756/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: CSV authorization requests \"<timestamp_seconds>,<unique_id>,<amount>,<card_number>,<merchant>\", pre-validated, part-1 policy approve every request (later parts and the output format not visible); algorithmTags: SIMULATION; preview response sha256 367c8711f58b3a93ee136bf77cb2187e39c9359253be14ef2b2c8eb8efb35ec8"
+   },
+   {
+    "statement": "Uncertainty: very high: only part 1 is visible; the rule list, its three fields and the DECLINE decision are inferred as a plausible part 2",
+    "basis": "the public group preview is partial (537 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 2 of 3: inferred part 2 adds static blocking rules; no per-variant text is public",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/16/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/16/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/16/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which rule fields exist and how are they encoded?",
+   "Is the amount rule strict (greater than) or inclusive?",
+   "If several max_amount rules exist, which applies?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a79c81f779dc6a23756/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "9,id51,0,5555000011112222,cafe",
+      "1,id61,1000000000,4222,shop",
+      "5,id87,100,5555000011112222,m_1",
+      "1,id24,100,4111,cafe",
+      "9,id37,999,5555000011112222,shop",
+      "9,id74,1000000000,4111,m_1",
+      "9,id12,999,5555000011112222,m_1",
+      "5,id1,0,4222,cafe",
+      "0,id53,1000000000,4111,m_1"
+     ],
+     [
+      "merchant,zzz"
+     ]
+    ],
+    "output": [
+     [
+      "id53",
+      "APPROVE"
+     ],
+     [
+      "id61",
+      "APPROVE"
+     ],
+     [
+      "id24",
+      "APPROVE"
+     ],
+     [
+      "id87",
+      "APPROVE"
+     ],
+     [
+      "id1",
+      "APPROVE"
+     ],
+     [
+      "id51",
+      "APPROVE"
+     ],
+     [
+      "id37",
+      "APPROVE"
+     ],
+     [
+      "id74",
+      "APPROVE"
+     ],
+     [
+      "id12",
+      "APPROVE"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a79c81f779dc6a23756/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def processRequests(requests, rules) -> list<[string,string]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a79c81f779dc6a23756-python.json",
+     "inferredInterface": {
+      "name": "processRequests",
+      "params": [
+       {
+        "name": "requests",
+        "type": "string[]"
+       },
+       {
+        "name": "rules",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a79c81f779dc6a23756-python.json",
+      "sha256": "aad4d66e011e64d57a5ecb18c7875b23a56c1cd4b335a06adc19dadb400dce20",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function processRequests(requests, rules) /* -> list<[string,string]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a79c81f779dc6a23756-javascript.json",
+     "inferredInterface": {
+      "name": "processRequests",
+      "params": [
+       {
+        "name": "requests",
+        "type": "string[]"
+       },
+       {
+        "name": "rules",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a79c81f779dc6a23756-javascript.json",
+      "sha256": "13981102fbb8c9c9b8cf7aabc0b39ba8f01066583d319a249cc93e67fbe45073",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/16/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/16/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

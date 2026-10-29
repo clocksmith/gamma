@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a77ef3cd713d873ca7a9ab3",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "products",
+  "productPrices",
+  "productSold",
+  "soldPrice"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countIncorrect",
+  "params": [
+   {
+    "name": "products",
+    "type": "string[]"
+   },
+   {
+    "name": "productPrices",
+    "type": "number[]"
+   },
+   {
+    "name": "productSold",
+    "type": "string[]"
+   },
+   {
+    "name": "soldPrice",
+    "type": "number[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every sale, search the product list linearly for its catalog index",
+  "candidate_design": "a hash map from product name to correct price, then one pass over the sales",
+  "complexity_target": "O(p + s) expected time/O(p) space"
+ },
+ "source_sha256": "428910a2b3033146bb7bac34f7c2017a354b44a5db9a100a2aae6031c8936d77",
+ "wrapper": "Solution.countIncorrect"
+}

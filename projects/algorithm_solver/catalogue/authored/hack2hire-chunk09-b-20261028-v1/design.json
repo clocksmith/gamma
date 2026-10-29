@@ -1,0 +1,94 @@
+{
+ "problems": {
+  "hack2hire:6a02333a2608e589a944a29d": {
+   "reference": "label propagation: every tile repeatedly takes the smallest label of its same-terrain neighbours until nothing changes, then sum size x crowns per label",
+   "candidate_design": "one BFS per unvisited tile with an explicit queue over the flattened grid, accumulating size and crowns per region",
+   "complexity_target": "O(R * C) time/O(R * C) space"
+  },
+  "hack2hire:6a94a962cddc54478ddf6084": {
+   "reference": "for every i scan j from n-1 down to i+1 and stop at the first smaller priority",
+   "candidate_design": "suffix minimum array (non-decreasing in j); for each i binary-search the last j with suffixMin[j] < priorities[i]; that j holds a smaller priority and is the largest such index",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:67eb0d624c9bb801bfd0ef6b": {
+   "reference": "for every distinct interval start, scan all pairs again and keep those inside it",
+   "candidate_design": "sort the pairs by time once, then sweep and close a candlestick whenever the interval start changes",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:69bf10b121f6ab4226963d68": {
+   "reference": "flatten into one list with nested loops, then place value k into chunk k // size",
+   "candidate_design": "stream the values with one current buffer that is emitted whenever it reaches size",
+   "complexity_target": "O(total values + number of inner lists) time/O(total values) space"
+  },
+  "hack2hire:696294968742114304441df4": {
+   "reference": "keep the current associations in a plain list and scan it for every new triple",
+   "candidate_design": "a set of (company, contact, role) keys and a set of (company, role) keys, both updated when an association is accepted",
+   "complexity_target": "O(e + n) expected time/O(e + n) space"
+  },
+  "hack2hire:67e4db7050b60b77022f386f": {
+   "reference": "build a child map and recursively expand every compressed child into its promoted children, then emit preorder recursively",
+   "candidate_design": "walk the preorder rows once with a stack of (node, remaining children, nearest kept ancestor); every kept node is appended to its nearest kept ancestor's child list, and kept nodes keep their original preorder",
+   "complexity_target": "O(n + |compressedNodes|) time/O(n) space"
+  },
+  "hack2hire:677595ec0d31dc201f712037": {
+   "reference": "BFS directly over points, finding neighbours by scanning every placed point",
+   "candidate_design": "union-find over row and column lines (a point unites its row and its column) answers isConnected; getMinSteps checks the union-find first, then runs a BFS over lines where each row or column is expanded once",
+   "complexity_target": "O(alpha) per addPoint and isConnected; O(points in the component) per getMinSteps"
+  },
+  "hack2hire:68001116c48db1937ce88f45": {
+   "reference": "recount the bad hours of every window from scratch",
+   "candidate_design": "one sliding count of bad hours updated by the entering and leaving hour, compared with integer arithmetic",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:67e08fffa59c3d249d3625e0": {
+   "reference": "build a set of every window slice",
+   "candidate_design": "a hash map from value to count in the current window and a running distinct counter updated by the entering and leaving value",
+   "complexity_target": "O(n) expected time/O(k) space"
+  },
+  "hack2hire:69fa8ff5661bab75bbca3e10": {
+   "reference": "for every request count the earlier requests in each window by scanning all of them",
+   "candidate_design": "because times are sorted, compare requestTime[i] with requestTime[i-3], requestTime[i-20] and requestTime[i-60]",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:6a77ef3cd713d873ca7a9ab3": {
+   "reference": "for every sale, search the product list linearly for its catalog index",
+   "candidate_design": "a hash map from product name to correct price, then one pass over the sales",
+   "complexity_target": "O(p + s) expected time/O(p) space"
+  },
+  "hack2hire:6a4fe73a665efda9311f575d": {
+   "reference": "depth-first search over every order of lenders, extending a plan while the next lend covers the current payback",
+   "candidate_design": "subset dynamic programming: reach[mask] is the bitmask of lenders that can end a plan using exactly mask; extend by every unused lender whose lend covers the payback of some possible last lender",
+   "complexity_target": "O(2^n * n) time/O(2^n) space"
+  },
+  "hack2hire:681bafaba73bd75b806cb981": {
+   "reference": "label propagation: each object pixel repeatedly takes the smallest label of neighbours the black box links to it, then count distinct labels",
+   "candidate_design": "one BFS per unvisited object pixel, calling isSameObject only on 4-neighbours",
+   "complexity_target": "O(R * C) time and black-box calls/O(R * C) space"
+  },
+  "hack2hire:6a21d6fcd5c5b3e5f9c345f1": {
+   "reference": "for every singer compare every pair of their performances and collect the co-occurring role pairs in a set",
+   "candidate_design": "per singer, sorted distinct years per role; for each pair of roles a two-pointer merge finds whether the closest years are within period",
+   "complexity_target": "O(sum over singers of R_s * P_s + p log p) time/O(p) space"
+  },
+  "hack2hire:69beec3021f6ab4226963c1d": {
+   "reference": "split the lower-cased text and count each distinct word with list.count, then sort",
+   "candidate_design": "one hash-map count, sort the distinct frequencies, keep words whose frequency is at least the k-th largest, sort by (-frequency, word)",
+   "complexity_target": "O(n + W log W) time/O(W) space"
+  },
+  "hack2hire:6a1a0a50c81f779dc6a23753": {
+   "reference": "parse every row, repeatedly pick the unprocessed request with the smallest (timestamp, input index)",
+   "candidate_design": "parse once, stable sort by timestamp, emit APPROVE rows",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:6a1a0a79c81f779dc6a23756": {
+   "reference": "for every request scan every rule",
+   "candidate_design": "sets of blocked cards and merchants and the minimum max_amount, then one pass over the stable-sorted requests",
+   "complexity_target": "O((n + r) + n log n) time/O(n + r) space"
+  },
+  "hack2hire:6a1a0a7ac81f779dc6a23757": {
+   "reference": "for every request scan every rule and every report",
+   "candidate_design": "part 2 lookups plus a map from card number to its earliest report time; a request is blocked when its timestamp exceeds that time",
+   "complexity_target": "O(n log n + r + f) time/O(n + r + f) space"
+  }
+ }
+}

@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68001116c48db1937ce88f45",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "errors",
+  "threshold",
+  "duration",
+  "percent"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countAlerts",
+  "params": [
+   {
+    "name": "errors",
+    "type": "integer[]"
+   },
+   {
+    "name": "threshold",
+    "type": "integer"
+   },
+   {
+    "name": "duration",
+    "type": "integer"
+   },
+   {
+    "name": "percent",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recount the bad hours of every window from scratch",
+  "candidate_design": "one sliding count of bad hours updated by the entering and leaving hour, compared with integer arithmetic",
+  "complexity_target": "O(n) time/O(1) extra space"
+ },
+ "source_sha256": "0810493e34d72bd0cc6520106f73b71fc6739ec288ca3c755f7799a0127dbe99",
+ "wrapper": "Solution.countAlerts"
+}

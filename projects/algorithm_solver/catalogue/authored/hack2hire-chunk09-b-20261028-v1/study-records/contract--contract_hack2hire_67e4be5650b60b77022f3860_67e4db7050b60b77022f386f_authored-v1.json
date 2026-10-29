@@ -1,0 +1,452 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67e4be5650b60b77022f3860:67e4db7050b60b77022f386f:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67e4be5650b60b77022f3860.json",
+   "sha256": "ac322eebf86ef761263c4f5583e11c7e3cc2be57e9817a77a4b6edeb4e3356c0",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:67e4db7050b60b77022f386f"
+  }
+ ],
+ "problemId": "hack2hire:67e4be5650b60b77022f3860",
+ "variantId": "67e4db7050b60b77022f386f",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: remove compressed nodes and promote their children",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:67e4db7050b60b77022f386f/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "The tree is given as a list of rows [value, childValues] in preorder: the first row is the root and each node's children are listed in order. Values are unique. compressedNodes lists values to compress; values not in the tree and the root are ignored, and repeats do not matter. Compressing a node removes it and puts its children, in order, where it stood in its parent's child list; this applies recursively, so a compressed child of a compressed node is replaced by its own children. Return the resulting tree in the same preorder row format.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "The tree is given as a list of rows [value, childValues] in preorder: the first row is the root and each node's children are listed in order.",
+   "Values are unique.",
+   "compressedNodes lists values to compress; values not in the tree and the root are ignored, and repeats do not matter.",
+   "Compressing a node removes it and puts its children, in order, where it stood in its parent's child list; this applies recursively, so a compressed child of a compressed node is replaced by its own children.",
+   "Return the resulting tree in the same preorder row format."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= number of nodes <= 1e5",
+   "0 <= value <= 1e9, values unique",
+   "rows are in preorder and every non-root value is the child of exactly one row",
+   "0 <= compressedNodes.length <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:67e4db7050b60b77022f386f/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: n-ary tree with unique values, compressedNodes list, children of a compressed node promoted to its parent, root never compressed, return the modified tree; algorithmTags: DEPTH_FIRST_SEARCH; preview response sha256 3892585169c5c155083885ab9654511ae9997dc0e59530c14d56772d70fc40a5"
+   },
+   {
+    "statement": "Uncertainty: medium: the compression rule and the never-compressed root are in the preview; the preorder [value, childValues] row encoding for input and output, keeping child order and ignoring unknown values are inferred",
+    "basis": "the public group preview is partial (326 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is the tree passed in and returned?",
+   "Are promoted children inserted where the compressed node was, or appended?",
+   "What happens if compressedNodes contains the root or an unknown value?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:67e4db7050b60b77022f386f/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       1,
+       []
+      ]
+     ],
+     []
+    ],
+    "output": [
+     [
+      1,
+      []
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       0,
+       [
+        3,
+        2
+       ]
+      ],
+      [
+       3,
+       []
+      ],
+      [
+       2,
+       [
+        21,
+        28
+       ]
+      ],
+      [
+       21,
+       [
+        29,
+        12,
+        36
+       ]
+      ],
+      [
+       29,
+       [
+        25
+       ]
+      ],
+      [
+       25,
+       [
+        35
+       ]
+      ],
+      [
+       35,
+       []
+      ],
+      [
+       12,
+       [
+        5
+       ]
+      ],
+      [
+       5,
+       [
+        8
+       ]
+      ],
+      [
+       8,
+       []
+      ],
+      [
+       36,
+       [
+        13
+       ]
+      ],
+      [
+       13,
+       []
+      ],
+      [
+       28,
+       []
+      ]
+     ],
+     [
+      41,
+      8,
+      2,
+      8,
+      0,
+      8,
+      36,
+      42,
+      25,
+      29,
+      35,
+      13
+     ]
+    ],
+    "output": [
+     [
+      0,
+      [
+       3,
+       21,
+       28
+      ]
+     ],
+     [
+      3,
+      []
+     ],
+     [
+      21,
+      [
+       12
+      ]
+     ],
+     [
+      12,
+      [
+       5
+      ]
+     ],
+     [
+      5,
+      []
+     ],
+     [
+      28,
+      []
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:67e4db7050b60b77022f386f/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def compressTree(tree, compressedNodes) -> list<[integer,integer[]]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/67e4db7050b60b77022f386f-python.json",
+     "inferredInterface": {
+      "name": "compressTree",
+      "params": [
+       {
+        "name": "tree",
+        "type": "list<[integer,integer[]]>"
+       },
+       {
+        "name": "compressedNodes",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "list<[integer,integer[]]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/67e4db7050b60b77022f386f-python.json",
+      "sha256": "757096a52693dc4af9a9c7c2b8f96f718a2952b1cd589e6ca959d5b632b8e483",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function compressTree(tree, compressedNodes) /* -> list<[integer,integer[]]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/67e4db7050b60b77022f386f-javascript.json",
+     "inferredInterface": {
+      "name": "compressTree",
+      "params": [
+       {
+        "name": "tree",
+        "type": "list<[integer,integer[]]>"
+       },
+       {
+        "name": "compressedNodes",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "list<[integer,integer[]]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/67e4db7050b60b77022f386f-javascript.json",
+      "sha256": "6b6d34db0c7f79875a5f49e515d1f6c1fb55ed7aff67f6d3b2ab70718f897d31",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

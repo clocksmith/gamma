@@ -1,0 +1,875 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk09-b (16 Hack2Hire groups, 18 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:6a02333a2608e589a944a29d",
+   "title": "Calculate Board Score",
+   "variant_ordinal": 1,
+   "group_post_id": "6a0233312608e589a944a29c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "calculateScore",
+     "params": [
+      {
+       "name": "board",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "label propagation: every tile repeatedly takes the smallest label of its same-terrain neighbours until nothing changes, then sum size x crowns per label",
+    "candidate_design": "one BFS per unvisited tile with an explicit queue over the flattened grid, accumulating size and crowns per region",
+    "complexity_target": "O(R * C) time/O(R * C) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "03b09663f56cfc58ee9523bf430999e4d930601f6d2e9ee3400bddcf37f90610",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a94a962cddc54478ddf6084",
+   "title": "Calculate Process Starvation",
+   "variant_ordinal": 1,
+   "group_post_id": "6a94a95dcddc54478ddf6082",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "starvationTimes",
+     "params": [
+      {
+       "name": "priorities",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every i scan j from n-1 down to i+1 and stop at the first smaller priority",
+    "candidate_design": "suffix minimum array (non-decreasing in j); for each i binary-search the last j with suffixMin[j] < priorities[i]; that j holds a smaller priority and is the largest such index",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c9b1dbc443a6b7e22b70d0b2766e0a0caafce3a18602f899b63b6907973a20f4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67eb0d624c9bb801bfd0ef6b",
+   "title": "Candlestick Data Generator",
+   "variant_ordinal": 1,
+   "group_post_id": "67eb0bdd4c9bb801bfd0ef6a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "generateCandlesticks",
+     "params": [
+      {
+       "name": "prices",
+       "type": "list<[integer,integer]>"
+      }
+     ],
+     "return": {
+      "type": "list<integer[5]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every distinct interval start, scan all pairs again and keep those inside it",
+    "candidate_design": "sort the pairs by time once, then sweep and close a candlestick whenever the interval start changes",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "79012b182dd3df70ae2281924df0f1586bf808face75ab576ff8ef977bbca2dc",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69bf10b121f6ab4226963d68",
+   "title": "Chunk a List of Lists",
+   "variant_ordinal": 1,
+   "group_post_id": "69bf10aa21f6ab4226963d67",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "rechunk",
+     "params": [
+      {
+       "name": "data",
+       "type": "integer[][]"
+      },
+      {
+       "name": "size",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "flatten into one list with nested loops, then place value k into chunk k // size",
+    "candidate_design": "stream the values with one current buffer that is emitted whenever it reaches size",
+    "complexity_target": "O(total values + number of inner lists) time/O(total values) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4243ee5737f5b5c4e028c6009baa7b42dd868865d95a5063a818698bf0a202bf",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:696294968742114304441df4",
+   "title": "Company Role Assignment",
+   "variant_ordinal": 1,
+   "group_post_id": "696294908742114304441df1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "validateAssociations",
+     "params": [
+      {
+       "name": "existingAssociations",
+       "type": "list<string[3]>"
+      },
+      {
+       "name": "newAssociations",
+       "type": "list<string[3]>"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep the current associations in a plain list and scan it for every new triple",
+    "candidate_design": "a set of (company, contact, role) keys and a set of (company, role) keys, both updated when an association is accepted",
+    "complexity_target": "O(e + n) expected time/O(e + n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "d323cfeb7eeaf6b8312653cf00521d763cee141acd06bd656426b678880fb7ef",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67e4db7050b60b77022f386f",
+   "title": "Compress N-ary Tree",
+   "variant_ordinal": 1,
+   "group_post_id": "67e4be5650b60b77022f3860",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "compressTree",
+     "params": [
+      {
+       "name": "tree",
+       "type": "list<[integer,integer[]]>"
+      },
+      {
+       "name": "compressedNodes",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "list<[integer,integer[]]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "build a child map and recursively expand every compressed child into its promoted children, then emit preorder recursively",
+    "candidate_design": "walk the preorder rows once with a stack of (node, remaining children, nearest kept ancestor); every kept node is appended to its nearest kept ancestor's child list, and kept nodes keep their original preorder",
+    "complexity_target": "O(n + |compressedNodes|) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3892585169c5c155083885ab9654511ae9997dc0e59530c14d56772d70fc40a5",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:677595ec0d31dc201f712037",
+   "title": "Connect Points in 2D Matrix",
+   "variant_ordinal": 1,
+   "group_post_id": "677593f60d31dc201f712036",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "PointMatrix",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addPoint",
+       "params": [
+        {
+         "name": "row",
+         "type": "integer"
+        },
+        {
+         "name": "col",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "isConnected",
+       "params": [
+        {
+         "name": "point1",
+         "type": "integer[2]"
+        },
+        {
+         "name": "point2",
+         "type": "integer[2]"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getMinSteps",
+       "params": [
+        {
+         "name": "start",
+         "type": "integer[2]"
+        },
+        {
+         "name": "end",
+         "type": "integer[2]"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "PointMatrix"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "BFS directly over points, finding neighbours by scanning every placed point",
+    "candidate_design": "union-find over row and column lines (a point unites its row and its column) answers isConnected; getMinSteps checks the union-find first, then runs a BFS over lines where each row or column is expanded once",
+    "complexity_target": "O(alpha) per addPoint and isConnected; O(points in the component) per getMinSteps"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b0de3bc54bb31ca1986c0b9b6bf0b2a94828d477e726c105af0931c3a1fec3b8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68001116c48db1937ce88f45",
+   "title": "Count Alert Triggers",
+   "variant_ordinal": 1,
+   "group_post_id": "67ff3b3ca19f45c95d405689",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countAlerts",
+     "params": [
+      {
+       "name": "errors",
+       "type": "integer[]"
+      },
+      {
+       "name": "threshold",
+       "type": "integer"
+      },
+      {
+       "name": "duration",
+       "type": "integer"
+      },
+      {
+       "name": "percent",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recount the bad hours of every window from scratch",
+    "candidate_design": "one sliding count of bad hours updated by the entering and leaving hour, compared with integer arithmetic",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "bec364c564699253277cc23a518666ede43445a85531906e68c955075b6e443d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67e08fffa59c3d249d3625e0",
+   "title": "Count Distinct Elements in Window",
+   "variant_ordinal": 1,
+   "group_post_id": "67e08f3ea59c3d249d3625df",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countDistinct",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "build a set of every window slice",
+    "candidate_design": "a hash map from value to count in the current window and a running distinct counter updated by the entering and leaving value",
+    "complexity_target": "O(n) expected time/O(k) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "7e808d3677763ca942ab46bde04985aaaaf5b8d928e4ecf1653c82d3d13af8ec",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69fa8ff5661bab75bbca3e10",
+   "title": "Count Dropped Requests",
+   "variant_ordinal": 1,
+   "group_post_id": "69fa8fa8661bab75bbca3e0b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "droppedRequests",
+     "params": [
+      {
+       "name": "requestTime",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every request count the earlier requests in each window by scanning all of them",
+    "candidate_design": "because times are sorted, compare requestTime[i] with requestTime[i-3], requestTime[i-20] and requestTime[i-60]",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "238de8784501fd2b30a04ec5c72dbbd878f5f4814ba21243a2667a5d9ed2d6eb",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a77ef3cd713d873ca7a9ab3",
+   "title": "Count Incorrect Sale Prices",
+   "variant_ordinal": 1,
+   "group_post_id": "6a77ef33d713d873ca7a9ab2",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countIncorrect",
+     "params": [
+      {
+       "name": "products",
+       "type": "string[]"
+      },
+      {
+       "name": "productPrices",
+       "type": "number[]"
+      },
+      {
+       "name": "productSold",
+       "type": "string[]"
+      },
+      {
+       "name": "soldPrice",
+       "type": "number[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every sale, search the product list linearly for its catalog index",
+    "candidate_design": "a hash map from product name to correct price, then one pass over the sales",
+    "complexity_target": "O(p + s) expected time/O(p) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "e45e950ca641d36271e39ef523d166f025a053d30675a2514c7839a138bcf6ab",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a4fe73a665efda9311f575d",
+   "title": "Count Maximum Borrowing Days",
+   "variant_ordinal": 1,
+   "group_post_id": "6a4fe695665efda9311f5752",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxBorrowingDays",
+     "params": [
+      {
+       "name": "lend",
+       "type": "integer[]"
+      },
+      {
+       "name": "payback",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "depth-first search over every order of lenders, extending a plan while the next lend covers the current payback",
+    "candidate_design": "subset dynamic programming: reach[mask] is the bitmask of lenders that can end a plan using exactly mask; extend by every unused lender whose lend covers the payback of some possible last lender",
+    "complexity_target": "O(2^n * n) time/O(2^n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "e04b9b3c38a511ed5dacda67c2296877c9d55cde0aed737d98acf428e3e6b2c2",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:681bafaba73bd75b806cb981",
+   "title": "Count Objects in Pin",
+   "variant_ordinal": 1,
+   "group_post_id": "681babe1a73bd75b806cb97a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countObjects",
+     "params": [
+      {
+       "name": "grid",
+       "type": "string[]"
+      },
+      {
+       "name": "objectIds",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "label propagation: each object pixel repeatedly takes the smallest label of neighbours the black box links to it, then count distinct labels",
+    "candidate_design": "one BFS per unvisited object pixel, calling isSameObject only on 4-neighbours",
+    "complexity_target": "O(R * C) time and black-box calls/O(R * C) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5dfeb10d34bc9f1b039d9ee5006c01b220acabd8cecf89444471e782919a9bd2",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a21d6fcd5c5b3e5f9c345f1",
+   "title": "Count Singler Role Co-occurrences",
+   "variant_ordinal": 1,
+   "group_post_id": "6a21d6f7d5c5b3e5f9c345f0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "roleCooccurrences",
+     "params": [
+      {
+       "name": "performances",
+       "type": "list<string[3]>"
+      },
+      {
+       "name": "period",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "list<string[3]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every singer compare every pair of their performances and collect the co-occurring role pairs in a set",
+    "candidate_design": "per singer, sorted distinct years per role; for each pair of roles a two-pointer merge finds whether the closest years are within period",
+    "complexity_target": "O(sum over singers of R_s * P_s + p log p) time/O(p) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "87a7f7b8fffb08a6b49c60b4b949d75ad9ac1976e597be1aff0f1f4368e53524",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69beec3021f6ab4226963c1d",
+   "title": "Counting Words in a Text",
+   "variant_ordinal": 1,
+   "group_post_id": "69beea4721f6ab4226963c0f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "topFrequencyWords",
+     "params": [
+      {
+       "name": "text",
+       "type": "string"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "list<[string,integer]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "split the lower-cased text and count each distinct word with list.count, then sort",
+    "candidate_design": "one hash-map count, sort the distinct frequencies, keep words whose frequency is at least the k-th largest, sort by (-frequency, word)",
+    "complexity_target": "O(n + W log W) time/O(W) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ad67ac710efcca99d99b8774cc2fd8ce85bf4383bb9cc97e7da6573d2fa59843",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1a0a50c81f779dc6a23753",
+   "title": "Credit Card Fraud Detection",
+   "variant_ordinal": 1,
+   "group_post_id": "6a1a0a12c81f779dc6a23752",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processRequests",
+     "params": [
+      {
+       "name": "requests",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "list<[string,string]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "parse every row, repeatedly pick the unprocessed request with the smallest (timestamp, input index)",
+    "candidate_design": "parse once, stable sort by timestamp, emit APPROVE rows",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "367c8711f58b3a93ee136bf77cb2187e39c9359253be14ef2b2c8eb8efb35ec8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1a0a79c81f779dc6a23756",
+   "title": "Credit Card Fraud Detection",
+   "variant_ordinal": 2,
+   "group_post_id": "6a1a0a12c81f779dc6a23752",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processRequests",
+     "params": [
+      {
+       "name": "requests",
+       "type": "string[]"
+      },
+      {
+       "name": "rules",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "list<[string,string]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every request scan every rule",
+    "candidate_design": "sets of blocked cards and merchants and the minimum max_amount, then one pass over the stable-sorted requests",
+    "complexity_target": "O((n + r) + n log n) time/O(n + r) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "367c8711f58b3a93ee136bf77cb2187e39c9359253be14ef2b2c8eb8efb35ec8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1a0a7ac81f779dc6a23757",
+   "title": "Credit Card Fraud Detection",
+   "variant_ordinal": 3,
+   "group_post_id": "6a1a0a12c81f779dc6a23752",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processRequests",
+     "params": [
+      {
+       "name": "requests",
+       "type": "string[]"
+      },
+      {
+       "name": "rules",
+       "type": "string[]"
+      },
+      {
+       "name": "fraudReports",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "list<[string,string]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every request scan every rule and every report",
+    "candidate_design": "part 2 lookups plus a map from card number to its earliest report time; a request is blocked when its timestamp exceeds that time",
+    "complexity_target": "O(n log n + r + f) time/O(n + r + f) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "367c8711f58b3a93ee136bf77cb2187e39c9359253be14ef2b2c8eb8efb35ec8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

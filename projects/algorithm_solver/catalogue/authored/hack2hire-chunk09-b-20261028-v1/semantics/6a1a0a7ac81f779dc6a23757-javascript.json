@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1a0a7ac81f779dc6a23757",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "requests",
+  "rules",
+  "fraudReports"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "processRequests",
+  "params": [
+   {
+    "name": "requests",
+    "type": "string[]"
+   },
+   {
+    "name": "rules",
+    "type": "string[]"
+   },
+   {
+    "name": "fraudReports",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string,string]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every request scan every rule and every report",
+  "candidate_design": "part 2 lookups plus a map from card number to its earliest report time; a request is blocked when its timestamp exceeds that time",
+  "complexity_target": "O(n log n + r + f) time/O(n + r + f) space"
+ },
+ "source_sha256": "61c9e30627423de97e7397c6b758463486d31b8dad262312fe8ad6520e26186e",
+ "wrapper": "named export processRequests"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1a0a79c81f779dc6a23756",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "requests",
+  "rules"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "processRequests",
+  "params": [
+   {
+    "name": "requests",
+    "type": "string[]"
+   },
+   {
+    "name": "rules",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string,string]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every request scan every rule",
+  "candidate_design": "sets of blocked cards and merchants and the minimum max_amount, then one pass over the stable-sorted requests",
+  "complexity_target": "O((n + r) + n log n) time/O(n + r) space"
+ },
+ "source_sha256": "66cb85107750d3277ac26c58d7ae5d7d31fac2fc383ea161503ffb965fb5199b",
+ "wrapper": "named export processRequests"
+}
