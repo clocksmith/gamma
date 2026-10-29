@@ -62,13 +62,20 @@ class ReviewsFailClosed(unittest.TestCase):
         result=p.reviews(SimpleNamespace(review=None),rows,contract)
         self.assertEqual(set(result),{'222:javascript'});self.assertFalse(result['222:javascript']['approved'])
 
-    def test_unpinned_receipts_refused(self):
-        self.assertIsNone(p.SOURCE_REVIEW_SHA);self.assertIsNone(p.OBSERVER_REVIEW_SHA)
+    def test_unpinned_or_mismatched_receipts_refused(self):
+        self.assertEqual(p.SOURCE_REVIEW_SHA,'da7b6322e59b4e4add33ac828ec825a4e8e1820a6992b014322cb7735d18c7f0')
+        self.assertEqual(p.OBSERVER_REVIEW_SHA,'41631f32cdfa2ea0b9b9008d8a857235fd94ef078c22443063e7d4b98f11e5af')
         rows,contract=p.metadata()
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'review.json';path.write_text('{}')
-            with self.assertRaisesRegex(ValueError,'not yet pinned'):p.reviews(SimpleNamespace(review=path),rows,contract)
-            with self.assertRaisesRegex(ValueError,'not yet pinned'):p.observer_review(SimpleNamespace(observer_review=path))
+            with self.assertRaisesRegex(ValueError,'exact independent S20 source review required'):p.reviews(SimpleNamespace(review=path),rows,contract)
+            with self.assertRaisesRegex(ValueError,'exact independent observer receipt required'):p.observer_review(SimpleNamespace(observer_review=path))
+            originals=p.SOURCE_REVIEW_SHA,p.OBSERVER_REVIEW_SHA
+            try:
+                p.SOURCE_REVIEW_SHA=p.OBSERVER_REVIEW_SHA=None
+                with self.assertRaisesRegex(ValueError,'not yet pinned'):p.reviews(SimpleNamespace(review=path),rows,contract)
+                with self.assertRaisesRegex(ValueError,'not yet pinned'):p.observer_review(SimpleNamespace(observer_review=path))
+            finally:p.SOURCE_REVIEW_SHA,p.OBSERVER_REVIEW_SHA=originals
 
     def test_v1_bound_review_cannot_approve_v2_binding(self):
         rows,contract=p.metadata();pins=p.binding(222,'javascript',rows[222,'javascript'],contract)

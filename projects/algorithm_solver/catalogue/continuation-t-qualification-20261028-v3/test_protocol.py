@@ -70,13 +70,18 @@ class ReviewsFailClosed(unittest.TestCase):
         self.assertEqual(set(result),{f'{pid}:{lang}' for pid,lang in p.RERUN})
         self.assertFalse(any(r['approved'] for r in result.values()))
 
-    def test_unpinned_rebinding_receipt_refused(self):
-        self.assertIsNone(p.SOURCE_REVIEW_SHA)
+    def test_unpinned_or_mismatched_receipt_refused(self):
+        self.assertEqual(p.SOURCE_REVIEW_SHA,'512afc450b9242977ad55b4c8613619e95e17990f52278f0efd9a0ec78a2303c')
         rows,contract=p.metadata()
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'review.json';path.write_text('{}')
-            with self.assertRaisesRegex(ValueError,'not yet pinned'):p.reviews(SimpleNamespace(review=path),rows,contract)
-            with self.assertRaisesRegex(ValueError,'not yet pinned'):p.observer_review(SimpleNamespace(review=path))
+            with self.assertRaisesRegex(ValueError,'exact independent T16 source review required'):p.reviews(SimpleNamespace(review=path),rows,contract)
+            with self.assertRaisesRegex(ValueError,'exact independent observer/source receipt required'):p.observer_review(SimpleNamespace(review=path))
+            original=p.SOURCE_REVIEW_SHA
+            try:
+                p.SOURCE_REVIEW_SHA=None
+                with self.assertRaisesRegex(ValueError,'not yet pinned'):p.reviews(SimpleNamespace(review=path),rows,contract)
+            finally:p.SOURCE_REVIEW_SHA=original
 
     def test_old_v1_bound_review_cannot_approve_v2_binding(self):
         rows,contract=p.metadata()

@@ -1,0 +1,253 @@
+{
+  "actions": {
+    "broader_assignments_resumed": false,
+    "candidate_executions": 0,
+    "git_mutations": 0,
+    "historical_raw_bodies_opened": 0,
+    "numbered_candidate_source_bodies_opened": 0,
+    "pycache_left": 0,
+    "sha256sums_or_validation_regenerated": false,
+    "source_edits": 0
+  },
+  "approved_for_source_only_controller_draft": true,
+  "author_task": "controller author (separate task; not this reviewer)",
+  "blocking_controller_correctness_findings": [],
+  "diff_vs_predecessor": {
+    "changed": {
+      "protocol.py:101-102": "dispatch filtered to RERUN after full 20-slot inventory",
+      "protocol.py:177,184": "None-pin guards",
+      "protocol.py:25": "OBSERVER -> continuation-s-observers-20261028-v2",
+      "protocol.py:254": "208 scope note prepared_scope.source_review_sha256 checked against PRIOR_SOURCE_REVIEW_SHA (the note is unchanged and records the original review; required, otherwise the unchanged note would be refused)",
+      "protocol.py:26-28": "PRIOR_LANE, PRIOR_PROFILE_SHA, RERUN (222 javascript)",
+      "protocol.py:265,277,327,367": "rerun record in freeze, verified() before metadata/gate, identity and report",
+      "protocol.py:33-41": "PROFILE_SHA de0204ae...; PRIOR_SOURCE/OBSERVER_REVIEW_SHA; SOURCE_REVIEW_SHA da7b6322...; OBSERVER_REVIEW_SHA 41631f32...",
+      "protocol.py:43": "SCHEMA gamma.s20-official-execution.v3",
+      "protocol.py:58-61": "rerun_record()",
+      "protocol.py:68": "profile lineage previous_profile_sha256 == PRIOR_PROFILE_SHA"
+    },
+    "only_allowed_categories_changed": [
+      "observer binding",
+      "RERUN selection",
+      "lineage",
+      "pins",
+      "tests",
+      "README"
+    ],
+    "unchanged_confirmed": [
+      "ARGV and E.LIMITS (3 CPU s, 8 wall s, 1 GiB, 16 MiB output)",
+      "PLAN_SHA e3aef8f4..., plan.py, host_check.py, harness.py, native_graphs.py, prospective-plan.json byte-identical to observer v1",
+      "MANIFEST_SHA, IDS, inventory() 20-slot verification",
+      "gate(): exact six boundary anchors; definitions/refetch bindings",
+      "binding(), accept_reviews() FLAGS and exact SAFETY_REVIEW_TEXT",
+      "observer_review() separate-receipt rule and reviewed_helpers/profile/source-review binding",
+      "required_blockers() 208 symbolic transport witness and SCOPE; required-domain-supplement.json byte-identical; SCOPE_NOTE_SHA unchanged",
+      "transport: packet/output envelopes, raw-first capture, framing, verdict, summary, replay"
+    ]
+  },
+  "focused_verification": {
+    "command": [
+      "python3",
+      "-B",
+      "test_protocol.py",
+      "-v"
+    ],
+    "cwd": "/Users/xyz/deco/gamma/projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v3",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "log_location": "reviewer scratchpad (ephemeral, not committed)",
+    "log_path": "/private/tmp/claude-501/-Users-xyz-deco/f7c6ca03-f1d7-40a6-9dbd-091c2291175b/scratchpad/review/continuation-s-qualification-20261028-v3.log",
+    "log_sha256": "78df3d154d14f0a82b386a51a3f3d5febf749b10167febffad36e64c69fb5741",
+    "predecessor_suite": {
+      "command": [
+        "python3",
+        "-B",
+        "test_protocol.py",
+        "-v"
+      ],
+      "cwd": "/Users/xyz/deco/gamma/projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v2",
+      "exit_code": 0,
+      "log_path": "/private/tmp/claude-501/-Users-xyz-deco/f7c6ca03-f1d7-40a6-9dbd-091c2291175b/scratchpad/review/continuation-s-qualification-20261028-v2.log",
+      "log_sha256": "cb0e3b4795bde5f3570bd502ba69082ccb8b347f30253806b4f69b8e9b89ecc7",
+      "tests_failed": 0,
+      "tests_passed": 21
+    },
+    "python_runtime": "3.14.2 (main, Dec  5 2025, 16:49:16) [Clang 17.0.0 (clang-1700.4.4.1)]",
+    "reviewed_file_hashes_stable_during_test": true,
+    "sandbox_dispatch": "mocked inert fixtures only; no candidate interpreter dispatched",
+    "tests_failed": 0,
+    "tests_passed": 13
+  },
+  "limitations": [
+    "Static/source-free controller approval is not qualification of the rerun candidate programs.",
+    "Receipt contents (reviewer findings, fuzz counts, headroom estimates) are claims of the receipt author; this review verified their hashes, schema and binding, not their reasoning.",
+    "Executor preflight, freeze, Linux candidate execution and independent raw replay remain separate and pending.",
+    "Test logs live in the reviewer scratchpad and are not durable repository evidence.",
+    "This task did not alter validation.json, SHA256SUMS, source/controller files, Git/index, catalogue, retrieval or composition."
+  ],
+  "non_blocking_findings": [
+    {
+      "finding": "v3 suite drops v2 run/replay/tamper and 208 behavioral controls; that logic is byte-identical to v2 and the unchanged v2 suite (21/21) still exercises it against the v2 module.",
+      "location": "continuation-s-qualification-20261028-v3/test_protocol.py (13 tests vs v2 21)",
+      "severity": "non_blocking"
+    },
+    {
+      "finding": "Scope-note lineage is asserted by grepping protocol.py source text, not by calling scope_note() on the pinned note; this review verified the note hash and prepared_scope lineage directly.",
+      "location": "continuation-s-qualification-20261028-v3/test_protocol.py:90-91",
+      "severity": "non_blocking"
+    },
+    {
+      "finding": "No test asserts the pinned receipts approve exactly RERUN; verified out of band (receipt_verification).",
+      "location": "continuation-s-qualification-20261028-v3/test_protocol.py:65-78",
+      "severity": "non_blocking"
+    },
+    {
+      "finding": "S v2 has no independent-controller-review.json; the only precedent is T v2, whose schema and fields this receipt follows.",
+      "location": "continuation-s-qualification-20261028-v2/",
+      "severity": "informational"
+    }
+  ],
+  "predecessor_files": {
+    "projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v2/README.md": {
+      "bytes": 1602,
+      "sha256": "778ea2c4ec29cfa345703033b5e97f53762164c471188d8d83db9af625b137de"
+    },
+    "projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v2/SHA256SUMS": {
+      "bytes": 335,
+      "sha256": "1ef87aae79d64d8128d005ca3ed43e4360d03489609c6c588e27a3e8e50fcffb"
+    },
+    "projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v2/protocol.py": {
+      "bytes": 30160,
+      "sha256": "33fb3b9e2e78769c51ec473566b04264fcf2fad1d4f2629a704a2bf0ac3af281"
+    },
+    "projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v2/required-domain-supplement.json": {
+      "bytes": 1912,
+      "sha256": "bcd0849c655e4435308072ae4584c6092be3cac442b74befcf0a7b692a2d1200"
+    },
+    "projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v2/test_protocol.py": {
+      "bytes": 13382,
+      "sha256": "4536e0809ff7affadd96725f3c92e01b9b4d147be30419b6e9a33252e2c06042"
+    }
+  },
+  "predecessor_unchanged_in_git": true,
+  "preserved_gates": [
+    "Missing review dispatches nothing; zero-execution pass forbidden.",
+    "Unpinned (None) or mismatched receipt raises before approval.",
+    "v2 freeze schema and v1 profile rejected by verified() before metadata/gate access.",
+    "Rerun lineage record verified on freeze, run and replay.",
+    "Live six-anchor authorization, bounded source opens, Linux runtime identity, 37-check preflight, argv, limits, raw-first capture and strict replay retained."
+  ],
+  "receipt_verification": {
+    "check": {
+      "method": "imported v3 protocol modules source-free; called metadata(), reviews(), observer_review(), accept_reviews() with the exact receipt files; no gate, statement, candidate source or sandbox access",
+      "output_path": "/private/tmp/claude-501/-Users-xyz-deco/f7c6ca03-f1d7-40a6-9dbd-091c2291175b/scratchpad/review/receipt-check.json",
+      "output_sha256": "aa44c79ec94c0fdccf8744a1b06158ea1fa7072801ef8246b880daab0fe69572",
+      "script_path": "/private/tmp/claude-501/-Users-xyz-deco/f7c6ca03-f1d7-40a6-9dbd-091c2291175b/scratchpad/review/check_receipts.py",
+      "script_sha256": "9432b03f5dfdaa818552d19b740f28641494d807892341a2f22a0b83743afba3"
+    },
+    "observer_review": {
+      "bytes": 2558,
+      "observer_review_result": "accepted",
+      "path": "projects/algorithm_solver/runs/download-integration-20261028/packages/gamma-lower-PU-source-private/static-review-receipts/s-observer-v2-rerun-observer-review.json",
+      "pinned_as": "OBSERVER_REVIEW_SHA (protocol.py:41)",
+      "profile_sha256": "de0204ae2e7ed1417f2a48ffd9d321358d741fe28402b216017c66185149d27c",
+      "reviewed_helpers": [
+        "harness.cjs",
+        "harness.py",
+        "host_check.py",
+        "native_graphs.cjs",
+        "native_graphs.py",
+        "plan.py"
+      ],
+      "reviewed_helpers_match_profile": true,
+      "schema": "gamma.s-independent-observer-review.v1",
+      "sha256": "41631f32cdfa2ea0b9b9008d8a857235fd94ef078c22443063e7d4b98f11e5af",
+      "sha256_equals_pin": true,
+      "source_review_sha256": "da7b6322e59b4e4add33ac828ec825a4e8e1820a6992b014322cb7735d18c7f0"
+    },
+    "scope_note": {
+      "equals_PRIOR_SOURCE_REVIEW_SHA": true,
+      "equals_SCOPE_NOTE_SHA": true,
+      "path": "projects/algorithm_solver/runs/download-integration-20261028/packages/gamma-lower-PU-source-private/static-review-receipts/s208-domain-envelope-note.json",
+      "prepared_scope_source_review_sha256": "586e961550864e992750897ecbdcdb19b37bfc4548352291899e7860d5bd4f5c",
+      "sha256": "d064f0501f9fd19d49639f3bde0fdb244b4554825cd1090f649e0ba50aa70f6d"
+    },
+    "source_review": {
+      "accept_reviews_result": {
+        "222:javascript": true
+      },
+      "all_20_slots_with_this_receipt": "refused: source review root binding/count",
+      "bytes": 3766,
+      "non_rerun_slots_approved": 0,
+      "path": "projects/algorithm_solver/runs/download-integration-20261028/packages/gamma-lower-PU-source-private/static-review-receipts/s-observer-v2-rerun-mandatory-source-review.json",
+      "pinned_as": "SOURCE_REVIEW_SHA (protocol.py:40)",
+      "prior_v2_controller_with_this_receipt": "refused: exact independent S20 source review required",
+      "program_records": [
+        [
+          222,
+          "javascript"
+        ]
+      ],
+      "schema": "gamma.s-independent-mandatory-static-review.v1",
+      "sha256": "da7b6322e59b4e4add33ac828ec825a4e8e1820a6992b014322cb7735d18c7f0",
+      "sha256_equals_pin": true,
+      "source_safety_equals_SAFETY_REVIEW_TEXT": true,
+      "static_reviewed_programs": 1
+    },
+    "swap_controls": {
+      "T receipt as S source review": "refused",
+      "observer receipt as source review": "refused",
+      "source receipt as observer review": "refused"
+    }
+  },
+  "resolved_review_findings": [],
+  "review_scope": "S-v3 observer-cost rerun controller vs continuation-s-qualification-20261028-v2: diff of protocol.py/test_protocol.py/README.md, pinned review receipt hashes and approval set, focused source-free v3 and v2 suites. No candidate qualification or runtime evidence added.",
+  "reviewed_at": "2026-10-29T01:58:47.487465+00:00",
+  "reviewed_files": {
+    "projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v3/README.md": {
+      "bytes": 3475,
+      "sha256": "37a64dc5eff551c4ed7aef35c8962dd14e10e9e81d8d574a6493fa3944480448"
+    },
+    "projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v3/protocol.py": {
+      "bytes": 32393,
+      "sha256": "cb873b1fa074f501d8ded2a53a2d29ad6ddf466f2567098fdfcb2e8551f504db"
+    },
+    "projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v3/required-domain-supplement.json": {
+      "bytes": 1912,
+      "sha256": "bcd0849c655e4435308072ae4584c6092be3cac442b74befcf0a7b692a2d1200"
+    },
+    "projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v3/test_protocol.py": {
+      "bytes": 9908,
+      "sha256": "43a72718d900bf0db63f845612ea1be94904d1a6bc47fcaee8743278a3a36fcf"
+    }
+  },
+  "reviewer": "claude-opus-5-5 subagent independent controller reviewer (not controller, observer or receipt author), 2026-10-28",
+  "reviewer_task": "independent controller review subagent",
+  "schema": "gamma.independent-controller-review.v1",
+  "validation_metadata_refresh_required_before_publication": {
+    "correct_tests_passed": 13,
+    "current_sha256": "cb811b78c3393b7d4435d42816dd4b198ef2f89c920dc673f272fe515d90716e",
+    "is_controller_code_correctness_blocker": false,
+    "note": "Not regenerated by this reviewer, per instruction; README step requires recording SHA256SUMS and validation.json again after this review.",
+    "path": "projects/algorithm_solver/catalogue/continuation-s-qualification-20261028-v3/validation.json",
+    "recorded_status": "draft; reviews and controller review pending",
+    "recorded_tests_passed": 13,
+    "refresh_controller_review_status_with_this_receipt": true,
+    "sha256sums_current_sha256": "7ba1854580ba910fa34a5e9e04a53d60c7544e99f5fff43c9e6cf650b96b091a",
+    "stale_file_hashes": {
+      "README.md": {
+        "recorded": "30f4ec260c742bb6fbd116bce71eb8fb87d744699f6cedc6c54033e4a43529bc",
+        "reviewed": "37a64dc5eff551c4ed7aef35c8962dd14e10e9e81d8d574a6493fa3944480448"
+      },
+      "protocol.py": {
+        "recorded": "06df47cfbd20c4244c8f62d718a1aff57ba81c8d6d495e4c78fa06a3165a1d91",
+        "reviewed": "cb873b1fa074f501d8ded2a53a2d29ad6ddf466f2567098fdfcb2e8551f504db"
+      },
+      "test_protocol.py": {
+        "recorded": "ee9d89f403d99643fd928e23d1c5f00800ba6c44cd9f779260433fd34d548e53",
+        "reviewed": "43a72718d900bf0db63f845612ea1be94904d1a6bc47fcaee8743278a3a36fcf"
+      }
+    }
+  }
+}

@@ -35,7 +35,7 @@ PRIOR_SOURCE_REVIEW_SHA='1c908db7b6ade8452c6670007abd70775a3ca5701820cc4c8a9eafb
 # Pin the exact independent receipt that re-reviews RERUN against observer v2
 # (schema gamma.independent-source-observer-static-review.v1, observer_profile_sha256=PROFILE_SHA,
 # selected_programs=len(RERUN)). None keeps freeze/run fail-closed.
-SOURCE_REVIEW_SHA=None
+SOURCE_REVIEW_SHA='512afc450b9242977ad55b4c8613619e95e17990f52278f0efd9a0ec78a2303c'
 
 PLAN_SHA='16e73e4f2e8a8b2d9b919305faba5e1ca03b1865437459f9e41fd34bf1508474'
 SCHEMA='gamma.t16-official-execution.v3'
