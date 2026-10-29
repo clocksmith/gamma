@@ -7,7 +7,7 @@ All 604 Hack2Hire coding question groups (805 variants) from [bank.json](../../.
 | chunk01.txt | 32 | Committed: `hack2hire-chunk01-a/-b` |
 | chunk02.txt | 72 | Committed: `hack2hire-chunk02-a/-b/-c/-d` |
 | chunk03.txt, chunk04.txt | 64 | Committed: `hack2hire-chunk03-a/-b`, `hack2hire-chunk04-a/-b` |
-| chunk05.txt | 32 | Committed by another session: `hack2hire-chunk05-v1` (nine variants blocked) |
+| chunk05.txt | 32 | Committed: `hack2hire-chunk05-v1`; its nine blocked variants are solved from inferred specs in `hack2hire-chunk05-blocked-20261029-v1` |
 | chunk06.txt | 32 | Committed: `hack2hire-chunk06-a/-b` |
 | chunk07.txt | 32 | Committed: `hack2hire-chunk07-a/-b` |
 | chunk08.txt | 32 | Committed: `hack2hire-chunk08-a/-b` |
@@ -20,6 +20,6 @@ All 604 Hack2Hire coding question groups (805 variants) from [bank.json](../../.
 | chunk15.txt | 32 | Committed: `hack2hire-chunk15-a/-b` |
 | chunk16.txt | 32 | Committed: `hack2hire-chunk16-a/-b` |
 | chunk17.txt | 32 | Committed: `hack2hire-chunk17-a/-b` |
-| chunk18.txt | 20 | Being solved in `hack2hire-chunk18-a/-b` |
+| chunk18.txt | 20 | Committed: `hack2hire-chunk18-a/-b` |
 
 Assignment status is not qualification. Progress links point to the cohort's actual checks and blockers; consult them for source and execution status. Specs for these groups are inferred from public previews, not official. See the question-bank [CATSCAN](../../../../question_bank/CATSCAN.md).
