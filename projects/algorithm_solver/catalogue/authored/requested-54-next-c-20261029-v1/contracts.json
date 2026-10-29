@@ -1,0 +1,334 @@
+{
+  "schema": "gamma.original-problem-contracts.v1",
+  "problems": [
+    {
+      "id": 912,
+      "title": "Sort an Array",
+      "slug": "sort-an-array",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "nums"
+        ],
+        "official": {
+          "name": "sortArray",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Inputlength1..50000; values[-50000,50000]. Ascending order without built-in sorting, O(nlogn) time. Input preserved by output copy; heapsort adds constant workspace beyond output.",
+        "official_response_sha256": "5d2d29d6fa736e304de7afae042c79acfd205b42e32b8a481cda8c0fb492fbcc",
+        "statement_html_sha256": "9975cea62c62ef849e14520d1f70c6e1a5a365e5f6f942649c63bf20790d4aea",
+        "reference_url": "https://leetcode.com/problems/sort-an-array/description/"
+      },
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "comparison": {
+        "policy": "exact typed result; each get_root compared as tree snapshot"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "result": "fresh returned mutable arrays, except919 get_root returns stable receiver-owned mutable root. Constructor input nodes are cloned and disjoint."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Copy input then iterative in-place heapsort on output.",
+        "complexity_target": "O(n log n) time; O(n) output, O(1) auxiliary space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 919,
+      "title": "Complete Binary Tree Inserter",
+      "slug": "complete-binary-tree-inserter",
+      "external_interface": {
+        "canonical": "CBTInserter",
+        "argument_order": [
+          "root"
+        ],
+        "official": {
+          "classname": "CBTInserter",
+          "maxbytesperline": 200000,
+          "constructor": {
+            "params": [
+              {
+                "name": "root",
+                "type": "TreeNode"
+              }
+            ]
+          },
+          "methods": [
+            {
+              "name": "insert",
+              "params": [
+                {
+                  "name": "val",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "get_root",
+              "params": [],
+              "return": {
+                "type": "TreeNode"
+              }
+            }
+          ],
+          "systemdesign": true,
+          "params": [
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            },
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "list<String>",
+            "dealloc": true
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Complete host TreeNode tree with1..1000 initial nodes, values0..5000; <=10000 insert(val0..5000)/get_root calls. Return parent value on insert and evolving receiver root on get_root; constructor input cloned.",
+        "official_response_sha256": "f6c715e88b709136c55058843ca12eb156ed3fb678459f1e64164d22ae30839c",
+        "statement_html_sha256": "b3afcc38a4cc8df8655b8172377cae20f2484024feab8e466caabdaf12706c48",
+        "reference_url": "https://leetcode.com/problems/complete-binary-tree-inserter/description/"
+      },
+      "return_domain": {
+        "type": "list<String>",
+        "dealloc": true
+      },
+      "comparison": {
+        "policy": "exact typed result; each get_root compared as tree snapshot"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "result": "fresh returned mutable arrays, except919 get_root returns stable receiver-owned mutable root. Constructor input nodes are cloned and disjoint."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Clone constructor tree, store cloned complete tree in breadth-first index order; insert at next array index.",
+        "complexity_target": "O(initial nodes) construction; O(1) amortized insert/get_root; O(total nodes) state"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 924,
+      "title": "Minimize Malware Spread",
+      "slug": "minimize-malware-spread",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "graph",
+          "initial"
+        ],
+        "official": {
+          "name": "minMalwareSpread",
+          "params": [
+            {
+              "name": "graph",
+              "type": "integer[][]"
+            },
+            {
+              "name": "initial",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Symmetric binary n*n graph, n2..300, diagonal1; unique nonempty initial subset of indices. Remove one seed only, not vertex/edges, minimize final infected count; tie lowest index.",
+        "official_response_sha256": "11cf71d9cdd077333be1b92d51d2940acfa7001e46524a45b12605efb71ba72c",
+        "statement_html_sha256": "7856edf4fa6b69f3fa1ea0bf386ac9dc287eef1cb11b0e61f631c89864ebe632",
+        "reference_url": "https://leetcode.com/problems/minimize-malware-spread/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result; each get_root compared as tree snapshot"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "result": "fresh returned mutable arrays, except919 get_root returns stable receiver-owned mutable root. Constructor input nodes are cloned and disjoint."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Label original components; removing sole seed saves its component, otherwise saves none; break ties by index.",
+        "complexity_target": "O(n^2) time, O(n) auxiliary space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 933,
+      "title": "Number of Recent Calls",
+      "slug": "number-of-recent-calls",
+      "external_interface": {
+        "canonical": "RecentCounter",
+        "argument_order": [],
+        "official": {
+          "classname": "RecentCounter",
+          "maxbytesperline": 200000,
+          "constructor": {
+            "params": []
+          },
+          "methods": [
+            {
+              "name": "ping",
+              "params": [
+                {
+                  "name": "t",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ],
+          "systemdesign": true,
+          "params": [
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            },
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "list<String>",
+            "dealloc": true
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Official RecentCounter constructor(),ping(t), strictly increasing integer t in1..1e9; <=10000 pings. Count inclusive [t-3000,t].",
+        "official_response_sha256": "88a70345478a58bbdf52de5d171ba5a2b0ee1ee09c52b84fe4b1e1f12fb613d0",
+        "statement_html_sha256": "88b03cd2c3ef71676cfcc15d2638b0fc3d71c8c2ff1be68b459fb12fb429c030",
+        "reference_url": "https://leetcode.com/problems/number-of-recent-calls/description/"
+      },
+      "return_domain": {
+        "type": "list<String>",
+        "dealloc": true
+      },
+      "comparison": {
+        "policy": "exact typed result; each get_root compared as tree snapshot"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "result": "fresh returned mutable arrays, except919 get_root returns stable receiver-owned mutable root. Constructor input nodes are cloned and disjoint."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Monotone request queue with expired prefix removed by advancing head.",
+        "complexity_target": "O(1) amortized ping, O(calls) stored space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 943,
+      "title": "Find the Shortest Superstring",
+      "slug": "find-the-shortest-superstring",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "words"
+        ],
+        "official": {
+          "name": "shortestSuperstring",
+          "params": [
+            {
+              "name": "words",
+              "type": "string[]"
+            }
+          ],
+          "return": {
+            "type": "string"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "1..12 distinct lowercase words, lengths1..20; no word is a substring of another. Return any minimum-length string covering every word.",
+        "official_response_sha256": "a3bb7f377c663e2c265a9ff86ca48eaa540553e03cb248bfaa2ec8ff335d2e2a",
+        "statement_html_sha256": "9613aa9393c12b6b1e64674c9fda837801ed9bb5a6977e2f55084504c5ff3cf9",
+        "reference_url": "https://leetcode.com/problems/find-the-shortest-superstring/description/"
+      },
+      "return_domain": {
+        "type": "string"
+      },
+      "comparison": {
+        "policy": "minimum length and all input words present"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "result": "fresh returned mutable arrays, except919 get_root returns stable receiver-owned mutable root. Constructor input nodes are cloned and disjoint."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Subset DP for shortest assembled superstring ending at each last word using precomputed directed overlaps.",
+        "complexity_target": "O(n^2*L^2+n^2*2^n*nL) time, O(n*2^n*nL) string storage"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 959,
+      "title": "Regions Cut By Slashes",
+      "slug": "regions-cut-by-slashes",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "grid"
+        ],
+        "official": {
+          "name": "regionsBySlashes",
+          "params": [
+            {
+              "name": "grid",
+              "type": "string[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Square grid n1..30, characters slash, backslash, space. Count connected planar regions cut by diagonals.",
+        "official_response_sha256": "547b9419746844b079ec48360175aebc4eacb93ec1d512af11f0b6857156e4c2",
+        "statement_html_sha256": "6f31a6215fd4c8af5ff72d1bbbe99e71ce5cc309f30edc9a24b075770130a341",
+        "reference_url": "https://leetcode.com/problems/regions-cut-by-slashes/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result; each get_root compared as tree snapshot"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "result": "fresh returned mutable arrays, except919 get_root returns stable receiver-owned mutable root. Constructor input nodes are cloned and disjoint."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Four triangular regions per cell; union internal triangles across nonblocking edges and adjacent cells.",
+        "complexity_target": "O(n^2 alpha(n^2)) time, O(n^2) space"
+      },
+      "qualification_status": "unknown"
+    }
+  ]
+}

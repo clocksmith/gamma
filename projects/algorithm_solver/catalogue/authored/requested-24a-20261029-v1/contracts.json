@@ -1,0 +1,240 @@
+{
+  "problems": [
+    {
+      "comparison": {
+        "policy": "exact integer"
+      },
+      "external_interface": {
+        "argument_order": [
+          "root",
+          "distance"
+        ],
+        "canonical": "solve",
+        "official": {
+          "name": "countPairs",
+          "params": [
+            {
+              "name": "root",
+              "type": "TreeNode"
+            },
+            {
+              "name": "distance",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "stateful_native_class": false
+      },
+      "id": 1530,
+      "mutation_alias_contract": "Host tree and scalar arguments unchanged; immutable scalar result",
+      "numeric_complexity_contract": {
+        "candidate_design": "Iterative postorder leaf-depth histograms; count pairs crossing each lowest common ancestor.",
+        "complexity_target": "O(n*d^2) time, O(n*d) space",
+        "reference": "Undirected tree adjacency and per-leaf BFS shortest distances."
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "number-of-good-leaf-nodes-pairs",
+      "statement_constraints_snapshot": {
+        "bounds": {
+          "Node.val": [
+            1,
+            100
+          ],
+          "distance": [
+            1,
+            10
+          ],
+          "nodes": [
+            1,
+            1024
+          ]
+        },
+        "domain_owner": "oracles.py validate_domain",
+        "response_sha256": "a02e6573f027d4a2ef0ceb51f24f1b2dbabc1170bd1bec13823b1dabe4631ac5",
+        "statement_html_sha256": "a1c642dddbac95987c8a97dd2bf55fc290e59ddcfb1760c21190cf478f86c3cb"
+      },
+      "title": "Number of Good Leaf Nodes Pairs"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed method trace; snapshot mutable method results at each call"
+      },
+      "external_interface": {
+        "argument_order": [
+          "kingName"
+        ],
+        "canonical": "ThroneInheritance",
+        "official": {
+          "classname": "ThroneInheritance",
+          "constructor": {
+            "params": [
+              {
+                "name": "kingName",
+                "type": "string"
+              }
+            ]
+          },
+          "methods": [
+            {
+              "name": "birth",
+              "params": [
+                {
+                  "name": "parentName",
+                  "type": "string"
+                },
+                {
+                  "name": "childName",
+                  "type": "string"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "death",
+              "params": [
+                {
+                  "name": "name",
+                  "type": "string"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "getInheritanceOrder",
+              "params": [],
+              "return": {
+                "type": "list<string>"
+              }
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          },
+          "systemdesign": true
+        },
+        "stateful_native_class": true
+      },
+      "id": 1600,
+      "mutation_alias_contract": "Method arguments unchanged; only receiver state mutates by declared methods; returned order lists fresh with no mutable aliases across calls",
+      "numeric_complexity_contract": {
+        "candidate_design": "Birth-ordered child lists, dead-name set, iterative preorder skipping dead entries but traversing their descendants.",
+        "complexity_target": "Birth/death expected amortized O(1); getInheritanceOrder O(n); O(n) retained space",
+        "reference": "Maintain literal succession order and insert a newborn after all existing descendants of its parent, checking ancestry links."
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "throne-inheritance",
+      "statement_constraints_snapshot": {
+        "bounds": {
+          "birth_and_death_calls_max": 100000,
+          "birth_parent": "alive existing person",
+          "death_name": "existing person",
+          "getInheritanceOrder_calls_max": 10,
+          "king_and_child_names": "distinct",
+          "name_charset": "lowercase English letters",
+          "name_length": [
+            1,
+            15
+          ]
+        },
+        "domain_owner": "oracles.py validate_domain",
+        "response_sha256": "95b6521524aa3090c6c829de05671a537d59eaca79729f306e32418a1c9ffb1e",
+        "statement_html_sha256": "c8ce1dfe8076559f1463165f8bad7f161469c74358837fc2e1c11b5b3386229b"
+      },
+      "title": "Throne Inheritance"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed method trace; snapshot mutable method results at each call"
+      },
+      "external_interface": {
+        "argument_order": [
+          "big",
+          "medium",
+          "small"
+        ],
+        "canonical": "ParkingSystem",
+        "official": {
+          "classname": "ParkingSystem",
+          "constructor": {
+            "params": [
+              {
+                "name": "big",
+                "type": "integer"
+              },
+              {
+                "name": "medium",
+                "type": "integer"
+              },
+              {
+                "name": "small",
+                "type": "integer"
+              }
+            ]
+          },
+          "methods": [
+            {
+              "name": "addCar",
+              "params": [
+                {
+                  "name": "carType",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "boolean"
+              }
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          },
+          "systemdesign": true
+        },
+        "stateful_native_class": true
+      },
+      "id": 1603,
+      "mutation_alias_contract": "Method arguments unchanged; only receiver state mutates by declared methods; returned order lists fresh with no mutable aliases across calls",
+      "numeric_complexity_contract": {
+        "candidate_design": "Keep one remaining capacity counter per exact car type.",
+        "complexity_target": "O(1) per call and O(1) space",
+        "reference": "Maintain individual occupied parking-slot booleans and search for the first free slot of that type."
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "design-parking-system",
+      "statement_constraints_snapshot": {
+        "bounds": {
+          "addCar_calls_max": 1000,
+          "capacity_each": [
+            0,
+            1000
+          ],
+          "carType": [
+            1,
+            3
+          ]
+        },
+        "domain_owner": "oracles.py validate_domain",
+        "response_sha256": "a7c733ebccf544f3145333f4ad117375f7030a465e9cb1cbc025fa62d272bbd8",
+        "statement_html_sha256": "5e2bf8068550550bf240000f14d21a8927ea03fc34a16e8110654ea4272ab8b1"
+      },
+      "title": "Design Parking System"
+    }
+  ],
+  "schema": "gamma.original-problem-contracts.v1"
+}

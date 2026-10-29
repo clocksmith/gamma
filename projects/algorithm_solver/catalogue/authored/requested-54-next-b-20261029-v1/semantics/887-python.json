@@ -1,0 +1,40 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 887,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "k",
+    "n"
+  ],
+  "official_interface": {
+    "name": "superEggDrop",
+    "params": [
+      {
+        "name": "k",
+        "type": "integer"
+      },
+      {
+        "name": "n",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact integer",
+  "effects": "Arguments and host tree unchanged. Mutable result list is fresh and unaliased to inputs; scalar result immutable.",
+  "complexity_target": "O(k*m) time and O(k) space for returned optimal moves m.",
+  "candidate_design": "For each move update maximum distinguishable floors per egg count downward, capped at n; stop when coverage reaches n.",
+  "source_reasoning": {
+    "candidate_design": "For each move update maximum distinguishable floors per egg count downward, capped at n; stop when coverage reaches n.",
+    "complexity_target": "O(k*m) time and O(k) space for returned optimal moves m.",
+    "independent_reference": "Memoized minimax over every physical drop floor, with broken/surviving subproblem floor counts."
+  },
+  "source_sha256": "8d726b41d37b859a4c3bcedbe77f717223c862578038643c9f355ef15af76b74",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Actual local development tests only; no isolated qualification/admission."
+  }
+}

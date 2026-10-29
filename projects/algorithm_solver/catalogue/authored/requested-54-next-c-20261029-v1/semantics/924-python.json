@@ -1,0 +1,32 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 924,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "graph",
+    "initial"
+  ],
+  "official_interface": {
+    "name": "minMalwareSpread",
+    "params": [
+      {
+        "name": "graph",
+        "type": "integer[][]"
+      },
+      {
+        "name": "initial",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result; snapshot each get_root observation",
+  "effects": "inputs unchanged; fresh mutable result or declared receiver mutation",
+  "candidate_design": "Label original components; removing sole seed saves its component, otherwise saves none; break ties by index.",
+  "complexity_target": "O(n^2) time, O(n) auxiliary space",
+  "source_sha256": "430e8f9546cabbbf3bf68a608c70d7312cb826cc4b4620dd4a411c7486d95409",
+  "qualification_status": "unknown"
+}

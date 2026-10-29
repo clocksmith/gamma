@@ -1,0 +1,39 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 902,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "digits",
+    "n"
+  ],
+  "official_interface": {
+    "name": "atMostNGivenDigitSet",
+    "params": [
+      {
+        "name": "digits",
+        "type": "string[]"
+      },
+      {
+        "name": "n",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(d*L) time, O(L) space for d digits and L decimal positions",
+  "candidate_design": "Count shorter lengths, then lexicographically smaller first differing digits while following equal prefixes.",
+  "source_reasoning": {
+    "candidate_design": "Count shorter lengths, then lexicographically smaller first differing digits while following equal prefixes.",
+    "complexity_target": "O(d*L) time, O(L) space for d digits and L decimal positions"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "6e8922895ea10f3f07a50da3ff9aab4033feb09215e8ff64939ca5074261ac48"
+}

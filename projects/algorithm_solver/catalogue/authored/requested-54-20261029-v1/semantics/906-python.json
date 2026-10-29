@@ -1,0 +1,39 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 906,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "left",
+    "right"
+  ],
+  "official_interface": {
+    "name": "superpalindromesInRange",
+    "params": [
+      {
+        "name": "left",
+        "type": "string"
+      },
+      {
+        "name": "right",
+        "type": "string"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(R^(1/4)*log R) time, O(log R) auxiliary space; JS squares use BigInt",
+  "candidate_design": "Generate odd and even palindromic roots from nonempty half-prefixes, square exactly, then test square palindrome and interval.",
+  "source_reasoning": {
+    "candidate_design": "Generate odd and even palindromic roots from nonempty half-prefixes, square exactly, then test square palindrome and interval.",
+    "complexity_target": "O(R^(1/4)*log R) time, O(log R) auxiliary space; JS squares use BigInt"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "056797f144957690aebca5f7c8f42e8b9a1df9c0f57ade06e57002822084a26a"
+}

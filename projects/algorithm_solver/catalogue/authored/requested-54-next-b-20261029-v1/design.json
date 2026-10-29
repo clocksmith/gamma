@@ -1,0 +1,27 @@
+{
+  "855": {
+    "candidate_design": "Keep a sorted occupied-seat list. Scan boundary and interior gaps in ascending order, updating only on strictly better distance; binary-position insertion.",
+    "complexity_target": "O(s) time per seat or leave, O(s) space for s occupied seats; O(c^2) worst-case total over c calls.",
+    "independent_reference": "Enumerate every free seat and measure its literal minimum absolute distance to all occupied seats."
+  },
+  "863": {
+    "candidate_design": "Iteratively build value-keyed undirected tree adjacency; BFS from official integer target value until distance k.",
+    "complexity_target": "O(n) time and space.",
+    "independent_reference": "Root-to-node value paths; distance from target computed via longest shared root-path prefix, without graph search."
+  },
+  "887": {
+    "candidate_design": "For each move update maximum distinguishable floors per egg count downward, capped at n; stop when coverage reaches n.",
+    "complexity_target": "O(k*m) time and O(k) space for returned optimal moves m.",
+    "independent_reference": "Memoized minimax over every physical drop floor, with broken/surviving subproblem floor counts."
+  },
+  "900": {
+    "candidate_design": "Copy encoded runs, maintain run index and consumed count; consume whole exhausted runs and track partial run without expanding.",
+    "complexity_target": "O(r) construction and storage for r encoding entries; O(r+c) total over c next calls.",
+    "independent_reference": "Explicitly expand small encodings into a literal sequence, advance a cumulative consumed index for every call."
+  },
+  "901": {
+    "candidate_design": "Monotone decreasing stack of (price, aggregated span); discard all not-greater entries and sum their spans.",
+    "complexity_target": "O(1) amortized per call, O(c) space for c calls.",
+    "independent_reference": "Keep every price and scan backward one day at a time until the first greater price."
+  }
+}

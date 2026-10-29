@@ -1,0 +1,355 @@
+{
+  "schema": "gamma.authored-assignment-public-safe.v1",
+  "authorization": "Exclusive five-ID subset of owner54-ID request; existing identity-bound public definition snapshots were retrieved after approved bounded retry. No new retrieval or access-policy changes in this worker.",
+  "problems": [
+    {
+      "id": 855,
+      "title": "Exam Room",
+      "slug": "exam-room",
+      "external_interface": {
+        "canonical": "ExamRoom",
+        "argument_order": [
+          "n"
+        ],
+        "official": {
+          "classname": "ExamRoom",
+          "maxbytesperline": 200000,
+          "constructor": {
+            "params": [
+              {
+                "type": "integer",
+                "name": "n"
+              }
+            ]
+          },
+          "methods": [
+            {
+              "name": "seat",
+              "params": [],
+              "return": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "leave",
+              "params": [
+                {
+                  "type": "integer",
+                  "name": "p"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            }
+          ],
+          "systemdesign": true,
+          "params": [
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            },
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "list<String>",
+            "dealloc": true
+          }
+        },
+        "native_class": true
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "1<=n<=1e9; <=10000 seat/leave calls; leave names an occupied seat. Test traces call seat only while an unoccupied seat exists. Choose maximum nearest-person distance and smallest index on ties,0 when empty.",
+        "official_response_sha256": "945e4661ca08f9c11e29834f2d7dca18961015bf55ce96e1f5133a6957c62731",
+        "statement_html_sha256": "dc44b589718a6bb1b547d8d8d1ce74c751d0d14820d85283b5d07cc6a4d0955e",
+        "url": "https://leetcode.com/problems/exam-room/description/"
+      },
+      "comparison": {
+        "policy": "exact typed outputs for native methods"
+      },
+      "return_domain": {
+        "type": "list<String>",
+        "dealloc": true
+      },
+      "mutation_alias_contract": {
+        "effects": "Constructor arguments and method arguments unchanged. Only native receiver state mutates under declared methods; no candidate I/O."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Keep a sorted occupied-seat list. Scan boundary and interior gaps in ascending order, updating only on strictly better distance; binary-position insertion.",
+        "complexity_target": "O(s) time per seat or leave, O(s) space for s occupied seats; O(c^2) worst-case total over c calls.",
+        "independent_reference": "Enumerate every free seat and measure its literal minimum absolute distance to all occupied seats."
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 863,
+      "title": "All Nodes Distance K in Binary Tree",
+      "slug": "all-nodes-distance-k-in-binary-tree",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "root",
+          "target",
+          "k"
+        ],
+        "official": {
+          "name": "distanceK",
+          "params": [
+            {
+              "name": "root",
+              "type": "TreeNode"
+            },
+            {
+              "name": "target",
+              "type": "integer"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "list<integer>"
+          },
+          "manual": true,
+          "languages": [
+            "cpp",
+            "java",
+            "python",
+            "c",
+            "csharp",
+            "javascript",
+            "ruby",
+            "swift",
+            "golang",
+            "python3",
+            "scala",
+            "kotlin",
+            "rust",
+            "php",
+            "typescript"
+          ]
+        },
+        "native_class": false
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Host TreeNode root with1..500 nodes, unique integer values0..500; integer target is an existing value;0<=k<=1000. Return all values at undirected edge distance k, any order. Current snapshot explicitly declares target integer, not TreeNode.",
+        "official_response_sha256": "c0916fa5ef3158d496646d4415044af09f9952f61d80384e2451f4922fade47b",
+        "statement_html_sha256": "40112711be557931d285a9419941455d209741b5bca91051cb706601b7d13003",
+        "url": "https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/description/"
+      },
+      "comparison": {
+        "policy": "unordered unique integer values"
+      },
+      "return_domain": {
+        "type": "list<integer>"
+      },
+      "mutation_alias_contract": {
+        "effects": "Arguments and host tree unchanged. Mutable result list is fresh and unaliased to inputs; scalar result immutable."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Iteratively build value-keyed undirected tree adjacency; BFS from official integer target value until distance k.",
+        "complexity_target": "O(n) time and space.",
+        "independent_reference": "Root-to-node value paths; distance from target computed via longest shared root-path prefix, without graph search."
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 887,
+      "title": "Super Egg Drop",
+      "slug": "super-egg-drop",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "k",
+          "n"
+        ],
+        "official": {
+          "name": "superEggDrop",
+          "params": [
+            {
+              "name": "k",
+              "type": "integer"
+            },
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "native_class": false
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "1<=k<=100 eggs and1<=n<=10000 floors; determine threshold among0..n minimizing worst-case moves.",
+        "official_response_sha256": "fa969f70374b79914f4b9093dc3debf797830979d50874a6e6f0c791e465e5c3",
+        "statement_html_sha256": "690d24bd059bdfa54c5eb78c92dc0e822a40d30560e8121a9064cb74d058781f",
+        "url": "https://leetcode.com/problems/super-egg-drop/description/"
+      },
+      "comparison": {
+        "policy": "exact integer"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "mutation_alias_contract": {
+        "effects": "Arguments and host tree unchanged. Mutable result list is fresh and unaliased to inputs; scalar result immutable."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "For each move update maximum distinguishable floors per egg count downward, capped at n; stop when coverage reaches n.",
+        "complexity_target": "O(k*m) time and O(k) space for returned optimal moves m.",
+        "independent_reference": "Memoized minimax over every physical drop floor, with broken/surviving subproblem floor counts."
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 900,
+      "title": "RLE Iterator",
+      "slug": "rle-iterator",
+      "external_interface": {
+        "canonical": "RLEIterator",
+        "argument_order": [
+          "encoding"
+        ],
+        "official": {
+          "classname": "RLEIterator",
+          "maxbytesperline": 200000,
+          "constructor": {
+            "params": [
+              {
+                "type": "integer[]",
+                "name": "encoding"
+              }
+            ]
+          },
+          "methods": [
+            {
+              "name": "next",
+              "params": [
+                {
+                  "type": "integer",
+                  "name": "n"
+                }
+              ],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ],
+          "systemdesign": true,
+          "params": [
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            },
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "list<String>",
+            "dealloc": true
+          }
+        },
+        "native_class": true
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Encoding has even length2..1000; counts and values0..1e9; <=1000 next calls with1<=n<=1e9. Exhaust n elements, returning last value or-1 after insufficient remaining elements; exhaustion persists.",
+        "official_response_sha256": "ad708b2965e82fc4312a6a8e2b178d9b1f45a9016fb0050ab7011c5994c2f8b1",
+        "statement_html_sha256": "de126d3d1c642a4438f019a456904737515c1f88410aa581e26f0735d2e53c43",
+        "url": "https://leetcode.com/problems/rle-iterator/description/"
+      },
+      "comparison": {
+        "policy": "exact typed outputs for native methods"
+      },
+      "return_domain": {
+        "type": "list<String>",
+        "dealloc": true
+      },
+      "mutation_alias_contract": {
+        "effects": "Constructor arguments and method arguments unchanged. Only native receiver state mutates under declared methods; no candidate I/O."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Copy encoded runs, maintain run index and consumed count; consume whole exhausted runs and track partial run without expanding.",
+        "complexity_target": "O(r) construction and storage for r encoding entries; O(r+c) total over c next calls.",
+        "independent_reference": "Explicitly expand small encodings into a literal sequence, advance a cumulative consumed index for every call."
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 901,
+      "title": "Online Stock Span",
+      "slug": "online-stock-span",
+      "external_interface": {
+        "canonical": "StockSpanner",
+        "argument_order": [],
+        "official": {
+          "classname": "StockSpanner",
+          "maxbytesperline": 200000,
+          "constructor": {
+            "params": []
+          },
+          "methods": [
+            {
+              "name": "next",
+              "params": [
+                {
+                  "type": "integer",
+                  "name": "price"
+                }
+              ],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ],
+          "systemdesign": true,
+          "params": [
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            },
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "list<String>",
+            "dealloc": true
+          }
+        },
+        "native_class": true
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Prices1..100000; <=10000 next calls. Return length of consecutive suffix of previous/current prices <=current.",
+        "official_response_sha256": "f220789cc045a644466667ac5c161967075e0c5087d5600e00c318a340814105",
+        "statement_html_sha256": "4761de566c0ce6845d901ff75254ddcdd9b4a1b8478954a8c51ea9b36590b391",
+        "url": "https://leetcode.com/problems/online-stock-span/description/"
+      },
+      "comparison": {
+        "policy": "exact typed outputs for native methods"
+      },
+      "return_domain": {
+        "type": "list<String>",
+        "dealloc": true
+      },
+      "mutation_alias_contract": {
+        "effects": "Constructor arguments and method arguments unchanged. Only native receiver state mutates under declared methods; no candidate I/O."
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Monotone decreasing stack of (price, aggregated span); discard all not-greater entries and sum their spans.",
+        "complexity_target": "O(1) amortized per call, O(c) space for c calls.",
+        "independent_reference": "Keep every price and scan backward one day at a time until the first greater price."
+      },
+      "qualification_status": "unknown"
+    }
+  ],
+  "status": "Original development candidates; locally tested, qualification unknown"
+}

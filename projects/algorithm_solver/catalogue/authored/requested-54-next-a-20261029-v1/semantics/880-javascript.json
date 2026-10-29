@@ -1,0 +1,35 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 880,
+  "language": "javascript",
+  "entrypoint": "solve",
+  "parameters": [
+    "s",
+    "k"
+  ],
+  "official_interface": {
+    "name": "decodeAtIndex",
+    "params": [
+      {
+        "name": "s",
+        "type": "string"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "string"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "arguments unchanged; mutable results freshly allocated",
+  "complexity_target": "O(L) arithmetic operations and O(1) auxiliary values, decoded length<2^63; JS BigInt",
+  "candidate_design": "Compute exact decoded length then invert repetition and append operations from right to left using one-based modular index.",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks only; independent isolated qualification pending"
+  },
+  "source_sha256": "5d77a43ea7a40573dbd13421b07538cfa27eeb1fdeb0021929febd29a4bbfb4f"
+}

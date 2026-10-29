@@ -1,0 +1,34 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 864,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "grid"
+  ],
+  "official_interface": {
+    "name": "shortestPathAllKeys",
+    "params": [
+      {
+        "name": "grid",
+        "type": "string[]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(m*n*2^k) time and space",
+  "candidate_design": "BFS on cell and acquired-key mask, testing a lock before entering its cell.",
+  "source_reasoning": {
+    "candidate_design": "BFS on cell and acquired-key mask, testing a lock before entering its cell.",
+    "complexity_target": "O(m*n*2^k) time and space"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "82a9c7015873e9d0c85967dca5d577c5f3da8160234bf3d720c075c574256ffe"
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 900,
+  "language": "javascript",
+  "entrypoint": "RLEIterator",
+  "parameters": [
+    "encoding"
+  ],
+  "official_interface": {
+    "classname": "RLEIterator",
+    "maxbytesperline": 200000,
+    "constructor": {
+      "params": [
+        {
+          "type": "integer[]",
+          "name": "encoding"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "next",
+        "params": [
+          {
+            "type": "integer",
+            "name": "n"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "systemdesign": true,
+    "params": [
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      },
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "list<String>",
+      "dealloc": true
+    }
+  },
+  "comparison": "exact typed outputs for native methods",
+  "effects": "Constructor arguments and method arguments unchanged. Only native receiver state mutates under declared methods; no candidate I/O.",
+  "complexity_target": "O(r) construction and storage for r encoding entries; O(r+c) total over c next calls.",
+  "candidate_design": "Copy encoded runs, maintain run index and consumed count; consume whole exhausted runs and track partial run without expanding.",
+  "source_reasoning": {
+    "candidate_design": "Copy encoded runs, maintain run index and consumed count; consume whole exhausted runs and track partial run without expanding.",
+    "complexity_target": "O(r) construction and storage for r encoding entries; O(r+c) total over c next calls.",
+    "independent_reference": "Explicitly expand small encodings into a literal sequence, advance a cumulative consumed index for every call."
+  },
+  "source_sha256": "fd656150968f881ad21465fa8b77f7fb7f99fbf51b56c549ffb58c07f73cedf8",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Actual local development tests only; no isolated qualification/admission."
+  }
+}

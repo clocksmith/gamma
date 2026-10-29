@@ -1,0 +1,39 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 862,
+  "language": "javascript",
+  "entrypoint": "solve",
+  "parameters": [
+    "nums",
+    "k"
+  ],
+  "official_interface": {
+    "name": "shortestSubarray",
+    "params": [
+      {
+        "name": "nums",
+        "type": "integer[]"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(n) time and space",
+  "candidate_design": "Monotone deque of prefix sums; pop qualifying starts and dominated suffix starts.",
+  "source_reasoning": {
+    "candidate_design": "Monotone deque of prefix sums; pop qualifying starts and dominated suffix starts.",
+    "complexity_target": "O(n) time and space"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "fdb75e719b9fec27bc9e46277757f4fe11d7819272ab2cc863830c5748ad2123"
+}

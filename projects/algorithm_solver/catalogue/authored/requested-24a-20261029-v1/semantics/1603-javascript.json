@@ -1,0 +1,62 @@
+{
+  "candidate_design": "Keep one remaining capacity counter per exact car type.",
+  "comparison": "exact typed method trace; snapshot mutable method results at each call",
+  "complexity_target": "O(1) per call and O(1) space",
+  "effects": "Method arguments unchanged; only receiver state mutates by declared methods; returned order lists fresh with no mutable aliases across calls",
+  "entrypoint": "ParkingSystem",
+  "language": "javascript",
+  "official_interface": {
+    "classname": "ParkingSystem",
+    "constructor": {
+      "params": [
+        {
+          "name": "big",
+          "type": "integer"
+        },
+        {
+          "name": "medium",
+          "type": "integer"
+        },
+        {
+          "name": "small",
+          "type": "integer"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "addCar",
+        "params": [
+          {
+            "name": "carType",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "big",
+    "medium",
+    "small"
+  ],
+  "problem_id": 1603,
+  "qualification": {
+    "reason": "Development tests are not isolated qualification or catalogue activation",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "Keep one remaining capacity counter per exact car type.",
+    "complexity_target": "O(1) per call and O(1) space",
+    "reference": "Maintain individual occupied parking-slot booleans and search for the first free slot of that type."
+  },
+  "source_sha256": "70308e53287bb668911944a59d4ce0e2ee01db74b4f39a227732d286d30e44bd"
+}

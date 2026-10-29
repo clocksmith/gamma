@@ -1,0 +1,39 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 851,
+  "language": "javascript",
+  "entrypoint": "solve",
+  "parameters": [
+    "richer",
+    "quiet"
+  ],
+  "official_interface": {
+    "name": "loudAndRich",
+    "params": [
+      {
+        "name": "richer",
+        "type": "integer[][]"
+      },
+      {
+        "name": "quiet",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "integer[]"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(n+m) time and space",
+  "candidate_design": "Propagate quietest known richer ancestor along a topological ordering.",
+  "source_reasoning": {
+    "candidate_design": "Propagate quietest known richer ancestor along a topological ordering.",
+    "complexity_target": "O(n+m) time and space"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "65bff920c35cbc6af09b181814e84281a82ead64f53e66b1333915010a8977b0"
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 854,
+  "language": "javascript",
+  "entrypoint": "solve",
+  "parameters": [
+    "s1",
+    "s2"
+  ],
+  "official_interface": {
+    "name": "kSimilarity",
+    "params": [
+      {
+        "name": "s1",
+        "type": "string"
+      },
+      {
+        "name": "s2",
+        "type": "string"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(n^2*S) time, O(n*S) space for S reachable pruned string states; exponential worst case",
+  "candidate_design": "BFS fixing the first mismatch by swapping in a matching character from an incorrect suffix position.",
+  "source_reasoning": {
+    "candidate_design": "BFS fixing the first mismatch by swapping in a matching character from an incorrect suffix position.",
+    "complexity_target": "O(n^2*S) time, O(n*S) space for S reachable pruned string states; exponential worst case"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "0e1d4c2f13f7290b39f7597c964793c9195204de052a16411e5a069bbd8eabb3"
+}

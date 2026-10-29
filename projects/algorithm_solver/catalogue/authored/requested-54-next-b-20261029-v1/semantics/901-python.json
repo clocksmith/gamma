@@ -1,0 +1,57 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 901,
+  "language": "python",
+  "entrypoint": "StockSpanner",
+  "parameters": [],
+  "official_interface": {
+    "classname": "StockSpanner",
+    "maxbytesperline": 200000,
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "next",
+        "params": [
+          {
+            "type": "integer",
+            "name": "price"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "systemdesign": true,
+    "params": [
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      },
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "list<String>",
+      "dealloc": true
+    }
+  },
+  "comparison": "exact typed outputs for native methods",
+  "effects": "Constructor arguments and method arguments unchanged. Only native receiver state mutates under declared methods; no candidate I/O.",
+  "complexity_target": "O(1) amortized per call, O(c) space for c calls.",
+  "candidate_design": "Monotone decreasing stack of (price, aggregated span); discard all not-greater entries and sum their spans.",
+  "source_reasoning": {
+    "candidate_design": "Monotone decreasing stack of (price, aggregated span); discard all not-greater entries and sum their spans.",
+    "complexity_target": "O(1) amortized per call, O(c) space for c calls.",
+    "independent_reference": "Keep every price and scan backward one day at a time until the first greater price."
+  },
+  "source_sha256": "ad56a1ed91fdc35969a186dd7a369c0443729c58e2be49607df7931b317ee3d9",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Actual local development tests only; no isolated qualification/admission."
+  }
+}

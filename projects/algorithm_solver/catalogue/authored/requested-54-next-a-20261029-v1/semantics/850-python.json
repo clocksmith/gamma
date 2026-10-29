@@ -1,0 +1,30 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 850,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "rectangles"
+  ],
+  "official_interface": {
+    "name": "rectangleArea",
+    "params": [
+      {
+        "name": "rectangles",
+        "type": "integer[][]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "arguments unchanged; mutable results freshly allocated",
+  "complexity_target": "O(m^2 log m) time and O(m) space",
+  "candidate_design": "Sweep distinct x slabs; sort and merge active y intervals per slab; exact area product then modulo.",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks only; independent isolated qualification pending"
+  },
+  "source_sha256": "0bc0822a869411ff8e596e9ced834eb30983810a7042bff7b9306bdd0e5dc774"
+}

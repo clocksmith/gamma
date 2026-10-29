@@ -1,0 +1,75 @@
+{
+  "candidate_design": "Birth-ordered child lists, dead-name set, iterative preorder skipping dead entries but traversing their descendants.",
+  "comparison": "exact typed method trace; snapshot mutable method results at each call",
+  "complexity_target": "Birth/death expected amortized O(1); getInheritanceOrder O(n); O(n) retained space",
+  "effects": "Method arguments unchanged; only receiver state mutates by declared methods; returned order lists fresh with no mutable aliases across calls",
+  "entrypoint": "ThroneInheritance",
+  "language": "python",
+  "official_interface": {
+    "classname": "ThroneInheritance",
+    "constructor": {
+      "params": [
+        {
+          "name": "kingName",
+          "type": "string"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "birth",
+        "params": [
+          {
+            "name": "parentName",
+            "type": "string"
+          },
+          {
+            "name": "childName",
+            "type": "string"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "death",
+        "params": [
+          {
+            "name": "name",
+            "type": "string"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "getInheritanceOrder",
+        "params": [],
+        "return": {
+          "type": "list<string>"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "kingName"
+  ],
+  "problem_id": 1600,
+  "qualification": {
+    "reason": "Development tests are not isolated qualification or catalogue activation",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "Birth-ordered child lists, dead-name set, iterative preorder skipping dead entries but traversing their descendants.",
+    "complexity_target": "Birth/death expected amortized O(1); getInheritanceOrder O(n); O(n) retained space",
+    "reference": "Maintain literal succession order and insert a newborn after all existing descendants of its parent, checking ancestry links."
+  },
+  "source_sha256": "dcc0e270cde46d5d1b63162b020831a6a5a4be16bf72912ef470c5637795cc84"
+}

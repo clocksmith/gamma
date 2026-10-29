@@ -1,0 +1,44 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 882,
+  "language": "javascript",
+  "entrypoint": "solve",
+  "parameters": [
+    "edges",
+    "maxMoves",
+    "n"
+  ],
+  "official_interface": {
+    "name": "reachableNodes",
+    "params": [
+      {
+        "name": "edges",
+        "type": "integer[][]"
+      },
+      {
+        "name": "maxMoves",
+        "type": "integer"
+      },
+      {
+        "name": "n",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(n^2+m) time, O(n+m) space",
+  "candidate_design": "Dense-selection Dijkstra on original weighted edges; count each subdivided edge from both endpoint budgets with overlap capped.",
+  "source_reasoning": {
+    "candidate_design": "Dense-selection Dijkstra on original weighted edges; count each subdivided edge from both endpoint budgets with overlap capped.",
+    "complexity_target": "O(n^2+m) time, O(n+m) space"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "53a3b2195574d06f56999aceeac8688c01f01a50e5ad7655a2b930cb6f4ae463"
+}

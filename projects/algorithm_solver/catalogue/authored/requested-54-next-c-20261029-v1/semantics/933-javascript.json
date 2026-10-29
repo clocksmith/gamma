@@ -1,0 +1,49 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 933,
+  "language": "javascript",
+  "entrypoint": "RecentCounter",
+  "parameters": [],
+  "official_interface": {
+    "classname": "RecentCounter",
+    "maxbytesperline": 200000,
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "ping",
+        "params": [
+          {
+            "name": "t",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "systemdesign": true,
+    "params": [
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      },
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "list<String>",
+      "dealloc": true
+    }
+  },
+  "comparison": "exact typed result; snapshot each get_root observation",
+  "effects": "inputs unchanged; fresh mutable result or declared receiver mutation",
+  "candidate_design": "Monotone request queue with expired prefix removed by advancing head.",
+  "complexity_target": "O(1) amortized ping, O(calls) stored space",
+  "source_sha256": "6acc83f9b29256865d928d7c9e63dce253c9433f8e3799b36bfd2359adc6b02d",
+  "qualification_status": "unknown"
+}

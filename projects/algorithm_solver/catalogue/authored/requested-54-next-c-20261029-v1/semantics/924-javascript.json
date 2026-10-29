@@ -1,0 +1,32 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 924,
+  "language": "javascript",
+  "entrypoint": "solve",
+  "parameters": [
+    "graph",
+    "initial"
+  ],
+  "official_interface": {
+    "name": "minMalwareSpread",
+    "params": [
+      {
+        "name": "graph",
+        "type": "integer[][]"
+      },
+      {
+        "name": "initial",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result; snapshot each get_root observation",
+  "effects": "inputs unchanged; fresh mutable result or declared receiver mutation",
+  "candidate_design": "Label original components; removing sole seed saves its component, otherwise saves none; break ties by index.",
+  "complexity_target": "O(n^2) time, O(n) auxiliary space",
+  "source_sha256": "aa9c5468dd39e9604d62b541a96cd3b88c0baa6802aa53a160721acd8e28cb16",
+  "qualification_status": "unknown"
+}
