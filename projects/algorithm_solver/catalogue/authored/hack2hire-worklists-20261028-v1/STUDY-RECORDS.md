@@ -19,5 +19,8 @@ Problem records are not authored here: migration builds them from the question b
 - Every record has `schema: "study.record.v1"`, `version: 1` and `origin` (SourcePointers with `repository: "gamma"`, `revision: null`, the cohort file path and its sha256).
 - Each `present` field carries `provenance` pointing to the cohort file it came from. Use `unknown`, `missing` or `not-applicable` with a reason instead of inventing content. A present empty list means "checked, none".
 - A `Ref` carries `kind`, `id`, `version`, the record's path and the record file's sha256. Write records in dependency order (contract, then artifacts, then approach) so the hashes are final. References must stay acyclic.
+- The schema requires a `native` Ref on each approach and stage. Point it at one extra `source-native` artifact per variant, `artifact:<problemId>:<variant id>:approach-native:v1`, whose file is the cohort's design.json (selector naming the variant's entry).
+- Contract `sources` and `native` are present-empty lists; migration builds source records. Put the preview or contract file in the contract's `origin`.
+- Teaching content with no other cohort file (constraints, clarifying questions, examples, hints, invariants, chooseWhen, tradeoffs) goes in a cohort `study-content.json`, so each field's provenance points at a real file.
 - No qualification, admission or evidence records. Local runs stay in `checks.json`.
 - Validate every record with `jsonschema` against `schema.v1.json` in a `test_study_records.py`, and include the records in the cohort's manifest and SHA256SUMS.
