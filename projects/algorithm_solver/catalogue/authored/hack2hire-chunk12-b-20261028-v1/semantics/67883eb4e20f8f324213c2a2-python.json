@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67883eb4e20f8f324213c2a2",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "nextGreaterPalindrome",
+  "params": [
+   {
+    "name": "n",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "add one to the integer value repeatedly until its decimal string is a palindrome",
+  "candidate_design": "mirror the left half onto the right; if the result is not greater than n, add one to the left half (including the middle digit) with carry and mirror again; all nines become 1 0...0 1",
+  "complexity_target": "O(len(n)) time and space"
+ },
+ "source_sha256": "a5a67c646a1acc2278163e3c6a2486bb508d9d3dccf91f07b2c09ab29f0d7dd6",
+ "wrapper": "Solution.nextGreaterPalindrome"
+}

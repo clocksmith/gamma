@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69d1828717b72775cc49c028",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "parseNested",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "(string|NestedList)[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive descent parser over the grammar list := \"(\" [item (\",\" item)*] \")\", item := word | list",
+  "candidate_design": "iterative stack parser: \"(\" pushes a new array, letters accumulate into a word that is flushed on \",\" or \")\", and \")\" pops the finished array into its parent",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "269ef9137371d3a1304555e80cd775b7077dacfeba94a0a3bb06d752330ea6c4",
+ "wrapper": "named export parseNested"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:686839500ed1b6fe83428ac8",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "scores",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minimumDecrement",
+  "params": [
+   {
+    "name": "scores",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try x = 1, 2, ... up to the largest score and return the first x whose total operation count sum(ceil(s / x)) is at most k",
+  "candidate_design": "binary search x over [1, max score]; the operation count sum(ceil(s / x)) over positive scores is non-increasing in x",
+  "complexity_target": "O(n log max) time/O(1) extra space"
+ },
+ "source_sha256": "7b9a6be4c83d85b7a2a5ec1e2301d75f08170d9219348012212c1408ef405b50",
+ "wrapper": "Solution.minimumDecrement"
+}

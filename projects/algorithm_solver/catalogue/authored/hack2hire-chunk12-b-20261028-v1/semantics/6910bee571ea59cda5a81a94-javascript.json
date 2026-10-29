@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6910bee571ea59cda5a81a94",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "root"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minPathSum",
+  "params": [
+   {
+    "name": "root",
+    "type": "(integer|null)[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "build nested node lists and enumerate every root-to-leaf path recursively, keeping the first path with the smallest sum",
+  "candidate_design": "decode the level-order list into child index arrays, run an iterative preorder walk carrying prefix sums and parent indices, keep the first leaf with a strictly smaller sum, then rebuild its path from parents",
+  "complexity_target": "O(n) time and space"
+ },
+ "source_sha256": "a415dad0afe9f7410bef4735de88840479a1fce1184a8f3f2434a72aae84cd93",
+ "wrapper": "named export minPathSum"
+}

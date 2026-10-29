@@ -1,0 +1,1269 @@
+{
+ "schema": "gamma.hack2hire-chunk12-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:688a81d832b6b01c49be543b": {
+   "constraints": [
+    "1 <= A.length, B.length <= 1e5",
+    "-1e9 <= A[i], B[j] <= 1e9",
+    "A and B sorted non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "Can either array be empty?",
+    "Can the arrays contain duplicates?",
+    "Is the tie rule applied to a first and then b?"
+   ],
+   "hints": [
+    "Because both arrays are sorted, moving the pointer at the smaller value is the only move that can shrink the gap.",
+    "Find the minimum difference first; tie-breaking is easier as a second pass.",
+    "For a fixed a the best partner is a - d before a + d; scan A in ascending order and stop at the first a with a partner."
+   ],
+   "invariants": [
+    "both pointers only move forward",
+    "d never increases during the first pass",
+    "the first a found in the second pass is the smallest a with a partner at distance d"
+   ],
+   "chooseWhen": [
+    "Closest-pair queries over two sorted sequences"
+   ],
+   "tradeoffs": [
+    "Two passes keep the tie rule simple; a single pass with careful tie handling saves a constant factor"
+   ],
+   "variantLabel": "Inferred single variant: closest pair across two sorted arrays with tie-breaking",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      [
+       1
+      ]
+     ],
+     "output": [
+      1,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       461297511
+      ],
+      [
+       -872144517,
+       -794030417,
+       -702125558,
+       -670254149,
+       -656340756,
+       -652372890,
+       -622720470,
+       -550107993,
+       -512508844,
+       -387207338,
+       -36307504,
+       52018436,
+       287877102,
+       343085549,
+       416627975,
+       550796672,
+       620538331,
+       647281641,
+       650909319,
+       668845973,
+       757485447,
+       874446378,
+       930905804,
+       952334465,
+       953955793
+      ]
+     ],
+     "output": [
+      461297511,
+      416627975
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:686839500ed1b6fe83428ac8": {
+   "constraints": [
+    "1 <= scores.length <= 1e5",
+    "-1e9 <= scores[i] <= 1e9",
+    "0 <= k <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Do non-positive scores need any operations?",
+    "What makes the task impossible?",
+    "Must x be an integer?"
+   ],
+   "hints": [
+    "A score s > 0 needs exactly ceil(s / x) operations.",
+    "The total number of operations only falls as x grows, so the feasible x form a suffix.",
+    "Binary search between 1 and the maximum score; if even x = max needs more than k operations, return -1."
+   ],
+   "invariants": [
+    "feasibility is monotone in x",
+    "x = max score needs exactly one operation per positive score"
+   ],
+   "chooseWhen": [
+    "Minimising a parameter under a monotone feasibility check"
+   ],
+   "tradeoffs": [
+    "Binary search costs a log factor; a closed form is not available because ceil sums are not invertible"
+   ],
+   "variantLabel": "Inferred single variant: smallest uniform decrement within an operation budget",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ],
+      0
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       63,
+       230,
+       -2,
+       -5,
+       21,
+       187,
+       -19,
+       16,
+       276,
+       175,
+       -20,
+       221,
+       -20,
+       -20
+      ],
+      40
+     ],
+     "output": 32,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:686833a90ed1b6fe83428ac3": {
+   "constraints": [
+    "0 <= price.length <= 1e5",
+    "0 <= price[i] <= 1e9",
+    "0 <= vouchersCount <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Is the halved price rounded down, rounded, or kept fractional?",
+    "Must every voucher be used?",
+    "What is returned: the total cost or the per-item prices?"
+   ],
+   "hints": [
+    "The saving from halving p is p - floor(p / 2), which grows with p.",
+    "Each item's savings shrink as it is halved again, so taking the largest available saving each time is optimal.",
+    "Keep the current prices in a max-heap and halve the top vouchersCount times, stopping early when the top is 0."
+   ],
+   "invariants": [
+    "each item's sequence of savings is non-increasing",
+    "the heap holds every item's current price"
+   ],
+   "chooseWhen": [
+    "Greedy allocation of a budget over items with diminishing returns"
+   ],
+   "tradeoffs": [
+    "A heap is simple; with very many vouchers, counting savings per threshold avoids per-voucher work"
+   ],
+   "variantLabel": "Inferred single variant: halving vouchers, minimum total cost",
+   "examples": [
+    {
+     "input": [
+      [],
+      3
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       134178351,
+       66615549,
+       970034379,
+       729932317,
+       170992177,
+       901437853,
+       999021198,
+       747802978,
+       713172061,
+       794414293,
+       895330445,
+       331854368,
+       259115743
+      ],
+      11
+     ],
+     "output": 3620705589,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c327671f64f4312b0a3e1e": {
+   "constraints": [
+    "0 <= products.length <= 1e5",
+    "0 <= shoppingList.length <= 1e5",
+    "names and departments match [A-Za-z0-9 ]{1,20}",
+    "product names unique"
+   ],
+   "clarifyingQuestions": [
+    "Is the answer the minimum number of visits or the number saved compared with walking the list in order?",
+    "What happens to items not sold in the store?",
+    "Can a product belong to more than one department?"
+   ],
+   "hints": [
+    "Visiting a department once lets you buy all of its listed items.",
+    "So the answer only depends on which departments appear.",
+    "Map each product to its department and count the distinct departments of the listed items."
+   ],
+   "invariants": [
+    "each department is counted at most once",
+    "unknown items never add a department"
+   ],
+   "chooseWhen": [
+    "Deduplicating categories through a lookup table"
+   ],
+   "tradeoffs": [
+    "A hash map makes lookups O(1) at the cost of storing every product"
+   ],
+   "variantLabel": "Inferred single variant: distinct departments needed for a shopping list",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "Bread 2",
+        "Pantry"
+       ],
+       [
+        "tent",
+        "Dairy"
+       ],
+       [
+        "rope",
+        "Produce"
+       ],
+       [
+        "Eggs",
+        "Produce"
+       ],
+       [
+        "gas",
+        "Produce"
+       ],
+       [
+        "apple",
+        "Pantry"
+       ],
+       [
+        "milk",
+        "Pantry"
+       ],
+       [
+        "rice",
+        "Camping"
+       ]
+      ],
+      [
+       "tent",
+       "milk",
+       "Bread 2",
+       "gas",
+       "rice",
+       "Eggs",
+       "gas",
+       "Eggs",
+       "Eggs",
+       "salt",
+       "gas"
+      ]
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69646297b481f959f9e384ee": {
+   "constraints": [
+    "1 <= coins.length <= 50",
+    "1 <= coins[i] <= 1e4, distinct",
+    "0 <= target <= 1e4"
+   ],
+   "clarifyingQuestions": [
+    "Should the answer be the coin count, the combination, or the number of combinations?",
+    "How are ties between fewest-coin combinations broken?",
+    "What is returned when target cannot be made?"
+   ],
+   "hints": [
+    "First solve the 322 problem: the fewest coins for every amount up to target.",
+    "To pick a specific optimal combination, keep one table per suffix of denominations sorted from largest to smallest.",
+    "Reconstruct greedily: for the largest denomination take the largest count that still leaves an optimal remainder for the smaller ones."
+   ],
+   "invariants": [
+    "f_i[a] <= f_{i+1}[a]",
+    "the reconstructed counts always sum to target with f_0[target] coins"
+   ],
+   "chooseWhen": [
+    "Reconstructing a canonical optimum from a DP"
+   ],
+   "tradeoffs": [
+    "One table per denomination costs memory; a single table suffices if any optimal combination is acceptable"
+   ],
+   "variantLabel": "Inferred single variant: per-denomination counts of a fewest-coins combination",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      0
+     ],
+     "output": [
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       17,
+       15,
+       1,
+       25,
+       11
+      ],
+      12
+     ],
+     "output": [
+      0,
+      0,
+      1,
+      0,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:688cdf12b6c09ad9a4fcc2cc": {
+   "constraints": [
+    "1 <= nums.length <= 1e5",
+    "-1e9 <= nums[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Which x is returned when several minimise the distance?",
+    "Is nums sorted?",
+    "Can the total overflow 32-bit integers?"
+   ],
+   "hints": [
+    "The sum of absolute deviations is minimised at a median.",
+    "With an even count every point between the two middle values is optimal; the smaller middle value is the smallest optimal input value.",
+    "Sort a copy and take sorted[(n - 1) // 2], then sum the distances."
+   ],
+   "invariants": [
+    "the lower median is itself an input value",
+    "the total distance is convex in x"
+   ],
+   "chooseWhen": [
+    "Minimising a sum of absolute deviations"
+   ],
+   "tradeoffs": [
+    "Sorting is O(n log n); quickselect would be O(n) on average but is harder to keep identical across languages"
+   ],
+   "variantLabel": "Inferred single variant: best meeting point on a line restricted to input sites",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ]
+     ],
+     "output": [
+      5,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -205788074,
+       935376190,
+       261716857,
+       881974640,
+       639776297,
+       -752750682,
+       607971293,
+       361839232,
+       -667283029,
+       720030991,
+       -381829500,
+       -818706347,
+       -656278275,
+       -538628959,
+       171285941,
+       71217300,
+       -220961173,
+       494556102,
+       265093003,
+       414998064,
+       -541609075,
+       -428727813,
+       869526981,
+       970694060,
+       -493696518,
+       -50693039
+      ]
+     ],
+     "output": [
+      71217300,
+      13280574835
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a93084ea201244f8fae263": {
+   "constraints": [
+    "1 <= N, M",
+    "N * M <= 2.5e5",
+    "every row has length M and uses only \"B\" and \"W\""
+   ],
+   "clarifyingQuestions": [
+    "Is the grid given as strings or as lists of characters?",
+    "Must rows and columns both be palindromes, or either?",
+    "Is the answer the count of flips or the resulting grid?"
+   ],
+   "hints": [
+    "Row symmetry ties (i, j) to (i, M-1-j); column symmetry ties (i, j) to (N-1-i, j).",
+    "Together they split the grid into orbits of at most four cells that must end up the same colour.",
+    "For each orbit, flip whichever colour is in the minority; middle rows and columns give orbits of size 2 or 1."
+   ],
+   "invariants": [
+    "orbits partition the grid",
+    "each orbit contributes min(B, W) flips independently"
+   ],
+   "chooseWhen": [
+    "Symmetry constraints that group cells into independent classes"
+   ],
+   "tradeoffs": [
+    "Enumerating orbits directly avoids union-find but needs care with odd middle rows and columns"
+   ],
+   "variantLabel": "Inferred single variant: minimum flips to make all rows and columns palindromes",
+   "examples": [
+    {
+     "input": [
+      [
+       "B"
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "BBBBBBBW",
+       "WWBWWWWB",
+       "BWWWBWBB",
+       "WBBBWBWW",
+       "BBWBWWWB",
+       "WBWBWBBW",
+       "WWWWWWWW",
+       "BBBWBWBB"
+      ]
+     ],
+     "output": 19,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:699e789b6e73e4abccc9b2c8": {
+   "constraints": [
+    "1 <= s.length <= 1e5",
+    "s contains only \"a\" and \"b\"",
+    "0 <= k <= s.length"
+   ],
+   "clarifyingQuestions": [
+    "Is a flip a single character change, or a whole range?",
+    "Must exactly k flips be made, or at most k?",
+    "Is the answer the idleness or the flipped string?"
+   ],
+   "hints": [
+    "Check a candidate answer L instead of searching for flips directly: feasibility is monotone in L.",
+    "For L >= 2, flipping every (L + 1)-th character of a run of length r breaks it with floor(r / (L + 1)) flips and never merges runs.",
+    "L = 1 is special: the result must alternate, so compare against both alternating patterns."
+   ],
+   "invariants": [
+    "the needed flip count is non-increasing in L",
+    "runs are counted on the original string"
+   ],
+   "chooseWhen": [
+    "Minimising a maximum with a monotone check"
+   ],
+   "tradeoffs": [
+    "The binary search adds a log factor; the per-run formula avoids simulating flips"
+   ],
+   "variantLabel": "Inferred single variant: shortest achievable longest run with at most k flips",
+   "examples": [
+    {
+     "input": [
+      "a",
+      0
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "aaabbaaaaa",
+      3
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a04d7ad3141bbc31efdd5c2": {
+   "constraints": [
+    "0 <= tasks.length <= 1e5",
+    "0 <= start < end <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Can a machine start a task at the instant another ends?",
+    "Are intervals given as [start, end] or [start, duration]?",
+    "Is the answer the count or an assignment of tasks to machines?"
+   ],
+   "hints": [
+    "The number of machines needed equals the largest number of tasks running at the same moment.",
+    "That maximum is reached at some task start.",
+    "Sort starts and ends separately and sweep, releasing ends at time t before taking starts at t."
+   ],
+   "invariants": [
+    "running count = starts seen - ends seen",
+    "ends at t are processed before starts at t"
+   ],
+   "chooseWhen": [
+    "Interval overlap and room allocation"
+   ],
+   "tradeoffs": [
+    "The two-array sweep avoids a heap but only gives the count, not an assignment"
+   ],
+   "variantLabel": "Inferred single variant: maximum overlap of half-open task intervals",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        15,
+        16
+       ],
+       [
+        12,
+        16
+       ],
+       [
+        8,
+        14
+       ],
+       [
+        13,
+        15
+       ],
+       [
+        19,
+        23
+       ],
+       [
+        14,
+        15
+       ],
+       [
+        12,
+        19
+       ],
+       [
+        15,
+        20
+       ],
+       [
+        2,
+        8
+       ],
+       [
+        5,
+        8
+       ],
+       [
+        16,
+        22
+       ],
+       [
+        4,
+        10
+       ],
+       [
+        13,
+        15
+       ],
+       [
+        15,
+        16
+       ],
+       [
+        11,
+        14
+       ],
+       [
+        15,
+        20
+       ],
+       [
+        0,
+        7
+       ],
+       [
+        11,
+        16
+       ],
+       [
+        9,
+        13
+       ],
+       [
+        2,
+        8
+       ],
+       [
+        18,
+        24
+       ],
+       [
+        17,
+        22
+       ],
+       [
+        2,
+        4
+       ]
+      ]
+     ],
+     "output": 7,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6910bee571ea59cda5a81a94": {
+   "constraints": [
+    "0 <= number of nodes <= 1e5",
+    "-1e9 <= node value <= 1e9",
+    "level-order list with no trailing null"
+   ],
+   "clarifyingQuestions": [
+    "Return the path, the sum, or both?",
+    "Which path wins a tie?",
+    "How is the tree encoded?"
+   ],
+   "hints": [
+    "Every root-to-leaf path is found by a depth-first walk that carries the running sum.",
+    "Visiting the left child first makes the first strictly-better leaf the leftmost optimum.",
+    "Store parent links instead of copying paths, then walk back from the best leaf."
+   ],
+   "invariants": [
+    "the carried sum equals the sum of the node's ancestors and itself",
+    "a later leaf replaces the best only when strictly smaller"
+   ],
+   "chooseWhen": [
+    "Path queries on trees encoded as arrays"
+   ],
+   "tradeoffs": [
+    "Iterative traversal avoids recursion limits on deep trees at the cost of explicit stacks"
+   ],
+   "variantLabel": "Inferred single variant: minimum-sum root-to-leaf path values",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       8,
+       3,
+       0,
+       6,
+       8,
+       3,
+       6,
+       null,
+       null,
+       8,
+       null,
+       -5,
+       -3,
+       9,
+       null,
+       null,
+       null,
+       -1,
+       null,
+       8,
+       -1,
+       null,
+       null,
+       4,
+       -1,
+       null,
+       -4,
+       -4,
+       null,
+       6,
+       -3,
+       null,
+       null,
+       2,
+       null,
+       5,
+       null,
+       null,
+       null,
+       null,
+       7,
+       null,
+       null,
+       null,
+       null,
+       0
+      ]
+     ],
+     "output": [
+      8,
+      0,
+      3,
+      -5,
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67d88d261989183df5382503": {
+   "constraints": [
+    "1 <= usage.length <= 1e5",
+    "-1e9 <= usage[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Can a task add energy (negative usage)?",
+    "Is the level checked only between tasks or also during a task?",
+    "Are there recharge stations or other rules after a task?"
+   ],
+   "hints": [
+    "The level after task i is b minus a prefix sum.",
+    "It stays positive exactly when b exceeds every prefix sum.",
+    "Track the largest prefix sum P; the answer is max(1, P + 1)."
+   ],
+   "invariants": [
+    "the running prefix sum is exact in integers",
+    "the answer is at least 1"
+   ],
+   "chooseWhen": [
+    "Minimum initial balance for a sequence of changes"
+   ],
+   "tradeoffs": [
+    "One pass is optimal; the result can reach about 1e14, which needs 64-bit or exact integers"
+   ],
+   "variantLabel": "Inferred single variant: smallest starting level keeping a running balance positive",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ]
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -7,
+       1,
+       -2,
+       -2,
+       -4,
+       -6,
+       7,
+       -3,
+       6,
+       -9,
+       6,
+       8,
+       4,
+       -4,
+       -4,
+       -6,
+       0,
+       -5,
+       4
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69e93d83fbaf3da6418286c9": {
+   "constraints": [
+    "1 <= arr.length <= 1e5",
+    "1 <= arr[i] <= 1e9",
+    "1 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Is it at least k or exactly k distinct values?",
+    "What if k exceeds the number of distinct values?",
+    "Must the subarray be contiguous?"
+   ],
+   "hints": [
+    "Adding elements never lowers the distinct count, so for each right end there is a latest valid left end.",
+    "Maintain counts in a hash map and the number of keys with positive count.",
+    "Shrink from the left while the window stays good, recording each length."
+   ],
+   "invariants": [
+    "distinct = number of keys with positive count in the window",
+    "left never moves backwards"
+   ],
+   "chooseWhen": [
+    "Shortest window satisfying a monotone condition"
+   ],
+   "tradeoffs": [
+    "Hash map counts cost memory proportional to distinct values; values are large so an array index is not possible"
+   ],
+   "variantLabel": "Inferred single variant: shortest window with at least k distinct values",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       222882495,
+       61041082,
+       493543124,
+       839559219,
+       777052542,
+       96931562,
+       894405751,
+       370660413,
+       597633792,
+       467320397,
+       874811927,
+       507503200,
+       292966018,
+       539445513,
+       95757535,
+       743889983,
+       632239278,
+       74266907,
+       537225638,
+       933224490,
+       162479930,
+       552326192,
+       30583195,
+       469872835,
+       993554501,
+       255396120
+      ],
+      2
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68f842c4d7ff180d0ab950eb": {
+   "constraints": [
+    "0 <= nums.length <= 1e5",
+    "-1e9 <= nums[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are negative numbers allowed, and how is their parity defined?",
+    "Is a swap of any two indices allowed, or only adjacent ones?"
+   ],
+   "hints": [
+    "Only parities matter, and the final layout is fixed: E evens then the odds.",
+    "Every odd value in the first E slots must leave, and each swap can fix one of those together with one misplaced even.",
+    "Count the odd values among the first E positions."
+   ],
+   "invariants": [
+    "misplaced odds in the prefix = misplaced evens in the suffix",
+    "one swap fixes at most one misplaced pair"
+   ],
+   "chooseWhen": [
+    "Counting the cost of a partition by swaps"
+   ],
+   "tradeoffs": [
+    "The count is exact for arbitrary swaps; adjacent swaps would need an inversion count instead"
+   ],
+   "variantLabel": "Inferred single variant: fewest swaps to partition evens before odds",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -2,
+       0,
+       1,
+       -1,
+       -4,
+       -9,
+       -8,
+       -5,
+       -1,
+       4
+      ]
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68a615443a368733bb104245": {
+   "constraints": [
+    "0 <= number of nodes <= 1e5",
+    "-1e9 <= node value <= 1e9 (duplicates allowed)",
+    "canonical LeetCode N-ary level-order list"
+   ],
+   "clarifyingQuestions": [
+    "How is the N-ary tree given?",
+    "In which order should values within a day appear?",
+    "What is returned for an empty tree?"
+   ],
+   "hints": [
+    "A node is removed on the day after its last child is removed.",
+    "So the removal day of a node is its height plus one, with leaves at height 0.",
+    "Compute heights bottom-up in reverse breadth-first order and group values by height."
+   ],
+   "invariants": [
+    "a node's height is one more than its tallest child",
+    "the root is alone on the last day"
+   ],
+   "chooseWhen": [
+    "Grouping tree nodes by height"
+   ],
+   "tradeoffs": [
+    "Height grouping is linear; the day-by-day simulation is quadratic on chains"
+   ],
+   "variantLabel": "Inferred single variant: N-ary leaf removal grouped by day",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -2,
+       null,
+       3,
+       null,
+       8,
+       6,
+       3,
+       5,
+       null,
+       null,
+       null,
+       null,
+       5,
+       6,
+       null,
+       null,
+       -2,
+       -2,
+       2,
+       5,
+       null,
+       2,
+       null,
+       null,
+       null,
+       9,
+       null,
+       null,
+       6,
+       3,
+       -2,
+       4,
+       null,
+       -3,
+       null,
+       null,
+       null,
+       4,
+       null,
+       null,
+       6,
+       7,
+       8,
+       null,
+       null,
+       null,
+       6
+      ]
+     ],
+     "output": [
+      [
+       -3,
+       -2,
+       -2,
+       2,
+       2,
+       3,
+       3,
+       5,
+       6,
+       6,
+       6,
+       7,
+       8
+      ],
+      [
+       -2,
+       6,
+       8
+      ],
+      [
+       4
+      ],
+      [
+       4
+      ],
+      [
+       9
+      ],
+      [
+       5
+      ],
+      [
+       6
+      ],
+      [
+       5
+      ],
+      [
+       3
+      ],
+      [
+       -2
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d1807e17b72775cc49c008": {
+   "constraints": [
+    "0 <= s.length <= 1e5",
+    "s matches [a-z,()]*"
+   ],
+   "clarifyingQuestions": [
+    "Are there rules for commas and letters beyond the parenthesis rules?",
+    "Is the empty string well-formed?",
+    "In the parsing level, what structure should be returned?",
+    "Can a group be empty, like \"()\"?"
+   ],
+   "hints": [
+    "With a single bracket type, a stack of \"(\" reduces to a counter.",
+    "A \")\" with the counter at 0 has no partner.",
+    "At the end the counter must be 0."
+   ],
+   "invariants": [
+    "the counter equals the number of unclosed \"(\" so far",
+    "the counter is never negative on a well-formed prefix"
+   ],
+   "chooseWhen": [
+    "Bracket matching with one bracket type"
+   ],
+   "tradeoffs": [
+    "A counter is enough for one bracket type; several types need a real stack"
+   ],
+   "variantLabel": "Inferred level 1: parenthesis well-formedness with letters and commas",
+   "examples": [
+    {
+     "input": [
+      ""
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      ",(((aa((a(,,a(a(()))))))))"
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d1828717b72775cc49c028": {
+   "constraints": [
+    "2 <= s.length <= 1e5",
+    "s is one well-formed nested list",
+    "nesting depth <= 100"
+   ],
+   "clarifyingQuestions": [
+    "Are there rules for commas and letters beyond the parenthesis rules?",
+    "Is the empty string well-formed?",
+    "In the parsing level, what structure should be returned?",
+    "Can a group be empty, like \"()\"?"
+   ],
+   "hints": [
+    "Each \"(\" starts a new array and each \")\" ends the innermost one: a stack of arrays mirrors the nesting.",
+    "Collect letters into the current word and flush it when a comma or \")\" arrives.",
+    "The outermost \")\" leaves the finished top-level array."
+   ],
+   "invariants": [
+    "the stack depth equals the number of unclosed \"(\"",
+    "a word is flushed exactly once"
+   ],
+   "chooseWhen": [
+    "Parsing bracketed list syntax"
+   ],
+   "tradeoffs": [
+    "An explicit stack avoids recursion limits; recursive descent is shorter to read"
+   ],
+   "variantLabel": "Inferred level 2: parse a nested comma list into nested arrays",
+   "examples": [
+    {
+     "input": [
+      "()"
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "((((z,za,b)),(z,(zb,aa)),(aa,(zbb,zz),a)))"
+     ],
+     "output": [
+      [
+       [
+        [
+         "z",
+         "za",
+         "b"
+        ]
+       ],
+       [
+        "z",
+        [
+         "zb",
+         "aa"
+        ]
+       ],
+       [
+        "aa",
+        [
+         "zbb",
+         "zz"
+        ],
+        "a"
+       ]
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67883eb4e20f8f324213c2a2": {
+   "constraints": [
+    "1 <= n.length <= 1e5",
+    "n has no leading zeros and is at least 1"
+   ],
+   "clarifyingQuestions": [
+    "Strictly greater or greater-or-equal?",
+    "Can n have leading zeros?",
+    "How long can n be (does it fit in 64 bits)?"
+   ],
+   "hints": [
+    "A palindrome is fixed by its left half (with the middle digit).",
+    "Mirroring n's left half gives the smallest palindrome with that half; if it is not larger than n, the half must grow by one.",
+    "Incrementing an all-nines half carries out of the half: the answer is then 1, zeros, 1, one digit longer."
+   ],
+   "invariants": [
+    "the output always has len(n) or len(n) + 1 digits",
+    "mirroring keeps the left half unchanged"
+   ],
+   "chooseWhen": [
+    "Big-number string manipulation without integer conversion"
+   ],
+   "tradeoffs": [
+    "String arithmetic handles any length; native integers only work up to 15 digits in JavaScript"
+   ],
+   "variantLabel": "Inferred single variant: smallest palindrome strictly above a decimal string",
+   "examples": [
+    {
+     "input": [
+      "1"
+     ],
+     "output": "2",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "7755577"
+     ],
+     "output": "7756577",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

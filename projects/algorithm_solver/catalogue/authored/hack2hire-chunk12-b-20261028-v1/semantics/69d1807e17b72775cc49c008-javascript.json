@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69d1807e17b72775cc49c008",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "isWellFormed",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "repeatedly delete letters, commas and every \"()\" pair from the string until nothing changes; it is well-formed when the result is empty",
+  "candidate_design": "one left-to-right scan with an open-parenthesis counter; fail when it drops below 0, succeed when it ends at 0",
+  "complexity_target": "O(n) time/O(1) extra space"
+ },
+ "source_sha256": "94adde6579f9916c56980ea798b4f2fb2d2f53a5751bf1b2a1dec4e597c229d0",
+ "wrapper": "named export isWellFormed"
+}

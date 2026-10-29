@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68a615443a368733bb104245",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "root"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "removeLeavesByDay",
+  "params": [
+   {
+    "name": "root",
+    "type": "(integer|null)[]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate the days: keep the set of remaining nodes, remove those with no remaining children, repeat",
+  "candidate_design": "decode into child lists, compute each node's height (leaves 0) in reverse breadth-first order, and bucket values by height; sort each bucket",
+  "complexity_target": "O(n log n) time for the sorts/O(n) space"
+ },
+ "source_sha256": "d4f08f9e48edc55e77fe86c125002f0b6e441f457bd1e3a2e668310238201325",
+ "wrapper": "named export removeLeavesByDay"
+}

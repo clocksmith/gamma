@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67a93084ea201244f8fae263",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "grid"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minFlips",
+  "params": [
+   {
+    "name": "grid",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "union-find over the cells joining every cell with its row mirror and its column mirror, then for every class flip the minority colour",
+  "candidate_design": "visit each orbit {(i, j), (i, M-1-j), (N-1-i, j), (N-1-i, M-1-j)} once from its top-left representative, count B among its distinct cells and add min(B, size - B)",
+  "complexity_target": "O(N * M) time/O(1) extra space"
+ },
+ "source_sha256": "4b834eeb520f749c83a92f69000e78e615dc9756182d9026f87bb47c9e91fb1e",
+ "wrapper": "named export minFlips"
+}

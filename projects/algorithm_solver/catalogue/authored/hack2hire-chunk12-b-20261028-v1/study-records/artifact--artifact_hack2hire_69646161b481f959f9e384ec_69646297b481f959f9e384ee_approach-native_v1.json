@@ -1,0 +1,72 @@
+{
+ "kind": "artifact",
+ "id": "artifact:hack2hire:69646161b481f959f9e384ec:69646297b481f959f9e384ee:approach-native:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/design.json",
+   "sha256": "e99ef42860c8dfd4d443f76e3d7a46f85f639919198cad8007f02b46e489cbb4",
+   "selector": "/problems/hack2hire:69646297b481f959f9e384ee"
+  }
+ ],
+ "type": "source-native",
+ "title": "Minimum Coin Combination Counts variant 1 design entry",
+ "problemId": "hack2hire:69646161b481f959f9e384ec",
+ "approachId": "approach:hack2hire:69646161b481f959f9e384ec:69646297b481f959f9e384ee:v1",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:69646161b481f959f9e384ec:69646297b481f959f9e384ee:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-records/contract--contract_hack2hire_69646161b481f959f9e384ec_69646297b481f959f9e384ee_authored-v1.json",
+  "sha256": "d8fa4a9e5aea4949d81cabed32c15e6c538c8e56493b4573fb7cac718d9cc317"
+ },
+ "file": {
+  "status": "present",
+  "value": {
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/design.json",
+   "sha256": "e99ef42860c8dfd4d443f76e3d7a46f85f639919198cad8007f02b46e489cbb4",
+   "bytes": 7049,
+   "mediaType": "application/json"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/design.json",
+    "sha256": "e99ef42860c8dfd4d443f76e3d7a46f85f639919198cad8007f02b46e489cbb4",
+    "selector": "/problems/hack2hire:69646297b481f959f9e384ee"
+   }
+  ]
+ },
+ "externalLocator": {
+  "status": "not-applicable",
+  "reason": "Native design entry is in the referenced cohort file"
+ },
+ "language": null,
+ "documentSchema": null,
+ "executionKind": "reference-only",
+ "complexityClaims": {
+  "status": "not-applicable",
+  "reason": "Complexity claims live on the implementation artifacts"
+ },
+ "nativeMetadata": {
+  "status": "present",
+  "value": {
+   "reference": "recursive enumeration of every count vector from the largest denomination down, keeping the best by (total coins, then counts from the largest denomination, larger first)",
+   "candidate_design": "suffix tables f_i[a] = fewest coins for amount a using the i-th largest denomination and smaller ones (unbounded knapsack per denomination), then reconstruct from the largest denomination taking the largest count t with f_{i+1}[a - t * c] = f_i[a] - t",
+   "complexity_target": "O(len(coins) * target) time and space"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/design.json",
+    "sha256": "e99ef42860c8dfd4d443f76e3d7a46f85f639919198cad8007f02b46e489cbb4",
+    "selector": "/problems/hack2hire:69646297b481f959f9e384ee"
+   }
+  ]
+ }
+}
