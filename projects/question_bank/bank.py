@@ -174,15 +174,17 @@ def apply_reviews(records):
 def write_report(bank):
     lines = ['# Hack2Hire intake report', '',
              'Snapshot: ' + bank['retrieved_at_utc'], '',
-             'Complete public listing inventory; detailed acquisition remains incomplete. '
+             'Complete public listing inventory; public-description coverage is recorded below. '
              'This is unqualified interview-practice intake, separate from Algorithm Solver evaluation.', '',
              '| Category | Groups | Entries / variants |', '| --- | ---: | ---: |']
     for category in sorted(bank['counts']['categories']):
         rows = [r for r in bank['records'] if r['category'] == category]
         lines.append(f"| {category} | {len(rows)} | {sum(len(r['variants']) for r in rows)} |")
-    lines += ['', '## Acquisition and overlap gaps', '',
-              'Browser check on 2026-10-28: Chrome A (XY) displayed Log In; clicking it opened a blank /login page. '
-              'Authenticated access is unverified. Anonymous listing lock flags do not establish the user’s subscription or access.', '',
+    lines += ['', '## Source coverage and overlap', '',
+              'Browser check on 2026-10-28: signed-in access confirmed in Chrome A (XY). '
+              'Uniform Group Spanning Tree still displayed Subscribe for full content. '
+              'Public descriptions/previews are collected independently through the public post endpoint; '
+              'solutions and full-content endpoints are not used.', '',
               f"LeetCode comparison uses {bank['leetcode_metadata_records']:,} official public title/ID/slug records. "
               'Title matches are candidates, never automatic merges. No title match is not evidence of a novel problem. '
               'Full input/output, constraints, tie-breaking and variant comparisons remain pending except for the limited reviews below.', '',
@@ -199,9 +201,33 @@ def write_report(bank):
         if o['candidates']:
             links = ', '.join(f"[{c['id']}: {c['title']}]({c['url']})" for c in o['candidates'])
             lines.append(f"| [{r['title']}]({r['url']}) | {r['category']} | {o['status']} | {links} |")
+    described = [r for r in bank['records'] if r.get('description')]
+    lines += ['', '## Description acquisition', '',
+              f"{len(described)} / {len(bank['records'])} groups indexed from the public description endpoint. "
+              'See [description index](descriptions.json) for short excerpts and provenance. '
+              'Locally cached source previews are readable through descriptions.py show --id POST_ID. '
+              'A public group preview is not a complete variant-specific contract.', '',
+              f"{sum(bool(r.get('source_leetcode_relationships')) for r in bank['records'])} groups contain explicit source LeetCode links. "
+              'These are related-problem citations, not equivalent-problem verdicts.', '',
+              '## Companies reporting these problems', '',
+              'Associations and frequencies are Hack2Hire reports, not independently verified employer statements.', '',
+              '| Company | Coding groups | SQL groups | System design | ML design | OOD | Total variants / entries |',
+              '| --- | ---: | ---: | ---: | ---: | ---: | ---: |']
+    for company in sorted({c for r in bank['records'] for c in r['companies']}):
+        rows = [r for r in bank['records'] if company in r['companies']]
+        nums = [sum(r['category'] == c for r in rows) for c in ('coding', 'sql', 'system-design', 'ml-system-design', 'object-oriented-design')]
+        lines.append('| ' + company + ' | ' + ' | '.join(map(str, nums)) + f" | {sum(len(r['variants']) for r in rows)} |")
+    lines += ['', '## Explicit source LeetCode references', '',
+              'Source citations can identify an antecedent or variation even when titles differ. They do not authorize merging specifications.', '',
+              '| Hack2Hire problem | Source-cited LeetCode problems |', '| --- | --- |']
+    for record in bank['records']:
+        related = record.get('source_leetcode_relationships', [])
+        if related:
+            links = ', '.join(f"[{x.get('id') or '?'}: {x.get('title') or x['slug']}]({x['url']})" for x in related)
+            lines.append(f"| [{record['title']}]({record['url']}) | {links} |")
     lines += ['', '## Complete index', '', '| Problem | Category | Variants | Companies | Topics |', '| --- | --- | ---: | --- | --- |']
     for r in bank['records']:
-        lines.append(f"| [{r['title'].replace('|', '/')} ]({r['url']}) | {r['category']} | {len(r['variants'])} | {', '.join(r['companies'])} | {', '.join(r.get('topics', []))} |")
+        lines.append(f"| [{r['title'].replace('|', '/')} ]({r['url']}) | {r['category']} | {len(r['variants'])} | {', '.join(r['companies'])} | {', '.join(r.get('topics', [])) or 'inferred: ' + ', '.join(r.get('description_inferred_topics', []))} |")
     (DEST / 'REPORT.md').write_text('\n'.join(lines) + '\n')
 
 
@@ -210,7 +236,9 @@ def counts(records):
             'categories': dict(sorted(Counter(r['category'] for r in records).items())),
             'overlap_status': dict(sorted(Counter(r['leetcode_overlap']['status'] for r in records).items())),
             'locked_groups': sum(r['anonymous_listing_locked'] is True for r in records),
-            'content_status': dict(Counter(v['content_status'] for r in records for v in r['variants']))}
+            'content_status': dict(Counter(v['content_status'] for r in records for v in r['variants'])),
+            'description_groups': dict(Counter(r.get('description', {}).get('status', 'not_indexed') for r in records)),
+            'source_leetcode_cited_groups': sum(bool(r.get('source_leetcode_relationships')) for r in records)}
 
 
 def fetch_bank():
@@ -229,11 +257,14 @@ def fetch_bank():
     if len(set(variants)) != len(variants):
         raise ValueError('Cross-group duplicate variant identity')
     apply_reviews(records)
+    if (DEST / 'descriptions.json').exists():
+        from descriptions import attach
+        attach(records, json.loads((DEST / 'descriptions.json').read_text()))
     records.sort(key=lambda r: (r['category'], normalized(r['title']), r['uid']))
     bank = {'schema': 'gamma.external-question-bank.v1', 'source': 'hack2hire',
             'retrieved_at_utc': datetime.now(timezone.utc).isoformat(),
             'leetcode_metadata_records': len(reference),
-            'content_scope': 'complete listing metadata; limited original public-specification summaries; no solutions',
+            'content_scope': 'complete listing metadata; public group previews indexed separately from variant-specific specification reviews; no solutions',
             'counts': counts(records), 'records': records}
     (DEST / 'bank.json').write_text(json.dumps(bank, indent=2, ensure_ascii=False) + '\n')
     (DEST / 'leetcode-metadata.json').write_text(json.dumps(reference, indent=2, ensure_ascii=False) + '\n')
@@ -251,6 +282,9 @@ def main():
     parser.add_argument('--company')
     parser.add_argument('--category', choices=[v[0] for v in CATEGORIES.values()])
     parser.add_argument('--overlap')
+    parser.add_argument('--title', help='Case-insensitive title substring')
+    parser.add_argument('--topic', help='Exact source-normalized or description-inferred topic')
+    parser.add_argument('--leetcode', help='LeetCode ID from source citations or title candidates')
     parser.add_argument('--json', action='store_true')
     args = parser.parse_args()
     if args.command == 'fetch':
@@ -260,14 +294,17 @@ def main():
     rows = [r for r in bank['records'] if
             (not args.company or args.company.casefold() in [c.casefold() for c in r['companies']]) and
             (not args.category or r['category'] == args.category) and
-            (not args.overlap or r['leetcode_overlap']['status'] == args.overlap)]
+            (not args.overlap or r['leetcode_overlap']['status'] == args.overlap) and
+            (not args.title or args.title.casefold() in r['title'].casefold()) and
+            (not args.topic or args.topic in r.get('topics', []) + r.get('description_inferred_topics', [])) and
+            (not args.leetcode or args.leetcode in [x.get('id') for x in r.get('source_leetcode_relationships', []) + r['leetcode_overlap']['candidates']])]
     if args.command == 'stats':
         print(json.dumps(counts(rows), indent=2))
     elif args.json:
         print(json.dumps(rows, indent=2, ensure_ascii=False))
     else:
         for row in rows:
-            print(f"{row['category']} | {row['title']} | {len(row['variants'])} variant(s) | {row['leetcode_overlap']['status']} | {row['url']}")
+            print(f"{row['category']} | {row['title']} | {len(row['variants'])} variant(s) | {', '.join(row['companies'])} | {row['leetcode_overlap']['status']} | {row['url']}")
 
 
 if __name__ == '__main__':

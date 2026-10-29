@@ -2,7 +2,7 @@
 
 Snapshot: 2026-10-29T00:16:01.370450+00:00
 
-Complete public listing inventory; detailed acquisition remains incomplete. This is unqualified interview-practice intake, separate from Algorithm Solver evaluation.
+Complete public listing inventory; public-description coverage is recorded below. This is unqualified interview-practice intake, separate from Algorithm Solver evaluation.
 
 | Category | Groups | Entries / variants |
 | --- | ---: | ---: |
@@ -12,13 +12,13 @@ Complete public listing inventory; detailed acquisition remains incomplete. This
 | sql | 109 | 129 |
 | system-design | 76 | 76 |
 
-## Acquisition and overlap gaps
+## Source coverage and overlap
 
-Browser check on 2026-10-28: Chrome A (XY) displayed Log In; clicking it opened a blank /login page. Authenticated access is unverified. Anonymous listing lock flags do not establish the user’s subscription or access.
+Browser check on 2026-10-28: signed-in access confirmed in Chrome A (XY). Uniform Group Spanning Tree still displayed Subscribe for full content. Public descriptions/previews are collected independently through the public post endpoint; solutions and full-content endpoints are not used.
 
 LeetCode comparison uses 4,096 official public title/ID/slug records. Title matches are candidates, never automatic merges. No title match is not evidence of a novel problem. Full input/output, constraints, tie-breaking and variant comparisons remain pending except for the limited reviews below.
 
-Content statuses: `{"not_acquired": 1042, "public_spec_synopsis": 6}`.
+Content statuses: `{"group_preview_available": 1042, "public_spec_synopsis": 6}`.
 
 Overlap statuses: `{"exact_title_candidate": 7, "no_title_match_found": 786, "possible_title_overlap": 34}`.
 
@@ -87,6 +87,222 @@ Overlap statuses: `{"exact_title_candidate": 7, "no_title_match_found": 786, "po
 | [Top Three Salaries](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628a40190ed618c6e6b152) | sql | possible_title_overlap | [185: Department Top Three Salaries](https://leetcode.com/problems/department-top-three-salaries/) |
 | [Year-Over-Year Growth Rate](https://www.hack2hire.com/question-bank/questions/sql-questions/6a457d6d077f066afe215e9d) | sql | possible_title_overlap | [3214: Year on Year Growth Rate](https://leetcode.com/problems/year-on-year-growth-rate/) |
 | [Design A Shared Todo List](https://www.hack2hire.com/question-bank/questions/system-design/69de544095e80ae213e5be75) | system-design | possible_title_overlap | [2590: Design a Todo List](https://leetcode.com/problems/design-a-todo-list/) |
+
+## Description acquisition
+
+827 / 827 groups indexed from the public description endpoint. See [description index](descriptions.json) for short excerpts and provenance. Locally cached source previews are readable through descriptions.py show --id POST_ID. A public group preview is not a complete variant-specific contract.
+
+123 groups contain explicit source LeetCode links. These are related-problem citations, not equivalent-problem verdicts.
+
+## Companies reporting these problems
+
+Associations and frequencies are Hack2Hire reports, not independently verified employer statements.
+
+| Company | Coding groups | SQL groups | System design | ML design | OOD | Total variants / entries |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| ACCENTURE | 0 | 4 | 0 | 0 | 0 | 4 |
+| AFFIRM | 13 | 0 | 1 | 1 | 0 | 19 |
+| AIRBNB | 22 | 2 | 9 | 4 | 0 | 42 |
+| ALIBABA | 0 | 2 | 0 | 0 | 0 | 2 |
+| AMAZON | 56 | 11 | 19 | 2 | 19 | 110 |
+| ANTHROPIC | 14 | 0 | 7 | 0 | 0 | 48 |
+| APPLE | 0 | 3 | 0 | 0 | 0 | 3 |
+| ATLASSIAN | 16 | 0 | 9 | 0 | 0 | 28 |
+| BLOOMBERG | 11 | 2 | 3 | 0 | 0 | 16 |
+| CAPITAL_ONE | 11 | 0 | 3 | 1 | 0 | 18 |
+| CITADEL | 12 | 0 | 0 | 0 | 0 | 12 |
+| COINBASE | 21 | 0 | 4 | 0 | 0 | 56 |
+| CONFLUENT | 10 | 0 | 5 | 0 | 0 | 19 |
+| DATABRICKS | 15 | 0 | 10 | 1 | 0 | 31 |
+| DATADOG | 10 | 0 | 7 | 0 | 0 | 18 |
+| DOORDASH | 10 | 8 | 8 | 4 | 0 | 35 |
+| EBAY | 13 | 2 | 7 | 1 | 0 | 28 |
+| ETSY | 0 | 1 | 0 | 0 | 0 | 1 |
+| EXPEDIA | 10 | 0 | 6 | 1 | 0 | 17 |
+| FIGMA | 6 | 0 | 2 | 1 | 0 | 13 |
+| GOLDMAN_SACHS | 12 | 0 | 0 | 0 | 0 | 12 |
+| GOOGLE | 48 | 4 | 20 | 2 | 0 | 82 |
+| HRT | 6 | 0 | 0 | 0 | 0 | 7 |
+| HUBSPOT | 12 | 0 | 1 | 0 | 0 | 34 |
+| IBM | 12 | 1 | 0 | 0 | 0 | 13 |
+| INSTACART | 13 | 0 | 3 | 4 | 0 | 47 |
+| INTUIT | 0 | 2 | 0 | 0 | 0 | 2 |
+| JANE_STREET | 7 | 0 | 0 | 0 | 0 | 10 |
+| JPMORGAN | 0 | 2 | 0 | 0 | 0 | 2 |
+| LIME | 0 | 1 | 0 | 0 | 0 | 2 |
+| LINKEDIN | 12 | 3 | 10 | 2 | 0 | 29 |
+| LYFT | 7 | 0 | 9 | 0 | 0 | 16 |
+| MAI | 8 | 0 | 6 | 0 | 0 | 21 |
+| MCKINSEY | 0 | 1 | 0 | 0 | 0 | 1 |
+| META | 18 | 20 | 15 | 0 | 0 | 59 |
+| MICROSOFT | 46 | 5 | 26 | 0 | 0 | 88 |
+| NETFLIX | 11 | 1 | 1 | 0 | 0 | 14 |
+| NOTION | 0 | 1 | 0 | 0 | 0 | 3 |
+| NVIDIA | 0 | 1 | 0 | 0 | 0 | 1 |
+| OPENAI | 22 | 0 | 16 | 0 | 0 | 69 |
+| OPTIVER | 5 | 0 | 0 | 0 | 0 | 5 |
+| ORACLE | 14 | 1 | 0 | 0 | 0 | 15 |
+| PERPLEXITY | 5 | 0 | 3 | 1 | 0 | 12 |
+| PINTEREST | 22 | 6 | 9 | 5 | 0 | 48 |
+| POINT72 | 10 | 0 | 0 | 0 | 0 | 10 |
+| RAMP | 12 | 0 | 2 | 0 | 0 | 37 |
+| REDDIT | 7 | 0 | 6 | 4 | 0 | 27 |
+| RIPPLING | 5 | 1 | 7 | 0 | 0 | 22 |
+| ROBINHOOD | 14 | 1 | 6 | 2 | 0 | 28 |
+| ROBLOX | 11 | 0 | 9 | 0 | 0 | 20 |
+| SALESFORCE | 0 | 1 | 0 | 0 | 0 | 1 |
+| SCALEAI | 7 | 0 | 0 | 0 | 0 | 12 |
+| SHOPIFY | 0 | 1 | 0 | 0 | 0 | 1 |
+| SNAPCHAT | 8 | 1 | 16 | 0 | 0 | 25 |
+| SNOWFLAKE | 18 | 2 | 9 | 0 | 0 | 33 |
+| SPOTIFY | 0 | 1 | 0 | 0 | 0 | 1 |
+| SQUARE | 10 | 0 | 2 | 0 | 0 | 15 |
+| SQUAREPOINT | 6 | 1 | 0 | 0 | 0 | 7 |
+| STRIPE | 20 | 1 | 6 | 3 | 0 | 67 |
+| TESLA | 12 | 1 | 1 | 0 | 0 | 14 |
+| TIKTOK | 14 | 2 | 7 | 0 | 0 | 24 |
+| TWOSIGMA | 7 | 0 | 0 | 0 | 0 | 7 |
+| UBER | 26 | 1 | 9 | 6 | 0 | 43 |
+| VERIZON | 0 | 1 | 0 | 0 | 0 | 1 |
+| VERKADA | 10 | 0 | 5 | 0 | 0 | 20 |
+| VISA | 0 | 1 | 0 | 0 | 0 | 1 |
+| WALMART | 0 | 2 | 0 | 0 | 0 | 2 |
+| WAYFAIR | 0 | 1 | 0 | 0 | 0 | 1 |
+| WAYMO | 7 | 5 | 0 | 0 | 0 | 15 |
+| WHATNOT | 6 | 0 | 5 | 0 | 0 | 13 |
+| XAI | 6 | 2 | 2 | 0 | 0 | 13 |
+| YELP | 9 | 1 | 8 | 0 | 0 | 21 |
+| ZOMATO | 0 | 1 | 0 | 0 | 0 | 1 |
+
+## Explicit source LeetCode references
+
+Source citations can identify an antecedent or variation even when titles differ. They do not authorize merging specifications.
+
+| Hack2Hire problem | Source-cited LeetCode problems |
+| --- | --- |
+| [Apply Domain Request Limits](https://www.hack2hire.com/question-bank/questions/coding-questions/6a7a3b62d713d873ca7aaf61) | [359: Logger Rate Limiter](https://leetcode.com/problems/logger-rate-limiter/) |
+| [Array Frequency Sort](https://www.hack2hire.com/question-bank/questions/coding-questions/6a4fae8d665efda9311f5606) | [1636: Sort Array by Increasing Frequency](https://leetcode.com/problems/sort-array-by-increasing-frequency/) |
+| [Asteroid Collision - Different Speed](https://www.hack2hire.com/question-bank/questions/coding-questions/679dad80996c3c60bd38b5bb) | [735: Asteroid Collision](https://leetcode.com/problems/asteroid-collision/) |
+| [Autocorrect Prototype](https://www.hack2hire.com/question-bank/questions/coding-questions/6a9744fa0ca9cc4e1c789ed3) | [49: Group Anagrams](https://leetcode.com/problems/group-anagrams/) |
+| [Ball Picking Game](https://www.hack2hire.com/question-bank/questions/coding-questions/67775b1c8df5ec401f786daf) | [486: Predict the Winner](https://leetcode.com/problems/predict-the-winner/) |
+| [Basic Calculator](https://www.hack2hire.com/question-bank/questions/coding-questions/692cf0591abcca80b1122341) | [772: Basic Calculator III](https://leetcode.com/problems/basic-calculator-iii/) |
+| [Black Cell Covering Block List](https://www.hack2hire.com/question-bank/questions/coding-questions/68eabd453a3bb8f8354249a6) | [2768: Number of Black Blocks](https://leetcode.com/problems/number-of-black-blocks/) |
+| [Bubble Explosion](https://www.hack2hire.com/question-bank/questions/coding-questions/6a7fc716d713d873ca7ade78) | [723: Candy Crush](https://leetcode.com/problems/candy-crush/) |
+| [Camera Motion Detection](https://www.hack2hire.com/question-bank/questions/coding-questions/6a08df5bbd4165b6d480ff96) | [986: Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/) |
+| [Car Fleet Scheduler](https://www.hack2hire.com/question-bank/questions/coding-questions/69b784bf8a0eeb9897a8d235) | [253: Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/) |
+| [Cellular Infection Spreading](https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0) | [994: Rotting Oranges](https://leetcode.com/problems/rotting-oranges/) |
+| [Chat Message Events Aggregation](https://www.hack2hire.com/question-bank/questions/coding-questions/6a579fda665efda9311f9374) | [362: Design Hit Counter](https://leetcode.com/problems/design-hit-counter/) |
+| [Circular Storage Allocator](https://www.hack2hire.com/question-bank/questions/coding-questions/6a1f2f5a8b879849ebc10f99) | [2502: Design Memory Allocator](https://leetcode.com/problems/design-memory-allocator/) |
+| [Closest Pair of Points](https://www.hack2hire.com/question-bank/questions/coding-questions/68fe48a67e1bd8f9501bf145) | [973: K Closest Points to Origin](https://leetcode.com/problems/k-closest-points-to-origin/) |
+| [Concurrent Web Crawler ](https://www.hack2hire.com/question-bank/questions/coding-questions/692f5158cd79766b0b310122) | [1242: Web Crawler Multithreaded](https://leetcode.com/problems/web-crawler-multithreaded/) |
+| [Copy Neighbor Sums Between Binary Trees](https://www.hack2hire.com/question-bank/questions/coding-questions/69c42bb321f6ab4226965a1b) | [617: Merge Two Binary Trees](https://leetcode.com/problems/merge-two-binary-trees/) |
+| [Count Intervals Covering Point](https://www.hack2hire.com/question-bank/questions/coding-questions/692fc0e2cd79766b0b31019f) | [253: Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/) |
+| [Count Islands and Water Boundary](https://www.hack2hire.com/question-bank/questions/coding-questions/6933a7a0e8ebbb1c53caf333) | [200: Number of Islands](https://leetcode.com/problems/number-of-islands/) |
+| [Count Reversing Triples](https://www.hack2hire.com/question-bank/questions/coding-questions/67840acad0faf7ec64cc3ada) | [334: Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/) |
+| [Design a Spreadsheet with Formula Evaluation](https://www.hack2hire.com/question-bank/questions/coding-questions/69f789f030f41dfd539fc6bb) | [3484: Design Spreadsheet](https://leetcode.com/problems/design-spreadsheet/) |
+| [Design Connect Four](https://www.hack2hire.com/question-bank/questions/coding-questions/68b93a9883188776facc8ff5) | [348: Design Tic-Tac-Toe](https://leetcode.com/problems/design-tic-tac-toe/) |
+| [Design In-Memory SQL](https://www.hack2hire.com/question-bank/questions/coding-questions/691cfb44ba2fba0a9e173e8b) | [2408: Design SQL](https://leetcode.com/problems/design-sql/) |
+| [Distinct Products Of Prime Subsets](https://www.hack2hire.com/question-bank/questions/coding-questions/6927c1979c0536c47b291ab4) | [90: Subsets II](https://leetcode.com/problems/subsets-ii/) |
+| [Dynamic LRU Cache](https://www.hack2hire.com/question-bank/questions/coding-questions/680e43307003ce5d1dcb0376) | [146: LRU Cache](https://leetcode.com/problems/lru-cache/) |
+| [Evaluate String Expression](https://www.hack2hire.com/question-bank/questions/coding-questions/67872156e20f8f324213c296) | [224: Basic Calculator](https://leetcode.com/problems/basic-calculator/) |
+| [Evaluate String Expression II](https://www.hack2hire.com/question-bank/questions/coding-questions/678d3ddc8c349080cddc5f5d) | [224: Basic Calculator](https://leetcode.com/problems/basic-calculator/) |
+| [Fill Equation with Operators](https://www.hack2hire.com/question-bank/questions/coding-questions/67c76c906c89e288437c3030) | [282: Expression Add Operators](https://leetcode.com/problems/expression-add-operators/) |
+| [Fill Layover With Experiences](https://www.hack2hire.com/question-bank/questions/coding-questions/6a0226da2608e589a944a228) | [322: Coin Change](https://leetcode.com/problems/coin-change/) |
+| [Find Anagram in String](https://www.hack2hire.com/question-bank/questions/coding-questions/68c87196df5a6365aa774b14) | [438: Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string/) |
+| [Find Closest Dashmart ](https://www.hack2hire.com/question-bank/questions/coding-questions/689bcafe1126a03aace65e50) | [286: Walls and Gates](https://leetcode.com/problems/walls-and-gates/) |
+| [Find Complete Flight Path](https://www.hack2hire.com/question-bank/questions/coding-questions/68fe46fd7e1bd8f9501bf144) | [332: Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/) |
+| [Find Duplicate Files](https://www.hack2hire.com/question-bank/questions/coding-questions/6934db5e5f306485cc5f08b9) | [609: Find Duplicate File in System](https://leetcode.com/problems/find-duplicate-file-in-system/) |
+| [Find Earliest Available Meeting Slot](https://www.hack2hire.com/question-bank/questions/coding-questions/68f5628e577eec16d6b9c92a) | [759: Employee Free Time](https://leetcode.com/problems/employee-free-time/) |
+| [Find K Distinct Element Subarray](https://www.hack2hire.com/question-bank/questions/coding-questions/69f131a496981f58ae1f7653) | [992: Subarrays with K Different Integers](https://leetcode.com/problems/subarrays-with-k-different-integers/) |
+| [Find Lowest Common Manager](https://www.hack2hire.com/question-bank/questions/coding-questions/67cb45939db31a8671abf92b) | [236: Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) |
+| [Find Median In Large Array](https://www.hack2hire.com/question-bank/questions/coding-questions/68c2d9081f64f4312b0a3df1) | [295: Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/) |
+| [Find Middle Course](https://www.hack2hire.com/question-bank/questions/coding-questions/67e4a41750b60b77022f3847) | [207: Course Schedule](https://leetcode.com/problems/course-schedule/) |
+| [Find Minimal Shoppers ](https://www.hack2hire.com/question-bank/questions/coding-questions/688102f5f96758aa78e1d679) | [1701: Average Waiting Time](https://leetcode.com/problems/average-waiting-time/) |
+| [Find Missing Subsequence Words](https://www.hack2hire.com/question-bank/questions/coding-questions/6a7921e3d713d873ca7aa5e9) | [392: Is Subsequence](https://leetcode.com/problems/is-subsequence/) |
+| [Find Nearest Exit in Maze](https://www.hack2hire.com/question-bank/questions/coding-questions/68f7fb6786f7cb4953d41094) | [1926: Nearest Exit from Entrance in Maze](https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/) |
+| [Find Path in Fibonacci Tree](https://www.hack2hire.com/question-bank/questions/coding-questions/685303ac1af0034b3227652d) | [2096: Step-By-Step Directions From a Binary Tree Node to Another](https://leetcode.com/problems/step-by-step-directions-from-a-binary-tree-node-to-another/) |
+| [Find Pattern Matching Words](https://www.hack2hire.com/question-bank/questions/coding-questions/6a1f3c9a8b879849ebc10ffa) | [44: Wildcard Matching](https://leetcode.com/problems/wildcard-matching/) |
+| [Find Peak Event Moment](https://www.hack2hire.com/question-bank/questions/coding-questions/69279c3a9c0536c47b291a7f) | [253: Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/) |
+| [Find Shortest Path in Matrix](https://www.hack2hire.com/question-bank/questions/coding-questions/67dcd81b99f4f89b276f1889) | [1091: Shortest Path in Binary Matrix](https://leetcode.com/problems/shortest-path-in-binary-matrix/) |
+| [Find the Most Common Ads](https://www.hack2hire.com/question-bank/questions/coding-questions/6a7f6a37d713d873ca7adb3a) | [347: Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/) |
+| [Find the Nearest City](https://www.hack2hire.com/question-bank/questions/coding-questions/6781bdae3cd890ccd3798fbf) | [1779: Find Nearest Point That Has the Same X or Y Coordinate](https://leetcode.com/problems/find-nearest-point-that-has-the-same-x-or-y-coordinate/) |
+| [Flatten 2D Array With Remove](https://www.hack2hire.com/question-bank/questions/coding-questions/68dd920dfb98b196fa540557) | [251: Flatten 2D Vector](https://leetcode.com/problems/flatten-2d-vector/) |
+| [Game Machine](https://www.hack2hire.com/question-bank/questions/coding-questions/68f6f35f86f7cb4953d40fbb) | [134: Gas Station](https://leetcode.com/problems/gas-station/) |
+| [Generate Function Profiling Events](https://www.hack2hire.com/question-bank/questions/coding-questions/69308191cd79766b0b310224) | [636: Exclusive Time of Functions](https://leetcode.com/problems/exclusive-time-of-functions/) |
+| [Hopscotch](https://www.hack2hire.com/question-bank/questions/coding-questions/68c4834997640ed3834dc7c9) | [1306: Jump Game III](https://leetcode.com/problems/jump-game-iii/) |
+| [Implement itoa()](https://www.hack2hire.com/question-bank/questions/coding-questions/69c87a3021f6ab4226966de0) | [8: String to Integer (atoi)](https://leetcode.com/problems/string-to-integer-atoi/) |
+| [Integer to English Converter](https://www.hack2hire.com/question-bank/questions/coding-questions/678882de402dc47b67a14949) | [273: Integer to English Words](https://leetcode.com/problems/integer-to-english-words/) |
+| [Interleave Iterator with Cycle](https://www.hack2hire.com/question-bank/questions/coding-questions/678d52d48c349080cddc5f5f) | [281: Zigzag Iterator](https://leetcode.com/problems/zigzag-iterator/) |
+| [IP CIDR Firewall](https://www.hack2hire.com/question-bank/questions/coding-questions/684baaa84023c4f502877df2) | [751: IP to CIDR](https://leetcode.com/problems/ip-to-cidr/) |
+| [Jump Game Prime](https://www.hack2hire.com/question-bank/questions/coding-questions/69e9319cfbaf3da641828683) | [1696: Jump Game VI](https://leetcode.com/problems/jump-game-vi/) |
+| [Keypad Letter Combination](https://www.hack2hire.com/question-bank/questions/coding-questions/67e38ccf87527b3f41af78b5) | [17: Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/) |
+| [Knight Paths on a Phone Keypad](https://www.hack2hire.com/question-bank/questions/coding-questions/68fe4a1f7e1bd8f9501bf146) | [1197: Minimum Knight Moves](https://leetcode.com/problems/minimum-knight-moves/) |
+| [Kth Greatest in Growing Prefix](https://www.hack2hire.com/question-bank/questions/coding-questions/6a04f73a3141bbc31efdd6f0) | [703: Kth Largest Element in a Stream](https://leetcode.com/problems/kth-largest-element-in-a-stream/) |
+| [Largest Consecutive Skill Team](https://www.hack2hire.com/question-bank/questions/coding-questions/6a73bf26d713d873ca7a77c5) | [128: Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/) |
+| [Largest K Elements in Sliding Window](https://www.hack2hire.com/question-bank/questions/coding-questions/6907c9e9e1919109b6df11b7) | [239: Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/) |
+| [Largest Number by Parity Swaps](https://www.hack2hire.com/question-bank/questions/coding-questions/6a73ba21d713d873ca7a77a0) | [2231: Largest Number After Digit Swaps by Parity](https://leetcode.com/problems/largest-number-after-digit-swaps-by-parity/) |
+| [Largest Rectangle Area](https://www.hack2hire.com/question-bank/questions/coding-questions/69a4fb493d95612a1782bbd1) | [939: Minimum Area Rectangle](https://leetcode.com/problems/minimum-area-rectangle/) |
+| [Level Order Task Scheduling](https://www.hack2hire.com/question-bank/questions/coding-questions/6938fd66b03e15724c2174bb) | [210: Course Schedule II](https://leetcode.com/problems/course-schedule-ii/) |
+| [Longest Circular Sequence of Ones](https://www.hack2hire.com/question-bank/questions/coding-questions/688baabb3867670cfb894156) | [1004: Max Consecutive Ones III](https://leetcode.com/problems/max-consecutive-ones-iii/) |
+| [Longest Common Subsequence-Substring](https://www.hack2hire.com/question-bank/questions/coding-questions/6a0236a62608e589a944a2b9) | [1143: Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/) |
+| [Longest Subarray Under Limit](https://www.hack2hire.com/question-bank/questions/coding-questions/6a974d070ca9cc4e1c789f24) | [209: Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum/) |
+| [Matrix Escape ](https://www.hack2hire.com/question-bank/questions/coding-questions/6865a598cb498a83f3920c40) | [2258: Escape the Spreading Fire](https://leetcode.com/problems/escape-the-spreading-fire/), [1926: Nearest Exit from Entrance in Maze](https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/) |
+| [Matrix Transpose with Workers](https://www.hack2hire.com/question-bank/questions/coding-questions/6a2265c0981072682a6f2163) | [867: Transpose Matrix](https://leetcode.com/problems/transpose-matrix/) |
+| [Max Non-overlapping Tasks](https://www.hack2hire.com/question-bank/questions/coding-questions/6827f586f13ac663af91d7a4) | [435: Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals/) |
+| [Maximize Deployment Score](https://www.hack2hire.com/question-bank/questions/coding-questions/6a9495fccddc54478ddf5f31) | [2740: Find the Value of the Partition](https://leetcode.com/problems/find-the-value-of-the-partition/) |
+| [Maximize Hole in Prison Gate](https://www.hack2hire.com/question-bank/questions/coding-questions/69fa55bf661bab75bbca3b9c) | [2943: Maximize Area of Square Hole in Grid](https://leetcode.com/problems/maximize-area-of-square-hole-in-grid/) |
+| [Maximum Distinct Split Sum](https://www.hack2hire.com/question-bank/questions/coding-questions/6a724c9348af2ae18e995e5d) | [1525: Number of Good Ways to Split a String](https://leetcode.com/problems/number-of-good-ways-to-split-a-string/) |
+| [Maximum Interval Overlap Count](https://www.hack2hire.com/question-bank/questions/coding-questions/68eda9b25abdefad4f6693bd) | [253: Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/) |
+| [Maximum Island Perimeter](https://www.hack2hire.com/question-bank/questions/coding-questions/6933c5bb5f306485cc5f07bf) | [200: Number of Islands](https://leetcode.com/problems/number-of-islands/) |
+| [Maximum Multiplier Path](https://www.hack2hire.com/question-bank/questions/coding-questions/67e4438350b60b77022f381b) | [1514: Path with Maximum Probability](https://leetcode.com/problems/path-with-maximum-probability/) |
+| [Maximum Task Rewards](https://www.hack2hire.com/question-bank/questions/coding-questions/68c2e21a1f64f4312b0a3df7) | [1235: Maximum Profit in Job Scheduling](https://leetcode.com/problems/maximum-profit-in-job-scheduling/) |
+| [Maximum Vacation With Minimum Flights](https://www.hack2hire.com/question-bank/questions/coding-questions/69952fd9312381f4e70fdb57) | [568: Maximum Vacation Days](https://leetcode.com/problems/maximum-vacation-days/) |
+| [Merge K Sorted Price Streams](https://www.hack2hire.com/question-bank/questions/coding-questions/68fe514e7e1bd8f9501bf149) | [23: Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) |
+| [Merge N-ary Tree](https://www.hack2hire.com/question-bank/questions/coding-questions/688b83823867670cfb89414b) | [617: Merge Two Binary Trees](https://leetcode.com/problems/merge-two-binary-trees/) |
+| [Merge Two Interval Lists ](https://www.hack2hire.com/question-bank/questions/coding-questions/67df682a06b62d81733ab892) | [56: Merge Intervals](https://leetcode.com/problems/merge-intervals/) |
+| [Merge Unique Arrays](https://www.hack2hire.com/question-bank/questions/coding-questions/6a4816493588ba8acc693046) | [88: Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/) |
+| [Minimum Absolute Difference Pairs](https://www.hack2hire.com/question-bank/questions/coding-questions/69cac65eff3ebde766ced9a4) | [1200: Minimum Absolute Difference](https://leetcode.com/problems/minimum-absolute-difference/) |
+| [Minimum Coin Combination Counts](https://www.hack2hire.com/question-bank/questions/coding-questions/69646161b481f959f9e384ec) | [322: Coin Change](https://leetcode.com/problems/coin-change/) |
+| [Minimum Distance in N-ary Tree](https://www.hack2hire.com/question-bank/questions/coding-questions/696eb85f920c39311a3992bd) | [236: Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/) |
+| [Minimum Distance to All Points](https://www.hack2hire.com/question-bank/questions/coding-questions/688cdeffb6c09ad9a4fcc2cb) | [296: Best Meeting Point](https://leetcode.com/problems/best-meeting-point/) |
+| [Minimum Idleness After K Flips](https://www.hack2hire.com/question-bank/questions/coding-questions/699b55036e73e4abccc9a863) | [424: Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/) |
+| [Minimum Machines for Task Scheduling](https://www.hack2hire.com/question-bank/questions/coding-questions/6a04d73e3141bbc31efdd5be) | [253: Meeting Rooms II](https://leetcode.com/problems/meeting-rooms-ii/) |
+| [Minimum Operations to Reduce to Zero](https://www.hack2hire.com/question-bank/questions/coding-questions/6982c645d92d0020410a9911) | [397: Integer Replacement](https://leetcode.com/problems/integer-replacement/) |
+| [Minimum Root-to-Leaf Path Sum](https://www.hack2hire.com/question-bank/questions/coding-questions/6907c9a4e1919109b6df11b6) | [112: Path Sum](https://leetcode.com/problems/path-sum/) |
+| [Minimum Subarray with K Unique Integers](https://www.hack2hire.com/question-bank/questions/coding-questions/69e93d76fbaf3da6418286c8) | [76: Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/) |
+| [Minimum Swaps to Group Evens First](https://www.hack2hire.com/question-bank/questions/coding-questions/68f8417bd7ff180d0ab950e5) | [905: Sort Array By Parity](https://leetcode.com/problems/sort-array-by-parity/) |
+| [Minimum Vertices to Traverse Directed Graph](https://www.hack2hire.com/question-bank/questions/coding-questions/68c4483f70268e95f5f43d5d) | [1557: Minimum Number of Vertices to Reach All Nodes](https://leetcode.com/problems/minimum-number-of-vertices-to-reach-all-nodes/) |
+| [MultiStream Reader](https://www.hack2hire.com/question-bank/questions/coding-questions/67b2cb8275074948935624c6) | [158: Read N Characters Given read4 II - Call Multiple Times](https://leetcode.com/problems/read-n-characters-given-read4-ii-call-multiple-times/) |
+| [N-ary Tree Leaf Node Removal](https://www.hack2hire.com/question-bank/questions/coding-questions/68a615393a368733bb104244) | [366: Find Leaves of Binary Tree](https://leetcode.com/problems/find-leaves-of-binary-tree/) |
+| [Nested String with Brackets Parsing](https://www.hack2hire.com/question-bank/questions/coding-questions/69d1807617b72775cc49c007) | [20: Valid Parentheses](https://leetcode.com/problems/valid-parentheses/) |
+| [Next Greater Palindrome](https://www.hack2hire.com/question-bank/questions/coding-questions/67883de3e20f8f324213c2a1) | [564: Find the Closest Palindrome](https://leetcode.com/problems/find-the-closest-palindrome/) |
+| [Non-Consecutive Process Scheduling](https://www.hack2hire.com/question-bank/questions/coding-questions/68f562c3577eec16d6b9c92b) | [276: Paint Fence](https://leetcode.com/problems/paint-fence/) |
+| [Obstacle Placement and Block Check](https://www.hack2hire.com/question-bank/questions/coding-questions/6a1e2de18b879849ebc10899) | [3161: Block Placement Queries](https://leetcode.com/problems/block-placement-queries/) |
+| [Optimal Stock Price Subsequence](https://www.hack2hire.com/question-bank/questions/coding-questions/6a513e88665efda9311f609c) | [2926: Maximum Balanced Subsequence Sum](https://leetcode.com/problems/maximum-balanced-subsequence-sum/) |
+| [Phone Number Word Matching](https://www.hack2hire.com/question-bank/questions/coding-questions/688bc39c3867670cfb89417b) | [17: Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/) |
+| [Pig Latin Sentence Converter](https://www.hack2hire.com/question-bank/questions/coding-questions/68f2815df567e950995157d3) | [824: Goat Latin](https://leetcode.com/problems/goat-latin/) |
+| [Prefix Search II](https://www.hack2hire.com/question-bank/questions/coding-questions/67f8221d1d70a71460925c52) | [1268: Search Suggestions System](https://leetcode.com/problems/search-suggestions-system/) |
+| [Product Price Query System](https://www.hack2hire.com/question-bank/questions/coding-questions/68f68771a269f53ea0eff91c) | [981: Time Based Key-Value Store](https://leetcode.com/problems/time-based-key-value-store/) |
+| [Rank Songs by Popularity](https://www.hack2hire.com/question-bank/questions/coding-questions/6a00c4b5f1b0b7030ba32382) | [1366: Rank Teams by Votes](https://leetcode.com/problems/rank-teams-by-votes/) |
+| [Reach End in Grid With Teleports](https://www.hack2hire.com/question-bank/questions/coding-questions/69a39f116e73e4abccc9c0e6) | [63: Unique Paths II](https://leetcode.com/problems/unique-paths-ii/) |
+| [Reverse Count and Say](https://www.hack2hire.com/question-bank/questions/coding-questions/6834c930071112104d71e173) | [38: Count and Say](https://leetcode.com/problems/count-and-say/) |
+| [Reversi Move Simulation](https://www.hack2hire.com/question-bank/questions/coding-questions/69c0a16521f6ab42269647a7) | [1958: Check if Move is Legal](https://leetcode.com/problems/check-if-move-is-legal/) |
+| [Sentence Variations with Anagram](https://www.hack2hire.com/question-bank/questions/coding-questions/699b517e6e73e4abccc9a847) | [49: Group Anagrams](https://leetcode.com/problems/group-anagrams/) |
+| [Sparse Matrix Operation](https://www.hack2hire.com/question-bank/questions/coding-questions/690cfffd0a0bc710235894c3) | [311: Sparse Matrix Multiplication](https://leetcode.com/problems/sparse-matrix-multiplication/) |
+| [String Reorganization](https://www.hack2hire.com/question-bank/questions/coding-questions/6887e0ec6509c24ee64e4b20) | [767: Reorganize String](https://leetcode.com/problems/reorganize-string/) |
+| [Student Reading Textbook](https://www.hack2hire.com/question-bank/questions/coding-questions/67801a786fee41e51af73dd9) | [875: Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/) |
+| [Subset Sum Equals K](https://www.hack2hire.com/question-bank/questions/coding-questions/677c87c55cbaff553b53b06d) | [39: Combination Sum](https://leetcode.com/problems/combination-sum/) |
+| [Sum of Islands Max](https://www.hack2hire.com/question-bank/questions/coding-questions/678dd2dffa7ce9616e190fb9) | [200: Number of Islands](https://leetcode.com/problems/number-of-islands/) |
+| [Text Box Formatter](https://www.hack2hire.com/question-bank/questions/coding-questions/68d566de569e57bd10bbd431) | [68: Text Justification](https://leetcode.com/problems/text-justification/) |
+| [Threshold Alerts](https://www.hack2hire.com/question-bank/questions/coding-questions/6a9729150ca9cc4e1c789d81) | [1343: Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold](https://leetcode.com/problems/number-of-sub-arrays-of-size-k-and-average-greater-than-or-equal-to-threshold/) |
+| [Tic-Tac-Toe II](https://www.hack2hire.com/question-bank/questions/coding-questions/684c9251cab8e9bb7ea93aeb) | [348: Design Tic-Tac-Toe](https://leetcode.com/problems/design-tic-tac-toe/) |
+| [Top K Largest Elements](https://www.hack2hire.com/question-bank/questions/coding-questions/6a4813c83588ba8acc693029) | [215: Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) |
+| [Top Love Message Receivers](https://www.hack2hire.com/question-bank/questions/coding-questions/67f9968855e478de52401ddc) | [692: Top K Frequent Words](https://leetcode.com/problems/top-k-frequent-words/) |
+| [User Journey Paths](https://www.hack2hire.com/question-bank/questions/coding-questions/6a2091bf8b879849ebc118ab) | [208: Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/) |
+| [Wildcard Matching](https://www.hack2hire.com/question-bank/questions/coding-questions/67798becdcf91f8e3c1c310c) | [44: Wildcard Matching](https://leetcode.com/problems/wildcard-matching/) |
+| [Windowed Key-Value Store](https://www.hack2hire.com/question-bank/questions/coding-questions/67775e328df5ec401f786db1) | [146: LRU Cache](https://leetcode.com/problems/lru-cache/) |
+| [Word Pattern Match](https://www.hack2hire.com/question-bank/questions/coding-questions/67e45b2050b60b77022f382d) | [290: Word Pattern](https://leetcode.com/problems/word-pattern/) |
+| [Word Search in a Straight Line](https://www.hack2hire.com/question-bank/questions/coding-questions/68e86c2780f69c7a01706885) | [79: Word Search](https://leetcode.com/problems/word-search/) |
 
 ## Complete index
 
@@ -696,226 +912,226 @@ Overlap statuses: `{"exact_title_candidate": 7, "no_title_match_found": 786, "po
 | [Work Schedule ](https://www.hack2hire.com/question-bank/questions/coding-questions/67fc7463216af53465a7221a) | coding | 1 | SNOWFLAKE | backtracking |
 | [Worker-Task Matching with Specialties ](https://www.hack2hire.com/question-bank/questions/coding-questions/697a5a4e2ae9e181e44b7b95) | coding | 3 | STRIPE | heap |
 | [Write Disk Block With Cycle ](https://www.hack2hire.com/question-bank/questions/coding-questions/67730896dd9437f8aa275b03) | coding | 1 | AMAZON | heap |
-| [Design A Bot Detection System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f67e5830f41dfd539fbf82) | ml-system-design | 1 | AMAZON, GOOGLE |  |
-| [Design A Customer Churn Prediction System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/6a0dcf68bd87a7041d74ce56) | ml-system-design | 1 | STRIPE |  |
-| [Design A Family Friendly Listing Ranking System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f8b88d72a3d3fe39f8cbd7) | ml-system-design | 1 | AIRBNB |  |
-| [Design A Feed Recommendation System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fa848f661bab75bbca3d76) | ml-system-design | 1 | EBAY, FIGMA, PERPLEXITY, PINTEREST |  |
-| [Design A Harmful Content Detection System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f67ef230f41dfd539fbf8a) | ml-system-design | 1 | DATABRICKS, DOORDASH, PINTEREST |  |
-| [Design A Nearby Restaurant Recommendation System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/6a07c7bdbd4165b6d480f8b4) | ml-system-design | 1 | DOORDASH, UBER |  |
-| [Design A Personalized Search Ranking System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f975fb72a3d3fe39f8d24c) | ml-system-design | 1 | AIRBNB, DOORDASH, INSTACART, REDDIT, ROBINHOOD, UBER |  |
-| [Design A Video Recommendation System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f67ec330f41dfd539fbf87) | ml-system-design | 1 | INSTACART, LINKEDIN, PINTEREST, REDDIT |  |
-| [Design Airbnb Relisting Detection ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f8b8c472a3d3fe39f8cbde) | ml-system-design | 1 | AIRBNB |  |
-| [Design An Account Takeover Detection System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/6a0cac9b567356be0f453389) | ml-system-design | 1 | STRIPE |  |
-| [Design An Address Autofill System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/6a094f91c84b6e8a3be17ce4) | ml-system-design | 1 | AMAZON, GOOGLE, UBER |  |
-| [Design An Airbnb Price Prediction System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fa0a3a72a3d3fe39f8d4fb) | ml-system-design | 1 | AIRBNB |  |
-| [Design An Online Ads Ranking System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fa876f661bab75bbca3dbb) | ml-system-design | 1 | DOORDASH, EXPEDIA, INSTACART, PINTEREST, REDDIT |  |
-| [Design Linkedin Learning Recommendation System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f77ece30f41dfd539fc65c) | ml-system-design | 1 | LINKEDIN |  |
-| [Design Map Traffic Forecasting System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fd390c574d87bc4900618c) | ml-system-design | 1 | UBER |  |
-| [Design Payment Fraud Detection System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fe2239574d87bc490066f0) | ml-system-design | 1 | AFFIRM, CAPITAL_ONE, ROBINHOOD, STRIPE, UBER |  |
-| [Design Real-Time Driver ETA Prediction ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fd3346574d87bc49006174) | ml-system-design | 1 | INSTACART, UBER |  |
-| [Design Reddit Comments Ranking System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/6a285bef97d3b4b32966b621) | ml-system-design | 1 | REDDIT |  |
-| [Design Soft 404 Detection ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fbf561574d87bc49005955) | ml-system-design | 1 | PINTEREST |  |
-| [Design a Amazon Locker ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a20b0958b879849ebc119f7) | object-oriented-design | 1 | AMAZON |  |
-| [Design a Coffee Maker ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a22e5a9981072682a6f22d9) | object-oriented-design | 1 | AMAZON |  |
-| [Design a Hotel Booking System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a234260990d33e1b222b859) | object-oriented-design | 1 | AMAZON |  |
-| [Design a Library Management System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a27a1b897d3b4b32966b276) | object-oriented-design | 1 | AMAZON |  |
-| [Design a Parking Lot ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a208e6f8b879849ebc11890) | object-oriented-design | 1 | AMAZON |  |
-| [Design a Pizza Price Calculator ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a22e5c9981072682a6f22da) | object-oriented-design | 1 | AMAZON |  |
-| [Design a Traffic Light Control System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a234661990d33e1b222b873) | object-oriented-design | 1 | AMAZON |  |
-| [Design a Vending Machine ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a20f5128b879849ebc11c8a) | object-oriented-design | 1 | AMAZON |  |
-| [Design a Voting System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a24c8049d6d10648d02a1c7) | object-oriented-design | 1 | AMAZON |  |
-| [Design Amazon Kindle ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a26d7cb97d3b4b32966aa57) | object-oriented-design | 1 | AMAZON |  |
-| [Design an Airport Boarding System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a20f5938b879849ebc11c8e) | object-oriented-design | 1 | AMAZON |  |
-| [Design an ATM ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a2c406f5117d1b5435655ae) | object-oriented-design | 1 | AMAZON |  |
-| [Design Blackjack Game ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a24ffb99d6d10648d02a3fc) | object-oriented-design | 1 | AMAZON |  |
-| [Design Chess Game ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a2760db97d3b4b32966afae) | object-oriented-design | 1 | AMAZON |  |
-| [Design Elevator Control System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a20b1088b879849ebc119fb) | object-oriented-design | 1 | AMAZON |  |
-| [Design Food Delivery System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a2ca60d5117d1b543565913) | object-oriented-design | 1 | AMAZON |  |
-| [Design Restaurant Reservation Service ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a26272297d3b4b32966a595) | object-oriented-design | 1 | AMAZON |  |
-| [Design Tic-Tac-Toc ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a225baa981072682a6f20ae) | object-oriented-design | 1 | AMAZON |  |
-| [Design Unix File Search ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a24d0349d6d10648d02a227) | object-oriented-design | 1 | AMAZON |  |
-| [3-Topping Pizzas ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a458581077f066afe215ec4) | sql | 1 | MCKINSEY |  |
-| [7-Day Inactive Users ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a7c930f41dfd539fc7f6) | sql | 1 | WAYMO |  |
-| [Ad Campaign ROAS ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a619205190ed618c6e6aab6) | sql | 1 | GOOGLE |  |
-| [Advertising Campaign Performance ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85e170701a76fc6843acca) | sql | 2 | TIKTOK |  |
-| [Advertising Time-of-Day Analysis ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a65730f41dfd539fc7f0) | sql | 1 | META |  |
-| [Apple Pay Volume ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a6192f4190ed618c6e6aacd) | sql | 1 | VISA |  |
-| [Auction Lots with Highest Bids ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f67e0230f41dfd539fbf7e) | sql | 1 | SQUAREPOINT |  |
-| [Average Deal Size ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45b52c077f066afe2160f9) | sql | 1 | SALESFORCE |  |
-| [Average Reactions per Post ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f6ccb230f41dfd539fc31a) | sql | 1 | META |  |
-| [Average Review Ratings ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82ab20701a76fc684390ee) | sql | 1 | AMAZON |  |
-| [Average Ticket Resolution Time ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a942485cddc54478ddf5c00) | sql | 1 | IBM |  |
-| [Average Vacant Days ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a051c8d3141bbc31efdd918) | sql | 1 | AIRBNB |  |
-| [Best-Selling Product ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57cdc9665efda9311f94bb) | sql | 1 | AMAZON |  |
-| [Booking Analysis ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a852829701a76fc6843a7c8) | sql | 3 | RIPPLING |  |
-| [Bottom Quartile Reach ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f649bf30f41dfd539fbd9e) | sql | 1 | DOORDASH |  |
-| [Calculate Monthly Cohort Retention ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a8527af701a76fc6843a7b9) | sql | 1 | AMAZON |  |
-| [Calculate Survey Response Rate ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85298b701a76fc6843a7e8) | sql | 1 | META |  |
-| [Card Launch Success ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628f2c190ed618c6e6b185) | sql | 1 | JPMORGAN |  |
-| [Cards Issued Difference ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82a490701a76fc684390a2) | sql | 1 | JPMORGAN |  |
-| [Cities With Completed Trades ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82b011701a76fc6843912a) | sql | 1 | ROBINHOOD |  |
-| [Collaborator Source Distribution ](https://www.hack2hire.com/question-bank/questions/sql-questions/6aa55d2a0ca9cc4e1c79134c) | sql | 3 | NOTION |  |
-| [Company Suggestion Funnel ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a83dd7f701a76fc68439b6c) | sql | 1 | GOOGLE |  |
-| [Compensation Outliers ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45b752077f066afe216120) | sql | 1 | ACCENTURE |  |
-| [Compressed Mean ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82a458701a76fc684390a0) | sql | 1 | ALIBABA |  |
-| [Compressed Mode ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628eb7190ed618c6e6b180) | sql | 1 | ALIBABA |  |
-| [Consecutive Filing Years ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45ac1b077f066afe2160a2) | sql | 1 | INTUIT |  |
-| [Coupon Recipient Activity ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a850bb6701a76fc6843a633) | sql | 3 | EBAY |  |
-| [CTR by Ad Type ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a86520a701a76fc6843b21a) | sql | 1 | META |  |
-| [CTR By Pin-Format and Date ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a87330f41dfd539fc7fb) | sql | 1 | PINTEREST |  |
-| [Cumulative Purchases by Product Type ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45b7bb077f066afe216126) | sql | 1 | AMAZON |  |
-| [Data Science Skills ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a04a33f2608e589a944b498) | sql | 1 | LINKEDIN |  |
-| [Departments with Multiple Employees ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a942a14cddc54478ddf5c09) | sql | 2 | MICROSOFT |  |
-| [Duplicate Job Listings ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82b03b701a76fc6843912b) | sql | 1 | LINKEDIN |  |
-| [Efficient Low Maintenance Vehicles ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a852651701a76fc6843a79f) | sql | 1 | WAYMO |  |
-| [Event Friends Recommendation ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a456a77077f066afe215e11) | sql | 1 | META |  |
-| [FAANG Stock Min-Max ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57cef0665efda9311f94c6) | sql | 1 | BLOOMBERG |  |
-| [FAANG Stock Monthly Change ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a487eeb3588ba8acc6934b5) | sql | 1 | BLOOMBERG |  |
-| [Fill Missing Client Data ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a487b0c3588ba8acc69348f) | sql | 1 | ACCENTURE |  |
-| [Find Unfinished Parts ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82b0c3701a76fc6843912f) | sql | 1 | TESLA |  |
-| [First Transaction ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45b3ff077f066afe2160ed) | sql | 1 | ETSY |  |
-| [Follow-Up Airpod Percentage ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a0522433141bbc31efdd94a) | sql | 1 | APPLE |  |
-| [Frequently Purchased Pairs ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628c28190ed618c6e6b15e) | sql | 1 | WALMART |  |
-| [Fresh Content Reach ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a89c30f41dfd539fc7fd) | sql | 1 | PINTEREST |  |
-| [High-frequency Call Initiators ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a94275dcddc54478ddf5c06) | sql | 2 | META |  |
-| [Highest-Grossing Items ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57d5c5665efda9311f9526) | sql | 1 | AMAZON |  |
-| [Highest Number of Products ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a619288190ed618c6e6aac0) | sql | 1 | EBAY |  |
-| [Histogram of Tweets ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82b116701a76fc68439131) | sql | 1 | XAI |  |
-| [Histogram of Users and Purchases ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628d7b190ed618c6e6b170) | sql | 1 | WALMART |  |
-| [International Call Percentage ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628fcf190ed618c6e6b18d) | sql | 1 | VERIZON |  |
-| [LinkedIn Power Creators ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a487b803588ba8acc693495) | sql | 2 | LINKEDIN |  |
-| [Low-Frequency Users By City ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a81630f41dfd539fc7f8) | sql | 1 | WAYMO |  |
-| [Marketing Touch Streak ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45a9f8077f066afe216008) | sql | 1 | SNOWFLAKE |  |
-| [Matching Rental Amenities ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a4569e0077f066afe215e0e) | sql | 1 | AIRBNB |  |
-| [Maximize Prime Item Inventory ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a457ad4077f066afe215e8e) | sql | 1 | AMAZON |  |
-| [Median Google Search Frequency ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45755b077f066afe215e6d) | sql | 1 | GOOGLE |  |
-| [Monthly Customer and Restaurant Metrics ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a86568d701a76fc6843b26b) | sql | 4 | DOORDASH |  |
-| [Monthly Percentage of High-Frequency Customers ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f607782272a804521201cd) | sql | 1 | DOORDASH |  |
-| [Monthly Ride Aggregation ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a7ef30f41dfd539fc7f7) | sql | 1 | WAYMO |  |
-| [Monthly Sales Growth ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f62f8430f41dfd539fbcb8) | sql | 1 | DOORDASH |  |
-| [Monthly Top Eligible Customer ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f61a792272a804521201fb) | sql | 1 | DOORDASH |  |
-| [Most Expensive Purchase ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a619318190ed618c6e6aad2) | sql | 1 | AMAZON |  |
-| [New Versus Existing Satisfaction ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85dfe5701a76fc6843acc0) | sql | 1 | META |  |
-| [Odd and Even Measurements ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57cfef665efda9311f94d5) | sql | 1 | GOOGLE |  |
-| [Order-Level Request Statistics ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7966730f41dfd539fc75b) | sql | 1 | DOORDASH |  |
-| [Orders with Offer Increase ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f79c3330f41dfd539fc792) | sql | 1 | DOORDASH |  |
-| [Page With No Likes ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a0519e23141bbc31efdd903) | sql | 1 | META |  |
-| [Patient Support Analysis ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a56fc2f665efda9311f8edc) | sql | 2 | PINTEREST |  |
-| [Peak Hour Ad Performance ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a865360701a76fc6843b224) | sql | 1 | META |  |
-| [Percent of Late Orders ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f77b4130f41dfd539fc649) | sql | 1 | DOORDASH |  |
-| [Pirated Theme Monthly Active Shops ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a22a30f41dfd539fc7db) | sql | 1 | SHOPIFY |  |
-| [Posts with 10 more Views in 7 Days ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a9434d5cddc54478ddf5c1a) | sql | 3 | META |  |
-| [Product Line Revenue ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a6191de190ed618c6e6aaad) | sql | 1 | NVIDIA |  |
-| [QuickBooks vs TurboTax ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a617ccd190ed618c6e6a9ad) | sql | 1 | INTUIT |  |
-| [Recent Unrelated Posts ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f6c49d30f41dfd539fc2c2) | sql | 1 | META |  |
-| [Repeated Payments ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a4584b9077f066afe215ebe) | sql | 1 | STRIPE |  |
-| [Retention Rating By Active Month ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a84330f41dfd539fc7fa) | sql | 1 | WAYMO |  |
-| [Same Week Purchases ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a452903077f066afe215cd2) | sql | 1 | PINTEREST |  |
-| [Second Highest Salary ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a61789ec16dcdf8ba4ffcae) | sql | 1 | AMAZON, APPLE, META, MICROSOFT |  |
-| [Second-ranked Vehicle by Country ](https://www.hack2hire.com/question-bank/questions/sql-questions/6aa55c9e0ca9cc4e1c791349) | sql | 2 | LIME |  |
-| [Sellers with Multi-interaction Products ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a942716cddc54478ddf5c04) | sql | 2 | META |  |
-| [Sending vs. Opening Snaps ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a592c5a665efda9311fa38e) | sql | 1 | SNAPCHAT |  |
-| [Server Utilization Time ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a4574b5077f066afe215e66) | sql | 1 | AMAZON |  |
-| [Shop Spend Share ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85e304701a76fc6843ace8) | sql | 1 | META |  |
-| [Shop Versus Web Performance ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85e3b8701a76fc6843acf8) | sql | 1 | META |  |
-| [Signup Activation Rate ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57d4a2665efda9311f9519) | sql | 1 | TIKTOK |  |
-| [Spare Server Capacity ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a61925e190ed618c6e6aabd) | sql | 1 | MICROSOFT |  |
-| [Streaming History ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628ae9190ed618c6e6b155) | sql | 1 | SPOTIFY |  |
-| [Subject Matter Experts ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a6192c4190ed618c6e6aac3) | sql | 1 | ACCENTURE |  |
-| [Supercloud Customer ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57d3a6665efda9311f9511) | sql | 1 | MICROSOFT |  |
-| [Swapped Food Delivery ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628ca3190ed618c6e6b165) | sql | 1 | ZOMATO |  |
-| [Teams Power Users ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82b14e701a76fc68439133) | sql | 1 | MICROSOFT |  |
-| [Top Campaign Value per User ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a8652c4701a76fc6843b21f) | sql | 1 | META |  |
-| [Top Five Ads by Impressions ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85e473701a76fc6843ad06) | sql | 1 | META |  |
-| [Top Rated Businesses ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a619234190ed618c6e6aaba) | sql | 1 | YELP |  |
-| [Top Three Salaries ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628a40190ed618c6e6b152) | sql | 1 | PINTEREST |  |
-| [Total Order Amount per Region ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f6b9a930f41dfd539fc236) | sql | 1 | AMAZON |  |
-| [Trade In Payouts ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a619092190ed618c6e6aa9a) | sql | 1 | APPLE |  |
-| [Tweets' Rolling Averages ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57d765665efda9311f9537) | sql | 1 | XAI |  |
-| [Uniquely Staffed Consultants ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a452ec1077f066afe215ce4) | sql | 1 | ACCENTURE |  |
-| [US Call Pickup Rate ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a9423f9cddc54478ddf5bfc) | sql | 2 | META |  |
-| [User Concurrent Sessions ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a456ede077f066afe215e3c) | sql | 1 | PINTEREST |  |
-| [User's Third Transaction ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a6178cbc16dcdf8ba4ffcaf) | sql | 1 | UBER |  |
-| [User Shopping Sprees ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57cbde665efda9311f94a1) | sql | 1 | AMAZON |  |
-| [Users by Account Count ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a9425e0cddc54478ddf5c01) | sql | 2 | META |  |
-| [Webinar Popularity ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a618582190ed618c6e6aa01) | sql | 1 | SNOWFLAKE |  |
-| [Weekly Churn Rates ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a4534e3077f066afe215cfc) | sql | 1 | META |  |
-| [Well Paid Employees ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82a509701a76fc684390a7) | sql | 1 | NETFLIX |  |
-| [Who Made Quota? ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a617e00190ed618c6e6a9ba) | sql | 1 | ORACLE |  |
-| [Year-Over-Year Growth Rate ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a457d6d077f066afe215e9d) | sql | 1 | WAYFAIR |  |
-| [Design A Color Picker Service ](https://www.hack2hire.com/question-bank/questions/system-design/6a04f93a3141bbc31efdd704) | system-design | 1 | ATLASSIAN |  |
-| [Design a Distributed Power Grid Control System ](https://www.hack2hire.com/question-bank/questions/system-design/6ab2ff05e74ebb7457a3ef14) | system-design | 1 | OPENAI |  |
-| [Design A Facial Image Matching System ](https://www.hack2hire.com/question-bank/questions/system-design/69ec1a5b068f42e155089421) | system-design | 1 | DATADOG |  |
-| [Design a Flight Deal Notification System ](https://www.hack2hire.com/question-bank/questions/system-design/69ec13a6068f42e1550893ea) | system-design | 1 | DATADOG |  |
-| [Design A Kafka-like Distributed Message Queue ](https://www.hack2hire.com/question-bank/questions/system-design/69ebc33b068f42e1550890b8) | system-design | 1 | CONFLUENT, DATABRICKS, LINKEDIN, MICROSOFT, WHATNOT |  |
-| [Design a Logging Service ](https://www.hack2hire.com/question-bank/questions/system-design/69d84d1dc4c1bc791ee230b4) | system-design | 1 | AMAZON, ATLASSIAN, BLOOMBERG, DATADOG, LINKEDIN, RIPPLING, SNAPCHAT, SNOWFLAKE, YELP |  |
-| [Design A Nearby POI Service ](https://www.hack2hire.com/question-bank/questions/system-design/69f9729772a3d3fe39f8d21b) | system-design | 1 | OPENAI |  |
-| [Design a Real-Time Canvas Comment System ](https://www.hack2hire.com/question-bank/questions/system-design/6a0cab29567356be0f453385) | system-design | 1 | FIGMA |  |
-| [Design a Sandboxed Cloud IDE ](https://www.hack2hire.com/question-bank/questions/system-design/6acc71782e3a0349b3a8cbe2) | system-design | 1 | OPENAI |  |
-| [Design A Shared Todo List ](https://www.hack2hire.com/question-bank/questions/system-design/69de544095e80ae213e5be75) | system-design | 1 | ROBLOX |  |
-| [Design A Top K Popular Items System ](https://www.hack2hire.com/question-bank/questions/system-design/69d2ef0707421ca06eb8e53b) | system-design | 1 | ATLASSIAN, BLOOMBERG, FIGMA, GOOGLE, LYFT, MICROSOFT, PERPLEXITY, SNAPCHAT, UBER |  |
-| [Design A VM Bandwidth Rate Limiter ](https://www.hack2hire.com/question-bank/questions/system-design/6a074964906c2652b8dd4616) | system-design | 1 | AMAZON, DATABRICKS, GOOGLE, MICROSOFT |  |
-| [Design Access Management System ](https://www.hack2hire.com/question-bank/questions/system-design/69d47da779bf03c0074bd2be) | system-design | 1 | ATLASSIAN, EXPEDIA, RAMP, ROBLOX, SNAPCHAT, SNOWFLAKE, STRIPE, VERKADA |  |
-| [Design Ad Click Event Aggregation System ](https://www.hack2hire.com/question-bank/questions/system-design/69d1342f17b72775cc49be7a) | system-design | 1 | AIRBNB, META, PINTEREST, RIPPLING, ROBINHOOD, ROBLOX, SNAPCHAT |  |
-| [Design AI Chatbot App ](https://www.hack2hire.com/question-bank/questions/system-design/69cb3259ff3ebde766cedc1f) | system-design | 1 | MAI, MICROSOFT, OPENAI, UBER |  |
-| [Design AI Prompt Playground ](https://www.hack2hire.com/question-bank/questions/system-design/69dbcc73e4441834b3f72fad) | system-design | 1 | ANTHROPIC |  |
-| [Design Airbnb Notification System ](https://www.hack2hire.com/question-bank/questions/system-design/69d094f717b72775cc49bd09) | system-design | 1 | AIRBNB, ROBINHOOD |  |
-| [Design Amazon Locker ](https://www.hack2hire.com/question-bank/questions/system-design/69e06a8095e80ae213e5cc3a) | system-design | 1 | AMAZON, MICROSOFT |  |
-| [Design Book Price Aggregator ](https://www.hack2hire.com/question-bank/questions/system-design/69dc4935e4441834b3f73718) | system-design | 1 | DATABRICKS |  |
-| [Design ChatGPT ](https://www.hack2hire.com/question-bank/questions/system-design/69d6f527c4c1bc791ee229e3) | system-design | 1 | AMAZON, ANTHROPIC, OPENAI, XAI |  |
-| [Design CICD System ](https://www.hack2hire.com/question-bank/questions/system-design/69c9ff24ff3ebde766ced6fa) | system-design | 1 | EBAY, OPENAI |  |
-| [Design Coinbase Explore ](https://www.hack2hire.com/question-bank/questions/system-design/69cec33e4f38b199f9e49199) | system-design | 1 | COINBASE, ROBINHOOD, SNAPCHAT |  |
-| [Design Content Moderation System ](https://www.hack2hire.com/question-bank/questions/system-design/69e841e1fbaf3da641828244) | system-design | 1 | META, REDDIT, TIKTOK |  |
-| [Design Credit Card Application System ](https://www.hack2hire.com/question-bank/questions/system-design/69cec63d4f38b199f9e491af) | system-design | 1 | CAPITAL_ONE, COINBASE |  |
-| [Design Customer Support Ticketing System ](https://www.hack2hire.com/question-bank/questions/system-design/69d1348a17b72775cc49be7b) | system-design | 1 | AIRBNB |  |
-| [Design Distributed AI Model Downloader ](https://www.hack2hire.com/question-bank/questions/system-design/69dbccaee4441834b3f72fae) | system-design | 1 | ANTHROPIC |  |
-| [Design Distributed Rate Limiter ](https://www.hack2hire.com/question-bank/questions/system-design/69cd9871ff3ebde766cee7fe) | system-design | 1 | AMAZON, EXPEDIA, GOOGLE, LINKEDIN, MICROSOFT, PINTEREST, SNAPCHAT, SNOWFLAKE |  |
-| [Design Distributed Web Crawler ](https://www.hack2hire.com/question-bank/questions/system-design/69dc41c3e4441834b3f736bb) | system-design | 1 | ATLASSIAN, DATABRICKS, LYFT, MAI, META, MICROSOFT, OPENAI, PINTEREST |  |
-| [Design Driver Location Heatmap ](https://www.hack2hire.com/question-bank/questions/system-design/69d2e1c707421ca06eb8e4c0) | system-design | 1 | AMAZON, LYFT, UBER |  |
-| [Design Dropbox ](https://www.hack2hire.com/question-bank/questions/system-design/69cdf6feff3ebde766ceea74) | system-design | 1 | DATABRICKS, GOOGLE, MICROSOFT, TESLA |  |
-| [Design Facebook Messenger ](https://www.hack2hire.com/question-bank/questions/system-design/69d2bf7307421ca06eb8e38c) | system-design | 1 | ANTHROPIC, GOOGLE, LYFT, META, MICROSOFT, SNAPCHAT, UBER |  |
-| [Design Feature Flag ](https://www.hack2hire.com/question-bank/questions/system-design/69d47d8679bf03c0074bd2bd) | system-design | 1 | REDDIT, STRIPE |  |
-| [Design Food Review System ](https://www.hack2hire.com/question-bank/questions/system-design/69e4633aad1522fdaff14b09) | system-design | 1 | DOORDASH |  |
-| [Design Google Calendar ](https://www.hack2hire.com/question-bank/questions/system-design/69d0903c17b72775cc49bcf0) | system-design | 1 | AIRBNB, LINKEDIN, OPENAI |  |
-| [Design Google Docs ](https://www.hack2hire.com/question-bank/questions/system-design/69ca9a17ff3ebde766ced8e7) | system-design | 1 | META, MICROSOFT |  |
-| [Design Google News ](https://www.hack2hire.com/question-bank/questions/system-design/69f03b3196981f58ae1f71b7) | system-design | 1 | EXPEDIA, GOOGLE, MICROSOFT, RIPPLING, TIKTOK |  |
-| [Design GPU Inference Serving System ](https://www.hack2hire.com/question-bank/questions/system-design/69db22a2e4441834b3f72b81) | system-design | 1 | ANTHROPIC |  |
-| [Design GPU Scheduling Platform ](https://www.hack2hire.com/question-bank/questions/system-design/69d71cbfc4c1bc791ee22b22) | system-design | 1 | ANTHROPIC, DATABRICKS, OPENAI |  |
-| [Design Hotel Booking System ](https://www.hack2hire.com/question-bank/questions/system-design/69d5d62760ca00f1f2f5f466) | system-design | 1 | AIRBNB, AMAZON, EBAY, EXPEDIA, META, MICROSOFT, RAMP, RIPPLING, SQUARE, VERKADA |  |
-| [Design Instacart Inventory System ](https://www.hack2hire.com/question-bank/questions/system-design/69d8052ec4c1bc791ee22f21) | system-design | 1 | INSTACART |  |
-| [Design Instagram ](https://www.hack2hire.com/question-bank/questions/system-design/69e1b8b295e80ae213e5d4a2) | system-design | 1 | DATADOG, DOORDASH, EBAY, GOOGLE, LYFT, META, MICROSOFT, ROBLOX |  |
-| [Design Inventory Management System ](https://www.hack2hire.com/question-bank/questions/system-design/69d1bc9017b72775cc49c34a) | system-design | 1 | PINTEREST |  |
-| [Design Job Scheduler ](https://www.hack2hire.com/question-bank/questions/system-design/69ce7e9a4f38b199f9e49099) | system-design | 1 | AIRBNB, ATLASSIAN, DATABRICKS, DOORDASH, GOOGLE, LINKEDIN, LYFT, MICROSOFT, OPENAI, PINTEREST, REDDIT, ROBINHOOD, SNAPCHAT, TIKTOK, YELP |  |
-| [Design Key-value Store ](https://www.hack2hire.com/question-bank/questions/system-design/69dc51e8e4441834b3f7376f) | system-design | 1 | AIRBNB, AMAZON, CONFLUENT, DOORDASH, GOOGLE, LINKEDIN, MICROSOFT, PINTEREST, SNAPCHAT, SNOWFLAKE |  |
-| [Design Leetcode ](https://www.hack2hire.com/question-bank/questions/system-design/69d98d1ed94fcdd01529ff91) | system-design | 1 | META, SNOWFLAKE, TIKTOK, UBER, WHATNOT |  |
-| [Design Merchant Lender System ](https://www.hack2hire.com/question-bank/questions/system-design/69d47d5b79bf03c0074bd2ba) | system-design | 1 | STRIPE |  |
-| [Design Metrics System ](https://www.hack2hire.com/question-bank/questions/system-design/69cc94b2ff3ebde766cee3f2) | system-design | 1 | AMAZON, DATADOG, DOORDASH, GOOGLE, LINKEDIN, MICROSOFT, RIPPLING, ROBLOX, SNAPCHAT, STRIPE |  |
-| [Design Mint.com ](https://www.hack2hire.com/question-bank/questions/system-design/69eb9acffbaf3da6418293dc) | system-design | 1 | DATADOG, PERPLEXITY |  |
-| [Design News Feed ](https://www.hack2hire.com/question-bank/questions/system-design/69ca9b37ff3ebde766ced8eb) | system-design | 1 | AMAZON, BLOOMBERG, CONFLUENT, GOOGLE, LYFT, META, PINTEREST, RIPPLING, ROBINHOOD, ROBLOX, SNAPCHAT, SNOWFLAKE, UBER, VERKADA, WHATNOT, YELP |  |
-| [Design Notification System ](https://www.hack2hire.com/question-bank/questions/system-design/69cfaa8f4f38b199f9e49615) | system-design | 1 | DOORDASH, EXPEDIA, GOOGLE, MICROSOFT, PINTEREST, REDDIT, SNAPCHAT, WHATNOT, XAI, YELP |  |
-| [Design Online Banking App ](https://www.hack2hire.com/question-bank/questions/system-design/6a08c64bbd4165b6d480fe87) | system-design | 1 | CAPITAL_ONE |  |
-| [Design Online Bookstore ](https://www.hack2hire.com/question-bank/questions/system-design/69e1249f95e80ae213e5cf9f) | system-design | 1 | AMAZON, RIPPLING |  |
-| [Design Online Chess Game ](https://www.hack2hire.com/question-bank/questions/system-design/69cb09edff3ebde766cedb20) | system-design | 1 | AIRBNB, MAI, MICROSOFT, OPENAI |  |
-| [Design Online Donation Service ](https://www.hack2hire.com/question-bank/questions/system-design/69e45d03ad1522fdaff14ac5) | system-design | 1 | DOORDASH, EBAY, LYFT, WHATNOT |  |
-| [Design Online Game Leaderboard ](https://www.hack2hire.com/question-bank/questions/system-design/69e1ab3b95e80ae213e5d40c) | system-design | 1 | ATLASSIAN, META, MICROSOFT, REDDIT |  |
-| [Design Online Game Matching Service ](https://www.hack2hire.com/question-bank/questions/system-design/69ddb7f695e80ae213e5bb63) | system-design | 1 | ROBLOX |  |
-| [Design Online Product Catalog ](https://www.hack2hire.com/question-bank/questions/system-design/69c9fdbeff3ebde766ced6e5) | system-design | 1 | INSTACART |  |
-| [Design Online Shopping Cart ](https://www.hack2hire.com/question-bank/questions/system-design/69d71d52c4c1bc791ee22b2c) | system-design | 1 | UBER |  |
-| [Design Payment System ](https://www.hack2hire.com/question-bank/questions/system-design/69c9f9a3ff3ebde766ced6b4) | system-design | 1 | AFFIRM, CAPITAL_ONE, EXPEDIA, GOOGLE, MAI, MICROSOFT, OPENAI, ROBLOX, STRIPE, TIKTOK, YELP |  |
-| [Design Price Tracking Service ](https://www.hack2hire.com/question-bank/questions/system-design/69e1b3ad95e80ae213e5d46e) | system-design | 1 | META |  |
-| [Design Quota Service ](https://www.hack2hire.com/question-bank/questions/system-design/69d850f4c4c1bc791ee230c5) | system-design | 1 | AMAZON, GOOGLE, MICROSOFT, SNOWFLAKE |  |
-| [Design Real-time Air Traffic Control Sytstem ](https://www.hack2hire.com/question-bank/questions/system-design/69e124dc95e80ae213e5cfa6) | system-design | 1 | AMAZON |  |
-| [Design Real-time Like Interation System ](https://www.hack2hire.com/question-bank/questions/system-design/69de84db95e80ae213e5bf47) | system-design | 1 | ROBLOX |  |
-| [Design Realtime Temperature Monitoring System ](https://www.hack2hire.com/question-bank/questions/system-design/69e05c7495e80ae213e5cb6c) | system-design | 1 | AMAZON, VERKADA |  |
-| [Design S3-like Object Storage System ](https://www.hack2hire.com/question-bank/questions/system-design/69d84a1bc4c1bc791ee2309f) | system-design | 1 | AMAZON, ATLASSIAN, COINBASE, DATABRICKS, GOOGLE, MICROSOFT, SNOWFLAKE |  |
-| [Design Slack-like Chat System ](https://www.hack2hire.com/question-bank/questions/system-design/69c9fe5dff3ebde766ced6f4) | system-design | 1 | AIRBNB, ANTHROPIC, DATABRICKS, EBAY, GOOGLE, LINKEDIN, MAI, META, OPENAI, REDDIT, SNAPCHAT, TIKTOK, YELP |  |
-| [Design Spotify ](https://www.hack2hire.com/question-bank/questions/system-design/69d8023ac4c1bc791ee22f16) | system-design | 1 | AMAZON, CONFLUENT, GOOGLE, INSTACART, LINKEDIN, META, MICROSOFT, TIKTOK |  |
-| [Design Stock Trading Platform ](https://www.hack2hire.com/question-bank/questions/system-design/69d95055d94fcdd01529fe51) | system-design | 1 | COINBASE, DATABRICKS, ROBINHOOD, SNOWFLAKE, SQUARE |  |
-| [Design Tagging System ](https://www.hack2hire.com/question-bank/questions/system-design/69f6d02830f41dfd539fc33f) | system-design | 1 | ATLASSIAN |  |
-| [Design Ticket Booking System ](https://www.hack2hire.com/question-bank/questions/system-design/69d1f51c17b72775cc49c4d0) | system-design | 1 | EBAY, META, MICROSOFT |  |
-| [Design TinyURL ](https://www.hack2hire.com/question-bank/questions/system-design/69cc73c2ff3ebde766cee30b) | system-design | 1 | AMAZON, CONFLUENT, EBAY, GOOGLE, MICROSOFT, OPENAI, SNAPCHAT, YELP |  |
-| [Design Typehead Suggestion ](https://www.hack2hire.com/question-bank/questions/system-design/69d55ecf60ca00f1f2f5f100) | system-design | 1 | AMAZON, GOOGLE, LINKEDIN, MAI, META, MICROSOFT, PERPLEXITY, PINTEREST |  |
-| [Design Uber ](https://www.hack2hire.com/question-bank/questions/system-design/69ca875aff3ebde766ced8b9) | system-design | 1 | DOORDASH, LYFT, SNAPCHAT, UBER |  |
-| [Design Webhook Delivery System ](https://www.hack2hire.com/question-bank/questions/system-design/69cb3b1aff3ebde766cedc63) | system-design | 1 | OPENAI, STRIPE |  |
-| [Design Yelp ](https://www.hack2hire.com/question-bank/questions/system-design/69cf39cc4f38b199f9e4942f) | system-design | 1 | UBER, YELP |  |
-| [Design Youtube ](https://www.hack2hire.com/question-bank/questions/system-design/69cd3e3cff3ebde766cee66e) | system-design | 1 | AMAZON, DATADOG, GOOGLE, HUBSPOT, NETFLIX, OPENAI, SNAPCHAT, VERKADA |  |
+| [Design A Bot Detection System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f67e5830f41dfd539fbf82) | ml-system-design | 1 | AMAZON, GOOGLE | inferred: rate-limiting |
+| [Design A Customer Churn Prediction System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/6a0dcf68bd87a7041d74ce56) | ml-system-design | 1 | STRIPE | inferred: payments-finance, time-series |
+| [Design A Family Friendly Listing Ranking System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f8b88d72a3d3fe39f8cbd7) | ml-system-design | 1 | AIRBNB | inferred: search-retrieval, recommendations-ranking |
+| [Design A Feed Recommendation System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fa848f661bab75bbca3d76) | ml-system-design | 1 | EBAY, FIGMA, PERPLEXITY, PINTEREST | inferred: queues-streaming, recommendations-ranking |
+| [Design A Harmful Content Detection System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f67ef230f41dfd539fbf8a) | ml-system-design | 1 | DATABRICKS, DOORDASH, PINTEREST | inferred:  |
+| [Design A Nearby Restaurant Recommendation System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/6a07c7bdbd4165b6d480f8b4) | ml-system-design | 1 | DOORDASH, UBER | inferred: search-retrieval, recommendations-ranking |
+| [Design A Personalized Search Ranking System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f975fb72a3d3fe39f8d24c) | ml-system-design | 1 | AIRBNB, DOORDASH, INSTACART, REDDIT, ROBINHOOD, UBER | inferred: search-retrieval, recommendations-ranking |
+| [Design A Video Recommendation System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f67ec330f41dfd539fbf87) | ml-system-design | 1 | INSTACART, LINKEDIN, PINTEREST, REDDIT | inferred: search-retrieval, recommendations-ranking |
+| [Design Airbnb Relisting Detection ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f8b8c472a3d3fe39f8cbde) | ml-system-design | 1 | AIRBNB | inferred: search-retrieval, observability |
+| [Design An Account Takeover Detection System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/6a0cac9b567356be0f453389) | ml-system-design | 1 | STRIPE | inferred: databases, payments-finance |
+| [Design An Address Autofill System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/6a094f91c84b6e8a3be17ce4) | ml-system-design | 1 | AMAZON, GOOGLE, UBER | inferred: search-retrieval, recommendations-ranking |
+| [Design An Airbnb Price Prediction System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fa0a3a72a3d3fe39f8d4fb) | ml-system-design | 1 | AIRBNB | inferred: recommendations-ranking |
+| [Design An Online Ads Ranking System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fa876f661bab75bbca3dbb) | ml-system-design | 1 | DOORDASH, EXPEDIA, INSTACART, PINTEREST, REDDIT | inferred: recommendations-ranking |
+| [Design Linkedin Learning Recommendation System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69f77ece30f41dfd539fc65c) | ml-system-design | 1 | LINKEDIN | inferred: recommendations-ranking |
+| [Design Map Traffic Forecasting System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fd390c574d87bc4900618c) | ml-system-design | 1 | UBER | inferred: queues-streaming, graphs |
+| [Design Payment Fraud Detection System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fe2239574d87bc490066f0) | ml-system-design | 1 | AFFIRM, CAPITAL_ONE, ROBINHOOD, STRIPE, UBER | inferred: databases, queues-streaming, payments-finance, graphs |
+| [Design Real-Time Driver ETA Prediction ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fd3346574d87bc49006174) | ml-system-design | 1 | INSTACART, UBER | inferred: ml-training-serving |
+| [Design Reddit Comments Ranking System ](https://www.hack2hire.com/question-bank/questions/ml-system-design/6a285bef97d3b4b32966b621) | ml-system-design | 1 | REDDIT | inferred: caching, queues-streaming, search-retrieval, recommendations-ranking, ml-training-serving |
+| [Design Soft 404 Detection ](https://www.hack2hire.com/question-bank/questions/ml-system-design/69fbf561574d87bc49005955) | ml-system-design | 1 | PINTEREST | inferred: search-retrieval |
+| [Design a Amazon Locker ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a20b0958b879849ebc119f7) | object-oriented-design | 1 | AMAZON | inferred: concurrency, payments-finance, graphs |
+| [Design a Coffee Maker ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a22e5a9981072682a6f22d9) | object-oriented-design | 1 | AMAZON | inferred: payments-finance |
+| [Design a Hotel Booking System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a234260990d33e1b222b859) | object-oriented-design | 1 | AMAZON | inferred: search-retrieval, payments-finance |
+| [Design a Library Management System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a27a1b897d3b4b32966b276) | object-oriented-design | 1 | AMAZON | inferred: search-retrieval, payments-finance |
+| [Design a Parking Lot ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a208e6f8b879849ebc11890) | object-oriented-design | 1 | AMAZON | inferred: search-retrieval, payments-finance |
+| [Design a Pizza Price Calculator ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a22e5c9981072682a6f22da) | object-oriented-design | 1 | AMAZON | inferred:  |
+| [Design a Traffic Light Control System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a234661990d33e1b222b873) | object-oriented-design | 1 | AMAZON | inferred: scheduling, graphs |
+| [Design a Vending Machine ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a20f5128b879849ebc11c8a) | object-oriented-design | 1 | AMAZON | inferred: concurrency |
+| [Design a Voting System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a24c8049d6d10648d02a1c7) | object-oriented-design | 1 | AMAZON | inferred:  |
+| [Design Amazon Kindle ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a26d7cb97d3b4b32966aa57) | object-oriented-design | 1 | AMAZON | inferred: storage |
+| [Design an Airport Boarding System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a20f5938b879849ebc11c8e) | object-oriented-design | 1 | AMAZON | inferred: queues-streaming, recommendations-ranking, scheduling, payments-finance, graphs |
+| [Design an ATM ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a2c406f5117d1b5435655ae) | object-oriented-design | 1 | AMAZON | inferred:  |
+| [Design Blackjack Game ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a24ffb99d6d10648d02a3fc) | object-oriented-design | 1 | AMAZON | inferred:  |
+| [Design Chess Game ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a2760db97d3b4b32966afae) | object-oriented-design | 1 | AMAZON | inferred: search-retrieval |
+| [Design Elevator Control System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a20b1088b879849ebc119fb) | object-oriented-design | 1 | AMAZON | inferred: queues-streaming, scheduling |
+| [Design Food Delivery System ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a2ca60d5117d1b543565913) | object-oriented-design | 1 | AMAZON | inferred: payments-finance, graphs |
+| [Design Restaurant Reservation Service ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a26272297d3b4b32966a595) | object-oriented-design | 1 | AMAZON | inferred: search-retrieval, sql-joins |
+| [Design Tic-Tac-Toc ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a225baa981072682a6f20ae) | object-oriented-design | 1 | AMAZON | inferred:  |
+| [Design Unix File Search ](https://www.hack2hire.com/question-bank/questions/object-oriented-design/6a24d0349d6d10648d02a227) | object-oriented-design | 1 | AMAZON | inferred: search-retrieval, recommendations-ranking |
+| [3-Topping Pizzas ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a458581077f066afe215ec4) | sql | 1 | MCKINSEY | inferred:  |
+| [7-Day Inactive Users ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a7c930f41dfd539fc7f6) | sql | 1 | WAYMO | inferred:  |
+| [Ad Campaign ROAS ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a619205190ed618c6e6aab6) | sql | 1 | GOOGLE | inferred:  |
+| [Advertising Campaign Performance ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85e170701a76fc6843acca) | sql | 2 | TIKTOK | inferred:  |
+| [Advertising Time-of-Day Analysis ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a65730f41dfd539fc7f0) | sql | 1 | META | inferred:  |
+| [Apple Pay Volume ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a6192f4190ed618c6e6aacd) | sql | 1 | VISA | inferred: databases, payments-finance |
+| [Auction Lots with Highest Bids ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f67e0230f41dfd539fbf7e) | sql | 1 | SQUAREPOINT | inferred:  |
+| [Average Deal Size ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45b52c077f066afe2160f9) | sql | 1 | SALESFORCE | inferred:  |
+| [Average Reactions per Post ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f6ccb230f41dfd539fc31a) | sql | 1 | META | inferred:  |
+| [Average Review Ratings ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82ab20701a76fc684390ee) | sql | 1 | AMAZON | inferred:  |
+| [Average Ticket Resolution Time ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a942485cddc54478ddf5c00) | sql | 1 | IBM | inferred:  |
+| [Average Vacant Days ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a051c8d3141bbc31efdd918) | sql | 1 | AIRBNB | inferred:  |
+| [Best-Selling Product ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57cdc9665efda9311f94bb) | sql | 1 | AMAZON | inferred:  |
+| [Booking Analysis ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a852829701a76fc6843a7c8) | sql | 3 | RIPPLING | inferred:  |
+| [Bottom Quartile Reach ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f649bf30f41dfd539fbd9e) | sql | 1 | DOORDASH | inferred:  |
+| [Calculate Monthly Cohort Retention ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a8527af701a76fc6843a7b9) | sql | 1 | AMAZON | inferred:  |
+| [Calculate Survey Response Rate ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85298b701a76fc6843a7e8) | sql | 1 | META | inferred:  |
+| [Card Launch Success ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628f2c190ed618c6e6b185) | sql | 1 | JPMORGAN | inferred: payments-finance |
+| [Cards Issued Difference ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82a490701a76fc684390a2) | sql | 1 | JPMORGAN | inferred: payments-finance |
+| [Cities With Completed Trades ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82b011701a76fc6843912a) | sql | 1 | ROBINHOOD | inferred:  |
+| [Collaborator Source Distribution ](https://www.hack2hire.com/question-bank/questions/sql-questions/6aa55d2a0ca9cc4e1c79134c) | sql | 3 | NOTION | inferred:  |
+| [Company Suggestion Funnel ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a83dd7f701a76fc68439b6c) | sql | 1 | GOOGLE | inferred:  |
+| [Compensation Outliers ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45b752077f066afe216120) | sql | 1 | ACCENTURE | inferred:  |
+| [Compressed Mean ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82a458701a76fc684390a0) | sql | 1 | ALIBABA | inferred:  |
+| [Compressed Mode ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628eb7190ed618c6e6b180) | sql | 1 | ALIBABA | inferred:  |
+| [Consecutive Filing Years ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45ac1b077f066afe2160a2) | sql | 1 | INTUIT | inferred: time-series |
+| [Coupon Recipient Activity ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a850bb6701a76fc6843a633) | sql | 3 | EBAY | inferred:  |
+| [CTR by Ad Type ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a86520a701a76fc6843b21a) | sql | 1 | META | inferred:  |
+| [CTR By Pin-Format and Date ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a87330f41dfd539fc7fb) | sql | 1 | PINTEREST | inferred:  |
+| [Cumulative Purchases by Product Type ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45b7bb077f066afe216126) | sql | 1 | AMAZON | inferred: databases |
+| [Data Science Skills ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a04a33f2608e589a944b498) | sql | 1 | LINKEDIN | inferred:  |
+| [Departments with Multiple Employees ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a942a14cddc54478ddf5c09) | sql | 2 | MICROSOFT | inferred:  |
+| [Duplicate Job Listings ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82b03b701a76fc6843912b) | sql | 1 | LINKEDIN | inferred:  |
+| [Efficient Low Maintenance Vehicles ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a852651701a76fc6843a79f) | sql | 1 | WAYMO | inferred:  |
+| [Event Friends Recommendation ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a456a77077f066afe215e11) | sql | 1 | META | inferred: recommendations-ranking |
+| [FAANG Stock Min-Max ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57cef0665efda9311f94c6) | sql | 1 | BLOOMBERG | inferred:  |
+| [FAANG Stock Monthly Change ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a487eeb3588ba8acc6934b5) | sql | 1 | BLOOMBERG | inferred: payments-finance |
+| [Fill Missing Client Data ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a487b0c3588ba8acc69348f) | sql | 1 | ACCENTURE | inferred:  |
+| [Find Unfinished Parts ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82b0c3701a76fc6843912f) | sql | 1 | TESLA | inferred:  |
+| [First Transaction ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45b3ff077f066afe2160ed) | sql | 1 | ETSY | inferred: databases |
+| [Follow-Up Airpod Percentage ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a0522433141bbc31efdd94a) | sql | 1 | APPLE | inferred:  |
+| [Frequently Purchased Pairs ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628c28190ed618c6e6b15e) | sql | 1 | WALMART | inferred: databases |
+| [Fresh Content Reach ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a89c30f41dfd539fc7fd) | sql | 1 | PINTEREST | inferred:  |
+| [High-frequency Call Initiators ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a94275dcddc54478ddf5c06) | sql | 2 | META | inferred:  |
+| [Highest-Grossing Items ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57d5c5665efda9311f9526) | sql | 1 | AMAZON | inferred:  |
+| [Highest Number of Products ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a619288190ed618c6e6aac0) | sql | 1 | EBAY | inferred: databases |
+| [Histogram of Tweets ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82b116701a76fc68439131) | sql | 1 | XAI | inferred:  |
+| [Histogram of Users and Purchases ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628d7b190ed618c6e6b170) | sql | 1 | WALMART | inferred:  |
+| [International Call Percentage ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628fcf190ed618c6e6b18d) | sql | 1 | VERIZON | inferred:  |
+| [LinkedIn Power Creators ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a487b803588ba8acc693495) | sql | 2 | LINKEDIN | inferred:  |
+| [Low-Frequency Users By City ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a81630f41dfd539fc7f8) | sql | 1 | WAYMO | inferred:  |
+| [Marketing Touch Streak ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45a9f8077f066afe216008) | sql | 1 | SNOWFLAKE | inferred:  |
+| [Matching Rental Amenities ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a4569e0077f066afe215e0e) | sql | 1 | AIRBNB | inferred: search-retrieval |
+| [Maximize Prime Item Inventory ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a457ad4077f066afe215e8e) | sql | 1 | AMAZON | inferred:  |
+| [Median Google Search Frequency ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a45755b077f066afe215e6d) | sql | 1 | GOOGLE | inferred: search-retrieval |
+| [Monthly Customer and Restaurant Metrics ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a86568d701a76fc6843b26b) | sql | 4 | DOORDASH | inferred: observability |
+| [Monthly Percentage of High-Frequency Customers ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f607782272a804521201cd) | sql | 1 | DOORDASH | inferred:  |
+| [Monthly Ride Aggregation ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a7ef30f41dfd539fc7f7) | sql | 1 | WAYMO | inferred:  |
+| [Monthly Sales Growth ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f62f8430f41dfd539fbcb8) | sql | 1 | DOORDASH | inferred:  |
+| [Monthly Top Eligible Customer ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f61a792272a804521201fb) | sql | 1 | DOORDASH | inferred:  |
+| [Most Expensive Purchase ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a619318190ed618c6e6aad2) | sql | 1 | AMAZON | inferred: databases |
+| [New Versus Existing Satisfaction ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85dfe5701a76fc6843acc0) | sql | 1 | META | inferred:  |
+| [Odd and Even Measurements ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57cfef665efda9311f94d5) | sql | 1 | GOOGLE | inferred:  |
+| [Order-Level Request Statistics ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7966730f41dfd539fc75b) | sql | 1 | DOORDASH | inferred:  |
+| [Orders with Offer Increase ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f79c3330f41dfd539fc792) | sql | 1 | DOORDASH | inferred:  |
+| [Page With No Likes ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a0519e23141bbc31efdd903) | sql | 1 | META | inferred:  |
+| [Patient Support Analysis ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a56fc2f665efda9311f8edc) | sql | 2 | PINTEREST | inferred:  |
+| [Peak Hour Ad Performance ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a865360701a76fc6843b224) | sql | 1 | META | inferred:  |
+| [Percent of Late Orders ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f77b4130f41dfd539fc649) | sql | 1 | DOORDASH | inferred:  |
+| [Pirated Theme Monthly Active Shops ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a22a30f41dfd539fc7db) | sql | 1 | SHOPIFY | inferred:  |
+| [Posts with 10 more Views in 7 Days ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a9434d5cddc54478ddf5c1a) | sql | 3 | META | inferred:  |
+| [Product Line Revenue ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a6191de190ed618c6e6aaad) | sql | 1 | NVIDIA | inferred:  |
+| [QuickBooks vs TurboTax ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a617ccd190ed618c6e6a9ad) | sql | 1 | INTUIT | inferred:  |
+| [Recent Unrelated Posts ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f6c49d30f41dfd539fc2c2) | sql | 1 | META | inferred:  |
+| [Repeated Payments ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a4584b9077f066afe215ebe) | sql | 1 | STRIPE | inferred: databases, payments-finance |
+| [Retention Rating By Active Month ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f7a84330f41dfd539fc7fa) | sql | 1 | WAYMO | inferred:  |
+| [Same Week Purchases ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a452903077f066afe215cd2) | sql | 1 | PINTEREST | inferred: databases |
+| [Second Highest Salary ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a61789ec16dcdf8ba4ffcae) | sql | 1 | AMAZON, APPLE, META, MICROSOFT | inferred:  |
+| [Second-ranked Vehicle by Country ](https://www.hack2hire.com/question-bank/questions/sql-questions/6aa55c9e0ca9cc4e1c791349) | sql | 2 | LIME | inferred:  |
+| [Sellers with Multi-interaction Products ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a942716cddc54478ddf5c04) | sql | 2 | META | inferred:  |
+| [Sending vs. Opening Snaps ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a592c5a665efda9311fa38e) | sql | 1 | SNAPCHAT | inferred:  |
+| [Server Utilization Time ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a4574b5077f066afe215e66) | sql | 1 | AMAZON | inferred:  |
+| [Shop Spend Share ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85e304701a76fc6843ace8) | sql | 1 | META | inferred:  |
+| [Shop Versus Web Performance ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85e3b8701a76fc6843acf8) | sql | 1 | META | inferred:  |
+| [Signup Activation Rate ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57d4a2665efda9311f9519) | sql | 1 | TIKTOK | inferred:  |
+| [Spare Server Capacity ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a61925e190ed618c6e6aabd) | sql | 1 | MICROSOFT | inferred:  |
+| [Streaming History ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628ae9190ed618c6e6b155) | sql | 1 | SPOTIFY | inferred: queues-streaming |
+| [Subject Matter Experts ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a6192c4190ed618c6e6aac3) | sql | 1 | ACCENTURE | inferred:  |
+| [Supercloud Customer ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57d3a6665efda9311f9511) | sql | 1 | MICROSOFT | inferred:  |
+| [Swapped Food Delivery ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628ca3190ed618c6e6b165) | sql | 1 | ZOMATO | inferred:  |
+| [Teams Power Users ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82b14e701a76fc68439133) | sql | 1 | MICROSOFT | inferred:  |
+| [Top Campaign Value per User ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a8652c4701a76fc6843b21f) | sql | 1 | META | inferred:  |
+| [Top Five Ads by Impressions ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a85e473701a76fc6843ad06) | sql | 1 | META | inferred:  |
+| [Top Rated Businesses ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a619234190ed618c6e6aaba) | sql | 1 | YELP | inferred:  |
+| [Top Three Salaries ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a628a40190ed618c6e6b152) | sql | 1 | PINTEREST | inferred:  |
+| [Total Order Amount per Region ](https://www.hack2hire.com/question-bank/questions/sql-questions/69f6b9a930f41dfd539fc236) | sql | 1 | AMAZON | inferred:  |
+| [Trade In Payouts ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a619092190ed618c6e6aa9a) | sql | 1 | APPLE | inferred: databases |
+| [Tweets' Rolling Averages ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57d765665efda9311f9537) | sql | 1 | XAI | inferred:  |
+| [Uniquely Staffed Consultants ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a452ec1077f066afe215ce4) | sql | 1 | ACCENTURE | inferred:  |
+| [US Call Pickup Rate ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a9423f9cddc54478ddf5bfc) | sql | 2 | META | inferred:  |
+| [User Concurrent Sessions ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a456ede077f066afe215e3c) | sql | 1 | PINTEREST | inferred: concurrency |
+| [User's Third Transaction ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a6178cbc16dcdf8ba4ffcaf) | sql | 1 | UBER | inferred: databases |
+| [User Shopping Sprees ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a57cbde665efda9311f94a1) | sql | 1 | AMAZON | inferred: databases |
+| [Users by Account Count ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a9425e0cddc54478ddf5c01) | sql | 2 | META | inferred:  |
+| [Webinar Popularity ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a618582190ed618c6e6aa01) | sql | 1 | SNOWFLAKE | inferred:  |
+| [Weekly Churn Rates ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a4534e3077f066afe215cfc) | sql | 1 | META | inferred:  |
+| [Well Paid Employees ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a82a509701a76fc684390a7) | sql | 1 | NETFLIX | inferred:  |
+| [Who Made Quota? ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a617e00190ed618c6e6a9ba) | sql | 1 | ORACLE | inferred:  |
+| [Year-Over-Year Growth Rate ](https://www.hack2hire.com/question-bank/questions/sql-questions/6a457d6d077f066afe215e9d) | sql | 1 | WAYFAIR | inferred:  |
+| [Design A Color Picker Service ](https://www.hack2hire.com/question-bank/questions/system-design/6a04f93a3141bbc31efdd704) | system-design | 1 | ATLASSIAN | inferred: observability |
+| [Design a Distributed Power Grid Control System ](https://www.hack2hire.com/question-bank/questions/system-design/6ab2ff05e74ebb7457a3ef14) | system-design | 1 | OPENAI | inferred: observability |
+| [Design A Facial Image Matching System ](https://www.hack2hire.com/question-bank/questions/system-design/69ec1a5b068f42e155089421) | system-design | 1 | DATADOG | inferred: queues-streaming, rate-limiting |
+| [Design a Flight Deal Notification System ](https://www.hack2hire.com/question-bank/questions/system-design/69ec13a6068f42e1550893ea) | system-design | 1 | DATADOG | inferred:  |
+| [Design A Kafka-like Distributed Message Queue ](https://www.hack2hire.com/question-bank/questions/system-design/69ebc33b068f42e1550890b8) | system-design | 1 | CONFLUENT, DATABRICKS, LINKEDIN, MICROSOFT, WHATNOT | inferred: databases, queues-streaming |
+| [Design a Logging Service ](https://www.hack2hire.com/question-bank/questions/system-design/69d84d1dc4c1bc791ee230b4) | system-design | 1 | AMAZON, ATLASSIAN, BLOOMBERG, DATADOG, LINKEDIN, RIPPLING, SNAPCHAT, SNOWFLAKE, YELP | inferred: storage, rate-limiting, search-retrieval, observability |
+| [Design A Nearby POI Service ](https://www.hack2hire.com/question-bank/questions/system-design/69f9729772a3d3fe39f8d21b) | system-design | 1 | OPENAI | inferred: databases, search-retrieval |
+| [Design a Real-Time Canvas Comment System ](https://www.hack2hire.com/question-bank/questions/system-design/6a0cab29567356be0f453385) | system-design | 1 | FIGMA | inferred: databases |
+| [Design a Sandboxed Cloud IDE ](https://www.hack2hire.com/question-bank/questions/system-design/6acc71782e3a0349b3a8cbe2) | system-design | 1 | OPENAI | inferred: storage, queues-streaming |
+| [Design A Shared Todo List ](https://www.hack2hire.com/question-bank/questions/system-design/69de544095e80ae213e5be75) | system-design | 1 | ROBLOX | inferred: queues-streaming, concurrency |
+| [Design A Top K Popular Items System ](https://www.hack2hire.com/question-bank/questions/system-design/69d2ef0707421ca06eb8e53b) | system-design | 1 | ATLASSIAN, BLOOMBERG, FIGMA, GOOGLE, LYFT, MICROSOFT, PERPLEXITY, SNAPCHAT, UBER | inferred: recommendations-ranking, scheduling |
+| [Design A VM Bandwidth Rate Limiter ](https://www.hack2hire.com/question-bank/questions/system-design/6a074964906c2652b8dd4616) | system-design | 1 | AMAZON, DATABRICKS, GOOGLE, MICROSOFT | inferred: rate-limiting, scheduling |
+| [Design Access Management System ](https://www.hack2hire.com/question-bank/questions/system-design/69d47da779bf03c0074bd2be) | system-design | 1 | ATLASSIAN, EXPEDIA, RAMP, ROBLOX, SNAPCHAT, SNOWFLAKE, STRIPE, VERKADA | inferred: caching, graphs |
+| [Design Ad Click Event Aggregation System ](https://www.hack2hire.com/question-bank/questions/system-design/69d1342f17b72775cc49be7a) | system-design | 1 | AIRBNB, META, PINTEREST, RIPPLING, ROBINHOOD, ROBLOX, SNAPCHAT | inferred: queues-streaming, observability |
+| [Design AI Chatbot App ](https://www.hack2hire.com/question-bank/questions/system-design/69cb3259ff3ebde766cedc1f) | system-design | 1 | MAI, MICROSOFT, OPENAI, UBER | inferred: storage, queues-streaming |
+| [Design AI Prompt Playground ](https://www.hack2hire.com/question-bank/questions/system-design/69dbcc73e4441834b3f72fad) | system-design | 1 | ANTHROPIC | inferred: storage |
+| [Design Airbnb Notification System ](https://www.hack2hire.com/question-bank/questions/system-design/69d094f717b72775cc49bd09) | system-design | 1 | AIRBNB, ROBINHOOD | inferred:  |
+| [Design Amazon Locker ](https://www.hack2hire.com/question-bank/questions/system-design/69e06a8095e80ae213e5cc3a) | system-design | 1 | AMAZON, MICROSOFT | inferred:  |
+| [Design Book Price Aggregator ](https://www.hack2hire.com/question-bank/questions/system-design/69dc4935e4441834b3f73718) | system-design | 1 | DATABRICKS | inferred: storage, databases, payments-finance |
+| [Design ChatGPT ](https://www.hack2hire.com/question-bank/questions/system-design/69d6f527c4c1bc791ee229e3) | system-design | 1 | AMAZON, ANTHROPIC, OPENAI, XAI | inferred: queues-streaming, ml-training-serving, scheduling |
+| [Design CICD System ](https://www.hack2hire.com/question-bank/questions/system-design/69c9ff24ff3ebde766ced6fa) | system-design | 1 | EBAY, OPENAI | inferred: scheduling, graphs |
+| [Design Coinbase Explore ](https://www.hack2hire.com/question-bank/questions/system-design/69cec33e4f38b199f9e49199) | system-design | 1 | COINBASE, ROBINHOOD, SNAPCHAT | inferred: recommendations-ranking |
+| [Design Content Moderation System ](https://www.hack2hire.com/question-bank/questions/system-design/69e841e1fbaf3da641828244) | system-design | 1 | META, REDDIT, TIKTOK | inferred: queues-streaming |
+| [Design Credit Card Application System ](https://www.hack2hire.com/question-bank/questions/system-design/69cec63d4f38b199f9e491af) | system-design | 1 | CAPITAL_ONE, COINBASE | inferred: databases, payments-finance |
+| [Design Customer Support Ticketing System ](https://www.hack2hire.com/question-bank/questions/system-design/69d1348a17b72775cc49be7b) | system-design | 1 | AIRBNB | inferred: concurrency |
+| [Design Distributed AI Model Downloader ](https://www.hack2hire.com/question-bank/questions/system-design/69dbccaee4441834b3f72fae) | system-design | 1 | ANTHROPIC | inferred: concurrency |
+| [Design Distributed Rate Limiter ](https://www.hack2hire.com/question-bank/questions/system-design/69cd9871ff3ebde766cee7fe) | system-design | 1 | AMAZON, EXPEDIA, GOOGLE, LINKEDIN, MICROSOFT, PINTEREST, SNAPCHAT, SNOWFLAKE | inferred: rate-limiting |
+| [Design Distributed Web Crawler ](https://www.hack2hire.com/question-bank/questions/system-design/69dc41c3e4441834b3f736bb) | system-design | 1 | ATLASSIAN, DATABRICKS, LYFT, MAI, META, MICROSOFT, OPENAI, PINTEREST | inferred: storage, concurrency, rate-limiting, search-retrieval, ml-training-serving, observability |
+| [Design Driver Location Heatmap ](https://www.hack2hire.com/question-bank/questions/system-design/69d2e1c707421ca06eb8e4c0) | system-design | 1 | AMAZON, LYFT, UBER | inferred: databases, queues-streaming |
+| [Design Dropbox ](https://www.hack2hire.com/question-bank/questions/system-design/69cdf6feff3ebde766ceea74) | system-design | 1 | DATABRICKS, GOOGLE, MICROSOFT, TESLA | inferred: storage, concurrency |
+| [Design Facebook Messenger ](https://www.hack2hire.com/question-bank/questions/system-design/69d2bf7307421ca06eb8e38c) | system-design | 1 | ANTHROPIC, GOOGLE, LYFT, META, MICROSOFT, SNAPCHAT, UBER | inferred: caching, sql-joins |
+| [Design Feature Flag ](https://www.hack2hire.com/question-bank/questions/system-design/69d47d8679bf03c0074bd2bd) | system-design | 1 | REDDIT, STRIPE | inferred:  |
+| [Design Food Review System ](https://www.hack2hire.com/question-bank/questions/system-design/69e4633aad1522fdaff14b09) | system-design | 1 | DOORDASH | inferred: payments-finance |
+| [Design Google Calendar ](https://www.hack2hire.com/question-bank/questions/system-design/69d0903c17b72775cc49bcf0) | system-design | 1 | AIRBNB, LINKEDIN, OPENAI | inferred: recommendations-ranking, scheduling |
+| [Design Google Docs ](https://www.hack2hire.com/question-bank/questions/system-design/69ca9a17ff3ebde766ced8e7) | system-design | 1 | META, MICROSOFT | inferred: concurrency, sql-joins |
+| [Design Google News ](https://www.hack2hire.com/question-bank/questions/system-design/69f03b3196981f58ae1f71b7) | system-design | 1 | EXPEDIA, GOOGLE, MICROSOFT, RIPPLING, TIKTOK | inferred: recommendations-ranking, scheduling |
+| [Design GPU Inference Serving System ](https://www.hack2hire.com/question-bank/questions/system-design/69db22a2e4441834b3f72b81) | system-design | 1 | ANTHROPIC | inferred: queues-streaming, concurrency, ml-training-serving |
+| [Design GPU Scheduling Platform ](https://www.hack2hire.com/question-bank/questions/system-design/69d71cbfc4c1bc791ee22b22) | system-design | 1 | ANTHROPIC, DATABRICKS, OPENAI | inferred: databases, ml-training-serving, scheduling, observability |
+| [Design Hotel Booking System ](https://www.hack2hire.com/question-bank/questions/system-design/69d5d62760ca00f1f2f5f466) | system-design | 1 | AIRBNB, AMAZON, EBAY, EXPEDIA, META, MICROSOFT, RAMP, RIPPLING, SQUARE, VERKADA | inferred: queues-streaming, search-retrieval |
+| [Design Instacart Inventory System ](https://www.hack2hire.com/question-bank/questions/system-design/69d8052ec4c1bc791ee22f21) | system-design | 1 | INSTACART | inferred: databases, concurrency |
+| [Design Instagram ](https://www.hack2hire.com/question-bank/questions/system-design/69e1b8b295e80ae213e5d4a2) | system-design | 1 | DATADOG, DOORDASH, EBAY, GOOGLE, LYFT, META, MICROSOFT, ROBLOX | inferred: caching, graphs, sql-joins |
+| [Design Inventory Management System ](https://www.hack2hire.com/question-bank/questions/system-design/69d1bc9017b72775cc49c34a) | system-design | 1 | PINTEREST | inferred: caching, search-retrieval |
+| [Design Job Scheduler ](https://www.hack2hire.com/question-bank/questions/system-design/69ce7e9a4f38b199f9e49099) | system-design | 1 | AIRBNB, ATLASSIAN, DATABRICKS, DOORDASH, GOOGLE, LINKEDIN, LYFT, MICROSOFT, OPENAI, PINTEREST, REDDIT, ROBINHOOD, SNAPCHAT, TIKTOK, YELP | inferred: queues-streaming, scheduling, payments-finance |
+| [Design Key-value Store ](https://www.hack2hire.com/question-bank/questions/system-design/69dc51e8e4441834b3f7376f) | system-design | 1 | AIRBNB, AMAZON, CONFLUENT, DOORDASH, GOOGLE, LINKEDIN, MICROSOFT, PINTEREST, SNAPCHAT, SNOWFLAKE | inferred: caching, storage, databases, concurrency |
+| [Design Leetcode ](https://www.hack2hire.com/question-bank/questions/system-design/69d98d1ed94fcdd01529ff91) | system-design | 1 | META, SNOWFLAKE, TIKTOK, UBER, WHATNOT | inferred: storage |
+| [Design Merchant Lender System ](https://www.hack2hire.com/question-bank/questions/system-design/69d47d5b79bf03c0074bd2ba) | system-design | 1 | STRIPE | inferred: concurrency, payments-finance |
+| [Design Metrics System ](https://www.hack2hire.com/question-bank/questions/system-design/69cc94b2ff3ebde766cee3f2) | system-design | 1 | AMAZON, DATADOG, DOORDASH, GOOGLE, LINKEDIN, MICROSOFT, RIPPLING, ROBLOX, SNAPCHAT, STRIPE | inferred: databases, queues-streaming, rate-limiting, search-retrieval, scheduling, observability, time-series |
+| [Design Mint.com ](https://www.hack2hire.com/question-bank/questions/system-design/69eb9acffbaf3da6418293dc) | system-design | 1 | DATADOG, PERPLEXITY | inferred: storage, databases, rate-limiting |
+| [Design News Feed ](https://www.hack2hire.com/question-bank/questions/system-design/69ca9b37ff3ebde766ced8eb) | system-design | 1 | AMAZON, BLOOMBERG, CONFLUENT, GOOGLE, LYFT, META, PINTEREST, RIPPLING, ROBINHOOD, ROBLOX, SNAPCHAT, SNOWFLAKE, UBER, VERKADA, WHATNOT, YELP | inferred: queues-streaming, search-retrieval, recommendations-ranking, graphs |
+| [Design Notification System ](https://www.hack2hire.com/question-bank/questions/system-design/69cfaa8f4f38b199f9e49615) | system-design | 1 | DOORDASH, EXPEDIA, GOOGLE, MICROSOFT, PINTEREST, REDDIT, SNAPCHAT, WHATNOT, XAI, YELP | inferred:  |
+| [Design Online Banking App ](https://www.hack2hire.com/question-bank/questions/system-design/6a08c64bbd4165b6d480fe87) | system-design | 1 | CAPITAL_ONE | inferred: databases, payments-finance |
+| [Design Online Bookstore ](https://www.hack2hire.com/question-bank/questions/system-design/69e1249f95e80ae213e5cf9f) | system-design | 1 | AMAZON, RIPPLING | inferred: queues-streaming, search-retrieval |
+| [Design Online Chess Game ](https://www.hack2hire.com/question-bank/questions/system-design/69cb09edff3ebde766cedb20) | system-design | 1 | AIRBNB, MAI, MICROSOFT, OPENAI | inferred: sql-joins |
+| [Design Online Donation Service ](https://www.hack2hire.com/question-bank/questions/system-design/69e45d03ad1522fdaff14ac5) | system-design | 1 | DOORDASH, EBAY, LYFT, WHATNOT | inferred: payments-finance |
+| [Design Online Game Leaderboard ](https://www.hack2hire.com/question-bank/questions/system-design/69e1ab3b95e80ae213e5d40c) | system-design | 1 | ATLASSIAN, META, MICROSOFT, REDDIT | inferred: concurrency, recommendations-ranking |
+| [Design Online Game Matching Service ](https://www.hack2hire.com/question-bank/questions/system-design/69ddb7f695e80ae213e5bb63) | system-design | 1 | ROBLOX | inferred: storage, queues-streaming, concurrency, scheduling |
+| [Design Online Product Catalog ](https://www.hack2hire.com/question-bank/questions/system-design/69c9fdbeff3ebde766ced6e5) | system-design | 1 | INSTACART | inferred: databases, concurrency |
+| [Design Online Shopping Cart ](https://www.hack2hire.com/question-bank/questions/system-design/69d71d52c4c1bc791ee22b2c) | system-design | 1 | UBER | inferred: concurrency, payments-finance |
+| [Design Payment System ](https://www.hack2hire.com/question-bank/questions/system-design/69c9f9a3ff3ebde766ced6b4) | system-design | 1 | AFFIRM, CAPITAL_ONE, EXPEDIA, GOOGLE, MAI, MICROSOFT, OPENAI, ROBLOX, STRIPE, TIKTOK, YELP | inferred: databases, payments-finance |
+| [Design Price Tracking Service ](https://www.hack2hire.com/question-bank/questions/system-design/69e1b3ad95e80ae213e5d46e) | system-design | 1 | META | inferred: caching, search-retrieval, observability |
+| [Design Quota Service ](https://www.hack2hire.com/question-bank/questions/system-design/69d850f4c4c1bc791ee230c5) | system-design | 1 | AMAZON, GOOGLE, MICROSOFT, SNOWFLAKE | inferred: storage, concurrency |
+| [Design Real-time Air Traffic Control Sytstem ](https://www.hack2hire.com/question-bank/questions/system-design/69e124dc95e80ae213e5cfa6) | system-design | 1 | AMAZON | inferred: scheduling, observability |
+| [Design Real-time Like Interation System ](https://www.hack2hire.com/question-bank/questions/system-design/69de84db95e80ae213e5bf47) | system-design | 1 | ROBLOX | inferred: storage, concurrency |
+| [Design Realtime Temperature Monitoring System ](https://www.hack2hire.com/question-bank/questions/system-design/69e05c7495e80ae213e5cb6c) | system-design | 1 | AMAZON, VERKADA | inferred: databases, queues-streaming, concurrency, observability |
+| [Design S3-like Object Storage System ](https://www.hack2hire.com/question-bank/questions/system-design/69d84a1bc4c1bc791ee2309f) | system-design | 1 | AMAZON, ATLASSIAN, COINBASE, DATABRICKS, GOOGLE, MICROSOFT, SNOWFLAKE | inferred: storage |
+| [Design Slack-like Chat System ](https://www.hack2hire.com/question-bank/questions/system-design/69c9fe5dff3ebde766ced6f4) | system-design | 1 | AIRBNB, ANTHROPIC, DATABRICKS, EBAY, GOOGLE, LINKEDIN, MAI, META, OPENAI, REDDIT, SNAPCHAT, TIKTOK, YELP | inferred:  |
+| [Design Spotify ](https://www.hack2hire.com/question-bank/questions/system-design/69d8023ac4c1bc791ee22f16) | system-design | 1 | AMAZON, CONFLUENT, GOOGLE, INSTACART, LINKEDIN, META, MICROSOFT, TIKTOK | inferred: caching, queues-streaming, search-retrieval, recommendations-ranking |
+| [Design Stock Trading Platform ](https://www.hack2hire.com/question-bank/questions/system-design/69d95055d94fcdd01529fe51) | system-design | 1 | COINBASE, DATABRICKS, ROBINHOOD, SNOWFLAKE, SQUARE | inferred: concurrency, payments-finance |
+| [Design Tagging System ](https://www.hack2hire.com/question-bank/questions/system-design/69f6d02830f41dfd539fc33f) | system-design | 1 | ATLASSIAN | inferred: search-retrieval |
+| [Design Ticket Booking System ](https://www.hack2hire.com/question-bank/questions/system-design/69d1f51c17b72775cc49c4d0) | system-design | 1 | EBAY, META, MICROSOFT | inferred: queues-streaming, search-retrieval |
+| [Design TinyURL ](https://www.hack2hire.com/question-bank/questions/system-design/69cc73c2ff3ebde766cee30b) | system-design | 1 | AMAZON, CONFLUENT, EBAY, GOOGLE, MICROSOFT, OPENAI, SNAPCHAT, YELP | inferred: caching, storage, databases, concurrency |
+| [Design Typehead Suggestion ](https://www.hack2hire.com/question-bank/questions/system-design/69d55ecf60ca00f1f2f5f100) | system-design | 1 | AMAZON, GOOGLE, LINKEDIN, MAI, META, MICROSOFT, PERPLEXITY, PINTEREST | inferred: caching, concurrency, search-retrieval, recommendations-ranking, scheduling |
+| [Design Uber ](https://www.hack2hire.com/question-bank/questions/system-design/69ca875aff3ebde766ced8b9) | system-design | 1 | DOORDASH, LYFT, SNAPCHAT, UBER | inferred: queues-streaming, payments-finance |
+| [Design Webhook Delivery System ](https://www.hack2hire.com/question-bank/questions/system-design/69cb3b1aff3ebde766cedc63) | system-design | 1 | OPENAI, STRIPE | inferred: sql-joins |
+| [Design Yelp ](https://www.hack2hire.com/question-bank/questions/system-design/69cf39cc4f38b199f9e4942f) | system-design | 1 | UBER, YELP | inferred: queues-streaming, search-retrieval |
+| [Design Youtube ](https://www.hack2hire.com/question-bank/questions/system-design/69cd3e3cff3ebde766cee66e) | system-design | 1 | AMAZON, DATADOG, GOOGLE, HUBSPOT, NETFLIX, OPENAI, SNAPCHAT, VERKADA | inferred: caching, storage, queues-streaming, concurrency, search-retrieval, recommendations-ranking |

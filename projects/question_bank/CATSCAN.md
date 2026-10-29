@@ -8,7 +8,7 @@ Keep source-linked interview question inventories, category metadata, distinct v
 
 ## Authority and scope
 
-Owns external question-bank acquisition receipts, metadata search and overlap reports. Algorithm Solver retains its frozen universes, protected populations, source-access gates, solution qualification and serving authority.
+Owns external question-bank acquisition receipts, local public-description caches, metadata search and overlap reports. Algorithm Solver retains its frozen universes, protected populations, source-access gates, solution qualification and serving authority.
 
 ## Invariants
 
@@ -16,7 +16,7 @@ Question groups and variants have separate source identities. Preserve original 
 
 ## Acceptance
 
-Validate complete pagination, unique identities, variant coverage, source receipts and conservative overlap classification. Focused tests exercise failure on duplicate/incomplete responses and distinction between title candidates and actual duplicates.
+Validate complete pagination, unique identities, variant coverage, public-description identity/category, company provenance, source receipts and conservative overlap classification. Keep source previews separate from complete variant-specific specifications. Focused tests exercise failure on duplicate/incomplete responses and distinction between title candidates and actual duplicates.
 
 ## Non-goals
 
