@@ -1,0 +1,38 @@
+{
+  "byte_identical_to_v1": [
+    "harness.py",
+    "native_graphs.py",
+    "host_check.py",
+    "plan.py",
+    "prospective-plan.json",
+    "test_observers.py",
+    "test_observers.cjs",
+    "test_integration.py",
+    "test_planning.py"
+  ],
+  "candidate_executions": 0,
+  "candidate_source_reads": 0,
+  "changed_files": [
+    "harness.cjs",
+    "native_graphs.cjs"
+  ],
+  "checks_changed": false,
+  "independent_review_correction": {
+    "candidate_executions": 0,
+    "defect": "Proxy on the exported node constructor or its prototype chain: draft kept graph plain, swallowed guard trap errors in the fast snapshot and skipped the second guard+snapshot after trap code ran",
+    "draft_random_mismatches_at_600_cases": 198,
+    "fix": "class guard marks proxyChain; Graph becomes non-plain and counts each guard call as foreign; snapshot guard runs outside the fallback; harness reuse requires graph.plain",
+    "reproducers_now_fixed_tests": [
+      "review S222"
+    ]
+  },
+  "limits_changed": false,
+  "previous_profile_bytes_unchanged": true,
+  "previous_profile_sha256": "bf3481a50b40bb2da04b46e993da4857923ab84101edfabc01afa5ceb3775fa9",
+  "prior_failed_raw_results_retained": true,
+  "record_schema_and_route_unchanged": true,
+  "revision_after_execution": true,
+  "root_cause": "observer-alone cost under --jitless: class guard after every constructor call with closure/array-heavy descriptor comparison, repeated per-child data() checks in snapshots, discarded duplicate post-call snapshot",
+  "schema": "gamma.s-observer-cost-revision.v1",
+  "trigger": "lane continuation-s-qualification-20261028-v2: JavaScript 222 SIGKILL exit 137 near 3.02 CPU s on cases 135-137 (two 50000-node trees per batch)"
+}

@@ -1,0 +1,1556 @@
+{
+ "schema": "gamma.ts-observer-cost-measurement.v1",
+ "executor": "Linux judge executor (hostname omitted)",
+ "kernel": "7.0.0-38-generic",
+ "node": "v22.22.1",
+ "argv": [
+  "/usr/bin/node",
+  "--jitless",
+  "--single-threaded",
+  "--max-old-space-size=256",
+  "harness.cjs"
+ ],
+ "limits": {
+  "cpu_seconds": 3,
+  "wall_seconds": 8,
+  "memory_bytes": 1073741824,
+  "max_processes": 16,
+  "max_file_bytes": 1048576,
+  "max_open_files": 64,
+  "max_output_bytes": 16777216
+ },
+ "sandbox_sha256": "04fe78fcc41dac4c22430d0cacc1d2b40c40daafc2b609ebfe47246030c3fd74",
+ "reps": 5,
+ "observers": {
+  "t-v1": {
+   "harness.cjs": "b9600b5d59571b91393472920358a26d7d450fdf1bb392eeab9a95699cadc337",
+   "native_graphs.cjs": "dc07adeacafbbe7ae5f730b72ad95843b7583f0373bf0ac5382e64d410299f57"
+  },
+  "t-v2": {
+   "harness.cjs": "2168c4f635fb9e269dafacbf9de5ef20e91aed8e968691fce03d50a19d4e3c6f",
+   "native_graphs.cjs": "ce2c512d41c5660b8f88a16fb182ea60ee1c5784cc9580f321cc9872329cc705"
+  },
+  "s-v1": {
+   "harness.cjs": "ad72139a71af33db78980da5e5f2d9cc78fc4f3ee26d31d7d9cb982c144a1bd8",
+   "native_graphs.cjs": "be391db51ac5d1efc5fde0c0806ce00065711ab41f0d88e44accd9fcbf13bb63"
+  },
+  "s-v2": {
+   "harness.cjs": "c5e73b42a2baad3499052cc357e9384a6e974099ba35531b3d4dc84f8ebc3f13",
+   "native_graphs.cjs": "a094aa2b910d427bca2be59fca6c523043c5d171634d045a01cb5ffdb38db03d"
+  }
+ },
+ "programs": "synthetic no-op TreeNode/ListNode programs defined in this script",
+ "candidate_executions": 0,
+ "problem_statements_or_reference_cases_read": false,
+ "results": [
+  {
+   "scenario": "T235 chain [3,100k,3]",
+   "observer": "v1",
+   "problem_id": 235,
+   "calls": 3,
+   "input_bytes": 1678085,
+   "runs": [
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.016,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1318,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.016,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1318,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.012,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1318,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.015,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1318,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.01,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1318,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": false,
+   "median_process_cpu_ms": null,
+   "stdout_sha256": [
+    "938e08725972f23fb62e03924122ff006cd720c5fa7bfd2e77eaa20a1b75ac2b"
+   ],
+   "phase_probe": {
+    "exit_code": 137,
+    "signal": 9,
+    "wall_seconds": 3.012,
+    "phases_ms": null
+   }
+  },
+  {
+   "scenario": "T235 chain [3,100k,3]",
+   "observer": "v2",
+   "problem_id": 235,
+   "calls": 3,
+   "input_bytes": 1678085,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.256,
+     "process_cpu_ms": 1237.77,
+     "stdout_bytes": 11714852,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.243,
+     "process_cpu_ms": 1227.966,
+     "stdout_bytes": 11714852,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.146,
+     "process_cpu_ms": 1130.503,
+     "stdout_bytes": 11714852,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.2,
+     "process_cpu_ms": 1185.08,
+     "stdout_bytes": 11714852,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.23,
+     "process_cpu_ms": 1216.688,
+     "stdout_bytes": 11714852,
+     "complete_records": 3,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 1216.688,
+   "stdout_sha256": [
+    "b08a3b30ce16bd0724f07a5d343144309a0c0d538e338957aff87482e032b45d"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 1.239,
+    "phases_ms": {
+     "startup": 57,
+     "total": 1218,
+     "observe": 1125,
+     "json_parse": 12,
+     "json_stringify": 35,
+     "build": 890,
+     "snapshot": 214
+    }
+   }
+  },
+  {
+   "scenario": "T235 balanced [3,100k,3]",
+   "observer": "v1",
+   "problem_id": 235,
+   "calls": 3,
+   "input_bytes": 1678081,
+   "runs": [
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.016,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1298,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.012,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1298,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.012,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1298,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.012,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1298,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.012,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1298,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": false,
+   "median_process_cpu_ms": null,
+   "stdout_sha256": [
+    "9c5f6505b57946f17a76031d8adb3ceffcfb7c88ff788f68076a43560fd042b1"
+   ],
+   "phase_probe": {
+    "exit_code": 137,
+    "signal": 9,
+    "wall_seconds": 3.013,
+    "phases_ms": null
+   }
+  },
+  {
+   "scenario": "T235 balanced [3,100k,3]",
+   "observer": "v2",
+   "problem_id": 235,
+   "calls": 3,
+   "input_bytes": 1678081,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.19,
+     "process_cpu_ms": 1173.156,
+     "stdout_bytes": 11714780,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.235,
+     "process_cpu_ms": 1218.559,
+     "stdout_bytes": 11714780,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.201,
+     "process_cpu_ms": 1186.72,
+     "stdout_bytes": 11714780,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.167,
+     "process_cpu_ms": 1153.872,
+     "stdout_bytes": 11714780,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.238,
+     "process_cpu_ms": 1224.896,
+     "stdout_bytes": 11714780,
+     "complete_records": 3,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 1186.72,
+   "stdout_sha256": [
+    "8ea07e364527452b3e6ace442ae502f79f46ebfad809b5206bae4e3ee99a53fb"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 1.159,
+    "phases_ms": {
+     "startup": 63,
+     "total": 1137,
+     "observe": 1039,
+     "json_parse": 11,
+     "json_stringify": 32,
+     "build": 832,
+     "snapshot": 189
+    }
+   }
+  },
+  {
+   "scenario": "T236 complete [3,100k,3]",
+   "observer": "v1",
+   "problem_id": 236,
+   "calls": 3,
+   "input_bytes": 1678085,
+   "runs": [
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.011,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1298,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.013,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1298,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.015,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1298,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.013,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1298,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.013,
+     "process_cpu_ms": null,
+     "stdout_bytes": 1298,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": false,
+   "median_process_cpu_ms": null,
+   "stdout_sha256": [
+    "271a94dbf832ae19a3a639364dec6a4c5054b901e0cefffa67b4b8bdd466f795"
+   ],
+   "phase_probe": {
+    "exit_code": 137,
+    "signal": 9,
+    "wall_seconds": 3.014,
+    "phases_ms": null
+   }
+  },
+  {
+   "scenario": "T236 complete [3,100k,3]",
+   "observer": "v2",
+   "problem_id": 236,
+   "calls": 3,
+   "input_bytes": 1678085,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.151,
+     "process_cpu_ms": 1135.027,
+     "stdout_bytes": 11714812,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.196,
+     "process_cpu_ms": 1181.794,
+     "stdout_bytes": 11714812,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.167,
+     "process_cpu_ms": 1151.111,
+     "stdout_bytes": 11714812,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.204,
+     "process_cpu_ms": 1188.287,
+     "stdout_bytes": 11714812,
+     "complete_records": 3,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.227,
+     "process_cpu_ms": 1211.512,
+     "stdout_bytes": 11714812,
+     "complete_records": 3,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 1181.794,
+   "stdout_sha256": [
+    "d7a70defb5c4998ed991d1859a499a8900861c9927afad9d56a5e56b1216c47f"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 1.15,
+    "phases_ms": {
+     "startup": 58,
+     "total": 1125,
+     "observe": 1032,
+     "json_parse": 10,
+     "json_stringify": 31,
+     "build": 801,
+     "snapshot": 214
+    }
+   }
+  },
+  {
+   "scenario": "T234 list [100k,100k]",
+   "observer": "v1",
+   "problem_id": 234,
+   "calls": 2,
+   "input_bytes": 1577936,
+   "runs": [
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.017,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.011,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.014,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.011,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.012,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": false,
+   "median_process_cpu_ms": null,
+   "stdout_sha256": [
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   ],
+   "phase_probe": {
+    "exit_code": 137,
+    "signal": 9,
+    "wall_seconds": 3.014,
+    "phases_ms": null
+   }
+  },
+  {
+   "scenario": "T234 list [100k,100k]",
+   "observer": "v2",
+   "problem_id": 234,
+   "calls": 2,
+   "input_bytes": 1577936,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.016,
+     "process_cpu_ms": 1997.695,
+     "stdout_bytes": 13113011,
+     "complete_records": 2,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.133,
+     "process_cpu_ms": 2114.733,
+     "stdout_bytes": 13113011,
+     "complete_records": 2,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.166,
+     "process_cpu_ms": 2148.473,
+     "stdout_bytes": 13113011,
+     "complete_records": 2,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.202,
+     "process_cpu_ms": 2184.855,
+     "stdout_bytes": 13113011,
+     "complete_records": 2,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.098,
+     "process_cpu_ms": 2079.052,
+     "stdout_bytes": 13113011,
+     "complete_records": 2,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 2114.733,
+   "stdout_sha256": [
+    "95ba734b9f35383de2e3e1d5ffdb50f9bf8fe8abdfbf286ceb2deaa2219e20b9"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 2.121,
+    "phases_ms": {
+     "startup": 55,
+     "total": 2102,
+     "observe": 2005,
+     "json_parse": 11,
+     "json_stringify": 38,
+     "build": 1605,
+     "snapshot": 381
+    }
+   }
+  },
+  {
+   "scenario": "S222 complete [50k,50k]",
+   "observer": "v1",
+   "problem_id": 222,
+   "calls": 2,
+   "input_bytes": 1655736,
+   "runs": [
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.013,
+     "process_cpu_ms": null,
+     "stdout_bytes": 65536,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.015,
+     "process_cpu_ms": null,
+     "stdout_bytes": 65536,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.016,
+     "process_cpu_ms": null,
+     "stdout_bytes": 65536,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.015,
+     "process_cpu_ms": null,
+     "stdout_bytes": 131072,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.014,
+     "process_cpu_ms": null,
+     "stdout_bytes": 65536,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": false,
+   "median_process_cpu_ms": null,
+   "stdout_sha256": [
+    "d5f33fed6138b208c0d21ab6910ee0caea198be426b94dc0f396c8f002265d10",
+    "f6abe50deee8765a620d45c0aff793f1709a2bfc730009ec4a42b1bcb727e6e7"
+   ],
+   "phase_probe": {
+    "exit_code": 137,
+    "signal": 9,
+    "wall_seconds": 3.017,
+    "phases_ms": null
+   }
+  },
+  {
+   "scenario": "S222 complete [50k,50k]",
+   "observer": "v2",
+   "problem_id": 222,
+   "calls": 2,
+   "input_bytes": 1655736,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.285,
+     "process_cpu_ms": 1269.249,
+     "stdout_bytes": 11624119,
+     "complete_records": 2,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.224,
+     "process_cpu_ms": 1210.622,
+     "stdout_bytes": 11624119,
+     "complete_records": 2,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.325,
+     "process_cpu_ms": 1310.09,
+     "stdout_bytes": 11624119,
+     "complete_records": 2,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.247,
+     "process_cpu_ms": 1231.017,
+     "stdout_bytes": 11624119,
+     "complete_records": 2,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.233,
+     "process_cpu_ms": 1218.208,
+     "stdout_bytes": 11624119,
+     "complete_records": 2,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 1231.017,
+   "stdout_sha256": [
+    "ac6d166335a7b2b43441ccabe0c5bc3ad682410272eba7d13303e65548c23883"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 1.251,
+    "phases_ms": {
+     "startup": 57,
+     "total": 1228,
+     "observe": 1137,
+     "json_parse": 9,
+     "json_stringify": 30,
+     "build": 896,
+     "snapshot": 224
+    }
+   }
+  },
+  {
+   "scenario": "T235 chain [100k]",
+   "observer": "v1",
+   "problem_id": 235,
+   "calls": 1,
+   "input_bytes": 1677913,
+   "runs": [
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.013,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.015,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.014,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.013,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.012,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": false,
+   "median_process_cpu_ms": null,
+   "stdout_sha256": [
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   ],
+   "phase_probe": {
+    "exit_code": 137,
+    "signal": 9,
+    "wall_seconds": 3.012,
+    "phases_ms": null
+   }
+  },
+  {
+   "scenario": "T235 chain [100k]",
+   "observer": "v2",
+   "problem_id": 235,
+   "calls": 1,
+   "input_bytes": 1677913,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.234,
+     "process_cpu_ms": 1221.011,
+     "stdout_bytes": 11712216,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.202,
+     "process_cpu_ms": 1183.956,
+     "stdout_bytes": 11712216,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.2,
+     "process_cpu_ms": 1186.372,
+     "stdout_bytes": 11712216,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.22,
+     "process_cpu_ms": 1201.53,
+     "stdout_bytes": 11712216,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.139,
+     "process_cpu_ms": 1122.629,
+     "stdout_bytes": 11712216,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 1186.372,
+   "stdout_sha256": [
+    "ed406f94dac9714aff2158202573478f65f751229fd80cc928129404405a5ea8"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 1.17,
+    "phases_ms": {
+     "startup": 63,
+     "total": 1149,
+     "observe": 1048,
+     "json_parse": 14,
+     "json_stringify": 35,
+     "build": 817,
+     "snapshot": 209
+    }
+   }
+  },
+  {
+   "scenario": "T234 list [100k]",
+   "observer": "v1",
+   "problem_id": 234,
+   "calls": 1,
+   "input_bytes": 789001,
+   "runs": [
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.011,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.014,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.013,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.013,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    },
+    {
+     "exit_code": 137,
+     "signal": 9,
+     "timed_out": false,
+     "wall_seconds": 3.012,
+     "process_cpu_ms": null,
+     "stdout_bytes": 0,
+     "complete_records": 0,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": false,
+   "median_process_cpu_ms": null,
+   "stdout_sha256": [
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   ],
+   "phase_probe": {
+    "exit_code": 137,
+    "signal": 9,
+    "wall_seconds": 3.013,
+    "phases_ms": null
+   }
+  },
+  {
+   "scenario": "T234 list [100k]",
+   "observer": "v2",
+   "problem_id": 234,
+   "calls": 1,
+   "input_bytes": 789001,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.046,
+     "process_cpu_ms": 1033.28,
+     "stdout_bytes": 6556511,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.048,
+     "process_cpu_ms": 1034.837,
+     "stdout_bytes": 6556511,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.074,
+     "process_cpu_ms": 1060.217,
+     "stdout_bytes": 6556511,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.183,
+     "process_cpu_ms": 1166.203,
+     "stdout_bytes": 6556511,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 1.145,
+     "process_cpu_ms": 1130.515,
+     "stdout_bytes": 6556511,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 1060.217,
+   "stdout_sha256": [
+    "d739331897e615199d8ec7ca0d9c508f7e193ade809de80c89976c38a24a41ce"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 1.07,
+    "phases_ms": {
+     "startup": 57,
+     "total": 1052,
+     "observe": 970,
+     "json_parse": 6,
+     "json_stringify": 19,
+     "build": 789,
+     "snapshot": 171
+    }
+   }
+  },
+  {
+   "scenario": "S222 complete [50k]",
+   "observer": "v1",
+   "problem_id": 222,
+   "calls": 1,
+   "input_bytes": 827901,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.599,
+     "process_cpu_ms": 2583.875,
+     "stdout_bytes": 5812065,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.567,
+     "process_cpu_ms": 2549.601,
+     "stdout_bytes": 5812065,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.601,
+     "process_cpu_ms": 2586.618,
+     "stdout_bytes": 5812065,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.6,
+     "process_cpu_ms": 2585.855,
+     "stdout_bytes": 5812065,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.692,
+     "process_cpu_ms": 2675.685,
+     "stdout_bytes": 5812065,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 2585.855,
+   "stdout_sha256": [
+    "503e17555d42def78cfb5deccb9548bcebf5544e8a2acbc17db8f9a2aec79975"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 2.605,
+    "phases_ms": {
+     "startup": 61,
+     "total": 2582,
+     "observe": 2499,
+     "json_parse": 5,
+     "json_stringify": 17,
+     "build": 1770,
+     "snapshot": 719
+    }
+   }
+  },
+  {
+   "scenario": "S222 complete [50k]",
+   "observer": "v2",
+   "problem_id": 222,
+   "calls": 1,
+   "input_bytes": 827901,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.749,
+     "process_cpu_ms": 732.988,
+     "stdout_bytes": 5812065,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.714,
+     "process_cpu_ms": 698.977,
+     "stdout_bytes": 5812065,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.691,
+     "process_cpu_ms": 674.096,
+     "stdout_bytes": 5812065,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.708,
+     "process_cpu_ms": 692.81,
+     "stdout_bytes": 5812065,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.679,
+     "process_cpu_ms": 662.937,
+     "stdout_bytes": 5812065,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 692.81,
+   "stdout_sha256": [
+    "503e17555d42def78cfb5deccb9548bcebf5544e8a2acbc17db8f9a2aec79975"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 0.679,
+    "phases_ms": {
+     "startup": 55,
+     "total": 664,
+     "observe": 587,
+     "json_parse": 5,
+     "json_stringify": 16,
+     "build": 472,
+     "snapshot": 106
+    }
+   },
+   "stdout_identical_to_v1": true
+  },
+  {
+   "scenario": "T235 chain [50k]",
+   "observer": "v1",
+   "problem_id": 235,
+   "calls": 1,
+   "input_bytes": 827913,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.364,
+     "process_cpu_ms": 2347.944,
+     "stdout_bytes": 5812215,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.344,
+     "process_cpu_ms": 2328.83,
+     "stdout_bytes": 5812215,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.363,
+     "process_cpu_ms": 2347.825,
+     "stdout_bytes": 5812215,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.328,
+     "process_cpu_ms": 2312.456,
+     "stdout_bytes": 5812215,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.363,
+     "process_cpu_ms": 2347.183,
+     "stdout_bytes": 5812215,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 2347.183,
+   "stdout_sha256": [
+    "f3addf754eaafad7f76e4a8ffd00173d4cfe2096226f5cceb312d96b943b3a07"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 2.383,
+    "phases_ms": {
+     "startup": 61,
+     "total": 2366,
+     "observe": 2282,
+     "json_parse": 5,
+     "json_stringify": 17,
+     "build": 1704,
+     "snapshot": 568
+    }
+   }
+  },
+  {
+   "scenario": "T235 chain [50k]",
+   "observer": "v2",
+   "problem_id": 235,
+   "calls": 1,
+   "input_bytes": 827913,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.652,
+     "process_cpu_ms": 638.773,
+     "stdout_bytes": 5812215,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.624,
+     "process_cpu_ms": 610.721,
+     "stdout_bytes": 5812215,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.63,
+     "process_cpu_ms": 618.79,
+     "stdout_bytes": 5812215,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.6,
+     "process_cpu_ms": 587.704,
+     "stdout_bytes": 5812215,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.601,
+     "process_cpu_ms": 588.293,
+     "stdout_bytes": 5812215,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 610.721,
+   "stdout_sha256": [
+    "f3addf754eaafad7f76e4a8ffd00173d4cfe2096226f5cceb312d96b943b3a07"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 0.616,
+    "phases_ms": {
+     "startup": 63,
+     "total": 592,
+     "observe": 506,
+     "json_parse": 7,
+     "json_stringify": 18,
+     "build": 403,
+     "snapshot": 89
+    }
+   },
+   "stdout_identical_to_v1": true
+  },
+  {
+   "scenario": "T234 list [50k]",
+   "observer": "v1",
+   "problem_id": 234,
+   "calls": 1,
+   "input_bytes": 389001,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.343,
+     "process_cpu_ms": 2327.472,
+     "stdout_bytes": 3256510,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.248,
+     "process_cpu_ms": 2235.086,
+     "stdout_bytes": 3256510,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.286,
+     "process_cpu_ms": 2273.146,
+     "stdout_bytes": 3256510,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.325,
+     "process_cpu_ms": 2304.926,
+     "stdout_bytes": 3256510,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 2.291,
+     "process_cpu_ms": 2276.732,
+     "stdout_bytes": 3256510,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 2276.732,
+   "stdout_sha256": [
+    "d1e1bdc144d7c98de7651e5d4305627c30bfb6e45f70f76a2a44c734157e761b"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 2.248,
+    "phases_ms": {
+     "startup": 54,
+     "total": 2234,
+     "observe": 2163,
+     "json_parse": 4,
+     "json_stringify": 10,
+     "build": 1635,
+     "snapshot": 521
+    }
+   }
+  },
+  {
+   "scenario": "T234 list [50k]",
+   "observer": "v2",
+   "problem_id": 234,
+   "calls": 1,
+   "input_bytes": 389001,
+   "runs": [
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.668,
+     "process_cpu_ms": 654.267,
+     "stdout_bytes": 3256510,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.598,
+     "process_cpu_ms": 585.452,
+     "stdout_bytes": 3256510,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.636,
+     "process_cpu_ms": 623.461,
+     "stdout_bytes": 3256510,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.597,
+     "process_cpu_ms": 582.07,
+     "stdout_bytes": 3256510,
+     "complete_records": 1,
+     "error_records": 0
+    },
+    {
+     "exit_code": 0,
+     "signal": null,
+     "timed_out": false,
+     "wall_seconds": 0.572,
+     "process_cpu_ms": 559.522,
+     "stdout_bytes": 3256510,
+     "complete_records": 1,
+     "error_records": 0
+    }
+   ],
+   "all_exit_zero": true,
+   "median_process_cpu_ms": 585.452,
+   "stdout_sha256": [
+    "d1e1bdc144d7c98de7651e5d4305627c30bfb6e45f70f76a2a44c734157e761b"
+   ],
+   "phase_probe": {
+    "exit_code": 0,
+    "signal": null,
+    "wall_seconds": 0.584,
+    "phases_ms": {
+     "startup": 55,
+     "total": 571,
+     "observe": 499,
+     "json_parse": 4,
+     "json_stringify": 10,
+     "build": 394,
+     "snapshot": 99
+    }
+   },
+   "stdout_identical_to_v1": true
+  }
+ ],
+ "interpretation": "Observer-alone cost under the unchanged sandbox. Not candidate qualification."
+}
