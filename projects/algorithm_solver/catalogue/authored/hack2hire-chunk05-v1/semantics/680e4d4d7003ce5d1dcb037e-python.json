@@ -1,0 +1,59 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:680e4d4d7003ce5d1dcb037e",
+  "source_sha256": "364e8e8a2fc6897245fd8ac2f81d38af3161891fac53b97ce23c581e337f89b5",
+  "language": "python",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "LRUCache",
+    "constructor": {
+      "params": [
+        "capacity"
+      ]
+    },
+    "methods": {
+      "get": [
+        "key"
+      ],
+      "put": [
+        "key",
+        "value"
+      ],
+      "resize": [
+        "capacity"
+      ]
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:680e4d4d7003ce5d1dcb037e",
+    "key": "lru",
+    "candidate_design": "Use insertion-ordered maps, moving accessed keys to the newest position and evicting the oldest entry until within capacity.",
+    "complexity_target": "O(1) expected get/put; resize proportional to evictions",
+    "reference": "Linear ordered list of key/value pairs with explicit scans.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Provide get, put and resize with least-recently-used eviction. get returns -1 for absence and otherwise refreshes recency. put refreshes existing keys. Nonnegative resize immediately evicts oldest entries until within capacity; zero capacity retains nothing."
+    }
+  ],
+  "snapshot_cost": "Map recency operations are O(1); cloning a non-scalar stored value costs O(value size)."
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:688fe380b3f942cc1004c02a",
+  "source_sha256": "4f31672fe012c55bac3f66dd687d3afb5ab0b053974c36ba5240dc723a122755",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "eliminateAdjacentDuplicates",
+    "params": [
+      {
+        "name": "text",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:688fe380b3f942cc1004c02a",
+    "key": "adjacent",
+    "candidate_design": "Each equal-character run of length k needs floor(k/2) replacements; sum those independent lower bounds.",
+    "complexity_target": "O(n) time, O(1) space",
+    "reference": "Dynamic programming over all 26 possible replacement characters.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Return the minimum number of single-character replacements needed so no adjacent characters match. The input is lowercase English letters and replacements may use any lowercase letter."
+    }
+  ]
+}

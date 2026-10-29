@@ -1,0 +1,46 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:67eaec184c9bb801bfd0ef4d",
+  "source_sha256": "fe4b0b94c22d34fa1fe8341f56494816c9185bd19f6dbfb63abd0f747eea5d27",
+  "language": "python",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "dualCarDestinations",
+    "params": [
+      {
+        "name": "grid",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:67eaec184c9bb801bfd0ef4d",
+    "key": "cars",
+    "candidate_design": "BFS the ordered pair of car positions; combine their five possible moves, excluding occupancy and edge-swap collisions.",
+    "complexity_target": "O(open cells squared) states and space; at most 25 transitions per state",
+    "reference": "Layered sets built with grid-wide move enumeration rather than candidate adjacency tables.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Find the fewest synchronous ticks moving each car in four directions or waiting until both reach their own marked destination. Walls are impassable. Cars cannot share a cell or swap endpoints of an edge in one tick. Reaching a destination does not freeze movement. These collision and timing rules are explicit inferences because the preview stops before them."
+    }
+  ]
+}

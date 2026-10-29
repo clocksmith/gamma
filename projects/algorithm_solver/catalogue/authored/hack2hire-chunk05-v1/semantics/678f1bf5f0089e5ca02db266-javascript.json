@@ -1,0 +1,68 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:678f1bf5f0089e5ca02db266",
+  "source_sha256": "bc6e39a4f8421ef547493cfd95cbcab21489723df92ed087af9ecf08dd1b9e27",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "CryptoTradingSystem",
+    "constructor": {
+      "params": []
+    },
+    "methods": {
+      "place": [
+        "id",
+        "currency",
+        "amount",
+        "timestamp",
+        "type"
+      ],
+      "pause": [
+        "id"
+      ],
+      "resume": [
+        "id"
+      ],
+      "cancel": [
+        "id"
+      ],
+      "complete": [
+        "id"
+      ],
+      "listLive": [
+        "currency"
+      ]
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:678f1bf5f0089e5ca02db266",
+    "key": "crypto",
+    "candidate_design": "Use an explicit transition table and ID-indexed records. Sort only live snapshots for listing.",
+    "complexity_target": "O(1) transitions; O(n log n) listing",
+    "reference": "Literal state-machine replay with independently spelled transition rules.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused."
+    }
+  ]
+}

@@ -1,0 +1,1406 @@
+{
+  "67a4ce0f2a9ed767fa215431": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Count distinct Unicode-code-point strings obtainable by reversing one nonempty contiguous segment. Include the unchanged string; the empty input has one result by an explicit extension."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Count unequal endpoint pairs, plus the unchanged string. Strip equal ends from a reversal to identify its unique first/last changed positions.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Count distinct Unicode-code-point strings obtainable by reversing one nonempty contiguous segment. Include the unchanged string; the empty input has one result by an explicit extension.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(n) time, O(alphabet) space"
+    ],
+    "examples": []
+  },
+  "689bf3a41126a03aace65e63": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Count four-connected components of user cells whose every cell has availability 1. Matrices have identical rectangular dimensions; availability need not connect to other available cells. Empty matrices return zero."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Flood each user component once; keep a covered flag while visiting all cells, even after finding an uncovered cell.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Count four-connected components of user cells whose every cell has availability 1. Matrices have identical rectangular dimensions; availability need not connect to other available cells. Empty matrices return zero.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(rows*columns) time and space"
+    ],
+    "examples": []
+  },
+  "6a949eeacddc54478ddf5fab": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "For each nonnegative [rows, columns], return the exact number of axis-aligned square placements of every positive side length. Zero-sized grids have zero placements."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Expand the sum of (r-k+1)(c-k+1) and use exact integer sums of k and k squared.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "For each nonnegative [rows, columns], return the exact number of axis-aligned square placements of every positive side length. Zero-sized grids have zero placements.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(queries) arithmetic operations; integer bit cost applies"
+    ],
+    "examples": []
+  },
+  "68c87699df5a6365aa774b1e": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "record(agentId,score,month) records one integer score. rank(month) returns [agentId,numerator,denominator] rows for exact reduced average scores, descending by average then ASCII agent ID. A null month means all time; empty groups are absent."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Maintain sum/count aggregates per agent globally and per month; rank by cross-multiplied rational averages and reduce output fractions.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "record(agentId,score,month) records one integer score. rank(month) returns [agentId,numerator,denominator] rows for exact reduced average scores, descending by average then ASCII agent ID. A null month means all time; empty groups are absent.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) record; O(agents log agents) rank"
+    ],
+    "examples": []
+  },
+  "6764932ccc8f5deed53ccd76": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Return true if any permutation of the three supplied integers is a valid proleptic Gregorian [year,month,day], with year 1..9999. Consider all six permutations, including century leap-year rules."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Try the six assignments; validate month length with a 400/100/4 Gregorian leap predicate.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Return true if any permutation of the three supplied integers is a valid proleptic Gregorian [year,month,day], with year 1..9999. Consider all six permutations, including century leap-year rules.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) time and space"
+    ],
+    "examples": []
+  },
+  "676496fecc8f5deed53ccd77": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Return true if any permutation of the three supplied integers is a valid proleptic Gregorian [year,month,day], with year 1..9999. Consider all six permutations, including century leap-year rules."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Try the six assignments; validate month length with a 400/100/4 Gregorian leap predicate.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Return true if any permutation of the three supplied integers is a valid proleptic Gregorian [year,month,day], with year 1..9999. Consider all six permutations, including century leap-year rules.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) time and space"
+    ],
+    "examples": []
+  },
+  "6884635760cda5e06150289e": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "The first string contains [x,y]. Treat x as the zero-based column and y as the zero-based row in the subsequent rectangular uppercase-letter board. Return that one character. Inputs contain an in-range coordinate."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Parse the two coordinate integers and index the board at row y, column x.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "The first string contains [x,y]. Treat x as the zero-based column and y as the zero-based row in the subsequent rectangular uppercase-letter board. Return that one character. Inputs contain an in-range coordinate.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(coordinate text length) time, O(1) extra space"
+    ],
+    "examples": []
+  },
+  "688466f560cda5e0615028a4": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "The first string contains [x,y]. Treat x as the zero-based column and y as the zero-based row in the subsequent rectangular uppercase-letter board. Return that one character. Inputs contain an in-range coordinate."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Parse the two coordinate integers and index the board at row y, column x.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "The first string contains [x,y]. Treat x as the zero-based column and y as the zero-based row in the subsequent rectangular uppercase-letter board. Return that one character. Inputs contain an in-range coordinate.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(coordinate text length) time, O(1) extra space"
+    ],
+    "examples": []
+  },
+  "688466f660cda5e0615028a5": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "The first string contains [x,y]. Treat x as the zero-based column and y as the zero-based row in the subsequent rectangular uppercase-letter board. Return that one character. Inputs contain an in-range coordinate."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Parse the two coordinate integers and index the board at row y, column x.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "The first string contains [x,y]. Treat x as the zero-based column and y as the zero-based row in the subsequent rectangular uppercase-letter board. Return that one character. Inputs contain an in-range coordinate.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(coordinate text length) time, O(1) extra space"
+    ],
+    "examples": []
+  },
+  "68377035587136177f847c00": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "A parent map describes a fixed rooted tree. Each advertiser begins with no permitted nodes. grant unions an entire subtree; revoke subtracts the entire subtree even after an ancestor grant; canAccess checks membership. A later grant can restore a revoked descendant."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Flatten the tree into Euler subtree intervals. Maintain a sorted union of allowed intervals per advertiser; revoke subtracts a range, creating exceptions.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "A parent map describes a fixed rooted tree. Each advertiser begins with no permitted nodes. grant unions an entire subtree; revoke subtracts the entire subtree even after an ancestor grant; canAccess checks membership. A later grant can restore a revoked descendant.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(regions) preprocessing; O(intervals) updates; O(log intervals) query"
+    ],
+    "examples": []
+  },
+  "691614103f8671d8f7a56642": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Given a valid parent-index rooted tree, aggregate child replies bottom-up. Return the node count and topology rendered as id(child1,child2), omitting parentheses for leaves and ordering children by numeric ID. Empty input returns count zero and empty topology. This is a local adjacency-only protocol model, not a deployed distributed implementation."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Reduce leaves toward parents using a pending-child counter. Each reply carries only its child count/topology and travels to that child’s parent.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Given a valid parent-index rooted tree, aggregate child replies bottom-up. Return the node count and topology rendered as id(child1,child2), omitting parentheses for leaves and ordering children by numeric ID. Empty input returns count zero and empty topology. This is a local adjacency-only protocol model, not a deployed distributed implementation.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(n squared) worst-case string construction; O(n squared) transient text"
+    ],
+    "examples": []
+  },
+  "69a905614b133b6a8f3a609c": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Process ordered, at-most-once NEW/FILLED CSV events. NEW creates an order; an identical repeated NEW is a no-op, conflicting NEW returns false. FILLED requires matching side/symbol and positive quantity no greater than remaining. Invalid updates return false without mutation. status returns a fresh snapshot or null. FILLED retries are not deduplicated because the preview supplies no event ID."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Keep one record per ID; validate complete events before modifying fill counters. Return fresh snapshots.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Process ordered, at-most-once NEW/FILLED CSV events. NEW creates an order; an identical repeated NEW is a no-op, conflicting NEW returns false. FILLED requires matching side/symbol and positive quantity no greater than remaining. Invalid updates return false without mutation. status returns a fresh snapshot or null. FILLED retries are not deduplicated because the preview supplies no event ID.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) expected apply/status"
+    ],
+    "examples": []
+  },
+  "69a905b44b133b6a8f3a60a1": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Process ordered, at-most-once NEW/FILLED CSV events. NEW creates an order; an identical repeated NEW is a no-op, conflicting NEW returns false. FILLED requires matching side/symbol and positive quantity no greater than remaining. Invalid updates return false without mutation. status returns a fresh snapshot or null. FILLED retries are not deduplicated because the preview supplies no event ID."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Keep one record per ID; validate complete events before modifying fill counters. Return fresh snapshots.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Process ordered, at-most-once NEW/FILLED CSV events. NEW creates an order; an identical repeated NEW is a no-op, conflicting NEW returns false. FILLED requires matching side/symbol and positive quantity no greater than remaining. Invalid updates return false without mutation. status returns a fresh snapshot or null. FILLED retries are not deduplicated because the preview supplies no event ID.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) expected apply/status"
+    ],
+    "examples": []
+  },
+  "678f1bf5f0089e5ca02db266": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Use an explicit transition table and ID-indexed records. Sort only live snapshots for listing.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) transitions; O(n log n) listing"
+    ],
+    "examples": []
+  },
+  "678fc891f0089e5ca02db267": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Use an explicit transition table and ID-indexed records. Sort only live snapshots for listing.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) transitions; O(n log n) listing"
+    ],
+    "examples": []
+  },
+  "679039a5dda371fa278429f4": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Use an explicit transition table and ID-indexed records. Sort only live snapshots for listing.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) transitions; O(n log n) listing"
+    ],
+    "examples": []
+  },
+  "69a5fdb73d95612a1782be7b": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Iterate forward from a valid IPv4 address through 255.255.255.255 inclusive. hasNext reports availability; next returns an address or null after exhaustion, without wrapping. Python iterator protocol additionally raises StopIteration on exhaustion."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Convert octets to an unsigned arithmetic counter; format and increment without signed bitwise operations.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Iterate forward from a valid IPv4 address through 255.255.255.255 inclusive. hasNext reports availability; next returns an address or null after exhaustion, without wrapping. Python iterator protocol additionally raises StopIteration on exhaustion.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) per next, O(1) state"
+    ],
+    "examples": []
+  },
+  "69a6011f3d95612a1782be88": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Iterate forward from a valid IPv4 address through 255.255.255.255 inclusive. hasNext reports availability; next returns an address or null after exhaustion, without wrapping. Python iterator protocol additionally raises StopIteration on exhaustion."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Convert octets to an unsigned arithmetic counter; format and increment without signed bitwise operations.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Iterate forward from a valid IPv4 address through 255.255.255.255 inclusive. hasNext reports availability; next returns an address or null after exhaustion, without wrapping. Python iterator protocol additionally raises StopIteration on exhaustion.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) per next, O(1) state"
+    ],
+    "examples": []
+  },
+  "69a607ac3d95612a1782be9b": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Iterate forward from a valid IPv4 address through 255.255.255.255 inclusive. hasNext reports availability; next returns an address or null after exhaustion, without wrapping. Python iterator protocol additionally raises StopIteration on exhaustion."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Convert octets to an unsigned arithmetic counter; format and increment without signed bitwise operations.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Iterate forward from a valid IPv4 address through 255.255.255.255 inclusive. hasNext reports availability; next returns an address or null after exhaustion, without wrapping. Python iterator protocol additionally raises StopIteration on exhaustion.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) per next, O(1) state"
+    ],
+    "examples": []
+  },
+  "6a171a967b0582b3527890e5": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Iterate forward from a valid IPv4 address through 255.255.255.255 inclusive. hasNext reports availability; next returns an address or null after exhaustion, without wrapping. Python iterator protocol additionally raises StopIteration on exhaustion."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Convert octets to an unsigned arithmetic counter; format and increment without signed bitwise operations.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Iterate forward from a valid IPv4 address through 255.255.255.255 inclusive. hasNext reports availability; next returns an address or null after exhaustion, without wrapping. Python iterator protocol additionally raises StopIteration on exhaustion.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) per next, O(1) state"
+    ],
+    "examples": []
+  },
+  "678811c9e20f8f324213c29e": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Rooms retain constructor order. book(start,end) uses half-open nonempty intervals and assigns the first room with no overlap, returning its ID or null. schedule(room) returns fresh sorted intervals. Cancellation is outside this inferred exercise."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Keep each room’s bookings sorted; binary-search the insertion slot and inspect only neighboring intervals.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Rooms retain constructor order. book(start,end) uses half-open nonempty intervals and assigns the first room with no overlap, returning its ID or null. schedule(room) returns fresh sorted intervals. Cancellation is outside this inferred exercise.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(rooms log bookings + bookings) booking; O(bookings) snapshot"
+    ],
+    "examples": []
+  },
+  "68771a6734c7f781dae2a98b": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Wrap an injected getPage(zeroBasedPage) provider. read(k) returns up to k strings without losing unused page tails. Empty pages mean terminal EOF; interior empty pages are excluded because the preview exposes no independent continuation signal. read(0) must not fetch. The trace adapter injects a finite page fixture; fetchCount is an authored observability method."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Keep a current-page buffer and index, next page number and EOF flag. Fetch lazily only when a positive read needs more items.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Wrap an injected getPage(zeroBasedPage) provider. read(k) returns up to k strings without losing unused page tails. Empty pages mean terminal EOF; interior empty pages are excluded because the preview exposes no independent continuation signal. read(0) must not fetch. The trace adapter injects a finite page fixture; fetchCount is an authored observability method.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(returned items + fetched pages); one page buffered"
+    ],
+    "examples": []
+  },
+  "678365c4d0faf7ec64cc3ad9": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Maintain canonical absolute paths with immutable root / holding root. create succeeds only for a missing non-root path with an existing parent. set updates existing non-root values. get returns a string or null. delete removes only existing non-root leaves. Operations return booleans except get."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Map canonical paths to values plus direct-child counts, preventing parent deletion without scanning all descendants.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Maintain canonical absolute paths with immutable root / holding root. create succeeds only for a missing non-root path with an existing parent. set updates existing non-root values. get returns a string or null. delete removes only existing non-root leaves. Operations return booleans except get.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(path length) expected operations; O(stored path bytes) space"
+    ],
+    "examples": []
+  },
+  "695d73139c1c1f40daea737f": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Store integer-sequence keys in a compressed radix tree. insert(sequence,value) overwrites exact keys; get requires an exact terminal key and returns its scalar value or null. Empty sequences are valid. Insertions must split shared compressed edges rather than changing other keys."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Traverse compressed edges; split an edge at the first mismatch or a key ending inside it, preserving old suffix and terminal state.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Store integer-sequence keys in a compressed radix tree. insert(sequence,value) overwrites exact keys; get requires an exact terminal key and returns its scalar value or null. Empty sequences are valid. Insertions must split shared compressed edges rather than changing other keys.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(key length) operations, O(total key bytes) storage"
+    ],
+    "examples": []
+  },
+  "685df8f70807241a1a2453fb": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "For nondecreasing integer timestamps, accept iff every [limit,window] rule has fewer than limit accepted requests in (timestamp-window,timestamp]. Rejected attempts do not consume any rule. Apply acceptance atomically across rules in this sequential exercise; no production concurrency guarantee is inferred."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Keep accepted timestamps in a queue per rule. Prune expired entries in every rule, decide once, then append to all queues only on success.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "For nondecreasing integer timestamps, accept iff every [limit,window] rule has fewer than limit accepted requests in (timestamp-window,timestamp]. Rejected attempts do not consume any rule. Apply acceptance atomically across rules in this sequential exercise; no production concurrency guarantee is inferred.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(rules) amortized per request plus retained timestamps"
+    ],
+    "examples": []
+  },
+  "68c6b9866211711bd990ccd5": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "The native retry callable retries exceptions up to maxAttempts including the first call, invoking an injected delay hook between failed attempts with initialDelay*multiplier^i. Never sleep or perform I/O. The JSON adapter accepts scripted ok/error outcomes and returns value, error, attempts and delays; exhausted scripts raise exhausted."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Run an explicit bounded attempt loop. Delay only between failures; return first success or preserve the last error.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "The native retry callable retries exceptions up to maxAttempts including the first call, invoking an injected delay hook between failed attempts with initialDelay*multiplier^i. Never sleep or perform I/O. The JSON adapter accepts scripted ok/error outcomes and returns value, error, attempts and delays; exhausted scripts raise exhausted.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(attempts) control work, O(1) native state apart from hooks"
+    ],
+    "examples": []
+  },
+  "69baff097d8d5a1c3037177a": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "addListing adds one unit with seller, item and integer price. buy(item,budget) consumes the cheapest eligible listing, breaking equal-price ties by insertion order, and returns [seller,price] or null. Quantities, cancellation and order books are outside this inferred single-unit marketplace contract."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Maintain a price/insertion-sequence min-heap per item; inspect and pop the cheapest eligible listing.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "addListing adds one unit with seller, item and integer price. buy(item,budget) consumes the cheapest eligible listing, breaking equal-price ties by insertion order, and returns [seller,price] or null. Quantities, cancellation and order books are outside this inferred single-unit marketplace contract.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(log listings) add/buy, O(listings) storage"
+    ],
+    "examples": []
+  },
+  "69bb12b97d8d5a1c303717c1": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "addListing adds one unit with seller, item and integer price. buy(item,budget) consumes the cheapest eligible listing, breaking equal-price ties by insertion order, and returns [seller,price] or null. Quantities, cancellation and order books are outside this inferred single-unit marketplace contract."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Maintain a price/insertion-sequence min-heap per item; inspect and pop the cheapest eligible listing.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "addListing adds one unit with seller, item and integer price. buy(item,budget) consumes the cheapest eligible listing, breaking equal-price ties by insertion order, and returns [seller,price] or null. Quantities, cancellation and order books are outside this inferred single-unit marketplace contract.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(log listings) add/buy, O(listings) storage"
+    ],
+    "examples": []
+  },
+  "68fd2b2247bea664c0bba304": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Return the sorted distinct bitwise-OR values of strictly increasing subsequences, including zero for the empty subsequence. Input values are nonnegative safe integers; order is preserved and equal successive values cannot extend a subsequence."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "For each reachable OR value retain the smallest final element; smaller tails dominate larger tails when extending strictly increasing subsequences.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Return the sorted distinct bitwise-OR values of strictly increasing subsequences, including zero for the empty subsequence. Input values are nonnegative safe integers; order is preserved and equal successive values cannot extend a subsequence.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(n*distinct OR states) time, O(distinct OR states) space"
+    ],
+    "examples": []
+  },
+  "6927c1a99c0536c47b291ab5": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Return all distinct products of nonempty subsets of the supplied primes, including multiplicities up to those present in the input, sorted numerically. Use arbitrary-precision integers; the input is not changed."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Extend a set of exact products by each input prime, deduplicate, remove the empty product and sort numerically.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Return all distinct products of nonempty subsets of the supplied primes, including multiplicities up to those present in the input, sorted numerically. Use arbitrary-precision integers; the input is not changed.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(n*distinct products + sort) arithmetic operations; bit cost applies"
+    ],
+    "examples": []
+  },
+  "67eaec184c9bb801bfd0ef4d": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Find the fewest synchronous ticks moving each car in four directions or waiting until both reach their own marked destination. Walls are impassable. Cars cannot share a cell or swap endpoints of an edge in one tick. Reaching a destination does not freeze movement. These collision and timing rules are explicit inferences because the preview stops before them."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "BFS the ordered pair of car positions; combine their five possible moves, excluding occupancy and edge-swap collisions.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Find the fewest synchronous ticks moving each car in four directions or waiting until both reach their own marked destination. Walls are impassable. Cars cannot share a cell or swap endpoints of an edge in one tick. Reaching a destination does not freeze movement. These collision and timing rules are explicit inferences because the preview stops before them.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(open cells squared) states and space; at most 25 transitions per state"
+    ],
+    "examples": []
+  },
+  "680e4d4d7003ce5d1dcb037e": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Provide get, put and resize with least-recently-used eviction. get returns -1 for absence and otherwise refreshes recency. put refreshes existing keys. Nonnegative resize immediately evicts oldest entries until within capacity; zero capacity retains nothing."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Use insertion-ordered maps, moving accessed keys to the newest position and evicting the oldest entry until within capacity.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Provide get, put and resize with least-recently-used eviction. get returns -1 for absence and otherwise refreshes recency. put refreshes existing keys. Nonnegative resize immediately evicts oldest entries until within capacity; zero capacity retains nothing.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) expected get/put; resize proportional to evictions"
+    ],
+    "examples": []
+  },
+  "6a6d1d1d48af2ae18e99352e": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Return the earliest prefix length in which the target can be reached using each direction only at its listed second, with waiting permitted. Return zero when already there and -1 if no prefix suffices."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Consume a direction only while that axis still needs movement toward the target; return when both deficits become zero.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Return the earliest prefix length in which the target can be reached using each direction only at its listed second, with waiting permitted. Return zero when already there and -1 if no prefix suffices.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(direction count) time, O(1) space"
+    ],
+    "examples": []
+  },
+  "688fe380b3f942cc1004c02a": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Return the minimum number of single-character replacements needed so no adjacent characters match. The input is lowercase English letters and replacements may use any lowercase letter."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Each equal-character run of length k needs floor(k/2) replacements; sum those independent lower bounds.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Return the minimum number of single-character replacements needed so no adjacent characters match. The input is lowercase English letters and replacements may use any lowercase letter.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(n) time, O(1) space"
+    ],
+    "examples": []
+  },
+  "67dcb3b799f4f89b276f186c": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "For an acyclic forest with at most one referrer per referred user and no duplicate edge, count each direct or indirect descendant. Return the top three users that actually appear as referrers, ordered by count descending then ASCII name. Returning [name,count] rows and tie rules are inferred."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Process leaves upward, accumulating subtree sizes, then rank only actual referrers.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "For an acyclic forest with at most one referrer per referred user and no duplicate edge, count each direct or indirect descendant. Return the top three users that actually appear as referrers, ordered by count descending then ASCII name. Returning [name,count] rows and tie rules are inferred.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(users + referrers log referrers) time, O(users) space"
+    ],
+    "examples": []
+  },
+  "67fd508ed2adf72ba62b0ec4": {
+    "constraints": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "clarifyingQuestions": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "assumptions": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Produce maximal nonempty half-open intervals with a constant set of working employees. Overlapping shifts from the same employee count once. Employee order follows first appearance in the input. Merge adjacent intervals with identical employee lists; omit uncovered gaps."
+      }
+    ],
+    "hints": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Sweep sorted endpoint deltas with a reference count per name; emit active names in first-input order and coalesce identical adjacent sets.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "invariants": [
+      "Produce maximal nonempty half-open intervals with a constant set of working employees. Overlapping shifts from the same employee count once. Employee order follows first appearance in the input. Merge adjacent intervals with identical employee lists; omit uncovered gaps.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "chooseWhen": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "tradeoffs": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(shifts log shifts + endpoints*employees) time; output-sized memory"
+    ],
+    "examples": []
+  }
+}

@@ -1,0 +1,318 @@
+{
+  "schema": "study.record.v1",
+  "kind": "contract",
+  "id": "contract:hack2hire:67881198e20f8f324213c29d:678811c9e20f8f324213c29e:authored-v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+      "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+      "selector": "/problems/28"
+    }
+  ],
+  "problemId": "hack2hire:67881198e20f8f324213c29d",
+  "variantId": "hack2hire:678811c9e20f8f324213c29e",
+  "variantLabel": {
+    "status": "present",
+    "value": "Design Meeting Scheduler",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/28/title"
+      }
+    ]
+  },
+  "statement": {
+    "status": "present",
+    "value": "Rooms retain constructor order. book(start,end) uses half-open nonempty intervals and assigns the first room with no overlap, returning its ID or null. schedule(room) returns fresh sorted intervals. Cancellation is outside this inferred exercise.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/28/inferred_spec"
+      }
+    ]
+  },
+  "contentScope": "authored",
+  "requirements": {
+    "status": "present",
+    "value": [
+      {
+        "id": "r0",
+        "text": "Rooms retain constructor order. book(start,end) uses half-open nonempty intervals and assigns the first room with no overlap, returning its ID or null. schedule(room) returns fresh sorted intervals. Cancellation is outside this inferred exercise."
+      },
+      {
+        "id": "r1",
+        "text": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate"
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/28"
+      }
+    ]
+  },
+  "constraints": {
+    "status": "present",
+    "value": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/678811c9e20f8f324213c29e/constraints"
+      }
+    ]
+  },
+  "assumptions": {
+    "status": "present",
+    "value": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Rooms retain constructor order. book(start,end) uses half-open nonempty intervals and assigns the first room with no overlap, returning its ID or null. schedule(room) returns fresh sorted intervals. Cancellation is outside this inferred exercise."
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/678811c9e20f8f324213c29e/assumptions"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "status": "present",
+    "value": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/678811c9e20f8f324213c29e/clarifyingQuestions"
+      }
+    ]
+  },
+  "examples": {
+    "status": "present",
+    "value": [
+      {
+        "arguments": [
+          [
+            "MeetingScheduler",
+            "book",
+            "book",
+            "book",
+            "book"
+          ],
+          [
+            [
+              [
+                "z",
+                "a"
+              ]
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        ],
+        "expected": [
+          null,
+          "z",
+          "z",
+          "a",
+          null
+        ],
+        "scope": "Author-created example for inferred contract, not an official example"
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-examples.json",
+        "sha256": "b8ab5be396c9fb44506615f0516313b82cd20a4ee57790493e9004a346ad8aae",
+        "selector": "/678811c9e20f8f324213c29e"
+      }
+    ]
+  },
+  "interfaces": [
+    {
+      "language": "python",
+      "kind": "class",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "kind": "class",
+          "classname": "MeetingScheduler",
+          "constructor": {
+            "params": [
+              "rooms"
+            ]
+          },
+          "methods": {
+            "book": [
+              "start",
+              "end"
+            ],
+            "schedule": [
+              "room"
+            ]
+          },
+          "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/28/inferred_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "spec_basis": "inferred",
+          "official_interface_available": false
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/28"
+          }
+        ]
+      }
+    },
+    {
+      "language": "javascript",
+      "kind": "class",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "kind": "class",
+          "classname": "MeetingScheduler",
+          "constructor": {
+            "params": [
+              "rooms"
+            ]
+          },
+          "methods": {
+            "book": [
+              "start",
+              "end"
+            ],
+            "schedule": [
+              "room"
+            ]
+          },
+          "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/28/inferred_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "spec_basis": "inferred",
+          "official_interface_available": false
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/28"
+          }
+        ]
+      }
+    }
+  ],
+  "effects": {
+    "status": "present",
+    "value": {
+      "inputMutation": "forbidden",
+      "outputAliasing": "forbidden",
+      "classPrivateStateMutation": "allowed"
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/28/effects"
+      }
+    ]
+  },
+  "comparison": {
+    "status": "present",
+    "value": {
+      "kind": "exact",
+      "wire": "Integers within JavaScript safe range are numbers; larger exact integers encode as decimal strings. Python native integers and JS BigInt remain exact."
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/28/comparison"
+      }
+    ]
+  },
+  "sources": [],
+  "native": []
+}

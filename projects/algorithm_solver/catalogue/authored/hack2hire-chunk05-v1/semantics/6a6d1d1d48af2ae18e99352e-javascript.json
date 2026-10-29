@@ -1,0 +1,62 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:6a6d1d1d48af2ae18e99352e",
+  "source_sha256": "b4caee24bed5714940379b9dc850521e95adc74b697ba42c2066881906783495",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "earliestReachableTime",
+    "params": [
+      {
+        "name": "startX",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "startY",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "targetX",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "targetY",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "directions",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:6a6d1d1d48af2ae18e99352e",
+    "key": "earliest",
+    "candidate_design": "Consume a direction only while that axis still needs movement toward the target; return when both deficits become zero.",
+    "complexity_target": "O(direction count) time, O(1) space",
+    "reference": "Track every reachable coordinate under move-or-wait choices.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Return the earliest prefix length in which the target can be reached using each direction only at its listed second, with waiting permitted. Return zero when already there and -1 if no prefix suffices."
+    }
+  ]
+}

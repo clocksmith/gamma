@@ -1,0 +1,46 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:67fd508ed2adf72ba62b0ec4",
+  "source_sha256": "21ae37574e0cf0139155c6de2463941cea84fdc4418ad259b4a168b5c774f76e",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "shiftTimeline",
+    "params": [
+      {
+        "name": "schedules",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:67fd508ed2adf72ba62b0ec4",
+    "key": "timeline",
+    "candidate_design": "Sweep sorted endpoint deltas with a reference count per name; emit active names in first-input order and coalesce identical adjacent sets.",
+    "complexity_target": "O(shifts log shifts + endpoints*employees) time; output-sized memory",
+    "reference": "Rescan every input shift across every elementary time interval.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Produce maximal nonempty half-open intervals with a constant set of working employees. Overlapping shifts from the same employee count once. Employee order follows first appearance in the input. Merge adjacent intervals with identical employee lists; omit uncovered gaps."
+    }
+  ]
+}

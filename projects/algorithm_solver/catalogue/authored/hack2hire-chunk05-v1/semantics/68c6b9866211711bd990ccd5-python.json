@@ -1,0 +1,58 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:68c6b9866211711bd990ccd5",
+  "source_sha256": "fc5fbea8806345b92cde50f967c7b095b3f436af105295a718272757658d523a",
+  "language": "python",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "retryOperation",
+    "params": [
+      {
+        "name": "outcomes",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "maxAttempts",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "initialDelay",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "multiplier",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:68c6b9866211711bd990ccd5",
+    "key": "retry",
+    "candidate_design": "Run an explicit bounded attempt loop. Delay only between failures; return first success or preserve the last error.",
+    "complexity_target": "O(attempts) control work, O(1) native state apart from hooks",
+    "reference": "Interpret scripted outcomes directly and construct the expected delay series.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "The native retry callable retries exceptions up to maxAttempts including the first call, invoking an injected delay hook between failed attempts with initialDelay*multiplier^i. Never sleep or perform I/O. The JSON adapter accepts scripted ok/error outcomes and returns value, error, attempts and delays; exhausted scripts raise exhausted."
+    }
+  ]
+}

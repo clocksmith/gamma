@@ -1,0 +1,60 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:678365c4d0faf7ec64cc3ad9",
+  "source_sha256": "4146fa513b5c6788fdd93549a4446a683b00fd46be14fb3fb622c24cf7346358",
+  "language": "python",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "PathKeyValueStore",
+    "constructor": {
+      "params": []
+    },
+    "methods": {
+      "create": [
+        "path",
+        "value"
+      ],
+      "set": [
+        "path",
+        "value"
+      ],
+      "get": [
+        "path"
+      ],
+      "delete": [
+        "path"
+      ]
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:678365c4d0faf7ec64cc3ad9",
+    "key": "path",
+    "candidate_design": "Map canonical paths to values plus direct-child counts, preventing parent deletion without scanning all descendants.",
+    "complexity_target": "O(path length) expected operations; O(stored path bytes) space",
+    "reference": "Scan all stored path strings to determine whether a node has descendants.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Maintain canonical absolute paths with immutable root / holding root. create succeeds only for a missing non-root path with an existing parent. set updates existing non-root values. get returns a string or null. delete removes only existing non-root leaves. Operations return booleans except get."
+    }
+  ]
+}

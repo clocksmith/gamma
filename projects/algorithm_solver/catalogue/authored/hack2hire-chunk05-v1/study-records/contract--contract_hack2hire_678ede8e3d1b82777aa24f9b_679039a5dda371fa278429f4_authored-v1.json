@@ -1,0 +1,335 @@
+{
+  "schema": "study.record.v1",
+  "kind": "contract",
+  "id": "contract:hack2hire:678ede8e3d1b82777aa24f9b:679039a5dda371fa278429f4:authored-v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+      "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+      "selector": "/problems/22"
+    }
+  ],
+  "problemId": "hack2hire:678ede8e3d1b82777aa24f9b",
+  "variantId": "hack2hire:679039a5dda371fa278429f4",
+  "variantLabel": {
+    "status": "present",
+    "value": "Design Crypto Trading System",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/22/title"
+      }
+    ]
+  },
+  "statement": {
+    "status": "present",
+    "value": "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/22/inferred_spec"
+      }
+    ]
+  },
+  "contentScope": "authored",
+  "requirements": {
+    "status": "present",
+    "value": [
+      {
+        "id": "r0",
+        "text": "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused."
+      },
+      {
+        "id": "r1",
+        "text": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate"
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/22"
+      }
+    ]
+  },
+  "constraints": {
+    "status": "present",
+    "value": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/679039a5dda371fa278429f4/constraints"
+      }
+    ]
+  },
+  "assumptions": {
+    "status": "present",
+    "value": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused."
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/679039a5dda371fa278429f4/assumptions"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "status": "present",
+    "value": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/679039a5dda371fa278429f4/clarifyingQuestions"
+      }
+    ]
+  },
+  "examples": {
+    "status": "present",
+    "value": [
+      {
+        "arguments": [
+          [
+            "CryptoTradingSystem",
+            "pause",
+            "listLive",
+            "complete",
+            "listLive"
+          ],
+          [
+            [],
+            [
+              "c"
+            ],
+            [
+              "BTC"
+            ],
+            [
+              "b"
+            ],
+            [
+              "ETH"
+            ]
+          ]
+        ],
+        "expected": [
+          null,
+          false,
+          [],
+          false,
+          []
+        ],
+        "scope": "Author-created example for inferred contract, not an official example"
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-examples.json",
+        "sha256": "b8ab5be396c9fb44506615f0516313b82cd20a4ee57790493e9004a346ad8aae",
+        "selector": "/679039a5dda371fa278429f4"
+      }
+    ]
+  },
+  "interfaces": [
+    {
+      "language": "python",
+      "kind": "class",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "kind": "class",
+          "classname": "CryptoTradingSystem",
+          "constructor": {
+            "params": []
+          },
+          "methods": {
+            "place": [
+              "id",
+              "currency",
+              "amount",
+              "timestamp",
+              "type"
+            ],
+            "pause": [
+              "id"
+            ],
+            "resume": [
+              "id"
+            ],
+            "cancel": [
+              "id"
+            ],
+            "complete": [
+              "id"
+            ],
+            "listLive": [
+              "currency"
+            ]
+          },
+          "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/22/inferred_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "spec_basis": "inferred",
+          "official_interface_available": false
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/22"
+          }
+        ]
+      }
+    },
+    {
+      "language": "javascript",
+      "kind": "class",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "kind": "class",
+          "classname": "CryptoTradingSystem",
+          "constructor": {
+            "params": []
+          },
+          "methods": {
+            "place": [
+              "id",
+              "currency",
+              "amount",
+              "timestamp",
+              "type"
+            ],
+            "pause": [
+              "id"
+            ],
+            "resume": [
+              "id"
+            ],
+            "cancel": [
+              "id"
+            ],
+            "complete": [
+              "id"
+            ],
+            "listLive": [
+              "currency"
+            ]
+          },
+          "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/22/inferred_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "spec_basis": "inferred",
+          "official_interface_available": false
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/22"
+          }
+        ]
+      }
+    }
+  ],
+  "effects": {
+    "status": "present",
+    "value": {
+      "inputMutation": "forbidden",
+      "outputAliasing": "forbidden",
+      "classPrivateStateMutation": "allowed"
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/22/effects"
+      }
+    ]
+  },
+  "comparison": {
+    "status": "present",
+    "value": {
+      "kind": "exact",
+      "wire": "Integers within JavaScript safe range are numbers; larger exact integers encode as decimal strings. Python native integers and JS BigInt remain exact."
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/22/comparison"
+      }
+    ]
+  },
+  "sources": [],
+  "native": []
+}

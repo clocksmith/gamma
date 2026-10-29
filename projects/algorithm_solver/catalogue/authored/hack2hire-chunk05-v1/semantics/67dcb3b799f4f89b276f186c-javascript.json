@@ -1,0 +1,50 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:67dcb3b799f4f89b276f186c",
+  "source_sha256": "ef03680dd4441b057c109bae2c2032d5014658d7fd0ff01a6c2245f72e54f5bf",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "referralLeaderboard",
+    "params": [
+      {
+        "name": "referrers",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "referrals",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:67dcb3b799f4f89b276f186c",
+    "key": "referrals",
+    "candidate_design": "Process leaves upward, accumulating subtree sizes, then rank only actual referrers.",
+    "complexity_target": "O(users + referrers log referrers) time, O(users) space",
+    "reference": "Recursively count descendants separately for every referrer.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "For an acyclic forest with at most one referrer per referred user and no duplicate edge, count each direct or indirect descendant. Return the top three users that actually appear as referrers, ordered by count descending then ASCII name. Returning [name,count] rows and tie rules are inferred."
+    }
+  ]
+}

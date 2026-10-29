@@ -1,0 +1,50 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:69a5fdb73d95612a1782be7b",
+  "source_sha256": "029ea67726291a42f73a3bb2e1053c72545a2aed6480794c6d689b81e72935db",
+  "language": "python",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "IPRangeIterator",
+    "constructor": {
+      "params": [
+        "start"
+      ]
+    },
+    "methods": {
+      "hasNext": [],
+      "next": []
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:69a5fdb73d95612a1782be7b",
+    "key": "ip",
+    "candidate_design": "Convert octets to an unsigned arithmetic counter; format and increment without signed bitwise operations.",
+    "complexity_target": "O(1) per next, O(1) state",
+    "reference": "Use division by explicit powers of 256 for every octet.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Iterate forward from a valid IPv4 address through 255.255.255.255 inclusive. hasNext reports availability; next returns an address or null after exhaustion, without wrapping. Python iterator protocol additionally raises StopIteration on exhaustion."
+    }
+  ]
+}

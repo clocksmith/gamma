@@ -1,0 +1,52 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:68771a6734c7f781dae2a98b",
+  "source_sha256": "2fb9d2bdf50c7e0a99576b2f3fb3c61d2333b561a884c993ed024f1a03384816",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "PaginationAPI",
+    "constructor": {
+      "params": [
+        "external"
+      ]
+    },
+    "methods": {
+      "read": [
+        "count"
+      ],
+      "fetchCount": []
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:68771a6734c7f781dae2a98b",
+    "key": "pagination",
+    "candidate_design": "Keep a current-page buffer and index, next page number and EOF flag. Fetch lazily only when a positive read needs more items.",
+    "complexity_target": "O(returned items + fetched pages); one page buffered",
+    "reference": "Flatten the known finite fixture and separately account for provider fetch boundaries.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Wrap an injected getPage(zeroBasedPage) provider. read(k) returns up to k strings without losing unused page tails. Empty pages mean terminal EOF; interior empty pages are excluded because the preview exposes no independent continuation signal. read(0) must not fetch. The trace adapter injects a finite page fixture; fetchCount is an authored observability method."
+    }
+  ]
+}

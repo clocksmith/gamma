@@ -1,0 +1,52 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:69a905b44b133b6a8f3a60a1",
+  "source_sha256": "da3f57c757c8f82552462e8d48bd42025a6648037216537653e003bb8c6cb74f",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "CryptoOrderManager",
+    "constructor": {
+      "params": []
+    },
+    "methods": {
+      "apply": [
+        "message"
+      ],
+      "status": [
+        "orderId"
+      ]
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:69a905b44b133b6a8f3a60a1",
+    "key": "orders",
+    "candidate_design": "Keep one record per ID; validate complete events before modifying fill counters. Return fresh snapshots.",
+    "complexity_target": "O(1) expected apply/status",
+    "reference": "Literal dictionary state transition model, including rejected updates.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Process ordered, at-most-once NEW/FILLED CSV events. NEW creates an order; an identical repeated NEW is a no-op, conflicting NEW returns false. FILLED requires matching side/symbol and positive quantity no greater than remaining. Invalid updates return false without mutation. status returns a fresh snapshot or null. FILLED retries are not deduplicated because the preview supplies no event ID."
+    }
+  ]
+}

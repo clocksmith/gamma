@@ -1,0 +1,60 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:68377035587136177f847c00",
+  "source_sha256": "c10b13602b3d8eb0f281fb19c8fdc1bc0ba2f7dc89ee666b98ac6d30a2209e31",
+  "language": "python",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "AccessSystem",
+    "constructor": {
+      "params": [
+        "parents"
+      ]
+    },
+    "methods": {
+      "grant": [
+        "advertiser",
+        "region"
+      ],
+      "revoke": [
+        "advertiser",
+        "region"
+      ],
+      "canAccess": [
+        "advertiser",
+        "region"
+      ]
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:68377035587136177f847c00",
+    "key": "access",
+    "candidate_design": "Flatten the tree into Euler subtree intervals. Maintain a sorted union of allowed intervals per advertiser; revoke subtracts a range, creating exceptions.",
+    "complexity_target": "O(regions) preprocessing; O(intervals) updates; O(log intervals) query",
+    "reference": "Rescan ancestor chains and explicitly union/subtract permitted node sets.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "A parent map describes a fixed rooted tree. Each advertiser begins with no permitted nodes. grant unions an entire subtree; revoke subtracts the entire subtree even after an ancestor grant; canAccess checks membership. A later grant can restore a revoked descendant."
+    }
+  ]
+}

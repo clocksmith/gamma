@@ -1,0 +1,322 @@
+{
+  "schema": "study.record.v1",
+  "kind": "contract",
+  "id": "contract:hack2hire:695d647b68e2c0dd046c4af1:695d73139c1c1f40daea737f:authored-v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+      "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+      "selector": "/problems/31"
+    }
+  ],
+  "problemId": "hack2hire:695d647b68e2c0dd046c4af1",
+  "variantId": "hack2hire:695d73139c1c1f40daea737f",
+  "variantLabel": {
+    "status": "present",
+    "value": "Design Radix Cache",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/31/title"
+      }
+    ]
+  },
+  "statement": {
+    "status": "present",
+    "value": "Store integer-sequence keys in a compressed radix tree. insert(sequence,value) overwrites exact keys; get requires an exact terminal key and returns its scalar value or null. Empty sequences are valid. Insertions must split shared compressed edges rather than changing other keys.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/31/inferred_spec"
+      }
+    ]
+  },
+  "contentScope": "authored",
+  "requirements": {
+    "status": "present",
+    "value": [
+      {
+        "id": "r0",
+        "text": "Store integer-sequence keys in a compressed radix tree. insert(sequence,value) overwrites exact keys; get requires an exact terminal key and returns its scalar value or null. Empty sequences are valid. Insertions must split shared compressed edges rather than changing other keys."
+      },
+      {
+        "id": "r1",
+        "text": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate"
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/31"
+      }
+    ]
+  },
+  "constraints": {
+    "status": "present",
+    "value": [
+      "Use valid inputs described by the inferred contract; official constraints are unavailable.",
+      "Class traces are sequential; they do not prove production concurrency.",
+      "No I/O or real sleeps; all dependencies are injected or fixture-controlled."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/695d73139c1c1f40daea737f/constraints"
+      }
+    ]
+  },
+  "assumptions": {
+    "status": "present",
+    "value": [
+      {
+        "spec_basis": "inferred",
+        "who": "Codex /root",
+        "date": "2026-10-29",
+        "basis": "Public group preview only; no exact variant body"
+      },
+      {
+        "text": "Store integer-sequence keys in a compressed radix tree. insert(sequence,value) overwrites exact keys; get requires an exact terminal key and returns its scalar value or null. Empty sequences are valid. Insertions must split shared compressed edges rather than changing other keys."
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/695d73139c1c1f40daea737f/assumptions"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "status": "present",
+    "value": [
+      "Does this paraphrase match the exact hidden variant?",
+      "What are the actual method signatures, bounds and ordering/error requirements?"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/695d73139c1c1f40daea737f/clarifyingQuestions"
+      }
+    ]
+  },
+  "examples": {
+    "status": "present",
+    "value": [
+      {
+        "arguments": [
+          [
+            "RadixCache",
+            "insert",
+            "insert",
+            "insert",
+            "get"
+          ],
+          [
+            [],
+            [
+              [
+                1,
+                2,
+                3
+              ],
+              5
+            ],
+            [
+              [
+                1,
+                2
+              ],
+              6
+            ],
+            [
+              [
+                1,
+                4
+              ],
+              7
+            ],
+            [
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          ]
+        ],
+        "expected": [
+          null,
+          null,
+          null,
+          null,
+          5
+        ],
+        "scope": "Author-created example for inferred contract, not an official example"
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-examples.json",
+        "sha256": "b8ab5be396c9fb44506615f0516313b82cd20a4ee57790493e9004a346ad8aae",
+        "selector": "/695d73139c1c1f40daea737f"
+      }
+    ]
+  },
+  "interfaces": [
+    {
+      "language": "python",
+      "kind": "class",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "kind": "class",
+          "classname": "RadixCache",
+          "constructor": {
+            "params": []
+          },
+          "methods": {
+            "insert": [
+              "sequence",
+              "value"
+            ],
+            "get": [
+              "sequence"
+            ]
+          },
+          "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/31/inferred_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "spec_basis": "inferred",
+          "official_interface_available": false
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/31"
+          }
+        ]
+      }
+    },
+    {
+      "language": "javascript",
+      "kind": "class",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "kind": "class",
+          "classname": "RadixCache",
+          "constructor": {
+            "params": []
+          },
+          "methods": {
+            "insert": [
+              "sequence",
+              "value"
+            ],
+            "get": [
+              "sequence"
+            ]
+          },
+          "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/31/inferred_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "spec_basis": "inferred",
+          "official_interface_available": false
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/31"
+          }
+        ]
+      }
+    }
+  ],
+  "effects": {
+    "status": "present",
+    "value": {
+      "inputMutation": "forbidden",
+      "outputAliasing": "forbidden",
+      "classPrivateStateMutation": "allowed"
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/31/effects"
+      }
+    ]
+  },
+  "comparison": {
+    "status": "present",
+    "value": {
+      "kind": "exact",
+      "wire": "Integers within JavaScript safe range are numbers; larger exact integers encode as decimal strings. Python native integers and JS BigInt remain exact."
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+        "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+        "selector": "/problems/31/comparison"
+      }
+    ]
+  },
+  "sources": [],
+  "native": []
+}

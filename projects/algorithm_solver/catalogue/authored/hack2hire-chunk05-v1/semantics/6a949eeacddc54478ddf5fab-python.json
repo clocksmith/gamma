@@ -1,0 +1,46 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:6a949eeacddc54478ddf5fab",
+  "source_sha256": "cc8856cbb80ed20c48a064358214bc32af741846697ba3057be225246effe6d3",
+  "language": "python",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "countGridSquares",
+    "params": [
+      {
+        "name": "queries",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:6a949eeacddc54478ddf5fab",
+    "key": "squares",
+    "candidate_design": "Expand the sum of (r-k+1)(c-k+1) and use exact integer sums of k and k squared.",
+    "complexity_target": "O(queries) arithmetic operations; integer bit cost applies",
+    "reference": "Enumerate side lengths and placement coordinates on small grids.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "For each nonnegative [rows, columns], return the exact number of axis-aligned square placements of every positive side length. Zero-sized grids have zero placements."
+    }
+  ]
+}
