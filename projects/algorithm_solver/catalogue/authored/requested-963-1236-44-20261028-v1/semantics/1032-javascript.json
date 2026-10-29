@@ -1,0 +1,65 @@
+{
+  "candidate_design": "reversed-word trie checks suffixes in a bounded recent-character buffer",
+  "comparison": "development observer under construction; no qualification",
+  "complexity_target": "build O(total word length); query O(max word length); bounded stream storage",
+  "effects": "caller-owned inputs unchanged; owned class state may change; fresh nodes for structural transformations",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "manual_interface_note": null,
+  "official_interface": {
+    "classname": "StreamChecker",
+    "constructor": {
+      "params": [
+        {
+          "name": "words",
+          "type": "string[]"
+        }
+      ]
+    },
+    "maxbytesperline": 500000,
+    "methods": [
+      {
+        "name": "query",
+        "params": [
+          {
+            "name": "letter",
+            "type": "character"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      }
+    ],
+    "params": [
+      {
+        "name": "starts",
+        "type": "integer[]"
+      },
+      {
+        "name": "ends",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "dealloc": true,
+      "type": "list<boolean>"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 1032,
+  "qualification": {
+    "reason": "Draft checkpoint; candidate execution tests pending",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "reversed-word trie checks suffixes in a bounded recent-character buffer",
+    "complexity_target": "build O(total word length); query O(max word length); bounded stream storage"
+  },
+  "source_sha256": "dc92ebbebcbea1d7c78bf5be1401b23a7cc8d0a1cb19ef1693dea5b0c31b9a53"
+}

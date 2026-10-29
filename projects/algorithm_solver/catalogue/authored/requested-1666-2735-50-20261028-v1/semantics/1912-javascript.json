@@ -1,0 +1,97 @@
+{
+  "candidate_design": "per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports",
+  "comparison": "development observer under construction; no qualification",
+  "complexity_target": "amortized O(log(E+calls)) update/heap removal, top5 query plus cleanup; O(E+calls) space",
+  "effects": "caller-owned inputs unchanged; owned class state may change; fresh nodes for structural transformations",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "manual_interface_note": null,
+  "official_interface": {
+    "classname": "MovieRentingSystem",
+    "constructor": {
+      "params": [
+        {
+          "name": "n",
+          "type": "integer"
+        },
+        {
+          "name": "entries",
+          "type": "integer[][]"
+        }
+      ]
+    },
+    "manual": false,
+    "methods": [
+      {
+        "name": "search",
+        "params": [
+          {
+            "name": "movie",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "list<integer>"
+        }
+      },
+      {
+        "name": "rent",
+        "params": [
+          {
+            "name": "shop",
+            "type": "integer"
+          },
+          {
+            "name": "movie",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "drop",
+        "params": [
+          {
+            "name": "shop",
+            "type": "integer"
+          },
+          {
+            "name": "movie",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "report",
+        "params": [],
+        "return": {
+          "type": "list<list<integer>>"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 1912,
+  "qualification": {
+    "reason": "Draft checkpoint; candidate execution tests pending",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports",
+    "complexity_target": "amortized O(log(E+calls)) update/heap removal, top5 query plus cleanup; O(E+calls) space"
+  },
+  "source_sha256": "d50d229ba86f5e3c34329c99c72d7a110cd9d1d75be83a5c1f46e1527d2e7546"
+}

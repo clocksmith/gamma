@@ -1,0 +1,92 @@
+{
+  "candidate_design": "per-index versioned values, overwrite within current snapshot, predecessor binary search",
+  "comparison": "development observer under construction; no qualification",
+  "complexity_target": "set/snap amortized O(1), get O(log history), O(length+sets) space",
+  "effects": "caller-owned inputs unchanged; owned class state may change; fresh nodes for structural transformations",
+  "entrypoint": "solve",
+  "language": "python",
+  "manual_interface_note": null,
+  "official_interface": {
+    "classname": "SnapshotArray",
+    "constructor": {
+      "params": [
+        {
+          "name": "length",
+          "type": "integer"
+        }
+      ]
+    },
+    "manual": false,
+    "maxbytesperline": 400000,
+    "methods": [
+      {
+        "name": "set",
+        "params": [
+          {
+            "name": "index",
+            "type": "integer"
+          },
+          {
+            "name": "val",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "snap",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      },
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "index",
+            "type": "integer"
+          },
+          {
+            "name": "snap_id",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "params": [
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      },
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 1146,
+  "qualification": {
+    "reason": "Draft checkpoint; candidate execution tests pending",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "per-index versioned values, overwrite within current snapshot, predecessor binary search",
+    "complexity_target": "set/snap amortized O(1), get O(log history), O(length+sets) space"
+  },
+  "source_sha256": "989ae9756ec8203a54774368e43a25ce8e3f2072de6a06e1393799ff831a5683"
+}

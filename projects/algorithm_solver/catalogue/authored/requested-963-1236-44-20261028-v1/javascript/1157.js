@@ -1,0 +1,6 @@
+"use strict";
+class MajorityChecker{constructor(arr){this.positions=new Map();this.size=1;while(this.size<arr.length)this.size*=2;this.tree=Array.from({length:2*this.size},()=>[0,0]);arr.forEach((v,i)=>{if(!this.positions.has(v))this.positions.set(v,[]);this.positions.get(v).push(i);this.tree[this.size+i]=[v,1];});for(let i=this.size-1;i;i--)this.tree[i]=this.merge(this.tree[2*i],this.tree[2*i+1]);}merge(a,b){return a[0]===b[0]?[a[0],a[1]+b[1]]:a[1]>=b[1]?[a[0],a[1]-b[1]]:[b[0],b[1]-a[1]];}query(left,right,threshold){let l=left+this.size,r=right+this.size+1,c=[0,0];while(l<r){if(l%2)c=this.merge(c,this.tree[l++]);if(r%2)c=this.merge(c,this.tree[--r]);l=Math.floor(l/2);r=Math.floor(r/2);}const value=c[0],places=this.positions.get(value)||[];function bound(target){let l=0,r=places.length;while(l<r){const m=(l+r)>>1;if(places[m]<target)l=m+1;else r=m;}return l;}return bound(right+1)-bound(left)>=threshold?value:-1;}}
+
+function solve(operations,args){const x=new MajorityChecker(...args[0]),out=[null];for(let i=1;i<operations.length;i++){const v=x[operations[i]](...args[i]);out.push(v===undefined?null:v);}return out;}
+module.exports=solve;
+module.exports.MajorityChecker=MajorityChecker;
