@@ -1,0 +1,2327 @@
+{
+ "schema": "gamma.hack2hire-chunk11-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:68e6bf5c605ab8e954684812": {
+   "constraints": [
+    "0 <= requests.length <= 1e5",
+    "sequence numbers match [0-9]{1,6} and are unique",
+    "user names match [a-z0-9]{1,10}",
+    "0 <= initialBalance <= 1e9",
+    "1 <= amount <= 1e9",
+    "every requestString is well-formed"
+   ],
+   "clarifyingQuestions": [
+    "Which request types exist besides REGISTER and FRIEND_REQUEST, and how are they formatted?",
+    "What is returned for each request: a status string, a list, or only some responses?",
+    "Can money move between users who are not friends?",
+    "What happens when a transfer would overdraw the sender?",
+    "Can a friend request be accepted twice?"
+   ],
+   "hints": [
+    "Each request touches at most two users: hash maps keyed by user name make every request O(1) after parsing.",
+    "Store pending friend requests by their sequence number so an accept request can find them directly.",
+    "Keep friendships as a set of ordered pair keys (smaller name first) and check balances before moving money."
+   ],
+   "invariants": [
+    "the sum of all balances only changes on REGISTER",
+    "a pending request is consumed by at most one accept",
+    "friendship is symmetric"
+   ],
+   "chooseWhen": [
+    "Replaying an API log with per-entity state"
+   ],
+   "tradeoffs": [
+    "String parsing dominates; a stricter request schema would let the parser reject malformed lines"
+   ],
+   "variantLabel": "Inferred single variant: request log with registrations, friend requests, transfers between friends and balances",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "553",
+        "v1/BALANCE/d9"
+       ],
+       [
+        "599",
+        "v1/REGISTER/b/5"
+       ],
+       [
+        "927",
+        "v1/TRANSFER/c/c/7"
+       ],
+       [
+        "465",
+        "v1/REGISTER/b/10"
+       ],
+       [
+        "560",
+        "v1/FRIEND_REQUEST/d9/a"
+       ],
+       [
+        "244",
+        "v1/ACCEPT_FRIEND_REQUEST/465"
+       ],
+       [
+        "341",
+        "v1/REGISTER/a/5"
+       ],
+       [
+        "377",
+        "v1/REGISTER/a/1000000000"
+       ],
+       [
+        "469",
+        "v1/TRANSFER/c/d9/1"
+       ]
+      ]
+     ],
+     "output": [
+      "ERROR",
+      "OK",
+      "ERROR",
+      "ERROR",
+      "ERROR",
+      "ERROR",
+      "OK",
+      "ERROR",
+      "ERROR"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69c7f82d21f6ab4226966a80": {
+   "constraints": [
+    "0 <= demands.length <= 1e5",
+    "1 <= demands[i] <= 1e9",
+    "0 <= x, y, z <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "How long does refuelling take per liter?",
+    "Which dispenser does a driver pick when several are free?",
+    "What should be returned: the longest wait, total wait, or the per-car waits?",
+    "What happens when no dispenser can ever serve the front car?"
+   ],
+   "hints": [
+    "Fuel only decreases, so a car that no dispenser can serve now can never be served.",
+    "Cars start in queue order, so each start time is at least the previous one.",
+    "A car starts at the earliest free-at time among dispensers with enough fuel (but not before the previous car); pick the first such dispenser free then."
+   ],
+   "invariants": [
+    "start times are non-decreasing in queue order",
+    "each dispenser serves one car at a time"
+   ],
+   "chooseWhen": [
+    "Queue simulations whose events can be computed directly instead of ticking a clock"
+   ],
+   "tradeoffs": [
+    "Event arithmetic is O(N) regardless of the amounts; a tick simulation is only feasible for tiny amounts"
+   ],
+   "variantLabel": "Inferred single variant: three-dispenser queue, longest wait",
+   "examples": [
+    {
+     "input": [
+      [],
+      0,
+      0,
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       3,
+       5,
+       4,
+       1,
+       2,
+       1,
+       5,
+       6,
+       6,
+       3,
+       4
+      ],
+      18,
+      18,
+      15
+     ],
+     "output": 11,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:699bb8776e73e4abccc9aa11": {
+   "constraints": [
+    "0 <= names.length <= 1e4",
+    "each name has 2 to 5 words of [A-Za-z]{1,12}",
+    "words separated by single spaces"
+   ],
+   "clarifyingQuestions": [
+    "How is the base username built from a full name?",
+    "Are middle names used?",
+    "How are duplicates disambiguated and how does that interact with the 8-character limit?",
+    "Can a numbered username collide with another person's base?"
+   ],
+   "hints": [
+    "Build the base once per name: first initial plus family name, lowercased, cut to 8 characters.",
+    "Duplicates need a suffix; shorten the base so base plus digits still fits in 8 characters.",
+    "Different bases can collide after truncation, so always test candidates against the set of issued names, and remember per base where the search stopped."
+   ],
+   "invariants": [
+    "issued usernames are pairwise distinct",
+    "every username has length <= 8 and matches [a-z0-9]+"
+   ],
+   "chooseWhen": [
+    "Generating short unique identifiers from free-form names"
+   ],
+   "tradeoffs": [
+    "Per-base counters avoid rescanning suffixes but need extra memory per distinct base"
+   ],
+   "variantLabel": "Inferred single variant: initial-plus-surname usernames with numeric suffixes",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "alice Lu",
+       "Bo Mary Q Abcdefghij",
+       "Al Mary Smithsonian",
+       "alice Q Mary Bcdefgh",
+       "Al Bcdefgh",
+       "Bob Lu",
+       "Bob x Q Abcdefghij",
+       "Bo Abcdefgx",
+       "Ann Bcdefgh",
+       "Bo x Smithson",
+       "Bo Smithson",
+       "Al x Mary Abcdefgx",
+       "Bo Abcdefghij",
+       "alice Abcdefghij",
+       "Bo Mary Q Abcdefghij",
+       "Bo x Q Abcdefghij"
+      ]
+     ],
+     "output": [
+      "alu",
+      "babcdefg",
+      "asmithso",
+      "abcdefgh",
+      "abcdefg1",
+      "blu",
+      "babcdef1",
+      "babcdef2",
+      "abcdefg2",
+      "bsmithso",
+      "bsmiths1",
+      "aabcdefg",
+      "babcdef3",
+      "aabcdef1",
+      "babcdef4",
+      "babcdef5"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67fda0b6d2adf72ba62b0ed9": {
+   "constraints": [
+    "0 <= intervals.length <= 1e5",
+    "9 <= start < end <= 17",
+    "1 <= n <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Are hours whole numbers, and is end the last moment the recipient is present?",
+    "Does every recipient need a gift, or do we maximise the number served?",
+    "Should the schedule itself be returned?"
+   ],
+   "hints": [
+    "Sweep the hours in order and decide who is served in each slot.",
+    "At each hour serve, among the recipients who are present, those whose availability ends soonest (exchange argument).",
+    "With only nine possible end hours, a counter per end hour replaces the heap."
+   ],
+   "invariants": [
+    "a recipient is served at most once",
+    "no slot serves more than n recipients"
+   ],
+   "chooseWhen": [
+    "Unit-length jobs with release times, deadlines and parallel machines"
+   ],
+   "tradeoffs": [
+    "The bucket counter relies on the tiny hour range; general times need a real heap"
+   ],
+   "variantLabel": "Inferred single variant: maximum deliveries with n parallel one-hour slots",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        11,
+        14
+       ],
+       [
+        16,
+        17
+       ],
+       [
+        13,
+        15
+       ],
+       [
+        10,
+        13
+       ],
+       [
+        13,
+        15
+       ],
+       [
+        16,
+        17
+       ],
+       [
+        12,
+        14
+       ],
+       [
+        14,
+        17
+       ],
+       [
+        11,
+        13
+       ],
+       [
+        10,
+        12
+       ],
+       [
+        16,
+        17
+       ],
+       [
+        15,
+        16
+       ],
+       [
+        13,
+        14
+       ],
+       [
+        11,
+        12
+       ],
+       [
+        11,
+        15
+       ],
+       [
+        9,
+        13
+       ],
+       [
+        13,
+        16
+       ],
+       [
+        11,
+        14
+       ],
+       [
+        11,
+        13
+       ],
+       [
+        15,
+        16
+       ],
+       [
+        15,
+        17
+       ],
+       [
+        9,
+        10
+       ],
+       [
+        13,
+        15
+       ],
+       [
+        14,
+        15
+       ],
+       [
+        13,
+        15
+       ],
+       [
+        15,
+        17
+       ],
+       [
+        13,
+        16
+       ],
+       [
+        12,
+        13
+       ],
+       [
+        14,
+        17
+       ]
+      ],
+      2
+     ],
+     "output": 16,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c4834e97640ed3834dc7ca": {
+   "constraints": [
+    "1 <= s.length <= 1e5",
+    "s[i] is \"X\" or 1 to 6 directives (L|R)[1-9][0-9]{0,5}?",
+    "steps <= 1e5",
+    "0 <= start < s.length"
+   ],
+   "clarifyingQuestions": [
+    "Where does the player start, and which cell is the goal?",
+    "Is the answer reachability or the number of moves?",
+    "Can a step jump over obstacles?",
+    "What if the start cell is an obstacle?"
+   ],
+   "hints": [
+    "Every move costs one, so breadth-first search gives the fewest moves.",
+    "Parse a cell's directives into (direction, step) pairs; a missing number means 1.",
+    "Skip moves that leave the board or land on \"X\"; jumping over obstacles is allowed."
+   ],
+   "invariants": [
+    "each cell is enqueued at most once",
+    "BFS distances never decrease along the queue"
+   ],
+   "chooseWhen": [
+    "Shortest paths with unit edge costs on implicit graphs"
+   ],
+   "tradeoffs": [
+    "Parsing lazily avoids work for unreachable cells but keeps the board strings alive"
+   ],
+   "variantLabel": "Inferred single variant: fewest moves to the last cell",
+   "examples": [
+    {
+     "input": [
+      [
+       "R"
+      ],
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "R9",
+       "LL1",
+       "L3R",
+       "R9R9",
+       "L2",
+       "X",
+       "X",
+       "R",
+       "LL",
+       "RL9",
+       "R2R9R9",
+       "X",
+       "RL4L4",
+       "L9",
+       "X",
+       "L1L2",
+       "L5",
+       "R2",
+       "R3",
+       "L4R3L9",
+       "X",
+       "R1L4L",
+       "L3"
+      ],
+      17
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:687eda22cdb08328ca5a8483": {
+   "constraints": [
+    "0 <= routes.length <= 2e4",
+    "0 <= queries.length <= 2e4",
+    "octets are 0..255 without leading zeros",
+    "nextHop matches [a-z0-9.-]{1,20}"
+   ],
+   "clarifyingQuestions": [
+    "When several prefixes match, which one wins?",
+    "What is returned when no route matches?",
+    "Can the base address have bits set beyond the prefix length?",
+    "Can the same prefix appear twice?"
+   ],
+   "hints": [
+    "Convert dotted quads to 32-bit integers once.",
+    "A route with length k matches exactly when the top k bits agree: compare ip >> (32 - k) with the route network >> (32 - k).",
+    "Keep one map per length and probe lengths from 32 down; the first hit is the longest match."
+   ],
+   "invariants": [
+    "each map holds only masked networks of its length",
+    "the first hit in descending length order is the longest match"
+   ],
+   "chooseWhen": [
+    "Longest-prefix lookups with few distinct prefix lengths"
+   ],
+   "tradeoffs": [
+    "A binary trie gives O(32) per query independent of the number of lengths but costs more memory per route"
+   ],
+   "variantLabel": "Inferred single variant: longest-prefix-match routing table",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "26.171.236.208/1",
+        "b.c"
+       ],
+       [
+        "191.111.32.148/32",
+        "b.c"
+       ],
+       [
+        "16.159.254.78/24",
+        "x9"
+       ],
+       [
+        "26.171.236.208/0",
+        "a"
+       ],
+       [
+        "166.16.66.168/32",
+        "b.c"
+       ],
+       [
+        "252.219.71.239/20",
+        "b.c"
+       ],
+       [
+        "26.171.236.209/24",
+        "hop-1"
+       ]
+      ],
+      [
+       "26.171.236.209",
+       "166.16.64.168",
+       "116.180.218.10",
+       "116.180.218.244",
+       "90.171.236.208"
+      ]
+     ],
+     "output": [
+      "hop-1",
+      "a",
+      "b.c",
+      "b.c",
+      "b.c"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1a0cc4c81f779dc6a2376b": {
+   "constraints": [
+    "1 <= customerFile.length, processorFile.length <= 2e4 + 1",
+    "column names match [A-Za-z0-9_]{1,10}, at most 10 per file",
+    "values match [A-Za-z0-9_.-]{0,10}",
+    "at most 1e5 output rows"
+   ],
+   "clarifyingQuestions": [
+    "Is the header part of the output?",
+    "What if a key matches several processor rows?",
+    "Is the key column repeated in the output?",
+    "What happens to rows without a match?",
+    "Can values be empty, and do empty keys match?"
+   ],
+   "hints": [
+    "Find the key column index in each header first.",
+    "Index the processor rows by key in a hash map of lists so each customer row finds its matches directly.",
+    "Emit the combined header, then customer values plus processor values for every match."
+   ],
+   "invariants": [
+    "output rows follow customer order, then processor order",
+    "every output row has the customer plus processor column count"
+   ],
+   "chooseWhen": [
+    "Equi-joins where one side fits in memory"
+   ],
+   "tradeoffs": [
+    "The hash index costs memory for the whole processor file; a sort-merge join would stream sorted inputs"
+   ],
+   "variantLabel": "Inferred level 1: inner join on one column",
+   "examples": [
+    {
+     "input": [
+      [
+       "id"
+      ],
+      [
+       "id",
+       ""
+      ],
+      "id"
+     ],
+     "output": [
+      "id,id"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "region,id,name",
+       "eu,1,ann",
+       "eu,,b.o",
+       "eu,,ann",
+       "us,2,",
+       "eu,2,b.o",
+       "eu,3,",
+       "eu,3,",
+       "eu,3,ann",
+       "eu,1,",
+       "eu,2,b.o",
+       "us,,b.o"
+      ],
+      [
+       "id,amt,ok,region",
+       "2,5,y,us",
+       "3,-1,y,eu",
+       "1,-1,y,us",
+       "2,5,y,us",
+       "1,7.5,n,eu",
+       "3,7.5,n,us",
+       ",7.5,n,us",
+       "3,-1,y,eu",
+       "1,7.5,y,us",
+       ",-1,n,us"
+      ],
+      "region"
+     ],
+     "output": [
+      "region,id,name,id,amt,ok,region",
+      "eu,1,ann,3,-1,y,eu",
+      "eu,1,ann,1,7.5,n,eu",
+      "eu,1,ann,3,-1,y,eu",
+      "eu,,b.o,3,-1,y,eu",
+      "eu,,b.o,1,7.5,n,eu",
+      "eu,,b.o,3,-1,y,eu",
+      "eu,,ann,3,-1,y,eu",
+      "eu,,ann,1,7.5,n,eu",
+      "eu,,ann,3,-1,y,eu",
+      "us,2,,2,5,y,us",
+      "us,2,,1,-1,y,us",
+      "us,2,,2,5,y,us",
+      "us,2,,3,7.5,n,us",
+      "us,2,,,7.5,n,us",
+      "us,2,,1,7.5,y,us",
+      "us,2,,,-1,n,us",
+      "eu,2,b.o,3,-1,y,eu",
+      "eu,2,b.o,1,7.5,n,eu",
+      "eu,2,b.o,3,-1,y,eu",
+      "eu,3,,3,-1,y,eu",
+      "eu,3,,1,7.5,n,eu",
+      "eu,3,,3,-1,y,eu",
+      "eu,3,,3,-1,y,eu",
+      "eu,3,,1,7.5,n,eu",
+      "eu,3,,3,-1,y,eu",
+      "eu,3,ann,3,-1,y,eu",
+      "eu,3,ann,1,7.5,n,eu",
+      "eu,3,ann,3,-1,y,eu",
+      "eu,1,,3,-1,y,eu",
+      "eu,1,,1,7.5,n,eu",
+      "eu,1,,3,-1,y,eu",
+      "eu,2,b.o,3,-1,y,eu",
+      "eu,2,b.o,1,7.5,n,eu",
+      "eu,2,b.o,3,-1,y,eu",
+      "us,,b.o,2,5,y,us",
+      "us,,b.o,1,-1,y,us",
+      "us,,b.o,2,5,y,us",
+      "us,,b.o,3,7.5,n,us",
+      "us,,b.o,,7.5,n,us",
+      "us,,b.o,1,7.5,y,us",
+      "us,,b.o,,-1,n,us"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1a0ed3c81f779dc6a2377c": {
+   "constraints": [
+    "1 <= customerFile.length, processorFile.length <= 2e4 + 1",
+    "column names match [A-Za-z0-9_]{1,10}, at most 10 per file",
+    "values match [A-Za-z0-9_.-]{0,10}",
+    "at most 1e5 output rows"
+   ],
+   "clarifyingQuestions": [
+    "Is the header part of the output?",
+    "What if a key matches several processor rows?",
+    "Is the key column repeated in the output?",
+    "What happens to rows without a match?",
+    "Can values be empty, and do empty keys match?"
+   ],
+   "hints": [
+    "Start from the level-1 hash index of processor rows.",
+    "A customer row with no matches still produces one row.",
+    "Padding with m empty values is just m extra commas."
+   ],
+   "invariants": [
+    "every customer row appears at least once",
+    "output rows follow customer order, then processor order"
+   ],
+   "chooseWhen": [
+    "Joins that must keep every row of the primary table"
+   ],
+   "tradeoffs": [
+    "Padded rows lose the distinction between a missing match and genuinely empty values"
+   ],
+   "variantLabel": "Inferred level 2: left join with empty padding",
+   "examples": [
+    {
+     "input": [
+      [
+       "id"
+      ],
+      [
+       "id",
+       ""
+      ],
+      "id"
+     ],
+     "output": [
+      "id,id"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "id,name,region",
+       "1,,us",
+       "1,b.o,eu",
+       "2,b.o,eu",
+       ",ann,us",
+       "2,ann,eu",
+       ",ann,us",
+       "2,ann,eu",
+       "2,,us",
+       "1,ann,eu"
+      ],
+      [
+       "id,region,amt,ok",
+       "2,us,5,y",
+       "3,eu,5,y",
+       "3,us,7.5,n",
+       ",us,7.5,n",
+       "1,us,5,n",
+       "2,eu,5,y",
+       "3,us,-1,n",
+       "3,eu,7.5,n",
+       "2,eu,-1,n"
+      ],
+      "region"
+     ],
+     "output": [
+      "id,name,region,id,region,amt,ok",
+      "1,,us,2,us,5,y",
+      "1,,us,3,us,7.5,n",
+      "1,,us,,us,7.5,n",
+      "1,,us,1,us,5,n",
+      "1,,us,3,us,-1,n",
+      "1,b.o,eu,3,eu,5,y",
+      "1,b.o,eu,2,eu,5,y",
+      "1,b.o,eu,3,eu,7.5,n",
+      "1,b.o,eu,2,eu,-1,n",
+      "2,b.o,eu,3,eu,5,y",
+      "2,b.o,eu,2,eu,5,y",
+      "2,b.o,eu,3,eu,7.5,n",
+      "2,b.o,eu,2,eu,-1,n",
+      ",ann,us,2,us,5,y",
+      ",ann,us,3,us,7.5,n",
+      ",ann,us,,us,7.5,n",
+      ",ann,us,1,us,5,n",
+      ",ann,us,3,us,-1,n",
+      "2,ann,eu,3,eu,5,y",
+      "2,ann,eu,2,eu,5,y",
+      "2,ann,eu,3,eu,7.5,n",
+      "2,ann,eu,2,eu,-1,n",
+      ",ann,us,2,us,5,y",
+      ",ann,us,3,us,7.5,n",
+      ",ann,us,,us,7.5,n",
+      ",ann,us,1,us,5,n",
+      ",ann,us,3,us,-1,n",
+      "2,ann,eu,3,eu,5,y",
+      "2,ann,eu,2,eu,5,y",
+      "2,ann,eu,3,eu,7.5,n",
+      "2,ann,eu,2,eu,-1,n",
+      "2,,us,2,us,5,y",
+      "2,,us,3,us,7.5,n",
+      "2,,us,,us,7.5,n",
+      "2,,us,1,us,5,n",
+      "2,,us,3,us,-1,n",
+      "1,ann,eu,3,eu,5,y",
+      "1,ann,eu,2,eu,5,y",
+      "1,ann,eu,3,eu,7.5,n",
+      "1,ann,eu,2,eu,-1,n"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1a0ee5c81f779dc6a2377d": {
+   "constraints": [
+    "1 <= customerFile.length, processorFile.length <= 2e4 + 1",
+    "column names match [A-Za-z0-9_]{1,10}, at most 10 per file",
+    "values match [A-Za-z0-9_.-]{0,10}",
+    "at most 1e5 output rows"
+   ],
+   "clarifyingQuestions": [
+    "Is the header part of the output?",
+    "What if a key matches several processor rows?",
+    "Is the key column repeated in the output?",
+    "What happens to rows without a match?",
+    "Can values be empty, and do empty keys match?"
+   ],
+   "hints": [
+    "Do the left join first.",
+    "Mark every processor row that was used.",
+    "Append the unused processor rows, each preceded by empty customer values."
+   ],
+   "invariants": [
+    "every input data row appears in at least one output row",
+    "unmatched processor rows come last, in processor order"
+   ],
+   "chooseWhen": [
+    "Reconciliation between two sources where either side may be missing records"
+   ],
+   "tradeoffs": [
+    "Needs a used flag per processor row; output order depends on the chosen convention"
+   ],
+   "variantLabel": "Inferred level 3: full outer join",
+   "examples": [
+    {
+     "input": [
+      [
+       "id"
+      ],
+      [
+       "id",
+       ""
+      ],
+      "id"
+     ],
+     "output": [
+      "id,id",
+      ","
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "region,name,id",
+       "eu,ann,2",
+       "us,b.o,1",
+       "eu,,",
+       "eu,b.o,2",
+       "eu,,",
+       "eu,ann,3",
+       "eu,,2",
+       "us,,",
+       "eu,b.o,2"
+      ],
+      [
+       "ok,amt,id,region",
+       "y,-1,2,us",
+       "n,7.5,2,us",
+       "y,5,,eu",
+       "y,7.5,2,eu",
+       "y,5,3,eu",
+       "n,7.5,2,us",
+       "n,7.5,2,us",
+       "n,-1,3,eu",
+       "n,5,3,us",
+       "y,7.5,,eu",
+       "n,5,2,us"
+      ],
+      "region"
+     ],
+     "output": [
+      "region,name,id,ok,amt,id,region",
+      "eu,ann,2,y,5,,eu",
+      "eu,ann,2,y,7.5,2,eu",
+      "eu,ann,2,y,5,3,eu",
+      "eu,ann,2,n,-1,3,eu",
+      "eu,ann,2,y,7.5,,eu",
+      "us,b.o,1,y,-1,2,us",
+      "us,b.o,1,n,7.5,2,us",
+      "us,b.o,1,n,7.5,2,us",
+      "us,b.o,1,n,7.5,2,us",
+      "us,b.o,1,n,5,3,us",
+      "us,b.o,1,n,5,2,us",
+      "eu,,,y,5,,eu",
+      "eu,,,y,7.5,2,eu",
+      "eu,,,y,5,3,eu",
+      "eu,,,n,-1,3,eu",
+      "eu,,,y,7.5,,eu",
+      "eu,b.o,2,y,5,,eu",
+      "eu,b.o,2,y,7.5,2,eu",
+      "eu,b.o,2,y,5,3,eu",
+      "eu,b.o,2,n,-1,3,eu",
+      "eu,b.o,2,y,7.5,,eu",
+      "eu,,,y,5,,eu",
+      "eu,,,y,7.5,2,eu",
+      "eu,,,y,5,3,eu",
+      "eu,,,n,-1,3,eu",
+      "eu,,,y,7.5,,eu",
+      "eu,ann,3,y,5,,eu",
+      "eu,ann,3,y,7.5,2,eu",
+      "eu,ann,3,y,5,3,eu",
+      "eu,ann,3,n,-1,3,eu",
+      "eu,ann,3,y,7.5,,eu",
+      "eu,,2,y,5,,eu",
+      "eu,,2,y,7.5,2,eu",
+      "eu,,2,y,5,3,eu",
+      "eu,,2,n,-1,3,eu",
+      "eu,,2,y,7.5,,eu",
+      "us,,,y,-1,2,us",
+      "us,,,n,7.5,2,us",
+      "us,,,n,7.5,2,us",
+      "us,,,n,7.5,2,us",
+      "us,,,n,5,3,us",
+      "us,,,n,5,2,us",
+      "eu,b.o,2,y,5,,eu",
+      "eu,b.o,2,y,7.5,2,eu",
+      "eu,b.o,2,y,5,3,eu",
+      "eu,b.o,2,n,-1,3,eu",
+      "eu,b.o,2,y,7.5,,eu"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1a0f0dc81f779dc6a2377e": {
+   "constraints": [
+    "1 <= customerFile.length, processorFile.length <= 2e4 + 1",
+    "column names match [A-Za-z0-9_]{1,10}, at most 10 per file",
+    "1 <= fieldNames.length <= 3",
+    "values match [A-Za-z0-9_.-]{0,10}",
+    "at most 1e5 output rows"
+   ],
+   "clarifyingQuestions": [
+    "Is the header part of the output?",
+    "What if a key matches several processor rows?",
+    "Is the key column repeated in the output?",
+    "What happens to rows without a match?",
+    "Can values be empty, and do empty keys match?"
+   ],
+   "hints": [
+    "Look up the index of every key column in each header.",
+    "Build one hash key per row from all key values; a separator that cannot occur in values keeps keys unambiguous.",
+    "Then join exactly as with a single column."
+   ],
+   "invariants": [
+    "rows match only when every key column agrees",
+    "output rows follow customer order, then processor order"
+   ],
+   "chooseWhen": [
+    "Joins on multi-column keys"
+   ],
+   "tradeoffs": [
+    "String keys are simple; a tuple key avoids building strings but is slower in JavaScript"
+   ],
+   "variantLabel": "Inferred level 4: inner join on a composite key",
+   "examples": [
+    {
+     "input": [
+      [
+       "id"
+      ],
+      [
+       "id",
+       ""
+      ],
+      [
+       "id"
+      ]
+     ],
+     "output": [
+      "id,id"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "id,name,region",
+       ",b.o,eu",
+       ",b.o,us",
+       "1,,us",
+       ",b.o,us",
+       "2,b.o,eu",
+       "1,,eu",
+       "3,,eu",
+       ",ann,eu",
+       "1,ann,us"
+      ],
+      [
+       "amt,ok,id,region",
+       "7.5,y,3,us",
+       "7.5,n,,eu",
+       "7.5,y,,us",
+       "-1,n,3,us",
+       "-1,n,,us",
+       "7.5,n,2,us",
+       "-1,n,2,eu",
+       "-1,y,2,eu",
+       "5,y,1,us",
+       "7.5,n,,us",
+       "7.5,n,2,eu"
+      ],
+      [
+       "region",
+       "id"
+      ]
+     ],
+     "output": [
+      "id,name,region,amt,ok,id,region",
+      ",b.o,eu,7.5,n,,eu",
+      ",b.o,us,7.5,y,,us",
+      ",b.o,us,-1,n,,us",
+      ",b.o,us,7.5,n,,us",
+      "1,,us,5,y,1,us",
+      ",b.o,us,7.5,y,,us",
+      ",b.o,us,-1,n,,us",
+      ",b.o,us,7.5,n,,us",
+      "2,b.o,eu,-1,n,2,eu",
+      "2,b.o,eu,-1,y,2,eu",
+      "2,b.o,eu,7.5,n,2,eu",
+      ",ann,eu,7.5,n,,eu",
+      "1,ann,us,5,y,1,us"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68a61ebd3a368733bb10424d": {
+   "constraints": [
+    "up to 2500 calls",
+    "ids match [a-z0-9]{1,8}",
+    "each dependency list has 0 to 10 distinct ids"
+   ],
+   "clarifyingQuestions": [
+    "Can a task list prerequisites that do not exist yet?",
+    "What happens when a new task would create a cycle?",
+    "Which order is returned when several are valid?",
+    "Are tasks with missing prerequisites included?"
+   ],
+   "hints": [
+    "Adding id with prerequisites d creates edges d -> id; a cycle appears exactly when some d already depends on id transitively.",
+    "Search from id along existing dependents (tasks that listed id) and reject if a prerequisite of the new task is reached.",
+    "For the order, run Kahn's algorithm with a min-heap; tasks waiting on a missing prerequisite never reach in-degree zero, nor do their dependents."
+   ],
+   "invariants": [
+    "the stored graph is always acyclic",
+    "the returned order lists a task only after all its prerequisites"
+   ],
+   "chooseWhen": [
+    "Build systems and schedulers that accept tasks over time"
+   ],
+   "tradeoffs": [
+    "Per-add cycle checks can cost O(V) each; batching additions and checking once is cheaper when rejection details are not needed"
+   ],
+   "variantLabel": "Inferred single variant: incremental DAG with cycle rejection and smallest-id order",
+   "examples": [
+    {
+     "input": [
+      [
+       "TaskScheduler"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TaskScheduler",
+       "addTask",
+       "addTask",
+       "addTask",
+       "getExecutionOrder",
+       "addTask",
+       "addTask",
+       "getExecutionOrder",
+       "getExecutionOrder",
+       "addTask",
+       "getExecutionOrder"
+      ],
+      [
+       [],
+       [
+        "b",
+        []
+       ],
+       [
+        "c",
+        [
+         "b",
+         "f",
+         "c"
+        ]
+       ],
+       [
+        "b",
+        []
+       ],
+       [],
+       [
+        "c",
+        [
+         "c"
+        ]
+       ],
+       [
+        "b",
+        [
+         "f",
+         "e"
+        ]
+       ],
+       [],
+       [],
+       [
+        "g1",
+        [
+         "a",
+         "g1",
+         "b"
+        ]
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false,
+      false,
+      [
+       "b"
+      ],
+      false,
+      false,
+      [
+       "b"
+      ],
+      [
+       "b"
+      ],
+      false,
+      [
+       "b"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678dc780fa7ce9616e190fb7": {
+   "constraints": [
+    "0 <= nums.length <= 1e5",
+    "-1e9 <= nums[i] <= 1e9",
+    "filterName is one of even, odd, positive, negative, nonzero",
+    "up to 2e5 calls; next only when an element remains"
+   ],
+   "clarifyingQuestions": [
+    "How is the filter passed: a function, a predicate object or a name?",
+    "What should next() do when nothing is left?",
+    "Should elements be filtered eagerly or lazily?",
+    "May the iterator copy or modify the list?"
+   ],
+   "hints": [
+    "Keep a cursor into the list instead of copying it.",
+    "hasNext skips elements the predicate rejects and stops at the next accepted one without consuming it.",
+    "next calls hasNext first, then returns the element at the cursor and advances past it."
+   ],
+   "invariants": [
+    "the cursor never moves backwards",
+    "every returned element satisfies the predicate"
+   ],
+   "chooseWhen": [
+    "Streaming filters over large or lazy sources"
+   ],
+   "tradeoffs": [
+    "A lazy cursor keeps O(1) memory but repeats predicate work if hasNext is called many times without caching"
+   ],
+   "variantLabel": "Inferred single variant: lazy filtering iterator with named predicates",
+   "examples": [
+    {
+     "input": [
+      [
+       "FilterIterator"
+      ],
+      [
+       [
+        [
+         -2
+        ],
+        "even"
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "FilterIterator",
+       "hasNext",
+       "next",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "next",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "next",
+       "hasNext",
+       "hasNext"
+      ],
+      [
+       [
+        [
+         -4,
+         -5,
+         -5,
+         -1,
+         -1,
+         2,
+         -2,
+         3,
+         3,
+         -1
+        ],
+        "even"
+       ],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      -4,
+      true,
+      true,
+      true,
+      true,
+      2,
+      true,
+      true,
+      true,
+      true,
+      true,
+      -2,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a14d69a7b0582b352787fa8": {
+   "constraints": [
+    "1 <= nums.length <= 1e5",
+    "0 <= nums[i] <= 1e5",
+    "0 <= index < nums.length"
+   ],
+   "clarifyingQuestions": [
+    "How far does a jump go?",
+    "How does currentHeight change after landing?",
+    "When does the walk end, and what is returned?",
+    "What if the walk never ends?"
+   ],
+   "hints": [
+    "After the first jump the height always equals nums at the current position, so the state is just (position, direction).",
+    "There are only 2n states; a repeated state means the walk loops forever.",
+    "Record states in a hash set (or a 2n-entry visited array) and stop at the first repeat or the first jump that leaves the array."
+   ],
+   "invariants": [
+    "the state (position, direction) determines the rest of the walk",
+    "the walk makes at most 2n successful jumps before a state repeats"
+   ],
+   "chooseWhen": [
+    "Deterministic walks that may cycle"
+   ],
+   "tradeoffs": [
+    "A visited array is faster than a hash set but costs 2n entries even for short walks"
+   ],
+   "variantLabel": "Inferred single variant: alternating jumps of the current height",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      0
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       3,
+       1,
+       3,
+       4,
+       2,
+       6,
+       1,
+       1,
+       0,
+       3,
+       3,
+       4,
+       2,
+       3,
+       0,
+       2,
+       6,
+       4,
+       0,
+       5,
+       3,
+       2,
+       3
+      ],
+      1
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68099e1fcbb5948f87732b56": {
+   "constraints": [
+    "up to 1e5 calls",
+    "keys match [a-z]{1,10}",
+    "prefixes match [a-z]{0,10}",
+    "-1e9 <= value <= 1e9",
+    "set only for absent keys, update only for present keys"
+   ],
+   "clarifyingQuestions": [
+    "What does prefix search return: keys, values or pairs, and in which order?",
+    "How are the error cases reported?",
+    "Does the empty prefix match everything?",
+    "Should deleted keys leave trie nodes behind?"
+   ],
+   "hints": [
+    "A hash map answers get, set, update and delete; a trie answers prefix questions.",
+    "Store a live-key count in every trie node so empty branches can be pruned on delete.",
+    "Visit children in letter order with an explicit stack to produce values in key order."
+   ],
+   "invariants": [
+    "every trie node on a live key's path has a positive count",
+    "the hash map and the trie hold the same key set"
+   ],
+   "chooseWhen": [
+    "Autocomplete-style lookups over a mutable key set"
+   ],
+   "tradeoffs": [
+    "The trie duplicates keys already in the hash map; a sorted array is smaller but makes inserts O(n)"
+   ],
+   "variantLabel": "Inferred single variant: key-value store with ordered prefix search",
+   "examples": [
+    {
+     "input": [
+      [
+       "KVStore",
+       "set"
+      ],
+      [
+       [],
+       [
+        "abc",
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "KVStore",
+       "get",
+       "set",
+       "set",
+       "prefixSearch",
+       "prefixSearch",
+       "prefixSearch",
+       "prefixSearch",
+       "get",
+       "deleteKey",
+       "prefixSearch",
+       "update",
+       "prefixSearch",
+       "deleteKey"
+      ],
+      [
+       [],
+       [
+        "aa"
+       ],
+       [
+        "ba",
+        2
+       ],
+       [
+        "aa",
+        -5
+       ],
+       [
+        "ba"
+       ],
+       [
+        "ba"
+       ],
+       [
+        ""
+       ],
+       [
+        "c"
+       ],
+       [
+        "bab"
+       ],
+       [
+        "ab"
+       ],
+       [
+        "a"
+       ],
+       [
+        "ba",
+        -7
+       ],
+       [
+        "ab"
+       ],
+       [
+        "ba"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1,
+      null,
+      null,
+      [
+       2
+      ],
+      [
+       2
+      ],
+      [
+       -5,
+       2
+      ],
+      [],
+      -1,
+      null,
+      [
+       -5
+      ],
+      null,
+      [],
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67e3915487527b3f41af78b6": {
+   "constraints": [
+    "0 <= digits.length <= 60",
+    "the number of results is at most 2e5"
+   ],
+   "clarifyingQuestions": [
+    "Which letter does a run of presses produce, and can a group be longer than the letter list?",
+    "Are separate presses of the same digit allowed inside a run?",
+    "In which order should results be returned?",
+    "What is the answer for an empty input?"
+   ],
+   "hints": [
+    "Only runs of the same digit interact; each run is cut into groups of size 1 to the letter count.",
+    "Backtrack over the string: at position i choose a group size g while the next g characters are the same digit.",
+    "Trying smaller groups first emits smaller letters first, so the output is already in lexicographic order."
+   ],
+   "invariants": [
+    "a group never crosses a change of digit",
+    "two different groupings never give the same string"
+   ],
+   "chooseWhen": [
+    "Enumerating all decodings of a run-length style code"
+   ],
+   "tradeoffs": [
+    "The output can be exponential in the input length, so bounds on the result size matter more than time per result"
+   ],
+   "variantLabel": "Inferred single variant: multi-press keypad decodings",
+   "examples": [
+    {
+     "input": [
+      ""
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "3366111222"
+     ],
+     "output": [
+      "GGPPAAADDD",
+      "GGPPAAADE",
+      "GGPPAAAED",
+      "GGPPAAAF",
+      "GGPPABDDD",
+      "GGPPABDE",
+      "GGPPABED",
+      "GGPPABF",
+      "GGPPBADDD",
+      "GGPPBADE",
+      "GGPPBAED",
+      "GGPPBAF",
+      "GGPPCDDD",
+      "GGPPCDE",
+      "GGPPCED",
+      "GGPPCF",
+      "GGQAAADDD",
+      "GGQAAADE",
+      "GGQAAAED",
+      "GGQAAAF",
+      "GGQABDDD",
+      "GGQABDE",
+      "GGQABED",
+      "GGQABF",
+      "GGQBADDD",
+      "GGQBADE",
+      "GGQBAED",
+      "GGQBAF",
+      "GGQCDDD",
+      "GGQCDE",
+      "GGQCED",
+      "GGQCF",
+      "HPPAAADDD",
+      "HPPAAADE",
+      "HPPAAAED",
+      "HPPAAAF",
+      "HPPABDDD",
+      "HPPABDE",
+      "HPPABED",
+      "HPPABF",
+      "HPPBADDD",
+      "HPPBADE",
+      "HPPBAED",
+      "HPPBAF",
+      "HPPCDDD",
+      "HPPCDE",
+      "HPPCED",
+      "HPPCF",
+      "HQAAADDD",
+      "HQAAADE",
+      "HQAAAED",
+      "HQAAAF",
+      "HQABDDD",
+      "HQABDE",
+      "HQABED",
+      "HQABF",
+      "HQBADDD",
+      "HQBADE",
+      "HQBAED",
+      "HQBAF",
+      "HQCDDD",
+      "HQCDE",
+      "HQCED",
+      "HQCF"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67709b6d366afdc1233e4ffc": {
+   "constraints": [
+    "1 <= nodes per tree <= 1e5",
+    "-1e9 <= value <= 1e9",
+    "values distinct within a tree",
+    "level-order arrays up to 2e5 entries"
+   ],
+   "clarifyingQuestions": [
+    "How are the trees given?",
+    "Can values repeat inside one tree?",
+    "What if -1 itself is the common value?",
+    "Is recursion depth a concern for skewed trees?"
+   ],
+   "hints": [
+    "A reverse in-order traversal visits a BST from largest to smallest.",
+    "Walk both trees downwards at once: when the current values differ, advance the tree with the larger one.",
+    "Use explicit stacks so a 1e5-deep skewed tree does not overflow the call stack."
+   ],
+   "invariants": [
+    "both cursors only move to smaller values",
+    "no common value larger than both current values exists"
+   ],
+   "chooseWhen": [
+    "Merging sorted sequences stored as trees"
+   ],
+   "tradeoffs": [
+    "The two-cursor walk needs only O(h) stack, but decoding the level-order input already costs O(n)"
+   ],
+   "variantLabel": "Inferred single variant: largest shared value of two BSTs",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      [
+       2
+      ]
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -3,
+       -20,
+       13,
+       null,
+       -9,
+       4,
+       16,
+       null,
+       -5,
+       -1,
+       8,
+       14,
+       20,
+       null,
+       null,
+       null,
+       1,
+       null,
+       null,
+       null,
+       null,
+       17,
+       null,
+       null,
+       null,
+       null,
+       18
+      ],
+      [
+       16,
+       -4,
+       18,
+       -8,
+       14,
+       null,
+       null,
+       -13,
+       -5,
+       -3,
+       null,
+       -14,
+       -11,
+       null,
+       null,
+       null,
+       8,
+       -20,
+       null,
+       null,
+       null,
+       2,
+       13,
+       null,
+       null,
+       -2,
+       3,
+       null,
+       null,
+       null,
+       0,
+       null,
+       6
+      ]
+     ],
+     "output": 18,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69ae2fec4b133b6a8f3a7345": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "0 <= connections.length <= n - 1",
+    "no self-pair, no repeated pair, no cycle"
+   ],
+   "clarifyingQuestions": [
+    "What are the conditions on the relationships: a tree, a forest, bounded degree?",
+    "Do people with no connections count?",
+    "Is the size enough or must the group be listed?"
+   ],
+   "hints": [
+    "On a forest each component can be solved independently from any root.",
+    "For a vertex v, take(v) = 1 + sum of skip(child) and skip(v) = sum of max(take(child), skip(child)).",
+    "Process vertices in reverse depth-first order with an explicit stack to avoid recursion limits."
+   ],
+   "invariants": [
+    "take(v) never includes two adjacent people",
+    "children are finished before their parent"
+   ],
+   "chooseWhen": [
+    "Independent-set questions on trees"
+   ],
+   "tradeoffs": [
+    "The DP relies on the forest structure; the general graph problem needs exponential search"
+   ],
+   "variantLabel": "Inferred single variant: maximum independent set in a forest",
+   "examples": [
+    {
+     "input": [
+      1,
+      []
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      13,
+      [
+       [
+        6,
+        3
+       ],
+       [
+        11,
+        8
+       ],
+       [
+        3,
+        11
+       ],
+       [
+        5,
+        3
+       ],
+       [
+        0,
+        2
+       ],
+       [
+        12,
+        4
+       ],
+       [
+        5,
+        4
+       ],
+       [
+        1,
+        10
+       ],
+       [
+        9,
+        11
+       ],
+       [
+        9,
+        1
+       ],
+       [
+        11,
+        7
+       ]
+      ]
+     ],
+     "output": 8,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6910e7e971ea59cda5a81ac4": {
+   "constraints": [
+    "1 <= nums.length <= 2e4",
+    "-1e9 <= nums[i] <= 1e9",
+    "1 <= k <= w <= nums.length",
+    "(n - w + 1) * k <= 2e5"
+   ],
+   "clarifyingQuestions": [
+    "In which order should the k elements be listed?",
+    "Do equal values count separately?",
+    "What if k > w?"
+   ],
+   "hints": [
+    "Each slide changes the window by one element in and one out.",
+    "A sorted copy of the window turns \"k largest\" into reading its last k slots.",
+    "Binary search finds where to insert the new element and where the leaving value sits."
+   ],
+   "invariants": [
+    "the maintained array is the current window in ascending order",
+    "each output list is non-increasing"
+   ],
+   "chooseWhen": [
+    "Repeated order-statistic queries on a moving window"
+   ],
+   "tradeoffs": [
+    "Array insertion moves O(w) items per step; balanced trees or heaps give O(log w) at a higher constant"
+   ],
+   "variantLabel": "Inferred single variant: top-k per sliding window",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1,
+      1
+     ],
+     "output": [
+      [
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       0,
+       0,
+       5,
+       -4,
+       2,
+       -3,
+       -2,
+       -3,
+       4,
+       -2,
+       -5,
+       5,
+       2,
+       0,
+       -4,
+       4,
+       -1,
+       -4,
+       -2,
+       -4,
+       -5,
+       -1,
+       0,
+       -4,
+       4,
+       -4,
+       3,
+       1,
+       2,
+       -1
+      ],
+      12,
+      18
+     ],
+     "output": [
+      [
+       5,
+       5,
+       4,
+       4,
+       2,
+       2,
+       0,
+       0,
+       0,
+       -1,
+       -2,
+       -2
+      ],
+      [
+       5,
+       5,
+       4,
+       4,
+       2,
+       2,
+       0,
+       0,
+       -1,
+       -2,
+       -2,
+       -2
+      ],
+      [
+       5,
+       5,
+       4,
+       4,
+       2,
+       2,
+       0,
+       -1,
+       -2,
+       -2,
+       -2,
+       -3
+      ],
+      [
+       5,
+       4,
+       4,
+       2,
+       2,
+       0,
+       -1,
+       -2,
+       -2,
+       -2,
+       -3,
+       -3
+      ],
+      [
+       5,
+       4,
+       4,
+       2,
+       2,
+       0,
+       -1,
+       -1,
+       -2,
+       -2,
+       -2,
+       -3
+      ],
+      [
+       5,
+       4,
+       4,
+       2,
+       0,
+       0,
+       -1,
+       -1,
+       -2,
+       -2,
+       -2,
+       -3
+      ],
+      [
+       5,
+       4,
+       4,
+       2,
+       0,
+       0,
+       -1,
+       -1,
+       -2,
+       -2,
+       -2,
+       -3
+      ],
+      [
+       5,
+       4,
+       4,
+       4,
+       2,
+       0,
+       0,
+       -1,
+       -1,
+       -2,
+       -2,
+       -3
+      ],
+      [
+       5,
+       4,
+       4,
+       4,
+       2,
+       0,
+       0,
+       -1,
+       -1,
+       -2,
+       -2,
+       -4
+      ],
+      [
+       5,
+       4,
+       4,
+       3,
+       2,
+       0,
+       0,
+       -1,
+       -1,
+       -2,
+       -2,
+       -4
+      ],
+      [
+       5,
+       4,
+       4,
+       3,
+       2,
+       1,
+       0,
+       0,
+       -1,
+       -1,
+       -2,
+       -4
+      ],
+      [
+       5,
+       4,
+       4,
+       3,
+       2,
+       2,
+       1,
+       0,
+       0,
+       -1,
+       -1,
+       -2
+      ],
+      [
+       4,
+       4,
+       3,
+       2,
+       2,
+       1,
+       0,
+       0,
+       -1,
+       -1,
+       -1,
+       -2
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a4fb4e3d95612a1782bbd2": {
+   "constraints": [
+    "0 <= points.length <= 500",
+    "0 <= x, y <= 4e4",
+    "points distinct"
+   ],
+   "clarifyingQuestions": [
+    "What is returned when no rectangle exists?",
+    "Must the sides be parallel to the axes?",
+    "Do the four corners have to be input points?",
+    "How large can coordinates get, and can the area overflow?"
+   ],
+   "hints": [
+    "An axis-aligned rectangle is two columns sharing the same pair of y values.",
+    "Sweep columns by increasing x; for each pair (y1, y2) the widest rectangle uses the first column where the pair appeared.",
+    "Track the best (x - firstX) * (y2 - y1)."
+   ],
+   "invariants": [
+    "firstX of a pair never changes once set",
+    "every scored rectangle has four input corners"
+   ],
+   "chooseWhen": [
+    "Rectangle detection on lattice points"
+   ],
+   "tradeoffs": [
+    "The column-pair map can hold O(n^2) entries when columns are tall"
+   ],
+   "variantLabel": "Inferred level 1: largest axis-aligned rectangle",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        18000,
+        0
+       ],
+       [
+        30000,
+        24000
+       ],
+       [
+        24000,
+        12000
+       ],
+       [
+        12000,
+        18000
+       ],
+       [
+        6000,
+        24000
+       ],
+       [
+        12000,
+        24000
+       ],
+       [
+        30000,
+        30000
+       ],
+       [
+        30000,
+        6000
+       ],
+       [
+        18000,
+        6000
+       ],
+       [
+        24000,
+        30000
+       ],
+       [
+        18000,
+        24000
+       ],
+       [
+        24000,
+        24000
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        12000,
+        12000
+       ],
+       [
+        30000,
+        0
+       ],
+       [
+        6000,
+        30000
+       ],
+       [
+        0,
+        30000
+       ],
+       [
+        24000,
+        0
+       ]
+      ]
+     ],
+     "output": 900000000,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b62ed7666464810ca36212": {
+   "constraints": [
+    "0 <= points.length <= 300",
+    "0 <= x, y <= 4e4",
+    "points distinct"
+   ],
+   "clarifyingQuestions": [
+    "What is returned when no rectangle exists?",
+    "Must the sides be parallel to the axes?",
+    "Do the four corners have to be input points?",
+    "How large can coordinates get, and can the area overflow?"
+   ],
+   "hints": [
+    "A quadrilateral is a rectangle exactly when its diagonals share a midpoint and a length.",
+    "Group point pairs by (x1 + x2, y1 + y2, squared distance); any two pairs in a group are the diagonals of a rectangle.",
+    "With diagonal (p1, p2) and other corners a, b, the area is |(a - p1) x (b - p1)|, an exact integer."
+   ],
+   "invariants": [
+    "pairs in a group share midpoint and length",
+    "areas are computed with integers only"
+   ],
+   "chooseWhen": [
+    "Geometry over lattice points where exact integer arithmetic is possible"
+   ],
+   "tradeoffs": [
+    "Grouping by exact integer keys avoids floating-point error but can store O(n^2) pairs"
+   ],
+   "variantLabel": "Inferred level 2: largest rectangle in any orientation",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        6000
+       ],
+       [
+        12000,
+        30000
+       ],
+       [
+        18000,
+        18000
+       ],
+       [
+        30000,
+        12000
+       ],
+       [
+        24000,
+        12000
+       ],
+       [
+        12000,
+        6000
+       ],
+       [
+        6000,
+        18000
+       ],
+       [
+        0,
+        30000
+       ],
+       [
+        12000,
+        12000
+       ],
+       [
+        18000,
+        12000
+       ],
+       [
+        18000,
+        0
+       ],
+       [
+        18000,
+        6000
+       ],
+       [
+        24000,
+        0
+       ],
+       [
+        30000,
+        30000
+       ]
+      ]
+     ],
+     "output": 324000000,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

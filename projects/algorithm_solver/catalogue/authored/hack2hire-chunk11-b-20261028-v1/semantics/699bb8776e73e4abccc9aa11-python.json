@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:699bb8776e73e4abccc9aa11",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "names"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "generateUsernames",
+  "params": [
+   {
+    "name": "names",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each name try k = 0, 1, 2, ... and test every candidate against a plain list of the usernames already issued",
+  "candidate_design": "set of issued usernames plus a per-base counter remembering the last suffix tried, so repeated bases resume where they stopped",
+  "complexity_target": "O(n * 8) expected time beyond suffix probing/O(n) space"
+ },
+ "source_sha256": "6a5c27c6bca750a6606bcbed79dbc579baebc812695816959bee3bb75c349a05",
+ "wrapper": "Solution.generateUsernames"
+}

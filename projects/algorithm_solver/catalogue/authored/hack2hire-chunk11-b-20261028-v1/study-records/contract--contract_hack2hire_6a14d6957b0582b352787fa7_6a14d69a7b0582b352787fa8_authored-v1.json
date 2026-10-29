@@ -1,0 +1,349 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a14d6957b0582b352787fa7:6a14d69a7b0582b352787fa8:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+   "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+   "selector": "/problems/12"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a14d6957b0582b352787fa7.json",
+   "sha256": "1a94cd30e70c7499480cada08c2a472d00feb258bde84dbd560c0d60e3f35dd8",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:6a14d69a7b0582b352787fa8"
+  }
+ ],
+ "problemId": "hack2hire:6a14d6957b0582b352787fa7",
+ "variantId": "6a14d69a7b0582b352787fa8",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: alternating jumps of the current height",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:6a14d69a7b0582b352787fa8/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "nums holds non-negative integers and index is the start. currentHeight starts as nums[index] and the first jump goes left. A jump moves exactly currentHeight cells in the current direction; it succeeds when the target index is inside the array, and then the position becomes the target, currentHeight becomes nums[target] and the direction flips. The walk stops at the first jump whose target is outside the array. Return the number of successful jumps, or -1 when the walk never stops (a jump of 0 lands in place, so a zero height never stops).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "nums holds non-negative integers and index is the start.",
+   "currentHeight starts as nums[index] and the first jump goes left.",
+   "A jump moves exactly currentHeight cells in the current direction; it succeeds when the target index is inside the array, and then the position becomes the target, currentHeight becomes nums[target] and the direction flips.",
+   "The walk stops at the first jump whose target is outside the array.",
+   "Return the number of successful jumps, or -1 when the walk never stops (a jump of 0 lands in place, so a zero height never stops)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= nums.length <= 1e5",
+   "0 <= nums[i] <= 1e5",
+   "0 <= index < nums.length"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:6a14d69a7b0582b352787fa8/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: array nums, starting position index; currentHeight starts as nums[index]; jumps alternate direction, the first going left (how far a jump goes, how the height changes and the output are cut off); algorithmTags: SIMULATION, HASH_TABLE; preview response sha256 d0f9395dfa47e876267f6403a83e439ef17161baf2299c1084f79b0b106f8372"
+   },
+   {
+    "statement": "Uncertainty: very high: the start, currentHeight initialisation and alternating directions starting left are in the preview; the jump length equal to currentHeight, the height update, the stop rule and returning the jump count (with -1 for an endless walk, suggested by the hash-table tag) are inferred",
+    "basis": "the public group preview is partial (389 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/12/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/12/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/12/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How far does a jump go?",
+   "How does currentHeight change after landing?",
+   "When does the walk end, and what is returned?",
+   "What if the walk never ends?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:6a14d69a7b0582b352787fa8/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      0
+     ],
+     0
+    ],
+    "output": -1,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      3,
+      1,
+      3,
+      4,
+      2,
+      6,
+      1,
+      1,
+      0,
+      3,
+      3,
+      4,
+      2,
+      3,
+      0,
+      2,
+      6,
+      4,
+      0,
+      5,
+      3,
+      2,
+      3
+     ],
+     1
+    ],
+    "output": 2,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:6a14d69a7b0582b352787fa8/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/oracles.py",
+    "sha256": "537cdc3769fee5020247b958d8af2feccd49ef53d12161fdaa6fcf07138a0f6d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def countJumps(nums, index) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/6a14d69a7b0582b352787fa8-python.json",
+     "inferredInterface": {
+      "name": "countJumps",
+      "params": [
+       {
+        "name": "nums",
+        "type": "integer[]"
+       },
+       {
+        "name": "index",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/6a14d69a7b0582b352787fa8-python.json",
+      "sha256": "7706c3a7cd965734ae6acbb4ee765f3f564b328b630b5e644fd0102642751b73",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function countJumps(nums, index) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/6a14d69a7b0582b352787fa8-javascript.json",
+     "inferredInterface": {
+      "name": "countJumps",
+      "params": [
+       {
+        "name": "nums",
+        "type": "integer[]"
+       },
+       {
+        "name": "index",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/6a14d69a7b0582b352787fa8-javascript.json",
+      "sha256": "b5140e05b3b9344e64430aa12f31b07afd693e2c90656aa0ae36cb4e6909c89e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/12/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/12/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68c4834e97640ed3834dc7ca",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "s",
+  "start"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minJumps",
+  "params": [
+   {
+    "name": "s",
+    "type": "string[]"
+   },
+   {
+    "name": "start",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "parse every cell with a regular expression, then relax all edges repeatedly (Bellman-Ford style) until no distance changes",
+  "candidate_design": "breadth-first search from start, parsing each cell's directives with a character scanner the first time the cell is dequeued",
+  "complexity_target": "O(n + total directive length) time/O(n) space"
+ },
+ "source_sha256": "a85dba0fdab0643ac5d3c98dbf6e727cf174a740e778db6b514ee668c4b087ac",
+ "wrapper": "Solution.minJumps"
+}

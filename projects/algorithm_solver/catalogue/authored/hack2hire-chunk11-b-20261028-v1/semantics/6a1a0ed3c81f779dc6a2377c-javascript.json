@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1a0ed3c81f779dc6a2377c",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "customerFile",
+  "processorFile",
+  "fieldName"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "joinDataSet",
+  "params": [
+   {
+    "name": "customerFile",
+    "type": "string[]"
+   },
+   {
+    "name": "processorFile",
+    "type": "string[]"
+   },
+   {
+    "name": "fieldName",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "nested loops comparing every customer row with every processor row, padding when nothing matched",
+  "candidate_design": "hash map from key value to the list of processor rows (kept in input order), then one pass over the customer rows; unmatched customer rows are padded with empty processor values",
+  "complexity_target": "O(input + output) time/O(processor rows) space"
+ },
+ "source_sha256": "31246e7aeb2330b33e695b97027471ad6ef8c198d22a2d00002484a1740f6135",
+ "wrapper": "named export joinDataSet"
+}

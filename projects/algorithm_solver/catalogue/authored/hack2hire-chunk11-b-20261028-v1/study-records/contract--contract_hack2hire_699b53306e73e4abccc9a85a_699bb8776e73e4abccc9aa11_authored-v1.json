@@ -1,0 +1,347 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:699b53306e73e4abccc9a85a:699bb8776e73e4abccc9aa11:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+   "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/699b53306e73e4abccc9a85a.json",
+   "sha256": "0064ceb96da963fece4141b9bfe74a6dc93d85a72b0f71570fb3e8d961702aea",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:699bb8776e73e4abccc9aa11"
+  }
+ ],
+ "problemId": "hack2hire:699b53306e73e4abccc9a85a",
+ "variantId": "699bb8776e73e4abccc9aa11",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: initial-plus-surname usernames with numeric suffixes",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:699bb8776e73e4abccc9aa11/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "names is a list of full names, each two or more words of ASCII letters separated by single spaces; the first word is the given name and the last the family name. The base of a name is the lowercase first letter of the given name followed by the lowercase family name, truncated to 8 characters. Process names in order: a name gets its base when no earlier name received that username; otherwise it gets, for the smallest k = 1, 2, ... whose result is unused so far, the base truncated to 8 - (number of digits of k) characters followed by the decimal k. Return the usernames in input order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "names is a list of full names, each two or more words of ASCII letters separated by single spaces; the first word is the given name and the last the family name.",
+   "The base of a name is the lowercase first letter of the given name followed by the lowercase family name, truncated to 8 characters.",
+   "Process names in order: a name gets its base when no earlier name received that username; otherwise it gets, for the smallest k = 1, 2, ..",
+   "whose result is unused so far, the base truncated to 8 - (number of digits of k) characters followed by the decimal k.",
+   "Return the usernames in input order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= names.length <= 1e4",
+   "each name has 2 to 5 words of [A-Za-z]{1,12}",
+   "words separated by single spaces"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:699bb8776e73e4abccc9aa11/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: names are full names \"<Given> <Middle...> <Family>\"; return one username per name; usernames unique within the list, only lowercase letters and digits, at most 8 characters (the construction rule is cut off); algorithmTags: STRING; preview response sha256 000d1db8ef8bd40203c7eac36ad6b0482e2454b0645828205b9c231b319169c3"
+   },
+   {
+    "statement": "Uncertainty: high: uniqueness, the character set and the 8-character limit are in the preview; the base (given-name initial plus family name), ignoring middle names and the numeric-suffix collision rule with truncation are inferred",
+    "basis": "the public group preview is partial (679 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is the base username built from a full name?",
+   "Are middle names used?",
+   "How are duplicates disambiguated and how does that interact with the 8-character limit?",
+   "Can a numbered username collide with another person's base?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:699bb8776e73e4abccc9aa11/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "alice Lu",
+      "Bo Mary Q Abcdefghij",
+      "Al Mary Smithsonian",
+      "alice Q Mary Bcdefgh",
+      "Al Bcdefgh",
+      "Bob Lu",
+      "Bob x Q Abcdefghij",
+      "Bo Abcdefgx",
+      "Ann Bcdefgh",
+      "Bo x Smithson",
+      "Bo Smithson",
+      "Al x Mary Abcdefgx",
+      "Bo Abcdefghij",
+      "alice Abcdefghij",
+      "Bo Mary Q Abcdefghij",
+      "Bo x Q Abcdefghij"
+     ]
+    ],
+    "output": [
+     "alu",
+     "babcdefg",
+     "asmithso",
+     "abcdefgh",
+     "abcdefg1",
+     "blu",
+     "babcdef1",
+     "babcdef2",
+     "abcdefg2",
+     "bsmithso",
+     "bsmiths1",
+     "aabcdefg",
+     "babcdef3",
+     "aabcdef1",
+     "babcdef4",
+     "babcdef5"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:699bb8776e73e4abccc9aa11/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/oracles.py",
+    "sha256": "537cdc3769fee5020247b958d8af2feccd49ef53d12161fdaa6fcf07138a0f6d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def generateUsernames(names) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/699bb8776e73e4abccc9aa11-python.json",
+     "inferredInterface": {
+      "name": "generateUsernames",
+      "params": [
+       {
+        "name": "names",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/699bb8776e73e4abccc9aa11-python.json",
+      "sha256": "c734ada199ea35c1226ef48c4fb154c3c5a01da0b1402386a5c7039040214593",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function generateUsernames(names) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/699bb8776e73e4abccc9aa11-javascript.json",
+     "inferredInterface": {
+      "name": "generateUsernames",
+      "params": [
+       {
+        "name": "names",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/699bb8776e73e4abccc9aa11-javascript.json",
+      "sha256": "51f4c33631686e5b68b414693dff3a884018e5b957d4b54ec48cc811c7340c01",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

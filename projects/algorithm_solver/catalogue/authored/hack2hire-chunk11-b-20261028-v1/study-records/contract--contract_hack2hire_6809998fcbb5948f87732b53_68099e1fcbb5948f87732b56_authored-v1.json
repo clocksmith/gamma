@@ -1,0 +1,560 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6809998fcbb5948f87732b53:68099e1fcbb5948f87732b56:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+   "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6809998fcbb5948f87732b53.json",
+   "sha256": "6fd12071013e3442edb42ed6ba39deb5f030c2c24ef9799c55217fad5784cc55",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:68099e1fcbb5948f87732b56"
+  }
+ ],
+ "problemId": "hack2hire:6809998fcbb5948f87732b53",
+ "variantId": "68099e1fcbb5948f87732b56",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: key-value store with ordered prefix search",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68099e1fcbb5948f87732b56/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "KVStore() starts empty. set(key, value) inserts a new key; update(key, value) overwrites an existing key; get(key) returns the value or -1 when absent; deleteKey(key) removes the key when present (no effect otherwise). The preview's error cases are excluded from the domain: set is only called for absent keys and update only for present keys. prefixSearch(prefix) returns the values of all present keys starting with prefix (the empty prefix matches every key), ordered by key in ascending code-point order. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "KVStore() starts empty.",
+   "set(key, value) inserts a new key; update(key, value) overwrites an existing key; get(key) returns the value or -1 when absent; deleteKey(key) removes the key when present (no effect otherwise).",
+   "The preview's error cases are excluded from the domain: set is only called for absent keys and update only for present keys.",
+   "prefixSearch(prefix) returns the values of all present keys starting with prefix (the empty prefix matches every key), ordered by key in ascending code-point order.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "keys match [a-z]{1,10}",
+   "prefixes match [a-z]{0,10}",
+   "-1e9 <= value <= 1e9",
+   "set only for absent keys, update only for present keys"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68099e1fcbb5948f87732b56/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: KVStore with set (error when the key exists), get (-1 when absent), update (error when missing) and deleteKey; efficient lookup of values by key prefix (the prefix method is cut off); algorithmTags: TRIE, HASH_TABLE; preview response sha256 baab970ad4c6357ed32021f2f43dccff1fb8cc467bc75db8b2f4c2ca93bcc6ab"
+   },
+   {
+    "statement": "Uncertainty: high: set, get, update and deleteKey with their -1 and error rules are in the preview; prefixSearch's name, returning values ordered by key, and replacing the thrown errors by domain preconditions (a throw cannot be expressed in a JSON trace) are inferred",
+    "basis": "the public group preview is partial (562 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does prefix search return: keys, values or pairs, and in which order?",
+   "How are the error cases reported?",
+   "Does the empty prefix match everything?",
+   "Should deleted keys leave trie nodes behind?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68099e1fcbb5948f87732b56/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "KVStore",
+      "set"
+     ],
+     [
+      [],
+      [
+       "abc",
+       0
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "KVStore",
+      "get",
+      "set",
+      "set",
+      "prefixSearch",
+      "prefixSearch",
+      "prefixSearch",
+      "prefixSearch",
+      "get",
+      "deleteKey",
+      "prefixSearch",
+      "update",
+      "prefixSearch",
+      "deleteKey"
+     ],
+     [
+      [],
+      [
+       "aa"
+      ],
+      [
+       "ba",
+       2
+      ],
+      [
+       "aa",
+       -5
+      ],
+      [
+       "ba"
+      ],
+      [
+       "ba"
+      ],
+      [
+       ""
+      ],
+      [
+       "c"
+      ],
+      [
+       "bab"
+      ],
+      [
+       "ab"
+      ],
+      [
+       "a"
+      ],
+      [
+       "ba",
+       -7
+      ],
+      [
+       "ab"
+      ],
+      [
+       "ba"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     -1,
+     null,
+     null,
+     [
+      2
+     ],
+     [
+      2
+     ],
+     [
+      -5,
+      2
+     ],
+     [],
+     -1,
+     null,
+     [
+      -5
+     ],
+     null,
+     [],
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68099e1fcbb5948f87732b56/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/oracles.py",
+    "sha256": "537cdc3769fee5020247b958d8af2feccd49ef53d12161fdaa6fcf07138a0f6d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class KVStore:\n    def __init__(self)\n    def set(self, key, value) -> void\n    def get(self, key) -> integer\n    def update(self, key, value) -> void\n    def deleteKey(self, key) -> void\n    def prefixSearch(self, prefix) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68099e1fcbb5948f87732b56-python.json",
+     "inferredInterface": {
+      "classname": "KVStore",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "update",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "deleteKey",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "prefixSearch",
+        "params": [
+         {
+          "name": "prefix",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68099e1fcbb5948f87732b56-python.json",
+      "sha256": "92eebee61dcc6f9cb012f44da7dcbc196d3de3ad2161e5f87b2249a1098dd270",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class KVStore {\n  constructor()\n  set(key, value) /* -> void */\n  get(key) /* -> integer */\n  update(key, value) /* -> void */\n  deleteKey(key) /* -> void */\n  prefixSearch(prefix) /* -> integer[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68099e1fcbb5948f87732b56-javascript.json",
+     "inferredInterface": {
+      "classname": "KVStore",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "update",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "deleteKey",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "prefixSearch",
+        "params": [
+         {
+          "name": "prefix",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68099e1fcbb5948f87732b56-javascript.json",
+      "sha256": "3d40f358ecabb59e7ae6a44d2f08d201f987b3c561866b038e7aaacc190069bb",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

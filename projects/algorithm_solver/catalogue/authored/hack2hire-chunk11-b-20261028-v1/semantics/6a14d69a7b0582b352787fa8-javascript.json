@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a14d69a7b0582b352787fa8",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "index"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countJumps",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "index",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate at most 2n + 1 jumps; if the walk is still going it must have repeated a state, so answer -1",
+  "candidate_design": "simulate while recording visited (position, direction) states in a hash set; a repeated state means an endless walk",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "9fdc1571200b47cfb8763b52fb62039685a6a1afe01c40f729fb12b7b68e053e",
+ "wrapper": "named export countJumps"
+}

@@ -1,0 +1,366 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68e6bf53605ab8e954684811:68e6bf5c605ab8e954684812:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+   "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68e6bf53605ab8e954684811.json",
+   "sha256": "5f632cfbb26f30cadbadcc83562871ae6e930cb03285fb8f9da0f55f3f400ddb",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:68e6bf5c605ab8e954684812"
+  }
+ ],
+ "problemId": "hack2hire:68e6bf53605ab8e954684811",
+ "variantId": "68e6bf5c605ab8e954684812",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: request log with registrations, friend requests, transfers between friends and balances",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68e6bf5c605ab8e954684812/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "requests is a list of [sequenceNumber, requestString] pairs with unique sequence numbers. Process them in order and return one response string per request. \"v1/REGISTER/{user}/{initialBalance}\" registers user with that balance and answers \"OK\", or \"ERROR\" when user already exists. \"v1/FRIEND_REQUEST/{fromUser}/{toUser}\" answers \"ERROR\" when either user is unregistered, the users are equal or already friends; otherwise it stores a pending request under this request's sequence number and answers \"OK\". \"v1/ACCEPT_FRIEND_REQUEST/{requestSequenceNumber}\" answers \"OK\" and makes the two users of that request friends when the number names a still-pending friend request (the request is then no longer pending, and accepting it when the users are already friends through another request is still \"OK\"); otherwise \"ERROR\". \"v1/TRANSFER/{fromUser}/{toUser}/{amount}\" moves amount from fromUser to toUser and answers \"OK\" when both are registered, distinct, friends, and fromUser's balance is at least amount; otherwise \"ERROR\" with no change. \"v1/BALANCE/{user}\" answers the user's balance in decimal, or \"ERROR\" when unregistered.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "requests is a list of [sequenceNumber, requestString] pairs with unique sequence numbers.",
+   "Process them in order and return one response string per request.",
+   "\"v1/REGISTER/{user}/{initialBalance}\" registers user with that balance and answers \"OK\", or \"ERROR\" when user already exists.",
+   "\"v1/FRIEND_REQUEST/{fromUser}/{toUser}\" answers \"ERROR\" when either user is unregistered, the users are equal or already friends; otherwise it stores a pending request under this request's sequence number and answers \"OK\".",
+   "\"v1/ACCEPT_FRIEND_REQUEST/{requestSequenceNumber}\" answers \"OK\" and makes the two users of that request friends when the number names a still-pending friend request (the request is then no longer pending, and accepting it when the users are already friends through another request is still \"OK\"); otherwise \"ERROR\".",
+   "\"v1/TRANSFER/{fromUser}/{toUser}/{amount}\" moves amount from fromUser to toUser and answers \"OK\" when both are registered, distinct, friends, and fromUser's balance is at least amount; otherwise \"ERROR\" with no change.",
+   "\"v1/BALANCE/{user}\" answers the user's balance in decimal, or \"ERROR\" when unregistered."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= requests.length <= 1e5",
+   "sequence numbers match [0-9]{1,6} and are unique",
+   "user names match [a-z0-9]{1,10}",
+   "0 <= initialBalance <= 1e9",
+   "1 <= amount <= 1e9",
+   "every requestString is well-formed"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68e6bf5c605ab8e954684812/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: requests are [sequenceNumber, requestString] pairs; request strings v1/REGISTER/{user}/{initialBalance} and v1/FRIEND_REQUEST/{fromUser}/{toUser} (a pending request stored under its sequence number); further request types and the output format are cut off; algorithmTags: HASH_TABLE; preview response sha256 b43d5ae68ec939dce07b86b9daf4e77be2d96f255fd44687becff60415c86c84"
+   },
+   {
+    "statement": "Uncertainty: very high: the request pair shape, REGISTER and pending FRIEND_REQUEST keyed by sequence number are in the preview; the accept, transfer and balance request formats, the friendship requirement for transfers, the \"OK\"/\"ERROR\" response strings and all failure rules are inferred",
+    "basis": "the public group preview is partial (742 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which request types exist besides REGISTER and FRIEND_REQUEST, and how are they formatted?",
+   "What is returned for each request: a status string, a list, or only some responses?",
+   "Can money move between users who are not friends?",
+   "What happens when a transfer would overdraw the sender?",
+   "Can a friend request be accepted twice?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68e6bf5c605ab8e954684812/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "553",
+       "v1/BALANCE/d9"
+      ],
+      [
+       "599",
+       "v1/REGISTER/b/5"
+      ],
+      [
+       "927",
+       "v1/TRANSFER/c/c/7"
+      ],
+      [
+       "465",
+       "v1/REGISTER/b/10"
+      ],
+      [
+       "560",
+       "v1/FRIEND_REQUEST/d9/a"
+      ],
+      [
+       "244",
+       "v1/ACCEPT_FRIEND_REQUEST/465"
+      ],
+      [
+       "341",
+       "v1/REGISTER/a/5"
+      ],
+      [
+       "377",
+       "v1/REGISTER/a/1000000000"
+      ],
+      [
+       "469",
+       "v1/TRANSFER/c/d9/1"
+      ]
+     ]
+    ],
+    "output": [
+     "ERROR",
+     "OK",
+     "ERROR",
+     "ERROR",
+     "ERROR",
+     "ERROR",
+     "OK",
+     "ERROR",
+     "ERROR"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68e6bf5c605ab8e954684812/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/oracles.py",
+    "sha256": "537cdc3769fee5020247b958d8af2feccd49ef53d12161fdaa6fcf07138a0f6d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def processRequests(requests) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68e6bf5c605ab8e954684812-python.json",
+     "inferredInterface": {
+      "name": "processRequests",
+      "params": [
+       {
+        "name": "requests",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68e6bf5c605ab8e954684812-python.json",
+      "sha256": "36c5efd87fb9e4ad70a37d76d5f7f990f50c22b5b93cf693e8771f07ae2f12a8",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function processRequests(requests) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68e6bf5c605ab8e954684812-javascript.json",
+     "inferredInterface": {
+      "name": "processRequests",
+      "params": [
+       {
+        "name": "requests",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68e6bf5c605ab8e954684812-javascript.json",
+      "sha256": "9cedd9a49b17d1367ced3edc8784f72c07847f4c3004a5b9b9946714bf16a2ac",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,356 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69c7f82821f6ab4226966a7f:69c7f82d21f6ab4226966a80:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+   "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69c7f82821f6ab4226966a7f.json",
+   "sha256": "896db6352fd2d5f02fd5ae68f6367e0aca383bc0ac2d5c35674553cbf8a28b10",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:69c7f82d21f6ab4226966a80"
+  }
+ ],
+ "problemId": "hack2hire:69c7f82821f6ab4226966a7f",
+ "variantId": "69c7f82d21f6ab4226966a80",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: three-dispenser queue, longest wait",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:69c7f82d21f6ab4226966a80/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "demands lists the cars in queue order; x, y and z are the liters initially in dispensers X, Y and Z. Refuelling one liter takes one second and cars are served strictly in queue order, starting at time 0. When a car is at the front at time t it starts at the earliest time s >= t at which some dispenser holding at least its demand is free; among such dispensers free at s it takes the first of X, Y, Z. The dispenser then holds demand fewer liters and is busy until s + demand (free again at that instant), and the next car reaches the front at s. A car's waiting time is s. Return the largest waiting time over all cars (0 for no cars), or -1 when some car finds no dispenser with enough fuel left, because then the queue never empties.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "demands lists the cars in queue order; x, y and z are the liters initially in dispensers X, Y and Z.",
+   "Refuelling one liter takes one second and cars are served strictly in queue order, starting at time 0.",
+   "When a car is at the front at time t it starts at the earliest time s >= t at which some dispenser holding at least its demand is free; among such dispensers free at s it takes the first of X, Y, Z.",
+   "The dispenser then holds demand fewer liters and is busy until s + demand (free again at that instant), and the next car reaches the front at s.",
+   "A car's waiting time is s.",
+   "Return the largest waiting time over all cars (0 for no cars), or -1 when some car finds no dispenser with enough fuel left, because then the queue never empties."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= demands.length <= 1e5",
+   "1 <= demands[i] <= 1e9",
+   "0 <= x, y, z <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:69c7f82d21f6ab4226966a80/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: three dispensers X, Y and Z with known fuel; a queue of N cars, each with a demand D; a dispenser is free when not serving a car; the car at the front may choose any free dispenser that still holds at least D liters (the remaining rules and the requested output are cut off); algorithmTags: SIMULATION; preview response sha256 16b9dc211cd83a2be56d057dc584fd22c8922536258cb7bb89b05d47b7c04598"
+   },
+   {
+    "statement": "Uncertainty: medium: dispensers, demands, freeness and the enough-fuel rule are in the preview, which matches a well-known simulation exercise; one second per liter, the X-Y-Z tie order, the maximum-waiting-time output and -1 for a blocked queue are inferred from that exercise, not from visible text",
+    "basis": "the public group preview is partial (482 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How long does refuelling take per liter?",
+   "Which dispenser does a driver pick when several are free?",
+   "What should be returned: the longest wait, total wait, or the per-car waits?",
+   "What happens when no dispenser can ever serve the front car?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:69c7f82d21f6ab4226966a80/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     0,
+     0,
+     0
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      3,
+      5,
+      4,
+      1,
+      2,
+      1,
+      5,
+      6,
+      6,
+      3,
+      4
+     ],
+     18,
+     18,
+     15
+    ],
+    "output": 11,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:69c7f82d21f6ab4226966a80/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/oracles.py",
+    "sha256": "537cdc3769fee5020247b958d8af2feccd49ef53d12161fdaa6fcf07138a0f6d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def maxWaitingTime(demands, x, y, z) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/69c7f82d21f6ab4226966a80-python.json",
+     "inferredInterface": {
+      "name": "maxWaitingTime",
+      "params": [
+       {
+        "name": "demands",
+        "type": "integer[]"
+       },
+       {
+        "name": "x",
+        "type": "integer"
+       },
+       {
+        "name": "y",
+        "type": "integer"
+       },
+       {
+        "name": "z",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/69c7f82d21f6ab4226966a80-python.json",
+      "sha256": "559425eaf170417757ea7be9544d9469d0c59455f7d9fe14a3916754b554fc47",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function maxWaitingTime(demands, x, y, z) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/69c7f82d21f6ab4226966a80-javascript.json",
+     "inferredInterface": {
+      "name": "maxWaitingTime",
+      "params": [
+       {
+        "name": "demands",
+        "type": "integer[]"
+       },
+       {
+        "name": "x",
+        "type": "integer"
+       },
+       {
+        "name": "y",
+        "type": "integer"
+       },
+       {
+        "name": "z",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/69c7f82d21f6ab4226966a80-javascript.json",
+      "sha256": "cab1168d1518c62af0a8cfc21296176c5404c9923e938815853aa48f744602af",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

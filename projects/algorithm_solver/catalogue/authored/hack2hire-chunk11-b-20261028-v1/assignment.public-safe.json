@@ -1,0 +1,1025 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk11-b (16 Hack2Hire groups, 20 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:68e6bf5c605ab8e954684812",
+   "title": "Friendship and Balance Tracker",
+   "variant_ordinal": 1,
+   "group_post_id": "68e6bf53605ab8e954684811",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processRequests",
+     "params": [
+      {
+       "name": "requests",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "replay with plain lists: users as a list of [name, balance] pairs searched linearly, friendships as a list of unordered pairs, pending requests as a list of [sequence, from, to]",
+    "candidate_design": "hash maps for balances and pending requests keyed by sequence number, and a set of canonical friend-pair keys; each request is parsed by splitting on \"/\"",
+    "complexity_target": "O(total request length) time/O(users + pending requests + friendships) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b43d5ae68ec939dce07b86b9daf4e77be2d96f255fd44687becff60415c86c84",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69c7f82d21f6ab4226966a80",
+   "title": "Fuel Station Queue Simulation",
+   "variant_ordinal": 1,
+   "group_post_id": "69c7f82821f6ab4226966a7f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxWaitingTime",
+     "params": [
+      {
+       "name": "demands",
+       "type": "integer[]"
+      },
+      {
+       "name": "x",
+       "type": "integer"
+      },
+      {
+       "name": "y",
+       "type": "integer"
+      },
+      {
+       "name": "z",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "second-by-second clock: free finished dispensers, seat as many front cars as possible at this second, then advance the clock by one",
+    "candidate_design": "event arithmetic: keep each dispenser's free-at time and remaining fuel; a car starts at max(previous start, earliest free-at among dispensers with enough fuel) and picks the first such dispenser free at that time",
+    "complexity_target": "O(N) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "16b9dc211cd83a2be56d057dc584fd22c8922536258cb7bb89b05d47b7c04598",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:699bb8776e73e4abccc9aa11",
+   "title": "Generate Unique Usernames",
+   "variant_ordinal": 1,
+   "group_post_id": "699b53306e73e4abccc9a85a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "generateUsernames",
+     "params": [
+      {
+       "name": "names",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each name try k = 0, 1, 2, ... and test every candidate against a plain list of the usernames already issued",
+    "candidate_design": "set of issued usernames plus a per-base counter remembering the last suffix tried, so repeated bases resume where they stopped",
+    "complexity_target": "O(n * 8) expected time beyond suffix probing/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "000d1db8ef8bd40203c7eac36ad6b0482e2454b0645828205b9c231b319169c3",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67fda0b6d2adf72ba62b0ed9",
+   "title": "Gift Delivery Scheduler",
+   "variant_ordinal": 1,
+   "group_post_id": "67fc81bc216af53465a72220",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxDeliveries",
+     "params": [
+      {
+       "name": "intervals",
+       "type": "integer[][]"
+      },
+      {
+       "name": "n",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "maximum flow by augmenting paths from recipients to hour slots of capacity n",
+    "candidate_design": "earliest-deadline-first sweep over the eight hours, using a count of available recipients per end hour as the priority queue (end hours take only nine values)",
+    "complexity_target": "O(m + 8 * 9) time/O(1) extra space for m recipients"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b0becc49f7cae140e3a2e64c5f559bcb7b8b5d1192197867c07d1350a7bb528c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68c4834e97640ed3834dc7ca",
+   "title": "Hopscotch",
+   "variant_ordinal": 1,
+   "group_post_id": "68c4834997640ed3834dc7c9",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minJumps",
+     "params": [
+      {
+       "name": "s",
+       "type": "string[]"
+      },
+      {
+       "name": "start",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "parse every cell with a regular expression, then relax all edges repeatedly (Bellman-Ford style) until no distance changes",
+    "candidate_design": "breadth-first search from start, parsing each cell's directives with a character scanner the first time the cell is dequeued",
+    "complexity_target": "O(n + total directive length) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "bf0b5d6e62887d6bcd51df930888cb165fe04ac0c946da057659c1693336a3cc",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:687eda22cdb08328ca5a8483",
+   "title": "IP Routing Lookup",
+   "variant_ordinal": 1,
+   "group_post_id": "687eda1bcdb08328ca5a8482",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "routeLookup",
+     "params": [
+      {
+       "name": "routes",
+       "type": "string[][]"
+      },
+      {
+       "name": "queries",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every query scan all routes, comparing the first k characters of 32-character binary strings and keeping the longest (later on ties)",
+    "candidate_design": "one hash map per prefix length from the masked network number to the next hop (later entries overwrite); a query probes the present lengths from longest to shortest",
+    "complexity_target": "O(R + Q * L) time for L distinct lengths (<= 33)/O(R) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "74b6495c311aa13f0aba6f2fa3b4671a0b2614769ec2a2102df1149ef472a1ca",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1a0cc4c81f779dc6a2376b",
+   "title": "Implement Dataset Join Operation",
+   "variant_ordinal": 1,
+   "group_post_id": "6a1a0cb8c81f779dc6a2376a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "joinDataSet",
+     "params": [
+      {
+       "name": "customerFile",
+       "type": "string[]"
+      },
+      {
+       "name": "processorFile",
+       "type": "string[]"
+      },
+      {
+       "name": "fieldName",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "nested loops comparing every customer row with every processor row",
+    "candidate_design": "hash map from key value to the list of processor rows (kept in input order), then one pass over the customer rows",
+    "complexity_target": "O(input + output) time/O(processor rows) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c5d20af773953721d9d16e796eaa798b2e530c2fd7e019d8cdb3939df62ebf76",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1a0ed3c81f779dc6a2377c",
+   "title": "Implement Dataset Join Operation",
+   "variant_ordinal": 2,
+   "group_post_id": "6a1a0cb8c81f779dc6a2376a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "joinDataSet",
+     "params": [
+      {
+       "name": "customerFile",
+       "type": "string[]"
+      },
+      {
+       "name": "processorFile",
+       "type": "string[]"
+      },
+      {
+       "name": "fieldName",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "nested loops comparing every customer row with every processor row, padding when nothing matched",
+    "candidate_design": "hash map from key value to the list of processor rows (kept in input order), then one pass over the customer rows; unmatched customer rows are padded with empty processor values",
+    "complexity_target": "O(input + output) time/O(processor rows) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c5d20af773953721d9d16e796eaa798b2e530c2fd7e019d8cdb3939df62ebf76",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1a0ee5c81f779dc6a2377d",
+   "title": "Implement Dataset Join Operation",
+   "variant_ordinal": 3,
+   "group_post_id": "6a1a0cb8c81f779dc6a2376a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "joinDataSet",
+     "params": [
+      {
+       "name": "customerFile",
+       "type": "string[]"
+      },
+      {
+       "name": "processorFile",
+       "type": "string[]"
+      },
+      {
+       "name": "fieldName",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "nested loops for the left part, then a second scan of processor rows checking every customer row for a match",
+    "candidate_design": "hash map from key value to the list of processor rows (kept in input order), then one pass over the customer rows; a matched flag per processor row selects the unmatched ones appended at the end",
+    "complexity_target": "O(input + output) time/O(processor rows) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c5d20af773953721d9d16e796eaa798b2e530c2fd7e019d8cdb3939df62ebf76",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1a0f0dc81f779dc6a2377e",
+   "title": "Implement Dataset Join Operation",
+   "variant_ordinal": 4,
+   "group_post_id": "6a1a0cb8c81f779dc6a2376a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "joinDataSet",
+     "params": [
+      {
+       "name": "customerFile",
+       "type": "string[]"
+      },
+      {
+       "name": "processorFile",
+       "type": "string[]"
+      },
+      {
+       "name": "fieldNames",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "nested loops comparing the listed columns of every customer row with every processor row",
+    "candidate_design": "hash map from the tuple of key values (joined with a comma, which cannot occur in values) to the processor rows",
+    "complexity_target": "O(input + output) time/O(processor rows) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c5d20af773953721d9d16e796eaa798b2e530c2fd7e019d8cdb3939df62ebf76",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68a61ebd3a368733bb10424d",
+   "title": "Incremental Task Scheduler",
+   "variant_ordinal": 1,
+   "group_post_id": "68a61c743a368733bb10424b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "TaskScheduler",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addTask",
+       "params": [
+        {
+         "name": "id",
+         "type": "string"
+        },
+        {
+         "name": "dependencies",
+         "type": "string[]"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getExecutionOrder",
+       "params": [],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "TaskScheduler"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "edge list; cycle check by repeatedly removing tasks with no remaining prerequisites over the tentative graph; order by repeatedly scanning for the smallest ready id",
+    "candidate_design": "adjacency maps in both directions; addTask runs an iterative depth-first search from id over existing dependents and rejects when it reaches a prerequisite; getExecutionOrder runs Kahn's algorithm with a binary min-heap of ids, counting only added prerequisites as satisfiable",
+    "complexity_target": "O(reachable) per addTask, O((V + E) log V) per getExecutionOrder/O(V + E) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "42d062f611ea34f1f2d156fc1a247461140b34deb3ce3d8ce9157fba6af801ea",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:678dc780fa7ce9616e190fb7",
+   "title": "Iterator with Filter",
+   "variant_ordinal": 1,
+   "group_post_id": "678dc014fa7ce9616e190fb6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "FilterIterator",
+     "constructor": {
+      "params": [
+       {
+        "name": "nums",
+        "type": "integer[]"
+       },
+       {
+        "name": "filterName",
+        "type": "string"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "hasNext",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "next",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "FilterIterator"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "materialise the filtered list eagerly in the constructor and walk it with an index",
+    "candidate_design": "lazy cursor: hasNext advances an index past rejected elements and caches the position of the next selected one; next returns it and moves on",
+    "complexity_target": "O(1) amortised per call/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "081dd5feace5126282c703c88987e0397d1b6827d07851dfa5c9a54e213b38bc",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a14d69a7b0582b352787fa8",
+   "title": "Jumping by Height",
+   "variant_ordinal": 1,
+   "group_post_id": "6a14d6957b0582b352787fa7",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countJumps",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      },
+      {
+       "name": "index",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate at most 2n + 1 jumps; if the walk is still going it must have repeated a state, so answer -1",
+    "candidate_design": "simulate while recording visited (position, direction) states in a hash set; a repeated state means an endless walk",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "d0f9395dfa47e876267f6403a83e439ef17161baf2299c1084f79b0b106f8372",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68099e1fcbb5948f87732b56",
+   "title": "KV Store with Prefix Search",
+   "variant_ordinal": 1,
+   "group_post_id": "6809998fcbb5948f87732b53",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "KVStore",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "set",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "get",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "update",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "deleteKey",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "prefixSearch",
+       "params": [
+        {
+         "name": "prefix",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer[]"
+       }
+      }
+     ]
+    },
+    "native_class": "KVStore"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "dictionary of keys; prefixSearch sorts every key and filters with startswith",
+    "candidate_design": "trie with per-node live-key counts and pruning on delete, plus a hash map for get; prefixSearch walks to the prefix node and runs an iterative depth-first search visiting children in letter order",
+    "complexity_target": "O(|key|) per set/update/delete, O(1) per get, O(|prefix| + matched subtree) per prefixSearch/O(total key length) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "baab970ad4c6357ed32021f2f43dccff1fb8cc467bc75db8b2f4c2ca93bcc6ab",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67e3915487527b3f41af78b6",
+   "title": "Keypad Letter Combination",
+   "variant_ordinal": 1,
+   "group_post_id": "67e38ccf87527b3f41af78b5",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "letterCombinations",
+     "params": [
+      {
+       "name": "digits",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "memoised recursion returning, for every suffix, the set of decodings, then one final sort",
+    "candidate_design": "iterative backtracking over positions that tries group sizes in increasing order; the letter grows with the group size, so the output comes out already sorted",
+    "complexity_target": "O(results * length) time/O(length) extra space beyond the output"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "14c8c064a4a39085f145f3a6f706fab5efb8d773df1f9794da372c24e9075302",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67709b6d366afdc1233e4ffc",
+   "title": "Largest Common BST Value",
+   "variant_ordinal": 1,
+   "group_post_id": "67708803366afdc1233e4ffa",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "largestCommonValue",
+     "params": [
+      {
+       "name": "root1",
+       "type": "(integer|null)[]"
+      },
+      {
+       "name": "root2",
+       "type": "(integer|null)[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "collect all non-null values of each array into sets and take the maximum of the intersection (ignores the tree structure)",
+    "candidate_design": "decode each level-order array into child index arrays, then walk both trees in reverse in-order with explicit stacks, advancing the side holding the larger value until the values meet",
+    "complexity_target": "O(n1 + n2) time/O(n1 + n2) space for decoding plus O(h1 + h2) stacks"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b22072432bc7f783b8025da5d7806d5858cb17871212c7ba3fe69cccce112f64",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69ae2fec4b133b6a8f3a7345",
+   "title": "Largest Group of Mutual Strangers",
+   "variant_ordinal": 1,
+   "group_post_id": "69ae2fa04b133b6a8f3a7343",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "largestStrangerGroup",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "connections",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every subset of people and keep the largest one containing no connection (small n only)",
+    "candidate_design": "tree dynamic programming over an iterative depth-first order: for each person the best group size with and without that person, combined bottom-up per component",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4571864667dd9fd3e280645b3369beaf0c4330d0ba5617ec841fb8c0c1256586",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6910e7e971ea59cda5a81ac4",
+   "title": "Largest K Elements in Sliding Window",
+   "variant_ordinal": 1,
+   "group_post_id": "6907c9e9e1919109b6df11b7",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "largestKInWindows",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      },
+      {
+       "name": "w",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "sort every window afresh and take its first k elements in descending order",
+    "candidate_design": "keep the window as a sorted array, inserting the entering element and removing the leaving one by binary search; read the last k entries backwards",
+    "complexity_target": "O(n * (log w + w_move) + output) time with array moves done by the runtime/O(w) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "fdf51dfcd26b5b50daa0c285bcdd4eeddb73f06fdcde6cfee09577918c690c9b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69a4fb4e3d95612a1782bbd2",
+   "title": "Largest Rectangle Area",
+   "variant_ordinal": 1,
+   "group_post_id": "69a4fb493d95612a1782bbd1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "largestRectangleArea",
+     "params": [
+      {
+       "name": "points",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every pair of points as opposite corners and look the other two corners up in the point list",
+    "candidate_design": "sort by x and sweep columns; for every pair of y values in a column, remember the first column containing both and score the rectangle from that column to the current one",
+    "complexity_target": "O(n log n + sum over columns of size^2) time/O(n^2) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "dabef99c011457eaf4433b689fb696cb3cf391a7ab33295ee632dd70b1feb27e",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69b62ed7666464810ca36212",
+   "title": "Largest Rectangle Area",
+   "variant_ordinal": 2,
+   "group_post_id": "69a4fb493d95612a1782bbd1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "largestRectangleArea",
+     "params": [
+      {
+       "name": "points",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every point p and every two other points q and r with (q - p) perpendicular to (r - p), check whether q + r - p is a point",
+    "candidate_design": "group all point pairs by (midpoint sum, squared length): two diagonals in the same group form a rectangle, scored as the absolute cross product of the sides from one corner",
+    "complexity_target": "O(n^2 + sum over groups of size^2) time/O(n^2) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "dabef99c011457eaf4433b689fb696cb3cf391a7ab33295ee632dd70b1feb27e",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

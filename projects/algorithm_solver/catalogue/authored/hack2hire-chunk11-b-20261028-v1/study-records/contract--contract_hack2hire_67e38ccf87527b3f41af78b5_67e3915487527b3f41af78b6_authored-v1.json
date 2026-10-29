@@ -1,0 +1,376 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67e38ccf87527b3f41af78b5:67e3915487527b3f41af78b6:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+   "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67e38ccf87527b3f41af78b5.json",
+   "sha256": "c1afaee4fc8d771310b75332859ee70ccc7a70af576a1f1f32bd84a27512512c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:67e3915487527b3f41af78b6"
+  }
+ ],
+ "problemId": "hack2hire:67e38ccf87527b3f41af78b5",
+ "variantId": "67e3915487527b3f41af78b6",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: multi-press keypad decodings",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:67e3915487527b3f41af78b6/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "digits is a string of 0-9 with the keypad 1 -> ABC, 2 -> DEF, 3 -> GHI, 4 -> JKL, 5 -> MNO, 6 -> PQR, 7 -> ST, 8 -> UVW, 9 -> XY, 0 -> Z. Each maximal run of one digit is split into consecutive groups, each of size 1 up to the number of letters of that digit; a group of size g produces the g-th letter. Return every distinct string obtainable this way, in ascending lexicographic order. An empty digits string returns an empty list.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "digits is a string of 0-9 with the keypad 1 -> ABC, 2 -> DEF, 3 -> GHI, 4 -> JKL, 5 -> MNO, 6 -> PQR, 7 -> ST, 8 -> UVW, 9 -> XY, 0 -> Z.",
+   "Each maximal run of one digit is split into consecutive groups, each of size 1 up to the number of letters of that digit; a group of size g produces the g-th letter.",
+   "Return every distinct string obtainable this way, in ascending lexicographic order.",
+   "An empty digits string returns an empty list."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= digits.length <= 60",
+   "the number of results is at most 2e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:67e3915487527b3f41af78b6/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: variation of LeetCode 17; digits 0-9 map to letters (1 -> ABC, 2 -> DEF, 3 -> GHI, 4 -> JKL, 5 -> MNO, 6 -> PQR, 7 -> ST, 8 -> UVW, 9 -> XY, 0 -> Z); consecutive identical digits may be separate presses or grouped, the group size choosing the letter (output format cut off); algorithmTags: BACKTRACKING; preview response sha256 14c8c064a4a39085f145f3a6f706fab5efb8d773df1f9794da372c24e9075302"
+   },
+   {
+    "statement": "Uncertainty: medium: the keypad and the run-grouping rule are in the preview; the sorted order, the treatment of the empty string and the cap of a group at the number of letters are inferred",
+    "basis": "the public group preview is partial (899 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which letter does a run of presses produce, and can a group be longer than the letter list?",
+   "Are separate presses of the same digit allowed inside a run?",
+   "In which order should results be returned?",
+   "What is the answer for an empty input?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:67e3915487527b3f41af78b6/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     ""
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     "3366111222"
+    ],
+    "output": [
+     "GGPPAAADDD",
+     "GGPPAAADE",
+     "GGPPAAAED",
+     "GGPPAAAF",
+     "GGPPABDDD",
+     "GGPPABDE",
+     "GGPPABED",
+     "GGPPABF",
+     "GGPPBADDD",
+     "GGPPBADE",
+     "GGPPBAED",
+     "GGPPBAF",
+     "GGPPCDDD",
+     "GGPPCDE",
+     "GGPPCED",
+     "GGPPCF",
+     "GGQAAADDD",
+     "GGQAAADE",
+     "GGQAAAED",
+     "GGQAAAF",
+     "GGQABDDD",
+     "GGQABDE",
+     "GGQABED",
+     "GGQABF",
+     "GGQBADDD",
+     "GGQBADE",
+     "GGQBAED",
+     "GGQBAF",
+     "GGQCDDD",
+     "GGQCDE",
+     "GGQCED",
+     "GGQCF",
+     "HPPAAADDD",
+     "HPPAAADE",
+     "HPPAAAED",
+     "HPPAAAF",
+     "HPPABDDD",
+     "HPPABDE",
+     "HPPABED",
+     "HPPABF",
+     "HPPBADDD",
+     "HPPBADE",
+     "HPPBAED",
+     "HPPBAF",
+     "HPPCDDD",
+     "HPPCDE",
+     "HPPCED",
+     "HPPCF",
+     "HQAAADDD",
+     "HQAAADE",
+     "HQAAAED",
+     "HQAAAF",
+     "HQABDDD",
+     "HQABDE",
+     "HQABED",
+     "HQABF",
+     "HQBADDD",
+     "HQBADE",
+     "HQBAED",
+     "HQBAF",
+     "HQCDDD",
+     "HQCDE",
+     "HQCED",
+     "HQCF"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:67e3915487527b3f41af78b6/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/oracles.py",
+    "sha256": "537cdc3769fee5020247b958d8af2feccd49ef53d12161fdaa6fcf07138a0f6d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def letterCombinations(digits) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/67e3915487527b3f41af78b6-python.json",
+     "inferredInterface": {
+      "name": "letterCombinations",
+      "params": [
+       {
+        "name": "digits",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/67e3915487527b3f41af78b6-python.json",
+      "sha256": "07d9a836198df728cb139ee86b4ae652fadf1dad443072c3f38bebaa21363707",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function letterCombinations(digits) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/67e3915487527b3f41af78b6-javascript.json",
+     "inferredInterface": {
+      "name": "letterCombinations",
+      "params": [
+       {
+        "name": "digits",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/67e3915487527b3f41af78b6-javascript.json",
+      "sha256": "53cdf534178a10b751908b68c55b164e171944236637dfb8e7c3fd29bc57cbc3",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

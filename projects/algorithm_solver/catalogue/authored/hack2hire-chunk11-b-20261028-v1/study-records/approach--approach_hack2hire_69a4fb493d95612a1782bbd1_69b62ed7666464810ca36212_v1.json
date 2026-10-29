@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/design.json",
+   "sha256": "2c2dd07a6014b50f87cbbff3a4f4d53ebabb5fd42d3c41e48f58c92d83a01e92",
+   "selector": "/problems/hack2hire:69b62ed7666464810ca36212"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:69b62ed7666464810ca36212"
+  }
+ ],
+ "problemId": "hack2hire:69a4fb493d95612a1782bbd1",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-records/contract--contract_hack2hire_69a4fb493d95612a1782bbd1_69b62ed7666464810ca36212_authored-v1.json",
+  "sha256": "fda449dbc176ff3cca60d28b192cea60e690ad509710f1944d076e6f9350d295"
+ },
+ "title": {
+  "status": "present",
+  "value": "group all point pairs by (midpoint sum, squared length): two diagonals in the same group form a rectangle, scored as the absolute cross product of the sides from one corner",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/design.json",
+    "sha256": "2c2dd07a6014b50f87cbbff3a4f4d53ebabb5fd42d3c41e48f58c92d83a01e92",
+    "selector": "/problems/hack2hire:69b62ed7666464810ca36212/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "group all point pairs by (midpoint sum, squared length): two diagonals in the same group form a rectangle, scored as the absolute cross product of the sides from one corner. Complexity target: O(n^2 + sum over groups of size^2) time/O(n^2) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/design.json",
+    "sha256": "2c2dd07a6014b50f87cbbff3a4f4d53ebabb5fd42d3c41e48f58c92d83a01e92",
+    "selector": "/problems/hack2hire:69b62ed7666464810ca36212"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Geometry over lattice points where exact integer arithmetic is possible"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:69b62ed7666464810ca36212/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Grouping by exact integer keys avoids floating-point error but can store O(n^2) pairs"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:69b62ed7666464810ca36212/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "pairs in a group share midpoint and length",
+   "areas are computed with integers only"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:69b62ed7666464810ca36212/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "A quadrilateral is a rectangle exactly when its diagonals share a midpoint and a length.",
+   "Group point pairs by (x1 + x2, y1 + y2, squared distance); any two pairs in a group are the diagonals of a rectangle.",
+   "With diagonal (p1, p2) and other corners a, b, the area is |(a - p1) x (b - p1)|, an exact integer."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:69b62ed7666464810ca36212/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "group all point pairs by (midpoint sum, squared length): two diagonals in the same group form a rectangle, scored as the absolute cross product of the sides from one corner",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/design.json",
+      "sha256": "2c2dd07a6014b50f87cbbff3a4f4d53ebabb5fd42d3c41e48f58c92d83a01e92",
+      "selector": "/problems/hack2hire:69b62ed7666464810ca36212/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n^2 + sum over groups of size^2) time/O(n^2) space; the independent reference (for every point p and every two other points q and r with (q - p) perpendicular to (r - p), check whether q + r - p is a point) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/design.json",
+      "sha256": "2c2dd07a6014b50f87cbbff3a4f4d53ebabb5fd42d3c41e48f58c92d83a01e92",
+      "selector": "/problems/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "A quadrilateral is a rectangle exactly when its diagonals share a midpoint and a length.",
+     "Group point pairs by (x1 + x2, y1 + y2, squared distance); any two pairs in a group are the diagonals of a rectangle."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4fb493d95612a1782bbd1_69b62ed7666464810ca36212_approach-native_v1.json",
+    "sha256": "a6c2d992ece7cbba338d3bf20fcf00ec8a2222ef15d50a0e7b7f5f1ef6efa4a8"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper largestRectangleArea, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/design.json",
+      "sha256": "2c2dd07a6014b50f87cbbff3a4f4d53ebabb5fd42d3c41e48f58c92d83a01e92",
+      "selector": "/problems/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "With diagonal (p1, p2) and other corners a, b, the area is |(a - p1) x (b - p1)|, an exact integer."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4fb493d95612a1782bbd1_69b62ed7666464810ca36212_python_v1.json",
+     "sha256": "4e319aa651c28401db071368a78dc55a82b65daae73e5bc52a184beeda6c839d"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4fb493d95612a1782bbd1_69b62ed7666464810ca36212_javascript_v1.json",
+     "sha256": "36d0f682d189d0e0fbc6a675b63c926f83f42d32926515b544c0540632c283b8"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4fb493d95612a1782bbd1_69b62ed7666464810ca36212_approach-native_v1.json",
+    "sha256": "a6c2d992ece7cbba338d3bf20fcf00ec8a2222ef15d50a0e7b7f5f1ef6efa4a8"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (for every point p and every two other points q and r with (q - p) perpendicular to (r - p), check whether q + r - p is a point) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/design.json",
+      "sha256": "2c2dd07a6014b50f87cbbff3a4f4d53ebabb5fd42d3c41e48f58c92d83a01e92",
+      "selector": "/problems/hack2hire:69b62ed7666464810ca36212/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/19/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/test_oracles.py",
+      "sha256": "dc00123bfe0eaa6d7fc8f232b30d678a9d57c93bb0e043a075e5269fbeb08e73",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+      "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+      "selector": "/variants/hack2hire:69b62ed7666464810ca36212"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4fb493d95612a1782bbd1_69b62ed7666464810ca36212_approach-native_v1.json",
+    "sha256": "a6c2d992ece7cbba338d3bf20fcf00ec8a2222ef15d50a0e7b7f5f1ef6efa4a8"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:69a4fb493d95612a1782bbd1:69b62ed7666464810ca36212:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4fb493d95612a1782bbd1_69b62ed7666464810ca36212_approach-native_v1.json",
+  "sha256": "a6c2d992ece7cbba338d3bf20fcf00ec8a2222ef15d50a0e7b7f5f1ef6efa4a8"
+ }
+}
