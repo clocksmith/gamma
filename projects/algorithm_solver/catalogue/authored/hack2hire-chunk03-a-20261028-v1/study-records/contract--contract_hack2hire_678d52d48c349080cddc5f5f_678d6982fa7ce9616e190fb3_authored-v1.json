@@ -1,0 +1,402 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:678d52d48c349080cddc5f5f:678d6982fa7ce9616e190fb3:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+   "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/678d52d48c349080cddc5f5f.json",
+   "sha256": "cd8bc289f2c441066f6f343599d3344b4f84c9b1734c73e129402204b6e43824",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+   "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+   "selector": "/variants/hack2hire:678d6982fa7ce9616e190fb3"
+  }
+ ],
+ "problemId": "hack2hire:678d52d48c349080cddc5f5f",
+ "variantId": "678d6982fa7ce9616e190fb3",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: round-robin iterator with optional restart",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:678d6982fa7ce9616e190fb3/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Class InterleaveIterator(arrays, cycle). Elements are produced round-robin: element 0 of each array in array order, then element 1 of each array that has one, and so on; exhausted and empty arrays are skipped. With cycle false the iterator ends after one pass. With cycle true the whole interleaved sequence restarts from the beginning after it is exhausted, forever, unless there are no elements at all. hasNext() reports whether next() would produce a value; next() returns the next value, or null when none is available (inference).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Class InterleaveIterator(arrays, cycle).",
+   "Elements are produced round-robin: element 0 of each array in array order, then element 1 of each array that has one, and so on; exhausted and empty arrays are skipped.",
+   "With cycle false the iterator ends after one pass.",
+   "With cycle true the whole interleaved sequence restarts from the beginning after it is exhausted, forever, unless there are no elements at all.",
+   "hasNext() reports whether next() would produce a value; next() returns the next value, or null when none is available (inference)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= number of arrays <= 1e4, total elements <= 1e5",
+   "|value| <= 1e9",
+   "up to 1e5 method calls"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:678d6982fa7ce9616e190fb3/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: round-robin interleaving iterator over integer arrays with a cycle flag; algorithmTags: ARRAY, QUEUE; preview response sha256 5db76590923db4fd9cfc3c586be6b8a7239e959a5710801c407b6527cbed506a"
+   },
+   {
+    "statement": "Uncertainty: high: the preview stops before describing the cycle behaviour; whole-sequence restart (rather than per-array wrap-around), the method names and the null return when exhausted are inferred",
+    "basis": "the public group preview is partial (510 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "With cycle on, does each array wrap independently or does the whole sequence restart?",
+   "What should next() do when nothing remains?",
+   "Are empty arrays allowed?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:678d6982fa7ce9616e190fb3/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "InterleaveIterator",
+      "hasNext",
+      "next"
+     ],
+     [
+      [
+       [],
+       false
+      ],
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     false,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "InterleaveIterator",
+      "hasNext",
+      "next"
+     ],
+     [
+      [
+       [],
+       true
+      ],
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     false,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:678d6982fa7ce9616e190fb3/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/oracles.py",
+    "sha256": "797614abc681e9c0d02c570ec4d81402ad92520b225d90dfbfdf026e54ab7e82",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class InterleaveIterator:\n    def __init__(self, arrays, cycle)\n    def hasNext(self) -> boolean\n    def next(self) -> integer|null",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+      "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/678d6982fa7ce9616e190fb3-python.json",
+     "inferredInterface": {
+      "classname": "InterleaveIterator",
+      "constructor": {
+       "params": [
+        {
+         "name": "arrays",
+         "type": "integer[][]"
+        },
+        {
+         "name": "cycle",
+         "type": "boolean"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "hasNext",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "next",
+        "params": [],
+        "return": {
+         "type": "integer|null"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/678d6982fa7ce9616e190fb3-python.json",
+      "sha256": "4a8ecbc6a7ba72161959a106041d8494efecf632bb24b40deae857a20a1ffb2c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class InterleaveIterator {\n  constructor(arrays, cycle)\n  hasNext() /* -> boolean */\n  next() /* -> integer|null */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+      "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/678d6982fa7ce9616e190fb3-javascript.json",
+     "inferredInterface": {
+      "classname": "InterleaveIterator",
+      "constructor": {
+       "params": [
+        {
+         "name": "arrays",
+         "type": "integer[][]"
+        },
+        {
+         "name": "cycle",
+         "type": "boolean"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "hasNext",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "next",
+        "params": [],
+        "return": {
+         "type": "integer|null"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/678d6982fa7ce9616e190fb3-javascript.json",
+      "sha256": "df8b65a13b0c12275ba9ebcde2fdd1642625451c198cfacc99ec8cd52031280c",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

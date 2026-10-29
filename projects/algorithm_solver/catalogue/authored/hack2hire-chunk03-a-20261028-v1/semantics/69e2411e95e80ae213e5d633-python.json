@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69e2411e95e80ae213e5d633",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "text",
+  "tokenAlphabet"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "tokenize",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "tokenAlphabet",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal left-to-right pair scan of the whole sequence for every multi-character token",
+  "candidate_design": "doubly linked sequence plus a lazy index from adjacent id pair to positions; per token enumerate its splits into two earlier tokens, sort the candidate positions and merge left to right with validity checks",
+  "complexity_target": "O(n log n + sum of token lengths) time/O(n) space"
+ },
+ "source_sha256": "45efeffcdd06e1961c083504a47d80fce4c4ab9e795578436c2966008a4c33af",
+ "wrapper": "Solution.tokenize"
+}

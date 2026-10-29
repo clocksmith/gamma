@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67a96e45017965d66059a736",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "M",
+  "N"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxSquareSide",
+  "params": [
+   {
+    "name": "M",
+    "type": "integer"
+   },
+   {
+    "name": "N",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan s downward from isqrt(M + 4N)",
+  "candidate_design": "feasibility is monotone within each parity of s; binary search the largest even and the largest odd side and take the larger",
+  "complexity_target": "O(log(M+N)) time/O(1) space"
+ },
+ "source_sha256": "ef8a71aaf079756244dc178ffe171816c4d4f830c6c7452d7bb9de594d8cb745",
+ "wrapper": "named export maxSquareSide"
+}

@@ -1,0 +1,349 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:696c35676b040fa4d120bc61:696c36906b040fa4d120bc68:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+   "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/696c35676b040fa4d120bc61.json",
+   "sha256": "2eb2bdb45bbfdc5bccd527b91b709c86658c872007820a552060fb3724097917",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+   "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+   "selector": "/variants/hack2hire:696c36906b040fa4d120bc68"
+  }
+ ],
+ "problemId": "hack2hire:696c35676b040fa4d120bc61",
+ "variantId": "696c36906b040fa4d120bc68",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: fill gaps on a regular x grid",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:696c36906b040fa4d120bc68/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "points are sorted by strictly increasing x. For each consecutive pair whose x gap exceeds interval, insert points at x1+interval, x1+2*interval, ... strictly before x2, with y on the segment between the two points. Gaps above interval are multiples of interval. Return all original and inserted points in x order as [x, y] with y as an exact reduced fraction string.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "points are sorted by strictly increasing x.",
+   "For each consecutive pair whose x gap exceeds interval, insert points at x1+interval, x1+2*interval, ...",
+   "strictly before x2, with y on the segment between the two points.",
+   "Gaps above interval are multiples of interval.",
+   "Return all original and inserted points in x order as [x, y] with y as an exact reduced fraction string."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= interval <= 1e6",
+   "1 <= points <= 1e5, |x|, |y| <= 1e6",
+   "total output <= 1e5 points"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:696c36906b040fa4d120bc68/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: sorted integer points, insert points every interval when a gap exceeds interval, gaps divisible, linear interpolation; algorithmTags: MATH; preview response sha256 11168c84686a7f7eef779bb28ac3dfda6cd0ce5fc9ccb429e90141ca490a1baa"
+   },
+   {
+    "statement": "Uncertainty: medium: the insertion rule is in the preview; the exact fraction output for y (the source likely uses floating point) and treatment of gaps smaller than interval (no insertion) are inferred",
+    "basis": "the public group preview is partial (776 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How should fractional y be represented?",
+   "What if a gap is smaller than interval but not divisible?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:696c36906b040fa4d120bc68/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     1,
+     [
+      [
+       0,
+       0
+      ]
+     ]
+    ],
+    "output": [
+     [
+      0,
+      "0"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     1,
+     [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       5
+      ]
+     ]
+    ],
+    "output": [
+     [
+      0,
+      "0"
+     ],
+     [
+      1,
+      "5"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:696c36906b040fa4d120bc68/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/oracles.py",
+    "sha256": "797614abc681e9c0d02c570ec4d81402ad92520b225d90dfbfdf026e54ab7e82",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def fillMissingPoints(interval, points) -> list<[integer,string]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+      "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/696c36906b040fa4d120bc68-python.json",
+     "inferredInterface": {
+      "name": "fillMissingPoints",
+      "params": [
+       {
+        "name": "interval",
+        "type": "integer"
+       },
+       {
+        "name": "points",
+        "type": "list<[integer,integer]>"
+       }
+      ],
+      "return": {
+       "type": "list<[integer,string]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/696c36906b040fa4d120bc68-python.json",
+      "sha256": "971c7135f49585560000719af0ab5ba8263279c61ac9822bc91a18bcef8298cd",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function fillMissingPoints(interval, points) /* -> list<[integer,string]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+      "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/696c36906b040fa4d120bc68-javascript.json",
+     "inferredInterface": {
+      "name": "fillMissingPoints",
+      "params": [
+       {
+        "name": "interval",
+        "type": "integer"
+       },
+       {
+        "name": "points",
+        "type": "list<[integer,integer]>"
+       }
+      ],
+      "return": {
+       "type": "list<[integer,string]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/696c36906b040fa4d120bc68-javascript.json",
+      "sha256": "2b0295903c0f247d55475f6069166390f46d9a05aa03d620cb630839ce6e52b8",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

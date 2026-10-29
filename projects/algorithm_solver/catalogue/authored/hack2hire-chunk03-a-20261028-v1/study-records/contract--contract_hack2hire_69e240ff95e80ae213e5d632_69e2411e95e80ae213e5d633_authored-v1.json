@@ -1,0 +1,329 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69e240ff95e80ae213e5d632:69e2411e95e80ae213e5d633:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+   "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69e240ff95e80ae213e5d632.json",
+   "sha256": "c22d364d65eb81e1102a9f83cca71d7805d989e8647030a58c18dec1d81066fe",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+   "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+   "selector": "/variants/hack2hire:69e2411e95e80ae213e5d633"
+  }
+ ],
+ "problemId": "hack2hire:69e240ff95e80ae213e5d632",
+ "variantId": "69e2411e95e80ae213e5d633",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: merge-pass tokenizer over an ordered token alphabet",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:69e2411e95e80ae213e5d633/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Token id = index in tokenAlphabet. A leading block of single-character tokens covers every character of text; all later tokens have length >= 2 and entries are distinct. Start from the per-character id sequence. Then process each multi-character token j in alphabet order: scan the current sequence left to right and replace every non-overlapping adjacent pair (a, b) whose strings concatenate to token j with the single id j (a merge at position i resumes scanning after the pair). Tokens with no valid split into two earlier tokens therefore never merge. Return the final id sequence.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Token id = index in tokenAlphabet.",
+   "A leading block of single-character tokens covers every character of text; all later tokens have length >= 2 and entries are distinct.",
+   "Start from the per-character id sequence.",
+   "Then process each multi-character token j in alphabet order: scan the current sequence left to right and replace every non-overlapping adjacent pair (a, b) whose strings concatenate to token j with the single id j (a merge at position i resumes scanning after the pair).",
+   "Tokens with no valid split into two earlier tokens therefore never merge.",
+   "Return the final id sequence."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= len(text) <= 1e5, lowercase letters",
+   "1 <= len(tokenAlphabet) <= 5000, distinct entries of 1..30 lowercase letters",
+   "single-character prefix covers every text character"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:69e2411e95e80ae213e5d633/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: single-character prefix of tokenAlphabet, multi-character tokens that may split into two earlier tokens, initial mapping step; algorithmTags: STRING, SIMULATION; preview response sha256 f031285a49331a4ac6e8b12d9fa81561e7ebca0ce432c25a38e3bf1e29a57c0b"
+   },
+   {
+    "statement": "Uncertainty: high: the preview ends after the initialisation step; the merge rule (left-to-right, non-overlapping, any split, one pass per token in alphabet order) is inferred from the title and the description of split tokens",
+    "basis": "the public group preview is partial (771 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "When a token has several splits into earlier tokens, do all of them merge?",
+   "Is each token applied once, in alphabet order, or repeatedly until no change?",
+   "Do overlapping matches resolve left to right?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:69e2411e95e80ae213e5d633/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     "",
+     [
+      "a"
+     ]
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     "a",
+     [
+      "a"
+     ]
+    ],
+    "output": [
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:69e2411e95e80ae213e5d633/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/oracles.py",
+    "sha256": "797614abc681e9c0d02c570ec4d81402ad92520b225d90dfbfdf026e54ab7e82",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def tokenize(text, tokenAlphabet) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+      "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/69e2411e95e80ae213e5d633-python.json",
+     "inferredInterface": {
+      "name": "tokenize",
+      "params": [
+       {
+        "name": "text",
+        "type": "string"
+       },
+       {
+        "name": "tokenAlphabet",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/69e2411e95e80ae213e5d633-python.json",
+      "sha256": "8bff9003eb05a10be0a5c757192f3b672ff5797ae2c403078e43fc274abe4272",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function tokenize(text, tokenAlphabet) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+      "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/69e2411e95e80ae213e5d633-javascript.json",
+     "inferredInterface": {
+      "name": "tokenize",
+      "params": [
+       {
+        "name": "text",
+        "type": "string"
+       },
+       {
+        "name": "tokenAlphabet",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/69e2411e95e80ae213e5d633-javascript.json",
+      "sha256": "fe1f1d069140d808455a65c60e700df3b44fb12d9b77e79289ab8d60a3cdb4ee",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

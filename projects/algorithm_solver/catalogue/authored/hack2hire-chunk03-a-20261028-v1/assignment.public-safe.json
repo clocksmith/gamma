@@ -1,0 +1,784 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk03-a (16 Hack2Hire groups, 17 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:69c87bbe21f6ab4226966de6",
+   "title": "Implement itoa()",
+   "variant_ordinal": 1,
+   "group_post_id": "69c87a3021f6ab4226966de0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "itoa",
+     "params": [
+      {
+       "name": "value",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "language built-in decimal conversion (str)",
+    "candidate_design": "peel decimal digits from the magnitude into a buffer, reverse, prepend the sign",
+    "complexity_target": "O(d) time/O(d) space for d digits"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "fff05104ffa497a608c9f1ca176e39120ddd754b540b9e453dd3364dc5e1e3ad",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69e2411e95e80ae213e5d633",
+   "title": "Incremental String Tokenizer",
+   "variant_ordinal": 1,
+   "group_post_id": "69e240ff95e80ae213e5d632",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "tokenize",
+     "params": [
+      {
+       "name": "text",
+       "type": "string"
+      },
+      {
+       "name": "tokenAlphabet",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal left-to-right pair scan of the whole sequence for every multi-character token",
+    "candidate_design": "doubly linked sequence plus a lazy index from adjacent id pair to positions; per token enumerate its splits into two earlier tokens, sort the candidate positions and merge left to right with validity checks",
+    "complexity_target": "O(n log n + sum of token lengths) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "f031285a49331a4ac6e8b12d9fa81561e7ebca0ce432c25a38e3bf1e29a57c0b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:678d6982fa7ce9616e190fb3",
+   "title": "Interleave Iterator with Cycle",
+   "variant_ordinal": 1,
+   "group_post_id": "678d52d48c349080cddc5f5f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "InterleaveIterator",
+     "constructor": {
+      "params": [
+       {
+        "name": "arrays",
+        "type": "integer[][]"
+       },
+       {
+        "name": "cycle",
+        "type": "boolean"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "hasNext",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "next",
+       "params": [],
+       "return": {
+        "type": "integer|null"
+       }
+      }
+     ]
+    },
+    "native_class": "InterleaveIterator"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "materialise one pass by rounds, then index it (modulo its length when cycling)",
+    "candidate_design": "queue of (array index, position) cursors over non-empty arrays; pop, emit, re-append if more remain; when cycling refill the queue once it empties",
+    "complexity_target": "O(k) construction for k arrays; amortised O(1) per call"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5db76590923db4fd9cfc3c586be6b8a7239e959a5710801c407b6527cbed506a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69e931b2fbaf3da641828684",
+   "title": "Jump Game Prime",
+   "variant_ordinal": 1,
+   "group_post_id": "69e9319cfbaf3da641828683",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxJumpScore",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "O(n^2) DP over every earlier index, with trial-division primality",
+    "candidate_design": "sieve the primes ending in 3 below n; dp[i] = nums[i] + max(dp[i-1], dp[i-p]) over those primes",
+    "complexity_target": "O(n * P) time for P such primes below n/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "46e7633ef7187c7a23322c9282ffdb92d22adce64dcdf65df46cc80f287b9b4d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a04f7473141bbc31efdd6f1",
+   "title": "Kth Greatest in Growing Prefix",
+   "variant_ordinal": 1,
+   "group_post_id": "6a04f73a3141bbc31efdd6f0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "kthGreatestInPrefixes",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "sort every prefix and index position k-1",
+    "candidate_design": "size-k min-heap of the largest values seen; its top is the answer",
+    "complexity_target": "O(n log k) time/O(k) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ad0e7f44ad6a384a8d5a8a70d14576c0ac5001ae59c1e02c50c7c7053c30ee41",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a73bf2fd713d873ca7a77c6",
+   "title": "Largest Consecutive Skill Team",
+   "variant_ordinal": 1,
+   "group_post_id": "6a73bf26d713d873ca7a77c5",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "largestTeam",
+     "params": [
+      {
+       "name": "skills",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "sort and scan runs whose adjacent differences are at most 1",
+    "candidate_design": "count each skill; from every level whose predecessor is absent walk upward summing counts",
+    "complexity_target": "O(n) expected time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "dc51bfafa8319e12ee3815a51c563c3775300787479ef8e14b28ea680b38180c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a4fb090665efda9311f5615",
+   "title": "League Earnings",
+   "variant_ordinal": 1,
+   "group_post_id": "6a4fb07c665efda9311f5612",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "leagueEarnings",
+     "params": [
+      {
+       "name": "leagues",
+       "type": "string[]"
+      },
+      {
+       "name": "stadiumCapacities",
+       "type": "integer[]"
+      },
+      {
+       "name": "silverwareCounts",
+       "type": "integer[]"
+      },
+      {
+       "name": "targetLeague",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "[integer,string]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal double loop over ordered pairs; exact Fraction average",
+    "candidate_design": "closed form: total = sum over clubs of capacity * ((c-1) * own trophies + (S - own trophies)); average from integer quotient and remainder",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "2a6f4cd1effd62fcd8058aa2130c3f7fa41981f33e2cf35d319cdfebea911c4d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69bc554c1cbff60a929be332",
+   "title": "Limit Tree Height by Deletions",
+   "variant_ordinal": 1,
+   "group_post_id": "69bc55471cbff60a929be330",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxHeightAfterDeletion",
+     "params": [
+      {
+       "name": "root",
+       "type": "tree<{id,children}>"
+      },
+      {
+       "name": "deletedIds",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recursively rebuild the promoted forest, then measure its height",
+    "candidate_design": "iterative DFS carrying the count of kept nodes on the path",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "642d5a6c6585b47f27476c3425a462bf93314a7f89a2da65d35aca0e232925e6",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69bc55661cbff60a929be333",
+   "title": "Limit Tree Height by Deletions",
+   "variant_ordinal": 2,
+   "group_post_id": "69bc55471cbff60a929be330",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minDeletionsForHeight",
+     "params": [
+      {
+       "name": "root",
+       "type": "tree<{id,children}>"
+      },
+      {
+       "name": "maxHeight",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "exhaustive search over deletion sets of increasing size",
+    "candidate_design": "post-order subtree heights; count non-root nodes whose subtree height is at least maxHeight (kept sets are unions of maxHeight-1 height layers under the root)",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "642d5a6c6585b47f27476c3425a462bf93314a7f89a2da65d35aca0e232925e6",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69bef92321f6ab4226963c6b",
+   "title": "Linear Interpolation",
+   "variant_ordinal": 1,
+   "group_post_id": "69bef7ed21f6ab4226963c67",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "interpolate",
+     "params": [
+      {
+       "name": "points",
+       "type": "list<[integer,integer]>"
+      },
+      {
+       "name": "queries",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per-query full scan of the points with Fraction arithmetic",
+    "candidate_design": "group points by x keeping min and max y, sort distinct x, binary search each query, integer numerator and denominator reduced by gcd",
+    "complexity_target": "O((n + q) log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "cd095cab38a2d2317886cb7fb10ffc38ee4694250858411fbe396140b853ab48",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:696c36906b040fa4d120bc68",
+   "title": "Linear Interpolation of Missing Points",
+   "variant_ordinal": 1,
+   "group_post_id": "696c35676b040fa4d120bc61",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "fillMissingPoints",
+     "params": [
+      {
+       "name": "interval",
+       "type": "integer"
+      },
+      {
+       "name": "points",
+       "type": "list<[integer,integer]>"
+      }
+     ],
+     "return": {
+      "type": "list<[integer,string]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "Fraction evaluation for every inserted point",
+    "candidate_design": "integer numerator (y2-y1)*(x-x1) over the gap, reduced by gcd, added to y1",
+    "complexity_target": "O(output) time/O(output) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "11168c84686a7f7eef779bb28ac3dfda6cd0ce5fc9ccb429e90141ca490a1baa",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a19022ac81f779dc6a231ab",
+   "title": "Match Cyclic Shift to Descending Sequence",
+   "variant_ordinal": 1,
+   "group_post_id": "6a1900e3c81f779dc6a2319e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findDescendingShift",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every t and check the shifted array",
+    "candidate_design": "count cyclic ascents nums[i] < nums[i+1 mod n]: none -> 0; exactly one at i -> t = (n - (i+1)) mod n; more -> -1",
+    "complexity_target": "O(n) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3c3422496d7b4087ac8b7ac5b34aba18e2b607aee55f2eb981c82e3b7a7822eb",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67a96e45017965d66059a736",
+   "title": "Max Square from Mixed Tiles",
+   "variant_ordinal": 1,
+   "group_post_id": "67a96c9b017965d66059a735",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxSquareSide",
+     "params": [
+      {
+       "name": "M",
+       "type": "integer"
+      },
+      {
+       "name": "N",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan s downward from isqrt(M + 4N)",
+    "candidate_design": "feasibility is monotone within each parity of s; binary search the largest even and the largest odd side and take the larger",
+    "complexity_target": "O(log(M+N)) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "9b28fbc5206549c18efdd44d09a09cc2f594c3d3317b6097a2f21bf8ad066559",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6769dd5b11bbd512d60ce762",
+   "title": "Max Sum Between Leaf Nodes",
+   "variant_ordinal": 1,
+   "group_post_id": "6769d41711bbd512d60ce760",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxLeafToLeafSum",
+     "params": [
+      {
+       "name": "tree",
+       "type": "(integer|null)[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every leaf pair and sum its path via parent chains",
+    "candidate_design": "iterative post-order: best downward leaf path per node; nodes with two children combine both sides",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3f263de4c4b1db57f844cc84f1498f7ea61b3abb2c5ca602d5e2f5b226dd705a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a949604cddc54478ddf5f33",
+   "title": "Maximize Deployment Score",
+   "variant_ordinal": 1,
+   "group_post_id": "6a9495fccddc54478ddf5f31",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxDeploymentScore",
+     "params": [
+      {
+       "name": "difficulty",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "exhaustive enumeration of all 3^n labelled assignments",
+    "candidate_design": "with sorted order v1 <= ... <= vn the optimum is (vn - v1) + max(v(n-1) - v1, vn - v2); found from the two smallest and two largest values",
+    "complexity_target": "O(n) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "773e4aede9e6202514817e5358fbf7128b8b72fc1965c792737c1f05d91a5146",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:696336dcf731aa3969ef52a7",
+   "title": "Maximum Concurrent Calls",
+   "variant_ordinal": 1,
+   "group_post_id": "696336d8f731aa3969ef52a6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxConcurrentCallsPerDay",
+     "params": [
+      {
+       "name": "calls",
+       "type": "list<[integer,string,integer,integer]>"
+      }
+     ],
+     "return": {
+      "type": "list<[integer,integer,integer]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per customer and day, count active calls at the day start and at every call start inside the day",
+    "candidate_design": "per customer sort +1/-1 events (ends before starts at equal times), sweep; each constant segment updates the maximum of every day it covers",
+    "complexity_target": "O(n log n + output) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "33593add707a2c600a609398a73805b8fe180ac58b2f787321780365549ec015",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67a574f4b571d6ff0a4bd23a",
+   "title": "Maximum Stability",
+   "variant_ordinal": 1,
+   "group_post_id": "67a5725db571d6ff0a4bd239",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxStability",
+     "params": [
+      {
+       "name": "availability",
+       "type": "integer[]"
+      },
+      {
+       "name": "reliability",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "all subsets for n <= 12, otherwise for each availability threshold sum reliabilities of servers at or above it",
+    "candidate_design": "sort servers by availability descending and keep a running reliability sum; candidate = availability * running sum",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b8830d5b5845f3d4aa53116c66f809f9feb91e7c43f0339e5431ac3440fdd04b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

@@ -1,0 +1,460 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/design.json",
+   "sha256": "8f32f2d0cac0f40ec51d32f5a0aa21793b19c591b0465dce6523a7ce9b79c189",
+   "selector": "/problems/hack2hire:6a4fb090665efda9311f5615"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+   "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+   "selector": "/variants/hack2hire:6a4fb090665efda9311f5615"
+  }
+ ],
+ "problemId": "hack2hire:6a4fb07c665efda9311f5612",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-records/contract--contract_hack2hire_6a4fb07c665efda9311f5612_6a4fb090665efda9311f5615_authored-v1.json",
+  "sha256": "0060b5e7a9fc499cb6f1eff378bd892e8e63e9c45c859f98e8f472b25491c527"
+ },
+ "title": {
+  "status": "present",
+  "value": "closed form: total = sum over clubs of capacity * ((c-1) * own trophies + (S - own trophies)); average from integer quotient and remainder",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/design.json",
+    "sha256": "8f32f2d0cac0f40ec51d32f5a0aa21793b19c591b0465dce6523a7ce9b79c189",
+    "selector": "/problems/hack2hire:6a4fb090665efda9311f5615/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "closed form: total = sum over clubs of capacity * ((c-1) * own trophies + (S - own trophies)); average from integer quotient and remainder. Complexity target: O(n) time/O(1) extra space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/design.json",
+    "sha256": "8f32f2d0cac0f40ec51d32f5a0aa21793b19c591b0465dce6523a7ce9b79c189",
+    "selector": "/problems/hack2hire:6a4fb090665efda9311f5615"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "The league is large and only aggregates are needed"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:6a4fb090665efda9311f5615/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "The closed form hides the per-match structure; the double loop is easier to audit"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:6a4fb090665efda9311f5615/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "total and match count stay exact integers below 2**53"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:6a4fb090665efda9311f5615/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Write the total as a double sum over home and away clubs.",
+   "Swap the order of summation: each home club meets every other club once.",
+   "Sum the away trophies with the league total S minus the home club own count."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:6a4fb090665efda9311f5615/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "closed form: total = sum over clubs of capacity * ((c-1) * own trophies + (S - own trophies)); average from integer quotient and remainder",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/design.json",
+      "sha256": "8f32f2d0cac0f40ec51d32f5a0aa21793b19c591b0465dce6523a7ce9b79c189",
+      "selector": "/problems/hack2hire:6a4fb090665efda9311f5615/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) time/O(1) extra space; the independent reference (literal double loop over ordered pairs; exact Fraction average) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/design.json",
+      "sha256": "8f32f2d0cac0f40ec51d32f5a0aa21793b19c591b0465dce6523a7ce9b79c189",
+      "selector": "/problems/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Write the total as a double sum over home and away clubs.",
+     "Swap the order of summation: each home club meets every other club once."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a4fb07c665efda9311f5612_6a4fb090665efda9311f5615_approach-native_v1.json",
+    "sha256": "3eee3f70f2da5b3083ebabc1c9348367f45527d3a7d4b4f46631179d7736486c"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper leagueEarnings, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+      "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/design.json",
+      "sha256": "8f32f2d0cac0f40ec51d32f5a0aa21793b19c591b0465dce6523a7ce9b79c189",
+      "selector": "/problems/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use iterative traversal where depth may be large."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Sum the away trophies with the league total S minus the home club own count."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a4fb07c665efda9311f5612_6a4fb090665efda9311f5615_python_v1.json",
+     "sha256": "c4ea48a30397048e7d52e1e9337fbf9d190978d3a9de2e69afc0e8bfe38a850d"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a4fb07c665efda9311f5612_6a4fb090665efda9311f5615_javascript_v1.json",
+     "sha256": "c3355b7fdbdd6fa432650fc963613ad91cb5c9bf5664d1386b62653981387229"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a4fb07c665efda9311f5612_6a4fb090665efda9311f5615_approach-native_v1.json",
+    "sha256": "3eee3f70f2da5b3083ebabc1c9348367f45527d3a7d4b4f46631179d7736486c"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (literal double loop over ordered pairs; exact Fraction average) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/design.json",
+      "sha256": "8f32f2d0cac0f40ec51d32f5a0aa21793b19c591b0465dce6523a7ce9b79c189",
+      "selector": "/problems/hack2hire:6a4fb090665efda9311f5615/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+      "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+      "selector": "/problems/6/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/test_oracles.py",
+      "sha256": "afeafe261aeeacad4e927dce2fc7358fef55900d014ec01c2f78f6c1a0cb05bc",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+      "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+      "selector": "/variants/hack2hire:6a4fb090665efda9311f5615"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a4fb07c665efda9311f5612_6a4fb090665efda9311f5615_approach-native_v1.json",
+    "sha256": "3eee3f70f2da5b3083ebabc1c9348367f45527d3a7d4b4f46631179d7736486c"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6a4fb07c665efda9311f5612:6a4fb090665efda9311f5615:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a4fb07c665efda9311f5612_6a4fb090665efda9311f5615_approach-native_v1.json",
+  "sha256": "3eee3f70f2da5b3083ebabc1c9348367f45527d3a7d4b4f46631179d7736486c"
+ }
+}

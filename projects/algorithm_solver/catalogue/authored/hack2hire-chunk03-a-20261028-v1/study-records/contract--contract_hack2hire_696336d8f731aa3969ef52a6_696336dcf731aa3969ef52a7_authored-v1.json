@@ -1,0 +1,325 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:696336d8f731aa3969ef52a6:696336dcf731aa3969ef52a7:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+   "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+   "selector": "/problems/15"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/696336d8f731aa3969ef52a6.json",
+   "sha256": "af9f8dc4e29818e53c99d8e02f9e6d95b3a433c08048b69be7d390ea0939fc82",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+   "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+   "selector": "/variants/hack2hire:696336dcf731aa3969ef52a7"
+  }
+ ],
+ "problemId": "hack2hire:696336d8f731aa3969ef52a6",
+ "variantId": "696336dcf731aa3969ef52a7",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: daily peak concurrency per customer",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:696336dcf731aa3969ef52a7/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "calls are [customerId, callId, startMs, endMs] with start inclusive and end exclusive. Days are UTC days, day = floor(ms / 86400000). For each customer and each day on which the customer has at least one active call, report the maximum number of that customer's calls active at the same instant within the day. A call spanning midnight counts on every day it touches. Return [customerId, day, maximum] rows sorted by customerId then day.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "calls are [customerId, callId, startMs, endMs] with start inclusive and end exclusive.",
+   "Days are UTC days, day = floor(ms / 86400000).",
+   "For each customer and each day on which the customer has at least one active call, report the maximum number of that customer's calls active at the same instant within the day.",
+   "A call spanning midnight counts on every day it touches.",
+   "Return [customerId, day, maximum] rows sorted by customerId then day."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= calls <= 1e5, unique callId",
+   "0 <= start < end <= start + 3 days, start <= 1e12 ms",
+   "1 <= customerId <= 1e6"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:696336dcf731aa3969ef52a7/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: call records with customerId, callId, start inclusive and end exclusive in ms; maximum concurrent calls per customer per day; algorithmTags: HASH_TABLE; preview response sha256 33593add707a2c600a609398a73805b8fe180ac58b2f787321780365549ec015"
+   },
+   {
+    "statement": "Uncertainty: medium: the record shape and interval semantics are in the preview; UTC day numbering as integers, the row output shape and the 3-day duration bound are inferred",
+    "basis": "the public group preview is partial (625 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/15/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/15/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/15/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which time zone defines a day?",
+   "Does a call that ends exactly at midnight touch the next day?",
+   "What output shape is expected?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:696336dcf731aa3969ef52a7/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       1,
+       "a",
+       0,
+       1
+      ]
+     ]
+    ],
+    "output": [
+     [
+      1,
+      0,
+      1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/study-content.json",
+    "sha256": "c4340120778ba769ec0e0b5c3560e13dec666096fc51c66b6346b61441bca170",
+    "selector": "/variants/hack2hire:696336dcf731aa3969ef52a7/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/oracles.py",
+    "sha256": "797614abc681e9c0d02c570ec4d81402ad92520b225d90dfbfdf026e54ab7e82",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def maxConcurrentCallsPerDay(calls) -> list<[integer,integer,integer]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+      "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/696336dcf731aa3969ef52a7-python.json",
+     "inferredInterface": {
+      "name": "maxConcurrentCallsPerDay",
+      "params": [
+       {
+        "name": "calls",
+        "type": "list<[integer,string,integer,integer]>"
+       }
+      ],
+      "return": {
+       "type": "list<[integer,integer,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/696336dcf731aa3969ef52a7-python.json",
+      "sha256": "448adbe3b19d389d6cabb8808f0e8f6057e11f3db9aef1931f91d494efcd0219",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function maxConcurrentCallsPerDay(calls) /* -> list<[integer,integer,integer]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+      "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/696336dcf731aa3969ef52a7-javascript.json",
+     "inferredInterface": {
+      "name": "maxConcurrentCallsPerDay",
+      "params": [
+       {
+        "name": "calls",
+        "type": "list<[integer,string,integer,integer]>"
+       }
+      ],
+      "return": {
+       "type": "list<[integer,integer,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/semantics/696336dcf731aa3969ef52a7-javascript.json",
+      "sha256": "16bdd72cf5496ddb74510c021358f2968ce77e6bb8c4486e05b771125a83822c",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/15/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-a-20261028-v1/contracts.json",
+    "sha256": "7d9af9e7248fdb6bc12fb3e2f53823de3dae9153e00a49185c3aabedea3c7a33",
+    "selector": "/problems/15/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

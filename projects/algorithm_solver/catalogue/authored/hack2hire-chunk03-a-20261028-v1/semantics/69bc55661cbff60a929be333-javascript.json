@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69bc55661cbff60a929be333",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "root",
+  "maxHeight"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minDeletionsForHeight",
+  "params": [
+   {
+    "name": "root",
+    "type": "tree<{id,children}>"
+   },
+   {
+    "name": "maxHeight",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exhaustive search over deletion sets of increasing size",
+  "candidate_design": "post-order subtree heights; count non-root nodes whose subtree height is at least maxHeight (kept sets are unions of maxHeight-1 height layers under the root)",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "69c0ba8b566628d55c72f76449ab9869fa696ce8d5ab1fd877775110ba3fb89b",
+ "wrapper": "named export minDeletionsForHeight"
+}

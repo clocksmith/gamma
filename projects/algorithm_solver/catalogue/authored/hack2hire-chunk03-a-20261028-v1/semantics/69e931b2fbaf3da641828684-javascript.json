@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69e931b2fbaf3da641828684",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxJumpScore",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "O(n^2) DP over every earlier index, with trial-division primality",
+  "candidate_design": "sieve the primes ending in 3 below n; dp[i] = nums[i] + max(dp[i-1], dp[i-p]) over those primes",
+  "complexity_target": "O(n * P) time for P such primes below n/O(n) space"
+ },
+ "source_sha256": "0a72d6567065e049d570a144835d3780e3bc5443f301d57786c03805736b487d",
+ "wrapper": "named export maxJumpScore"
+}
