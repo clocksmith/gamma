@@ -1,0 +1,201 @@
+{
+  "problems": {
+    "295": {
+      "reference": "append stream and sort copy per findMedian query",
+      "candidate_design": "two heaps (max-heap lower half and min-heap upper half) rebalanced on each insertion",
+      "complexity_target": "O(log n) addNum, O(1) findMedian time / O(n) space"
+    },
+    "297": {
+      "reference": "direct dictionary tree construction and level-order canonical normalization",
+      "candidate_design": "breadth-first level-order token stream with trailing-null trimming and queue reconstruction",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "303": {
+      "reference": "direct slice sum over nums[left:right+1] per query",
+      "candidate_design": "1D prefix sum table with O(1) endpoint subtraction",
+      "complexity_target": "O(n) init, O(1) sumRange time / O(n) space"
+    },
+    "304": {
+      "reference": "nested row/column loop sum over query rectangle",
+      "candidate_design": "2D inclusion-exclusion prefix sum table",
+      "complexity_target": "O(m*n) init, O(1) sumRegion time / O(m*n) space"
+    },
+    "307": {
+      "reference": "direct mutable array copy with linear slice summation",
+      "candidate_design": "1-indexed Fenwick tree (Binary Indexed Tree) built in O(n) with point delta updates",
+      "complexity_target": "O(n) init, O(log n) update and sumRange time / O(n) space"
+    },
+    "321": {
+      "reference": "memoized 3D dynamic programming over (i, j, remaining)",
+      "candidate_design": "monotonic-stack maximum subsequence per split length followed by lexicographical suffix merge",
+      "complexity_target": "O(k * (m + n)^2) time / O(m + n) space"
+    },
+    "328": {
+      "reference": "index parity slicing over value array",
+      "candidate_design": "two-pointer odd and even chain relinking with evenHead attachment",
+      "complexity_target": "O(n) time / O(1) auxiliary pointer state"
+    },
+    "341": {
+      "reference": "eager recursive flattening with cursor index",
+      "candidate_design": "reversed explicit stack lazily expanding top nested lists in hasNext",
+      "complexity_target": "O(1) amortized next and hasNext time / O(depth + elements) space"
+    },
+    "352": {
+      "reference": "hash set of seen values sorted and grouped on each getIntervals call",
+      "candidate_design": "sorted disjoint intervals maintained via binary search and neighbor coalescing",
+      "complexity_target": "O(log m + m) addNum, O(m) getIntervals time / O(m) space"
+    },
+    "355": {
+      "reference": "global chronological post log filtered in reverse per query",
+      "candidate_design": "per-user bounded-10 recent tweet buffer merged via k-way max-heap over followees",
+      "complexity_target": "O(1) post/follow/unfollow, O(F log F) getNewsFeed time / O(U + F) space"
+    },
+    "374": {
+      "reference": "direct domain verification of target pick",
+      "candidate_design": "iterative binary search narrowing [low, high] via ternary comparator",
+      "complexity_target": "O(log n) time / O(1) space"
+    },
+    "380": {
+      "reference": "reference state transition model with identical swap-with-last invariant",
+      "candidate_design": "dense array plus value-to-index map with swap-with-last removal and 32-bit LCG sampling",
+      "complexity_target": "O(1) average insert, remove, and getRandom time / O(n) space"
+    },
+    "381": {
+      "reference": "reference multiset index-slot table and deterministic LCG sampling",
+      "candidate_design": "dense [value, bucket_slot] array plus per-value index list with O(1) back-pointer swap",
+      "complexity_target": "O(1) average insert, remove, and getRandom time / O(n) space"
+    },
+    "382": {
+      "reference": "reference array snapshot with LCG index selection",
+      "candidate_design": "extracted value array with O(1) uniform LCG index selection",
+      "complexity_target": "O(n) init, O(1) getRandom time / O(n) space"
+    },
+    "384": {
+      "reference": "reference Fisher-Yates permutation over fresh copy",
+      "candidate_design": "immutable original array copy with backward Fisher-Yates shuffle on fresh buffer",
+      "complexity_target": "O(n) reset and shuffle time / O(n) space"
+    },
+    "385": {
+      "reference": "grammar-validated JSON recursive structure parser",
+      "candidate_design": "single-pass explicit stack parser constructing NestedInteger nodes",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "398": {
+      "reference": "grouped index table with deterministic LCG selection",
+      "candidate_design": "value-to-indices hash map with O(1) LCG bucket selection",
+      "complexity_target": "O(n) init, O(1) pick time / O(n) space"
+    },
+    "420": {
+      "reference": "independent run-length modular reduction and character-class check",
+      "candidate_design": "run-length extraction with greedy deletion allocation by L mod 3 priority",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "427": {
+      "reference": "direct cell-by-cell quadrant uniformity scan and level-order serialization",
+      "candidate_design": "2D prefix sums for O(1) quadrant uniformity checks with recursive quadtree build",
+      "complexity_target": "O(n^2) time / O(n^2) space"
+    },
+    "429": {
+      "reference": "depth-indexed recursive traversal over reconstructed N-ary tree",
+      "candidate_design": "breadth-first queue traversal grouping node values by level",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "430": {
+      "reference": "recursive depth-first traversal over multilevel chains",
+      "candidate_design": "iterative preorder stack splicing child chains before next pointers",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "432": {
+      "reference": "direct frequency Counter scanning extrema per query",
+      "candidate_design": "doubly-linked list of frequency buckets with key-to-bucket hash map",
+      "complexity_target": "O(1) inc/dec, O(bucket) canonical tie-broken extrema time / O(n) space"
+    },
+    "449": {
+      "reference": "BST validation and canonical level-order normalization",
+      "candidate_design": "compact preorder value stream without null markers reconstructed via monotonic stack",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "460": {
+      "reference": "dictionary tracking (value, freq, timestamp) with linear minimum scan on eviction",
+      "candidate_design": "key-to-(val,freq) map plus frequency-to-insertion-ordered-set buckets and minFreq pointer",
+      "complexity_target": "O(1) get and put time / O(capacity) space"
+    },
+    "466": {
+      "reference": "direct character scan on bounded repetitions with cycle fallback",
+      "candidate_design": "pigeonhole cycle detection on s2 index remainder after each s1 block",
+      "complexity_target": "O(|s1| * |s2|) time / O(|s2|) space"
+    },
+    "470": {
+      "reference": "direct pair-table filtering over input rand7 stream",
+      "candidate_design": "rejection sampling mapping 7x7 uniform grid 1..49 onto 1..40 modulo 10",
+      "complexity_target": "O(1) expected calls (2.45 rand7 calls per rand10) / O(1) space"
+    },
+    "478": {
+      "reference": "reference unit-square rejection sampling with shared LCG",
+      "candidate_design": "unit-square [-1, 1]^2 rejection sampling using exact dyadic LCG floats",
+      "complexity_target": "O(1) expected randPoint time / O(1) space"
+    },
+    "479": {
+      "reference": "independent descending palindrome factor search modulo 1337",
+      "candidate_design": "descending upper-half palindrome generation with 64-bit/BigInt factor trial division",
+      "complexity_target": "O(10^(2n)) worst-case bounded n<=8 search / O(1) space"
+    },
+    "480": {
+      "reference": "per-window slice copy and full sort from scratch",
+      "candidate_design": "sorted sliding window maintained via binary-search removal and insertion",
+      "complexity_target": "O(n * k) binary-search window maintenance time / O(k) space"
+    },
+    "483": {
+      "reference": "trial base division for small N and geometric-series identity verification",
+      "candidate_design": "iterate repunit length m from log2(N) down to 2 with integer binary search on base k",
+      "complexity_target": "O(log^2 N) time / O(1) space"
+    },
+    "488": {
+      "reference": "reference BFS state search with run collapsing",
+      "candidate_design": "breadth-first search with iterative 3+ run collapse and same-color/split-pair insertion pruning",
+      "complexity_target": "O(states) pruned BFS over collapsed (board, hand) pairs"
+    },
+    "497": {
+      "reference": "reference prefix weight lookup and grid coordinate decoding",
+      "candidate_design": "prefix sums of integer lattice point counts per rectangle with binary search and 2D offset",
+      "complexity_target": "O(R) init, O(log R) pick time / O(R) space"
+    },
+    "519": {
+      "reference": "reference sparse Fisher-Yates index transposition map",
+      "candidate_design": "virtual Fisher-Yates hash map swapping sampled index with decremented tail",
+      "complexity_target": "O(1) flip and reset time / O(flips) sparse space"
+    },
+    "528": {
+      "reference": "reference linear prefix scan on uniform target in 1..total",
+      "candidate_design": "prefix weight sums with binary search (lower_bound) on uniform target in 1..total",
+      "complexity_target": "O(n) init, O(log n) pickIndex time / O(n) space"
+    },
+    "535": {
+      "reference": "identity round-trip URL verification",
+      "candidate_design": "bijective base-62 counter map with URL-to-code and code-to-URL dictionaries",
+      "complexity_target": "O(|url|) encode and decode time / O(urls) space"
+    },
+    "558": {
+      "reference": "expand both quadtrees to full binary grids, bitwise OR cells, and rebuild quadtree",
+      "candidate_design": "recursive quadtree logical OR short-circuiting on leaves and coalescing 4 identical leaf children",
+      "complexity_target": "O(nodes) time / O(nodes) space"
+    },
+    "559": {
+      "reference": "recursive depth-first max child depth traversal",
+      "candidate_design": "iterative breadth-first level queue counting tree depth",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "572": {
+      "reference": "recursive structural subtree equality test at every root node",
+      "candidate_design": "canonical preorder token serialization with explicit null markers matched via KMP prefix function",
+      "complexity_target": "O(|root| + |subRoot|) time / O(|root| + |subRoot|) space"
+    },
+    "587": {
+      "reference": "all-pairs supporting half-plane check identifying collinear boundary points",
+      "candidate_design": "Andrew monotone chain lower and upper hulls retaining collinear boundary points",
+      "complexity_target": "O(n log n) time / O(n) space"
+    }
+  },
+  "numeric": "JS BigInt for 479 palindrome products and 483 base binary search; 32-bit exact LCG for randomized trace classes; all final outputs exact in IEEE-754 double / safe integer range",
+  "effects": "input arrays, nested grids, and trace lists unchanged; fresh outputs only"
+}

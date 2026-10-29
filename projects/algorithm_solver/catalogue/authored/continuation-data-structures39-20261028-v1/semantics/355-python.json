@@ -1,0 +1,40 @@
+{
+  "candidate_design": "per-user bounded-10 recent tweet buffer merged via k-way max-heap over followees",
+  "comparison": "exact typed JSON result",
+  "complexity_target": "O(1) post/follow/unfollow, O(F log F) getNewsFeed time / O(U + F) space",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "Twitter",
+    "params": [
+      {
+        "name": "operation_names",
+        "type": "string[]"
+      },
+      {
+        "name": "argument_lists",
+        "type": "any[][]"
+      }
+    ],
+    "return": {
+      "type": "any[]"
+    }
+  },
+  "parameters": [
+    "operation_names",
+    "argument_lists"
+  ],
+  "problem_id": 355,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "per-user bounded-10 recent tweet buffer merged via k-way max-heap over followees",
+    "complexity_target": "O(1) post/follow/unfollow, O(F log F) getNewsFeed time / O(U + F) space",
+    "reference": "global chronological post log filtered in reverse per query"
+  },
+  "source_sha256": "4daf29217ebb389c345aebd89579ddb08fb4ebc007d82bf150d0dc2e2ca989da"
+}
