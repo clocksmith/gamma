@@ -1,0 +1,88 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6879a663ef2889afac734167",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "FoodDeliverySystem",
+  "constructor": {
+   "params": [
+    {
+     "name": "restaurants",
+     "type": "list<[string,integer,integer]>"
+    },
+    {
+     "name": "menu",
+     "type": "list<[string,string,integer]>"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "getBestOption",
+    "params": [
+     {
+      "name": "item",
+      "type": "string"
+     },
+     {
+      "name": "userX",
+      "type": "integer"
+     },
+     {
+      "name": "userY",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   {
+    "name": "getBestOrder",
+    "params": [
+     {
+      "name": "items",
+      "type": "string[]"
+     },
+     {
+      "name": "userX",
+      "type": "integer"
+     },
+     {
+      "name": "userY",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rescan the whole menu for every query: for each restaurant collect the prices of the requested items and keep it when all are present",
+  "candidate_design": "per-item index of restaurant -> price; an order starts from the item with the fewest offers and probes the other items' maps for each of its restaurants",
+  "complexity_target": "O(offers of the rarest item * items) per order/O(menu) space"
+ },
+ "source_sha256": "e89172862bb49a4dd66ec7dc4b56500b00fdcf9356712ee03ffffc1a20cd6924",
+ "native_class": "FoodDeliverySystem",
+ "native_symbol": "module global FoodDeliverySystem",
+ "void_methods": []
+}

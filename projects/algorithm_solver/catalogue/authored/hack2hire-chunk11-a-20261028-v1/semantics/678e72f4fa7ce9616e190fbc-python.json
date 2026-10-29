@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:678e72f4fa7ce9616e190fbc",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findOptimalMoves",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "divide and conquer: add the minimum of the range, subtract it, and recurse into the positive runs",
+  "candidate_design": "one pass summing every positive rise arr[i] - arr[i-1] (with arr[-1] = 0)",
+  "complexity_target": "O(n) time/O(1) space"
+ },
+ "source_sha256": "9458b36e07980be2969c880474beec85871135767ba4cb06c4a3b01a525730ab",
+ "wrapper": "Solution.findOptimalMoves"
+}

@@ -1,0 +1,72 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68dd9212fb98b196fa540558",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "Vector2D",
+  "constructor": {
+   "params": [
+    {
+     "name": "vec",
+     "type": "integer[][]"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "next",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "hasNext",
+    "params": [],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "remove",
+    "params": [],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getVector",
+    "params": [],
+    "return": {
+     "type": "integer[][]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep a flat list of (row, value, alive) entries; getVector regroups every alive entry by row",
+  "candidate_design": "copy the rows, keep a row and column cursor that skips empty rows, a per-row list of removed flags and the position of the last returned element; getVector rebuilds rows from the flags",
+  "complexity_target": "O(1) amortised per next/hasNext/remove, O(total) per getVector/O(total) space"
+ },
+ "source_sha256": "7e95ade4d82cd4b007ebdb92fce58466b54593400556f8b1f03b1b50645c7e3d",
+ "native_class": "Vector2D",
+ "native_symbol": "module global Vector2D",
+ "void_methods": []
+}

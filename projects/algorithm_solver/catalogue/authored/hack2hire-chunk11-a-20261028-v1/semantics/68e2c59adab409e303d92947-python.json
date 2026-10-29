@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68e2c59adab409e303d92947",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "customerIds",
+  "movies",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findFriendGroups",
+  "params": [
+   {
+    "name": "customerIds",
+    "type": "string[]"
+   },
+   {
+    "name": "movies",
+    "type": "string[][]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "compare every pair of customers' last-k sets and merge equal ones",
+  "candidate_design": "canonical key = sorted distinct last-k movies joined by a separator; one hash map from key to member list in input order",
+  "complexity_target": "O(sum k log k) time/O(n k) space"
+ },
+ "source_sha256": "1aa760fd3f3f8c9a4f215317cbbff3b3d62b3c3471a3d478b641e8301b94ed53",
+ "wrapper": "Solution.findFriendGroups"
+}

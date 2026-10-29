@@ -1,0 +1,492 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68dd920dfb98b196fa540557:68dd9212fb98b196fa540558:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+   "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+   "selector": "/problems/12"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68dd920dfb98b196fa540557.json",
+   "sha256": "fd75bc0ce7773be2c6b14a2c278d18931d36d0de3ee8cf9ff3d058998d165fee",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+   "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+   "selector": "/variants/hack2hire:68dd9212fb98b196fa540558"
+  }
+ ],
+ "problemId": "hack2hire:68dd920dfb98b196fa540557",
+ "variantId": "68dd9212fb98b196fa540558",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: 2D iterator with remove-last and snapshot",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68dd9212fb98b196fa540558/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Vector2D(vec) copies a list of integer rows (rows may be empty). next() returns the next integer in row-major order and is only called when one remains. hasNext() reports whether one remains. remove() deletes the element most recently returned by next() and returns true; when next() has not been called yet, or that element was already removed, it changes nothing and returns false. Removal does not change which element next() returns. getVector() returns the current rows (every original row, possibly empty) without the removed elements. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Vector2D(vec) copies a list of integer rows (rows may be empty).",
+   "next() returns the next integer in row-major order and is only called when one remains.",
+   "hasNext() reports whether one remains.",
+   "remove() deletes the element most recently returned by next() and returns true; when next() has not been called yet, or that element was already removed, it changes nothing and returns false.",
+   "Removal does not change which element next() returns.",
+   "getVector() returns the current rows (every original row, possibly empty) without the removed elements.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= rows <= 1e4",
+   "0 <= total elements <= 1e5",
+   "-1e9 <= value <= 1e9",
+   "up to 1e5 calls",
+   "next only when hasNext is true",
+   "sum of getVector output sizes <= 2e6"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68dd9212fb98b196fa540558/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: design an iterator over a 2D vector row by row that also removes the last returned element and returns a snapshot of the current vector after removals; Vector2D class (methods cut off); variation of LeetCode 251; algorithmTags: DESIGN, ARRAY; preview response sha256 ecd5c4d7efad3d4627b14ef83097a6cd07c3757207930945035a0cbc1b3cd288"
+   },
+   {
+    "statement": "Uncertainty: high: the class name, row-major iteration, removing the last returned element and the snapshot are in the preview; the method names, remove returning a boolean, the no-op rule and keeping empty rows in the snapshot are inferred",
+    "basis": "the public group preview is partial (553 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/12/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/12/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/12/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does remove do when nothing was returned yet or it was already removed?",
+   "Does getVector keep rows that became empty?",
+   "Is next ever called past the end?",
+   "Must the original vector be left untouched?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68dd9212fb98b196fa540558/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "Vector2D",
+      "hasNext"
+     ],
+     [
+      [
+       [
+        []
+       ]
+      ],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "Vector2D",
+      "remove",
+      "hasNext",
+      "next",
+      "remove",
+      "getVector",
+      "hasNext",
+      "hasNext",
+      "remove",
+      "next",
+      "hasNext",
+      "remove",
+      "remove",
+      "next",
+      "hasNext",
+      "remove",
+      "hasNext",
+      "remove",
+      "hasNext"
+     ],
+     [
+      [
+       [
+        [],
+        [
+         -5,
+         5
+        ],
+        [],
+        [
+         1
+        ]
+       ]
+      ],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     false,
+     true,
+     -5,
+     true,
+     [
+      [],
+      [
+       5
+      ],
+      [],
+      [
+       1
+      ]
+     ],
+     true,
+     true,
+     false,
+     5,
+     true,
+     true,
+     false,
+     1,
+     false,
+     true,
+     false,
+     false,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68dd9212fb98b196fa540558/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/oracles.py",
+    "sha256": "f713a637167e1f017476052c44bfc54213ffff7485ad1afdcd959ec9f9e5d7c4",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Vector2D:\n    def __init__(self, vec)\n    def next(self) -> integer\n    def hasNext(self) -> boolean\n    def remove(self) -> boolean\n    def getVector(self) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+      "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68dd9212fb98b196fa540558-python.json",
+     "inferredInterface": {
+      "classname": "Vector2D",
+      "constructor": {
+       "params": [
+        {
+         "name": "vec",
+         "type": "integer[][]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "next",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "hasNext",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "remove",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getVector",
+        "params": [],
+        "return": {
+         "type": "integer[][]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68dd9212fb98b196fa540558-python.json",
+      "sha256": "2b5fd5c3251b4acc635f767346c08e2eae4507ba319a4e1f13ae04560eb64129",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Vector2D {\n  constructor(vec)\n  next() /* -> integer */\n  hasNext() /* -> boolean */\n  remove() /* -> boolean */\n  getVector() /* -> integer[][] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+      "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68dd9212fb98b196fa540558-javascript.json",
+     "inferredInterface": {
+      "classname": "Vector2D",
+      "constructor": {
+       "params": [
+        {
+         "name": "vec",
+         "type": "integer[][]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "next",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "hasNext",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "remove",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getVector",
+        "params": [],
+        "return": {
+         "type": "integer[][]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68dd9212fb98b196fa540558-javascript.json",
+      "sha256": "7849501b220a6246af8036d6985a8d3e0557672825065d47d4d3c124b481f2a1",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/12/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/12/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,376 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68ae72afc8631a6568126db2:68ae7b5ec8631a6568126dbe:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+   "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68ae72afc8631a6568126db2.json",
+   "sha256": "e187ffa7a55ab136e07c795c68058d18df5604934e9dc6da29e088f9d6ad5e74",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+   "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+   "selector": "/variants/hack2hire:68ae7b5ec8631a6568126dbe"
+  }
+ ],
+ "problemId": "hack2hire:68ae72afc8631a6568126db2",
+ "variantId": "68ae7b5ec8631a6568126dbe",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: smallest score whose upper tail is loss-heavy enough",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68ae7b5ec8631a6568126dbe/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "games is a list of [score, result] where score is a canonical decimal string of an integer 0..1e9 and result is \"win\" or \"lose\"; threshold is a number in [0, 1]. A candidate threshold s is one of the scores that occur. s is valid when, among the games with score >= s, the proportion lose / total, computed as an IEEE-754 double quotient, is >= threshold. Return the smallest valid s, or -1 when none is valid (including no games).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "games is a list of [score, result] where score is a canonical decimal string of an integer 0..1e9 and result is \"win\" or \"lose\"; threshold is a number in [0, 1].",
+   "A candidate threshold s is one of the scores that occur.",
+   "s is valid when, among the games with score >= s, the proportion lose / total, computed as an IEEE-754 double quotient, is >= threshold.",
+   "Return the smallest valid s, or -1 when none is valid (including no games)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= games.length <= 1e5",
+   "scores are canonical decimal strings 0..1e9",
+   "result is \"win\" or \"lose\"",
+   "0 <= threshold <= 1"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68ae7b5ec8631a6568126dbe/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: list of games [score string, \"win\" or \"lose\"] and a decimal threshold in [0, 1] giving the minimum proportion of lose games required (task cut off); algorithmTags: GREEDY, HASH_TABLE; preview response sha256 6aeb5b3c99729ef3ecc38aaf1001e3f441039f93ed882e304befd5517a94d9f7"
+   },
+   {
+    "statement": "Uncertainty: very high: the inputs are in the preview; what is being thresholded (games at or above the score), the candidate set (occurring scores), the floating comparison and the -1 result are inferred",
+    "basis": "the public group preview is partial (376 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which games does a score threshold select: at or above, or below?",
+   "Must the threshold be one of the observed scores?",
+   "What is returned when no threshold qualifies?",
+   "How are proportions compared (exactly or as floats)?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68ae7b5ec8631a6568126dbe/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     1
+    ],
+    "output": -1,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "1000000000",
+       "lose"
+      ],
+      [
+       "1",
+       "win"
+      ],
+      [
+       "2",
+       "win"
+      ],
+      [
+       "9",
+       "lose"
+      ],
+      [
+       "100",
+       "lose"
+      ],
+      [
+       "5",
+       "lose"
+      ],
+      [
+       "1000000000",
+       "win"
+      ],
+      [
+       "2",
+       "lose"
+      ],
+      [
+       "5",
+       "win"
+      ],
+      [
+       "1",
+       "win"
+      ],
+      [
+       "1000000000",
+       "lose"
+      ],
+      [
+       "1",
+       "win"
+      ],
+      [
+       "0",
+       "lose"
+      ]
+     ],
+     0.6666666666666666
+    ],
+    "output": 2,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68ae7b5ec8631a6568126dbe/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/oracles.py",
+    "sha256": "f713a637167e1f017476052c44bfc54213ffff7485ad1afdcd959ec9f9e5d7c4",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findMinimumScoreThreshold(games, threshold) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+      "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68ae7b5ec8631a6568126dbe-python.json",
+     "inferredInterface": {
+      "name": "findMinimumScoreThreshold",
+      "params": [
+       {
+        "name": "games",
+        "type": "list<[string,string]>"
+       },
+       {
+        "name": "threshold",
+        "type": "number"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68ae7b5ec8631a6568126dbe-python.json",
+      "sha256": "4ef2234683dce7bdb9d846d11c4ed111e33b95430acc1f8e737e8bc7fa9dbbd9",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findMinimumScoreThreshold(games, threshold) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+      "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68ae7b5ec8631a6568126dbe-javascript.json",
+     "inferredInterface": {
+      "name": "findMinimumScoreThreshold",
+      "params": [
+       {
+        "name": "games",
+        "type": "list<[string,string]>"
+       },
+       {
+        "name": "threshold",
+        "type": "number"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68ae7b5ec8631a6568126dbe-javascript.json",
+      "sha256": "8435d6c32c12b69a1710aed032edb6ec03d72bc411392c647a9b8056ab4c73ab",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

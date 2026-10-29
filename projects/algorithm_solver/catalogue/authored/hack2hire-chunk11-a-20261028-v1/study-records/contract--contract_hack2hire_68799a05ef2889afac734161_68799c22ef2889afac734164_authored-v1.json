@@ -1,0 +1,519 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68799a05ef2889afac734161:68799c22ef2889afac734164:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+   "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68799a05ef2889afac734161.json",
+   "sha256": "69c53e69f2b9c42bcb6666f609245ee67b0fc85d95c7fac972a6002551758ed1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+   "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+   "selector": "/variants/hack2hire:68799c22ef2889afac734164"
+  }
+ ],
+ "problemId": "hack2hire:68799a05ef2889afac734161",
+ "variantId": "68799c22ef2889afac734164",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: cheapest price and fastest delivery for one item",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68799c22ef2889afac734164/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "FoodDeliverySystem(restaurants, menu) takes restaurants as [restaurantId, x, y] rows (unique ids, integer coordinates) and menu as [restaurantId, item, price] rows (known restaurant, each restaurant lists an item at most once, positive integer price). Delivery time equals the Manhattan distance |x - userX| + |y - userY| (speed 1). getBestOption(item, userX, userY) returns [lowest price of item over all restaurants offering it, smallest delivery time over those restaurants]; the two minima may come from different restaurants; [-1, -1] when nobody offers the item. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "FoodDeliverySystem(restaurants, menu) takes restaurants as [restaurantId, x, y] rows (unique ids, integer coordinates) and menu as [restaurantId, item, price] rows (known restaurant, each restaurant lists an item at most once, positive integer price).",
+   "Delivery time equals the Manhattan distance |x - userX| + |y - userY| (speed 1).",
+   "getBestOption(item, userX, userY) returns [lowest price of item over all restaurants offering it, smallest delivery time over those restaurants]; the two minima may come from different restaurants; [-1, -1] when nobody offers the item.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= restaurants <= 200",
+   "ids and items match [A-Za-z0-9_]{1,15}",
+   "-1e6 <= coordinates <= 1e6",
+   "0 <= menu rows <= 2e4",
+   "1 <= price <= 1e6",
+   "up to 2e4 calls"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68799c22ef2889afac734164/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: food delivery system that, given user coordinates, restaurants with locations and a menu of items with prices, returns the lowest available price and the fastest delivery time at constant speed 1; FoodDeliverySystem class (methods cut off); algorithmTags: ARRAY; codingQuestions (variant count/order); preview response sha256 32c16ef31c6128d32b06d3e7fcf96722af27fd89ccc0652c055b75c131494975"
+   },
+   {
+    "statement": "Uncertainty: high: the class name and the two returned quantities are in the preview; the constructor shapes, the method name, Manhattan distance (chosen to keep times exact integers; Euclidean is equally plausible), independent minima and [-1, -1] are inferred",
+    "basis": "the public group preview is partial (334 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = one item, lowest price and fastest time; 2 = adds orders of several items that one restaurant must serve completely",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the distance Manhattan or Euclidean?",
+   "Must the lowest price and the fastest time come from the same restaurant?",
+   "What is returned when no restaurant offers the item?",
+   "Can the menu change after construction?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68799c22ef2889afac734164/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "FoodDeliverySystem",
+      "getBestOption"
+     ],
+     [
+      [
+       [
+        [
+         "r0",
+         2,
+         0
+        ]
+       ],
+       [
+        [
+         "r0",
+         "c",
+         2
+        ],
+        [
+         "r0",
+         "b",
+         1
+        ]
+       ]
+      ],
+      [
+       "a",
+       5,
+       -5
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [
+      -1,
+      -1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "FoodDeliverySystem",
+      "getBestOption",
+      "getBestOption",
+      "getBestOption",
+      "getBestOption",
+      "getBestOption"
+     ],
+     [
+      [
+       [
+        [
+         "r0",
+         0,
+         -1
+        ],
+        [
+         "r1",
+         -5,
+         -4
+        ],
+        [
+         "r2",
+         -4,
+         3
+        ]
+       ],
+       [
+        [
+         "r2",
+         "b",
+         1
+        ],
+        [
+         "r0",
+         "b",
+         2
+        ],
+        [
+         "r0",
+         "c",
+         5
+        ],
+        [
+         "r0",
+         "a",
+         5
+        ]
+       ]
+      ],
+      [
+       "a",
+       4,
+       -1
+      ],
+      [
+       "a",
+       -3,
+       -5
+      ],
+      [
+       "a",
+       -1,
+       -3
+      ],
+      [
+       "c",
+       -2,
+       4
+      ],
+      [
+       "d",
+       -6,
+       5
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [
+      5,
+      4
+     ],
+     [
+      5,
+      7
+     ],
+     [
+      5,
+      3
+     ],
+     [
+      5,
+      7
+     ],
+     [
+      -1,
+      -1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68799c22ef2889afac734164/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/oracles.py",
+    "sha256": "f713a637167e1f017476052c44bfc54213ffff7485ad1afdcd959ec9f9e5d7c4",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class FoodDeliverySystem:\n    def __init__(self, restaurants, menu)\n    def getBestOption(self, item, userX, userY) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+      "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68799c22ef2889afac734164-python.json",
+     "inferredInterface": {
+      "classname": "FoodDeliverySystem",
+      "constructor": {
+       "params": [
+        {
+         "name": "restaurants",
+         "type": "list<[string,integer,integer]>"
+        },
+        {
+         "name": "menu",
+         "type": "list<[string,string,integer]>"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "getBestOption",
+        "params": [
+         {
+          "name": "item",
+          "type": "string"
+         },
+         {
+          "name": "userX",
+          "type": "integer"
+         },
+         {
+          "name": "userY",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68799c22ef2889afac734164-python.json",
+      "sha256": "017e183f225e15282d625fbc46a7fdef39e49f0f2c94e476796f3b0cf7db5bef",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class FoodDeliverySystem {\n  constructor(restaurants, menu)\n  getBestOption(item, userX, userY) /* -> integer[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+      "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68799c22ef2889afac734164-javascript.json",
+     "inferredInterface": {
+      "classname": "FoodDeliverySystem",
+      "constructor": {
+       "params": [
+        {
+         "name": "restaurants",
+         "type": "list<[string,integer,integer]>"
+        },
+        {
+         "name": "menu",
+         "type": "list<[string,string,integer]>"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "getBestOption",
+        "params": [
+         {
+          "name": "item",
+          "type": "string"
+         },
+         {
+          "name": "userX",
+          "type": "integer"
+         },
+         {
+          "name": "userY",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68799c22ef2889afac734164-javascript.json",
+      "sha256": "34be40e0ef185f51d457e831c9f7cebc73eaef68e41983b921d714bad7e6decd",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

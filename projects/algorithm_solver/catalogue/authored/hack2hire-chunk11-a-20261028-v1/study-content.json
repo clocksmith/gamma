@@ -1,0 +1,1701 @@
+{
+ "schema": "gamma.hack2hire-chunk11-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:6789754f11318cc872dd83ec": {
+   "constraints": [
+    "3 <= digits.length <= 50",
+    "0 <= digits[i] <= 9"
+   ],
+   "clarifyingQuestions": [
+    "Is the answer an integer or a string (leading zeros)?",
+    "Can fewer than three digits ever give a larger number?",
+    "Must the chosen digits be contiguous?"
+   ],
+   "hints": [
+    "Adding a digit to a chosen subsequence never makes the number smaller, so always pick exactly three.",
+    "The first chosen digit must leave two digits after it: take the largest digit among the first N - 2.",
+    "Take its leftmost occurrence so the later windows stay as wide as possible, then repeat for the second and third places."
+   ],
+   "invariants": [
+    "each chosen digit leaves enough positions for the remaining places",
+    "taking the leftmost maximum never shrinks the later choices"
+   ],
+   "chooseWhen": [
+    "Lexicographically largest fixed-length subsequence"
+   ],
+   "tradeoffs": [
+    "The greedy window scan is O(N * 3); a monotonic stack generalises to any length"
+   ],
+   "variantLabel": "Inferred single variant: largest ordered three-digit pick",
+   "examples": [
+    {
+     "input": [
+      [
+       1,
+       2,
+       3
+      ]
+     ],
+     "output": 123,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       0,
+       0,
+       0,
+       1,
+       2,
+       9,
+       9,
+       9,
+       9,
+       0,
+       1
+      ]
+     ],
+     "output": 999,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67cb459e9db31a8671abf92c": {
+   "constraints": [
+    "1 <= employees <= 1e5",
+    "names match [A-Za-z0-9]{1,15}",
+    "total direct-report entries = employees - 1",
+    "tree depth may reach 1e5 (no recursion)"
+   ],
+   "clarifyingQuestions": [
+    "How is the hierarchy given, and which node is the root?",
+    "Are both employees guaranteed to be in the tree?",
+    "Can an employee be its own lowest common manager?",
+    "How deep can the hierarchy be?"
+   ],
+   "hints": [
+    "Record each employee's manager and depth in one pass from the root.",
+    "Lift the deeper of the two employees until both are at the same depth.",
+    "Then lift both one level at a time; the first common name is the answer."
+   ],
+   "invariants": [
+    "after lifting, both pointers are at equal depth",
+    "the root is a common manager of every pair"
+   ],
+   "chooseWhen": [
+    "One-off queries on a deep tree without recursion"
+   ],
+   "tradeoffs": [
+    "Binary lifting answers many queries in O(log n) each at O(n log n) memory"
+   ],
+   "variantLabel": "Inferred single variant: lowest common manager in an n-ary org chart",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "e0",
+        []
+       ]
+      ],
+      "e0",
+      "e0"
+     ],
+     "output": "e0",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "e7",
+        [
+         "e0"
+        ]
+       ],
+       [
+        "e12",
+        [
+         "e3",
+         "e15",
+         "e9",
+         "e14"
+        ]
+       ],
+       [
+        "e10",
+        [
+         "e6",
+         "e2"
+        ]
+       ],
+       [
+        "e6",
+        []
+       ],
+       [
+        "e14",
+        [
+         "e10",
+         "e11"
+        ]
+       ],
+       [
+        "e3",
+        []
+       ],
+       [
+        "e0",
+        [
+         "e12",
+         "e13",
+         "e5"
+        ]
+       ],
+       [
+        "e13",
+        []
+       ],
+       [
+        "e2",
+        []
+       ],
+       [
+        "e9",
+        []
+       ],
+       [
+        "e4",
+        []
+       ],
+       [
+        "e5",
+        [
+         "e8",
+         "e1"
+        ]
+       ],
+       [
+        "e11",
+        [
+         "e4"
+        ]
+       ],
+       [
+        "e15",
+        []
+       ],
+       [
+        "e1",
+        []
+       ],
+       [
+        "e8",
+        []
+       ]
+      ],
+      "e0",
+      "e11"
+     ],
+     "output": "e0",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1cd98b8b879849ebc0fdaf": {
+   "constraints": [
+    "1 <= word.length <= 100",
+    "0 <= skeletons.length <= 1e4",
+    "every skeleton has word's length and uses [a-z-]"
+   ],
+   "clarifyingQuestions": [
+    "What is the second matching rule for dash positions?",
+    "Must a skeleton contain at least one dash?",
+    "Is the output in input order, and are duplicates kept?"
+   ],
+   "hints": [
+    "Non-dash positions are a direct comparison.",
+    "Under the dashes, only remember the first hidden letter.",
+    "Every later dash must hide that same letter."
+   ],
+   "invariants": [
+    "all dashes seen so far hide one letter",
+    "every non-dash position seen so far equals word"
+   ],
+   "chooseWhen": [
+    "Pattern filtering with a single wildcard class"
+   ],
+   "tradeoffs": [
+    "A per-letter count table would be needed for the stricter rule"
+   ],
+   "variantLabel": "Inferred single variant: skeletons hiding one letter",
+   "examples": [
+    {
+     "input": [
+      "ab",
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "ababaa",
+      [
+       "ab--a-",
+       "abb--a",
+       "a-a-aa",
+       "abab-a",
+       "---b--",
+       "-baba-",
+       "---bab",
+       "ab---a",
+       "abab-a",
+       "--a-ab",
+       "ababaa"
+      ]
+     ],
+     "output": [
+      "a-a-aa",
+      "abab-a",
+      "-baba-",
+      "abab-a",
+      "ababaa"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c2d9291f64f4312b0a3df2": {
+   "constraints": [
+    "1 <= nums.length <= 2e5",
+    "-1e9 <= nums[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is the even-length median returned as a float or rounded?",
+    "May the input be reordered in place?",
+    "Is O(N) expected in the worst case or amortised?"
+   ],
+   "hints": [
+    "You only need one or two order statistics, not the whole sorted array.",
+    "Partition around a pivot and recurse only into the side holding the wanted rank.",
+    "Three-way partitioning keeps duplicate-heavy inputs linear; a fixed pseudo-random pivot sequence keeps both languages identical."
+   ],
+   "invariants": [
+    "the wanted rank always lies in the current range",
+    "values left of the range are smaller and right of it are larger than any value inside"
+   ],
+   "chooseWhen": [
+    "One-off order statistics on large unsorted data"
+   ],
+   "tradeoffs": [
+    "Quickselect copies the input to avoid mutation; worst case is quadratic but needs adversarial pivots"
+   ],
+   "variantLabel": "Inferred single variant: linear-time median selection",
+   "examples": [
+    {
+     "input": [
+      [
+       7
+      ]
+     ],
+     "output": 7,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       4,
+       -60860767,
+       -2,
+       -310639717,
+       -5,
+       -942720005,
+       443340475,
+       747572012,
+       0,
+       892575711,
+       400602754,
+       135135710,
+       204727765
+      ]
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a25626c5f86173882e3d8f": {
+   "constraints": [
+    "1 <= image.length <= 2e5",
+    "image uses only 0 and 1"
+   ],
+   "clarifyingQuestions": [
+    "What is the target of the operations: the reverse, a palindrome, something else?",
+    "Can a character be moved more than once?",
+    "Is the answer the count of moves or the moves themselves?"
+   ],
+   "hints": [
+    "Characters you never move stay in order and end up at the front.",
+    "So keep the longest prefix of the target that appears as a subsequence of image.",
+    "Every other character is moved once, in target order."
+   ],
+   "invariants": [
+    "matched characters form a prefix of the target",
+    "the greedy earliest match maximises the matched prefix"
+   ],
+   "chooseWhen": [
+    "Minimum moves to the end to reach a permutation"
+   ],
+   "tradeoffs": [
+    "The greedy match is linear; recording the moves themselves needs O(n) more output"
+   ],
+   "variantLabel": "Inferred single variant: move-to-end operations to reach the reverse",
+   "examples": [
+    {
+     "input": [
+      "0"
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "00101101"
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68ae7b5ec8631a6568126dbe": {
+   "constraints": [
+    "0 <= games.length <= 1e5",
+    "scores are canonical decimal strings 0..1e9",
+    "result is \"win\" or \"lose\"",
+    "0 <= threshold <= 1"
+   ],
+   "clarifyingQuestions": [
+    "Which games does a score threshold select: at or above, or below?",
+    "Must the threshold be one of the observed scores?",
+    "What is returned when no threshold qualifies?",
+    "How are proportions compared (exactly or as floats)?"
+   ],
+   "hints": [
+    "Group the games by score first.",
+    "Walking the distinct scores from high to low, the selected set only grows: keep running loss and total counts.",
+    "Check every prefix and keep the smallest qualifying score."
+   ],
+   "invariants": [
+    "running counts equal the games with score >= the current score",
+    "scores are visited in decreasing order"
+   ],
+   "chooseWhen": [
+    "Tail statistics over a sorted key"
+   ],
+   "tradeoffs": [
+    "A hash map plus a sort of distinct scores beats rescanning per candidate"
+   ],
+   "variantLabel": "Inferred single variant: smallest score whose upper tail is loss-heavy enough",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "1000000000",
+        "lose"
+       ],
+       [
+        "1",
+        "win"
+       ],
+       [
+        "2",
+        "win"
+       ],
+       [
+        "9",
+        "lose"
+       ],
+       [
+        "100",
+        "lose"
+       ],
+       [
+        "5",
+        "lose"
+       ],
+       [
+        "1000000000",
+        "win"
+       ],
+       [
+        "2",
+        "lose"
+       ],
+       [
+        "5",
+        "win"
+       ],
+       [
+        "1",
+        "win"
+       ],
+       [
+        "1000000000",
+        "lose"
+       ],
+       [
+        "1",
+        "win"
+       ],
+       [
+        "0",
+        "lose"
+       ]
+      ],
+      0.6666666666666666
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678e72f4fa7ce9616e190fbc": {
+   "constraints": [
+    "1 <= arr.length <= 1e5",
+    "0 <= arr[i] <= 1e9",
+    "answer <= 1e14"
+   ],
+   "clarifyingQuestions": [
+    "Is the goal to reach arr exactly with the fewest moves?",
+    "May values be negative?",
+    "Can the answer exceed 32-bit range?"
+   ],
+   "hints": [
+    "A move that covers a position can be extended rightwards for free while values do not drop.",
+    "New moves must start only where the value rises.",
+    "Sum the positive rises from left to right."
+   ],
+   "invariants": [
+    "moves started so far equal the sum of rises up to i",
+    "every position is covered by exactly arr[i] moves"
+   ],
+   "chooseWhen": [
+    "Range-increment counting problems"
+   ],
+   "tradeoffs": [
+    "The rise sum is the closed form of the divide-and-conquer recursion"
+   ],
+   "variantLabel": "Inferred single variant: fewest range increments",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1000000000,
+       1000000000,
+       2,
+       1000000000,
+       3,
+       1000000000,
+       0,
+       3,
+       3,
+       1000000000,
+       1000000000
+      ]
+     ],
+     "output": 3999999995,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:685303fe1af0034b3227652e": {
+   "constraints": [
+    "1 <= n <= 75",
+    "0 <= startValue, destValue < F(n + 2) - 1 (below 2**53)"
+   ],
+   "clarifyingQuestions": [
+    "What are the trees of order 0 and 1?",
+    "How are nodes labelled?",
+    "Which step letters are used?",
+    "How large can n be?"
+   ],
+   "hints": [
+    "The tree is exponential in n, so never build it.",
+    "A subtree of order m has S(m) = 1 + S(m - 2) + S(m - 1) nodes; with pre-order labels, comparing a label with S(m - 2) tells you whether to go left or right.",
+    "Walk both labels from the root, drop the shared prefix, then go up once per remaining start step and follow the rest of the dest path."
+   ],
+   "invariants": [
+    "the remaining label is always below the current subtree size",
+    "the common prefix ends at the lowest common ancestor"
+   ],
+   "chooseWhen": [
+    "Implicit trees defined by recurrences"
+   ],
+   "tradeoffs": [
+    "Sizes up to order 75 fit exactly in a double; larger orders would need big integers"
+   ],
+   "variantLabel": "Inferred single variant: directions inside an implicit Fibonacci tree",
+   "examples": [
+    {
+     "input": [
+      1,
+      0,
+      0
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      11,
+      163,
+      134
+     ],
+     "output": "UUUUUULRRRLL",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68a5e98e3a368733bb10422e": {
+   "constraints": [
+    "2 <= n <= 2e4",
+    "0 <= edges.length <= 5e4",
+    "1 <= w <= 1e9",
+    "1 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "What is returned when node n is unreachable within k edges?",
+    "Are self-loops or parallel edges present?",
+    "Is k a limit on edges or on intermediate nodes?"
+   ],
+   "hints": [
+    "If a bottleneck b is achievable, every larger b is too: the answer is monotone.",
+    "For a fixed b, keep only edges with weight <= b and ask whether the fewest-edge path to n has at most k edges.",
+    "Binary-search b over the distinct edge weights, testing each with a breadth-first search."
+   ],
+   "invariants": [
+    "feasibility is monotone in the weight bound",
+    "breadth-first search gives the fewest-edge distance"
+   ],
+   "chooseWhen": [
+    "Bottleneck objectives combined with a hop limit"
+   ],
+   "tradeoffs": [
+    "Dijkstra on (bottleneck, hops) pairs fails because the two criteria conflict; binary search keeps it simple"
+   ],
+   "variantLabel": "Inferred single variant: hop-limited minimum bottleneck path",
+   "examples": [
+    {
+     "input": [
+      6,
+      [],
+      2
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      7,
+      [
+       [
+        1,
+        4,
+        1
+       ],
+       [
+        4,
+        3,
+        1000000000
+       ],
+       [
+        5,
+        1,
+        1000000000
+       ],
+       [
+        5,
+        7,
+        3
+       ],
+       [
+        6,
+        1,
+        1000000000
+       ],
+       [
+        5,
+        2,
+        3
+       ],
+       [
+        6,
+        7,
+        5
+       ],
+       [
+        7,
+        2,
+        3
+       ],
+       [
+        1,
+        4,
+        1000000000
+       ],
+       [
+        4,
+        1,
+        1000000000
+       ],
+       [
+        7,
+        1,
+        1000000000
+       ],
+       [
+        3,
+        4,
+        1000000000
+       ]
+      ],
+      7
+     ],
+     "output": 1000000000,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1f3ca28b879849ebc10ffb": {
+   "constraints": [
+    "1 <= wordDict.length <= 1000",
+    "1 <= word length <= 30",
+    "1 <= pattern.length <= 30",
+    "words are distinct lowercase strings"
+   ],
+   "clarifyingQuestions": [
+    "Must the pattern match the whole word or a substring?",
+    "Can \".\" match zero characters?",
+    "In which order should matches be returned?"
+   ],
+   "hints": [
+    "Treat each word separately: does the whole pattern match the whole word?",
+    "dp[i][j] says whether the first i characters of the word match the first j pattern symbols.",
+    "For \".\" either it consumes its first character (dp[i-1][j-1]) or it extends (dp[i-1][j]); keep only one row."
+   ],
+   "invariants": [
+    "dp[0][0] is true and dp[0][j] is false for j > 0 because every symbol consumes a character",
+    "each row depends only on the previous row"
+   ],
+   "chooseWhen": [
+    "Wildcard matching against a dictionary"
+   ],
+   "tradeoffs": [
+    "A trie walk could share prefixes, at the cost of more code"
+   ],
+   "variantLabel": "Inferred single variant: wildcard filtering with one-or-more dots",
+   "examples": [
+    {
+     "input": [
+      [
+       "aa"
+      ],
+      ".?."
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "bbaba",
+       "aaaaa",
+       "bab",
+       "a",
+       "bbaab",
+       "aba",
+       "aaaba",
+       "b",
+       "baaab",
+       "abb",
+       "ba"
+      ],
+      "a.a"
+     ],
+     "output": [
+      "aaaaa",
+      "aba",
+      "aaaba"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69e51800ad1522fdaff14d5f": {
+   "constraints": [
+    "1 <= arr.length <= 1e5",
+    "1 <= arr[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Must the subset be non-empty?",
+    "Are the elements bounded by 2**31?",
+    "Is the size or the subset returned?"
+   ],
+   "hints": [
+    "When is an AND greater than zero?",
+    "Some single bit must be set in every chosen element.",
+    "For each bit count the elements that have it; the best bit gives the answer."
+   ],
+   "invariants": [
+    "a subset with positive AND lies inside one bit's group",
+    "every bit group is itself a valid subset"
+   ],
+   "chooseWhen": [
+    "Bitwise subset questions with a common-bit structure"
+   ],
+   "tradeoffs": [
+    "Thirty counters replace an exponential search"
+   ],
+   "variantLabel": "Inferred single variant: largest subset sharing a bit",
+   "examples": [
+    {
+     "input": [
+      [
+       7
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       12,
+       1000000000,
+       1000000000,
+       5,
+       4,
+       2,
+       5,
+       8
+      ]
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6795a8a1010c9ed2f849b1fd": {
+   "constraints": [
+    "1 <= word.length <= 2e4",
+    "word uses lowercase letters"
+   ],
+   "clarifyingQuestions": [
+    "Where does the cursor start?",
+    "Which letters denote moves and the key press?",
+    "If several shortest paths exist, which one is expected?"
+   ],
+   "hints": [
+    "Each letter c sits at row (c - a) // 5 and column (c - a) % 5.",
+    "Only z is dangerous: going down into row 5 must happen after moving left, and leaving z must go up first.",
+    "Emitting up and left moves before down and right moves satisfies both."
+   ],
+   "invariants": [
+    "the cursor never leaves an occupied cell",
+    "each letter costs |dr| + |dc| moves plus one press"
+   ],
+   "chooseWhen": [
+    "Keyboard and remote-control path puzzles"
+   ],
+   "tradeoffs": [
+    "A fixed move order makes the path unique; any other shortest order would be equally short"
+   ],
+   "variantLabel": "Inferred single variant: alphabet-board key path",
+   "examples": [
+    {
+     "input": [
+      "a"
+     ],
+     "output": "!",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "tktyjpaau"
+     ],
+     "output": "DDDRRRR!ULLLL!DRRRR!D!UUU!LLLLDD!UUU!!DDDD!",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68dd9212fb98b196fa540558": {
+   "constraints": [
+    "0 <= rows <= 1e4",
+    "0 <= total elements <= 1e5",
+    "-1e9 <= value <= 1e9",
+    "up to 1e5 calls",
+    "next only when hasNext is true",
+    "sum of getVector output sizes <= 2e6"
+   ],
+   "clarifyingQuestions": [
+    "What does remove do when nothing was returned yet or it was already removed?",
+    "Does getVector keep rows that became empty?",
+    "Is next ever called past the end?",
+    "Must the original vector be left untouched?"
+   ],
+   "hints": [
+    "Copy the rows so the caller's vector never changes.",
+    "Keep a cursor (row, column) that is advanced past empty rows lazily in hasNext.",
+    "Do not shift arrays on remove: mark the last returned position as removed and rebuild rows only when a snapshot is requested."
+   ],
+   "invariants": [
+    "the cursor always points at the next unreturned element or the end",
+    "a position can be removed at most once"
+   ],
+   "chooseWhen": [
+    "Iterators that must support deletion without invalidating the cursor"
+   ],
+   "tradeoffs": [
+    "Lazy deletion keeps remove O(1) but makes each snapshot O(total)"
+   ],
+   "variantLabel": "Inferred single variant: 2D iterator with remove-last and snapshot",
+   "examples": [
+    {
+     "input": [
+      [
+       "Vector2D",
+       "hasNext"
+      ],
+      [
+       [
+        [
+         []
+        ]
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Vector2D",
+       "remove",
+       "hasNext",
+       "next",
+       "remove",
+       "getVector",
+       "hasNext",
+       "hasNext",
+       "remove",
+       "next",
+       "hasNext",
+       "remove",
+       "remove",
+       "next",
+       "hasNext",
+       "remove",
+       "hasNext",
+       "remove",
+       "hasNext"
+      ],
+      [
+       [
+        [
+         [],
+         [
+          -5,
+          5
+         ],
+         [],
+         [
+          1
+         ]
+        ]
+       ],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      true,
+      -5,
+      true,
+      [
+       [],
+       [
+        5
+       ],
+       [],
+       [
+        1
+       ]
+      ],
+      true,
+      true,
+      false,
+      5,
+      true,
+      true,
+      false,
+      1,
+      false,
+      true,
+      false,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68799c22ef2889afac734164": {
+   "constraints": [
+    "1 <= restaurants <= 200",
+    "ids and items match [A-Za-z0-9_]{1,15}",
+    "-1e6 <= coordinates <= 1e6",
+    "0 <= menu rows <= 2e4",
+    "1 <= price <= 1e6",
+    "up to 2e4 calls"
+   ],
+   "clarifyingQuestions": [
+    "Is the distance Manhattan or Euclidean?",
+    "Must the lowest price and the fastest time come from the same restaurant?",
+    "What is returned when no restaurant offers the item?",
+    "Can the menu change after construction?"
+   ],
+   "hints": [
+    "The lowest price does not depend on the user: precompute it per item.",
+    "The fastest time does depend on the user: keep each item's list of restaurant locations.",
+    "A query is then one lookup plus one scan of that list."
+   ],
+   "invariants": [
+    "each item index lists exactly the restaurants that offer it",
+    "delivery times are exact integers"
+   ],
+   "chooseWhen": [
+    "Many queries over a static catalogue"
+   ],
+   "tradeoffs": [
+    "A spatial index would beat the per-item scan for very large catalogues"
+   ],
+   "variantLabel": "Inferred level 1: cheapest price and fastest delivery for one item",
+   "examples": [
+    {
+     "input": [
+      [
+       "FoodDeliverySystem",
+       "getBestOption"
+      ],
+      [
+       [
+        [
+         [
+          "r0",
+          2,
+          0
+         ]
+        ],
+        [
+         [
+          "r0",
+          "c",
+          2
+         ],
+         [
+          "r0",
+          "b",
+          1
+         ]
+        ]
+       ],
+       [
+        "a",
+        5,
+        -5
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       -1,
+       -1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "FoodDeliverySystem",
+       "getBestOption",
+       "getBestOption",
+       "getBestOption",
+       "getBestOption",
+       "getBestOption"
+      ],
+      [
+       [
+        [
+         [
+          "r0",
+          0,
+          -1
+         ],
+         [
+          "r1",
+          -5,
+          -4
+         ],
+         [
+          "r2",
+          -4,
+          3
+         ]
+        ],
+        [
+         [
+          "r2",
+          "b",
+          1
+         ],
+         [
+          "r0",
+          "b",
+          2
+         ],
+         [
+          "r0",
+          "c",
+          5
+         ],
+         [
+          "r0",
+          "a",
+          5
+         ]
+        ]
+       ],
+       [
+        "a",
+        4,
+        -1
+       ],
+       [
+        "a",
+        -3,
+        -5
+       ],
+       [
+        "a",
+        -1,
+        -3
+       ],
+       [
+        "c",
+        -2,
+        4
+       ],
+       [
+        "d",
+        -6,
+        5
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       5,
+       4
+      ],
+      [
+       5,
+       7
+      ],
+      [
+       5,
+       3
+      ],
+      [
+       5,
+       7
+      ],
+      [
+       -1,
+       -1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6879a663ef2889afac734167": {
+   "constraints": [
+    "1 <= restaurants <= 200",
+    "ids and items match [A-Za-z0-9_]{1,15}",
+    "-1e6 <= coordinates <= 1e6",
+    "0 <= menu rows <= 2e4",
+    "1 <= price <= 1e6",
+    "up to 2e4 calls",
+    "1 <= items per order <= 10, distinct"
+   ],
+   "clarifyingQuestions": [
+    "Is the distance Manhattan or Euclidean?",
+    "Must the lowest price and the fastest time come from the same restaurant?",
+    "What is returned when no restaurant offers the item?",
+    "Can the menu change after construction?",
+    "Can an order be split across restaurants?"
+   ],
+   "hints": [
+    "Level 1 stays as before: price per item precomputed, distances scanned.",
+    "For an order, only restaurants that offer the rarest item can qualify.",
+    "Probe each candidate's price in the other items' maps; sum prices and track both minima."
+   ],
+   "invariants": [
+    "a qualifying restaurant offers every ordered item",
+    "both minima range over the same qualifying set"
+   ],
+   "chooseWhen": [
+    "Catalogue queries that intersect several inverted lists"
+   ],
+   "tradeoffs": [
+    "Starting from the rarest list bounds the work by the smallest posting list"
+   ],
+   "variantLabel": "Inferred level 2: whole orders served by one restaurant",
+   "examples": [
+    {
+     "input": [
+      [
+       "FoodDeliverySystem",
+       "getBestOption"
+      ],
+      [
+       [
+        [
+         [
+          "r0",
+          0,
+          -3
+         ]
+        ],
+        [
+         [
+          "r0",
+          "a",
+          1000000
+         ]
+        ]
+       ],
+       [
+        "d",
+        6,
+        6
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       -1,
+       -1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "FoodDeliverySystem",
+       "getBestOrder",
+       "getBestOption",
+       "getBestOption",
+       "getBestOrder",
+       "getBestOrder",
+       "getBestOption"
+      ],
+      [
+       [
+        [
+         [
+          "r0",
+          -1,
+          -2
+         ]
+        ],
+        [
+         [
+          "r0",
+          "a",
+          1
+         ],
+         [
+          "r0",
+          "c",
+          2
+         ],
+         [
+          "r0",
+          "b",
+          1
+         ]
+        ]
+       ],
+       [
+        [
+         "b",
+         "d",
+         "c"
+        ],
+        -5,
+        4
+       ],
+       [
+        "a",
+        -6,
+        -5
+       ],
+       [
+        "d",
+        5,
+        -1
+       ],
+       [
+        [
+         "c"
+        ],
+        2,
+        -3
+       ],
+       [
+        [
+         "c"
+        ],
+        -2,
+        6
+       ],
+       [
+        "a",
+        -2,
+        -3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       -1,
+       -1
+      ],
+      [
+       1,
+       8
+      ],
+      [
+       -1,
+       -1
+      ],
+      [
+       2,
+       4
+      ],
+      [
+       2,
+       9
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69fe591f574d87bc4900686f": {
+   "constraints": [
+    "1 <= articles.length <= 1000",
+    "1 <= maxWidth <= 1000",
+    "every word has 1..maxWidth characters from [!-~]",
+    "total characters <= 2e5"
+   ],
+   "clarifyingQuestions": [
+    "Are lines justified or padded?",
+    "How are consecutive articles separated?",
+    "Can a word be longer than maxWidth?",
+    "Is an article a string or a list of words?"
+   ],
+   "hints": [
+    "Handle each article on its own.",
+    "A word fits on the current line when line length + 1 + word length <= maxWidth.",
+    "Collect line word slices and join them once; insert \"\" between articles."
+   ],
+   "invariants": [
+    "every emitted line has length <= maxWidth",
+    "no line could take the next word"
+   ],
+   "chooseWhen": [
+    "Plain greedy word wrap"
+   ],
+   "tradeoffs": [
+    "Greedy wrap minimises the line count but not raggedness"
+   ],
+   "variantLabel": "Inferred single variant: greedy word wrap of several articles",
+   "examples": [
+    {
+     "input": [
+      [
+       "dd"
+      ],
+      2
+     ],
+     "output": [
+      "dd"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "a 12345 12345 x!y x!y a ccc bb",
+       "x!y dddd a bb 12345 12345",
+       "ccc x!y dddd a 12345 ccc a dddd"
+      ],
+      8
+     ],
+     "output": [
+      "a 12345",
+      "12345",
+      "x!y x!y",
+      "a ccc bb",
+      "",
+      "x!y dddd",
+      "a bb",
+      "12345",
+      "12345",
+      "",
+      "ccc x!y",
+      "dddd a",
+      "12345",
+      "ccc a",
+      "dddd"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68e2c59adab409e303d92947": {
+   "constraints": [
+    "1 <= customers <= 1e4",
+    "ids and movies match [a-z0-9]{1,10}",
+    "0 <= movies[i].length <= 1e3",
+    "1 <= k <= 50",
+    "total watch entries <= 2e5"
+   ],
+   "clarifyingQuestions": [
+    "Are customers with fewer than k movies grouped?",
+    "Is the last-k window a set (duplicates collapse) or a multiset?",
+    "Are single-member groups returned?",
+    "How are groups and members ordered?"
+   ],
+   "hints": [
+    "Only the last k entries of each history matter.",
+    "Two sets are equal exactly when their sorted distinct elements are equal: use that as a hash key.",
+    "Bucket customers by key in input order and keep buckets with two or more members."
+   ],
+   "invariants": [
+    "a bucket holds customers with identical last-k sets",
+    "insertion order of buckets follows first members"
+   ],
+   "chooseWhen": [
+    "Grouping by an order-insensitive signature"
+   ],
+   "tradeoffs": [
+    "Sorting each window costs O(k log k); a multiset hash would be faster but not collision-free"
+   ],
+   "variantLabel": "Inferred level 1: friend groups from identical last-k sets",
+   "examples": [
+    {
+     "input": [
+      [
+       "c0"
+      ],
+      [
+       []
+      ],
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "c0",
+       "c1",
+       "c2",
+       "c3",
+       "c4",
+       "c5",
+       "c6",
+       "c7"
+      ],
+      [
+       [
+        "z",
+        "y",
+        "x"
+       ],
+       [
+        "y",
+        "x"
+       ],
+       [
+        "z",
+        "x",
+        "x"
+       ],
+       [
+        "y",
+        "x",
+        "z"
+       ],
+       [
+        "y",
+        "x",
+        "y",
+        "z",
+        "x"
+       ],
+       [
+        "z",
+        "z",
+        "x",
+        "x"
+       ],
+       [
+        "x",
+        "x",
+        "z",
+        "y",
+        "x"
+       ],
+       [
+        "x",
+        "x"
+       ]
+      ],
+      2
+     ],
+     "output": [
+      [
+       "c0",
+       "c1",
+       "c6"
+      ],
+      [
+       "c2",
+       "c5",
+       "c7"
+      ],
+      [
+       "c3",
+       "c4"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68e2d042dab409e303d92952": {
+   "constraints": [
+    "1 <= k <= 50",
+    "ids and movies match [a-z0-9]{1,10}",
+    "up to 5e4 calls",
+    "at most 1000 distinct customers"
+   ],
+   "clarifyingQuestions": [
+    "Are customers with fewer than k movies grouped?",
+    "Is the last-k window a set (duplicates collapse) or a multiset?",
+    "Are single-member groups returned?",
+    "How are groups and members ordered?",
+    "Should a customer's group change as soon as a new movie arrives?"
+   ],
+   "hints": [
+    "Each watch slides one customer's window: one movie enters and, after k entries, one leaves.",
+    "Keep counts so you know when a movie enters or leaves the distinct set; only then does the key change.",
+    "Move the customer between key buckets kept as sorted lists, and answer queries by copying the bucket without the caller."
+   ],
+   "invariants": [
+    "a customer is in exactly one bucket once they have k watches",
+    "bucket lists stay sorted"
+   ],
+   "chooseWhen": [
+    "Streaming equality grouping with sliding windows"
+   ],
+   "tradeoffs": [
+    "Sorted bucket lists make queries cheap but cost O(group size) per move"
+   ],
+   "variantLabel": "Inferred level 2: streaming last-k windows",
+   "examples": [
+    {
+     "input": [
+      [
+       "MovieFriends",
+       "watch"
+      ],
+      [
+       [
+        2
+       ],
+       [
+        "a",
+        "x"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "MovieFriends",
+       "watch",
+       "watch",
+       "getFriends",
+       "getFriends",
+       "getFriends",
+       "watch",
+       "watch",
+       "watch",
+       "watch",
+       "getFriends",
+       "watch",
+       "watch",
+       "getFriends"
+      ],
+      [
+       [
+        3
+       ],
+       [
+        "c",
+        "x"
+       ],
+       [
+        "d",
+        "z"
+       ],
+       [
+        "c"
+       ],
+       [
+        "c"
+       ],
+       [
+        "d"
+       ],
+       [
+        "c",
+        "y"
+       ],
+       [
+        "c",
+        "z"
+       ],
+       [
+        "a",
+        "z"
+       ],
+       [
+        "c",
+        "z"
+       ],
+       [
+        "b"
+       ],
+       [
+        "c",
+        "z"
+       ],
+       [
+        "c",
+        "y"
+       ],
+       [
+        "c"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      [],
+      [],
+      [],
+      null,
+      null,
+      null,
+      null,
+      [],
+      null,
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

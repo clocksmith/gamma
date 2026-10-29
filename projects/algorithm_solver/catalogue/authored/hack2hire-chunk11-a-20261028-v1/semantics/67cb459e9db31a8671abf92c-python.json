@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67cb459e9db31a8671abf92c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "hierarchy",
+  "employee1",
+  "employee2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findLowestCommonManager",
+  "params": [
+   {
+    "name": "hierarchy",
+    "type": "list<[string,string[]]>"
+   },
+   {
+    "name": "employee1",
+    "type": "string"
+   },
+   {
+    "name": "employee2",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "collect the ancestor chain of employee1 by repeatedly scanning all rows for its manager, then walk employee2 upward until it reaches a member of that chain",
+  "candidate_design": "build a manager map and depths with an iterative breadth-first pass from the root, lift the deeper employee to the same depth, then lift both together until they meet",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "522525d54aeba4511e35fc101efab51082617a0500d0592140b62b18c44a6a70",
+ "wrapper": "Solution.findLowestCommonManager"
+}

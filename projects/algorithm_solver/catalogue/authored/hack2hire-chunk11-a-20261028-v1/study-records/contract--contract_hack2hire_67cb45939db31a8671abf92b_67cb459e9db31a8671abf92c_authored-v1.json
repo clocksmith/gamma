@@ -1,0 +1,424 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67cb45939db31a8671abf92b:67cb459e9db31a8671abf92c:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+   "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67cb45939db31a8671abf92b.json",
+   "sha256": "89c16d91e505b99f52fb84381776df6220286fc182dc29039ee82ee3147eba4a",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+   "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+   "selector": "/variants/hack2hire:67cb459e9db31a8671abf92c"
+  }
+ ],
+ "problemId": "hack2hire:67cb45939db31a8671abf92b",
+ "variantId": "67cb459e9db31a8671abf92c",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: lowest common manager in an n-ary org chart",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:67cb459e9db31a8671abf92c/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "hierarchy is a list of rows [name, directReports]: one row per employee, names unique, the first row is the top-level executive (the root), every other employee appears in exactly one directReports list and the rows form one tree. employee1 and employee2 are names of employees in the tree (possibly equal). Return the name of their lowest common manager: the deepest employee that has both of them in its subtree, where an employee is in its own subtree.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "hierarchy is a list of rows [name, directReports]: one row per employee, names unique, the first row is the top-level executive (the root), every other employee appears in exactly one directReports list and the rows form one tree.",
+   "employee1 and employee2 are names of employees in the tree (possibly equal).",
+   "Return the name of their lowest common manager: the deepest employee that has both of them in its subtree, where an employee is in its own subtree."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= employees <= 1e5",
+   "names match [A-Za-z0-9]{1,15}",
+   "total direct-report entries = employees - 1",
+   "tree depth may reach 1e5 (no recursion)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:67cb459e9db31a8671abf92c/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: n-ary company tree of Employee nodes with unique names and direct-report lists; find the deepest employee having both given employees as descendants (a node descends from itself); variation of LeetCode 236; algorithmTags: RECURSION; preview response sha256 f571a3f8e1666723516f779340b88024936f1ddc53cd095b3a6e51fa70d720fe"
+   },
+   {
+    "statement": "Uncertainty: medium: the tree and the definition are in the preview; replacing the Employee object graph by name rows, the root being the first row, both employees being present and the bounds are inferred",
+    "basis": "the public group preview is partial (800 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is the hierarchy given, and which node is the root?",
+   "Are both employees guaranteed to be in the tree?",
+   "Can an employee be its own lowest common manager?",
+   "How deep can the hierarchy be?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:67cb459e9db31a8671abf92c/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "e0",
+       []
+      ]
+     ],
+     "e0",
+     "e0"
+    ],
+    "output": "e0",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "e7",
+       [
+        "e0"
+       ]
+      ],
+      [
+       "e12",
+       [
+        "e3",
+        "e15",
+        "e9",
+        "e14"
+       ]
+      ],
+      [
+       "e10",
+       [
+        "e6",
+        "e2"
+       ]
+      ],
+      [
+       "e6",
+       []
+      ],
+      [
+       "e14",
+       [
+        "e10",
+        "e11"
+       ]
+      ],
+      [
+       "e3",
+       []
+      ],
+      [
+       "e0",
+       [
+        "e12",
+        "e13",
+        "e5"
+       ]
+      ],
+      [
+       "e13",
+       []
+      ],
+      [
+       "e2",
+       []
+      ],
+      [
+       "e9",
+       []
+      ],
+      [
+       "e4",
+       []
+      ],
+      [
+       "e5",
+       [
+        "e8",
+        "e1"
+       ]
+      ],
+      [
+       "e11",
+       [
+        "e4"
+       ]
+      ],
+      [
+       "e15",
+       []
+      ],
+      [
+       "e1",
+       []
+      ],
+      [
+       "e8",
+       []
+      ]
+     ],
+     "e0",
+     "e11"
+    ],
+    "output": "e0",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:67cb459e9db31a8671abf92c/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/oracles.py",
+    "sha256": "f713a637167e1f017476052c44bfc54213ffff7485ad1afdcd959ec9f9e5d7c4",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findLowestCommonManager(hierarchy, employee1, employee2) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+      "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/67cb459e9db31a8671abf92c-python.json",
+     "inferredInterface": {
+      "name": "findLowestCommonManager",
+      "params": [
+       {
+        "name": "hierarchy",
+        "type": "list<[string,string[]]>"
+       },
+       {
+        "name": "employee1",
+        "type": "string"
+       },
+       {
+        "name": "employee2",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/67cb459e9db31a8671abf92c-python.json",
+      "sha256": "7516b3db4bd3b3c102b94ffe7e0f838d020913dacdd08df93eee943dd8709faf",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findLowestCommonManager(hierarchy, employee1, employee2) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+      "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/67cb459e9db31a8671abf92c-javascript.json",
+     "inferredInterface": {
+      "name": "findLowestCommonManager",
+      "params": [
+       {
+        "name": "hierarchy",
+        "type": "list<[string,string[]]>"
+       },
+       {
+        "name": "employee1",
+        "type": "string"
+       },
+       {
+        "name": "employee2",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/67cb459e9db31a8671abf92c-javascript.json",
+      "sha256": "932f5a0f251fba0eb477342eb74b0ddb45ec670d63636770f14cfbdc7a3f3114",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

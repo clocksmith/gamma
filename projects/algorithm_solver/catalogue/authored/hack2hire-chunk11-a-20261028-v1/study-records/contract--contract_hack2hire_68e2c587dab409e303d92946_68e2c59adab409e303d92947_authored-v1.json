@@ -1,0 +1,406 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68e2c587dab409e303d92946:68e2c59adab409e303d92947:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+   "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+   "selector": "/problems/16"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68e2c587dab409e303d92946.json",
+   "sha256": "b47ba440a2c5b800e526fc9117d7845366381c5cfc3485cc8f437743fa2fb411",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+   "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+   "selector": "/variants/hack2hire:68e2c59adab409e303d92947"
+  }
+ ],
+ "problemId": "hack2hire:68e2c587dab409e303d92946",
+ "variantId": "68e2c59adab409e303d92947",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: friend groups from identical last-k sets",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68e2c59adab409e303d92947/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "customerIds is a list of distinct ids, movies[i] the chronological list of movie ids watched by customerIds[i], and k >= 1. The key of a customer who watched at least k movies is the set of their last k entries (duplicates collapse, order ignored); customers with fewer than k entries belong to no group. Customers with equal keys form a group. Return every group with at least two members as a list of ids in input order; groups are ordered by the input position of their first member.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "customerIds is a list of distinct ids, movies[i] the chronological list of movie ids watched by customerIds[i], and k >= 1.",
+   "The key of a customer who watched at least k movies is the set of their last k entries (duplicates collapse, order ignored); customers with fewer than k entries belong to no group.",
+   "Customers with equal keys form a group.",
+   "Return every group with at least two members as a list of ids in input order; groups are ordered by the input position of their first member."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= customers <= 1e4",
+   "ids and movies match [a-z0-9]{1,10}",
+   "0 <= movies[i].length <= 1e3",
+   "1 <= k <= 50",
+   "total watch entries <= 2e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68e2c59adab409e303d92947/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: distinct customerIds, movies[i] the chronological watch list of customerIds[i], and k; customers whose last k movies form the same set (order ignored) are a group of friends (output cut off); algorithmTags: SLIDING_WINDOW; codingQuestions (variant count/order); preview response sha256 491d41579e8ced4e101871d20c421827accfbe3731115f0c0247d136ea34b57c"
+   },
+   {
+    "statement": "Uncertainty: high: the inputs and the grouping rule are in the preview; the output (groups of size >= 2, ordering), excluding short histories and the bounds are inferred",
+    "basis": "the public group preview is partial (503 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = static groups from complete histories, 2 = streaming watch events with a sliding window of the last k movies per customer and friend queries",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/16/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/16/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/16/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are customers with fewer than k movies grouped?",
+   "Is the last-k window a set (duplicates collapse) or a multiset?",
+   "Are single-member groups returned?",
+   "How are groups and members ordered?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68e2c59adab409e303d92947/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "c0"
+     ],
+     [
+      []
+     ],
+     1
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "c0",
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7"
+     ],
+     [
+      [
+       "z",
+       "y",
+       "x"
+      ],
+      [
+       "y",
+       "x"
+      ],
+      [
+       "z",
+       "x",
+       "x"
+      ],
+      [
+       "y",
+       "x",
+       "z"
+      ],
+      [
+       "y",
+       "x",
+       "y",
+       "z",
+       "x"
+      ],
+      [
+       "z",
+       "z",
+       "x",
+       "x"
+      ],
+      [
+       "x",
+       "x",
+       "z",
+       "y",
+       "x"
+      ],
+      [
+       "x",
+       "x"
+      ]
+     ],
+     2
+    ],
+    "output": [
+     [
+      "c0",
+      "c1",
+      "c6"
+     ],
+     [
+      "c2",
+      "c5",
+      "c7"
+     ],
+     [
+      "c3",
+      "c4"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/study-content.json",
+    "sha256": "00712756a391d1ea980f300ba2ff72acde240130bb6e99f5fb07a316cef1be14",
+    "selector": "/variants/hack2hire:68e2c59adab409e303d92947/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/oracles.py",
+    "sha256": "f713a637167e1f017476052c44bfc54213ffff7485ad1afdcd959ec9f9e5d7c4",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findFriendGroups(customerIds, movies, k) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+      "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68e2c59adab409e303d92947-python.json",
+     "inferredInterface": {
+      "name": "findFriendGroups",
+      "params": [
+       {
+        "name": "customerIds",
+        "type": "string[]"
+       },
+       {
+        "name": "movies",
+        "type": "string[][]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68e2c59adab409e303d92947-python.json",
+      "sha256": "0f57637a29c207b7175f800be68ce768b37a04d1a5d84ac50ede56341e5a846b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findFriendGroups(customerIds, movies, k) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+      "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68e2c59adab409e303d92947-javascript.json",
+     "inferredInterface": {
+      "name": "findFriendGroups",
+      "params": [
+       {
+        "name": "customerIds",
+        "type": "string[]"
+       },
+       {
+        "name": "movies",
+        "type": "string[][]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/semantics/68e2c59adab409e303d92947-javascript.json",
+      "sha256": "e2ff1082988959328c4afc3ac6dec18c400be81c7bb5ec433daf7065df26d046",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/16/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-a-20261028-v1/contracts.json",
+    "sha256": "dc9d8f89edc4f1eea2255ed752357d7d436bdabc184aab15875363728db04d5c",
+    "selector": "/problems/16/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

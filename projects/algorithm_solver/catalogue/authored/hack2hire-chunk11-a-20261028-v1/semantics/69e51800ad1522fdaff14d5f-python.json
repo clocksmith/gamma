@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69e51800ad1522fdaff14d5f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findLargestSubsetSize",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every subset and compute its AND",
+  "candidate_design": "the AND is positive exactly when some bit is set in every chosen element, so count, per bit, how many elements have it and return the largest count",
+  "complexity_target": "O(n * 30) time/O(1) space"
+ },
+ "source_sha256": "1233b649a91c3266b072cf4fd232cd3fa991e8469854ed8165958f3849d68ded",
+ "wrapper": "Solution.findLargestSubsetSize"
+}

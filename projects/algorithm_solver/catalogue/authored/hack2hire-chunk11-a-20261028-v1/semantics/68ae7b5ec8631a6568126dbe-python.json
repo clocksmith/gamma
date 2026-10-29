@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68ae7b5ec8631a6568126dbe",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "games",
+  "threshold"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findMinimumScoreThreshold",
+  "params": [
+   {
+    "name": "games",
+    "type": "list<[string,string]>"
+   },
+   {
+    "name": "threshold",
+    "type": "number"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every distinct score rescan all games to count losses and totals at or above it",
+  "candidate_design": "count losses and totals per distinct score in a hash map, sort the distinct scores descending and accumulate suffix totals, keeping the smallest valid score",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "90f358f09363090dbc46b89a8fdb31b13d7f3e9afa91001c889c0169f649457d",
+ "wrapper": "Solution.findMinimumScoreThreshold"
+}

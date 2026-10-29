@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1f3ca28b879849ebc10ffb",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "wordDict",
+  "pattern"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findPatternMatchingWords",
+  "params": [
+   {
+    "name": "wordDict",
+    "type": "string[]"
+   },
+   {
+    "name": "pattern",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "translate the pattern into a regular expression (\"?\" to \".\", \".\" to \".+\") and full-match every word",
+  "candidate_design": "per word, a rolling boolean dynamic programme over pattern positions: a \".\" cell is true when the previous character row was true at the same or the previous pattern position",
+  "complexity_target": "O(sum |w| * |p|) time/O(|p|) space"
+ },
+ "source_sha256": "6edb4c77552165ed2a3d13d624791569966f2b5d56989d9dd9e08ecf1b2012b2",
+ "wrapper": "named export findPatternMatchingWords"
+}
