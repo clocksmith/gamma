@@ -1,0 +1,304 @@
+{
+  "schema": "study.record.v1",
+  "kind": "contract",
+  "id": "contract:leetcode:751:requested-156-1940-31-20261028-v1:751:authored-v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+      "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+      "selector": "/problems/9"
+    }
+  ],
+  "problemId": "leetcode:751",
+  "variantId": "requested-156-1940-31-20261028-v1:751",
+  "variantLabel": {
+    "status": "present",
+    "value": "IP to CIDR",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+        "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+        "selector": "/problems/9/title"
+      }
+    ]
+  },
+  "statement": {
+    "status": "present",
+    "value": "Cover a consecutive range of IPv4 addresses with a minimum sequence of CIDR blocks.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/751/statement"
+      }
+    ]
+  },
+  "contentScope": "authored",
+  "requirements": {
+    "status": "present",
+    "value": [
+      {
+        "id": "r0",
+        "text": "Cover a consecutive range of IPv4 addresses with a minimum sequence of CIDR blocks."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/751/requirements"
+      }
+    ]
+  },
+  "constraints": {
+    "status": "unknown",
+    "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+  },
+  "assumptions": {
+    "status": "present",
+    "value": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/751/assumptions"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "status": "present",
+    "value": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/751/clarifyingQuestions"
+      }
+    ]
+  },
+  "examples": {
+    "status": "present",
+    "value": [
+      {
+        "arguments": [
+          "255.0.0.7",
+          10
+        ],
+        "expected": [
+          "255.0.0.7/32",
+          "255.0.0.8/29",
+          "255.0.0.16/32"
+        ],
+        "source": "cohort-authored development example; not asserted to be an official example"
+      },
+      {
+        "arguments": [
+          "117.145.102.62",
+          8
+        ],
+        "expected": [
+          "117.145.102.62/31",
+          "117.145.102.64/30",
+          "117.145.102.68/31"
+        ],
+        "source": "cohort-authored development example; not asserted to be an official example"
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-examples.json",
+        "sha256": "43c127495173874d972b20f0ebf454306b9ad8e830e1868f1dd9f218c20bc62c",
+        "selector": "/751"
+      }
+    ]
+  },
+  "interfaces": [
+    {
+      "language": "python",
+      "kind": "function",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "name": "ipToCIDR",
+          "params": [
+            {
+              "name": "ip",
+              "type": "string"
+            },
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "string[]"
+          }
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/9/official_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "scope": "Existing source-declared ABI retained; native compatibility is not established by the JSON-wrapper runs.",
+          "originalDeclaration": {
+            "name": "ipToCIDR",
+            "params": [
+              {
+                "name": "ip",
+                "type": "string"
+              },
+              {
+                "name": "n",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "string[]"
+            }
+          }
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/9/official_interface"
+          }
+        ]
+      }
+    },
+    {
+      "language": "javascript",
+      "kind": "function",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "name": "ipToCIDR",
+          "params": [
+            {
+              "name": "ip",
+              "type": "string"
+            },
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "string[]"
+          }
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/9/official_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "scope": "Existing source-declared ABI retained; native compatibility is not established by the JSON-wrapper runs.",
+          "originalDeclaration": {
+            "name": "ipToCIDR",
+            "params": [
+              {
+                "name": "ip",
+                "type": "string"
+              },
+              {
+                "name": "n",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "string[]"
+            }
+          }
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/9/official_interface"
+          }
+        ]
+      }
+    }
+  ],
+  "effects": {
+    "status": "present",
+    "value": {
+      "scope": "JSON solve wrapper",
+      "inputMutation": "forbidden",
+      "outputAliasing": "forbidden",
+      "nativeObjectEffects": "not-established-by-wrapper-execution"
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/9/mutation_alias_contract"
+      }
+    ]
+  },
+  "comparison": {
+    "status": "present",
+    "value": {
+      "kind": "exact",
+      "scope": "Existing cohort deterministic JSON result; native nonunique/float acceptance policy requires separate confirmation."
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/9/return_domain"
+      }
+    ]
+  },
+  "sources": [],
+  "native": []
+}
