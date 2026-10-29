@@ -1,0 +1,351 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67637136cc8f5deed53ccd72:6763722dcc8f5deed53ccd73:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+   "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67637136cc8f5deed53ccd72.json",
+   "sha256": "cba718dad14fd7ee7314cc301b27fabd211e6ffaf0b1bff8866b6351fcc32a30",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+   "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+   "selector": "/variants/hack2hire:6763722dcc8f5deed53ccd73"
+  }
+ ],
+ "problemId": "hack2hire:67637136cc8f5deed53ccd72",
+ "variantId": "6763722dcc8f5deed53ccd73",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: longest serviceable run after skipping a prefix",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6763722dcc8f5deed53ccd73/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "initialBalance >= 0 and transactions[k] is customer k's deposit (> 0) or withdrawal (< 0). Choose a start s; customers s, s + 1, ... are served in order while initialBalance plus the transactions served so far stays >= 0, and serving stops at the first customer who would make it negative (or at the end). Return the largest number of customers that can be served over all choices of s (0 if none).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "initialBalance >= 0 and transactions[k] is customer k's deposit (> 0) or withdrawal (< 0).",
+   "Choose a start s; customers s, s + 1, ..",
+   "are served in order while initialBalance plus the transactions served so far stays >= 0, and serving stops at the first customer who would make it negative (or at the end).",
+   "Return the largest number of customers that can be served over all choices of s (0 if none)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= transactions.length <= 1e5",
+   "0 <= initialBalance <= 1e9",
+   "1 <= |transactions[k]| <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6763722dcc8f5deed53ccd73/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a bank with an initial amount and a sequence of transactions (positive deposits, negative withdrawals); it may skip any number of customers at the start, but once it starts serving it continues in order until a customer cannot be served for lack of balance; algorithmTags: TWO_POINTER, SLIDING_WINDOW; preview response sha256 e732415e68dcf650897a584874e8bd0694c95de6438845e3f456f31b637f0895"
+   },
+   {
+    "statement": "Uncertainty: low: the task is in the preview; that a balance of exactly 0 is allowed and that the answer is the count served are inferred",
+    "basis": "the public group preview is partial (456 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "May the balance reach exactly zero?",
+   "After the first failure, can the bank skip and continue?",
+   "Is the answer the count or the final balance?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6763722dcc8f5deed53ccd73/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     0,
+     []
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     2,
+     [
+      -6,
+      7,
+      -4,
+      -6,
+      4,
+      -5,
+      -2,
+      1,
+      5,
+      7,
+      -5,
+      2,
+      -2,
+      2,
+      -3,
+      -5,
+      -2,
+      5,
+      -7,
+      -6,
+      -1,
+      6,
+      6,
+      -7,
+      3,
+      -7,
+      -6,
+      -7,
+      6
+     ]
+    ],
+    "output": 12,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6763722dcc8f5deed53ccd73/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/oracles.py",
+    "sha256": "f6b1b4df34a1cdc3a204377a5fe7dd60e83bd05632390acec3afcf71cd0127fa",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def maxCustomersServed(initialBalance, transactions) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6763722dcc8f5deed53ccd73-python.json",
+     "inferredInterface": {
+      "name": "maxCustomersServed",
+      "params": [
+       {
+        "name": "initialBalance",
+        "type": "integer"
+       },
+       {
+        "name": "transactions",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6763722dcc8f5deed53ccd73-python.json",
+      "sha256": "6b6ee85bfb036457af92870f4f32215338ea56865b4c61e4c636650bdf8c02eb",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function maxCustomersServed(initialBalance, transactions) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6763722dcc8f5deed53ccd73-javascript.json",
+     "inferredInterface": {
+      "name": "maxCustomersServed",
+      "params": [
+       {
+        "name": "initialBalance",
+        "type": "integer"
+       },
+       {
+        "name": "transactions",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6763722dcc8f5deed53ccd73-javascript.json",
+      "sha256": "fd1a1c5d2c3ec10b71fba1f0989c490fa6fa8e5481ee142dfd45d9b747219b17",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

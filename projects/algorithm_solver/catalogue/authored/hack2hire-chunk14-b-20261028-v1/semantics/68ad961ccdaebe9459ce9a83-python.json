@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68ad961ccdaebe9459ce9a83",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "detectedWords",
+  "categories",
+  "username"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "generateEmail",
+  "params": [
+   {
+    "name": "detectedWords",
+    "type": "string[]"
+   },
+   {
+    "name": "categories",
+    "type": "string[][]"
+   },
+   {
+    "name": "username",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every category (sorted), rescan all detected words and count each keyword by another scan",
+  "candidate_design": "hash maps keyword -> category, category -> ordered keyword counts; sort the category names once",
+  "complexity_target": "O(d + c log c) time/O(d + c) space"
+ },
+ "source_sha256": "651fdec24533863edc7df5e02939ee95b4ebe04c8f60581b1408a900c95fa343",
+ "wrapper": "Solution.generateEmail"
+}

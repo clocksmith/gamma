@@ -1,0 +1,376 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a4d607660d5cca82da2fdb7:6a4d62db60d5cca82da2fdda:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+   "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+   "selector": "/problems/17"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a4d607660d5cca82da2fdb7.json",
+   "sha256": "7f532f2af059dc5cfd5fa5e959688dac8720d3f37868126e8292af1639c97d81",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+   "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+   "selector": "/variants/hack2hire:6a4d62db60d5cca82da2fdda"
+  }
+ ],
+ "problemId": "hack2hire:6a4d607660d5cca82da2fdb7",
+ "variantId": "6a4d62db60d5cca82da2fdda",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: beam search returning the final beam",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6a4d62db60d5cca82da2fdda/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "scores is a non-empty T x V matrix of integers. Level 2 (inferred): beam search of width beamWidth. A sequence picks one token per step and scores the sum of its token scores. Return the beamWidth best full sequences (all of them if fewer than beamWidth exist), best first, ordered by higher total score and then by the lexicographically smaller index sequence.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "scores is a non-empty T x V matrix of integers.",
+   "Level 2 (inferred): beam search of width beamWidth.",
+   "A sequence picks one token per step and scores the sum of its token scores.",
+   "Return the beamWidth best full sequences (all of them if fewer than beamWidth exist), best first, ordered by higher total score and then by the lexicographically smaller index sequence."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= T <= 200",
+   "1 <= V <= 100",
+   "T * V <= 2e4",
+   "1 <= beamWidth <= 20",
+   "-1e6 <= scores[i][j] <= 1e6"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6a4d62db60d5cca82da2fdda/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: scores[i][j] is the score of token j at time step i; greedy decoding picks the highest-scoring token at each step independently, ties to the smaller index (the beam search part is cut off); algorithmTags: HEAP; preview response sha256 0f5683f02b2423136bcde0d1a9f002849ed648ee8beed82b75daa1d6efc0e3ae"
+   },
+   {
+    "statement": "Uncertainty: high: the beam search part has no public text; the additive integer scores, the width parameter, returning the final beam and the ordering are inferred (with independent steps the final beam equals the exact top sequences)",
+    "basis": "the public group preview is partial (548 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 2 of 2 extends greedy decoding to beam search",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/17/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/17/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/17/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are scores integers, floats or log-probabilities?",
+   "Is a sequence scored by the sum of its token scores?",
+   "In what order are the beam results returned and how are ties broken?",
+   "Do step scores depend on earlier tokens?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6a4d62db60d5cca82da2fdda/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       7
+      ]
+     ],
+     3
+    ],
+    "output": [
+     [
+      0
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       3,
+       0,
+       -1,
+       0,
+       1
+      ],
+      [
+       2,
+       3,
+       2,
+       0,
+       -2
+      ],
+      [
+       2,
+       -1,
+       -3,
+       2,
+       3
+      ],
+      [
+       -1,
+       -3,
+       2,
+       -1,
+       -1
+      ],
+      [
+       -1,
+       -1,
+       1,
+       1,
+       -3
+      ]
+     ],
+     1
+    ],
+    "output": [
+     [
+      0,
+      1,
+      4,
+      2,
+      2
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6a4d62db60d5cca82da2fdda/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/oracles.py",
+    "sha256": "f6b1b4df34a1cdc3a204377a5fe7dd60e83bd05632390acec3afcf71cd0127fa",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def beamSearch(scores, beamWidth) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6a4d62db60d5cca82da2fdda-python.json",
+     "inferredInterface": {
+      "name": "beamSearch",
+      "params": [
+       {
+        "name": "scores",
+        "type": "integer[][]"
+       },
+       {
+        "name": "beamWidth",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6a4d62db60d5cca82da2fdda-python.json",
+      "sha256": "c8094b18d3a21dff3819495176f2de0882c1bf0f9cbd11e3e50f4501b05162bd",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function beamSearch(scores, beamWidth) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6a4d62db60d5cca82da2fdda-javascript.json",
+     "inferredInterface": {
+      "name": "beamSearch",
+      "params": [
+       {
+        "name": "scores",
+        "type": "integer[][]"
+       },
+       {
+        "name": "beamWidth",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6a4d62db60d5cca82da2fdda-javascript.json",
+      "sha256": "bb5a039546aca399f3c53b06b2db3fae3347432e7495593c74db3897c3574e6c",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/17/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/17/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

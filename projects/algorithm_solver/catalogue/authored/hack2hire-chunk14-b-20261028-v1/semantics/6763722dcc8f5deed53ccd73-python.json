@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6763722dcc8f5deed53ccd73",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "initialBalance",
+  "transactions"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxCustomersServed",
+  "params": [
+   {
+    "name": "initialBalance",
+    "type": "integer"
+   },
+   {
+    "name": "transactions",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate every start position until it fails",
+  "candidate_design": "prefix sums P; for each start s (right to left) binary-search a monotonic stack for the first index j > s with P[j] < P[s] - initialBalance; served = j - 1 - s",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "948fd6665c64e1d3bbb516b40514feead451b1e736a3a3518c4edd8b65484320",
+ "wrapper": "Solution.maxCustomersServed"
+}

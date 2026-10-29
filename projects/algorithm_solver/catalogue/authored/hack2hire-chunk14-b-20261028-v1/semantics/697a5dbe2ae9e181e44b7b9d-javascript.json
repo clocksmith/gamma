@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697a5dbe2ae9e181e44b7b9d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "workers",
+  "specialties",
+  "tasks",
+  "taskTypes"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "assignTasksBySpecialty",
+  "params": [
+   {
+    "name": "workers",
+    "type": "string[]"
+   },
+   {
+    "name": "specialties",
+    "type": "string[][]"
+   },
+   {
+    "name": "tasks",
+    "type": "integer[][]"
+   },
+   {
+    "name": "taskTypes",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan every worker for every task, filtering by specialty",
+  "candidate_design": "one lazy min-heap per task type holding (workload, name, index, version); on assignment bump the worker version and push fresh entries into the heaps of all its specialties",
+  "complexity_target": "O((w s + t s) log(w s + t s)) time for s specialties per worker/O(w s + t s) space"
+ },
+ "source_sha256": "dced8c352c9ae784cfe5bedc3af794ead8dd7cf2f48617620b335365894f1bc3",
+ "wrapper": "named export assignTasksBySpecialty"
+}

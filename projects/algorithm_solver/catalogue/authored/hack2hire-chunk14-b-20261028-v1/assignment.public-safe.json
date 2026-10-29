@@ -1,0 +1,1025 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk14-b (16 Hack2Hire groups, 20 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:69166e5710632c00111ca0eb",
+   "title": "Toy Language Grammar",
+   "variant_ordinal": 1,
+   "group_post_id": "69166e4e10632c00111ca0ea",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "formatFunctionType",
+     "params": [
+      {
+       "name": "params",
+       "type": "Node[]"
+      },
+      {
+       "name": "returnType",
+       "type": "Node"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recursive string building with explicit concatenation per node",
+    "candidate_design": "one recursive formatter shared by parameters and return type, joining child strings",
+    "complexity_target": "O(total node count + output length) time/O(depth) stack"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5ecab84291cb8e1c5b250480e8b78b4a9fb48cef248855a8a1e063c1df4faced",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6916714410632c00111ca0f3",
+   "title": "Toy Language Grammar",
+   "variant_ordinal": 2,
+   "group_post_id": "69166e4e10632c00111ca0ea",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "inferReturnType",
+     "params": [
+      {
+       "name": "params",
+       "type": "Node[]"
+      },
+      {
+       "name": "returnType",
+       "type": "Node"
+      },
+      {
+       "name": "args",
+       "type": "Node[]"
+      }
+     ],
+     "return": {
+      "type": "string|null"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "substitute first-seen bindings into the parameters and compare the formatted strings of the substituted parameters and the arguments",
+    "candidate_design": "simultaneous recursive walk of parameter and argument nodes, storing each generic binding by its formatted string in a hash map and failing on the first conflict",
+    "complexity_target": "O(total node count + output length) time/O(number of generics + depth) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5ecab84291cb8e1c5b250480e8b78b4a9fb48cef248855a8a1e063c1df4faced",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68094bed31dc778b35c5d171",
+   "title": "Violation Log Analyzer",
+   "variant_ordinal": 1,
+   "group_post_id": "6809475131dc778b35c5d170",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "ViolationLogAnalyzer",
+     "constructor": {
+      "params": [
+       {
+        "name": "logs",
+        "type": "string[][]"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "countPolicies",
+       "params": [
+        {
+         "name": "postId",
+         "type": "string"
+        },
+        {
+         "name": "startDate",
+         "type": "string"
+        },
+        {
+         "name": "endDate",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "countPosts",
+       "params": [
+        {
+         "name": "policy",
+         "type": "string"
+        },
+        {
+         "name": "startDate",
+         "type": "string"
+        },
+        {
+         "name": "endDate",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "countViolations",
+       "params": [
+        {
+         "name": "startDate",
+         "type": "string"
+        },
+        {
+         "name": "endDate",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "ViolationLogAnalyzer"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan every log for every query and collect matching keys in a set",
+    "candidate_design": "group logs by post and by policy keeping date order; binary-search the date range in the group (or the whole log) and count distinct keys in that slice with a hash set",
+    "complexity_target": "O(n) build, O(log n + k) per query for k logs in range/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4f6de68a489940b5c9dd2008bd8a86c8bd0499c080197bd911928f6761e7cbcc",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67fdb0ced2adf72ba62b0eda",
+   "title": "Vowels Substring",
+   "variant_ordinal": 1,
+   "group_post_id": "67fc75a3216af53465a7221b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countVowelSubstrings",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every start and extend while characters are vowels, tracking which vowels have been seen",
+    "candidate_design": "one pass: for each end position keep the start of the current vowel run and the last position of each vowel; add (smallest last position - run start + 1) when all five have appeared in the run",
+    "complexity_target": "O(n) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "eff9f88a0a4b414cd67a8effcadd74ac6459871d80e9a7cff91c86a33ec7b005",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:699926ca6e73e4abccc9a376",
+   "title": "Warehouse Package Allocation",
+   "variant_ordinal": 1,
+   "group_post_id": "699926b86e73e4abccc9a375",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "busiestCenter",
+     "params": [
+      {
+       "name": "centerCapacity",
+       "type": "integer[]"
+      },
+      {
+       "name": "dailyLog",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate package by package, finding the next open center by a linear scan over all indices",
+    "candidate_design": "simulate with a circular doubly linked list of open centers, so passing the turn and closing a center are O(1)",
+    "complexity_target": "O(n + log length) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "61f36ef7bef97e50b4cfaa03e7db533b965ba9bc34b905d27fd01fe1b0a97374",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68d30311d490dee995152f5b",
+   "title": "Weighted Cache",
+   "variant_ordinal": 1,
+   "group_post_id": "68d302ecd490dee995152f5a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "WeightedCache",
+     "constructor": {
+      "params": [
+       {
+        "name": "maxTotalWeight",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "put",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "integer"
+        },
+        {
+         "name": "weight",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "get",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "WeightedCache"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep items in a plain list and find the heaviest oldest item by a full scan for each eviction",
+    "candidate_design": "hash map key -> (value, weight, write stamp) plus a max-heap of (weight, -stamp, key) with lazy deletion of stale entries",
+    "complexity_target": "O(log n) amortised per put, O(1) get/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b3c9bf3bceeed5bdbc01c17cc25744187754f9484840ceb84d24dc913a481018",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68815970f96758aa78e1d6b1",
+   "title": "Wildcard Search",
+   "variant_ordinal": 1,
+   "group_post_id": "6881593cf96758aa78e1d6b0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "wildcardSearch",
+     "params": [
+      {
+       "name": "pattern",
+       "type": "string"
+      },
+      {
+       "name": "str",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every start, dynamic programming of pattern prefixes against string positions from that start",
+    "candidate_design": "split the pattern on \"*\"; the answer is the first occurrence of the first piece (found with KMP), provided the remaining pieces can then be found in order with KMP from where each previous piece ended",
+    "complexity_target": "O(|pattern| + |str|) time/O(|pattern|) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "2eaa889997fa9c095abc24427d91da55c7c11b120dcf1a6a94a8f1526caadc66",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69c81f4621f6ab4226966b28",
+   "title": "Winner in a Dot Grid Game",
+   "variant_ordinal": 1,
+   "group_post_id": "69c81e3b21f6ab4226966b19",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "dotGridWinner",
+     "params": [
+      {
+       "name": "moves",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "after every move recount every completed square on the board and credit the mover with the increase",
+    "candidate_design": "keep a set of placed sticks and, per move, test only the one or two squares that the new stick borders",
+    "complexity_target": "O(moves) time/O(moves) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "f5bd71c2c1b63ccef35e276d72ad260af599390ce70bbb8381a9eee8af2e5bb1",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68e86c2f80f69c7a01706886",
+   "title": "Word Search in a Straight Line",
+   "variant_ordinal": 1,
+   "group_post_id": "68e86c2780f69c7a01706885",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "existsInStraightLine",
+     "params": [
+      {
+       "name": "board",
+       "type": "string[][]"
+      },
+      {
+       "name": "word",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "build every row, column and diagonal as a string in both directions and test whether word is a substring of any of them",
+    "candidate_design": "for every cell matching the first letter and every direction, step along and compare letters until a mismatch or the board edge",
+    "complexity_target": "O(m n 8 L) time worst case/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b56f496feab6a95be69898248176688687ad5450485ff5b607a0c5a878c388ac",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:697a5a552ae9e181e44b7b96",
+   "title": "Worker-Task Matching with Specialties",
+   "variant_ordinal": 1,
+   "group_post_id": "697a5a4e2ae9e181e44b7b95",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "assignTasks",
+     "params": [
+      {
+       "name": "workers",
+       "type": "string[]"
+      },
+      {
+       "name": "tasks",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan every worker for every task to find the least loaded one",
+    "candidate_design": "min-heap of (workload, name, index); pop the top, assign, push back with the new workload",
+    "complexity_target": "O((w + t) log w) time/O(w + t) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "7b3646ab59ab2f75a1387ee54733dcaada23ad0b3ca003dfc87c3a0ac5645b5c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:697a5dbe2ae9e181e44b7b9d",
+   "title": "Worker-Task Matching with Specialties",
+   "variant_ordinal": 2,
+   "group_post_id": "697a5a4e2ae9e181e44b7b95",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "assignTasksBySpecialty",
+     "params": [
+      {
+       "name": "workers",
+       "type": "string[]"
+      },
+      {
+       "name": "specialties",
+       "type": "string[][]"
+      },
+      {
+       "name": "tasks",
+       "type": "integer[][]"
+      },
+      {
+       "name": "taskTypes",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan every worker for every task, filtering by specialty",
+    "candidate_design": "one lazy min-heap per task type holding (workload, name, index, version); on assignment bump the worker version and push fresh entries into the heaps of all its specialties",
+    "complexity_target": "O((w s + t s) log(w s + t s)) time for s specialties per worker/O(w s + t s) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "7b3646ab59ab2f75a1387ee54733dcaada23ad0b3ca003dfc87c3a0ac5645b5c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:697a5dbf2ae9e181e44b7b9e",
+   "title": "Worker-Task Matching with Specialties",
+   "variant_ordinal": 3,
+   "group_post_id": "697a5a4e2ae9e181e44b7b95",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "assignTasksWithLimits",
+     "params": [
+      {
+       "name": "workers",
+       "type": "string[]"
+      },
+      {
+       "name": "specialties",
+       "type": "string[][]"
+      },
+      {
+       "name": "maxTasks",
+       "type": "integer[]"
+      },
+      {
+       "name": "tasks",
+       "type": "integer[][]"
+      },
+      {
+       "name": "taskTypes",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan every worker for every task, filtering by specialty and remaining limit",
+    "candidate_design": "lazy per-type min-heaps as in level 2; a worker at its limit simply gets no fresh entries, so its old entries are discarded as stale",
+    "complexity_target": "O((w s + t s) log(w s + t s)) time/O(w s + t s) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "7b3646ab59ab2f75a1387ee54733dcaada23ad0b3ca003dfc87c3a0ac5645b5c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69a35cd56e73e4abccc9bfb7",
+   "title": "Apply Binary Array Operations",
+   "variant_ordinal": 1,
+   "group_post_id": "69a35ccd6e73e4abccc9bfb6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "applyOperations",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      },
+      {
+       "name": "ops",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "apply each \"1\" by scanning from the left for the first 0",
+    "candidate_design": "copy the array and keep a min-heap of indices that may hold 0, skipping indices that are already 1 when popped",
+    "complexity_target": "O((n + q) log(n + q)) time/O(n + q) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "eda73065f9cb969fa90791806bef4145c299d63b230f4a8359acc9093b4da775",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68ad961ccdaebe9459ce9a83",
+   "title": "Auto Email Generation",
+   "variant_ordinal": 1,
+   "group_post_id": "68ad9604cdaebe9459ce9a82",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "generateEmail",
+     "params": [
+      {
+       "name": "detectedWords",
+       "type": "string[]"
+      },
+      {
+       "name": "categories",
+       "type": "string[][]"
+      },
+      {
+       "name": "username",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every category (sorted), rescan all detected words and count each keyword by another scan",
+    "candidate_design": "hash maps keyword -> category, category -> ordered keyword counts; sort the category names once",
+    "complexity_target": "O(d + c log c) time/O(d + c) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "bbf643d70ae6d798bcf7a79f393d69c02b6a0fb82d2325940fc37e4c6c9619ab",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6763722dcc8f5deed53ccd73",
+   "title": "Bank Service Maximization",
+   "variant_ordinal": 1,
+   "group_post_id": "67637136cc8f5deed53ccd72",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxCustomersServed",
+     "params": [
+      {
+       "name": "initialBalance",
+       "type": "integer"
+      },
+      {
+       "name": "transactions",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate every start position until it fails",
+    "candidate_design": "prefix sums P; for each start s (right to left) binary-search a monotonic stack for the first index j > s with P[j] < P[s] - initialBalance; served = j - 1 - s",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "e732415e68dcf650897a584874e8bd0694c95de6438845e3f456f31b637f0895",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:692d0f861abcca80b112238f",
+   "title": "Basic Calculator",
+   "variant_ordinal": 1,
+   "group_post_id": "692cf0591abcca80b1122341",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "calculate",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recursive descent with exact fractions, truncating each quotient toward zero",
+    "candidate_design": "one left-to-right pass with an explicit stack of frames (sum, pending term, pending operator, sign) per parenthesis level; exact integer truncating division",
+    "complexity_target": "O(n) time/O(depth) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5432847d2cf31a6312519d8261b948d3dbdc7c266badefa1df9738b0bc021f23",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a4d607d60d5cca82da2fdb8",
+   "title": "Beam Search Decoding",
+   "variant_ordinal": 1,
+   "group_post_id": "6a4d607660d5cca82da2fdb7",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "greedyDecode",
+     "params": [
+      {
+       "name": "scores",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each step sort token indices by (-score, index) and take the first",
+    "candidate_design": "one linear arg-max scan per step with strict comparison",
+    "complexity_target": "O(T V) time/O(T) output"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0f5683f02b2423136bcde0d1a9f002849ed648ee8beed82b75daa1d6efc0e3ae",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a4d62db60d5cca82da2fdda",
+   "title": "Beam Search Decoding",
+   "variant_ordinal": 2,
+   "group_post_id": "6a4d607660d5cca82da2fdb7",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "beamSearch",
+     "params": [
+      {
+       "name": "scores",
+       "type": "integer[][]"
+      },
+      {
+       "name": "beamWidth",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every sequence (Cartesian product) and sort by (-total, sequence)",
+    "candidate_design": "keep the beam sorted by (-total, lexicographic rank); each step extend every beam entry with the step's best beamWidth tokens and keep the best beamWidth candidates, ranking ties by (parent lexicographic rank, token)",
+    "complexity_target": "O(T k^2 log k + T V log V) time/O(T k) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0f5683f02b2423136bcde0d1a9f002849ed648ee8beed82b75daa1d6efc0e3ae",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68eabd503a3bb8f8354249a7",
+   "title": "Black Cell Covering Block List",
+   "variant_ordinal": 1,
+   "group_post_id": "68eabd453a3bb8f8354249a6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "blackBlockLists",
+     "params": [
+      {
+       "name": "m",
+       "type": "integer"
+      },
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "coordinates",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer[][][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every block touched by some black cell, count black cells by scanning all coordinates",
+    "candidate_design": "hash map from block corner to count, incrementing the up to four blocks around each black cell; then bucket and sort the corners",
+    "complexity_target": "O(c log c) time/O(c) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a26ab498b22b83b18e8a8451f4d87b1a54940c63534db453f7531638fccddff0",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:687e9cfe7bd121d1f502daa2",
+   "title": "Block-Based String Assembly",
+   "variant_ordinal": 1,
+   "group_post_id": "687e9cba7bd121d1f502daa1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "canAssemble",
+     "params": [
+      {
+       "name": "blocks",
+       "type": "string[][]"
+      },
+      {
+       "name": "target",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "backtracking over target positions with a used-block set",
+    "candidate_design": "bipartite matching (Kuhn augmenting paths) between target positions and blocks",
+    "complexity_target": "O(L B (L + B)) time/O(B L) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "06011524e97cf0bd8fdea617148f904f2efe4edfbefbece011ddc4c4fcb6500c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

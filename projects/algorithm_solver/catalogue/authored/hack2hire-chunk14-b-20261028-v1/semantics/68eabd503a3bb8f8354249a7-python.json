@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68eabd503a3bb8f8354249a7",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "m",
+  "n",
+  "coordinates"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "blackBlockLists",
+  "params": [
+   {
+    "name": "m",
+    "type": "integer"
+   },
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "coordinates",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[][][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every block touched by some black cell, count black cells by scanning all coordinates",
+  "candidate_design": "hash map from block corner to count, incrementing the up to four blocks around each black cell; then bucket and sort the corners",
+  "complexity_target": "O(c log c) time/O(c) space"
+ },
+ "source_sha256": "07b6ffafbf699b49f598bc1daab1a9c97cb63cce3c0a3597b1b7d62420f422ca",
+ "wrapper": "Solution.blackBlockLists"
+}

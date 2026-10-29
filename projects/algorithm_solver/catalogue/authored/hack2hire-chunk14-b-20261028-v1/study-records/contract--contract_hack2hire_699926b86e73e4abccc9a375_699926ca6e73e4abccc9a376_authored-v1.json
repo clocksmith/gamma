@@ -1,0 +1,356 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:699926b86e73e4abccc9a375:699926ca6e73e4abccc9a376:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+   "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+   "selector": "/problems/4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/699926b86e73e4abccc9a375.json",
+   "sha256": "c1873d121474065716380b0dcb1c8da3c4621e420a5c2f04763bd4a084b5ae7d",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+   "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+   "selector": "/variants/hack2hire:699926ca6e73e4abccc9a376"
+  }
+ ],
+ "problemId": "hack2hire:699926b86e73e4abccc9a375",
+ "variantId": "699926ca6e73e4abccc9a376",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: round-robin bursts with closures, report the busiest center",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:699926ca6e73e4abccc9a376/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "centerCapacity[i] >= 1 is how many consecutive packages center i takes on each round-robin visit. Assignment starts at center 0. Each \"PACKAGE\" goes to the current center; once it has taken centerCapacity[i] packages in this visit, the turn passes to the next open center in increasing index order, wrapping around (possibly the same center when it is the only open one), and that visit starts from zero. \"CLOSURE i\" permanently closes open center i (never the last open center); if i is the current center the turn passes at once to the next open center, which starts a fresh visit. Return the index of the center that received the most packages in total (closed centers keep their totals); on a tie return the largest index.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "centerCapacity[i] >= 1 is how many consecutive packages center i takes on each round-robin visit.",
+   "Assignment starts at center 0.",
+   "Each \"PACKAGE\" goes to the current center; once it has taken centerCapacity[i] packages in this visit, the turn passes to the next open center in increasing index order, wrapping around (possibly the same center when it is the only open one), and that visit starts from zero.",
+   "\"CLOSURE i\" permanently closes open center i (never the last open center); if i is the current center the turn passes at once to the next open center, which starts a fresh visit.",
+   "Return the index of the center that received the most packages in total (closed centers keep their totals); on a tie return the largest index."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= centerCapacity.length <= 1e4",
+   "1 <= centerCapacity[i] <= 1e9",
+   "0 <= dailyLog.length <= 1e5",
+   "a closure names an open center and never the last open one"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:699926ca6e73e4abccc9a376/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: centers with a maximum package count centerCapacity[i]; dailyLog entries are \"PACKAGE\" (assign one package) or \"CLOSURE i\" (center i closes permanently); assignment is round-robin (the output is cut off); algorithmTags: ARRAY, HASH_TABLE; preview response sha256 61f36ef7bef97e50b4cfaa03e7db533b965ba9bc34b905d27fd01fe1b0a97374"
+   },
+   {
+    "statement": "Uncertainty: very high: the inputs and the two operations are in the preview; the per-visit reading of capacity, the start at center 0, the handling of closing the current center, the output (busiest center) and the tie rule are inferred",
+    "basis": "the public group preview is partial (526 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/4/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/4/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/4/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the capacity a per-visit burst or a lifetime limit?",
+   "What happens to packages when every center is full?",
+   "What is returned: per-center totals, the busiest center, or the assignments?",
+   "How are ties broken?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:699926ca6e73e4abccc9a376/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      1
+     ],
+     []
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      1,
+      1
+     ],
+     [
+      "PACKAGE",
+      "CLOSURE 0",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE",
+      "PACKAGE"
+     ]
+    ],
+    "output": 1,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:699926ca6e73e4abccc9a376/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/oracles.py",
+    "sha256": "f6b1b4df34a1cdc3a204377a5fe7dd60e83bd05632390acec3afcf71cd0127fa",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def busiestCenter(centerCapacity, dailyLog) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/699926ca6e73e4abccc9a376-python.json",
+     "inferredInterface": {
+      "name": "busiestCenter",
+      "params": [
+       {
+        "name": "centerCapacity",
+        "type": "integer[]"
+       },
+       {
+        "name": "dailyLog",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/699926ca6e73e4abccc9a376-python.json",
+      "sha256": "594eda7139fa6c2809434fe0c9ee454156cc0b43944a56d042ca5a4976e5f808",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function busiestCenter(centerCapacity, dailyLog) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/699926ca6e73e4abccc9a376-javascript.json",
+     "inferredInterface": {
+      "name": "busiestCenter",
+      "params": [
+       {
+        "name": "centerCapacity",
+        "type": "integer[]"
+       },
+       {
+        "name": "dailyLog",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/699926ca6e73e4abccc9a376-javascript.json",
+      "sha256": "ad25a8154df032870996bd46afa1119555212ee711caf73c4768b99d279c3c42",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/4/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/4/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

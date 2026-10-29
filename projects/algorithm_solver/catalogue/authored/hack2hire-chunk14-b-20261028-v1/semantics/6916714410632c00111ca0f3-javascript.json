@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6916714410632c00111ca0f3",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "params",
+  "returnType",
+  "args"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "inferReturnType",
+  "params": [
+   {
+    "name": "params",
+    "type": "Node[]"
+   },
+   {
+    "name": "returnType",
+    "type": "Node"
+   },
+   {
+    "name": "args",
+    "type": "Node[]"
+   }
+  ],
+  "return": {
+   "type": "string|null"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "substitute first-seen bindings into the parameters and compare the formatted strings of the substituted parameters and the arguments",
+  "candidate_design": "simultaneous recursive walk of parameter and argument nodes, storing each generic binding by its formatted string in a hash map and failing on the first conflict",
+  "complexity_target": "O(total node count + output length) time/O(number of generics + depth) space"
+ },
+ "source_sha256": "0c326171c930fe68439e06aa9c1388f09c3a9c0dc862d541fa94c49e8e9ef87d",
+ "wrapper": "named export inferReturnType"
+}

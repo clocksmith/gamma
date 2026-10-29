@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697a5dbf2ae9e181e44b7b9e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "workers",
+  "specialties",
+  "maxTasks",
+  "tasks",
+  "taskTypes"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "assignTasksWithLimits",
+  "params": [
+   {
+    "name": "workers",
+    "type": "string[]"
+   },
+   {
+    "name": "specialties",
+    "type": "string[][]"
+   },
+   {
+    "name": "maxTasks",
+    "type": "integer[]"
+   },
+   {
+    "name": "tasks",
+    "type": "integer[][]"
+   },
+   {
+    "name": "taskTypes",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan every worker for every task, filtering by specialty and remaining limit",
+  "candidate_design": "lazy per-type min-heaps as in level 2; a worker at its limit simply gets no fresh entries, so its old entries are discarded as stale",
+  "complexity_target": "O((w s + t s) log(w s + t s)) time/O(w s + t s) space"
+ },
+ "source_sha256": "4ff694ae49e2156b041ab51d5f63f4e64b048f51c81da9326d2d506edbadbd0e",
+ "wrapper": "Solution.assignTasksWithLimits"
+}

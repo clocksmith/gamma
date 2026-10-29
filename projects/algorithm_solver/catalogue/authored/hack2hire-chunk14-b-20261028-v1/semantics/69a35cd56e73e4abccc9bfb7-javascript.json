@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a35cd56e73e4abccc9bfb7",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr",
+  "ops"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "applyOperations",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   },
+   {
+    "name": "ops",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "apply each \"1\" by scanning from the left for the first 0",
+  "candidate_design": "copy the array and keep a min-heap of indices that may hold 0, skipping indices that are already 1 when popped",
+  "complexity_target": "O((n + q) log(n + q)) time/O(n + q) space"
+ },
+ "source_sha256": "17e05707320e4d1922224ee734e827af8ad466b2cbd9842861436accc4fd0d9e",
+ "wrapper": "named export applyOperations"
+}

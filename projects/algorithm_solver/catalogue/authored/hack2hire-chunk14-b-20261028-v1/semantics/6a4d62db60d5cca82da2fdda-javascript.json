@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a4d62db60d5cca82da2fdda",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "scores",
+  "beamWidth"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "beamSearch",
+  "params": [
+   {
+    "name": "scores",
+    "type": "integer[][]"
+   },
+   {
+    "name": "beamWidth",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every sequence (Cartesian product) and sort by (-total, sequence)",
+  "candidate_design": "keep the beam sorted by (-total, lexicographic rank); each step extend every beam entry with the step's best beamWidth tokens and keep the best beamWidth candidates, ranking ties by (parent lexicographic rank, token)",
+  "complexity_target": "O(T k^2 log k + T V log V) time/O(T k) space"
+ },
+ "source_sha256": "6786abd94c26589df9fb5d1686e6bffb8d12235c85ac7291c481e8d9c0178baa",
+ "wrapper": "named export beamSearch"
+}

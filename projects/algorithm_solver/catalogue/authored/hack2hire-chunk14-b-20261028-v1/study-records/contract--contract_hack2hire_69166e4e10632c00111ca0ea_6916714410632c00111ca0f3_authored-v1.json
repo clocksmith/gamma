@@ -1,0 +1,405 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69166e4e10632c00111ca0ea:6916714410632c00111ca0f3:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+   "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69166e4e10632c00111ca0ea.json",
+   "sha256": "e046069f47e2474de8cc5918e9b3654daed6c81a0f2b660ed7605d5a722f7249",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+   "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+   "selector": "/variants/hack2hire:6916714410632c00111ca0f3"
+  }
+ ],
+ "problemId": "hack2hire:69166e4e10632c00111ca0ea",
+ "variantId": "6916714410632c00111ca0f3",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: bind generics from arguments and resolve the return type",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6916714410632c00111ca0f3/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "A type node is either a primitive string (\"int\", \"char\" or \"float\"), a generic string (\"T\" followed by one digit) or a tuple, written as a non-empty JSON list of type nodes (tuples nest, at most 20 levels). Formatting: a primitive or generic prints as itself; a tuple prints as \"[\" + its element strings joined by \", \" + \"]\"; a function type prints as \"(\" + the parameter strings joined by \", \" + \") -> \" + the return string. Level 2 (inferred): a function with parameter types params and return type returnType is called with argument types args (concrete nodes, no generics). Match each argument against its parameter: a primitive must equal the argument exactly, a tuple must meet a tuple of the same length element by element, and a generic binds to the whole argument node (which may be a tuple); every occurrence of the same generic must bind to an identical node. Return the formatted return type with every bound generic replaced by its binding (generics that are not bound stay as written), or null when the argument count differs or any argument does not match.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "A type node is either a primitive string (\"int\", \"char\" or \"float\"), a generic string (\"T\" followed by one digit) or a tuple, written as a non-empty JSON list of type nodes (tuples nest, at most 20 levels).",
+   "Formatting: a primitive or generic prints as itself; a tuple prints as \"[\" + its element strings joined by \", \" + \"]\"; a function type prints as \"(\" + the parameter strings joined by \", \" + \") -> \" + the return string.",
+   "Level 2 (inferred): a function with parameter types params and return type returnType is called with argument types args (concrete nodes, no generics).",
+   "Match each argument against its parameter: a primitive must equal the argument exactly, a tuple must meet a tuple of the same length element by element, and a generic binds to the whole argument node (which may be a tuple); every occurrence of the same generic must bind to an identical node.",
+   "Return the formatted return type with every bound generic replaced by its binding (generics that are not bound stay as written), or null when the argument count differs or any argument does not match."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= params.length <= 1e4",
+   "args.length <= 1e4",
+   "total nodes in all inputs <= 4e4",
+   "tuple nesting depth <= 20",
+   "args contain no generics"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6916714410632c00111ca0f3/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: three kinds of types (primitives int/char/float, generics \"T\" plus a digit that may stand for any type including a tuple, tuples written as possibly nested lists of types); a Node is one of these; the system describes function types with parameter and return types (the tasks themselves are cut off); algorithmTags: RECURSION, HASH_TABLE; preview response sha256 5ecab84291cb8e1c5b250480e8b78b4a9fb48cef248855a8a1e063c1df4faced"
+   },
+   {
+    "statement": "Uncertainty: very high: the preview never states the second task; binding generics from call arguments and returning the substituted return type is the usual follow-up but is an inference, as are the null result for errors and leaving unbound generics in place",
+    "basis": "the public group preview is partial (621 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 2 of 2 resolves generic parameters against concrete argument types",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What exact text format do nodes and function types use (separators, spaces, brackets)?",
+   "Can arguments themselves contain generics?",
+   "What should happen when an argument does not fit its parameter: error, exception or a sentinel?",
+   "Can a generic in the return type be absent from the parameters?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6916714410632c00111ca0f3/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     "T2",
+     []
+    ],
+    "output": "T2",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       [
+        [
+         "int"
+        ],
+        [
+         "char",
+         "T1"
+        ],
+        "float"
+       ],
+       [
+        "float",
+        [
+         "T1"
+        ]
+       ],
+       "T3"
+      ],
+      "int",
+      "T2",
+      "char"
+     ],
+     "int",
+     [
+      [
+       [
+        [
+         "int"
+        ],
+        [
+         "char",
+         [
+          [
+           "char"
+          ],
+          [
+           "float",
+           "int"
+          ],
+          "float"
+         ]
+        ],
+        "float"
+       ],
+       [
+        "float",
+        [
+         [
+          [
+           "char"
+          ],
+          [
+           "float",
+           "int"
+          ],
+          "float"
+         ]
+        ]
+       ],
+       "char"
+      ],
+      "int",
+      [
+       "float",
+       [
+        "char",
+        "int"
+       ]
+      ],
+      "char"
+     ]
+    ],
+    "output": "int",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:6916714410632c00111ca0f3/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/oracles.py",
+    "sha256": "f6b1b4df34a1cdc3a204377a5fe7dd60e83bd05632390acec3afcf71cd0127fa",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def inferReturnType(params, returnType, args) -> string|null",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6916714410632c00111ca0f3-python.json",
+     "inferredInterface": {
+      "name": "inferReturnType",
+      "params": [
+       {
+        "name": "params",
+        "type": "Node[]"
+       },
+       {
+        "name": "returnType",
+        "type": "Node"
+       },
+       {
+        "name": "args",
+        "type": "Node[]"
+       }
+      ],
+      "return": {
+       "type": "string|null"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6916714410632c00111ca0f3-python.json",
+      "sha256": "41aab18f3261587375698c269c277bba5544a9db11ed132f26eca85ccded6ca4",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function inferReturnType(params, returnType, args) /* -> string|null */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6916714410632c00111ca0f3-javascript.json",
+     "inferredInterface": {
+      "name": "inferReturnType",
+      "params": [
+       {
+        "name": "params",
+        "type": "Node[]"
+       },
+       {
+        "name": "returnType",
+        "type": "Node"
+       },
+       {
+        "name": "args",
+        "type": "Node[]"
+       }
+      ],
+      "return": {
+       "type": "string|null"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/6916714410632c00111ca0f3-javascript.json",
+      "sha256": "270b06a38e349a174a2512b98edef5bce799a11c066f8c5ea7133c6beb0c1b03",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

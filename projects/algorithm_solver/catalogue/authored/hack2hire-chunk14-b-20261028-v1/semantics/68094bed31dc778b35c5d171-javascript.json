@@ -1,0 +1,100 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68094bed31dc778b35c5d171",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "ViolationLogAnalyzer",
+  "constructor": {
+   "params": [
+    {
+     "name": "logs",
+     "type": "string[][]"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "countPolicies",
+    "params": [
+     {
+      "name": "postId",
+      "type": "string"
+     },
+     {
+      "name": "startDate",
+      "type": "string"
+     },
+     {
+      "name": "endDate",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "countPosts",
+    "params": [
+     {
+      "name": "policy",
+      "type": "string"
+     },
+     {
+      "name": "startDate",
+      "type": "string"
+     },
+     {
+      "name": "endDate",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "countViolations",
+    "params": [
+     {
+      "name": "startDate",
+      "type": "string"
+     },
+     {
+      "name": "endDate",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan every log for every query and collect matching keys in a set",
+  "candidate_design": "group logs by post and by policy keeping date order; binary-search the date range in the group (or the whole log) and count distinct keys in that slice with a hash set",
+  "complexity_target": "O(n) build, O(log n + k) per query for k logs in range/O(n) space"
+ },
+ "source_sha256": "5e012ce6a3a539eff9df8720160c8d570a3a18483888d92aa3876bad3a63d2d1",
+ "native_class": "ViolationLogAnalyzer",
+ "native_symbol": "property ViolationLogAnalyzer of the CommonJS solve export",
+ "void_methods": []
+}
