@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69e93d83fbaf3da6418286c9",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minLengthGoodSubarray",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every start index grow a set to the right until it holds k values and keep the shortest length",
+  "candidate_design": "sliding window with a hash map of counts: extend the right end, and while the window has at least k distinct values record its length and shrink from the left",
+  "complexity_target": "O(n) expected time/O(n) space"
+ },
+ "source_sha256": "304c11f60d03a57878bb1b42f456bdef01d6adcf9b62d0abd666ea58e5cc59cc",
+ "wrapper": "named export minLengthGoodSubarray"
+}

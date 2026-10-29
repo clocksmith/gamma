@@ -1,0 +1,89 @@
+{
+ "problems": {
+  "hack2hire:688a81d832b6b01c49be543b": {
+   "reference": "try every pair (a, b) and keep the lexicographically smallest key (|a - b|, a, b)",
+   "candidate_design": "two pointers over both sorted lists find the minimum difference d; a second merge pass walks A in ascending order and, for each a, advances a pointer in B to the first value >= a - d, returning the first a for which a - d or a + d is present",
+   "complexity_target": "O(|A| + |B|) time/O(1) extra space"
+  },
+  "hack2hire:686839500ed1b6fe83428ac8": {
+   "reference": "try x = 1, 2, ... up to the largest score and return the first x whose total operation count sum(ceil(s / x)) is at most k",
+   "candidate_design": "binary search x over [1, max score]; the operation count sum(ceil(s / x)) over positive scores is non-increasing in x",
+   "complexity_target": "O(n log max) time/O(1) extra space"
+  },
+  "hack2hire:686833a90ed1b6fe83428ac3": {
+   "reference": "list every item's successive savings (p - floor(p / 2) for p, floor(p / 2), ...), sort all savings and subtract the largest vouchersCount of them from the total",
+   "candidate_design": "max-heap of current prices; repeatedly halve the largest price until vouchers run out or the largest price is 0",
+   "complexity_target": "O(n + v log n) time for v = min(vouchersCount, useful halvings)/O(n) space"
+  },
+  "hack2hire:68c327671f64f4312b0a3e1e": {
+   "reference": "for every list item scan products linearly for its department and keep a list of departments seen so far, scanned linearly",
+   "candidate_design": "hash map from product name to department, then a set of departments over the shopping list",
+   "complexity_target": "O(products + list) expected time/O(products) space"
+  },
+  "hack2hire:69646297b481f959f9e384ee": {
+   "reference": "recursive enumeration of every count vector from the largest denomination down, keeping the best by (total coins, then counts from the largest denomination, larger first)",
+   "candidate_design": "suffix tables f_i[a] = fewest coins for amount a using the i-th largest denomination and smaller ones (unbounded knapsack per denomination), then reconstruct from the largest denomination taking the largest count t with f_{i+1}[a - t * c] = f_i[a] - t",
+   "complexity_target": "O(len(coins) * target) time and space"
+  },
+  "hack2hire:688cdf12b6c09ad9a4fcc2cc": {
+   "reference": "evaluate the total distance for every element of nums and keep the smallest (total, x)",
+   "candidate_design": "sort a copy; the lower median sorted[(n - 1) // 2] is the smallest minimiser, and its total distance is one pass",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:67a93084ea201244f8fae263": {
+   "reference": "union-find over the cells joining every cell with its row mirror and its column mirror, then for every class flip the minority colour",
+   "candidate_design": "visit each orbit {(i, j), (i, M-1-j), (N-1-i, j), (N-1-i, M-1-j)} once from its top-left representative, count B among its distinct cells and add min(B, size - B)",
+   "complexity_target": "O(N * M) time/O(1) extra space"
+  },
+  "hack2hire:699e789b6e73e4abccc9b2c8": {
+   "reference": "enumerate every set of at most k positions to flip and measure the longest run of each result",
+   "candidate_design": "binary search the answer L: L = 1 needs min(mismatches against \"abab...\", against \"baba...\") flips; for L >= 2 a run of length r needs floor(r / (L + 1)) flips",
+   "complexity_target": "O(n log n) time/O(1) extra space"
+  },
+  "hack2hire:6a04d7ad3141bbc31efdd5c2": {
+   "reference": "for every task start s count the tasks with start <= s < end, and return the largest count",
+   "candidate_design": "sort the starts and the ends separately and sweep: at equal times process ends before starts, tracking the running count and its maximum",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:6910bee571ea59cda5a81a94": {
+   "reference": "build nested node lists and enumerate every root-to-leaf path recursively, keeping the first path with the smallest sum",
+   "candidate_design": "decode the level-order list into child index arrays, run an iterative preorder walk carrying prefix sums and parent indices, keep the first leaf with a strictly smaller sum, then rebuild its path from parents",
+   "complexity_target": "O(n) time and space"
+  },
+  "hack2hire:67d88d261989183df5382503": {
+   "reference": "try b = 1, 2, ... and simulate the tasks until the level never drops to 0 or below",
+   "candidate_design": "one pass tracking the largest prefix sum P of usage; the answer is max(1, P + 1)",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:69e93d83fbaf3da6418286c9": {
+   "reference": "for every start index grow a set to the right until it holds k values and keep the shortest length",
+   "candidate_design": "sliding window with a hash map of counts: extend the right end, and while the window has at least k distinct values record its length and shrink from the left",
+   "complexity_target": "O(n) expected time/O(n) space"
+  },
+  "hack2hire:68f842c4d7ff180d0ab950eb": {
+   "reference": "breadth-first search over parity patterns (bitmasks), where each move swaps two positions, until the evens-first pattern is reached",
+   "candidate_design": "count the evens E; the answer is the number of odd values among the first E positions",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:68a615443a368733bb104245": {
+   "reference": "simulate the days: keep the set of remaining nodes, remove those with no remaining children, repeat",
+   "candidate_design": "decode into child lists, compute each node's height (leaves 0) in reverse breadth-first order, and bucket values by height; sort each bucket",
+   "complexity_target": "O(n log n) time for the sorts/O(n) space"
+  },
+  "hack2hire:69d1807e17b72775cc49c008": {
+   "reference": "repeatedly delete letters, commas and every \"()\" pair from the string until nothing changes; it is well-formed when the result is empty",
+   "candidate_design": "one left-to-right scan with an open-parenthesis counter; fail when it drops below 0, succeed when it ends at 0",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:69d1828717b72775cc49c028": {
+   "reference": "recursive descent parser over the grammar list := \"(\" [item (\",\" item)*] \")\", item := word | list",
+   "candidate_design": "iterative stack parser: \"(\" pushes a new array, letters accumulate into a word that is flushed on \",\" or \")\", and \")\" pops the finished array into its parent",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:67883eb4e20f8f324213c2a2": {
+   "reference": "add one to the integer value repeatedly until its decimal string is a palindrome",
+   "candidate_design": "mirror the left half onto the right; if the result is not greater than n, add one to the left half (including the middle digit) with carry and mirror again; all nines become 1 0...0 1",
+   "complexity_target": "O(len(n)) time and space"
+  }
+ }
+}

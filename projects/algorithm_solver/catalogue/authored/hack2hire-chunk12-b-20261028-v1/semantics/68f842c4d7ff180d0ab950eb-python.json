@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68f842c4d7ff180d0ab950eb",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minSwaps",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "breadth-first search over parity patterns (bitmasks), where each move swaps two positions, until the evens-first pattern is reached",
+  "candidate_design": "count the evens E; the answer is the number of odd values among the first E positions",
+  "complexity_target": "O(n) time/O(1) extra space"
+ },
+ "source_sha256": "4ddc40c33e218aca87609b3b9bae743906235caf542e0f6076a523d793d23883",
+ "wrapper": "Solution.minSwaps"
+}

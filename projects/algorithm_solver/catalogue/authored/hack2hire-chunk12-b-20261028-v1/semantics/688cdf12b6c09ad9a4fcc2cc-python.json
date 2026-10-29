@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:688cdf12b6c09ad9a4fcc2cc",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minTotalDistance",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "evaluate the total distance for every element of nums and keep the smallest (total, x)",
+  "candidate_design": "sort a copy; the lower median sorted[(n - 1) // 2] is the smallest minimiser, and its total distance is one pass",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "74140d094972fff221fab4a3c7f374bd3cc0d9eebc0640c8b01464b3252bbb98",
+ "wrapper": "Solution.minTotalDistance"
+}

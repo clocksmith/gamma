@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a04d7ad3141bbc31efdd5c2",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "tasks"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minMachines",
+  "params": [
+   {
+    "name": "tasks",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every task start s count the tasks with start <= s < end, and return the largest count",
+  "candidate_design": "sort the starts and the ends separately and sweep: at equal times process ends before starts, tracking the running count and its maximum",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "a0fbcb9df94d728472ba409d73e927b79eb5ef90f4783b1b19998fa29a39c9d1",
+ "wrapper": "Solution.minMachines"
+}

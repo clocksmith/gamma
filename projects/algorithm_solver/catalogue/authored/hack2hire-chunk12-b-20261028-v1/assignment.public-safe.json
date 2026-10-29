@@ -1,0 +1,749 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk12-b (16 Hack2Hire groups, 17 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:688a81d832b6b01c49be543b",
+   "title": "Minimal Difference in Two Arrays",
+   "variant_ordinal": 1,
+   "group_post_id": "688a81cd32b6b01c49be543a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findMinAbsDiffPair",
+     "params": [
+      {
+       "name": "A",
+       "type": "integer[]"
+      },
+      {
+       "name": "B",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every pair (a, b) and keep the lexicographically smallest key (|a - b|, a, b)",
+    "candidate_design": "two pointers over both sorted lists find the minimum difference d; a second merge pass walks A in ascending order and, for each a, advances a pointer in B to the first value >= a - d, returning the first a for which a - d or a + d is present",
+    "complexity_target": "O(|A| + |B|) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0e0c31c81684ecb873e8ae8a750c01c6d2cb03ccecaf28950c409d8391374c05",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:686839500ed1b6fe83428ac8",
+   "title": "Minimal Video Score Reduction",
+   "variant_ordinal": 1,
+   "group_post_id": "686836890ed1b6fe83428ac6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minimumDecrement",
+     "params": [
+      {
+       "name": "scores",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try x = 1, 2, ... up to the largest score and return the first x whose total operation count sum(ceil(s / x)) is at most k",
+    "candidate_design": "binary search x over [1, max score]; the operation count sum(ceil(s / x)) over positive scores is non-increasing in x",
+    "complexity_target": "O(n log max) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "8d3560f3d43fef7068ee0e1ffc14028b76e654a646fc94ce97ab8944be644610",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:686833a90ed1b6fe83428ac3",
+   "title": "Minimize Cost with Vouchers",
+   "variant_ordinal": 1,
+   "group_post_id": "68682d4c0ed1b6fe83428ac2",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minimizeCost",
+     "params": [
+      {
+       "name": "price",
+       "type": "integer[]"
+      },
+      {
+       "name": "vouchersCount",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "list every item's successive savings (p - floor(p / 2) for p, floor(p / 2), ...), sort all savings and subtract the largest vouchersCount of them from the total",
+    "candidate_design": "max-heap of current prices; repeatedly halve the largest price until vouchers run out or the largest price is 0",
+    "complexity_target": "O(n + v log n) time for v = min(vouchersCount, useful halvings)/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "e54f1868b2fedc0520bf6ffafa822aed8aad29444fc097a9a4003dc3beac0567",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68c327671f64f4312b0a3e1e",
+   "title": "Minimize Shopping Department Visits",
+   "variant_ordinal": 1,
+   "group_post_id": "68c327611f64f4312b0a3e1d",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minDepartmentVisits",
+     "params": [
+      {
+       "name": "products",
+       "type": "string[][]"
+      },
+      {
+       "name": "shoppingList",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every list item scan products linearly for its department and keep a list of departments seen so far, scanned linearly",
+    "candidate_design": "hash map from product name to department, then a set of departments over the shopping list",
+    "complexity_target": "O(products + list) expected time/O(products) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "db267bc834f96ce8f08a1d0d2b5717f7bcae665c114239f202d8df6c61f26720",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69646297b481f959f9e384ee",
+   "title": "Minimum Coin Combination Counts",
+   "variant_ordinal": 1,
+   "group_post_id": "69646161b481f959f9e384ec",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minCoinCombination",
+     "params": [
+      {
+       "name": "coins",
+       "type": "integer[]"
+      },
+      {
+       "name": "target",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recursive enumeration of every count vector from the largest denomination down, keeping the best by (total coins, then counts from the largest denomination, larger first)",
+    "candidate_design": "suffix tables f_i[a] = fewest coins for amount a using the i-th largest denomination and smaller ones (unbounded knapsack per denomination), then reconstruct from the largest denomination taking the largest count t with f_{i+1}[a - t * c] = f_i[a] - t",
+    "complexity_target": "O(len(coins) * target) time and space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4520141d3adfbaf4e8778808146eff2b0f2b0101ec5eb6a8f6ccb86744267cde",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:688cdf12b6c09ad9a4fcc2cc",
+   "title": "Minimum Distance to All Points",
+   "variant_ordinal": 1,
+   "group_post_id": "688cdeffb6c09ad9a4fcc2cb",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minTotalDistance",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "evaluate the total distance for every element of nums and keep the smallest (total, x)",
+    "candidate_design": "sort a copy; the lower median sorted[(n - 1) // 2] is the smallest minimiser, and its total distance is one pass",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "bc2284bc97b8db84bdee2fb6f39a3985d5be7d7fee9c85bb8126bdd18b1548bc",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67a93084ea201244f8fae263",
+   "title": "Minimum Flips for Grid Symmetry",
+   "variant_ordinal": 1,
+   "group_post_id": "67a92f3eea201244f8fae262",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minFlips",
+     "params": [
+      {
+       "name": "grid",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "union-find over the cells joining every cell with its row mirror and its column mirror, then for every class flip the minority colour",
+    "candidate_design": "visit each orbit {(i, j), (i, M-1-j), (N-1-i, j), (N-1-i, M-1-j)} once from its top-left representative, count B among its distinct cells and add min(B, size - B)",
+    "complexity_target": "O(N * M) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0ecd1c5387a2baf4c65a83e843c04200ad4b4185a5efd332813eef4ece986b2a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:699e789b6e73e4abccc9b2c8",
+   "title": "Minimum Idleness After K Flips",
+   "variant_ordinal": 1,
+   "group_post_id": "699b55036e73e4abccc9a863",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minIdleness",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every set of at most k positions to flip and measure the longest run of each result",
+    "candidate_design": "binary search the answer L: L = 1 needs min(mismatches against \"abab...\", against \"baba...\") flips; for L >= 2 a run of length r needs floor(r / (L + 1)) flips",
+    "complexity_target": "O(n log n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "dd3e91a1ec2b0edbf16757f747dddf799daec3474b566995329c515b7c00d005",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a04d7ad3141bbc31efdd5c2",
+   "title": "Minimum Machines for Task Scheduling",
+   "variant_ordinal": 1,
+   "group_post_id": "6a04d73e3141bbc31efdd5be",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minMachines",
+     "params": [
+      {
+       "name": "tasks",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every task start s count the tasks with start <= s < end, and return the largest count",
+    "candidate_design": "sort the starts and the ends separately and sweep: at equal times process ends before starts, tracking the running count and its maximum",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "303c8a00cb117ff3b0360bc4a621cdd2b3dc6d6afc347e471a26d5d8d5cb376f",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6910bee571ea59cda5a81a94",
+   "title": "Minimum Root-to-Leaf Path Sum",
+   "variant_ordinal": 1,
+   "group_post_id": "6907c9a4e1919109b6df11b6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minPathSum",
+     "params": [
+      {
+       "name": "root",
+       "type": "(integer|null)[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "build nested node lists and enumerate every root-to-leaf path recursively, keeping the first path with the smallest sum",
+    "candidate_design": "decode the level-order list into child index arrays, run an iterative preorder walk carrying prefix sums and parent indices, keep the first leaf with a strictly smaller sum, then rebuild its path from parents",
+    "complexity_target": "O(n) time and space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "951c84015fb25139090c4daa4e7688c769e91f0be4dbc0fe2563579142398848",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67d88d261989183df5382503",
+   "title": "Minimum Starting Battery Level",
+   "variant_ordinal": 1,
+   "group_post_id": "67d887151989183df53824ff",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minStartingBattery",
+     "params": [
+      {
+       "name": "usage",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try b = 1, 2, ... and simulate the tasks until the level never drops to 0 or below",
+    "candidate_design": "one pass tracking the largest prefix sum P of usage; the answer is max(1, P + 1)",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "93af7e3651baa9d8614e12b46ffe6d655c74947601ffe972bf51505136b0b82c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69e93d83fbaf3da6418286c9",
+   "title": "Minimum Subarray with K Unique Integers",
+   "variant_ordinal": 1,
+   "group_post_id": "69e93d76fbaf3da6418286c8",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minLengthGoodSubarray",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every start index grow a set to the right until it holds k values and keep the shortest length",
+    "candidate_design": "sliding window with a hash map of counts: extend the right end, and while the window has at least k distinct values record its length and shrink from the left",
+    "complexity_target": "O(n) expected time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "04eb3053a323c57a8b5b8ec8d13f0bfb0f40c4c6b070d4a6c92997ab64c475bb",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68f842c4d7ff180d0ab950eb",
+   "title": "Minimum Swaps to Group Evens First",
+   "variant_ordinal": 1,
+   "group_post_id": "68f8417bd7ff180d0ab950e5",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minSwaps",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "breadth-first search over parity patterns (bitmasks), where each move swaps two positions, until the evens-first pattern is reached",
+    "candidate_design": "count the evens E; the answer is the number of odd values among the first E positions",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "8a46ef9596e32573c6577d9acae48c59cbb39408195f52c88c5c39aa6922a246",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68a615443a368733bb104245",
+   "title": "N-ary Tree Leaf Node Removal",
+   "variant_ordinal": 1,
+   "group_post_id": "68a615393a368733bb104244",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "removeLeavesByDay",
+     "params": [
+      {
+       "name": "root",
+       "type": "(integer|null)[]"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate the days: keep the set of remaining nodes, remove those with no remaining children, repeat",
+    "candidate_design": "decode into child lists, compute each node's height (leaves 0) in reverse breadth-first order, and bucket values by height; sort each bucket",
+    "complexity_target": "O(n log n) time for the sorts/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "84bb9d25e8d22e585b39c30e932b512430d72f8bc33ec1959cb60683a70a66d3",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69d1807e17b72775cc49c008",
+   "title": "Nested String with Brackets Parsing",
+   "variant_ordinal": 1,
+   "group_post_id": "69d1807617b72775cc49c007",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "isWellFormed",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "repeatedly delete letters, commas and every \"()\" pair from the string until nothing changes; it is well-formed when the result is empty",
+    "candidate_design": "one left-to-right scan with an open-parenthesis counter; fail when it drops below 0, succeed when it ends at 0",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0d7e3d5b88c5d33da105f87c70d874b5a6ef1a3ef9b3630c4a916f706a28fbf7",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69d1828717b72775cc49c028",
+   "title": "Nested String with Brackets Parsing",
+   "variant_ordinal": 2,
+   "group_post_id": "69d1807617b72775cc49c007",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "parseNested",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "(string|NestedList)[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recursive descent parser over the grammar list := \"(\" [item (\",\" item)*] \")\", item := word | list",
+    "candidate_design": "iterative stack parser: \"(\" pushes a new array, letters accumulate into a word that is flushed on \",\" or \")\", and \")\" pops the finished array into its parent",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0d7e3d5b88c5d33da105f87c70d874b5a6ef1a3ef9b3630c4a916f706a28fbf7",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67883eb4e20f8f324213c2a2",
+   "title": "Next Greater Palindrome",
+   "variant_ordinal": 1,
+   "group_post_id": "67883de3e20f8f324213c2a1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "nextGreaterPalindrome",
+     "params": [
+      {
+       "name": "n",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "add one to the integer value repeatedly until its decimal string is a palindrome",
+    "candidate_design": "mirror the left half onto the right; if the result is not greater than n, add one to the left half (including the middle digit) with carry and mirror again; all nines become 1 0...0 1",
+    "complexity_target": "O(len(n)) time and space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5ab11a70902b675655cda89e639d0ed906d8e49dbe9aff5862b71b7d883a5e48",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

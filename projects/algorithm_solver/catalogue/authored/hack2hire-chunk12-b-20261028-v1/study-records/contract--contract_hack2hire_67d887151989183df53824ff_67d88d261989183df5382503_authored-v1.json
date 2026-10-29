@@ -1,0 +1,331 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67d887151989183df53824ff:67d88d261989183df5382503:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+   "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67d887151989183df53824ff.json",
+   "sha256": "13dfcd282af6138afa8cb6b4731b36061f5c89f82761c3436279249d477063f6",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+   "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+   "selector": "/variants/hack2hire:67d88d261989183df5382503"
+  }
+ ],
+ "problemId": "hack2hire:67d887151989183df53824ff",
+ "variantId": "67d88d261989183df5382503",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: smallest starting level keeping a running balance positive",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:67d88d261989183df5382503/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "usage lists the energy change of each task in order: a positive value is consumed, a negative value is energy returned to the battery. Starting from level b, the level after task i is b minus the sum of usage[0..i]. Return the smallest integer b such that the level is strictly positive at the start and after every task.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "usage lists the energy change of each task in order: a positive value is consumed, a negative value is energy returned to the battery.",
+   "Starting from level b, the level after task i is b minus the sum of usage[0..i].",
+   "Return the smallest integer b such that the level is strictly positive at the start and after every task."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= usage.length <= 1e5",
+   "-1e9 <= usage[i] <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:67d88d261989183df5382503/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: tasks run sequentially; task i uses usage[i] units of energy; the battery level must stay strictly above 0 at all times (further rules and the output are cut off); algorithmTags: GREEDY; preview response sha256 93af7e3651baa9d8614e12b46ffe6d655c74947601ffe972bf51505136b0b82c"
+   },
+   {
+    "statement": "Uncertainty: very high: sequential tasks, usage[i] and the strictly-positive rule are in the preview; the remaining rules are cut off, so signed usage (negative meaning recharge), checking only after each task and returning the starting level are inferred",
+    "basis": "the public group preview is partial (369 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Can a task add energy (negative usage)?",
+   "Is the level checked only between tasks or also during a task?",
+   "Are there recharge stations or other rules after a task?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:67d88d261989183df5382503/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      1
+     ]
+    ],
+    "output": 2,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      -7,
+      1,
+      -2,
+      -2,
+      -4,
+      -6,
+      7,
+      -3,
+      6,
+      -9,
+      6,
+      8,
+      4,
+      -4,
+      -4,
+      -6,
+      0,
+      -5,
+      4
+     ]
+    ],
+    "output": 1,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:67d88d261989183df5382503/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/oracles.py",
+    "sha256": "62dd7fc41f95b2c1806d79041ae3ee05363251970de8c828fefd9f32cf9150e9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def minStartingBattery(usage) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+      "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/67d88d261989183df5382503-python.json",
+     "inferredInterface": {
+      "name": "minStartingBattery",
+      "params": [
+       {
+        "name": "usage",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/67d88d261989183df5382503-python.json",
+      "sha256": "65764ed4faf8b81bc8d9ae220a61b923f8ee1c0c3e0afbcc234f804a61203144",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function minStartingBattery(usage) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+      "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/67d88d261989183df5382503-javascript.json",
+     "inferredInterface": {
+      "name": "minStartingBattery",
+      "params": [
+       {
+        "name": "usage",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/67d88d261989183df5382503-javascript.json",
+      "sha256": "b62c34c752c6536f08b94ce93fa7f01b1646f27db683d1939b671bf0233e83ff",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

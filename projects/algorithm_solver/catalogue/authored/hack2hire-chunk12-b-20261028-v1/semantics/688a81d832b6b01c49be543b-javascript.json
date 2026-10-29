@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:688a81d832b6b01c49be543b",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "A",
+  "B"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findMinAbsDiffPair",
+  "params": [
+   {
+    "name": "A",
+    "type": "integer[]"
+   },
+   {
+    "name": "B",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every pair (a, b) and keep the lexicographically smallest key (|a - b|, a, b)",
+  "candidate_design": "two pointers over both sorted lists find the minimum difference d; a second merge pass walks A in ascending order and, for each a, advances a pointer in B to the first value >= a - d, returning the first a for which a - d or a + d is present",
+  "complexity_target": "O(|A| + |B|) time/O(1) extra space"
+ },
+ "source_sha256": "c7155689427ae7d42e39506cb972e3b762bfb2c1ab2ffaa497af74f54fb36689",
+ "wrapper": "named export findMinAbsDiffPair"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69646297b481f959f9e384ee",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "coins",
+  "target"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minCoinCombination",
+  "params": [
+   {
+    "name": "coins",
+    "type": "integer[]"
+   },
+   {
+    "name": "target",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive enumeration of every count vector from the largest denomination down, keeping the best by (total coins, then counts from the largest denomination, larger first)",
+  "candidate_design": "suffix tables f_i[a] = fewest coins for amount a using the i-th largest denomination and smaller ones (unbounded knapsack per denomination), then reconstruct from the largest denomination taking the largest count t with f_{i+1}[a - t * c] = f_i[a] - t",
+  "complexity_target": "O(len(coins) * target) time and space"
+ },
+ "source_sha256": "876a26e2b36bcba4f242cda234ae44ed8f4f68924b9029777999b5646bb39158",
+ "wrapper": "named export minCoinCombination"
+}

@@ -1,0 +1,984 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:688a81d832b6b01c49be543b",
+   "variant_id": "688a81d832b6b01c49be543b",
+   "variant_ordinal": 1,
+   "title": "Minimal Difference in Two Arrays",
+   "source": {
+    "post_id": "688a81cd32b6b01c49be543a",
+    "group_title": "Minimal Difference in Two Arrays",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688a81cd32b6b01c49be543a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688a81cd32b6b01c49be543a/practice?questionId=688a81d832b6b01c49be543b",
+    "preview_response_sha256": "0e0c31c81684ecb873e8ae8a750c01c6d2cb03ccecaf28950c409d8391374c05",
+    "preview_content_sha256": "4bfd196fdfad72ffbb81f02c1b2317944259d0c3630977c16dbaaf6de7fb6ba2",
+    "preview_characters": 450,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/688a81cd32b6b01c49be543a.json",
+    "algorithm_tags": [
+     "TWO_POINTER"
+    ],
+    "companies": [
+     "LINKEDIN"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two ascending integer arrays A and B; function findMinAbsDiffPair(A, B) returns [a, b] with a from A and b from B minimising |a - b|; ties go to the smallest a, then the smallest b",
+    "algorithmTags: TWO_POINTER"
+   ],
+   "inferred_spec": "A and B are non-empty integer lists, each sorted in non-decreasing order (duplicates allowed). Return [a, b] with a taken from A and b taken from B such that |a - b| is as small as possible. Among pairs with the minimum difference return the one with the smallest a, and among those the smallest b.",
+   "inference_uncertainty": "low: the task, the method name and both tie rules are in the preview; non-emptiness, duplicates and the bounds are inferred",
+   "inferred_interface": {
+    "name": "findMinAbsDiffPair",
+    "params": [
+     {
+      "name": "A",
+      "type": "integer[]"
+     },
+     {
+      "name": "B",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MDA"
+  },
+  {
+   "uid": "hack2hire:686839500ed1b6fe83428ac8",
+   "variant_id": "686839500ed1b6fe83428ac8",
+   "variant_ordinal": 1,
+   "title": "Minimal Video Score Reduction",
+   "source": {
+    "post_id": "686836890ed1b6fe83428ac6",
+    "group_title": "Minimal Video Score Reduction",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/686836890ed1b6fe83428ac6",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/686836890ed1b6fe83428ac6/practice?questionId=686839500ed1b6fe83428ac8",
+    "preview_response_sha256": "8d3560f3d43fef7068ee0e1ffc14028b76e654a646fc94ce97ab8944be644610",
+    "preview_content_sha256": "084a909c6e0cc617f0d2c903a155a25c0d26732cdc676d3f527980e41ca20e6d",
+    "preview_characters": 747,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/686836890ed1b6fe83428ac6.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH",
+     "GREEDY"
+    ],
+    "companies": [
+     "TIKTOK"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: integer array scores and at most k operations; each operation subtracts a fixed positive integer x from one positive score; return the minimum x making every score <= 0, 1 when nothing is positive, -1 when impossible",
+    "algorithmTags: BINARY_SEARCH, GREEDY"
+   ],
+   "inferred_spec": "scores is a non-empty list of integers and k >= 0. One operation picks a score that is still positive and subtracts x from it. Return the smallest positive integer x such that at most k operations make every score <= 0. When no score is positive return 1. When no x works (more positive scores than k) return -1.",
+   "inference_uncertainty": "low: the operation, the 1 and -1 cases and the minimisation are in the preview; reading \"impossible\" as more positive scores than k and the bounds are inferred",
+   "inferred_interface": {
+    "name": "minimumDecrement",
+    "params": [
+     {
+      "name": "scores",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MVS"
+  },
+  {
+   "uid": "hack2hire:686833a90ed1b6fe83428ac3",
+   "variant_id": "686833a90ed1b6fe83428ac3",
+   "variant_ordinal": 1,
+   "title": "Minimize Cost with Vouchers",
+   "source": {
+    "post_id": "68682d4c0ed1b6fe83428ac2",
+    "group_title": "Minimize Cost with Vouchers",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68682d4c0ed1b6fe83428ac2",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68682d4c0ed1b6fe83428ac2/practice?questionId=686833a90ed1b6fe83428ac3",
+    "preview_response_sha256": "e54f1868b2fedc0520bf6ffafa822aed8aad29444fc097a9a4003dc3beac0567",
+    "preview_content_sha256": "8433272480cc4f94ba508f92a3f980938370bdcb081553a172779ba7ba39cf05",
+    "preview_characters": 543,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68682d4c0ed1b6fe83428ac2.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "HEAP"
+    ],
+    "companies": [
+     "TIKTOK"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n products with prices price[i] and vouchersCount vouchers; each voucher halves the current price of one item; several vouchers may go to one item (price p with k vouchers costs p / 2^k); the objective and rounding are cut off",
+    "algorithmTags: GREEDY, HEAP"
+   ],
+   "inferred_spec": "price lists the item prices and vouchersCount is the number of vouchers. Applying a voucher to an item replaces its current price p by floor(p / 2); any number of vouchers can go to one item, and not all vouchers need to be used. Return the minimum possible total price of all items.",
+   "inference_uncertainty": "medium: halving, stacking vouchers on one item and the heap/greedy tags are in the preview; minimising the total and rounding down after every halving (rather than exact fractions) are inferred",
+   "inferred_interface": {
+    "name": "minimizeCost",
+    "params": [
+     {
+      "name": "price",
+      "type": "integer[]"
+     },
+     {
+      "name": "vouchersCount",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MCV"
+  },
+  {
+   "uid": "hack2hire:68c327671f64f4312b0a3e1e",
+   "variant_id": "68c327671f64f4312b0a3e1e",
+   "variant_ordinal": 1,
+   "title": "Minimize Shopping Department Visits",
+   "source": {
+    "post_id": "68c327611f64f4312b0a3e1d",
+    "group_title": "Minimize Shopping Department Visits",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c327611f64f4312b0a3e1d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c327611f64f4312b0a3e1d/practice?questionId=68c327671f64f4312b0a3e1e",
+    "preview_response_sha256": "db267bc834f96ce8f08a1d0d2b5717f7bcae665c114239f202d8df6c61f26720",
+    "preview_content_sha256": "5717603f87c918ed8e55b02f970468935a3ea844496004acde3637a109908908",
+    "preview_characters": 433,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68c327611f64f4312b0a3e1d.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "ATLASSIAN"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: products is a list of [productName, department] pairs; shoppingList names the products to buy (the requested output is cut off)",
+    "algorithmTags: ARRAY, HASH_TABLE"
+   ],
+   "inferred_spec": "products lists [productName, department] pairs with unique product names; shoppingList lists product names to buy, possibly repeated. Names on the list that are not in products cannot be bought and are ignored. Return the minimum number of department visits needed to buy everything else, which is the number of distinct departments of the listed products.",
+   "inference_uncertainty": "high: the inputs are in the preview; the output (minimum visits rather than, for example, visits saved against list order), ignoring unknown products and unique product names are inferred",
+   "inferred_interface": {
+    "name": "minDepartmentVisits",
+    "params": [
+     {
+      "name": "products",
+      "type": "string[][]"
+     },
+     {
+      "name": "shoppingList",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MSD"
+  },
+  {
+   "uid": "hack2hire:69646297b481f959f9e384ee",
+   "variant_id": "69646297b481f959f9e384ee",
+   "variant_ordinal": 1,
+   "title": "Minimum Coin Combination Counts",
+   "source": {
+    "post_id": "69646161b481f959f9e384ec",
+    "group_title": "Minimum Coin Combination Counts",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69646161b481f959f9e384ec",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69646161b481f959f9e384ec/practice?questionId=69646297b481f959f9e384ee",
+    "preview_response_sha256": "4520141d3adfbaf4e8778808146eff2b0f2b0101ec5eb6a8f6ccb86744267cde",
+    "preview_content_sha256": "16b516385c979fe800278c94255f9ef5bfe13d4f935da53108596e890e16642b",
+    "preview_characters": 483,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69646161b481f959f9e384ec.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "DATADOG"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 322; coins holds distinct positive denominations with unlimited supply; integer target is the amount to assemble (the requested output is cut off)",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "coins is a list of distinct positive denominations, each available without limit, and target >= 0. Return a list counts aligned with coins, where counts[i] is how many coins of denomination coins[i] are used, such that the coins sum to target with the fewest coins in total. If several combinations use the fewest coins, prefer more coins of the largest denomination, then of the next largest, and so on. Return [] when target cannot be made.",
+   "inference_uncertainty": "very high: the inputs and the LeetCode 322 relation are in the preview; returning per-denomination counts, the tie rule favouring larger denominations and [] for impossible amounts are inferred from the title",
+   "inferred_interface": {
+    "name": "minCoinCombination",
+    "params": [
+     {
+      "name": "coins",
+      "type": "integer[]"
+     },
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MCC"
+  },
+  {
+   "uid": "hack2hire:688cdf12b6c09ad9a4fcc2cc",
+   "variant_id": "688cdf12b6c09ad9a4fcc2cc",
+   "variant_ordinal": 1,
+   "title": "Minimum Distance to All Points",
+   "source": {
+    "post_id": "688cdeffb6c09ad9a4fcc2cb",
+    "group_title": "Minimum Distance to All Points",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688cdeffb6c09ad9a4fcc2cb",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688cdeffb6c09ad9a4fcc2cb/practice?questionId=688cdf12b6c09ad9a4fcc2cc",
+    "preview_response_sha256": "bc2284bc97b8db84bdee2fb6f39a3985d5be7d7fee9c85bb8126bdd18b1548bc",
+    "preview_content_sha256": "f812fe225bb7d92cc87d8c88278d6f96a0c3d8171ed82ebe217936d1707717b5",
+    "preview_characters": 676,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/688cdeffb6c09ad9a4fcc2cb.json",
+    "algorithm_tags": [
+     "DIVIDE_AND_CONQUER"
+    ],
+    "companies": [
+     "LINKEDIN",
+     "META"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 296; integer array nums of site coordinates on a line; return [x, totalDistance] with x chosen from nums minimising the sum of |x - nums[i]| (tie rule cut off)",
+    "algorithmTags: DIVIDE_AND_CONQUER"
+   ],
+   "inferred_spec": "nums is a non-empty list of integers (not necessarily sorted). Return [x, total] where x is a value of nums minimising total = sum over i of |x - nums[i]|. When several values of nums give the same minimum, x is the smallest of them.",
+   "inference_uncertainty": "low: the output pair and the objective are in the preview; the smallest-x tie rule and the bounds are inferred",
+   "inferred_interface": {
+    "name": "minTotalDistance",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MDP"
+  },
+  {
+   "uid": "hack2hire:67a93084ea201244f8fae263",
+   "variant_id": "67a93084ea201244f8fae263",
+   "variant_ordinal": 1,
+   "title": "Minimum Flips for Grid Symmetry",
+   "source": {
+    "post_id": "67a92f3eea201244f8fae262",
+    "group_title": "Minimum Flips for Grid Symmetry",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a92f3eea201244f8fae262",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a92f3eea201244f8fae262/practice?questionId=67a93084ea201244f8fae263",
+    "preview_response_sha256": "0ecd1c5387a2baf4c65a83e843c04200ad4b4185a5efd332813eef4ece986b2a",
+    "preview_content_sha256": "fdb9338a2a2efafcee8bfb1fd5c2bcb4d8a59af878a1dde504ab81d3d97e7d44",
+    "preview_characters": 385,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67a92f3eea201244f8fae262.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "GREEDY"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: an N x M grid of cells coloured \"B\" or \"W\"; a row or column is symmetric when it reads the same both ways; flip cells so all rows and all columns become symmetric (output cut off, presumably the minimum flips)",
+    "algorithmTags: ARRAY, GREEDY"
+   ],
+   "inferred_spec": "grid is a non-empty list of N strings of equal length M over the letters \"B\" and \"W\". Flipping a cell changes its colour. Return the minimum number of flips after which every row and every column reads the same left to right as right to left (and top to bottom as bottom to top).",
+   "inference_uncertainty": "low: the colours, the symmetry rule and the flip operation are in the preview; returning the minimum flip count, the list-of-strings grid shape and the bounds are inferred",
+   "inferred_interface": {
+    "name": "minFlips",
+    "params": [
+     {
+      "name": "grid",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MFG"
+  },
+  {
+   "uid": "hack2hire:699e789b6e73e4abccc9b2c8",
+   "variant_id": "699e789b6e73e4abccc9b2c8",
+   "variant_ordinal": 1,
+   "title": "Minimum Idleness After K Flips",
+   "source": {
+    "post_id": "699b55036e73e4abccc9a863",
+    "group_title": "Minimum Idleness After K Flips",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/699b55036e73e4abccc9a863",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/699b55036e73e4abccc9a863/practice?questionId=699e789b6e73e4abccc9b2c8",
+    "preview_response_sha256": "dd3e91a1ec2b0edbf16757f747dddf799daec3474b566995329c515b7c00d005",
+    "preview_content_sha256": "a6e55a6a2703ba5d56e1f3903ad0f8407fa3a5a745868e332387f599cf47b8ca",
+    "preview_characters": 592,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/699b55036e73e4abccc9a863.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH",
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "SQUAREPOINT"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 424; string s over the GPUs \"a\" and \"b\", one character per shader; idleness is the longest run of consecutive equal characters (the flip rule and the output are cut off)",
+    "algorithmTags: BINARY_SEARCH, SLIDING_WINDOW"
+   ],
+   "inferred_spec": "s is a non-empty string over \"a\" and \"b\", and 0 <= k <= len(s). A flip changes one character to the other letter; at most k flips may be made. Return the minimum possible idleness, the length of the longest run of equal consecutive characters, after the flips.",
+   "inference_uncertainty": "medium: the string and the idleness definition are in the preview; \"at most k single-character flips\" (from the title) and minimising idleness are inferred, matching the known minimise-longest-run task",
+   "inferred_interface": {
+    "name": "minIdleness",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MIK"
+  },
+  {
+   "uid": "hack2hire:6a04d7ad3141bbc31efdd5c2",
+   "variant_id": "6a04d7ad3141bbc31efdd5c2",
+   "variant_ordinal": 1,
+   "title": "Minimum Machines for Task Scheduling",
+   "source": {
+    "post_id": "6a04d73e3141bbc31efdd5be",
+    "group_title": "Minimum Machines for Task Scheduling",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a04d73e3141bbc31efdd5be",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a04d73e3141bbc31efdd5be/practice?questionId=6a04d7ad3141bbc31efdd5c2",
+    "preview_response_sha256": "303c8a00cb117ff3b0360bc4a621cdd2b3dc6d6afc347e471a26d5d8d5cb376f",
+    "preview_content_sha256": "15df227feeedfd5297ea403647995326c50bf9111fed3d0bca87552010c26a82",
+    "preview_characters": 474,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a04d73e3141bbc31efdd5be.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "SORTING"
+    ],
+    "companies": [
+     "EXPEDIA"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 253; each task occupies exactly one machine for its time interval and a machine runs at most one task at a time (interval format and output cut off)",
+    "algorithmTags: GREEDY, SORTING"
+   ],
+   "inferred_spec": "tasks is a list of [start, end] integer intervals with start < end; a task runs during the half-open interval [start, end), so a machine that finishes at time t can start another task at t. Return the minimum number of machines that can run all tasks (0 for no tasks).",
+   "inference_uncertainty": "medium: one machine per task and one task per machine at a time are in the preview; the [start, end] pair shape, half-open intervals as in LeetCode 253 and the empty answer 0 are inferred",
+   "inferred_interface": {
+    "name": "minMachines",
+    "params": [
+     {
+      "name": "tasks",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MMT"
+  },
+  {
+   "uid": "hack2hire:6910bee571ea59cda5a81a94",
+   "variant_id": "6910bee571ea59cda5a81a94",
+   "variant_ordinal": 1,
+   "title": "Minimum Root-to-Leaf Path Sum",
+   "source": {
+    "post_id": "6907c9a4e1919109b6df11b6",
+    "group_title": "Minimum Root-to-Leaf Path Sum",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6907c9a4e1919109b6df11b6",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6907c9a4e1919109b6df11b6/practice?questionId=6910bee571ea59cda5a81a94",
+    "preview_response_sha256": "951c84015fb25139090c4daa4e7688c769e91f0be4dbc0fe2563579142398848",
+    "preview_content_sha256": "d496480969c47f11953e6a9f5a339620a418647f76b4b5010bd0e7e382e7f624",
+    "preview_characters": 538,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6907c9a4e1919109b6df11b6.json",
+    "algorithm_tags": [
+     "BACKTRACKING"
+    ],
+    "companies": [
+     "CITADEL",
+     "META",
+     "TESLA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 112; binary tree root with integer values; find the root-to-leaf path with the minimum sum; a leaf has no children and the path sum adds every node on the path (output format cut off)",
+    "algorithmTags: BACKTRACKING"
+   ],
+   "inferred_spec": "root is a binary tree in LeetCode level-order form (a list of integers with null for missing children, no trailing nulls; [] is the empty tree). Return the node values along the root-to-leaf path with the smallest sum, from root to leaf. When several paths share the smallest sum return the leftmost one. Return [] for the empty tree.",
+   "inference_uncertainty": "medium: the task and the leaf and path-sum definitions are in the preview; returning the path values (suggested by the backtracking tag) rather than the sum, the leftmost tie rule, [] for an empty tree and the level-order input are inferred",
+   "inferred_interface": {
+    "name": "minPathSum",
+    "params": [
+     {
+      "name": "root",
+      "type": "(integer|null)[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MRL"
+  },
+  {
+   "uid": "hack2hire:67d88d261989183df5382503",
+   "variant_id": "67d88d261989183df5382503",
+   "variant_ordinal": 1,
+   "title": "Minimum Starting Battery Level",
+   "source": {
+    "post_id": "67d887151989183df53824ff",
+    "group_title": "Minimum Starting Battery Level",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d887151989183df53824ff",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d887151989183df53824ff/practice?questionId=67d88d261989183df5382503",
+    "preview_response_sha256": "93af7e3651baa9d8614e12b46ffe6d655c74947601ffe972bf51505136b0b82c",
+    "preview_content_sha256": "3ac0e7fdcf771dd162989aa3adac415b57430128598db34d103003499b693a9e",
+    "preview_characters": 369,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67d887151989183df53824ff.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: tasks run sequentially; task i uses usage[i] units of energy; the battery level must stay strictly above 0 at all times (further rules and the output are cut off)",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "usage lists the energy change of each task in order: a positive value is consumed, a negative value is energy returned to the battery. Starting from level b, the level after task i is b minus the sum of usage[0..i]. Return the smallest integer b such that the level is strictly positive at the start and after every task.",
+   "inference_uncertainty": "very high: sequential tasks, usage[i] and the strictly-positive rule are in the preview; the remaining rules are cut off, so signed usage (negative meaning recharge), checking only after each task and returning the starting level are inferred",
+   "inferred_interface": {
+    "name": "minStartingBattery",
+    "params": [
+     {
+      "name": "usage",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MSB"
+  },
+  {
+   "uid": "hack2hire:69e93d83fbaf3da6418286c9",
+   "variant_id": "69e93d83fbaf3da6418286c9",
+   "variant_ordinal": 1,
+   "title": "Minimum Subarray with K Unique Integers",
+   "source": {
+    "post_id": "69e93d76fbaf3da6418286c8",
+    "group_title": "Minimum Subarray with K Unique Integers",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e93d76fbaf3da6418286c8",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e93d76fbaf3da6418286c8/practice?questionId=69e93d83fbaf3da6418286c9",
+    "preview_response_sha256": "04eb3053a323c57a8b5b8ec8d13f0bfb0f40c4c6b070d4a6c92997ab64c475bb",
+    "preview_content_sha256": "9fcce93849d43e20ea49527b98fcedcf80d3406f9cb50d18dc7c3ca1cfb40502",
+    "preview_characters": 483,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69e93d76fbaf3da6418286c8.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 76; array arr of n positive integers and integer k; a subarray is good when it contains at least k distinct integers; return the minimum length of a good subarray or -1",
+    "algorithmTags: SLIDING_WINDOW"
+   ],
+   "inferred_spec": "arr is a non-empty list of positive integers and k >= 1. A contiguous subarray is good when it contains at least k distinct values. Return the length of the shortest good subarray, or -1 when none exists.",
+   "inference_uncertainty": "low: the task and the -1 case are in the preview; the bounds are inferred",
+   "inferred_interface": {
+    "name": "minLengthGoodSubarray",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MSK"
+  },
+  {
+   "uid": "hack2hire:68f842c4d7ff180d0ab950eb",
+   "variant_id": "68f842c4d7ff180d0ab950eb",
+   "variant_ordinal": 1,
+   "title": "Minimum Swaps to Group Evens First",
+   "source": {
+    "post_id": "68f8417bd7ff180d0ab950e5",
+    "group_title": "Minimum Swaps to Group Evens First",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f8417bd7ff180d0ab950e5",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f8417bd7ff180d0ab950e5/practice?questionId=68f842c4d7ff180d0ab950eb",
+    "preview_response_sha256": "8a46ef9596e32573c6577d9acae48c59cbb39408195f52c88c5c39aa6922a246",
+    "preview_content_sha256": "aec964c35b6fd805644f84cc06f11951b0bd94d7385474d2b87b6ffcf30fae7b",
+    "preview_characters": 547,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f8417bd7ff180d0ab950e5.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "MATH"
+    ],
+    "companies": [
+     "MICROSOFT",
+     "ORACLE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 905; integer array nums of length n; rearrange so all even numbers precede all odd numbers by swapping values at two distinct indices; return the minimum number of swaps, 0 when already arranged",
+    "algorithmTags: ARRAY, MATH"
+   ],
+   "inferred_spec": "nums is a list of integers (negative values allowed; parity is by the mathematical remainder, so -3 is odd). A swap exchanges the values at two distinct indices. Return the minimum number of swaps after which every even value appears before every odd value.",
+   "inference_uncertainty": "low: the task, the swap operation and the 0 case are in the preview; negative values and the bounds are inferred",
+   "inferred_interface": {
+    "name": "minSwaps",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MSE"
+  },
+  {
+   "uid": "hack2hire:68a615443a368733bb104245",
+   "variant_id": "68a615443a368733bb104245",
+   "variant_ordinal": 1,
+   "title": "N-ary Tree Leaf Node Removal",
+   "source": {
+    "post_id": "68a615393a368733bb104244",
+    "group_title": "N-ary Tree Leaf Node Removal",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a615393a368733bb104244",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a615393a368733bb104244/practice?questionId=68a615443a368733bb104245",
+    "preview_response_sha256": "84bb9d25e8d22e585b39c30e932b512430d72f8bc33ec1959cb60683a70a66d3",
+    "preview_content_sha256": "c39f0d54cf45ec36b60d4019b40c01b8c94df467867c3aef492bd7761bddf819",
+    "preview_characters": 861,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68a615393a368733bb104244.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "GOOGLE",
+     "LINKEDIN"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 366 on an N-ary tree; every day all current leaves are removed at once, nodes that become leaves go the next day, until the root is removed; return days where days[i] holds the values removed on day i + 1, order within a day irrelevant",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "root is an N-ary tree in LeetCode level-order form: the root value, then for each node in breadth-first order the values of its children followed by null as a group separator, with trailing nulls removed ([] is the empty tree). Each day every current leaf is removed. Return the list of days, where entry i lists the values removed on day i + 1. Because the order within a day is free, each day is returned sorted ascending. Return [] for the empty tree.",
+   "inference_uncertainty": "low: the removal process and the output are in the preview; the level-order input encoding, sorting each day to fix the free order and [] for an empty tree are inferred",
+   "inferred_interface": {
+    "name": "removeLeavesByDay",
+    "params": [
+     {
+      "name": "root",
+      "type": "(integer|null)[]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "NTL"
+  },
+  {
+   "uid": "hack2hire:69d1807e17b72775cc49c008",
+   "variant_id": "69d1807e17b72775cc49c008",
+   "variant_ordinal": 1,
+   "title": "Nested String with Brackets Parsing",
+   "source": {
+    "post_id": "69d1807617b72775cc49c007",
+    "group_title": "Nested String with Brackets Parsing",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d1807617b72775cc49c007",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d1807617b72775cc49c007/practice?questionId=69d1807e17b72775cc49c008",
+    "preview_response_sha256": "0d7e3d5b88c5d33da105f87c70d874b5a6ef1a3ef9b3630c4a916f706a28fbf7",
+    "preview_content_sha256": "c492e6fad85cfc809febab19babbcacff0ba28275a84d85b5507c4d38de01314",
+    "preview_characters": 516,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d1807617b72775cc49c007.json",
+    "algorithm_tags": [
+     "STACK"
+    ],
+    "companies": [
+     "FIGMA"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 20; a string of parentheses, commas and lowercase letters is well-formed when every opening parenthesis has a matching closing one, every closing one has a matching opening one and they are properly nested (further conditions and the requested output are cut off)",
+    "algorithmTags: STACK",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "s is a string over lowercase letters, commas and parentheses. Return true when its parentheses are balanced and properly nested (every \"(\" is closed later by a matching \")\" and no \")\" appears without an open \"(\"); letters and commas place no further restrictions. The empty string is well-formed.",
+   "inference_uncertainty": "high: the three parenthesis rules are in the preview; the preview's list continues with at least one more condition that is cut off, so treating letters and commas as unrestricted is inferred, as is the boolean output",
+   "inferred_interface": {
+    "name": "isWellFormed",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = decide well-formedness, 2 = parse a well-formed nested list into nested arrays; the preview has no per-variant text",
+   "oracle_constant": "NSB1"
+  },
+  {
+   "uid": "hack2hire:69d1828717b72775cc49c028",
+   "variant_id": "69d1828717b72775cc49c028",
+   "variant_ordinal": 2,
+   "title": "Nested String with Brackets Parsing",
+   "source": {
+    "post_id": "69d1807617b72775cc49c007",
+    "group_title": "Nested String with Brackets Parsing",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d1807617b72775cc49c007",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d1807617b72775cc49c007/practice?questionId=69d1828717b72775cc49c028",
+    "preview_response_sha256": "0d7e3d5b88c5d33da105f87c70d874b5a6ef1a3ef9b3630c4a916f706a28fbf7",
+    "preview_content_sha256": "c492e6fad85cfc809febab19babbcacff0ba28275a84d85b5507c4d38de01314",
+    "preview_characters": 516,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d1807617b72775cc49c007.json",
+    "algorithm_tags": [
+     "STACK"
+    ],
+    "companies": [
+     "FIGMA"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 20; a string of parentheses, commas and lowercase letters is well-formed when every opening parenthesis has a matching closing one, every closing one has a matching opening one and they are properly nested (further conditions and the requested output are cut off)",
+    "algorithmTags: STACK",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "s is a well-formed nested list: \"(\" then zero or more items separated by commas then \")\", where an item is a non-empty lowercase word or another nested list. Return the list as nested arrays: each word becomes a string and each nested list an array, in order. \"()\" is the empty array.",
+   "inference_uncertainty": "very high: no public text for this level; parsing into nested arrays (suggested by the title), the item grammar, guaranteed-valid input and the empty-list form are inferred",
+   "inferred_interface": {
+    "name": "parseNested",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "(string|NestedList)[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = decide well-formedness, 2 = parse a well-formed nested list into nested arrays; the preview has no per-variant text",
+   "oracle_constant": "NSB2"
+  },
+  {
+   "uid": "hack2hire:67883eb4e20f8f324213c2a2",
+   "variant_id": "67883eb4e20f8f324213c2a2",
+   "variant_ordinal": 1,
+   "title": "Next Greater Palindrome",
+   "source": {
+    "post_id": "67883de3e20f8f324213c2a1",
+    "group_title": "Next Greater Palindrome",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67883de3e20f8f324213c2a1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67883de3e20f8f324213c2a1/practice?questionId=67883eb4e20f8f324213c2a2",
+    "preview_response_sha256": "5ab11a70902b675655cda89e639d0ed906d8e49dbe9aff5862b71b7d883a5e48",
+    "preview_content_sha256": "8749c4c9fcfe0b450778c98a94a2aa937bde67f3df4d7ad1de5db4a985b60e14",
+    "preview_characters": 408,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67883de3e20f8f324213c2a1.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 564; string n is a positive integer; return as a string the smallest palindrome strictly greater than n",
+    "algorithmTags: STRING"
+   ],
+   "inferred_spec": "n is a decimal string of a positive integer without leading zeros. Return, as a decimal string without leading zeros, the smallest palindromic integer strictly greater than n.",
+   "inference_uncertainty": "low: the task and the string output are in the preview; no leading zeros and the length bound are inferred",
+   "inferred_interface": {
+    "name": "nextGreaterPalindrome",
+    "params": [
+     {
+      "name": "n",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "NGP"
+  }
+ ]
+}

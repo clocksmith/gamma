@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67d88d261989183df5382503",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "usage"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minStartingBattery",
+  "params": [
+   {
+    "name": "usage",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try b = 1, 2, ... and simulate the tasks until the level never drops to 0 or below",
+  "candidate_design": "one pass tracking the largest prefix sum P of usage; the answer is max(1, P + 1)",
+  "complexity_target": "O(n) time/O(1) extra space"
+ },
+ "source_sha256": "5bbc6766307df79c924e4ca4039e1df2faa12cef0b60b5c03a773ee2f2d6979b",
+ "wrapper": "Solution.minStartingBattery"
+}

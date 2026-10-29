@@ -1,0 +1,334 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68682d4c0ed1b6fe83428ac2:686833a90ed1b6fe83428ac3:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+   "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68682d4c0ed1b6fe83428ac2.json",
+   "sha256": "23e6ad78577a05951e46a7e8db31e08950ffd530f89574a663e7ec1dc9c5231c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+   "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+   "selector": "/variants/hack2hire:686833a90ed1b6fe83428ac3"
+  }
+ ],
+ "problemId": "hack2hire:68682d4c0ed1b6fe83428ac2",
+ "variantId": "686833a90ed1b6fe83428ac3",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: halving vouchers, minimum total cost",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:686833a90ed1b6fe83428ac3/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "price lists the item prices and vouchersCount is the number of vouchers. Applying a voucher to an item replaces its current price p by floor(p / 2); any number of vouchers can go to one item, and not all vouchers need to be used. Return the minimum possible total price of all items.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "price lists the item prices and vouchersCount is the number of vouchers.",
+   "Applying a voucher to an item replaces its current price p by floor(p / 2); any number of vouchers can go to one item, and not all vouchers need to be used.",
+   "Return the minimum possible total price of all items."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= price.length <= 1e5",
+   "0 <= price[i] <= 1e9",
+   "0 <= vouchersCount <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:686833a90ed1b6fe83428ac3/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: n products with prices price[i] and vouchersCount vouchers; each voucher halves the current price of one item; several vouchers may go to one item (price p with k vouchers costs p / 2^k); the objective and rounding are cut off; algorithmTags: GREEDY, HEAP; preview response sha256 e54f1868b2fedc0520bf6ffafa822aed8aad29444fc097a9a4003dc3beac0567"
+   },
+   {
+    "statement": "Uncertainty: medium: halving, stacking vouchers on one item and the heap/greedy tags are in the preview; minimising the total and rounding down after every halving (rather than exact fractions) are inferred",
+    "basis": "the public group preview is partial (543 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the halved price rounded down, rounded, or kept fractional?",
+   "Must every voucher be used?",
+   "What is returned: the total cost or the per-item prices?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:686833a90ed1b6fe83428ac3/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     3
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      134178351,
+      66615549,
+      970034379,
+      729932317,
+      170992177,
+      901437853,
+      999021198,
+      747802978,
+      713172061,
+      794414293,
+      895330445,
+      331854368,
+      259115743
+     ],
+     11
+    ],
+    "output": 3620705589,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:686833a90ed1b6fe83428ac3/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/oracles.py",
+    "sha256": "62dd7fc41f95b2c1806d79041ae3ee05363251970de8c828fefd9f32cf9150e9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def minimizeCost(price, vouchersCount) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+      "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/686833a90ed1b6fe83428ac3-python.json",
+     "inferredInterface": {
+      "name": "minimizeCost",
+      "params": [
+       {
+        "name": "price",
+        "type": "integer[]"
+       },
+       {
+        "name": "vouchersCount",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/686833a90ed1b6fe83428ac3-python.json",
+      "sha256": "e24a38a654efaedab3a6c617ca2e7aeb111a7edd0d81811ca9e57099d55e9c0b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function minimizeCost(price, vouchersCount) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+      "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/686833a90ed1b6fe83428ac3-javascript.json",
+     "inferredInterface": {
+      "name": "minimizeCost",
+      "params": [
+       {
+        "name": "price",
+        "type": "integer[]"
+       },
+       {
+        "name": "vouchersCount",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/686833a90ed1b6fe83428ac3-javascript.json",
+      "sha256": "06643a1706dc225d699f2dd0a49aef138fdcf48f9999137d01f0bb7bdd159bb6",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

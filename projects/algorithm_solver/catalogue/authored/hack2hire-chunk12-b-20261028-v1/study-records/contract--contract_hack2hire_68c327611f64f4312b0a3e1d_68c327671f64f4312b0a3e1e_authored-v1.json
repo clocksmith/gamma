@@ -1,0 +1,366 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68c327611f64f4312b0a3e1d:68c327671f64f4312b0a3e1e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+   "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+   "selector": "/problems/3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68c327611f64f4312b0a3e1d.json",
+   "sha256": "c0b0f3abf44585350280914846a9fc58cd89ac28b20fc8d62c770d20cb04ef24",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+   "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+   "selector": "/variants/hack2hire:68c327671f64f4312b0a3e1e"
+  }
+ ],
+ "problemId": "hack2hire:68c327611f64f4312b0a3e1d",
+ "variantId": "68c327671f64f4312b0a3e1e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: distinct departments needed for a shopping list",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:68c327671f64f4312b0a3e1e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "products lists [productName, department] pairs with unique product names; shoppingList lists product names to buy, possibly repeated. Names on the list that are not in products cannot be bought and are ignored. Return the minimum number of department visits needed to buy everything else, which is the number of distinct departments of the listed products.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "products lists [productName, department] pairs with unique product names; shoppingList lists product names to buy, possibly repeated.",
+   "Names on the list that are not in products cannot be bought and are ignored.",
+   "Return the minimum number of department visits needed to buy everything else, which is the number of distinct departments of the listed products."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= products.length <= 1e5",
+   "0 <= shoppingList.length <= 1e5",
+   "names and departments match [A-Za-z0-9 ]{1,20}",
+   "product names unique"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:68c327671f64f4312b0a3e1e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: products is a list of [productName, department] pairs; shoppingList names the products to buy (the requested output is cut off); algorithmTags: ARRAY, HASH_TABLE; preview response sha256 db267bc834f96ce8f08a1d0d2b5717f7bcae665c114239f202d8df6c61f26720"
+   },
+   {
+    "statement": "Uncertainty: high: the inputs are in the preview; the output (minimum visits rather than, for example, visits saved against list order), ignoring unknown products and unique product names are inferred",
+    "basis": "the public group preview is partial (433 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/3/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/3/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/3/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the answer the minimum number of visits or the number saved compared with walking the list in order?",
+   "What happens to items not sold in the store?",
+   "Can a product belong to more than one department?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:68c327671f64f4312b0a3e1e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "Bread 2",
+       "Pantry"
+      ],
+      [
+       "tent",
+       "Dairy"
+      ],
+      [
+       "rope",
+       "Produce"
+      ],
+      [
+       "Eggs",
+       "Produce"
+      ],
+      [
+       "gas",
+       "Produce"
+      ],
+      [
+       "apple",
+       "Pantry"
+      ],
+      [
+       "milk",
+       "Pantry"
+      ],
+      [
+       "rice",
+       "Camping"
+      ]
+     ],
+     [
+      "tent",
+      "milk",
+      "Bread 2",
+      "gas",
+      "rice",
+      "Eggs",
+      "gas",
+      "Eggs",
+      "Eggs",
+      "salt",
+      "gas"
+     ]
+    ],
+    "output": 4,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/study-content.json",
+    "sha256": "00125402af668e0fc6d977a8eb9c004e48a750c404d5e64dfae0f953cd74d8dc",
+    "selector": "/variants/hack2hire:68c327671f64f4312b0a3e1e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/oracles.py",
+    "sha256": "62dd7fc41f95b2c1806d79041ae3ee05363251970de8c828fefd9f32cf9150e9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def minDepartmentVisits(products, shoppingList) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+      "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/68c327671f64f4312b0a3e1e-python.json",
+     "inferredInterface": {
+      "name": "minDepartmentVisits",
+      "params": [
+       {
+        "name": "products",
+        "type": "string[][]"
+       },
+       {
+        "name": "shoppingList",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/68c327671f64f4312b0a3e1e-python.json",
+      "sha256": "b8d97cf570ceafbdd7b2c64e8e46f6a6736c6b4e260e36e06051dad8579199d2",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function minDepartmentVisits(products, shoppingList) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+      "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/68c327671f64f4312b0a3e1e-javascript.json",
+     "inferredInterface": {
+      "name": "minDepartmentVisits",
+      "params": [
+       {
+        "name": "products",
+        "type": "string[][]"
+       },
+       {
+        "name": "shoppingList",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/semantics/68c327671f64f4312b0a3e1e-javascript.json",
+      "sha256": "f6753b75cb5ab69b42a2cb67fc9cd73141a6bb90d5f4640466746571747a917e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/3/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-b-20261028-v1/contracts.json",
+    "sha256": "9ac6a9a2924814644a983f8e028638ff6bea9e0043948a88d5a37f2e9ebb5c23",
+    "selector": "/problems/3/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

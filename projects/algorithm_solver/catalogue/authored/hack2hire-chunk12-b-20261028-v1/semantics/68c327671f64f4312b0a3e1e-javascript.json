@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68c327671f64f4312b0a3e1e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "products",
+  "shoppingList"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minDepartmentVisits",
+  "params": [
+   {
+    "name": "products",
+    "type": "string[][]"
+   },
+   {
+    "name": "shoppingList",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every list item scan products linearly for its department and keep a list of departments seen so far, scanned linearly",
+  "candidate_design": "hash map from product name to department, then a set of departments over the shopping list",
+  "complexity_target": "O(products + list) expected time/O(products) space"
+ },
+ "source_sha256": "88d7842228211080b2183694bb0a8658d030b924cc3c3aa5e0c85afc7a847001",
+ "wrapper": "named export minDepartmentVisits"
+}
