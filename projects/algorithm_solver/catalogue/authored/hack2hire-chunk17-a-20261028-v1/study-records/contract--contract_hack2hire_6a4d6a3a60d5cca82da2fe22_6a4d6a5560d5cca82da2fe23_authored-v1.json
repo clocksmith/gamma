@@ -1,0 +1,471 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a4d6a3a60d5cca82da2fe22:6a4d6a5560d5cca82da2fe23:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+   "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "selector": "/problems/16"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a4d6a3a60d5cca82da2fe22.json",
+   "sha256": "60306e17374d49d13f166586760bfe592190cb733dbedb33a816aa103c57d7b3",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:6a4d6a5560d5cca82da2fe23"
+  }
+ ],
+ "problemId": "hack2hire:6a4d6a3a60d5cca82da2fe22",
+ "variantId": "6a4d6a5560d5cca82da2fe23",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: two-type reader-style lock with FIFO admission",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a4d6a5560d5cca82da2fe23/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Concurrency is modelled as a deterministic single-threaded call sequence. MutexTaskLock() starts idle with an empty FIFO wait queue. acquire(jobId, jobType) admits the job at once and returns true when the wait queue is empty and no job of the other type is running; otherwise it appends the job to the wait queue and returns false (the job is blocked). release(jobId) ends a running job; if no job is running afterwards, the longest prefix of the wait queue whose jobs share the type of its first job is admitted. release returns the ids admitted by that call in queue order (possibly empty). Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Concurrency is modelled as a deterministic single-threaded call sequence.",
+   "MutexTaskLock() starts idle with an empty FIFO wait queue.",
+   "acquire(jobId, jobType) admits the job at once and returns true when the wait queue is empty and no job of the other type is running; otherwise it appends the job to the wait queue and returns false (the job is blocked).",
+   "release(jobId) ends a running job; if no job is running afterwards, the longest prefix of the wait queue whose jobs share the type of its first job is admitted.",
+   "release returns the ids admitted by that call in queue order (possibly empty).",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "at most 1e5 calls",
+   "jobType is \"gen\" or \"score\"",
+   "0 <= jobId <= 1e9, distinct over all acquires",
+   "release is only called for a running job"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a4d6a5560d5cca82da2fe23/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: jobs of type \"gen\" or \"score\" run on their own threads; jobs of the same type may run together, jobs of different types never at the same time; design MutexTaskLock with acquire (blocks until safe to run) and release; it must be thread-safe and must not busy-wait; algorithmTags: CONCURRENCY; preview response sha256 11095045c575154de3de2f6cf32b3af521058b6c9908c268676c40edd51adcdd"
+   },
+   {
+    "statement": "Uncertainty: very high: the two job types, the compatibility rule and acquire/release are in the preview; the deterministic trace model, the FIFO no-overtaking rule that prevents starvation, the job id parameter and the return values are inferred (the official task is a real multi-threaded lock)",
+    "basis": "the public group preview is partial (852 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/16/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/16/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/16/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "May a job join running jobs of its type while others wait?",
+   "Which waiting jobs are admitted when the lock becomes free?",
+   "How are blocked threads woken without busy-waiting?",
+   "Can the same job id be reused?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a4d6a5560d5cca82da2fe23/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "MutexTaskLock"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "MutexTaskLock",
+      "acquire",
+      "acquire",
+      "acquire",
+      "release",
+      "release",
+      "release",
+      "acquire",
+      "acquire",
+      "release",
+      "release",
+      "acquire",
+      "acquire",
+      "release"
+     ],
+     [
+      [],
+      [
+       0,
+       "score"
+      ],
+      [
+       1,
+       "score"
+      ],
+      [
+       2,
+       "score"
+      ],
+      [
+       2
+      ],
+      [
+       1
+      ],
+      [
+       0
+      ],
+      [
+       3,
+       "score"
+      ],
+      [
+       10,
+       "score"
+      ],
+      [
+       10
+      ],
+      [
+       3
+      ],
+      [
+       17,
+       "score"
+      ],
+      [
+       18,
+       "gen"
+      ],
+      [
+       17
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     true,
+     true,
+     true,
+     [],
+     [],
+     [],
+     true,
+     true,
+     [],
+     [],
+     true,
+     false,
+     [
+      18
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a4d6a5560d5cca82da2fe23/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/oracles.py",
+    "sha256": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class MutexTaskLock:\n    def __init__(self)\n    def acquire(self, jobId, jobType) -> boolean\n    def release(self, jobId) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a4d6a5560d5cca82da2fe23-python.json",
+     "inferredInterface": {
+      "classname": "MutexTaskLock",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "acquire",
+        "params": [
+         {
+          "name": "jobId",
+          "type": "integer"
+         },
+         {
+          "name": "jobType",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "release",
+        "params": [
+         {
+          "name": "jobId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a4d6a5560d5cca82da2fe23-python.json",
+      "sha256": "9c5f4353c655770590c14b6b89eb5db91ad2537406373a59d7310846733756db",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class MutexTaskLock {\n  constructor()\n  acquire(jobId, jobType) /* -> boolean */\n  release(jobId) /* -> integer[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a4d6a5560d5cca82da2fe23-javascript.json",
+     "inferredInterface": {
+      "classname": "MutexTaskLock",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "acquire",
+        "params": [
+         {
+          "name": "jobId",
+          "type": "integer"
+         },
+         {
+          "name": "jobType",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "release",
+        "params": [
+         {
+          "name": "jobId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a4d6a5560d5cca82da2fe23-javascript.json",
+      "sha256": "0fb40dfb4ed24a5b227b01ef96fe47f6b3c73696e821a6a164314e8772fae0c2",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/16/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/16/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

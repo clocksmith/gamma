@@ -1,0 +1,39 @@
+{
+ "schema": "gamma.hack2hire-chunk17-a-pre-source-freeze.v1",
+ "at": "2026-10-29T13:46:44.054473+00:00",
+ "files": {
+  "oracles.py": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+  "test_oracles.py": "98e4a8da7ddf5e149dc027f027fae9bbc2e301c87ca626d327a6d567f16a66d4",
+  "cases.py": "8d46dba0af304bf7ccabaded5a32fe18b202d520207720a730909761e8641b71",
+  "contracts.json": "fb9021c6215b0835168de11b9b24818381b2a19438c76347b1b7e0430c9bc9c5",
+  "design.json": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753"
+ },
+ "candidate_sources_exist": false,
+ "candidate_executions": 0,
+ "source_free_tests_passed": 20,
+ "note": "References, inferred contracts, case generator and designs frozen before any candidate source was written.",
+ "spec_basis": "inferred (claude-opus-5-5 subagent, 2026-10-29)",
+ "amendments": [
+  {
+   "file": "cases.py",
+   "from_sha256": "8d46dba0af304bf7ccabaded5a32fe18b202d520207720a730909761e8641b71",
+   "to_sha256": "f8967d8643f22f5302e0fd9ca1f36a5747d6248e6c1af9aa66606b74980ece40",
+   "after_candidate_runs": true,
+   "reason": "Memory only: the whole python3 test_oracles run peaked at 524 MB because two analytic Stock Trade Ranking System rows returned 1.9e6 ranked names in total. Reduced them to 150 repeated rankings of 3000 names and a 600-name alternating trace (reverse-order increments). All candidates had passed every row before the change; no reference, validator, contract or design changed."
+  },
+  {
+   "file": "contracts.json",
+   "from_sha256": "fb9021c6215b0835168de11b9b24818381b2a19438c76347b1b7e0430c9bc9c5",
+   "to_sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "after_candidate_runs": true,
+   "reason": "Wording only: the Roadway Segment Speed Query comparison field now states the float rule that oracles.FLOATS and test_oracles.py already applied before any candidate existed (Python float required; JavaScript compared by numeric value). No spec, interface, bound or expected value changed."
+  }
+ ],
+ "current_sha256": {
+  "oracles.py": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+  "test_oracles.py": "98e4a8da7ddf5e149dc027f027fae9bbc2e301c87ca626d327a6d567f16a66d4",
+  "cases.py": "f8967d8643f22f5302e0fd9ca1f36a5747d6248e6c1af9aa66606b74980ece40",
+  "contracts.json": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+  "design.json": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753"
+ }
+}

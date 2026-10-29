@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68c9ac13212d48d6e0f5977d",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "teleporters",
+  "dieSides",
+  "lastSquare"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minTurns",
+  "params": [
+   {
+    "name": "teleporters",
+    "type": "string[]"
+   },
+   {
+    "name": "dieSides",
+    "type": "integer"
+   },
+   {
+    "name": "lastSquare",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "Bellman-Ford style relaxation of turn counts over all squares until nothing changes",
+  "candidate_design": "breadth-first search over squares from 0, where each square has up to dieSides successors given by the turn rule",
+  "complexity_target": "O(lastSquare * dieSides) time/O(lastSquare) space"
+ },
+ "source_sha256": "76a07479ec7ff16bff34ef3df7f79965f545273cfc36b9ce339566465feb713a",
+ "wrapper": "Solution.minTurns"
+}

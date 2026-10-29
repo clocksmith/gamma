@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68f29e6ef567e950995157ea",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "base",
+  "snow",
+  "melt"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "totalAscentByDay",
+  "params": [
+   {
+    "name": "base",
+    "type": "integer[]"
+   },
+   {
+    "name": "snow",
+    "type": "integer[][]"
+   },
+   {
+    "name": "melt",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every day replay all days from day 0 to rebuild the snow, then sum the ascents",
+  "candidate_design": "keep the accumulated snow per point, update it once per day, and recompute the ascent with one pass",
+  "complexity_target": "O(D * n) time/O(n) extra space"
+ },
+ "source_sha256": "bec1538dee1c6d0219d049c858bea2fb87f299a571b4a38f85ec4a6cef289be0",
+ "wrapper": "Solution.totalAscentByDay"
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68e02ab4846fd9cdeb438e4e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "url"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "parseQuery",
+  "params": [
+   {
+    "name": "url",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "map<string,string|string[]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "regular expression over the query string capturing each key and optional value",
+  "candidate_design": "manual split on \"&\" and the first \"=\" with a hash map that promotes a value to a list on the second occurrence",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "6cb7171430331b55a9dca983afc89b8802db73be26af9aea25084f59d158e64c",
+ "wrapper": "named export parseQuery"
+}

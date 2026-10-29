@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6941b7e8b9d646bec48c68bc",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "text",
+  "dictionary"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "tokenize",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "dictionary",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "at every position test every key with a direct substring comparison and keep the longest match",
+  "candidate_design": "trie of the keys; from each position walk the trie as far as the text allows and remember the deepest node that ends a key",
+  "complexity_target": "O(n * L) time/O(total key length) space, L = longest key"
+ },
+ "source_sha256": "2231fec3d88f58039981698cf6cb49587a908a9818634aae2cccf0209e12838a",
+ "wrapper": "named export tokenize"
+}

@@ -1,0 +1,409 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68ac67651bf7d2097f647efd:68ac67eb1bf7d2097f647efe:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+   "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68ac67651bf7d2097f647efd.json",
+   "sha256": "3ae1e562bd33e3b206c2c9b793eec08ae3634ddf8bc48b356aaf23abd55a1770",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:68ac67eb1bf7d2097f647efe"
+  }
+ ],
+ "problemId": "hack2hire:68ac67651bf7d2097f647efd",
+ "variantId": "68ac67eb1bf7d2097f647efe",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: reproducible random split into k equal groups",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68ac67eb1bf7d2097f647efe/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "nums is a non-empty list of n integers and k is a positive divisor of n. Randomness is injected so the result is reproducible: randomInts has exactly n - 1 entries, each in [0, 1e9]. Shuffle a copy of nums with Fisher-Yates: for i = n - 1 down to 1, take the next random value r and swap the elements at positions i and r mod (i + 1). Return k lists, where list s holds the shuffled elements at positions s * (n / k) through (s + 1) * (n / k) - 1.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "nums is a non-empty list of n integers and k is a positive divisor of n.",
+   "Randomness is injected so the result is reproducible: randomInts has exactly n - 1 entries, each in [0, 1e9].",
+   "Shuffle a copy of nums with Fisher-Yates: for i = n - 1 down to 1, take the next random value r and swap the elements at positions i and r mod (i + 1).",
+   "Return k lists, where list s holds the shuffled elements at positions s * (n / k) through (s + 1) * (n / k) - 1."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n <= 1e5",
+   "1 <= k <= n and n mod k = 0",
+   "-1e9 <= nums[i] <= 1e9",
+   "randomInts has n - 1 entries in [0, 1e9]"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68ac67eb1bf7d2097f647efe/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: an integer array nums of length n and an integer k; split the elements at random into k groups of exactly n / k elements each, every element in exactly one group; output k equal-size lists forming one random division; algorithmTags: ARRAY; preview response sha256 7ba84627179e5c9698637794d62d1b43604db6f14982e5ed0644d1a45fbd60a1"
+   },
+   {
+    "statement": "Uncertainty: very high: the preview asks for a uniformly random division, which a fixed test cannot check; the injected randomInts list, the Fisher-Yates order, the modulo rule and the consecutive chunking are author choices that make the output deterministic (the official checker probably accepts any valid partition)",
+    "basis": "the public group preview is partial (413 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Must every division be equally likely?",
+   "Is n always divisible by k?",
+   "May the input array be shuffled in place?",
+   "How should randomness be supplied for testing?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68ac67eb1bf7d2097f647efe/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      7
+     ],
+     1,
+     []
+    ],
+    "output": [
+     [
+      7
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      4,
+      -5,
+      -7,
+      5,
+      -2,
+      -2,
+      -8,
+      3,
+      -8,
+      -3,
+      -3,
+      -9,
+      -3,
+      9,
+      -5,
+      4,
+      -2,
+      -3,
+      -2,
+      -9
+     ],
+     4,
+     [
+      1,
+      2,
+      1,
+      654927951,
+      427256557,
+      2,
+      2,
+      2,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      759952397,
+      2,
+      798522727,
+      1,
+      1
+     ]
+    ],
+    "output": [
+     [
+      4,
+      -2,
+      -9,
+      5,
+      -8
+     ],
+     [
+      -2,
+      3,
+      -8,
+      -3,
+      -2
+     ],
+     [
+      -3,
+      -3,
+      4,
+      -5,
+      -2
+     ],
+     [
+      9,
+      -3,
+      -9,
+      -7,
+      -5
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68ac67eb1bf7d2097f647efe/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/oracles.py",
+    "sha256": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def randomPartition(nums, k, randomInts) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68ac67eb1bf7d2097f647efe-python.json",
+     "inferredInterface": {
+      "name": "randomPartition",
+      "params": [
+       {
+        "name": "nums",
+        "type": "integer[]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       },
+       {
+        "name": "randomInts",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68ac67eb1bf7d2097f647efe-python.json",
+      "sha256": "601572968f3906eb5a9aa8576f4a660a165e13532ba765a589af344e15cb78c9",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function randomPartition(nums, k, randomInts) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68ac67eb1bf7d2097f647efe-javascript.json",
+     "inferredInterface": {
+      "name": "randomPartition",
+      "params": [
+       {
+        "name": "nums",
+        "type": "integer[]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       },
+       {
+        "name": "randomInts",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68ac67eb1bf7d2097f647efe-javascript.json",
+      "sha256": "2e28994ceb0234d07cfc7b6501598591cabb1969adebfa1011f6f6f6b93fe673",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

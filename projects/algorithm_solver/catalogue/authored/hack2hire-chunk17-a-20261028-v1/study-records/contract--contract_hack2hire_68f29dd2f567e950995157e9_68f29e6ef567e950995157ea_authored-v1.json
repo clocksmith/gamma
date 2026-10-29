@@ -1,0 +1,388 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+   "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68f29dd2f567e950995157e9.json",
+   "sha256": "5cc6d8c2f7b0465e83d58c8780e3a46bf627453be36e52c36e0e2626653c2f34",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+  }
+ ],
+ "problemId": "hack2hire:68f29dd2f567e950995157e9",
+ "variantId": "68f29e6ef567e950995157ea",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: total climb along the trail after each day",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68f29e6ef567e950995157ea/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "base lists the elevations of n points, snow is a list of D days each giving the new snow at every point, and melt is a non-negative integer. On each day d, every point first gains snow[d][i] units, then loses min(melt, its accumulated snow) units. After day d the height of point i is base[i] plus its accumulated snow. Return a list of D integers: entry d is the total ascent of walking from point 0 to point n - 1 after day d, the sum over i of max(0, height[i + 1] - height[i]).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "base lists the elevations of n points, snow is a list of D days each giving the new snow at every point, and melt is a non-negative integer.",
+   "On each day d, every point first gains snow[d][i] units, then loses min(melt, its accumulated snow) units.",
+   "After day d the height of point i is base[i] plus its accumulated snow.",
+   "Return a list of D integers: entry d is the total ascent of walking from point 0 to point n - 1 after day d, the sum over i of max(0, height[i + 1] - height[i])."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n",
+   "1 <= D",
+   "n * D <= 2e5",
+   "0 <= base[i] <= 1e6",
+   "0 <= snow[d][i] <= 1e3",
+   "0 <= melt <= 1e3"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68f29e6ef567e950995157ea/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: a straight trail of n points with base elevations base[i]; snow[d][i] falls at point i on day d and adds to the snow already there (the melting rule and the question are cut off); algorithmTags: GREEDY; preview response sha256 ea78da00dc9888544860867392c1ebf4f1ac19f7ca0cc2d949ac9c6ce6bd65fb"
+   },
+   {
+    "statement": "Uncertainty: very high: only the trail, base elevations and accumulating snowfall are in the preview; the uniform per-day melt amount, the order (fall then melt) and the question (total ascent per day) are author inventions to make the task concrete",
+    "basis": "the public group preview is partial (626 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/6/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/6/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/6/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How much snow melts per day, and is it applied before or after the new snow?",
+   "What is asked: ascent, steepest step or passable days?",
+   "Does melting depend on elevation?",
+   "Is the answer per day or only after the last day?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68f29e6ef567e950995157ea/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      5
+     ],
+     [
+      [
+       0
+      ]
+     ],
+     3
+    ],
+    "output": [
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      0,
+      4,
+      8,
+      5,
+      1,
+      7
+     ],
+     [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       4,
+       0,
+       0,
+       0,
+       4
+      ],
+      [
+       0,
+       0,
+       5,
+       3,
+       4,
+       0
+      ],
+      [
+       0,
+       3,
+       0,
+       0,
+       3,
+       0
+      ]
+     ],
+     2
+    ],
+    "output": [
+     14,
+     16,
+     15,
+     12
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68f29e6ef567e950995157ea/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/oracles.py",
+    "sha256": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def totalAscentByDay(base, snow, melt) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68f29e6ef567e950995157ea-python.json",
+     "inferredInterface": {
+      "name": "totalAscentByDay",
+      "params": [
+       {
+        "name": "base",
+        "type": "integer[]"
+       },
+       {
+        "name": "snow",
+        "type": "integer[][]"
+       },
+       {
+        "name": "melt",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68f29e6ef567e950995157ea-python.json",
+      "sha256": "5d4c7c6230bb306214167ea54b7978df8c7642705f681476a8c1b99d8f590e15",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function totalAscentByDay(base, snow, melt) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68f29e6ef567e950995157ea-javascript.json",
+     "inferredInterface": {
+      "name": "totalAscentByDay",
+      "params": [
+       {
+        "name": "base",
+        "type": "integer[]"
+       },
+       {
+        "name": "snow",
+        "type": "integer[][]"
+       },
+       {
+        "name": "melt",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68f29e6ef567e950995157ea-javascript.json",
+      "sha256": "753db4070ea441e3188491740091cbdf33ba706ff40b3ecd1e6bd9d5a92f480b",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/6/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

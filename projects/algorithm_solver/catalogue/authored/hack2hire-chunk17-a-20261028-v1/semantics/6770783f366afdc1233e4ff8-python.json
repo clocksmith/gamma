@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6770783f366afdc1233e4ff8",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "prices",
+  "k",
+  "threshold"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "reduceGifts",
+  "params": [
+   {
+    "name": "prices",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   },
+   {
+    "name": "threshold",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each removal count r from 0 upward, try every subset of r items to remove and check the k largest remaining prices",
+  "candidate_design": "sort ascending; the condition only depends on the k largest remaining, which are best removed from the top; slide a window of the k largest remaining prices down until its sum is at most threshold",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "5c646b4939120a35f6653c6a09210e802b9d2d19d9b6232a460868f69008643b",
+ "wrapper": "Solution.reduceGifts"
+}

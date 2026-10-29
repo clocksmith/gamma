@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69ab90f64b133b6a8f3a69a3",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "logs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "summarizeThreads",
+  "params": [
+   {
+    "name": "logs",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "collect every timestamp per (processId, threadId) in lists, then take len, min and max of each list",
+  "candidate_design": "one pass keeping count, minimum and maximum per (processId, threadId) in a hash map, then sort the keys",
+  "complexity_target": "O(n + g log g) time/O(g) space, g = threads"
+ },
+ "source_sha256": "ff7c7f92e3151d65614e7bcd12a2b91dfdcd43092649fa981cc39c19970983ef",
+ "wrapper": "Solution.summarizeThreads"
+}

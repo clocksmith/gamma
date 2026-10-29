@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69ab8d9d4b133b6a8f3a699f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "logs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "sortLogs",
+  "params": [
+   {
+    "name": "logs",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "bucket the entries by (processId, threadId) in a dictionary, sort the bucket keys, and order each bucket by timestamp with a stable insertion into a list",
+  "candidate_design": "parse every entry once and stable-sort the indices by (processId, threadId, timestamp)",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "136fade068cb291e00838ed52d7d45f5df6f57f6fb27938725aa6516ca720d33",
+ "wrapper": "Solution.sortLogs"
+}
