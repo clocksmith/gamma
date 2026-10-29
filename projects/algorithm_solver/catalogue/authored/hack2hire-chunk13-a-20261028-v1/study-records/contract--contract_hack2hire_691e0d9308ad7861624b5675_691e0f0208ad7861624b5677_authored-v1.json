@@ -1,0 +1,337 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:691e0d9308ad7861624b5675:691e0f0208ad7861624b5677:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+   "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/691e0d9308ad7861624b5675.json",
+   "sha256": "509fe98fb36025272cb2ecf28dc31890dfff25915cf79ff1842474a4aec4e867",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+   "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+   "selector": "/variants/hack2hire:691e0f0208ad7861624b5677"
+  }
+ ],
+ "problemId": "hack2hire:691e0d9308ad7861624b5675",
+ "variantId": "691e0f0208ad7861624b5677",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: indented org chart text",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:691e0f0208ad7861624b5677/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Each employee is [id, managerId, name] with a unique id; exactly one employee (the CEO) has managerId equal to its own id, every other managerId names an employee, and every management chain reaches the CEO. Return the chart as one string: one line per employee, each line the employee's name prefixed by four dashes per level below the CEO, lines joined by \"\\n\" with no trailing newline. The order is depth-first from the CEO, each manager followed by its direct reports in their order in the input list.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Each employee is [id, managerId, name] with a unique id; exactly one employee (the CEO) has managerId equal to its own id, every other managerId names an employee, and every management chain reaches the CEO.",
+   "Return the chart as one string: one line per employee, each line the employee's name prefixed by four dashes per level below the CEO, lines joined by \"\\n\" with no trailing newline.",
+   "The order is depth-first from the CEO, each manager followed by its direct reports in their order in the input list."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= employees.length <= 1e5",
+   "ids match [A-Za-z0-9]{1,10}; names match [A-Z][a-z]{0,11} optionally followed by a space and a second such word",
+   "total output length <= 4e6 characters (bounds the depth)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:691e0f0208ad7861624b5677/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: employees are [id, managerId, name] strings; the CEO is the only employee managed by itself; output each name on its own line separated by line breaks (none after the last), each direct report indented four dashes more than its manager; algorithmTags: DEPTH_FIRST_SEARCH; preview response sha256 67077be3512ada3b5483983c1d6a088161610d848b823028da30916117f42eb7"
+   },
+   {
+    "statement": "Uncertainty: medium: the input triples, CEO rule, line format and four-dash indentation are in the preview; the depth-first order and the order of siblings by input position are inferred",
+    "basis": "the public group preview is partial (542 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/11/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/11/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "In what order should siblings appear?",
+   "Is there a trailing newline?",
+   "Can the input contain cycles or several CEOs?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:691e0f0208ad7861624b5677/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "1",
+       "1",
+       "Ceo"
+      ]
+     ]
+    ],
+    "output": "Ceo",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "2",
+       "1",
+       "Bo"
+      ],
+      [
+       "1",
+       "1",
+       "Ann"
+      ],
+      [
+       "3",
+       "1",
+       "Cy"
+      ],
+      [
+       "4",
+       "2",
+       "Dee Lane"
+      ]
+     ]
+    ],
+    "output": "Ann\n----Bo\n--------Dee Lane\n----Cy",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:691e0f0208ad7861624b5677/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/oracles.py",
+    "sha256": "c6bcb2d1fc23114d25e5bb4a288e235431ebd2a84be21cbfb67a059c6dd79eb2",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def printOrgChart(employees) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/691e0f0208ad7861624b5677-python.json",
+     "inferredInterface": {
+      "name": "printOrgChart",
+      "params": [
+       {
+        "name": "employees",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/691e0f0208ad7861624b5677-python.json",
+      "sha256": "efcdf6ac8e3eeeb69cd5127ed8d548e214a5257a34c9c541e15f71fe039919f0",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function printOrgChart(employees) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/691e0f0208ad7861624b5677-javascript.json",
+     "inferredInterface": {
+      "name": "printOrgChart",
+      "params": [
+       {
+        "name": "employees",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/691e0f0208ad7861624b5677-javascript.json",
+      "sha256": "890c8bc085f96433f8226dab2c0bd966ee6bb1a8568fdb496f77814e1599152b",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

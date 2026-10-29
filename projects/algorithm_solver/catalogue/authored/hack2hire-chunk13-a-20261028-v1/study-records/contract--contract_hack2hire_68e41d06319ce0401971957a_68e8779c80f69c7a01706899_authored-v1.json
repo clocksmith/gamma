@@ -1,0 +1,340 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68e41d06319ce0401971957a:68e8779c80f69c7a01706899:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+   "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+   "selector": "/problems/12"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68e41d06319ce0401971957a.json",
+   "sha256": "2e33d0cb57ea287e314ac7e9a467eef249c95c3eb083f1678b28dc5510efb71e",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+   "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+   "selector": "/variants/hack2hire:68e8779c80f69c7a01706899"
+  }
+ ],
+ "problemId": "hack2hire:68e41d06319ce0401971957a",
+ "variantId": "68e8779c80f69c7a01706899",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 1: season winner by points",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:68e8779c80f69c7a01706899/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "races is a non-empty list of non-empty races; each race lists distinct rider names in finishing order. In each race the rider in 1st place earns 15 points, 2nd 10, 3rd 5, and every later place 0. A rider's total is the sum over all races; every rider named in any race takes part in the standings, even with 0 points. Names compare by plain character code order. Variant 1: return the rider with the highest total; on a tie return the smallest name.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "races is a non-empty list of non-empty races; each race lists distinct rider names in finishing order.",
+   "In each race the rider in 1st place earns 15 points, 2nd 10, 3rd 5, and every later place 0.",
+   "A rider's total is the sum over all races; every rider named in any race takes part in the standings, even with 0 points.",
+   "Names compare by plain character code order.",
+   "Variant 1: return the rider with the highest total; on a tie return the smallest name."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= races.length <= 1e4",
+   "1 <= race length; total entries over all races <= 2e5",
+   "names match [A-Za-z]{1,12}; names within one race are distinct"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:68e8779c80f69c7a01706899/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: races is a list of races, each a list of rider names from first to last; 1st place earns 15 points, 2nd 10, 3rd 5 and any later place 0 (the task after the scoring rule is cut off); algorithmTags: HASH_TABLE, SORTING; codingQuestions: two variant ids in this order; preview response sha256 9a31b23ae8f4ddc4c79a6c6d21a561b5031f03fcb0d55277e17f323b641ee9d6"
+   },
+   {
+    "statement": "Uncertainty: high: the scoring is in the preview; the task (single winner) and the tie-break by smallest name are inferred",
+    "basis": "the public group preview is partial (356 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: two variants with no per-variant text; the author assigned variant 1 the single season winner (ties to the smallest name) and variant 2 the full standings with a countback tie-break",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/12/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/12/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/12/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How are ties on points broken?",
+   "Do riders outside the top 3 count as participants?",
+   "Can a race be empty?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:68e8779c80f69c7a01706899/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "Ann"
+      ]
+     ]
+    ],
+    "output": "Ann",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "Ann",
+       "Cy"
+      ],
+      [
+       "Ann",
+       "Cy"
+      ],
+      [
+       "Bo",
+       "Dee",
+       "Cy"
+      ],
+      [
+       "Bo",
+       "Dee",
+       "Cy"
+      ],
+      [
+       "Bo",
+       "Dee",
+       "Cy"
+      ]
+     ]
+    ],
+    "output": "Bo",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:68e8779c80f69c7a01706899/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/oracles.py",
+    "sha256": "c6bcb2d1fc23114d25e5bb4a288e235431ebd2a84be21cbfb67a059c6dd79eb2",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def seasonWinner(races) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/68e8779c80f69c7a01706899-python.json",
+     "inferredInterface": {
+      "name": "seasonWinner",
+      "params": [
+       {
+        "name": "races",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/68e8779c80f69c7a01706899-python.json",
+      "sha256": "2c97384cd04ca6635370577001aa07b04ba5f94aa8890a23546586f11a3c7352",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function seasonWinner(races) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/68e8779c80f69c7a01706899-javascript.json",
+     "inferredInterface": {
+      "name": "seasonWinner",
+      "params": [
+       {
+        "name": "races",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/68e8779c80f69c7a01706899-javascript.json",
+      "sha256": "017be1e985884cd801ec28c6417ec47a60035c26084b8d0c4f81b88258f838c6",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/12/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/12/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

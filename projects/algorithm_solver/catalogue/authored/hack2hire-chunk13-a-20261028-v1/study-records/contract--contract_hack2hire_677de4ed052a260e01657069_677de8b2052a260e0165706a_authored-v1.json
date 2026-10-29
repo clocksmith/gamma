@@ -1,0 +1,360 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:677de4ed052a260e01657069:677de8b2052a260e0165706a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+   "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/677de4ed052a260e01657069.json",
+   "sha256": "f3100d45068bca3ea1907f5ac222b7c4b13a8b96f1a8d332024d29fad62106f1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+   "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+   "selector": "/variants/hack2hire:677de8b2052a260e0165706a"
+  }
+ ],
+ "problemId": "hack2hire:677de4ed052a260e01657069",
+ "variantId": "677de8b2052a260e0165706a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: shelf chosen for each book",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:677de8b2052a260e0165706a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Shelves 0 to numShelves - 1 start empty. Books arrive in order; book i goes on the shelf holding the fewest books among shelves 0 to limit[i] - 1, the smallest index on a tie, and that shelf gains one book. Return the shelf index chosen for each book, in order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Shelves 0 to numShelves - 1 start empty.",
+   "Books arrive in order; book i goes on the shelf holding the fewest books among shelves 0 to limit[i] - 1, the smallest index on a tie, and that shelf gains one book.",
+   "Return the shelf index chosen for each book, in order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= numShelves <= 1e5",
+   "0 <= limit.length <= 1e5",
+   "1 <= limit[i] <= numShelves"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:677de8b2052a260e0165706a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: numShelves empty shelves; book i goes on the shelf with the fewest books among shelves 0..limit[i]-1, smallest index on ties (the output is cut off); algorithmTags: HEAP; preview response sha256 4b2733a2a92dfb2d25eded0ebab71911213cc38628267358aedfc71d1f9c28b8"
+   },
+   {
+    "statement": "Uncertainty: medium: the placement rule is in the preview; returning the chosen shelf per book (rather than final counts) is inferred",
+    "basis": "the public group preview is partial (669 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the output the shelf per book or the final shelf counts?",
+   "Is limit[i] at least 1 and at most numShelves?",
+   "Are ties broken by the smallest index?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:677de8b2052a260e0165706a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     1,
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     1,
+     [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ]
+    ],
+    "output": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:677de8b2052a260e0165706a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/oracles.py",
+    "sha256": "c6bcb2d1fc23114d25e5bb4a288e235431ebd2a84be21cbfb67a059c6dd79eb2",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def organizeBooks(numShelves, limit) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/677de8b2052a260e0165706a-python.json",
+     "inferredInterface": {
+      "name": "organizeBooks",
+      "params": [
+       {
+        "name": "numShelves",
+        "type": "integer"
+       },
+       {
+        "name": "limit",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/677de8b2052a260e0165706a-python.json",
+      "sha256": "e53a3a155efbbc1bdbf1410d0f505ca161c9cdf21cf8c86516d0a69cb1dc061c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function organizeBooks(numShelves, limit) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/677de8b2052a260e0165706a-javascript.json",
+     "inferredInterface": {
+      "name": "organizeBooks",
+      "params": [
+       {
+        "name": "numShelves",
+        "type": "integer"
+       },
+       {
+        "name": "limit",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/677de8b2052a260e0165706a-javascript.json",
+      "sha256": "5f796c1d4fb1c38acc2676aff7764ec99a6ab520cee59d6476b1ca681c34f5aa",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

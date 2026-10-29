@@ -1,0 +1,1488 @@
+{
+ "schema": "gamma.hack2hire-chunk13-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:692d2a491abcca80b11223bf": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "0 <= connections.length <= 1e5",
+    "0 <= a, b < n and a != b; repeated connections allowed"
+   ],
+   "clarifyingQuestions": [
+    "What exactly is returned: the count of pairs or the pairs themselves?",
+    "Are pairs ordered or unordered?",
+    "Can a connection repeat?"
+   ],
+   "hints": [
+    "Friend groups are connected components.",
+    "Counting pairs inside groups is easier than counting pairs across groups.",
+    "Subtract the within-group pairs s(s-1)/2 from all n(n-1)/2 pairs, with group sizes from a union-find."
+   ],
+   "invariants": [
+    "each union merges two groups and adds their sizes",
+    "the total number of pairs is fixed at n(n-1)/2"
+   ],
+   "chooseWhen": [
+    "Counting pairs across connected components"
+   ],
+   "tradeoffs": [
+    "Union-find avoids building adjacency lists; BFS is equally fast but uses more memory"
+   ],
+   "variantLabel": "Inferred single variant: count pairs in different friend groups",
+   "examples": [
+    {
+     "input": [
+      1,
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      10,
+      [
+       [
+        4,
+        8
+       ],
+       [
+        6,
+        8
+       ],
+       [
+        8,
+        2
+       ],
+       [
+        6,
+        2
+       ],
+       [
+        1,
+        4
+       ],
+       [
+        7,
+        2
+       ],
+       [
+        6,
+        8
+       ],
+       [
+        8,
+        1
+       ],
+       [
+        7,
+        5
+       ],
+       [
+        9,
+        2
+       ]
+      ]
+     ],
+     "output": 17,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1e2e688b879849ebc1089e": {
+   "constraints": [
+    "0 <= operations.length <= 1e5",
+    "[1, x]: 0 <= x <= 1e9",
+    "[2, x, size]: 1 <= size <= x <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is the result a string or a list of strings?",
+    "Can an obstacle be placed twice at the same position?",
+    "Can the checked range reach below position 0?"
+   ],
+   "hints": [
+    "A check asks whether any placed obstacle lies in [x - size, x - 1].",
+    "All positions that will ever be placed are known in advance, so they can be compressed.",
+    "Keep a Fenwick tree of placed positions over the compressed order and count the obstacles inside each checked range with two binary searches."
+   ],
+   "invariants": [
+    "each position is counted at most once",
+    "a check sees exactly the placements that come before it"
+   ],
+   "chooseWhen": [
+    "Online range-occupancy queries where all keys are known in advance"
+   ],
+   "tradeoffs": [
+    "An ordered set gives the same bound online; the offline Fenwick tree needs only arrays"
+   ],
+   "variantLabel": "Inferred single variant: place obstacles and check free blocks",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        8
+       ],
+       [
+        2,
+        8,
+        4
+       ],
+       [
+        1,
+        4
+       ],
+       [
+        2,
+        6,
+        4
+       ],
+       [
+        1,
+        4
+       ],
+       [
+        2,
+        11,
+        8
+       ],
+       [
+        2,
+        3,
+        3
+       ],
+       [
+        1,
+        2
+       ],
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        1,
+        1
+       ],
+       [
+        2,
+        12,
+        7
+       ],
+       [
+        2,
+        16,
+        3
+       ],
+       [
+        2,
+        4,
+        4
+       ],
+       [
+        1,
+        4
+       ],
+       [
+        1,
+        14
+       ],
+       [
+        2,
+        4,
+        3
+       ],
+       [
+        1,
+        15
+       ],
+       [
+        2,
+        12,
+        9
+       ],
+       [
+        2,
+        5,
+        2
+       ],
+       [
+        2,
+        4,
+        1
+       ],
+       [
+        1,
+        10
+       ],
+       [
+        2,
+        5,
+        4
+       ],
+       [
+        1,
+        2
+       ],
+       [
+        1,
+        4
+       ]
+      ]
+     ],
+     "output": "1001101000010",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:688aefae3867670cfb894129": {
+   "constraints": [
+    "up to 2e5 calls",
+    "usernames match [a-z0-9_]{1,12}"
+   ],
+   "clarifyingQuestions": [
+    "What are the class and method names?",
+    "What is returned when no user has logged in exactly once?",
+    "Can a user who logged in twice ever become a one-time visitor again?"
+   ],
+   "hints": [
+    "Once a user logs in a second time they can never again be a one-time visitor.",
+    "Users who logged in exactly once are ordered by their first login, like a queue.",
+    "Keep a count per user and a queue of first logins; on a query, drop heads whose count is above 1 (each user is dropped at most once)."
+   ],
+   "invariants": [
+    "queue entries before the head are never answers again",
+    "every user appears in the queue at most once"
+   ],
+   "chooseWhen": [
+    "Streams that ask for the first element with a property that, once lost, never returns"
+   ],
+   "tradeoffs": [
+    "Lazy deletion keeps login O(1); an ordered dict also works with eager deletion"
+   ],
+   "variantLabel": "Inferred single variant: first user with exactly one login",
+   "examples": [
+    {
+     "input": [
+      [
+       "VisitorTracker"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "VisitorTracker",
+       "login",
+       "login",
+       "getOldestOneTimeVisitor",
+       "login",
+       "getOldestOneTimeVisitor",
+       "login",
+       "getOldestOneTimeVisitor",
+       "login",
+       "getOldestOneTimeVisitor"
+      ],
+      [
+       [],
+       [
+        "ann"
+       ],
+       [
+        "bo"
+       ],
+       [],
+       [
+        "ann"
+       ],
+       [],
+       [
+        "bo"
+       ],
+       [],
+       [
+        "cy"
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      "ann",
+      null,
+      "bo",
+      null,
+      "",
+      null,
+      "cy"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a513eaa665efda9311f609d": {
+   "constraints": [
+    "1 <= stockPrice.length <= 1e5",
+    "-1e9 <= stockPrice[i] <= 1e9 (negative values allowed by the author for generality)"
+   ],
+   "clarifyingQuestions": [
+    "What is optimised: the sum, the length or something else?",
+    "Is the inequality stockPrice[j] + j >= stockPrice[i] + i as written?",
+    "Must the subsequence be non-empty?"
+   ],
+   "hints": [
+    "The condition only compares key = price + index of consecutive picks.",
+    "Balanced subsequences are exactly those whose keys never decrease.",
+    "dp[j] adds price[j] to the best non-negative dp among earlier keys <= key[j]; a prefix-maximum Fenwick tree over compressed keys answers that."
+   ],
+   "invariants": [
+    "the Fenwick tree holds the best dp of every processed index at its key",
+    "a negative best prefix is replaced by 0 (start fresh)"
+   ],
+   "chooseWhen": [
+    "Maximum-weight non-decreasing subsequences"
+   ],
+   "tradeoffs": [
+    "O(n^2) DP is simpler but too slow at 1e5"
+   ],
+   "variantLabel": "Inferred single variant: maximum balanced subsequence sum",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -646854438,
+       473548653,
+       199714183,
+       -524140716,
+       285811852,
+       297337513,
+       -502197021,
+       -123286905
+      ]
+     ],
+     "output": 782863548,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a95d744cddc54478ddf6a6d": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "lowerSkill.length == higherSkill.length == n",
+    "0 <= lowerSkill[i], higherSkill[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is the answer the team size or the team members?",
+    "Is a one-person team always valid?",
+    "Are the bounds inclusive?"
+   ],
+   "hints": [
+    "Removing a member never raises the counts of anyone else, so feasibility is monotone in the team size.",
+    "For a fixed size k, scan developers from lowest skill: the j-th pick has j lower and k - 1 - j higher teammates.",
+    "Binary search k and greedily take every developer whose limits allow the current position in the team."
+   ],
+   "invariants": [
+    "taken-so-far equals the lower-teammate count of the next pick",
+    "feasibility of size k implies feasibility of k - 1"
+   ],
+   "chooseWhen": [
+    "Maximising a size when feasibility of a size is monotone and checkable greedily"
+   ],
+   "tradeoffs": [
+    "The greedy check is O(n), so binary search adds only a log factor"
+   ],
+   "variantLabel": "Inferred single variant: largest team meeting skill limits",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      [
+       0
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       10,
+       8,
+       5,
+       2,
+       2,
+       7,
+       9,
+       4,
+       8,
+       4
+      ],
+      [
+       7,
+       5,
+       8,
+       1,
+       3,
+       1,
+       0,
+       4,
+       10,
+       4
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677de8b2052a260e0165706a": {
+   "constraints": [
+    "1 <= numShelves <= 1e5",
+    "0 <= limit.length <= 1e5",
+    "1 <= limit[i] <= numShelves"
+   ],
+   "clarifyingQuestions": [
+    "Is the output the shelf per book or the final shelf counts?",
+    "Is limit[i] at least 1 and at most numShelves?",
+    "Are ties broken by the smallest index?"
+   ],
+   "hints": [
+    "Simulate a few books: counts never increase from left to right.",
+    "With non-increasing counts the minimum over a prefix is its last shelf, and the tie rule picks the first shelf with that count.",
+    "Track the first index of each count value; placing a book moves that index one to the right."
+   ],
+   "invariants": [
+    "count[0] >= count[1] >= ... >= count[numShelves - 1]",
+    "first[v] is the smallest shelf holding exactly v books"
+   ],
+   "chooseWhen": [
+    "Simulations whose state keeps a monotone shape"
+   ],
+   "tradeoffs": [
+    "A segment tree needs no structural insight but costs O(log n) per book"
+   ],
+   "variantLabel": "Inferred single variant: shelf chosen for each book",
+   "examples": [
+    {
+     "input": [
+      1,
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      1,
+      [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ]
+     ],
+     "output": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68ace5011bf7d2097f647f50": {
+   "constraints": [
+    "0 <= ignoreArray.length <= 100",
+    "0 <= inputArray.length <= 2e5",
+    "every element is one printable ASCII character"
+   ],
+   "clarifyingQuestions": [
+    "Is the comparison case-sensitive?",
+    "Is an empty filtered sequence a palindrome?",
+    "May ignoreArray contain duplicates?"
+   ],
+   "hints": [
+    "Filtering into a new array costs O(n) extra space, which the preview discourages.",
+    "Two pointers can skip ignored characters in place.",
+    "Put ignoreArray in a set; move left and right inward past ignored characters and compare."
+   ],
+   "invariants": [
+    "characters outside [left, right] already matched in pairs",
+    "ignored characters are never compared"
+   ],
+   "chooseWhen": [
+    "Palindrome checks with filtering under tight memory"
+   ],
+   "tradeoffs": [
+    "The set costs O(k) space, small because ignoreArray is short"
+   ],
+   "variantLabel": "Inferred single variant: palindrome after skipping ignored characters",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "b",
+       " ",
+       "!"
+      ],
+      [
+       "b",
+       "#",
+       "a",
+       "a",
+       "#",
+       "a",
+       "#",
+       "b",
+       "#",
+       "a",
+       "b",
+       "b"
+      ]
+     ],
+     "output": false,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677f4db36fee41e51af73dd6": {
+   "constraints": [
+    "up to 2e5 calls",
+    "-1e9 <= val <= 1e9",
+    "every version argument already exists",
+    "pop and peek only on non-empty versions"
+   ],
+   "clarifyingQuestions": [
+    "How are versions represented: returned stack objects or handles?",
+    "Does pop create a new version or return an existing one?",
+    "What do pop and peek do on an empty stack?"
+   ],
+   "hints": [
+    "Copying a stack per version costs O(n) per operation.",
+    "A singly linked list can share its tail: pushing onto any node creates one new node.",
+    "Name each version by its top node; push appends (parent, value, size + 1) to arrays and pop returns the parent."
+   ],
+   "invariants": [
+    "size[v] = size[parent[v]] + 1 for v > 0",
+    "existing nodes are never modified"
+   ],
+   "chooseWhen": [
+    "Persistent (versioned) stacks and undo histories"
+   ],
+   "tradeoffs": [
+    "Integer handles keep the trace JSON-friendly; returning stack objects would be closer to a native API"
+   ],
+   "variantLabel": "Inferred single variant: versioned stack with integer handles",
+   "examples": [
+    {
+     "input": [
+      [
+       "PStack"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "PStack",
+       "push",
+       "push",
+       "peek",
+       "pop",
+       "peek",
+       "push",
+       "size",
+       "pop",
+       "push",
+       "size",
+       "peek",
+       "size"
+      ],
+      [
+       [],
+       [
+        0,
+        5
+       ],
+       [
+        1,
+        7
+       ],
+       [
+        2
+       ],
+       [
+        2
+       ],
+       [
+        1
+       ],
+       [
+        1,
+        9
+       ],
+       [
+        3
+       ],
+       [
+        3
+       ],
+       [
+        0,
+        -1
+       ],
+       [
+        4
+       ],
+       [
+        4
+       ],
+       [
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      1,
+      2,
+      7,
+      1,
+      5,
+      3,
+      2,
+      1,
+      4,
+      1,
+      -1,
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6827b84d285cf34924f48286": {
+   "constraints": [
+    "0 <= boards.length <= 1e5",
+    "1 <= board length; total pins over all boards <= 2e5",
+    "1 <= pin <= 1e9; pins within a board are distinct",
+    "1 <= pin1, pin2 <= 1e9 and pin1 != pin2"
+   ],
+   "clarifyingQuestions": [
+    "Can pin1 equal pin2?",
+    "What if a pin is on no board?",
+    "Is relatedness transitive across several boards?"
+   ],
+   "hints": [
+    "Pins and boards form a graph; relatedness is connectivity.",
+    "All pins on one board are connected, so linking each to the board's first pin suffices.",
+    "Use a union-find keyed by pin value and compare the roots of pin1 and pin2."
+   ],
+   "invariants": [
+    "pins on one board share a root after it is processed",
+    "roots only change by union"
+   ],
+   "chooseWhen": [
+    "Connectivity queries over groups of items"
+   ],
+   "tradeoffs": [
+    "BFS over a pin-board graph also works but builds adjacency lists"
+   ],
+   "variantLabel": "Inferred variant 1: are two pins related",
+   "examples": [
+    {
+     "input": [
+      [],
+      1,
+      2
+     ],
+     "output": false,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        9
+       ],
+       [
+        10,
+        4,
+        1
+       ],
+       [
+        7
+       ],
+       [
+        1,
+        10,
+        5
+       ],
+       [
+        6,
+        8
+       ],
+       [
+        5,
+        6,
+        2
+       ],
+       [
+        10
+       ],
+       [
+        6,
+        3
+       ]
+      ],
+      3,
+      8
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6913ed33fa8a311e42671e5d": {
+   "constraints": [
+    "0 <= boards.length <= 1e5",
+    "1 <= board length; total pins over all boards <= 2e5",
+    "1 <= pin <= 1e9; pins within a board are distinct",
+    "1 <= pin1, pin2 <= 1e9 and pin1 != pin2"
+   ],
+   "clarifyingQuestions": [
+    "Is the distance counted in boards or in pins?",
+    "What is returned when the pins are not related?",
+    "Is the answer 1 when one board holds both pins?"
+   ],
+   "hints": [
+    "Boards are the steps of the route; pins are the junctions.",
+    "Breadth-first search over a bipartite pin-board graph finds the fewest boards.",
+    "Index boards by pin, start from every board holding pin1 at distance 1, and expand each board and each pin once."
+   ],
+   "invariants": [
+    "boards are dequeued in non-decreasing distance",
+    "each board and each pin is expanded at most once"
+   ],
+   "chooseWhen": [
+    "Fewest-hop routes through groups"
+   ],
+   "tradeoffs": [
+    "The bipartite BFS avoids building board-to-board edges, which can be quadratic"
+   ],
+   "variantLabel": "Inferred variant 2: fewest boards between two pins",
+   "examples": [
+    {
+     "input": [
+      [],
+      1,
+      2
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        8,
+        6,
+        10
+       ],
+       [
+        8,
+        3,
+        6
+       ],
+       [
+        3
+       ],
+       [
+        1,
+        7
+       ],
+       [
+        6,
+        5,
+        3
+       ],
+       [
+        1,
+        9,
+        4
+       ]
+      ],
+      1,
+      6
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68fd5b9d47bea664c0bba367": {
+   "constraints": [
+    "cards.length == 5",
+    "values are distinct members of A, 2..10, J, Q, K"
+   ],
+   "clarifyingQuestions": [
+    "Can the straight wrap around (Q, K, A, 2, 3)?",
+    "Are the inputs always distinct?",
+    "Is \"10\" given as \"10\" or \"T\"?"
+   ],
+   "hints": [
+    "Five distinct values are consecutive exactly when max - min == 4.",
+    "Only the ace has two possible ranks.",
+    "Check max - min == 4 once with the ace low and once with it high."
+   ],
+   "invariants": [
+    "ranks are distinct",
+    "the ace takes a single rank per check"
+   ],
+   "chooseWhen": [
+    "Consecutive-run checks over small distinct sets"
+   ],
+   "tradeoffs": [
+    "Sorting is unnecessary because distinctness makes the range test exact"
+   ],
+   "variantLabel": "Inferred single variant: five-card straight with a flexible ace",
+   "examples": [
+    {
+     "input": [
+      [
+       "A",
+       "2",
+       "3",
+       "4",
+       "5"
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "9",
+       "Q",
+       "K",
+       "J",
+       "10"
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:691e0f0208ad7861624b5677": {
+   "constraints": [
+    "1 <= employees.length <= 1e5",
+    "ids match [A-Za-z0-9]{1,10}; names match [A-Z][a-z]{0,11} optionally followed by a space and a second such word",
+    "total output length <= 4e6 characters (bounds the depth)"
+   ],
+   "clarifyingQuestions": [
+    "In what order should siblings appear?",
+    "Is there a trailing newline?",
+    "Can the input contain cycles or several CEOs?"
+   ],
+   "hints": [
+    "The chart is a pre-order walk of the management tree.",
+    "Group the reports of each manager first, keeping their input order.",
+    "Walk iteratively with a stack, pushing reports in reverse so the first report is printed first, and join the lines once."
+   ],
+   "invariants": [
+    "a manager is printed before all of its reports",
+    "the dash count is four times the depth"
+   ],
+   "chooseWhen": [
+    "Printing trees given as parent links"
+   ],
+   "tradeoffs": [
+    "An explicit stack avoids recursion limits on deep charts"
+   ],
+   "variantLabel": "Inferred single variant: indented org chart text",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "1",
+        "1",
+        "Ceo"
+       ]
+      ]
+     ],
+     "output": "Ceo",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "2",
+        "1",
+        "Bo"
+       ],
+       [
+        "1",
+        "1",
+        "Ann"
+       ],
+       [
+        "3",
+        "1",
+        "Cy"
+       ],
+       [
+        "4",
+        "2",
+        "Dee Lane"
+       ]
+      ]
+     ],
+     "output": "Ann\n----Bo\n--------Dee Lane\n----Cy",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68e8779c80f69c7a01706899": {
+   "constraints": [
+    "1 <= races.length <= 1e4",
+    "1 <= race length; total entries over all races <= 2e5",
+    "names match [A-Za-z]{1,12}; names within one race are distinct"
+   ],
+   "clarifyingQuestions": [
+    "How are ties on points broken?",
+    "Do riders outside the top 3 count as participants?",
+    "Can a race be empty?"
+   ],
+   "hints": [
+    "Only the first three places earn points.",
+    "A hash map from name to total accumulates the season.",
+    "Scan the map once, keeping the higher total, or the smaller name on equal totals."
+   ],
+   "invariants": [
+    "each race adds at most 30 points in total",
+    "the running best is the maximum (total, -name) seen so far"
+   ],
+   "chooseWhen": [
+    "Aggregating scores by key and picking a winner"
+   ],
+   "tradeoffs": [
+    "Sorting all riders is O(r log r); a single scan suffices for the winner"
+   ],
+   "variantLabel": "Inferred variant 1: season winner by points",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "Ann"
+       ]
+      ]
+     ],
+     "output": "Ann",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "Ann",
+        "Cy"
+       ],
+       [
+        "Ann",
+        "Cy"
+       ],
+       [
+        "Bo",
+        "Dee",
+        "Cy"
+       ],
+       [
+        "Bo",
+        "Dee",
+        "Cy"
+       ],
+       [
+        "Bo",
+        "Dee",
+        "Cy"
+       ]
+      ]
+     ],
+     "output": "Bo",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68e9554c149617c9114ecdd1": {
+   "constraints": [
+    "1 <= races.length <= 1e4",
+    "1 <= race length; total entries over all races <= 2e5",
+    "names match [A-Za-z]{1,12}; names within one race are distinct"
+   ],
+   "clarifyingQuestions": [
+    "Is the output the winner or the full standings?",
+    "What breaks ties: wins, countback or name?",
+    "Are riders with 0 points listed?"
+   ],
+   "hints": [
+    "The standings need a total and the placings of every rider.",
+    "Collect points and the counts of 1st, 2nd and 3rd places in one pass.",
+    "Sort once with the composite key (-points, -firsts, -seconds, -thirds, name)."
+   ],
+   "invariants": [
+    "points = 15 firsts + 10 seconds + 5 thirds",
+    "the sort key is a total order because names are unique"
+   ],
+   "chooseWhen": [
+    "Leaderboards with multi-level tie-breaks"
+   ],
+   "tradeoffs": [
+    "A composite key makes the comparator trivially consistent"
+   ],
+   "variantLabel": "Inferred variant 2: full standings with countback",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "Ann"
+       ]
+      ]
+     ],
+     "output": [
+      "Ann"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "Ann",
+        "Cy"
+       ],
+       [
+        "Ann",
+        "Cy"
+       ],
+       [
+        "Bo",
+        "Dee",
+        "Cy"
+       ],
+       [
+        "Bo",
+        "Dee",
+        "Cy"
+       ],
+       [
+        "Bo",
+        "Dee",
+        "Cy"
+       ]
+      ]
+     ],
+     "output": [
+      "Bo",
+      "Cy",
+      "Ann",
+      "Dee"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a00c4cbf1b0b7030ba32383": {
+   "constraints": [
+    "1 <= n",
+    "1 <= m <= 200",
+    "n * m <= 2e5",
+    "each pref[i] is a permutation of 0..m-1"
+   ],
+   "clarifyingQuestions": [
+    "Is the ranking by first-place votes with later positions as tie-breaks?",
+    "How are songs tied at every position ordered?",
+    "Do all users rank all songs?"
+   ],
+   "hints": [
+    "Count, for every song, how many users put it at each position.",
+    "Comparing two songs means comparing their count rows lexicographically, larger first.",
+    "Sort the ids by the negated count row, then by id."
+   ],
+   "invariants": [
+    "each count row sums to n",
+    "each position column sums to n"
+   ],
+   "chooseWhen": [
+    "Ranked-choice aggregations with positional tie-breaks"
+   ],
+   "tradeoffs": [
+    "The m x m table is small because m <= 200"
+   ],
+   "variantLabel": "Inferred single variant: positional vote ranking of songs",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0
+       ]
+      ]
+     ],
+     "output": [
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        2,
+        1,
+        3,
+        0,
+        4
+       ],
+       [
+        3,
+        4,
+        1,
+        2,
+        0
+       ],
+       [
+        4,
+        1,
+        0,
+        2,
+        3
+       ],
+       [
+        4,
+        2,
+        0,
+        3,
+        1
+       ],
+       [
+        2,
+        1,
+        0,
+        4,
+        3
+       ]
+      ]
+     ],
+     "output": [
+      2,
+      4,
+      3,
+      1,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:699f7bb56e73e4abccc9b565": {
+   "constraints": [
+    "0 <= events.length <= 1e5",
+    "vehicle ids match [A-Za-z0-9_-]{1,10} and are not \"server\"",
+    "chunk ids match [a-z0-9]{1,8}; 1 <= chunks per event; total chunk ids <= 2e5"
+   ],
+   "clarifyingQuestions": [
+    "How is contribution measured: chunks sent, distinct chunks, or downstream reach?",
+    "Are vehicles that only received data ranked?",
+    "How are ties ordered?"
+   ],
+   "hints": [
+    "The server is the origin, not a vehicle, so it is never ranked.",
+    "Split each chunk list and add its length to the sender.",
+    "Register every receiver with 0, then sort by (-contribution, id)."
+   ],
+   "invariants": [
+    "every vehicle id seen is in the map",
+    "contributions only grow"
+   ],
+   "chooseWhen": [
+    "Ranking participants by an aggregated count"
+   ],
+   "tradeoffs": [
+    "Counting split tokens is linear; deduplicating chunks would need a set per vehicle"
+   ],
+   "variantLabel": "Inferred single variant: vehicles ranked by chunks shared",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "server",
+        "c1 c2",
+        "v1"
+       ],
+       [
+        "v1",
+        "c1",
+        "v2"
+       ],
+       [
+        "v2",
+        "c1",
+        "v3"
+       ],
+       [
+        "v1",
+        "c2",
+        "v3"
+       ]
+      ]
+     ],
+     "output": [
+      "v1",
+      "v2",
+      "v3"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67eae60e4c9bb801bfd0ef48": {
+   "constraints": [
+    "1 <= houses.length <= 1e5",
+    "1 <= houses[i].length; total houses <= 2e5",
+    "1 <= house number <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is any valid arrangement accepted, or a specific one?",
+    "What is returned when no arrangement exists?",
+    "May neighborhood sizes change?"
+   ],
+   "hints": [
+    "A number with c copies must go to c different neighborhoods.",
+    "Placing the numbers with the most copies first never hurts (an exchange argument, as in the Gale-Ryser construction).",
+    "Use a max-heap of (copies, number): each neighborhood pops its size many entries and pushes back the ones with copies left."
+   ],
+   "invariants": [
+    "no number is taken twice for the same neighborhood",
+    "remaining copies always sum to the remaining capacity"
+   ],
+   "chooseWhen": [
+    "Distributing repeated items into groups without repeats inside a group"
+   ],
+   "tradeoffs": [
+    "The canonical tie rule makes the output checkable exactly but is an author choice"
+   ],
+   "variantLabel": "Inferred single variant: canonical rearrangement or []",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        1
+       ]
+      ]
+     ],
+     "output": [
+      [
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        3
+       ],
+       [
+        3,
+        4,
+        1
+       ],
+       [
+        1
+       ],
+       [
+        3,
+        2,
+        4
+       ]
+      ]
+     ],
+     "output": [
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       3,
+       4
+      ],
+      [
+       1
+      ],
+      [
+       2,
+       3,
+       4
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:688fb256b3f942cc1004c00e": {
+   "constraints": [
+    "1 <= nums.length <= 1e5",
+    "0 <= nums[i] <= 1e9",
+    "0 <= k <= 1e5",
+    "1 <= m <= 1e9 + 7"
+   ],
+   "clarifyingQuestions": [
+    "What happens after N is made even: halving, division by m, or something else?",
+    "What is returned: the array, its sum, or the sum modulo m?",
+    "Which copy of a repeated maximum is chosen?"
+   ],
+   "hints": [
+    "Only the current maximum changes, so the order of equal maxima does not matter for the final multiset.",
+    "A max-heap gives the maximum in O(log n).",
+    "Pop the maximum, push (N - N % 2) / 2, repeat k times (stop once it is 0), then sum and reduce modulo m."
+   ],
+   "invariants": [
+    "the multiset changes in one element per operation",
+    "values never increase"
+   ],
+   "chooseWhen": [
+    "Repeatedly shrinking the largest element"
+   ],
+   "tradeoffs": [
+    "Stopping at a zero maximum skips useless operations when k is large"
+   ],
+   "variantLabel": "Inferred single variant: halve the maximum k times, sum modulo m",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      0,
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       323030995,
+       929247151,
+       294950859,
+       135809440,
+       129675348,
+       802439368,
+       714451376,
+       739799823,
+       330747984,
+       354273799
+      ],
+      14,
+      7
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

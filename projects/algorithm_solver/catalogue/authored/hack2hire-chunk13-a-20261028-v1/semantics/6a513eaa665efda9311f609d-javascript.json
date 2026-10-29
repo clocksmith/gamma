@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a513eaa665efda9311f609d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "stockPrice"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxBalancedSum",
+  "params": [
+   {
+    "name": "stockPrice",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exhaustive search over every non-empty index subset",
+  "candidate_design": "dp[j] = price[j] + max(0, best dp over earlier keys <= key[j]) with key = price + index; a prefix-maximum Fenwick tree over compressed keys",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "6993956479284c106d81ec57d61add2abd115eee48b71e53036c2a54cc23e296",
+ "wrapper": "named export maxBalancedSum"
+}

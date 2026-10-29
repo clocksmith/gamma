@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a95d744cddc54478ddf6a6d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "lowerSkill",
+  "higherSkill"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxTeamSize",
+  "params": [
+   {
+    "name": "lowerSkill",
+    "type": "integer[]"
+   },
+   {
+    "name": "higherSkill",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exhaustive search over every subset, checking each member against its counts",
+  "candidate_design": "binary search the team size k; a size is feasible when a left-to-right greedy takes developer i whenever taken-so-far <= lowerSkill[i] and k - 1 - taken-so-far <= higherSkill[i], reaching k",
+  "complexity_target": "O(n log n) time/O(1) extra space"
+ },
+ "source_sha256": "863df2d9b82a21e9286dd0a3a0fff88a3a7729200be609dd4decbe1da82c9f44",
+ "wrapper": "named export maxTeamSize"
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68e9554c149617c9114ecdd1",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "races"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "seasonStandings",
+  "params": [
+   {
+    "name": "races",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "repeatedly select the best remaining rider by comparing totals and recounted placings from the raw races",
+  "candidate_design": "one pass building [points, firsts, seconds, thirds] per rider, then one sort by (-points, -firsts, -seconds, -thirds, name)",
+  "complexity_target": "O(entries + r log r) time/O(riders) space"
+ },
+ "source_sha256": "792eb926a8795c1130be4cde541cde72e532e08cb059f8acfa3d700437a37fe1",
+ "wrapper": "named export seasonStandings"
+}

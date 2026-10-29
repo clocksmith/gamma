@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/design.json",
+   "sha256": "da7f7ff1e47ed0b92c5497305045c43da74c73b75fec2cb4d01240de8faa14c4",
+   "selector": "/problems/hack2hire:699f7bb56e73e4abccc9b565"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+   "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+   "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565"
+  }
+ ],
+ "problemId": "hack2hire:699f79396e73e4abccc9b556",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-records/contract--contract_hack2hire_699f79396e73e4abccc9b556_699f7bb56e73e4abccc9b565_authored-v1.json",
+  "sha256": "d8e0b826ca41cc2cdf68c161bd18475187ce2ae3d6f0f3259df40bf1d314986a"
+ },
+ "title": {
+  "status": "present",
+  "value": "one pass counting chunk ids per sender into a hash map (registering receivers with 0), then one sort by (-contribution, id)",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/design.json",
+    "sha256": "da7f7ff1e47ed0b92c5497305045c43da74c73b75fec2cb4d01240de8faa14c4",
+    "selector": "/problems/hack2hire:699f7bb56e73e4abccc9b565/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "one pass counting chunk ids per sender into a hash map (registering receivers with 0), then one sort by (-contribution, id). Complexity target: O(total chunk ids + v log v) time/O(v) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/design.json",
+    "sha256": "da7f7ff1e47ed0b92c5497305045c43da74c73b75fec2cb4d01240de8faa14c4",
+    "selector": "/problems/hack2hire:699f7bb56e73e4abccc9b565"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Ranking participants by an aggregated count"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Counting split tokens is linear; deduplicating chunks would need a set per vehicle"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "every vehicle id seen is in the map",
+   "contributions only grow"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "The server is the origin, not a vehicle, so it is never ranked.",
+   "Split each chunk list and add its length to the sender.",
+   "Register every receiver with 0, then sort by (-contribution, id)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "one pass counting chunk ids per sender into a hash map (registering receivers with 0), then one sort by (-contribution, id)",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/design.json",
+      "sha256": "da7f7ff1e47ed0b92c5497305045c43da74c73b75fec2cb4d01240de8faa14c4",
+      "selector": "/problems/hack2hire:699f7bb56e73e4abccc9b565/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(total chunk ids + v log v) time/O(v) space; the independent reference (for every vehicle id, rescan all events and count the chunk ids it sent) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/design.json",
+      "sha256": "da7f7ff1e47ed0b92c5497305045c43da74c73b75fec2cb4d01240de8faa14c4",
+      "selector": "/problems/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "The server is the origin, not a vehicle, so it is never ranked.",
+     "Split each chunk list and add its length to the sender."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-records/artifact--artifact_hack2hire_699f79396e73e4abccc9b556_699f7bb56e73e4abccc9b565_approach-native_v1.json",
+    "sha256": "4e60e26dd31170885ba7aebe9d5579126e4ef23a3f2e2de773eaf12fb74ee17c"
+   }
+  },
+  {
+   "id": "approach:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper rankVehicles, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/design.json",
+      "sha256": "da7f7ff1e47ed0b92c5497305045c43da74c73b75fec2cb4d01240de8faa14c4",
+      "selector": "/problems/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Register every receiver with 0, then sort by (-contribution, id)."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-records/artifact--artifact_hack2hire_699f79396e73e4abccc9b556_699f7bb56e73e4abccc9b565_python_v1.json",
+     "sha256": "6d0d9718a99613e3d627f390ac80f587eabb8ad7e5c5b9e97ed492e3d09fd376"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-records/artifact--artifact_hack2hire_699f79396e73e4abccc9b556_699f7bb56e73e4abccc9b565_javascript_v1.json",
+     "sha256": "d46d2889f7d189608210f8c229d54f335bd6c23233095ac20b9ad4f1ab1d44f2"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-records/artifact--artifact_hack2hire_699f79396e73e4abccc9b556_699f7bb56e73e4abccc9b565_approach-native_v1.json",
+    "sha256": "4e60e26dd31170885ba7aebe9d5579126e4ef23a3f2e2de773eaf12fb74ee17c"
+   }
+  },
+  {
+   "id": "approach:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (for every vehicle id, rescan all events and count the chunk ids it sent) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/design.json",
+      "sha256": "da7f7ff1e47ed0b92c5497305045c43da74c73b75fec2cb4d01240de8faa14c4",
+      "selector": "/problems/hack2hire:699f7bb56e73e4abccc9b565/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/15/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/test_oracles.py",
+      "sha256": "ed2e217e981b257e8d20e7be5612f2a7e2f5c1b9158e33ad63a20e0b2701ab44",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+      "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+      "selector": "/variants/hack2hire:699f7bb56e73e4abccc9b565"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-records/artifact--artifact_hack2hire_699f79396e73e4abccc9b556_699f7bb56e73e4abccc9b565_approach-native_v1.json",
+    "sha256": "4e60e26dd31170885ba7aebe9d5579126e4ef23a3f2e2de773eaf12fb74ee17c"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:699f79396e73e4abccc9b556:699f7bb56e73e4abccc9b565:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-records/artifact--artifact_hack2hire_699f79396e73e4abccc9b556_699f7bb56e73e4abccc9b565_approach-native_v1.json",
+  "sha256": "4e60e26dd31170885ba7aebe9d5579126e4ef23a3f2e2de773eaf12fb74ee17c"
+ }
+}

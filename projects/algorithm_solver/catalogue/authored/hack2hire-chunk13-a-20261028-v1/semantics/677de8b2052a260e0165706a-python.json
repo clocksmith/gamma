@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:677de8b2052a260e0165706a",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "numShelves",
+  "limit"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "organizeBooks",
+  "params": [
+   {
+    "name": "numShelves",
+    "type": "integer"
+   },
+   {
+    "name": "limit",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan shelves 0..limit-1 for the minimum count for every book",
+  "candidate_design": "shelf counts stay non-increasing by index, so the target is the first shelf whose count equals count[limit - 1]; keep the first index of every count value and move it by one per book",
+  "complexity_target": "O(numShelves + books) time/O(numShelves) space"
+ },
+ "source_sha256": "d8a1678fab1963217a784feb2ebab3d66790e2f12ebd3e296fdc3d41eeae5977",
+ "wrapper": "Solution.organizeBooks"
+}
