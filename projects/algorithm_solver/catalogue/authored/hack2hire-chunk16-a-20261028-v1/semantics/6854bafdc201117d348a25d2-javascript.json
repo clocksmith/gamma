@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6854bafdc201117d348a25d2",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "s",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maximizeNumber",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every set of at most k positions to change and keep the largest result",
+  "candidate_design": "greedy: scan left to right and replace digits below 5 while operations remain",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "216e03b92b71fdfcb4e4cee7be4e785c08edf8b95c61a4abe03d6903ae48a365",
+ "wrapper": "named export maximizeNumber"
+}

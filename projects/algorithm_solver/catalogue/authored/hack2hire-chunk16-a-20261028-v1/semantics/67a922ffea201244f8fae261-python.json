@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67a922ffea201244f8fae261",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "longestPrefixSuffix",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try L from len(s) - 1 down to 0 and compare the prefix and suffix directly",
+  "candidate_design": "KMP prefix function; the answer is its last value",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "1a78c0f39e33b950295a05d0536e9b69306f61b567186e16e14069b369b6ba71",
+ "wrapper": "Solution.longestPrefixSuffix"
+}

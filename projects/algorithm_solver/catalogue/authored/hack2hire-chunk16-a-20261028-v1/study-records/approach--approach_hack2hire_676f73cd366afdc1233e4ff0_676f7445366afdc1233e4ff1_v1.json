@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/design.json",
+   "sha256": "bf28c3aa830614bb0df0ecea4c7357721f8c1faabb85e0f9c5e567ed67b6cde5",
+   "selector": "/problems/hack2hire:676f7445366afdc1233e4ff1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+   "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+   "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1"
+  }
+ ],
+ "problemId": "hack2hire:676f73cd366afdc1233e4ff0",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-records/contract--contract_hack2hire_676f73cd366afdc1233e4ff0_676f7445366afdc1233e4ff1_authored-v1.json",
+  "sha256": "465d055639d1f992e87656ed11ccf7d7d7a7e0b0608713b1bf1973c08f6831ab"
+ },
+ "title": {
+  "status": "present",
+  "value": "some optimal window ends on the last day of a sprint; over the doubled sprint list, prefix sums of days and of triangular sums plus a moving left pointer give each such window in O(1)",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/design.json",
+    "sha256": "bf28c3aa830614bb0df0ecea4c7357721f8c1faabb85e0f9c5e567ed67b6cde5",
+    "selector": "/problems/hack2hire:676f7445366afdc1233e4ff1/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "some optimal window ends on the last day of a sprint; over the doubled sprint list, prefix sums of days and of triangular sums plus a moving left pointer give each such window in O(1). Complexity target: O(n) time/O(n) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/design.json",
+    "sha256": "bf28c3aa830614bb0df0ecea4c7357721f8c1faabb85e0f9c5e567ed67b6cde5",
+    "selector": "/problems/hack2hire:676f7445366afdc1233e4ff1"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Sliding windows over run-length encoded sequences"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Run-length prefix sums are linear in the number of sprints; expanding days is linear in the total days"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "the left pointer only moves forward",
+   "whole sprints inside the window contribute d (d + 1) / 2"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Day j of a sprint is worth j, so later days in a sprint are worth more.",
+   "Moving a window that ends mid-sprint to the end of that sprint never loses points (the added days are worth more than the ones dropped, or else moving left is better), so check only windows ending at a sprint end.",
+   "Double the sprint list for wrapping; for each sprint end, take whole sprints from the left with prefix sums and a partial sprint's top days."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "some optimal window ends on the last day of a sprint; over the doubled sprint list, prefix sums of days and of triangular sums plus a moving left pointer give each such window in O(1)",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/design.json",
+      "sha256": "bf28c3aa830614bb0df0ecea4c7357721f8c1faabb85e0f9c5e567ed67b6cde5",
+      "selector": "/problems/hack2hire:676f7445366afdc1233e4ff1/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) time/O(n) space; the independent reference (expand the cyclic schedule day by day and sum every window of k days) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/design.json",
+      "sha256": "bf28c3aa830614bb0df0ecea4c7357721f8c1faabb85e0f9c5e567ed67b6cde5",
+      "selector": "/problems/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Day j of a sprint is worth j, so later days in a sprint are worth more.",
+     "Moving a window that ends mid-sprint to the end of that sprint never loses points (the added days are worth more than the ones dropped, or else moving left is better), so check only windows ending at a sprint end."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-records/artifact--artifact_hack2hire_676f73cd366afdc1233e4ff0_676f7445366afdc1233e4ff1_approach-native_v1.json",
+    "sha256": "317c8d90982712259b52beff6274d33d6b81f6acce213ba7de2eaf68ba3869c5"
+   }
+  },
+  {
+   "id": "approach:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper maxSprintPoints, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/design.json",
+      "sha256": "bf28c3aa830614bb0df0ecea4c7357721f8c1faabb85e0f9c5e567ed67b6cde5",
+      "selector": "/problems/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Double the sprint list for wrapping; for each sprint end, take whole sprints from the left with prefix sums and a partial sprint's top days."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-records/artifact--artifact_hack2hire_676f73cd366afdc1233e4ff0_676f7445366afdc1233e4ff1_python_v1.json",
+     "sha256": "75a03a65da736a0c10efc355a09ddab64c3206c330da27ac4710d2a1e2b980f7"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-records/artifact--artifact_hack2hire_676f73cd366afdc1233e4ff0_676f7445366afdc1233e4ff1_javascript_v1.json",
+     "sha256": "b0a576ce264d289dd6b0336c0f9083ba2ad7a320bb38f8122a6206ea29cbf913"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-records/artifact--artifact_hack2hire_676f73cd366afdc1233e4ff0_676f7445366afdc1233e4ff1_approach-native_v1.json",
+    "sha256": "317c8d90982712259b52beff6274d33d6b81f6acce213ba7de2eaf68ba3869c5"
+   }
+  },
+  {
+   "id": "approach:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (expand the cyclic schedule day by day and sum every window of k days) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/design.json",
+      "sha256": "bf28c3aa830614bb0df0ecea4c7357721f8c1faabb85e0f9c5e567ed67b6cde5",
+      "selector": "/problems/hack2hire:676f7445366afdc1233e4ff1/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/12/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare the inferred wrapper with solve on every case.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/test_oracles.py",
+      "sha256": "f6d001d2c03a476395abab2e93ed2dec1574142fc52736a7a56d1214f9d09861",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+      "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+      "selector": "/variants/hack2hire:676f7445366afdc1233e4ff1"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-records/artifact--artifact_hack2hire_676f73cd366afdc1233e4ff0_676f7445366afdc1233e4ff1_approach-native_v1.json",
+    "sha256": "317c8d90982712259b52beff6274d33d6b81f6acce213ba7de2eaf68ba3869c5"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:676f73cd366afdc1233e4ff0:676f7445366afdc1233e4ff1:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-records/artifact--artifact_hack2hire_676f73cd366afdc1233e4ff0_676f7445366afdc1233e4ff1_approach-native_v1.json",
+  "sha256": "317c8d90982712259b52beff6274d33d6b81f6acce213ba7de2eaf68ba3869c5"
+ }
+}

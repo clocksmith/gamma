@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68c301d01f64f4312b0a3e0a",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "routes",
+  "checkpoints"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxSkiScore",
+  "params": [
+   {
+    "name": "routes",
+    "type": "(string|integer)[][]"
+   },
+   {
+    "name": "checkpoints",
+    "type": "(string|integer)[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every path from the lodge by depth-first search and keep the best score at a sink",
+  "candidate_design": "topological order of the part reachable from the lodge (Kahn); DP of the best score to finish from each node, computed in reverse topological order",
+  "complexity_target": "O(V + E) time/O(V + E) space"
+ },
+ "source_sha256": "7675bcab2e476f8264be4b0c86e4f4d8d81f2bb41de0a1a1ad0d3e31b69228da",
+ "wrapper": "Solution.maxSkiScore"
+}

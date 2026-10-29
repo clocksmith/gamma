@@ -1,0 +1,426 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6938fd66b03e15724c2174bb:693903ffb03e15724c2174c5:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+   "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6938fd66b03e15724c2174bb.json",
+   "sha256": "b92d63a4ecd521db177e2d22f357af752ba3a11cfffc1baedf359f52b7522bf7",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+   "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+   "selector": "/variants/hack2hire:693903ffb03e15724c2174c5"
+  }
+ ],
+ "problemId": "hack2hire:6938fd66b03e15724c2174bb",
+ "variantId": "693903ffb03e15724c2174c5",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: topological order grouped into levels",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:693903ffb03e15724c2174c5/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "tasks is a list of distinct lowercase strings and dependencies is a list of [fromTask, toTask] pairs over those tasks. Level 0 holds the tasks with no prerequisites; level k + 1 holds the tasks not yet scheduled whose prerequisites are all in levels 0..k. Return the levels in order, each sorted lexicographically. When the dependencies contain a cycle (not every task can be scheduled), return [].",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "tasks is a list of distinct lowercase strings and dependencies is a list of [fromTask, toTask] pairs over those tasks.",
+   "Level 0 holds the tasks with no prerequisites; level k + 1 holds the tasks not yet scheduled whose prerequisites are all in levels 0..k.",
+   "Return the levels in order, each sorted lexicographically.",
+   "When the dependencies contain a cycle (not every task can be scheduled), return []."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= tasks.length <= 1e5",
+   "task names are 1 to 10 lowercase letters, distinct",
+   "0 <= dependencies.length <= 1e5, endpoints are listed tasks, no self-dependency, no duplicate pair"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:693903ffb03e15724c2174c5/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a variation of LeetCode 210 (Course Schedule II); tasks are unique non-empty lowercase strings; dependency [fromTask, toTask] means fromTask finishes before toTask starts (the output and the cycle case are cut off); algorithmTags: GRAPH; preview response sha256 dee4383fefe892c1b45fc95f8711696393c25ab5860c6131b451137f5e745108"
+   },
+   {
+    "statement": "Uncertainty: high: the task naming and the dependency direction are in the preview; returning levels sorted inside, the explicit tasks list and [] for a cycle are inferred from the title and LeetCode 210",
+    "basis": "the public group preview is partial (465 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Should tasks within one level be ordered?",
+   "What is returned when a cycle exists?",
+   "Are tasks without dependencies given separately?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:693903ffb03e15724c2174c5/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "k",
+      "e",
+      "f",
+      "ab",
+      "b",
+      "d",
+      "l",
+      "h",
+      "a",
+      "g",
+      "ba"
+     ],
+     [
+      [
+       "k",
+       "d"
+      ],
+      [
+       "l",
+       "k"
+      ],
+      [
+       "b",
+       "ba"
+      ],
+      [
+       "a",
+       "ab"
+      ],
+      [
+       "e",
+       "f"
+      ],
+      [
+       "b",
+       "f"
+      ],
+      [
+       "e",
+       "d"
+      ],
+      [
+       "b",
+       "d"
+      ],
+      [
+       "g",
+       "f"
+      ],
+      [
+       "b",
+       "k"
+      ],
+      [
+       "h",
+       "g"
+      ],
+      [
+       "f",
+       "k"
+      ],
+      [
+       "l",
+       "f"
+      ],
+      [
+       "ab",
+       "d"
+      ],
+      [
+       "ab",
+       "k"
+      ],
+      [
+       "ab",
+       "l"
+      ],
+      [
+       "e",
+       "k"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "a",
+      "b",
+      "e",
+      "h"
+     ],
+     [
+      "ab",
+      "ba",
+      "g"
+     ],
+     [
+      "l"
+     ],
+     [
+      "f"
+     ],
+     [
+      "k"
+     ],
+     [
+      "d"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:693903ffb03e15724c2174c5/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/oracles.py",
+    "sha256": "2e10d7c10635ae81a2f7123862cd2b1c65005ed3bc5386ef37030de0c084bb5b",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def scheduleByLevels(tasks, dependencies) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/693903ffb03e15724c2174c5-python.json",
+     "inferredInterface": {
+      "name": "scheduleByLevels",
+      "params": [
+       {
+        "name": "tasks",
+        "type": "string[]"
+       },
+       {
+        "name": "dependencies",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/693903ffb03e15724c2174c5-python.json",
+      "sha256": "e3030c5566c1f77b22c588af18fa99ee8b958d8c0e52f4dee138ead8b313cc76",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function scheduleByLevels(tasks, dependencies) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/693903ffb03e15724c2174c5-javascript.json",
+     "inferredInterface": {
+      "name": "scheduleByLevels",
+      "params": [
+       {
+        "name": "tasks",
+        "type": "string[]"
+       },
+       {
+        "name": "dependencies",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/693903ffb03e15724c2174c5-javascript.json",
+      "sha256": "5917712a84dfb4e38277370b9eb324e8d24d468aa5567c2b5afa141e889d929a",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,372 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69c2f1cc21f6ab422696534e:69c2f1d121f6ab422696534f:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+   "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69c2f1cc21f6ab422696534e.json",
+   "sha256": "906dc862d259ad5cf547f35e0d0bd1a6c036093f41a628b71b32bbc6010c575d",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+   "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+   "selector": "/variants/hack2hire:69c2f1d121f6ab422696534f"
+  }
+ ],
+ "problemId": "hack2hire:69c2f1cc21f6ab422696534e",
+ "variantId": "69c2f1d121f6ab422696534f",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 1: grep with symmetric context lines",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:69c2f1d121f6ab422696534f/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "lines is a list of strings, target is a non-empty string and linesAround >= 0. A line matches when target occurs in it as a case-sensitive substring. Line i is included when some matching line j satisfies |i - j| <= linesAround. Return the included lines, verbatim, in their original order, each line position at most once (equal lines at different positions are separate entries).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "lines is a list of strings, target is a non-empty string and linesAround >= 0.",
+   "A line matches when target occurs in it as a case-sensitive substring.",
+   "Line i is included when some matching line j satisfies |i - j| <= linesAround.",
+   "Return the included lines, verbatim, in their original order, each line position at most once (equal lines at different positions are separate entries)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= lines.length <= 1e5",
+   "each line is printable ASCII, at most 200 characters; total characters <= 1e6",
+   "target is 1 to 50 printable ASCII characters",
+   "0 <= linesAround <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:69c2f1d121f6ab422696534f/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a simplified grep over an array of lines with a target string and an integer linesAround; return the matching lines plus up to linesAround lines before and after each match; matching is case-sensitive substring matching anywhere in a line; each line appears at most once and document order is kept; algorithmTags: STRING, SLIDING_WINDOW; two variant ids under one group; no per-variant text is public; preview response sha256 25ec487bc1de211566c80e47274ec1a1f8b82f16e3ac89ddc0c8e8e44749cd47"
+   },
+   {
+    "statement": "Uncertainty: low: the matching rule, the context window, the at-most-once rule and the order are in the preview; returning line strings rather than indices and the bounds are inferred",
+    "basis": "the public group preview is partial (741 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 1 of 2 is the symmetric-context search described in the preview",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the output the line text or the line numbers?",
+   "Are overlapping context windows merged so a line is printed once?",
+   "Is matching case-sensitive and substring-based?",
+   "Can linesAround exceed the number of lines?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:69c2f1d121f6ab422696534f/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     "x",
+     3
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "err",
+      "xerrx ",
+      "",
+      "warn ",
+      "",
+      "xerrx ok",
+      "xerrx ",
+      " error",
+      "warn",
+      "",
+      "err error",
+      "Err err",
+      "error ok",
+      "ok",
+      "",
+      "err",
+      "e r r",
+      "e r r Err",
+      " warn",
+      "xerrx xerrx",
+      "err e r r",
+      "xerrx xerrx",
+      "xerrx",
+      ""
+     ],
+     "err",
+     0
+    ],
+    "output": [
+     "err",
+     "xerrx ",
+     "xerrx ok",
+     "xerrx ",
+     " error",
+     "err error",
+     "Err err",
+     "error ok",
+     "err",
+     "xerrx xerrx",
+     "err e r r",
+     "xerrx xerrx",
+     "xerrx"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:69c2f1d121f6ab422696534f/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/oracles.py",
+    "sha256": "2e10d7c10635ae81a2f7123862cd2b1c65005ed3bc5386ef37030de0c084bb5b",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def grepWithContext(lines, target, linesAround) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/69c2f1d121f6ab422696534f-python.json",
+     "inferredInterface": {
+      "name": "grepWithContext",
+      "params": [
+       {
+        "name": "lines",
+        "type": "string[]"
+       },
+       {
+        "name": "target",
+        "type": "string"
+       },
+       {
+        "name": "linesAround",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/69c2f1d121f6ab422696534f-python.json",
+      "sha256": "b3dd6ad45dd947a283757c72ee2a9e48d9f4a194403472846533f3bb3c92c318",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function grepWithContext(lines, target, linesAround) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/69c2f1d121f6ab422696534f-javascript.json",
+     "inferredInterface": {
+      "name": "grepWithContext",
+      "params": [
+       {
+        "name": "lines",
+        "type": "string[]"
+       },
+       {
+        "name": "target",
+        "type": "string"
+       },
+       {
+        "name": "linesAround",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/69c2f1d121f6ab422696534f-javascript.json",
+      "sha256": "55a1d690298334c4f4ea1f98ae510185c0de0a2c02152ac061ad414f6b356937",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,418 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67df682a06b62d81733ab892:67df6ae706b62d81733ab893:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+   "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+   "selector": "/problems/15"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67df682a06b62d81733ab892.json",
+   "sha256": "52fc6321447f13bee5451b3bdc4a6ec4db8c22906d31b895b9f74a2dc7c45a52",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+   "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+   "selector": "/variants/hack2hire:67df6ae706b62d81733ab893"
+  }
+ ],
+ "problemId": "hack2hire:67df682a06b62d81733ab892",
+ "variantId": "67df6ae706b62d81733ab893",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: union of two sorted interval lists",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:67df6ae706b62d81733ab893/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "list1 and list2 each hold closed integer intervals [start, end] with start <= end, sorted by start, and inside one list each interval starts after the previous one ends. Return the union as a list of disjoint closed intervals sorted by start, where intervals that overlap or touch (one starts exactly where another ends) are combined.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "list1 and list2 each hold closed integer intervals [start, end] with start <= end, sorted by start, and inside one list each interval starts after the previous one ends.",
+   "Return the union as a list of disjoint closed intervals sorted by start, where intervals that overlap or touch (one starts exactly where another ends) are combined."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= list1.length, list2.length <= 1e5",
+   "-1e9 <= start <= end <= 1e9",
+   "each list sorted, intervals within one list do not overlap or touch"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:67df6ae706b62d81733ab893/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a variation of LeetCode 56; two lists of [start, end] intervals, each sorted by start and non-overlapping; merge them into one list of non-overlapping intervals, combining overlaps across lists; algorithmTags: TWO_POINTER; preview response sha256 348083133ebef4420f826b46864323df9b48a69182fb0bf2603fa85b526596e6"
+   },
+   {
+    "statement": "Uncertainty: low: the task is stated in the preview; merging intervals that only touch (as LeetCode 56 does) and the bounds are inferred",
+    "basis": "the public group preview is partial (744 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/15/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/15/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/15/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are touching intervals ([1, 3] and [3, 5]) merged?",
+   "Can a list be empty?",
+   "Are the intervals closed?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:67df6ae706b62d81733ab893/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       -15,
+       -15
+      ],
+      [
+       -13,
+       -12
+      ],
+      [
+       -10,
+       -8
+      ],
+      [
+       -5,
+       -4
+      ],
+      [
+       -3,
+       -3
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       3,
+       7
+      ],
+      [
+       9,
+       11
+      ],
+      [
+       13,
+       17
+      ],
+      [
+       19,
+       22
+      ],
+      [
+       26,
+       26
+      ],
+      [
+       28,
+       32
+      ]
+     ]
+    ],
+    "output": [
+     [
+      -15,
+      -15
+     ],
+     [
+      -13,
+      -12
+     ],
+     [
+      -10,
+      -8
+     ],
+     [
+      -5,
+      -4
+     ],
+     [
+      -3,
+      -3
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      3,
+      7
+     ],
+     [
+      9,
+      11
+     ],
+     [
+      13,
+      17
+     ],
+     [
+      19,
+      22
+     ],
+     [
+      26,
+      26
+     ],
+     [
+      28,
+      32
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:67df6ae706b62d81733ab893/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/oracles.py",
+    "sha256": "2e10d7c10635ae81a2f7123862cd2b1c65005ed3bc5386ef37030de0c084bb5b",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def mergeIntervalLists(list1, list2) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/67df6ae706b62d81733ab893-python.json",
+     "inferredInterface": {
+      "name": "mergeIntervalLists",
+      "params": [
+       {
+        "name": "list1",
+        "type": "integer[][]"
+       },
+       {
+        "name": "list2",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/67df6ae706b62d81733ab893-python.json",
+      "sha256": "292fb0c0c82840afacbc0a77c8e5ada041a63d3c05905fc92b4c1440747e6fe7",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function mergeIntervalLists(list1, list2) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/67df6ae706b62d81733ab893-javascript.json",
+     "inferredInterface": {
+      "name": "mergeIntervalLists",
+      "params": [
+       {
+        "name": "list1",
+        "type": "integer[][]"
+       },
+       {
+        "name": "list2",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/67df6ae706b62d81733ab893-javascript.json",
+      "sha256": "971845c26e5f1eeec9d8ed54cda66136475673308bd5d15a03afdf3ea139cf93",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/15/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/15/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

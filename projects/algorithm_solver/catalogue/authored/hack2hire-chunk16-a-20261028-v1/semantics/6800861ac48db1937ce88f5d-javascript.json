@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6800861ac48db1937ce88f5d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "str1",
+  "str2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "mergeCommonSubstring",
+  "params": [
+   {
+    "name": "str1",
+    "type": "string"
+   },
+   {
+    "name": "str2",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try L from min(len) down to 0 and compare the suffix and prefix directly",
+  "candidate_design": "KMP prefix function of str2 + separator + the last min(len) characters of str1; the final value is L",
+  "complexity_target": "O(|str1| + |str2|) time/O(|str1| + |str2|) space"
+ },
+ "source_sha256": "dc5a44aee623a7fda20b9d50ec13db09b3c12d805a8389f7e10bae12263a626a",
+ "wrapper": "named export mergeCommonSubstring"
+}

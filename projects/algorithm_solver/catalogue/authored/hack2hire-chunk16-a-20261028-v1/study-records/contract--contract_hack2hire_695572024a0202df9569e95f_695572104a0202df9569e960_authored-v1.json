@@ -1,0 +1,398 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:695572024a0202df9569e95f:695572104a0202df9569e960:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+   "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/695572024a0202df9569e95f.json",
+   "sha256": "dd5b309125413acc19ec20bd59d766dcf10a80e01260061620f1f1d99a6bc4be",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+   "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+   "selector": "/variants/hack2hire:695572104a0202df9569e960"
+  }
+ ],
+ "problemId": "hack2hire:695572024a0202df9569e95f",
+ "variantId": "695572104a0202df9569e960",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: k-way merge of per-server event logs",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:695572104a0202df9569e960/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "logs maps each serverId to its list of events; each event is an object with integer \"time\", string \"type\" and optionally string \"target\"; each list is sorted by time. Return one list of all events ordered by time, ties broken by serverId (string order) and then by position in that server's list. Each output event is a new object with \"serverId\" added to its fields (\"target\" appears only when present in the input).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "logs maps each serverId to its list of events; each event is an object with integer \"time\", string \"type\" and optionally string \"target\"; each list is sorted by time.",
+   "Return one list of all events ordered by time, ties broken by serverId (string order) and then by position in that server's list.",
+   "Each output event is a new object with \"serverId\" added to its fields (\"target\" appears only when present in the input)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= number of servers <= 1000",
+   "total events <= 1e5",
+   "serverIds and targets are 1 to 10 characters, a lowercase letter followed by lowercase letters or digits",
+   "0 <= time <= 1e9, non-decreasing within one server",
+   "type is 1 to 10 lowercase letters"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:695572104a0202df9569e960/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a JSON object logs maps serverId to that server's list of events; an event has \"time\", \"type\" (e.g. send, receive, idle) and an optional \"target\" server (the requested output is cut off); algorithmTags: HEAP; preview response sha256 e6777432b91eae1a76f71eb141795e24e6b3b7cfc70dcac95fa1c97237707b76"
+   },
+   {
+    "statement": "Uncertainty: high: the input shape and fields are in the preview; the merged output, adding \"serverId\" to each event, per-server sorted input and the tie rules are inferred from the title and the HEAP tag",
+    "basis": "the public group preview is partial (627 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is the output: a merged list, or something derived such as matched send/receive pairs?",
+   "How are events with equal times ordered?",
+   "Is each server's list already sorted?",
+   "How is the source server recorded in the output?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:695572104a0202df9569e960/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     {
+      "a": []
+     }
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     {
+      "s2": [],
+      "b": [
+       {
+        "time": 3,
+        "type": "send"
+       },
+       {
+        "time": 3,
+        "type": "send",
+        "target": "q"
+       },
+       {
+        "time": 3,
+        "type": "idle"
+       },
+       {
+        "time": 5,
+        "type": "idle"
+       },
+       {
+        "time": 7,
+        "type": "idle"
+       }
+      ],
+      "srv1": [
+       {
+        "time": 3,
+        "type": "receive"
+       },
+       {
+        "time": 3,
+        "type": "receive",
+        "target": "q"
+       },
+       {
+        "time": 3,
+        "type": "send"
+       }
+      ]
+     }
+    ],
+    "output": [
+     {
+      "serverId": "b",
+      "time": 3,
+      "type": "send"
+     },
+     {
+      "serverId": "b",
+      "time": 3,
+      "type": "send",
+      "target": "q"
+     },
+     {
+      "serverId": "b",
+      "time": 3,
+      "type": "idle"
+     },
+     {
+      "serverId": "srv1",
+      "time": 3,
+      "type": "receive"
+     },
+     {
+      "serverId": "srv1",
+      "time": 3,
+      "type": "receive",
+      "target": "q"
+     },
+     {
+      "serverId": "srv1",
+      "time": 3,
+      "type": "send"
+     },
+     {
+      "serverId": "b",
+      "time": 5,
+      "type": "idle"
+     },
+     {
+      "serverId": "b",
+      "time": 7,
+      "type": "idle"
+     }
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:695572104a0202df9569e960/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/oracles.py",
+    "sha256": "2e10d7c10635ae81a2f7123862cd2b1c65005ed3bc5386ef37030de0c084bb5b",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def mergeEventLogs(logs) -> object[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/695572104a0202df9569e960-python.json",
+     "inferredInterface": {
+      "name": "mergeEventLogs",
+      "params": [
+       {
+        "name": "logs",
+        "type": "object<string, object[]>"
+       }
+      ],
+      "return": {
+       "type": "object[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/695572104a0202df9569e960-python.json",
+      "sha256": "9e26b80ea5e72ce7468952105cc41679864e0a0576e3ace883072cb45647b70e",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function mergeEventLogs(logs) /* -> object[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/695572104a0202df9569e960-javascript.json",
+     "inferredInterface": {
+      "name": "mergeEventLogs",
+      "params": [
+       {
+        "name": "logs",
+        "type": "object<string, object[]>"
+       }
+      ],
+      "return": {
+       "type": "object[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/695572104a0202df9569e960-javascript.json",
+      "sha256": "1dceb472782ad44c293af0131aed0649b6a74ea24a1553cf7554c9a861859e6e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

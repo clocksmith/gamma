@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69c2f5a621f6ab4226965367",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "lines",
+  "target",
+  "before",
+  "after"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "grepWithContextBlocks",
+  "params": [
+   {
+    "name": "lines",
+    "type": "string[]"
+   },
+   {
+    "name": "target",
+    "type": "string"
+   },
+   {
+    "name": "before",
+    "type": "integer"
+   },
+   {
+    "name": "after",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every line test every line in the window [i - after, i + before] for a match, then cut the included positions into runs",
+  "candidate_design": "one scan of match positions with a \"covered up to\" index; a new block starts whenever the next covered range begins after the last emitted index + 1",
+  "complexity_target": "O(total characters + n) time/O(n) space"
+ },
+ "source_sha256": "c94bcc7cae915f2ddde379c3c1984b0f53da93e37e8ceac4730055f1c9d93484",
+ "wrapper": "Solution.grepWithContextBlocks"
+}

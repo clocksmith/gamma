@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:676f7445366afdc1233e4ff1",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "days",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxSprintPoints",
+  "params": [
+   {
+    "name": "days",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "expand the cyclic schedule day by day and sum every window of k days",
+  "candidate_design": "some optimal window ends on the last day of a sprint; over the doubled sprint list, prefix sums of days and of triangular sums plus a moving left pointer give each such window in O(1)",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "4dddc045ffa233dc0127fac2a4dc49ca301d8584442299ed2fe862ef20fb2db1",
+ "wrapper": "named export maxSprintPoints"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a48164d3588ba8acc693047",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums1",
+  "nums2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "mergeUnique",
+  "params": [
+   {
+    "name": "nums1",
+    "type": "integer[]"
+   },
+   {
+    "name": "nums2",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sort the set of all values",
+  "candidate_design": "two pointers over both arrays, appending a value only when it differs from the last appended one",
+  "complexity_target": "O(n + m) time/O(n + m) space"
+ },
+ "source_sha256": "c7f1c5e91966f9d0353483ad483353e0e36c306a600d0e26bcdb760bb78750e2",
+ "wrapper": "named export mergeUnique"
+}

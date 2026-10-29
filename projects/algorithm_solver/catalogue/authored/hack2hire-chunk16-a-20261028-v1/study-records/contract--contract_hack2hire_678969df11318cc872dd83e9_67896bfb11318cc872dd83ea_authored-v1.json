@@ -1,0 +1,400 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:678969df11318cc872dd83e9:67896bfb11318cc872dd83ea:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+   "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/678969df11318cc872dd83e9.json",
+   "sha256": "3e11008cb8ee6084fc320a823e884447b299b2c414cba18c0b691bc2c56288b1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+   "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+   "selector": "/variants/hack2hire:67896bfb11318cc872dd83ea"
+  }
+ ],
+ "problemId": "hack2hire:678969df11318cc872dd83e9",
+ "variantId": "67896bfb11318cc872dd83ea",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: connected groups of elements sharing any same-position property",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:67896bfb11318cc872dd83ea/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "elements is a list of [id, p1, p2, p3] where id is a unique integer and p1, p2, p3 are strings. Two elements are directly related when they have the same value in the same property position (p1 with p1, p2 with p2, p3 with p3). Groups are the connected components of this relation (relatedness is transitive). Return every group as the ascending list of its ids, groups ordered by their smallest id; an element related to no other forms a group of one.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "elements is a list of [id, p1, p2, p3] where id is a unique integer and p1, p2, p3 are strings.",
+   "Two elements are directly related when they have the same value in the same property position (p1 with p1, p2 with p2, p3 with p3).",
+   "Groups are the connected components of this relation (relatedness is transitive).",
+   "Return every group as the ascending list of its ids, groups ordered by their smallest id; an element related to no other forms a group of one."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= elements.length <= 1e5",
+   "ids are distinct integers in [0, 1e9]",
+   "properties are 1 to 10 characters from lowercase letters and digits"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:67896bfb11318cc872dd83ea/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a fixed-length list of elements, each with a unique id and three distinct properties; two elements are duplicates when they share any of the properties (the output is cut off); algorithmTags: UNION_FIND; preview response sha256 3d4e95c44da7d0b1068a6dafa535504f1363fef8c716638496416c4b759d9237"
+   },
+   {
+    "statement": "Uncertainty: high: the element shape and the \"share any property\" rule are in the preview; position-wise comparison, transitivity, singleton groups, integer ids and the output ordering are inferred",
+    "basis": "the public group preview is partial (184 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Do properties match across positions or only in the same position?",
+   "Is the relation transitive (a~b and b~c puts a and c together)?",
+   "Do unrelated elements appear as groups of one?",
+   "How are groups and ids ordered?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:67896bfb11318cc872dd83ea/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       49,
+       "a0",
+       "e1",
+       "a2"
+      ],
+      [
+       42,
+       "a0",
+       "b1",
+       "e2"
+      ],
+      [
+       22,
+       "c0",
+       "b1",
+       "d2"
+      ],
+      [
+       5,
+       "g0",
+       "c1",
+       "e2"
+      ],
+      [
+       10,
+       "g0",
+       "b1",
+       "d2"
+      ],
+      [
+       21,
+       "f0",
+       "b1",
+       "c2"
+      ],
+      [
+       14,
+       "b0",
+       "a1",
+       "a2"
+      ],
+      [
+       51,
+       "b0",
+       "b1",
+       "e2"
+      ],
+      [
+       20,
+       "h0",
+       "b1",
+       "g2"
+      ],
+      [
+       54,
+       "a0",
+       "a1",
+       "c2"
+      ],
+      [
+       25,
+       "a0",
+       "a1",
+       "a2"
+      ],
+      [
+       40,
+       "f0",
+       "d1",
+       "b2"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      5,
+      10,
+      14,
+      20,
+      21,
+      22,
+      25,
+      40,
+      42,
+      49,
+      51,
+      54
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:67896bfb11318cc872dd83ea/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/oracles.py",
+    "sha256": "2e10d7c10635ae81a2f7123862cd2b1c65005ed3bc5386ef37030de0c084bb5b",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def groupElements(elements) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/67896bfb11318cc872dd83ea-python.json",
+     "inferredInterface": {
+      "name": "groupElements",
+      "params": [
+       {
+        "name": "elements",
+        "type": "(integer|string)[][]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/67896bfb11318cc872dd83ea-python.json",
+      "sha256": "0d706d54b36977c24b3f8cc259bd30b0a5396a0cd773142306427c86284ce098",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function groupElements(elements) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/67896bfb11318cc872dd83ea-javascript.json",
+     "inferredInterface": {
+      "name": "groupElements",
+      "params": [
+       {
+        "name": "elements",
+        "type": "(integer|string)[][]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/67896bfb11318cc872dd83ea-javascript.json",
+      "sha256": "ab38ed98d09dfa6e2dbc39d42ea4139751d5995e573c4be8849a66b2aed8accf",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

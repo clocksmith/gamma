@@ -1,0 +1,416 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68c301c91f64f4312b0a3e09:68c301d01f64f4312b0a3e0a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+   "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68c301c91f64f4312b0a3e09.json",
+   "sha256": "15ee63175262abdedd9d5a23048c1ba3d33053119312955ba48f53f99a35c8ad",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+   "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+   "selector": "/variants/hack2hire:68c301d01f64f4312b0a3e0a"
+  }
+ ],
+ "problemId": "hack2hire:68c301c91f64f4312b0a3e09",
+ "variantId": "68c301d01f64f4312b0a3e0a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: best reward-minus-cost path in a DAG",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:68c301d01f64f4312b0a3e0a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "routes is a list of [from, cost, to] with string checkpoint names and cost >= 0; checkpoints is a list of [name, reward] with reward >= 0 (a name not listed has reward 0). The routes form a DAG. A path starts at the checkpoint named \"lodge\" and ends at a finish line, which is any checkpoint with no outgoing route. Its score is the sum of rewards of every checkpoint arrived at after the lodge minus the sum of route costs. Return the maximum score over all such paths (0 when the lodge has no outgoing route).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "routes is a list of [from, cost, to] with string checkpoint names and cost >= 0; checkpoints is a list of [name, reward] with reward >= 0 (a name not listed has reward 0).",
+   "The routes form a DAG.",
+   "A path starts at the checkpoint named \"lodge\" and ends at a finish line, which is any checkpoint with no outgoing route.",
+   "Its score is the sum of rewards of every checkpoint arrived at after the lodge minus the sum of route costs.",
+   "Return the maximum score over all such paths (0 when the lodge has no outgoing route)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= routes.length <= 1e5",
+   "names are 1 to 10 lowercase letters or digits",
+   "0 <= cost, reward <= 1e6",
+   "the routes form a DAG",
+   "checkpoint names are distinct in checkpoints"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:68c301d01f64f4312b0a3e0a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a DAG of ski routes [from, cost, to] and checkpoints [checkpoint, reward] where the reward is gained on arriving at a checkpoint; find the most rewarding path from the lodge to any finish line (how the lodge and the finish lines are identified and the score formula are cut off); algorithmTags: GRAPH, DYNAMIC_PROGRAMMING; preview response sha256 c07376129bee9c577b889d733aeb699ace054296fc09430359e9777e5b58a298"
+   },
+   {
+    "statement": "Uncertainty: very high: the inputs and the DAG are in the preview; the start name \"lodge\", finish lines as checkpoints without outgoing routes, score = rewards minus costs and excluding the lodge's own reward are all inferred because the preview stops before them",
+    "basis": "the public group preview is partial (728 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/11/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/11/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How are the lodge and the finish lines identified?",
+   "Is the score the rewards minus the costs?",
+   "Does the lodge's own reward count?",
+   "Can there be several routes between the same pair?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:68c301d01f64f4312b0a3e0a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "c3",
+       1,
+       "c7"
+      ],
+      [
+       "c4",
+       7,
+       "c7"
+      ],
+      [
+       "c2",
+       2,
+       "c6"
+      ],
+      [
+       "c2",
+       7,
+       "c3"
+      ],
+      [
+       "c3",
+       6,
+       "c6"
+      ],
+      [
+       "c4",
+       0,
+       "c5"
+      ],
+      [
+       "c6",
+       4,
+       "c7"
+      ],
+      [
+       "c3",
+       2,
+       "c6"
+      ],
+      [
+       "lodge",
+       5,
+       "c7"
+      ],
+      [
+       "c1",
+       5,
+       "c6"
+      ],
+      [
+       "c6",
+       7,
+       "c7"
+      ],
+      [
+       "c1",
+       3,
+       "c6"
+      ],
+      [
+       "c6",
+       4,
+       "c7"
+      ]
+     ],
+     [
+      [
+       "c7",
+       7
+      ],
+      [
+       "c1",
+       0
+      ],
+      [
+       "c4",
+       0
+      ],
+      [
+       "c2",
+       8
+      ],
+      [
+       "c5",
+       6
+      ],
+      [
+       "lodge",
+       9
+      ]
+     ]
+    ],
+    "output": 2,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:68c301d01f64f4312b0a3e0a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/oracles.py",
+    "sha256": "2e10d7c10635ae81a2f7123862cd2b1c65005ed3bc5386ef37030de0c084bb5b",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def maxSkiScore(routes, checkpoints) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/68c301d01f64f4312b0a3e0a-python.json",
+     "inferredInterface": {
+      "name": "maxSkiScore",
+      "params": [
+       {
+        "name": "routes",
+        "type": "(string|integer)[][]"
+       },
+       {
+        "name": "checkpoints",
+        "type": "(string|integer)[][]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/68c301d01f64f4312b0a3e0a-python.json",
+      "sha256": "d6373bc2cc301db7d32bc975e0d3c010bb381e52f6629e5bcb2a86dfe8d4e58d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function maxSkiScore(routes, checkpoints) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/68c301d01f64f4312b0a3e0a-javascript.json",
+     "inferredInterface": {
+      "name": "maxSkiScore",
+      "params": [
+       {
+        "name": "routes",
+        "type": "(string|integer)[][]"
+       },
+       {
+        "name": "checkpoints",
+        "type": "(string|integer)[][]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/68c301d01f64f4312b0a3e0a-javascript.json",
+      "sha256": "9a0ac54b4c9daf2c5680815906f6372e36e8c4930aa36ae009976da6aa240fdd",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
