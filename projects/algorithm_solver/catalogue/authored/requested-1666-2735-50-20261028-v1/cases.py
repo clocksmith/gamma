@@ -80,7 +80,7 @@ def maximum(pid):
     if pid==1865:return [([['FindSumPairs']+['count']*1000,[[[100000]*1000,[100000]*100000]]+[[200000]]*1000],[None]+[100000000]*1000,'maximum array lengths/count calls, every pair qualifies'),([['FindSumPairs','add','count'],[[[1000000000],[100000]],[0,100000],[1000000000]]],[None,None,0],'maximum first-array value and increment')]
     if pid==1912:
         entries=[[i,10000,10000] for i in range(100000)];a=[['MovieRentingSystem']+['search']*100000,[[300000,entries]]+[[10000]]*100000];return [(a,[None]+[[0,1,2,3,4]]*100000,'maximum shop/entry/call count, movie and price; deterministic top5 ties')]
-    if pid==2025:return [([[0]*100000,0],99999,'every split stays balanced at maximum length'),([[100000]*100000,-100000],1,'unchanged even split is optimal; replacement cannot add more')]
+    if pid==2025:return [([[0]*100000,0],99999,'every split stays balanced at maximum length'),([[100000]*100000,-100000],2,'replace a central value: balanced splits at 49999 and 50001; every other split differs by more than the replacement delta')]
     if pid==2060:return [(['a'*40,'a'*40],True,'maximum literal lengths'),(['a'*40,'b'*40],False,'maximum unequal literals'),(['999a'*10,'999a'*10],True,'maximum length with three-digit runs')]
     if pid==2735:return [([[1000000000]*1000,1000000000],1000000000000,'maximum costs/rotation fee; rotations cannot improve equal prices')]
     raise ValueError(pid)
