@@ -1,0 +1,1098 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/765/approach/chooseWhen",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/765",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Each fix is local and permanently completes one unit without harming earlier units.",
+      "The minimum can be argued via a cycle decomposition, so the greedy needs no search.",
+      "You need O(1) lookup of where a person sits, so keep an inverse index."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:765:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/contract--contract_leetcode_765_official_authored-v1.json",
+    "sha256": "ef916c68cd15ccc0fde90e86e5d3ed178c51904c39ce094a22c494b689e16ed7",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/765/approach/explanation",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/765",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+      }
+    ],
+    "status": "present",
+    "value": "Walk the seat pairs from left to right. For pair (2j, 2j+1), the person in seat 2j has a partner seats[2j] ^ 1. If the partner is not already in seat 2j+1, swap the partner into seat 2j+1 with whoever sits there, updating a where[] index of each person's seat. Each swap completes at least one couple and never breaks a completed one. This is optimal: viewing seat pairs as nodes and couples as edges, the graph splits into cycles, a cycle of c pairs needs exactly c-1 swaps, and the greedy uses exactly that."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/765/approach/hints",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/765",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Fix seat pairs one at a time from the left. Can fixing one pair ever hurt another already fixed?",
+      "The partner of p is p ^ 1.",
+      "When a pair is wrong, bring the left person's partner into the right seat; you need to know where the partner sits.",
+      "Keep where[person] = seat and update both entries on each swap; count swaps."
+    ]
+  },
+  "id": "approach:leetcode:765:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/765/approach/invariants",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/765",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "After processing seat pair j, all seat pairs 0..j hold couples.",
+      "where[seats[i]] == i for every seat i at all times.",
+      "swaps equals the number of corrective swaps made, which equals the sum over cycles of (cycle size - 1) so far."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:765:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_765_official_approach-native_v1.json",
+    "sha256": "ba875dc0d15c98499a2778c0d39601cc58abce3d4154552af250676139691f04",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/765",
+      "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+    }
+  ],
+  "problemId": "leetcode:765",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/0/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "Treat each seat pair as a node and connect two nodes when they share a couple. Each node has degree two, so components are cycles. A cycle of c pairs needs c-1 swaps, because each swap can raise the number of completed pairs by at most one except the last swap, which completes two."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/0/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "What does each swap do to the number of seated couples?"
+        ]
+      },
+      "id": "approach:leetcode:765:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/0/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Draw the graph for [0, 3, 4, 1, 2, 5].",
+          "Count swaps per cycle."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:765:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_765_official_approach-native_v1.json",
+        "sha256": "ba875dc0d15c98499a2778c0d39601cc58abce3d4154552af250676139691f04",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/0/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A cycle of length 1 is an already-seated couple and costs 0."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/0/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "How many swaps does a group of mixed-up couples need?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/0/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "The cycle bound proves the greedy count is the minimum."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/0/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/0/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "Why one swap per wrong pair is enough and necessary"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:765:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_765_official_python_v1.json",
+          "sha256": "0efc8a03c1012043d403b5e6c9aedb31a9238811bc859b5ba7a811d8e958013d",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:765:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_765_official_javascript_v1.json",
+          "sha256": "f47f1dac8e214337a3abb49c7308d07c43b6891f91d44a3235bfe0815fea79bf",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/1/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "Copy the row into seats and build where[person] = seat. For seat = 0, 2, 4, ...: partner = seats[seat] ^ 1; if seats[seat+1] != partner, let other = where[partner]; move seats[seat+1] to other and update its where entry; put partner at seat+1 and update where[partner]; increment swaps."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/1/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Write the two assignments in an order that does not lose a value."
+        ]
+      },
+      "id": "approach:leetcode:765:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/1/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Copy the input before mutating.",
+          "Build where from the copy.",
+          "Loop over even seats and apply the swap when needed.",
+          "Return the swap count."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:765:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_765_official_approach-native_v1.json",
+        "sha256": "ba875dc0d15c98499a2778c0d39601cc58abce3d4154552af250676139691f04",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/1/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Updating where for both moved people is essential.",
+          "XOR with 1 pairs 2i with 2i+1."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/1/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "How do you perform each fix in O(1)?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/1/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "The inverse index avoids searching for the partner, giving linear time."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/1/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/1/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "Greedy with an inverse index"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/2/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "For small rows, BFS over seatings with arbitrary swaps gives the true minimum. Also compare with n minus the number of cycles computed by union-find. Test already-seated rows, a single long cycle and mixed cycles."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/2/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Try a reversed row like [5, 4, 3, 2, 1, 0]."
+        ]
+      },
+      "id": "approach:leetcode:765:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/2/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Compare with BFS for rows up to length 8.",
+          "Check the input row is unchanged after the call."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:765:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_765_official_approach-native_v1.json",
+        "sha256": "ba875dc0d15c98499a2778c0d39601cc58abce3d4154552af250676139691f04",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/2/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The answer is at most n - 1."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/2/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "How do you confirm minimality?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/2/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "Two independent methods catch both simulation bugs and reasoning errors."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/2/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/765/approach/stages/2/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/765",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+          }
+        ],
+        "status": "present",
+        "value": "Check against search and cycle counts"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/765/approach/title",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/765",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+      }
+    ],
+    "status": "present",
+    "value": "Greedy left-to-right pair fixing with a position index"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/765/approach/tradeoffs",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/765",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/765.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "69e1b607c6fa067811ca2a1fc3b903939abaa1df4767ddb288ceacfa6a984f58"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/765.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ac5125edffc5adfdd1d19ae7f80cf7f3440e39ae7db01965226e65b3b9ad61f9"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Union-find over couples counting cycles gives the same answer without simulating swaps.",
+      "Breadth-first search over seatings is a correct oracle but only feasible for very small rows.",
+      "The greedy works on a copy of the row and an inverse array, using O(n) extra space."
+    ]
+  },
+  "version": 1
+}

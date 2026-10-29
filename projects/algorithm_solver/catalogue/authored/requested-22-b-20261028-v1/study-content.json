@@ -1,0 +1,1606 @@
+{
+  "schema": "gamma.authored-study-content.v1",
+  "cohort": "requested-22-b-20261028-v1",
+  "scope": "Authored teaching content (paraphrased or inferred statements, requirements, constraints, assumptions, clarifying questions, own examples, interface declarations, approaches and complexity claims) behind this cohort's study.record.v1 records. Example outputs were produced by running both cohort candidates. Not qualification evidence.",
+  "variants": {
+    "745": {
+      "statement": "Build a dictionary object from a list of lowercase words. It must answer queries that give a prefix and a suffix: return the position (index in the original list) of a word that starts with the prefix and ends with the suffix. If several words qualify, return the largest index; if none does, return -1. The object is constructed once and then queried many times.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "The constructor receives the word list once; later queries refer to positions in that list."
+        },
+        {
+          "id": "R2",
+          "text": "f(pref, suff) returns the index of a word that has pref as a prefix and suff as a suffix (the whole word may serve as either)."
+        },
+        {
+          "id": "R3",
+          "text": "When several words match, return the largest index; duplicated words therefore resolve to their last occurrence."
+        },
+        {
+          "id": "R4",
+          "text": "Return -1 when no word matches."
+        },
+        {
+          "id": "R5",
+          "text": "Do not modify the word list or query strings; each object answers only for its own words."
+        }
+      ],
+      "constraints": [
+        "Between 1 and 10^4 words, each 1 to 7 lowercase English letters.",
+        "Prefix and suffix are each 1 to 7 lowercase letters.",
+        "At most 10^4 calls to f per object."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 2e8c60d9c6582a7a60be3b15f6832b57773b3003d2d7556660c9636a8fb8fb3f and statement content sha256 33683cb1b2036d7c4ab54858f84316a1e829e9ac040a8ebeac0c486d373b56c2; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "May the prefix and the suffix overlap inside a short word?",
+          "answer": "Yes. They are tested independently against the same word, so 'apple' matches prefix 'appl' and suffix 'ple'.",
+          "basis": "Prefix and suffix are separate conditions on one word."
+        },
+        {
+          "question": "What if the same word appears twice?",
+          "answer": "Return the later index, because the answer is the largest matching index.",
+          "basis": "Largest-index rule."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              "apple",
+              "apply",
+              "maple"
+            ]
+          ],
+          "calls": [
+            [
+              "ap",
+              "le"
+            ],
+            [
+              "ap",
+              "ly"
+            ],
+            [
+              "m",
+              "e"
+            ],
+            [
+              "a",
+              "e"
+            ],
+            [
+              "b",
+              "e"
+            ]
+          ],
+          "output": [
+            0,
+            1,
+            2,
+            0,
+            -1
+          ],
+          "explanation": "Constructor WordFilter(['apple','apply','maple']) followed by five f(pref, suff) calls. 'ap'/'le' matches only apple; 'a'/'e' also matches only apple because maple does not start with 'a'; nothing starts with 'b'."
+        },
+        {
+          "args": [
+            [
+              "cat",
+              "cat",
+              "dog"
+            ]
+          ],
+          "calls": [
+            [
+              "c",
+              "t"
+            ],
+            [
+              "cat",
+              "cat"
+            ],
+            [
+              "do",
+              "g"
+            ],
+            [
+              "dog",
+              "x"
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            2,
+            -1
+          ],
+          "explanation": "The duplicate 'cat' at index 1 wins over index 0; a whole word can be both prefix and suffix."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "class",
+          "declaration": "class WordFilter: def __init__(self, words: list[str]); def f(self, pref: str, suff: str) -> int"
+        },
+        "javascript": {
+          "kind": "class",
+          "declaration": "class WordFilter { constructor(words); f(pref, suff) -> number }; module.exports = { WordFilter }"
+        }
+      },
+      "approach": {
+        "title": "Precompute every prefix#suffix key with its latest index",
+        "explanation": "Words are at most 7 letters, so each word has at most 7 prefixes and 7 suffixes, i.e. at most 49 prefix/suffix pairs. During construction, insert the key prefix + '#' + suffix for every pair into a hash map, overwriting the stored index as words are processed in order, so the map keeps the largest index. A query then builds the same key and does one lookup. The separator '#' cannot occur in a word, so different (prefix, suffix) pairs never collide.",
+        "chooseWhen": [
+          "Words are short, so enumerating all prefix/suffix pairs per word is cheap.",
+          "There are many queries per object and each should be close to constant time.",
+          "Memory for roughly 49 keys per word is acceptable."
+        ],
+        "tradeoffs": [
+          "A linear scan per query needs no preprocessing but costs O(N*L) per query, too slow for 10^4 queries over 10^4 words.",
+          "Two tries (prefix and reversed suffix) with index-set intersection use less memory but make queries more complex and slower.",
+          "The key map uses O(N*L^2) keys of length O(L), so construction is O(N*L^3) characters; fine for L<=7, poor for long words."
+        ],
+        "invariants": [
+          "After processing words[0..i], map[p + '#' + s] is the largest j <= i such that words[j] starts with p and ends with s.",
+          "A key exists in the map exactly when some word matches that prefix and suffix."
+        ],
+        "hints": [
+          "Words are at most 7 letters long. How many distinct (prefix, suffix) pairs can one word have?",
+          "If you could store the answer for every possible pair, a query would be a lookup.",
+          "Combine prefix and suffix into one key with a separator character that cannot appear in a word.",
+          "Insert words in index order and overwrite: the last write for each key is the largest index."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Notice the tiny word length",
+            "question": "With up to 10^4 queries, why is a per-query scan too slow, and what does the 7-letter limit allow instead?",
+            "explanation": "A scan costs up to 10^4 words times 7 characters per query, about 7*10^8 work across all queries. But each word has only 7 prefixes and 7 suffixes, so all 49 combinations per word can be stored ahead of time.",
+            "rationale": "Moving work from query time to construction time pays off when the precomputed space is small and queries are many.",
+            "instructions": [
+              "Count the prefix/suffix pairs of 'apple'.",
+              "Estimate total keys for 10^4 words."
+            ],
+            "observations": [
+              "At most 490,000 keys in total.",
+              "The answer for a key never depends on the query order."
+            ],
+            "hints": [
+              "What if you precompute answers for every pair?",
+              "How do you make sure the largest index wins?"
+            ],
+            "requirementIds": [
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Build the key map and answer by lookup",
+            "question": "How should keys be formed and stored so that duplicates and the largest-index rule are handled automatically?",
+            "explanation": "For each word at position i, for every prefix length p from 1 to len and every suffix start s from 0 to len-1, set map[word[:p] + '#' + word[s:]] = i. Because words are visited in increasing i, later words overwrite earlier ones. f(pref, suff) returns map.get(pref + '#' + suff, -1). The JavaScript version uses a Map and converts undefined to -1.",
+            "rationale": "One hash lookup per query and no per-query string scans.",
+            "instructions": [
+              "Create an empty map in the constructor.",
+              "Loop words with their index; nested loops over prefix lengths and suffix starts.",
+              "Store the index under prefix + '#' + suffix.",
+              "In f, look up the combined key and return -1 when absent."
+            ],
+            "observations": [
+              "Index 0 is a valid answer, so in JavaScript test for undefined, not falsiness.",
+              "The original words list is only read."
+            ],
+            "hints": [
+              "Use a separator that is not a lowercase letter.",
+              "Prefixes have length 1..len; suffixes start at 0..len-1."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4",
+              "R5"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Check duplicates, overlaps and misses",
+            "question": "Which queries could reveal a wrong key or a wrong tie rule?",
+            "explanation": "Test duplicate words (largest index must win), a query where prefix and suffix are the whole word, overlapping prefix and suffix, a missing prefix and a missing suffix, and index 0 answers. Compare with a reverse linear scan on small random inputs.",
+            "rationale": "These are the points where a hand-rolled key scheme or tie rule usually fails.",
+            "instructions": [
+              "Run both examples.",
+              "Cross-check against a brute-force scan from the last word backwards.",
+              "Use separate objects for separate word lists."
+            ],
+            "observations": [
+              "A brute force that scans from the end returns the largest index naturally."
+            ],
+            "hints": [
+              "Try words = ['a'] with f('a','a').",
+              "Try a query longer than any word."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3",
+              "R4"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(N*L^3) construction, O(L) per query",
+            "where": "N words of length at most L=7; L^2 keys per word, each of length O(L)"
+          },
+          {
+            "resource": "space",
+            "bound": "O(N*L^3)",
+            "where": "stored keys and their characters"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(N*L^3) construction, O(L) per query",
+            "where": "N words of length at most L=7; L^2 keys per word, each of length O(L)"
+          },
+          {
+            "resource": "space",
+            "bound": "O(N*L^3)",
+            "where": "stored keys and their characters"
+          }
+        ]
+      }
+    },
+    "749": {
+      "statement": "A rectangular grid marks infected cells with 1 and healthy cells with 0. Each day you may build walls around exactly one connected infected region (4-directionally connected): choose the region that would infect the most healthy cells the next night. Building costs one wall per shared side between that region and a healthy neighbour. After that, every other region spreads to all healthy cells adjacent to it. Repeat until no region can spread further, or the whole grid is infected. Return the total number of walls built.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Regions are maximal groups of infected cells connected up, down, left or right, ignoring cells already walled off."
+        },
+        {
+          "id": "R2",
+          "text": "Each day, choose the region whose set of distinct threatened healthy neighbours is largest."
+        },
+        {
+          "id": "R3",
+          "text": "The walls needed for that region equal the number of (infected cell, healthy neighbour) adjacent pairs, so a healthy cell touching it on two sides needs two walls."
+        },
+        {
+          "id": "R4",
+          "text": "The walled region becomes inert; every other region infects all its healthy neighbours at the end of the day."
+        },
+        {
+          "id": "R5",
+          "text": "Stop when no region threatens a healthy cell; return the sum of walls built."
+        },
+        {
+          "id": "R6",
+          "text": "Do not modify the input grid."
+        }
+      ],
+      "constraints": [
+        "Grid has 1 to 50 rows and 1 to 50 columns, each cell 0 or 1.",
+        "Inputs are guaranteed never to produce a tie for the most-threatening region on any day."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 ae7cb9bc21205710b5e35dc50bb9da79ebdfc444d67d120a1aa4d4ed66ebc59d and statement content sha256 13ce16e55ce6f4b32c37e8402281cb1e0f6f6a66aaa86ceb9dc5ba0066ddc98e; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "Inputs that would produce a tie between regions on some day are outside the domain and are not tested.",
+          "basis": "README: 749 inputs that violate the public no-tie guarantee are domain-invalid; the reference simulation enforces it."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Is a region's threat counted in cells or in walls?",
+          "answer": "In distinct healthy cells. Walls are counted separately per shared side and are what is returned.",
+          "basis": "The two counts differ when a healthy cell touches the region on several sides."
+        },
+        {
+          "question": "Do walled cells still count as infected for connectivity?",
+          "answer": "No. They are inert from then on and neither spread nor join other regions.",
+          "basis": "A contained region is quarantined permanently."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              [
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0
+              ]
+            ]
+          ],
+          "output": 5,
+          "explanation": "One vertical region of two cells touches five healthy cells, one side each; walling it on day one ends the process."
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                1,
+                0,
+                1
+              ],
+              [
+                1,
+                1,
+                1
+              ]
+            ]
+          ],
+          "output": 4,
+          "explanation": "A ring surrounds one healthy cell, which it touches on four sides: one threatened cell but four walls."
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                1,
+                1
+              ]
+            ]
+          ],
+          "output": 7,
+          "explanation": "Day 1: the right pair threatens 3 cells (3 walls) and is walled; the corner cell spreads to 2 cells. Day 2: the 3-cell corner region needs 4 walls. Total 7."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(isInfected: list[list[int]]) -> int; class Solution: def containVirus(self, isInfected) -> int"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(isInfected) -> number; module.exports = solve; module.exports.containVirus(isInfected) -> number"
+        }
+      },
+      "approach": {
+        "title": "Day-by-day simulation with a flood fill per region",
+        "explanation": "Simulate the process literally. Work on a copy of the grid using 0 = healthy, 1 = active infection, 2 = walled. Each day, flood-fill every active region and record its cells, the set of distinct healthy cells it threatens and the number of walls (healthy neighbour sides). Pick the region with the largest threatened set, add its wall count to the answer and mark its cells 2. Every other region then turns its threatened cells to 1. Stop when there are no regions or the best region threatens nothing.",
+        "chooseWhen": [
+          "The rules describe a deterministic process with no cheaper closed form.",
+          "The grid is small (at most 2500 cells) so repeating a full flood fill per day is affordable.",
+          "Correctness hinges on following the rules exactly, including the cell-versus-wall distinction."
+        ],
+        "tradeoffs": [
+          "Recomputing regions every day costs O(m*n) per day; incremental region maintenance is faster but much harder to get right.",
+          "Keeping threatened cells in a set is needed to count distinct cells, while walls are counted with repetition.",
+          "Marking walled cells with a third state avoids storing wall edges explicitly."
+        ],
+        "invariants": [
+          "At the start of each day, value 1 marks exactly the cells of uncontained regions, and 2 marks contained cells.",
+          "The answer equals the walls built for all regions contained so far.",
+          "Each day the number of active regions or healthy cells strictly decreases, so the loop terminates within m*n days."
+        ],
+        "hints": [
+          "Follow the rules literally; the grid is small.",
+          "Each day you need, per region, its cells, its distinct threatened cells and its wall count.",
+          "Threat is a set of cells; walls are counted per adjacent side, with repeats.",
+          "Mark the chosen region with a third value so it never spreads or merges again, then spread every other region at once."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Separate the three per-region quantities",
+            "question": "For one region, what is the difference between the cells it threatens and the walls it needs?",
+            "explanation": "The choice of region uses distinct threatened cells; the cost uses adjacent sides. A healthy cell in a corner of an L-shaped region counts once for threat but twice for walls.",
+            "rationale": "Mixing the two counts is the most common bug in this problem.",
+            "instructions": [
+              "Draw the ring example and count threat and walls separately.",
+              "Write down what changes on the grid at the end of a day."
+            ],
+            "observations": [
+              "The grid evolves only through two operations: quarantine one region and spread the others."
+            ],
+            "hints": [
+              "Use a set for one count and a counter for the other."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Simulate days with flood fill",
+            "question": "How do you find all regions and their statistics each day, then apply the day's changes?",
+            "explanation": "Copy the grid. Loop: reset a seen matrix; for every unseen cell with value 1, run an iterative DFS collecting cells, adding each healthy neighbour to a threatened set and incrementing walls for every healthy-neighbour side. If there are no regions or the best one threatens nothing, return the total. Otherwise add its walls, set its cells to 2, and set every other region's threatened cells to 1.",
+            "rationale": "Recomputing from scratch each day keeps the simulation faithful and simple.",
+            "instructions": [
+              "Copy the input rows so the caller's grid is not changed.",
+              "Use an explicit stack to avoid recursion depth limits on a 50x50 grid.",
+              "Select the region with the maximum threatened-set size.",
+              "Apply quarantine before spreading the remaining regions."
+            ],
+            "observations": [
+              "Value 2 cells are neither healthy nor active, so they block both spreading and connectivity.",
+              "JavaScript encodes a threatened cell as row*cols+col in a Set."
+            ],
+            "hints": [
+              "Spread uses the threatened sets computed before any changes that day.",
+              "Return as soon as nothing is threatened."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4",
+              "R5",
+              "R6"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Test against hand simulations",
+            "question": "Which grids check the cell/wall distinction, multiple days and termination?",
+            "explanation": "Use a ring around one healthy cell (walls exceed threat), a grid with two regions over several days, a fully infected grid (answer 0) and a grid with no infection (answer 0). Avoid inputs with ties, which are outside the domain.",
+            "rationale": "Small hand-checkable grids cover each rule; larger random ones can be compared with an independent simulation that stores wall edges explicitly.",
+            "instructions": [
+              "Run the three examples.",
+              "Check that the input grid is unchanged after the call.",
+              "Compare against an edge-set simulation on random small grids without ties."
+            ],
+            "observations": [
+              "A grid already fully infected threatens nothing and costs nothing."
+            ],
+            "hints": [
+              "Count each day's choice by hand for the third example."
+            ],
+            "requirementIds": [
+              "R3",
+              "R4",
+              "R5",
+              "R6"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(D*m*n)",
+            "where": "m*n grid cells, D days with D <= m*n"
+          },
+          {
+            "resource": "space",
+            "bound": "O(m*n)",
+            "where": "grid copy, seen matrix and region lists"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(D*m*n)",
+            "where": "m*n grid cells, D days with D <= m*n"
+          },
+          {
+            "resource": "space",
+            "bound": "O(m*n)",
+            "where": "grid copy, seen matrix and region lists"
+          }
+        ]
+      }
+    },
+    "753": {
+      "statement": "A safe opens when its last n entered digits equal the secret password. Digits range over 0..k-1, and the password has exactly n digits. Return any shortest string of digits that, when typed in, is guaranteed to open the safe at some point whatever the password is; that is, every possible n-digit password appears as a contiguous substring.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "The result uses only digits 0..k-1."
+        },
+        {
+          "id": "R2",
+          "text": "Every one of the k^n possible n-digit strings appears as a contiguous window of the result."
+        },
+        {
+          "id": "R3",
+          "text": "The result has the minimum possible length, k^n + n - 1."
+        },
+        {
+          "id": "R4",
+          "text": "Any string meeting R1-R3 is acceptable."
+        }
+      ],
+      "constraints": [
+        "1 <= n <= 4 and 1 <= k <= 10.",
+        "k^n <= 4096."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 3f902df8fac0e0fd44511b236ebc5ba27702e7e948cbf95c0cbd158163bfae83 and statement content sha256 fbd8d0c8ac9360e0b2625d5c5c7c6f442a245da86c88fa05284cb0444d442918; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Is there a single expected answer?",
+          "answer": "No. Any minimum-length string covering all passwords is accepted; the cohort comparator checks length, alphabet and coverage.",
+          "basis": "README note on 753 and oracles.compare."
+        },
+        {
+          "question": "Why is k^n + n - 1 the minimum?",
+          "answer": "Each new digit after the first n-1 creates at most one new window, and k^n distinct windows are required.",
+          "basis": "Counting windows."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            1,
+            3
+          ],
+          "output": "012",
+          "explanation": "With one-digit passwords, listing each digit once suffices."
+        },
+        {
+          "args": [
+            2,
+            2
+          ],
+          "output": "00110",
+          "explanation": "Windows 00, 01, 11, 10 cover all four passwords in 2^2 + 1 = 5 digits. Other answers such as 01100 are equally valid."
+        },
+        {
+          "args": [
+            3,
+            2
+          ],
+          "output": "0001011100",
+          "explanation": "Length 2^3 + 2 = 10; the windows are 000, 001, 010, 101, 011, 111, 110, 100, all distinct."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(n: int, k: int) -> str; class Solution: def crackSafe(self, n, k) -> str"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(n, k) -> string; module.exports = solve; module.exports.crackSafe(n, k) -> string"
+        }
+      },
+      "approach": {
+        "title": "De Bruijn sequence via an Eulerian circuit (iterative Hierholzer)",
+        "explanation": "Model each (n-1)-digit string as a node. Appending digit d to node u gives an n-digit password and moves to the node made of the last n-1 digits. Each password is exactly one edge, every node has k outgoing and k incoming edges, so an Eulerian circuit exists and visits every edge once. Writing the starting node (n-1 zeros) followed by the edge digits in circuit order gives a string of length k^n + n - 1 containing every password. The candidate runs Hierholzer's algorithm with an explicit stack, using a per-node counter of used outgoing edges, and emits digits when edges are popped.",
+        "chooseWhen": [
+          "You need a shortest string containing every length-n word over an alphabet (a de Bruijn sequence).",
+          "The state space k^(n-1) nodes with k edges each is small enough to traverse fully.",
+          "Recursion depth k^n could be large, so an iterative traversal is preferred."
+        ],
+        "tradeoffs": [
+          "A greedy DFS over passwords that backtracks also works but its correctness argument is less direct.",
+          "The Lyndon-word (FKM) construction produces the lexicographically smallest de Bruijn sequence without a graph, but is harder to derive.",
+          "Hierholzer emits digits in reverse, so the result must be reversed before prefixing the start node."
+        ],
+        "invariants": [
+          "Node values are (n-1)-digit numbers in base k, i.e. integers below k^(n-1).",
+          "used[u] counts outgoing edges of u already traversed; each edge is traversed exactly once.",
+          "Digits appended on pop, read in reverse, form an Eulerian circuit starting and ending at node 0."
+        ],
+        "hints": [
+          "How many windows can a string of length L have, and how many must it cover?",
+          "Consecutive windows share n-1 digits. Think of those shared digits as a state.",
+          "Make (n-1)-digit strings nodes and passwords edges; you need a path that uses every edge once.",
+          "Every node has equal in- and out-degree k, so Hierholzer's algorithm finds an Eulerian circuit; prefix n-1 zeros to the reversed edge digits."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Turn coverage into an edge tour",
+            "question": "What structure links one password window to the next one in the typed string?",
+            "explanation": "Sliding the window by one digit keeps n-1 digits. If those n-1 digits are a node, each password is an edge between overlapping nodes, and a shortest covering string corresponds to a walk using each edge exactly once.",
+            "rationale": "Recognising the de Bruijn graph turns a search problem into a classic Eulerian circuit.",
+            "instructions": [
+              "Draw the graph for n=2, k=2: nodes 0 and 1, edges 00, 01, 10, 11.",
+              "Check in- and out-degrees."
+            ],
+            "observations": [
+              "Every node has in-degree k and out-degree k, and the graph is strongly connected.",
+              "With n=1 there is a single node with k self-loops."
+            ],
+            "hints": [
+              "Count windows versus string length.",
+              "Eulerian circuits exist when degrees balance."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Iterative Hierholzer over base-k nodes",
+            "question": "How do you traverse every edge once without recursion and recover the digit string?",
+            "explanation": "Let modulus = k^(n-1). Stack holds (node, digit-that-led-here) starting with (0, -1). While the stack is non-empty: if the top node has an unused edge e, increment used[node] and push ((node*k + e) % modulus, e); otherwise pop and, if its digit is not -1, append it. Reverse the collected digits and prefix n-1 zeros.",
+            "rationale": "Edges are consumed in a fixed order and each is pushed and popped once, giving O(k^n) time.",
+            "instructions": [
+              "Compute modulus = k^(n-1) (1 when n = 1).",
+              "Keep used[] per node.",
+              "Emit digits on pop, then reverse.",
+              "Return '0'*(n-1) + digits."
+            ],
+            "observations": [
+              "When n = 1, modulus is 1 and all edges are self-loops on node 0.",
+              "JavaScript uses Int32Array for used counts."
+            ],
+            "hints": [
+              "Popping, not pushing, yields digits in valid circuit order.",
+              "The start node 0 corresponds to n-1 zeros."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Check validity, not equality",
+            "question": "How do you test a function whose correct output is not unique?",
+            "explanation": "Check length k^n + n - 1, that every character is a digit below k, and that the set of all length-n windows has size k^n. Enumerate every allowed (n, k) pair, since the domain is small.",
+            "rationale": "A validity checker accepts every correct answer and rejects near misses such as a missing window.",
+            "instructions": [
+              "Write a checker that collects windows into a set.",
+              "Run it on all (n, k) with k^n <= 4096.",
+              "Include n = 1 and k = 1."
+            ],
+            "observations": [
+              "k = 1 gives a string of n zeros."
+            ],
+            "hints": [
+              "Do not compare with a fixed expected string."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(k^n)",
+            "where": "k^n edges, each pushed and popped once"
+          },
+          {
+            "resource": "space",
+            "bound": "O(k^n)",
+            "where": "stack and digit list of length k^n plus k^(n-1) counters"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(k^n)",
+            "where": "k^n edges, each pushed and popped once"
+          },
+          {
+            "resource": "space",
+            "bound": "O(k^n)",
+            "where": "stack and digit list of length k^n plus k^(n-1) counters"
+          }
+        ]
+      }
+    },
+    "756": {
+      "statement": "You are stacking coloured blocks into a pyramid. The bottom row is given as a string of letters A-F. Each row above has one block fewer, and a block may sit on two adjacent blocks only if the triple (left, right, top) is in a list of allowed patterns. Decide whether some choice of blocks lets you build all the way up to a single top block.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "A block with colour t may be placed on adjacent blocks (l, r) only when the pattern l r t is allowed."
+        },
+        {
+          "id": "R2",
+          "text": "Each new row is one shorter and every adjacent pair of the row below needs a block above it."
+        },
+        {
+          "id": "R3",
+          "text": "Return true if any sequence of choices reaches a single block, otherwise false."
+        },
+        {
+          "id": "R4",
+          "text": "Do not modify the inputs."
+        }
+      ],
+      "constraints": [
+        "The bottom string has length 2 to 6 and uses letters A to F.",
+        "The allowed list has at most 216 patterns, each three letters from A to F, all distinct."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 3151d0f31e3b8117d77a2062446aee55ddab25a311bf41b8f9d971763a44df37 and statement content sha256 ee119c152f6aad4e4cf67363018cf617ab053c643871bfb1a5cdfed482839119; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Can one pair have several allowed tops?",
+          "answer": "Yes; any of them may be chosen, which is why search is needed.",
+          "basis": "Patterns are a set of triples, not a function."
+        },
+        {
+          "question": "Is a bottom row of length 1 possible?",
+          "answer": "No; it is at least 2. A row of length 1 is the goal.",
+          "basis": "Constraints."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            "BCD",
+            [
+              "BCA",
+              "CDE",
+              "AEF"
+            ]
+          ],
+          "output": true,
+          "explanation": "BC gives A and CD gives E, so the next row is AE, and AE gives F at the top."
+        },
+        {
+          "args": [
+            "AAB",
+            [
+              "AAC",
+              "ACD",
+              "CDA"
+            ]
+          ],
+          "output": false,
+          "explanation": "No pattern starts with AB, so the second row cannot be completed."
+        },
+        {
+          "args": [
+            "ABC",
+            [
+              "ABD",
+              "BCE",
+              "DEA",
+              "DEF"
+            ]
+          ],
+          "output": true,
+          "explanation": "The row above is DE, and DE has two possible tops; either one completes the pyramid."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(bottom: str, allowed: list[str]) -> bool; class Solution: def pyramidTransition(self, bottom, allowed) -> bool"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(bottom, allowed) -> boolean; module.exports = solve; module.exports.pyramidTransition(bottom, allowed) -> boolean"
+        }
+      },
+      "approach": {
+        "title": "Depth-first search over next rows with pair bitmasks, pruning and memoised rows",
+        "explanation": "Index colours 0..5 and store, for each ordered pair (l, r), a 6-bit mask of allowed tops. To test whether a row can reach the top, build the row above one cell at a time: cell i must be a colour in mask(row[i], row[i+1]). After choosing cell i (i > 0), prune immediately if the new pair (cell i-1, cell i) has no allowed top at all, because that row could never continue. When the next row is complete, recurse on it. Memoise the outcome per row, since many different paths produce the same row.",
+        "chooseWhen": [
+          "The search space is small but branching (up to 6 choices per cell, rows of length at most 6).",
+          "Different partial choices lead to identical rows, so memoising row results removes repeated work.",
+          "Local feasibility (a pair with no top) can be tested before a row is finished."
+        ],
+        "tradeoffs": [
+          "Generating the full Cartesian product of each next row is simpler but explores dead rows that pruning would skip.",
+          "Bitmasks make the per-pair lookup O(1) and compact; a dictionary of lists is clearer but slower.",
+          "Memo keys are whole rows; the memo is bounded by 6^6 rows."
+        ],
+        "invariants": [
+          "following[0..i-1] is a valid partial row above row[0..i]: each cell is an allowed top of its pair.",
+          "Every adjacent pair already placed in following has at least one allowed top.",
+          "memo[row] is true exactly when some sequence of choices from row reaches one block."
+        ],
+        "hints": [
+          "The rows are short and there are only six colours. Can you just try possibilities?",
+          "Decide whether a row can reach the top; that depends only on the row, so cache it.",
+          "Build the next row left to right, and give up early when two adjacent new blocks have no allowed top between them.",
+          "Store allowed tops for each pair as a 6-bit mask indexed by l*6 + r."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "See the problem as search over rows",
+            "question": "What determines whether a pyramid can be finished from a given row?",
+            "explanation": "Only the row itself. That makes can(row) a well-defined function suitable for memoisation, and computing it means trying every valid row above it.",
+            "rationale": "A state that depends only on the row lets repeated rows be solved once.",
+            "instructions": [
+              "List the possible second rows for the third example.",
+              "Notice which rows repeat across different choices."
+            ],
+            "observations": [
+              "A row of length 1 is a success.",
+              "A pair with no allowed top makes every row containing it a dead end."
+            ],
+            "hints": [
+              "What should be cached?",
+              "When can you reject a partial row early?"
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Masks, cell-by-cell DFS and memo",
+            "question": "How do you enumerate valid next rows efficiently?",
+            "explanation": "Build top[36] masks from the patterns. can(row): return true for length 1; check memo; otherwise run build(0) which, for each colour c in mask(row[i], row[i+1]), skips c if i > 0 and top[prev*6+c] is 0, appends c and recurses to build(i+1). When i reaches len(row)-1, call can on the finished row. Store and return the result.",
+            "rationale": "Pruning cuts dead branches before the row is complete; memoisation avoids re-solving the same row.",
+            "instructions": [
+              "Convert letters to 0..5.",
+              "Fill the 36 masks with OR of 1 << top.",
+              "Implement build with an explicit following list and pop after each try.",
+              "Memoise by tuple (Python) or joined string (JavaScript)."
+            ],
+            "observations": [
+              "Return as soon as one choice succeeds.",
+              "The inputs are only read."
+            ],
+            "hints": [
+              "Check mask bit c with mask >> c & 1.",
+              "The memo key must be the full row."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Test reachability edge cases",
+            "question": "Which inputs check pruning, branching and failure?",
+            "explanation": "Use a case with no pattern for some bottom pair (false), a case where only one of several tops works, an empty allowed list (false), and a length-6 bottom with all 216 patterns (true). Compare against a brute-force product of all next rows for small inputs.",
+            "rationale": "Pruning bugs show up as false negatives; memo bugs as wrong answers on rows reached by different paths.",
+            "instructions": [
+              "Run the examples.",
+              "Compare with an exhaustive Cartesian-product search.",
+              "Include duplicate letters in the bottom."
+            ],
+            "observations": [
+              "With all patterns allowed, every bottom succeeds."
+            ],
+            "hints": [
+              "Construct a case where the first choice fails but a later one succeeds."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(sum over L<=6 of 6^L * 6^(L-1)) worst case",
+            "where": "row lengths L up to 6, 6 colours; pruning and memoisation usually do far better"
+          },
+          {
+            "resource": "space",
+            "bound": "O(6^6)",
+            "where": "memo of rows plus recursion depth"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(sum over L<=6 of 6^L * 6^(L-1)) worst case",
+            "where": "row lengths L up to 6, 6 colours; pruning and memoisation usually do far better"
+          },
+          {
+            "resource": "space",
+            "bound": "O(6^6)",
+            "where": "memo of rows plus recursion depth"
+          }
+        ]
+      }
+    },
+    "757": {
+      "statement": "Given closed integer intervals [start, end], find the smallest set of integers such that every interval contains at least two numbers from the set. Return the size of that set.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Each interval [a, b] includes both endpoints; the chosen set must contain at least two integers within it."
+        },
+        {
+          "id": "R2",
+          "text": "Return the minimum possible number of chosen integers."
+        },
+        {
+          "id": "R3",
+          "text": "Do not modify the input intervals."
+        }
+      ],
+      "constraints": [
+        "1 to 3000 intervals.",
+        "0 <= start < end <= 10^8, so every interval contains at least two integers."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 94db72f3bf6d3da6675755babde3371c922d6984a8db5d4ef9d26eb6fdc860d6 and statement content sha256 1d9c52a2edde4a6d0a0514a1a1d4e7f9d42f23132a3e404613c1083820464837; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Must the chosen numbers be distinct?",
+          "answer": "Yes; it is a set, so an interval needs two different integers inside it.",
+          "basis": "Set semantics."
+        },
+        {
+          "question": "Are intervals closed?",
+          "answer": "Yes, both endpoints count.",
+          "basis": "Intervals are inclusive."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                7
+              ],
+              [
+                8,
+                9
+              ]
+            ]
+          ],
+          "output": 5,
+          "explanation": "Choose 2, 3 for [1,3]; [3,7] already has 3 and adds 7; [8,9] needs 8 and 9."
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                5
+              ],
+              [
+                2,
+                6
+              ],
+              [
+                3,
+                7
+              ]
+            ]
+          ],
+          "output": 2,
+          "explanation": "4 and 5 lie in all three intervals."
+        },
+        {
+          "args": [
+            [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          ],
+          "output": 4,
+          "explanation": "Disjoint intervals each need their own two points."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(intervals: list[list[int]]) -> int; class Solution: def intersectionSizeTwo(self, intervals) -> int"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(intervals) -> number; module.exports = solve; module.exports.intersectionSizeTwo(intervals) -> number"
+        }
+      },
+      "approach": {
+        "title": "Greedy by right end, keeping only the two largest chosen points",
+        "explanation": "Sort intervals by end ascending and, for equal ends, by start descending. Process them in that order and remember the two largest chosen points, first < second. If an interval starts after second, it contains none of the chosen points, so add its two rightmost integers end-1 and end. If it starts after first but not after second, it contains only second, so add end. Otherwise it already has two. Choosing points as far right as possible maximises their chance of lying in later intervals, which all end at or after the current one.",
+        "chooseWhen": [
+          "A covering problem on intervals where points chosen further right help more later intervals.",
+          "Sorting by right endpoint makes the greedy choice safe by an exchange argument.",
+          "Only the most recent chosen points can matter for later intervals."
+        ],
+        "tradeoffs": [
+          "Sorting dominates at O(n log n); the sweep is linear.",
+          "Tie-breaking by start descending ensures the shorter interval among equal ends is handled first; omitting it gives wrong answers.",
+          "Exhaustive search over point sets is only feasible for tiny spans and serves as a test oracle."
+        ],
+        "invariants": [
+          "first < second are the two largest chosen points, and every processed interval contains at least two chosen points.",
+          "Chosen points never exceed the end of the interval currently being processed.",
+          "count is minimal for the processed prefix."
+        ],
+        "hints": [
+          "Process intervals in an order that makes a greedy choice safe.",
+          "If you must add a point to an interval, which point inside it is most useful for later intervals?",
+          "Sort by right end; when adding points, take the rightmost ones. You only need to remember the two largest chosen points.",
+          "Break end ties by larger start first, and handle three cases: start > second, start > first, otherwise."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Find the greedy choice",
+            "question": "When an interval lacks points, where should the new points go?",
+            "explanation": "Every later interval (in end order) ends at or after this one. A point at the far right of the current interval lies in every later interval that any point of the current interval lies in, so rightmost points dominate.",
+            "rationale": "An exchange argument shows the greedy set is never larger than an optimal one.",
+            "instructions": [
+              "Sort the first example by end and simulate.",
+              "Try placing points at the left instead and see the count grow."
+            ],
+            "observations": [
+              "Only how many chosen points fall in the current interval matters, and with sorted ends that is determined by the two largest points."
+            ],
+            "hints": [
+              "Which later intervals can a point help?",
+              "Why is the start-descending tie break needed?"
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Sort and sweep with two trackers",
+            "question": "How do you implement the three cases with only two remembered points?",
+            "explanation": "Sort a copy with key (end, -start). Initialise first = second = -1 and count = 0. For each [s, e]: if s > second, count += 2 and set first, second = e-1, e; elif s > first, count += 1 and set first, second = second, e; else do nothing.",
+            "rationale": "Two variables suffice because chosen points are always added at the current end, which is the largest so far.",
+            "instructions": [
+              "Sort a copy so the caller's list is unchanged (Python sorted, JavaScript slice().sort).",
+              "Use the comparator (a, b) => a[1]-b[1] || b[0]-a[0] in JavaScript.",
+              "Apply the three cases and return count."
+            ],
+            "observations": [
+              "In the one-point case, second may equal e already only if handled by the tie order; start-descending prevents the issue."
+            ],
+            "hints": [
+              "Initial -1 values work because starts are at least 0."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Compare with exhaustive search",
+            "question": "How do you build confidence in a greedy algorithm?",
+            "explanation": "Brute force on small coordinate spans: try subsets of increasing size until one satisfies every interval. Test nested intervals, identical intervals, equal ends with different starts, and touching intervals.",
+            "rationale": "Greedy algorithms fail on specific orderings; small exhaustive comparisons expose them.",
+            "instructions": [
+              "Run the examples.",
+              "Compare random small cases with an increasing-size subset search.",
+              "Check the input list order is unchanged."
+            ],
+            "observations": [
+              "Equal-end intervals with different starts are the classic failure case."
+            ],
+            "hints": [
+              "Try [[1,3],[2,3]] with and without the tie break."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(n log n)",
+            "where": "n intervals; sorting dominates"
+          },
+          {
+            "resource": "space",
+            "bound": "O(n)",
+            "where": "sorted copy of the intervals"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(n log n)",
+            "where": "n intervals; sorting dominates"
+          },
+          {
+            "resource": "space",
+            "bound": "O(n)",
+            "where": "sorted copy of the intervals"
+          }
+        ]
+      }
+    },
+    "761": {
+      "statement": "A binary string is special when it has as many 1s as 0s and every prefix has at least as many 1s as 0s. Given a special string, you may repeatedly swap two adjacent (consecutive, non-empty) special substrings. Return the lexicographically largest string reachable by such swaps.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "The input is special: equal counts of 1 and 0, and no prefix with more 0s than 1s."
+        },
+        {
+          "id": "R2",
+          "text": "A move swaps two special substrings that are adjacent in the string."
+        },
+        {
+          "id": "R3",
+          "text": "Return the lexicographically largest string reachable with any number of moves."
+        },
+        {
+          "id": "R4",
+          "text": "Return a new string; the input is unchanged."
+        }
+      ],
+      "constraints": [
+        "Length 1 to 50 characters (a special string is non-empty and has even length).",
+        "Characters are '0' or '1' and the input is special."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 fe48837f8fd9b785dbbf0750d6a823e743e7f5ed74b90c5da5293bf86452d176 and statement content sha256 f8f11042ae94d2dd95b3882b89349fb5c568be9b949ee71e8990e3497c1fac1d; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Is the result unique?",
+          "answer": "Yes, the lexicographic maximum is a single string, and it is compared exactly.",
+          "basis": "README: 761's answer is unique."
+        },
+        {
+          "question": "Can swaps happen inside nested parts?",
+          "answer": "Yes. Any adjacent special substrings anywhere may be swapped, including inside a block.",
+          "basis": "Moves are on substrings, not only top-level blocks."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            "11011000"
+          ],
+          "output": "11100100",
+          "explanation": "Inside the outer 1...0 the blocks 10 and 1100 are swapped so the larger block comes first."
+        },
+        {
+          "args": [
+            "101100"
+          ],
+          "output": "110010",
+          "explanation": "Top-level blocks 10 and 1100 are reordered as 1100, 10."
+        },
+        {
+          "args": [
+            "10"
+          ],
+          "output": "10",
+          "explanation": "A single primitive block cannot change."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(s: str) -> str; class Solution: def makeLargestSpecial(self, s) -> str"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(s) -> string; module.exports = solve; module.exports.makeLargestSpecial(s) -> string"
+        }
+      },
+      "approach": {
+        "title": "Recursive decomposition into blocks, sorted descending",
+        "explanation": "Read 1 as '(' and 0 as ')': a special string is a balanced parenthesis string. Split it into primitive blocks where the running balance returns to zero. Each primitive block is '1' + inner + '0' where inner is itself special. Swapping adjacent special substrings lets you reorder blocks at any nesting level freely, so the best string is obtained by first making each block's interior as large as possible (recursively), then sorting the blocks at that level in descending order and concatenating.",
+        "chooseWhen": [
+          "The string has a balanced-parentheses structure and allowed moves permute siblings.",
+          "Lexicographic maximisation over arbitrary permutations of independent parts reduces to sorting them.",
+          "Input length is small, so quadratic recursion with string copies is fine."
+        ],
+        "tradeoffs": [
+          "Searching over all reachable strings (BFS) is a correct oracle but exponential.",
+          "The recursion copies substrings, giving O(n^2) characters plus sorting; acceptable for n <= 50.",
+          "Plain descending string sort is safe for concatenation here because no primitive block is a proper prefix of another (a block's balance first returns to zero at its own end), so comparing blocks decides the order of their concatenations."
+        ],
+        "invariants": [
+          "Every block passed to the recursion is special.",
+          "After processing, each block's interior is the largest reachable arrangement of that interior.",
+          "Concatenating blocks in descending order yields the largest arrangement at that level."
+        ],
+        "hints": [
+          "Replace 1 with '(' and 0 with ')'. What does a special string look like?",
+          "Split the string where the running balance returns to zero; these blocks can be reordered.",
+          "Each block is 1 + special interior + 0, and its interior can be improved independently.",
+          "Recursively maximise each interior, then sort the blocks in descending order and join them."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "See the parenthesis structure",
+            "question": "What does a swap of adjacent special substrings do in terms of the tree of balanced blocks?",
+            "explanation": "Viewed as parentheses, a special string is a forest of nested blocks. Adjacent special substrings at the same level are sibling blocks (or runs of siblings), so swaps permute siblings, at any depth. The optimum makes every level as large as possible from the inside out.",
+            "rationale": "Reducing moves to sibling permutations turns the search into a sort.",
+            "instructions": [
+              "Draw the tree for 11011000.",
+              "List which swaps are possible at the top and inside."
+            ],
+            "observations": [
+              "The outer '1' and '0' of a block never move relative to its interior."
+            ],
+            "hints": [
+              "Where does the balance hit zero?",
+              "Can a swap mix two levels?"
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Recursive split, sort and join",
+            "question": "How do you implement the decomposition in one pass per level?",
+            "explanation": "largest(text): scan with a balance counter; when it returns to 0 at index i, the block from start to i is '1' + text[start+1:i] + '0', so append '1' + largest(text[start+1:i]) + '0' and set start = i+1. Sort the collected blocks in reverse order and join. solve(s) returns largest(s).",
+            "rationale": "Each level works on independent blocks, matching the tree structure.",
+            "instructions": [
+              "Track balance (+1 for '1', -1 for '0').",
+              "Recurse on each block's interior.",
+              "Sort descending (Python sort(reverse=True); JavaScript sort().reverse()).",
+              "Join and return."
+            ],
+            "observations": [
+              "The empty interior of '10' returns an empty string.",
+              "Plain string comparison is the needed lexicographic order."
+            ],
+            "hints": [
+              "Recurse before sorting so blocks are compared in their best form."
+            ],
+            "requirementIds": [
+              "R1",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Compare with exhaustive search",
+            "question": "How do you check the maximality claim?",
+            "explanation": "For short strings, BFS over all strings reachable by swapping adjacent special substrings and take the maximum. Compare with the recursive answer, including nested blocks and many equal blocks.",
+            "rationale": "The recursion relies on a structural argument; a brute-force oracle checks it directly.",
+            "instructions": [
+              "Run the examples.",
+              "Enumerate all special strings up to length 12 and compare with BFS.",
+              "Check the input string is unchanged."
+            ],
+            "observations": [
+              "Strings with only one top-level block still change if their interior can be reordered."
+            ],
+            "hints": [
+              "Try 1101001100 by hand."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(n^2 log n)",
+            "where": "n = string length; substring copies at each recursion level plus sorting"
+          },
+          {
+            "resource": "space",
+            "bound": "O(n^2)",
+            "where": "recursion depth up to n/2 with substring copies"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(n^2 log n)",
+            "where": "n = string length; substring copies at each recursion level plus sorting"
+          },
+          {
+            "resource": "space",
+            "bound": "O(n^2)",
+            "where": "recursion depth up to n/2 with substring copies"
+          }
+        ]
+      }
+    },
+    "765": {
+      "statement": "There are n couples sitting in 2n seats in a row; couple i consists of people 2i and 2i+1. Seats 0-1, 2-3 and so on form side-by-side pairs. A swap exchanges any two people's seats. Return the minimum number of swaps so that every couple sits in the same seat pair.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Person p's partner is p XOR 1 (0 with 1, 2 with 3, ...)."
+        },
+        {
+          "id": "R2",
+          "text": "A couple is together when its two people occupy seats 2j and 2j+1 for some j."
+        },
+        {
+          "id": "R3",
+          "text": "A swap exchanges the seats of any two people; return the minimum number of swaps."
+        },
+        {
+          "id": "R4",
+          "text": "Do not modify the input row."
+        }
+      ],
+      "constraints": [
+        "The row length is even, between 4 and 60.",
+        "The row is a permutation of 0..len-1."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 21a3343dc8a917c6e4dc056a15f1238232d70ea8776091cff1a5d94d59eec781 and statement content sha256 19a31841224b93b1644bcafc088d722237dc34d84a8ffe216a530ea7510b6d40; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Can a swap involve any two seats, not only neighbours?",
+          "answer": "Yes; any two people can exchange seats.",
+          "basis": "Swap definition."
+        },
+        {
+          "question": "Does it matter which side of the pair each partner sits on?",
+          "answer": "No; either order within the seat pair counts as together.",
+          "basis": "Seat pairs are unordered."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              0,
+              2,
+              1,
+              3
+            ]
+          ],
+          "output": 1,
+          "explanation": "Swapping person 2 and person 1 seats both couples."
+        },
+        {
+          "args": [
+            [
+              1,
+              0,
+              3,
+              2
+            ]
+          ],
+          "output": 0,
+          "explanation": "Both couples already share seat pairs, in either order."
+        },
+        {
+          "args": [
+            [
+              0,
+              3,
+              4,
+              1,
+              2,
+              5
+            ]
+          ],
+          "output": 2,
+          "explanation": "The three seat pairs form one cycle of three couples, which needs 3 - 1 = 2 swaps."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(row: list[int]) -> int; class Solution: def minSwapsCouples(self, row) -> int"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(row) -> number; module.exports = solve; module.exports.minSwapsCouples(row) -> number"
+        }
+      },
+      "approach": {
+        "title": "Greedy left-to-right pair fixing with a position index",
+        "explanation": "Walk the seat pairs from left to right. For pair (2j, 2j+1), the person in seat 2j has a partner seats[2j] ^ 1. If the partner is not already in seat 2j+1, swap the partner into seat 2j+1 with whoever sits there, updating a where[] index of each person's seat. Each swap completes at least one couple and never breaks a completed one. This is optimal: viewing seat pairs as nodes and couples as edges, the graph splits into cycles, a cycle of c pairs needs exactly c-1 swaps, and the greedy uses exactly that.",
+        "chooseWhen": [
+          "Each fix is local and permanently completes one unit without harming earlier units.",
+          "The minimum can be argued via a cycle decomposition, so the greedy needs no search.",
+          "You need O(1) lookup of where a person sits, so keep an inverse index."
+        ],
+        "tradeoffs": [
+          "Union-find over couples counting cycles gives the same answer without simulating swaps.",
+          "Breadth-first search over seatings is a correct oracle but only feasible for very small rows.",
+          "The greedy works on a copy of the row and an inverse array, using O(n) extra space."
+        ],
+        "invariants": [
+          "After processing seat pair j, all seat pairs 0..j hold couples.",
+          "where[seats[i]] == i for every seat i at all times.",
+          "swaps equals the number of corrective swaps made, which equals the sum over cycles of (cycle size - 1) so far."
+        ],
+        "hints": [
+          "Fix seat pairs one at a time from the left. Can fixing one pair ever hurt another already fixed?",
+          "The partner of p is p ^ 1.",
+          "When a pair is wrong, bring the left person's partner into the right seat; you need to know where the partner sits.",
+          "Keep where[person] = seat and update both entries on each swap; count swaps."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Why one swap per wrong pair is enough and necessary",
+            "question": "How many swaps does a group of mixed-up couples need?",
+            "explanation": "Treat each seat pair as a node and connect two nodes when they share a couple. Each node has degree two, so components are cycles. A cycle of c pairs needs c-1 swaps, because each swap can raise the number of completed pairs by at most one except the last swap, which completes two.",
+            "rationale": "The cycle bound proves the greedy count is the minimum.",
+            "instructions": [
+              "Draw the graph for [0, 3, 4, 1, 2, 5].",
+              "Count swaps per cycle."
+            ],
+            "observations": [
+              "A cycle of length 1 is an already-seated couple and costs 0."
+            ],
+            "hints": [
+              "What does each swap do to the number of seated couples?"
+            ],
+            "requirementIds": [
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Greedy with an inverse index",
+            "question": "How do you perform each fix in O(1)?",
+            "explanation": "Copy the row into seats and build where[person] = seat. For seat = 0, 2, 4, ...: partner = seats[seat] ^ 1; if seats[seat+1] != partner, let other = where[partner]; move seats[seat+1] to other and update its where entry; put partner at seat+1 and update where[partner]; increment swaps.",
+            "rationale": "The inverse index avoids searching for the partner, giving linear time.",
+            "instructions": [
+              "Copy the input before mutating.",
+              "Build where from the copy.",
+              "Loop over even seats and apply the swap when needed.",
+              "Return the swap count."
+            ],
+            "observations": [
+              "Updating where for both moved people is essential.",
+              "XOR with 1 pairs 2i with 2i+1."
+            ],
+            "hints": [
+              "Write the two assignments in an order that does not lose a value."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Check against search and cycle counts",
+            "question": "How do you confirm minimality?",
+            "explanation": "For small rows, BFS over seatings with arbitrary swaps gives the true minimum. Also compare with n minus the number of cycles computed by union-find. Test already-seated rows, a single long cycle and mixed cycles.",
+            "rationale": "Two independent methods catch both simulation bugs and reasoning errors.",
+            "instructions": [
+              "Run the examples.",
+              "Compare with BFS for rows up to length 8.",
+              "Check the input row is unchanged after the call."
+            ],
+            "observations": [
+              "The answer is at most n - 1."
+            ],
+            "hints": [
+              "Try a reversed row like [5, 4, 3, 2, 1, 0]."
+            ],
+            "requirementIds": [
+              "R3",
+              "R4"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(n)",
+            "where": "n = row length"
+          },
+          {
+            "resource": "space",
+            "bound": "O(n)",
+            "where": "copy of the row and the inverse index"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(n)",
+            "where": "n = row length"
+          },
+          {
+            "resource": "space",
+            "bound": "O(n)",
+            "where": "copy of the row and the inverse index"
+          }
+        ]
+      }
+    }
+  }
+}

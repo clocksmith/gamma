@@ -1,0 +1,1097 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/757/approach/chooseWhen",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/757",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A covering problem on intervals where points chosen further right help more later intervals.",
+      "Sorting by right endpoint makes the greedy choice safe by an exchange argument.",
+      "Only the most recent chosen points can matter for later intervals."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:757:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/contract--contract_leetcode_757_official_authored-v1.json",
+    "sha256": "35baa31c89f072df606c4538bdce11694bccb7575517804f31de8726139f5d64",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/757/approach/explanation",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/757",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+      }
+    ],
+    "status": "present",
+    "value": "Sort intervals by end ascending and, for equal ends, by start descending. Process them in that order and remember the two largest chosen points, first < second. If an interval starts after second, it contains none of the chosen points, so add its two rightmost integers end-1 and end. If it starts after first but not after second, it contains only second, so add end. Otherwise it already has two. Choosing points as far right as possible maximises their chance of lying in later intervals, which all end at or after the current one."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/757/approach/hints",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/757",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Process intervals in an order that makes a greedy choice safe.",
+      "If you must add a point to an interval, which point inside it is most useful for later intervals?",
+      "Sort by right end; when adding points, take the rightmost ones. You only need to remember the two largest chosen points.",
+      "Break end ties by larger start first, and handle three cases: start > second, start > first, otherwise."
+    ]
+  },
+  "id": "approach:leetcode:757:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/757/approach/invariants",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/757",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "first < second are the two largest chosen points, and every processed interval contains at least two chosen points.",
+      "Chosen points never exceed the end of the interval currently being processed.",
+      "count is minimal for the processed prefix."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:757:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_757_official_approach-native_v1.json",
+    "sha256": "8c5680a6b410c5d73adf73d954f04ddb2bea5ebbc5fe5f993f778eb8ab2fe5ee",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/757",
+      "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+    }
+  ],
+  "problemId": "leetcode:757",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/0/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "Every later interval (in end order) ends at or after this one. A point at the far right of the current interval lies in every later interval that any point of the current interval lies in, so rightmost points dominate."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/0/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Which later intervals can a point help?",
+          "Why is the start-descending tie break needed?"
+        ]
+      },
+      "id": "approach:leetcode:757:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/0/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Sort the first example by end and simulate.",
+          "Try placing points at the left instead and see the count grow."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:757:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_757_official_approach-native_v1.json",
+        "sha256": "8c5680a6b410c5d73adf73d954f04ddb2bea5ebbc5fe5f993f778eb8ab2fe5ee",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/0/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Only how many chosen points fall in the current interval matters, and with sorted ends that is determined by the two largest points."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/0/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "When an interval lacks points, where should the new points go?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/0/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "An exchange argument shows the greedy set is never larger than an optimal one."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/0/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/0/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "Find the greedy choice"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:757:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_757_official_python_v1.json",
+          "sha256": "9ee45eabb746a24d658a8250f923b30349744a0dacc365f26ab455936e18f08c",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:757:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_757_official_javascript_v1.json",
+          "sha256": "82316dea7afdf020607dcd2988e5685af0e22f7a0748c5d92fd7669fd88ea4c5",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/1/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "Sort a copy with key (end, -start). Initialise first = second = -1 and count = 0. For each [s, e]: if s > second, count += 2 and set first, second = e-1, e; elif s > first, count += 1 and set first, second = second, e; else do nothing."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/1/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Initial -1 values work because starts are at least 0."
+        ]
+      },
+      "id": "approach:leetcode:757:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/1/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Sort a copy so the caller's list is unchanged (Python sorted, JavaScript slice().sort).",
+          "Use the comparator (a, b) => a[1]-b[1] || b[0]-a[0] in JavaScript.",
+          "Apply the three cases and return count."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:757:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_757_official_approach-native_v1.json",
+        "sha256": "8c5680a6b410c5d73adf73d954f04ddb2bea5ebbc5fe5f993f778eb8ab2fe5ee",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/1/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "In the one-point case, second may equal e already only if handled by the tie order; start-descending prevents the issue."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/1/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement the three cases with only two remembered points?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/1/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "Two variables suffice because chosen points are always added at the current end, which is the largest so far."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/1/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/1/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "Sort and sweep with two trackers"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/2/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "Brute force on small coordinate spans: try subsets of increasing size until one satisfies every interval. Test nested intervals, identical intervals, equal ends with different starts, and touching intervals."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/2/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Try [[1,3],[2,3]] with and without the tie break."
+        ]
+      },
+      "id": "approach:leetcode:757:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/2/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Compare random small cases with an increasing-size subset search.",
+          "Check the input list order is unchanged."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:757:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_757_official_approach-native_v1.json",
+        "sha256": "8c5680a6b410c5d73adf73d954f04ddb2bea5ebbc5fe5f993f778eb8ab2fe5ee",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/2/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Equal-end intervals with different starts are the classic failure case."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/2/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "How do you build confidence in a greedy algorithm?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/2/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "Greedy algorithms fail on specific orderings; small exhaustive comparisons expose them."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/2/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/757/approach/stages/2/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/757",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with exhaustive search"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/757/approach/title",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/757",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+      }
+    ],
+    "status": "present",
+    "value": "Greedy by right end, keeping only the two largest chosen points"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/757/approach/tradeoffs",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/757",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/757.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a6d8660087fd26e8ef6919731685660ecb8a0bf81eff6c33f3140036878a8aef"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/757.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "f1befb57327564fc5558a11b0e2cdd530c74c29cf69c3aa1c08d5d6c43d17e59"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Sorting dominates at O(n log n); the sweep is linear.",
+      "Tie-breaking by start descending ensures the shorter interval among equal ends is handled first; omitting it gives wrong answers.",
+      "Exhaustive search over point sets is only feasible for tiny spans and serves as a test oracle."
+    ]
+  },
+  "version": 1
+}

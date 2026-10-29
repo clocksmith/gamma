@@ -1,0 +1,1103 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/745/approach/chooseWhen",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/745",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Words are short, so enumerating all prefix/suffix pairs per word is cheap.",
+      "There are many queries per object and each should be close to constant time.",
+      "Memory for roughly 49 keys per word is acceptable."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:745:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/contract--contract_leetcode_745_official_authored-v1.json",
+    "sha256": "3500dc5c236269309bee25c70d0c8e999598bacb3d439947db528c117ab84b70",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/745/approach/explanation",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/745",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+      }
+    ],
+    "status": "present",
+    "value": "Words are at most 7 letters, so each word has at most 7 prefixes and 7 suffixes, i.e. at most 49 prefix/suffix pairs. During construction, insert the key prefix + '#' + suffix for every pair into a hash map, overwriting the stored index as words are processed in order, so the map keeps the largest index. A query then builds the same key and does one lookup. The separator '#' cannot occur in a word, so different (prefix, suffix) pairs never collide."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/745/approach/hints",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/745",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Words are at most 7 letters long. How many distinct (prefix, suffix) pairs can one word have?",
+      "If you could store the answer for every possible pair, a query would be a lookup.",
+      "Combine prefix and suffix into one key with a separator character that cannot appear in a word.",
+      "Insert words in index order and overwrite: the last write for each key is the largest index."
+    ]
+  },
+  "id": "approach:leetcode:745:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/745/approach/invariants",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/745",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "After processing words[0..i], map[p + '#' + s] is the largest j <= i such that words[j] starts with p and ends with s.",
+      "A key exists in the map exactly when some word matches that prefix and suffix."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:745:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_745_official_approach-native_v1.json",
+    "sha256": "bbd470b8dc05bb3e11b0752e527ccab293b3c59250e90fd86a166b7d91994b15",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/745",
+      "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+    }
+  ],
+  "problemId": "leetcode:745",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/0/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "A scan costs up to 10^4 words times 7 characters per query, about 7*10^8 work across all queries. But each word has only 7 prefixes and 7 suffixes, so all 49 combinations per word can be stored ahead of time."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/0/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "What if you precompute answers for every pair?",
+          "How do you make sure the largest index wins?"
+        ]
+      },
+      "id": "approach:leetcode:745:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/0/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Count the prefix/suffix pairs of 'apple'.",
+          "Estimate total keys for 10^4 words."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:745:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_745_official_approach-native_v1.json",
+        "sha256": "bbd470b8dc05bb3e11b0752e527ccab293b3c59250e90fd86a166b7d91994b15",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/0/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "At most 490,000 keys in total.",
+          "The answer for a key never depends on the query order."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/0/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "With up to 10^4 queries, why is a per-query scan too slow, and what does the 7-letter limit allow instead?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/0/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "Moving work from query time to construction time pays off when the precomputed space is small and queries are many."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/0/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/0/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "Notice the tiny word length"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:745:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_745_official_python_v1.json",
+          "sha256": "460fe9b18f17e88e03784a6c581ab4af63fed652a76f155adc5a8443a1e96ce9",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:745:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_745_official_javascript_v1.json",
+          "sha256": "5c19b1327604fb42c0413dadeffa20e11a1585cbdb7914ceb029a13d00600752",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/1/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "For each word at position i, for every prefix length p from 1 to len and every suffix start s from 0 to len-1, set map[word[:p] + '#' + word[s:]] = i. Because words are visited in increasing i, later words overwrite earlier ones. f(pref, suff) returns map.get(pref + '#' + suff, -1). The JavaScript version uses a Map and converts undefined to -1."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/1/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Use a separator that is not a lowercase letter.",
+          "Prefixes have length 1..len; suffixes start at 0..len-1."
+        ]
+      },
+      "id": "approach:leetcode:745:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/1/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Create an empty map in the constructor.",
+          "Loop words with their index; nested loops over prefix lengths and suffix starts.",
+          "Store the index under prefix + '#' + suffix.",
+          "In f, look up the combined key and return -1 when absent."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:745:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_745_official_approach-native_v1.json",
+        "sha256": "bbd470b8dc05bb3e11b0752e527ccab293b3c59250e90fd86a166b7d91994b15",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/1/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Index 0 is a valid answer, so in JavaScript test for undefined, not falsiness.",
+          "The original words list is only read."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/1/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "How should keys be formed and stored so that duplicates and the largest-index rule are handled automatically?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/1/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "One hash lookup per query and no per-query string scans."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/1/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/1/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "Build the key map and answer by lookup"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/2/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "Test duplicate words (largest index must win), a query where prefix and suffix are the whole word, overlapping prefix and suffix, a missing prefix and a missing suffix, and index 0 answers. Compare with a reverse linear scan on small random inputs."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/2/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Try words = ['a'] with f('a','a').",
+          "Try a query longer than any word."
+        ]
+      },
+      "id": "approach:leetcode:745:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/2/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run both examples.",
+          "Cross-check against a brute-force scan from the last word backwards.",
+          "Use separate objects for separate word lists."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:745:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_745_official_approach-native_v1.json",
+        "sha256": "bbd470b8dc05bb3e11b0752e527ccab293b3c59250e90fd86a166b7d91994b15",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/2/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A brute force that scans from the end returns the largest index naturally."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/2/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "Which queries could reveal a wrong key or a wrong tie rule?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/2/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "These are the points where a hand-rolled key scheme or tie rule usually fails."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/2/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/745/approach/stages/2/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/745",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+          }
+        ],
+        "status": "present",
+        "value": "Check duplicates, overlaps and misses"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/745/approach/title",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/745",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+      }
+    ],
+    "status": "present",
+    "value": "Precompute every prefix#suffix key with its latest index"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/745/approach/tradeoffs",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/745",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/745.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "26bcdcd96ce6cc23e0330bfc7831b78b735fd9d878bf3db48d7634f4f13049b3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/745.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "25e763bf15fa811d84883d7aed16187e0411b13f968b1610effd057e7d05eee6"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A linear scan per query needs no preprocessing but costs O(N*L) per query, too slow for 10^4 queries over 10^4 words.",
+      "Two tries (prefix and reversed suffix) with index-set intersection use less memory but make queries more complex and slower.",
+      "The key map uses O(N*L^2) keys of length O(L), so construction is O(N*L^3) characters; fine for L<=7, poor for long words."
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,1103 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/756/approach/chooseWhen",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/756",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The search space is small but branching (up to 6 choices per cell, rows of length at most 6).",
+      "Different partial choices lead to identical rows, so memoising row results removes repeated work.",
+      "Local feasibility (a pair with no top) can be tested before a row is finished."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:756:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/contract--contract_leetcode_756_official_authored-v1.json",
+    "sha256": "ef2ac93dd89b34657382f56b559fc8a6e129fd7b3d404249990c44677030d858",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/756/approach/explanation",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/756",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+      }
+    ],
+    "status": "present",
+    "value": "Index colours 0..5 and store, for each ordered pair (l, r), a 6-bit mask of allowed tops. To test whether a row can reach the top, build the row above one cell at a time: cell i must be a colour in mask(row[i], row[i+1]). After choosing cell i (i > 0), prune immediately if the new pair (cell i-1, cell i) has no allowed top at all, because that row could never continue. When the next row is complete, recurse on it. Memoise the outcome per row, since many different paths produce the same row."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/756/approach/hints",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/756",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The rows are short and there are only six colours. Can you just try possibilities?",
+      "Decide whether a row can reach the top; that depends only on the row, so cache it.",
+      "Build the next row left to right, and give up early when two adjacent new blocks have no allowed top between them.",
+      "Store allowed tops for each pair as a 6-bit mask indexed by l*6 + r."
+    ]
+  },
+  "id": "approach:leetcode:756:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/756/approach/invariants",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/756",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "following[0..i-1] is a valid partial row above row[0..i]: each cell is an allowed top of its pair.",
+      "Every adjacent pair already placed in following has at least one allowed top.",
+      "memo[row] is true exactly when some sequence of choices from row reaches one block."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:756:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_756_official_approach-native_v1.json",
+    "sha256": "4397c7c3d5b99d34ba3e747c3cdfac84f4c6746ac00a3a94d5958bedc6346c4c",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/756",
+      "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+    }
+  ],
+  "problemId": "leetcode:756",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/0/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "Only the row itself. That makes can(row) a well-defined function suitable for memoisation, and computing it means trying every valid row above it."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/0/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "What should be cached?",
+          "When can you reject a partial row early?"
+        ]
+      },
+      "id": "approach:leetcode:756:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/0/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "List the possible second rows for the third example.",
+          "Notice which rows repeat across different choices."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:756:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_756_official_approach-native_v1.json",
+        "sha256": "4397c7c3d5b99d34ba3e747c3cdfac84f4c6746ac00a3a94d5958bedc6346c4c",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/0/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A row of length 1 is a success.",
+          "A pair with no allowed top makes every row containing it a dead end."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/0/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "What determines whether a pyramid can be finished from a given row?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/0/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "A state that depends only on the row lets repeated rows be solved once."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/0/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/0/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "See the problem as search over rows"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:756:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_756_official_python_v1.json",
+          "sha256": "1466097ed47a27512f296d0f4d723d9c41b3e37ff9ae07fa79a69e53e8f29f1d",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:756:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_756_official_javascript_v1.json",
+          "sha256": "aad59af5dec879d6b20fd49eae0c813a1454542c268ea2b8326aaac0e8939af1",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/1/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "Build top[36] masks from the patterns. can(row): return true for length 1; check memo; otherwise run build(0) which, for each colour c in mask(row[i], row[i+1]), skips c if i > 0 and top[prev*6+c] is 0, appends c and recurses to build(i+1). When i reaches len(row)-1, call can on the finished row. Store and return the result."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/1/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Check mask bit c with mask >> c & 1.",
+          "The memo key must be the full row."
+        ]
+      },
+      "id": "approach:leetcode:756:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/1/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Convert letters to 0..5.",
+          "Fill the 36 masks with OR of 1 << top.",
+          "Implement build with an explicit following list and pop after each try.",
+          "Memoise by tuple (Python) or joined string (JavaScript)."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:756:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_756_official_approach-native_v1.json",
+        "sha256": "4397c7c3d5b99d34ba3e747c3cdfac84f4c6746ac00a3a94d5958bedc6346c4c",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/1/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Return as soon as one choice succeeds.",
+          "The inputs are only read."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/1/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "How do you enumerate valid next rows efficiently?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/1/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "Pruning cuts dead branches before the row is complete; memoisation avoids re-solving the same row."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/1/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/1/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "Masks, cell-by-cell DFS and memo"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/2/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "Use a case with no pattern for some bottom pair (false), a case where only one of several tops works, an empty allowed list (false), and a length-6 bottom with all 216 patterns (true). Compare against a brute-force product of all next rows for small inputs."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/2/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Construct a case where the first choice fails but a later one succeeds."
+        ]
+      },
+      "id": "approach:leetcode:756:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/2/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Compare with an exhaustive Cartesian-product search.",
+          "Include duplicate letters in the bottom."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:756:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_756_official_approach-native_v1.json",
+        "sha256": "4397c7c3d5b99d34ba3e747c3cdfac84f4c6746ac00a3a94d5958bedc6346c4c",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/2/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "With all patterns allowed, every bottom succeeds."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/2/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "Which inputs check pruning, branching and failure?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/2/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "Pruning bugs show up as false negatives; memo bugs as wrong answers on rows reached by different paths."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/2/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/756/approach/stages/2/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/756",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+          }
+        ],
+        "status": "present",
+        "value": "Test reachability edge cases"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/756/approach/title",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/756",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+      }
+    ],
+    "status": "present",
+    "value": "Depth-first search over next rows with pair bitmasks, pruning and memoised rows"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/756/approach/tradeoffs",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/756",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/756.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6e0249a6f61270d7c190448737a57a704b31d60e5837aec2f4512da1598d8ec9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/756.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9a7bdd22f4d6db63b1269aeea31790c7fb0858b7ab4c2d0f6cd4a16dea5f2237"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Generating the full Cartesian product of each next row is simpler but explores dead rows that pruning would skip.",
+      "Bitmasks make the per-pair lookup O(1) and compact; a dictionary of lists is clearer but slower.",
+      "Memo keys are whole rows; the memo is bounded by 6^6 rows."
+    ]
+  },
+  "version": 1
+}
