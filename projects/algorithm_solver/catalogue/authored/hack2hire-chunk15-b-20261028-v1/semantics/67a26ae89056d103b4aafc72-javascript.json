@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67a26ae89056d103b4aafc72",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "server",
+  "replaced",
+  "newId"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "getTotalRequests",
+  "params": [
+   {
+    "name": "server",
+    "type": "integer[]"
+   },
+   {
+    "name": "replaced",
+    "type": "integer[]"
+   },
+   {
+    "name": "newId",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rewrite the whole server list each day and sum it",
+  "candidate_design": "hash map from id to how many servers have it plus a running total; a day moves the count of replaced[j] to newId[j]",
+  "complexity_target": "O(n + q) expected time/O(n) space"
+ },
+ "source_sha256": "0ded8e0aae9a8dbfb11362f170ec1852dd403c8e965732459a329fe01a70fc6a",
+ "wrapper": "named export getTotalRequests"
+}

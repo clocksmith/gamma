@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68edc9c15abdefad4f6693fc",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "EventLogger",
+  "constructor": {
+   "params": [
+    {
+     "name": "window",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "logEvent",
+    "params": [
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "timestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep every printed (name, time) pair and scan them all for a recent print of the same name",
+  "candidate_design": "hash map from name to its last printed timestamp",
+  "complexity_target": "O(1) expected per call/O(distinct names) space"
+ },
+ "source_sha256": "dcb1aa3b1a7cebbdcba04262c11a7617808bb7f7eb97c5ba59c7c12ada16aedc",
+ "native_class": "EventLogger",
+ "native_symbol": "module global EventLogger",
+ "void_methods": []
+}

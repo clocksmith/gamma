@@ -1,0 +1,382 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68d836e8ae12841706c1fc5c:68d8465eae12841706c1fc6e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+   "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68d836e8ae12841706c1fc5c.json",
+   "sha256": "829fcbdd1c6e46cab4f383b8b45b2c979077ae58ab751cb296bbeca3e611afef",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+   "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+   "selector": "/variants/hack2hire:68d8465eae12841706c1fc6e"
+  }
+ ],
+ "problemId": "hack2hire:68d836e8ae12841706c1fc5c",
+ "variantId": "68d8465eae12841706c1fc6e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: case-insensitive whole-word search across files",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:68d8465eae12841706c1fc6e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "files is a list of [name, lines] pairs (lines is a list of strings); word is a non-empty string of ASCII letters and digits. A token is a maximal run of ASCII letters and digits inside a line; an occurrence is a token equal to word when ASCII letter case is ignored. For each file, in input order, that has at least one occurrence, output the row [name, total occurrence count in the file as a decimal string, then every line with at least one occurrence, verbatim, in line order, each listed once]. Files without occurrences are omitted. Return the list of rows.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "files is a list of [name, lines] pairs (lines is a list of strings); word is a non-empty string of ASCII letters and digits.",
+   "A token is a maximal run of ASCII letters and digits inside a line; an occurrence is a token equal to word when ASCII letter case is ignored.",
+   "For each file, in input order, that has at least one occurrence, output the row [name, total occurrence count in the file as a decimal string, then every line with at least one occurrence, verbatim, in line order, each listed once].",
+   "Files without occurrences are omitted.",
+   "Return the list of rows."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= files.length <= 1000",
+   "file names are distinct, 1 to 30 characters from letters, digits, \".\", \"_\" and \"-\"",
+   "lines are printable ASCII, at most 200 characters each",
+   "total lines <= 1e5 and total line characters <= 1e6",
+   "1 <= word.length <= 30, letters and digits"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:68d8465eae12841706c1fc6e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a command-line style tool searches a word across several text files ignoring case; each file is a name plus a list of lines; for every file with at least one match the output row is the file name, the total match count written as a string, then the lines that contain matches (the matching rule and ordering details are cut off); algorithmTags: STRING, HASH_TABLE; preview response sha256 c56f39f8ede3b290bb03f9655aaec0aa9236755bda6c162b956e622e5139aa55"
+   },
+   {
+    "statement": "Uncertainty: high: the input shape, case-insensitivity and the output row layout are in the preview; whole-token matching (rather than raw substring matching), the token alphabet, listing each matching line once and keeping input file order are inferred",
+    "basis": "the public group preview is partial (610 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does a match have to be a whole word, or does any substring count?",
+   "Is a line with several matches listed once or once per match?",
+   "In which order are files and lines reported?",
+   "Is case ignored only for ASCII letters?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:68d8465eae12841706c1fc6e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     "x1"
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "file0.txt",
+       [
+        "foo1 BAR-",
+        ""
+       ]
+      ],
+      [
+       "file1.txt",
+       [
+        "BAR-Foox1 ",
+        "foo1",
+        "afoo FOO ",
+        "foo1-Foo-"
+       ]
+      ],
+      [
+       "file2.txt",
+       [
+        "x1,",
+        "BAR,",
+        "x1-FOO bar-",
+        "bar.Foo"
+       ]
+      ],
+      [
+       "file3.txt",
+       [
+        "barFoo ! x1-FOO",
+        "foo1 ! Foo ! barBAR ! ",
+        "x1 BARFOO.",
+        "bar foo1-FOO",
+        "bar.foo foo ! Foo ! "
+       ]
+      ]
+     ],
+     "FoO"
+    ],
+    "output": [
+     [
+      "file1.txt",
+      "2",
+      "afoo FOO ",
+      "foo1-Foo-"
+     ],
+     [
+      "file2.txt",
+      "2",
+      "x1-FOO bar-",
+      "bar.Foo"
+     ],
+     [
+      "file3.txt",
+      "6",
+      "barFoo ! x1-FOO",
+      "foo1 ! Foo ! barBAR ! ",
+      "bar foo1-FOO",
+      "bar.foo foo ! Foo ! "
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:68d8465eae12841706c1fc6e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/oracles.py",
+    "sha256": "91ac545e76e3dc0c0ecd12646904fa2075cfd3386905038f7253a8004f74a0de",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def searchFiles(files, word) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/68d8465eae12841706c1fc6e-python.json",
+     "inferredInterface": {
+      "name": "searchFiles",
+      "params": [
+       {
+        "name": "files",
+        "type": "(string|string[])[][]"
+       },
+       {
+        "name": "word",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/68d8465eae12841706c1fc6e-python.json",
+      "sha256": "7fb5c2f50fcfb4a1ee8425fb4cf17c62ac9859a2598604bb4940da009bfb1aa1",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function searchFiles(files, word) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/68d8465eae12841706c1fc6e-javascript.json",
+     "inferredInterface": {
+      "name": "searchFiles",
+      "params": [
+       {
+        "name": "files",
+        "type": "(string|string[])[][]"
+       },
+       {
+        "name": "word",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/68d8465eae12841706c1fc6e-javascript.json",
+      "sha256": "a598911d3e623a0f75ed86a7733d50dd2541f95ecfcec6ccc2af5954e675933a",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

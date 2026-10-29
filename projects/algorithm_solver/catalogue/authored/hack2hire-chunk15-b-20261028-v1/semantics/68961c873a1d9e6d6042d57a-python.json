@@ -1,0 +1,121 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68961c873a1d9e6d6042d57a",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "InMemoryDB",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "setData",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "field",
+      "type": "string"
+     },
+     {
+      "name": "value",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getData",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "field",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "deleteData",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "field",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "scanData",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "scanDataByPrefix",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "prefix",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "flat list of entries with linear search; scans filter the list and sort",
+  "candidate_design": "nested hash maps; scans sort the record's (filtered) field names",
+  "complexity_target": "O(1) per set/get/delete, O(f log f) per scan of a record with f fields"
+ },
+ "source_sha256": "afcf48d75333cbbcc88a97beb5bea9d9a0c4732834fdd3ef5a3071d74a67f98d",
+ "native_class": "InMemoryDB",
+ "native_symbol": "module global InMemoryDB",
+ "void_methods": [
+  "setData"
+ ]
+}

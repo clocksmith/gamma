@@ -1,0 +1,2121 @@
+{
+ "schema": "gamma.hack2hire-chunk15-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:68d8465eae12841706c1fc6e": {
+   "constraints": [
+    "0 <= files.length <= 1000",
+    "file names are distinct, 1 to 30 characters from letters, digits, \".\", \"_\" and \"-\"",
+    "lines are printable ASCII, at most 200 characters each",
+    "total lines <= 1e5 and total line characters <= 1e6",
+    "1 <= word.length <= 30, letters and digits"
+   ],
+   "clarifyingQuestions": [
+    "Does a match have to be a whole word, or does any substring count?",
+    "Is a line with several matches listed once or once per match?",
+    "In which order are files and lines reported?",
+    "Is case ignored only for ASCII letters?"
+   ],
+   "hints": [
+    "Lowercase the search word once.",
+    "Walk each line and cut it into maximal letter-or-digit runs; compare each run, lowercased, with the word.",
+    "Keep a per-file counter and the list of lines that matched; emit a row only when the counter is positive, with the count turned into a string."
+   ],
+   "invariants": [
+    "a reported count equals the number of matching tokens in the reported lines",
+    "every reported line contains at least one matching token"
+   ],
+   "chooseWhen": [
+    "Grep-like reporting over in-memory text"
+   ],
+   "tradeoffs": [
+    "A hand-written tokenizer avoids regex engine differences between languages; a regex is shorter where both languages agree"
+   ],
+   "variantLabel": "Inferred single variant: case-insensitive whole-word search across files",
+   "examples": [
+    {
+     "input": [
+      [],
+      "x1"
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "file0.txt",
+        [
+         "foo1 BAR-",
+         ""
+        ]
+       ],
+       [
+        "file1.txt",
+        [
+         "BAR-Foox1 ",
+         "foo1",
+         "afoo FOO ",
+         "foo1-Foo-"
+        ]
+       ],
+       [
+        "file2.txt",
+        [
+         "x1,",
+         "BAR,",
+         "x1-FOO bar-",
+         "bar.Foo"
+        ]
+       ],
+       [
+        "file3.txt",
+        [
+         "barFoo ! x1-FOO",
+         "foo1 ! Foo ! barBAR ! ",
+         "x1 BARFOO.",
+         "bar foo1-FOO",
+         "bar.foo foo ! Foo ! "
+        ]
+       ]
+      ],
+      "FoO"
+     ],
+     "output": [
+      [
+       "file1.txt",
+       "2",
+       "afoo FOO ",
+       "foo1-Foo-"
+      ],
+      [
+       "file2.txt",
+       "2",
+       "x1-FOO bar-",
+       "bar.Foo"
+      ],
+      [
+       "file3.txt",
+       "6",
+       "barFoo ! x1-FOO",
+       "foo1 ! Foo ! barBAR ! ",
+       "bar foo1-FOO",
+       "bar.foo foo ! Foo ! "
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:689505e73a1d9e6d6042d51a": {
+   "constraints": [
+    "keys are 1 to 4 characters, fields 1 to 8 characters, from lowercase letters and digits",
+    "values are 0 to 8 lowercase letters or digits; prefixes 0 to 8 such characters",
+    "at most 1e5 calls per trace"
+   ],
+   "clarifyingQuestions": [
+    "Are later levels cumulative, and are earlier methods still called once timestamps are introduced?",
+    "How are scan results formatted and ordered?",
+    "Is a TTL interval half-open, so a field set at t with ttl d expires exactly at t + d?",
+    "Which backup does restore use, and how are remaining TTLs carried over?"
+   ],
+   "hints": [
+    "A record is a map from field to value; the database is a map from key to record.",
+    "getData must not create records; return \"\" when either level is missing.",
+    "deleteData reports whether something was actually removed."
+   ],
+   "invariants": [
+    "each (key, field) pair holds at most one value",
+    "a scan lists each field at most once, in increasing field order"
+   ],
+   "chooseWhen": [
+    "Keyed record stores with per-field operations"
+   ],
+   "tradeoffs": [
+    "Nested hash maps make point operations O(1); a sorted map per record would make scans output-sensitive at the cost of slower writes"
+   ],
+   "variantLabel": "Level 1: set, get and delete fields",
+   "examples": [
+    {
+     "input": [
+      [
+       "InMemoryDB"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "InMemoryDB",
+       "deleteData",
+       "deleteData",
+       "deleteData",
+       "getData",
+       "setData",
+       "deleteData",
+       "deleteData",
+       "deleteData",
+       "setData",
+       "getData"
+      ],
+      [
+       [],
+       [
+        "b",
+        "fb"
+       ],
+       [
+        "b",
+        "h1"
+       ],
+       [
+        "a",
+        "h1"
+       ],
+       [
+        "b",
+        "fb"
+       ],
+       [
+        "c",
+        "fa",
+        ""
+       ],
+       [
+        "b",
+        "f"
+       ],
+       [
+        "c",
+        "f"
+       ],
+       [
+        "a",
+        "fb"
+       ],
+       [
+        "a",
+        "g",
+        ""
+       ],
+       [
+        "c",
+        "fa"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      false,
+      false,
+      "",
+      null,
+      false,
+      false,
+      false,
+      null,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68961c873a1d9e6d6042d57a": {
+   "constraints": [
+    "keys are 1 to 4 characters, fields 1 to 8 characters, from lowercase letters and digits",
+    "values are 0 to 8 lowercase letters or digits; prefixes 0 to 8 such characters",
+    "at most 1e5 calls per trace"
+   ],
+   "clarifyingQuestions": [
+    "Are later levels cumulative, and are earlier methods still called once timestamps are introduced?",
+    "How are scan results formatted and ordered?",
+    "Is a TTL interval half-open, so a field set at t with ttl d expires exactly at t + d?",
+    "Which backup does restore use, and how are remaining TTLs carried over?"
+   ],
+   "hints": [
+    "Keep the level 1 nested maps.",
+    "A scan collects the record's field names, filters by prefix and sorts them.",
+    "Format each kept field as field + \"(\" + value + \")\"."
+   ],
+   "invariants": [
+    "each (key, field) pair holds at most one value",
+    "a scan lists each field at most once, in increasing field order"
+   ],
+   "chooseWhen": [
+    "Keyed record stores with per-field operations"
+   ],
+   "tradeoffs": [
+    "Nested hash maps make point operations O(1); a sorted map per record would make scans output-sensitive at the cost of slower writes"
+   ],
+   "variantLabel": "Inferred level 2: sorted scans by record and prefix",
+   "examples": [
+    {
+     "input": [
+      [
+       "InMemoryDB"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "InMemoryDB",
+       "setData",
+       "deleteData",
+       "setData",
+       "deleteData",
+       "setData",
+       "scanDataByPrefix",
+       "getData",
+       "setData",
+       "getData",
+       "deleteData"
+      ],
+      [
+       [],
+       [
+        "b",
+        "g",
+        "x"
+       ],
+       [
+        "b",
+        "h1"
+       ],
+       [
+        "b",
+        "fb",
+        "x"
+       ],
+       [
+        "c",
+        "g"
+       ],
+       [
+        "b",
+        "fa",
+        ""
+       ],
+       [
+        "b",
+        ""
+       ],
+       [
+        "c",
+        "g"
+       ],
+       [
+        "a",
+        "f",
+        "x"
+       ],
+       [
+        "b",
+        "fb"
+       ],
+       [
+        "a",
+        "h1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      false,
+      null,
+      false,
+      null,
+      [
+       "fa()",
+       "fb(x)",
+       "g(x)"
+      ],
+      "",
+      null,
+      "x",
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:689641c83a1d9e6d6042d585": {
+   "constraints": [
+    "keys are 1 to 4 characters, fields 1 to 8 characters, from lowercase letters and digits",
+    "values are 0 to 8 lowercase letters or digits; prefixes 0 to 8 such characters",
+    "at most 1e5 calls per trace",
+    "timestamps are strictly increasing integers in [1, 1e9]",
+    "1 <= ttl <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are later levels cumulative, and are earlier methods still called once timestamps are introduced?",
+    "How are scan results formatted and ordered?",
+    "Is a TTL interval half-open, so a field set at t with ttl d expires exactly at t + d?",
+    "Which backup does restore use, and how are remaining TTLs carried over?"
+   ],
+   "hints": [
+    "Store an expiry with each value; no TTL means no expiry.",
+    "A field is live at t when t is before its expiry.",
+    "Reads, deletes and scans ignore expired fields; a set always overwrites."
+   ],
+   "invariants": [
+    "each (key, field) pair holds at most one value",
+    "a scan lists each field at most once, in increasing field order",
+    "an expired field is never returned"
+   ],
+   "chooseWhen": [
+    "Keyed record stores with per-field operations"
+   ],
+   "tradeoffs": [
+    "Nested hash maps make point operations O(1); a sorted map per record would make scans output-sensitive at the cost of slower writes"
+   ],
+   "variantLabel": "Inferred level 3: timestamps and TTL",
+   "examples": [
+    {
+     "input": [
+      [
+       "InMemoryDB"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "InMemoryDB",
+       "scanDataByPrefixAt",
+       "deleteDataAt",
+       "setDataAtWithTtl",
+       "scanDataAt",
+       "setDataAt",
+       "scanDataByPrefixAt",
+       "scanDataByPrefixAt",
+       "scanDataAt"
+      ],
+      [
+       [],
+       [
+        "c",
+        "fa",
+        3
+       ],
+       [
+        "a",
+        "h1",
+        4
+       ],
+       [
+        "b",
+        "g",
+        "x",
+        5,
+        9
+       ],
+       [
+        "c",
+        6
+       ],
+       [
+        "a",
+        "fa",
+        "y1",
+        8
+       ],
+       [
+        "c",
+        "",
+        10
+       ],
+       [
+        "b",
+        "",
+        13
+       ],
+       [
+        "a",
+        14
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      false,
+      null,
+      [],
+      null,
+      [],
+      [
+       "g(x)"
+      ],
+      [
+       "fa(y1)"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:689bb2061126a03aace65e39": {
+   "constraints": [
+    "keys are 1 to 4 characters, fields 1 to 8 characters, from lowercase letters and digits",
+    "values are 0 to 8 lowercase letters or digits; prefixes 0 to 8 such characters",
+    "at most 1e5 calls per trace",
+    "timestamps are strictly increasing integers in [1, 1e9]",
+    "1 <= ttl <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are later levels cumulative, and are earlier methods still called once timestamps are introduced?",
+    "How are scan results formatted and ordered?",
+    "Is a TTL interval half-open, so a field set at t with ttl d expires exactly at t + d?",
+    "Which backup does restore use, and how are remaining TTLs carried over?"
+   ],
+   "hints": [
+    "A backup stores only live fields, with expiry converted to remaining lifetime.",
+    "Backups arrive in increasing time, so a list is already sorted; binary search finds the latest at or before the target.",
+    "Restoring rebuilds the maps and turns each remaining lifetime into restore time + remaining."
+   ],
+   "invariants": [
+    "each (key, field) pair holds at most one value",
+    "a scan lists each field at most once, in increasing field order",
+    "an expired field is never returned"
+   ],
+   "chooseWhen": [
+    "Keyed record stores with per-field operations",
+    "Point-in-time snapshots with relative expiry"
+   ],
+   "tradeoffs": [
+    "Nested hash maps make point operations O(1); a sorted map per record would make scans output-sensitive at the cost of slower writes"
+   ],
+   "variantLabel": "Inferred level 4: backup and restore",
+   "examples": [
+    {
+     "input": [
+      [
+       "InMemoryDB"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "InMemoryDB",
+       "backup",
+       "deleteDataAt",
+       "setDataAtWithTtl",
+       "scanDataByPrefixAt",
+       "scanDataByPrefixAt",
+       "restore",
+       "deleteDataAt",
+       "scanDataAt"
+      ],
+      [
+       [],
+       [
+        2
+       ],
+       [
+        "c",
+        "fb",
+        3
+       ],
+       [
+        "a",
+        "f",
+        "x",
+        5,
+        2
+       ],
+       [
+        "b",
+        "fa",
+        7
+       ],
+       [
+        "a",
+        "g",
+        9
+       ],
+       [
+        10,
+        4
+       ],
+       [
+        "a",
+        "fb",
+        11
+       ],
+       [
+        "b",
+        14
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0,
+      false,
+      null,
+      [],
+      [],
+      null,
+      false,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677df76b052a260e0165706c": {
+   "constraints": [
+    "at most 1e5 calls per trace",
+    "0 <= value <= 1e9",
+    "0 <= r <= 1e15"
+   ],
+   "clarifyingQuestions": [
+    "What does poll or getRandom return on an empty queue?",
+    "Does getRandom remove the element?",
+    "How is randomness made testable: a seed, an injected index, or statistical checks?"
+   ],
+   "hints": [
+    "A linked list gives O(1) add and poll but not O(1) random access.",
+    "Store values in an array and keep the index of the front instead of shifting.",
+    "Position p from the front lives at head + p; compact the array occasionally so dead slots do not grow without bound."
+   ],
+   "invariants": [
+    "size equals the number of adds minus the number of successful polls",
+    "the live values are exactly the array slots from head to the end"
+   ],
+   "chooseWhen": [
+    "FIFO buffers that also need uniform sampling"
+   ],
+   "tradeoffs": [
+    "A head index keeps every operation O(1); a circular buffer avoids compaction but needs resizing"
+   ],
+   "variantLabel": "Inferred single variant: unbounded queue with O(1) indexed random access",
+   "examples": [
+    {
+     "input": [
+      [
+       "InfiniteQueue"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "InfiniteQueue",
+       "getRandom",
+       "poll",
+       "poll",
+       "getRandom",
+       "add",
+       "add",
+       "poll",
+       "add",
+       "add",
+       "getRandom",
+       "poll",
+       "add",
+       "add",
+       "add",
+       "add",
+       "getRandom",
+       "poll"
+      ],
+      [
+       [],
+       [
+        645363223444768
+       ],
+       [],
+       [],
+       [
+        2
+       ],
+       [
+        16
+       ],
+       [
+        6
+       ],
+       [],
+       [
+        6
+       ],
+       [
+        7
+       ],
+       [
+        5
+       ],
+       [],
+       [
+        10
+       ],
+       [
+        9
+       ],
+       [
+        10
+       ],
+       [
+        9
+       ],
+       [
+        600052667071935
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      -1,
+      -1,
+      -1,
+      -1,
+      null,
+      null,
+      16,
+      null,
+      null,
+      7,
+      6,
+      null,
+      null,
+      null,
+      null,
+      9,
+      6
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68539b6bd3dbd4fb8b026e9f": {
+   "constraints": [
+    "0 <= arr.length <= 1e5",
+    "|arr[i]| <= 1e6",
+    "add operands |c| <= 1e6, multiply operands |c| <= 1e3",
+    "after every map, the composed map a x + b satisfies |a| * max|arr| + |b| <= 1e15 (all values stay exact)",
+    "|target| <= 2e15",
+    "at most 1e5 calls per trace"
+   ],
+   "clarifyingQuestions": [
+    "What can map take: arbitrary functions, or a fixed set of operations?",
+    "Does map return a new lazy array or change this one?",
+    "Should indexOf return the first index or any index?",
+    "How large can values grow after many multiplications?"
+   ],
+   "hints": [
+    "Composing add and multiply always gives a function of the form a x + b.",
+    "Precompute the first index of every original value.",
+    "indexOf solves a x + b = target: if a = 0 the answer is 0 or -1; otherwise the preimage exists only when a divides target - b."
+   ],
+   "invariants": [
+    "after k maps the composed coefficients describe exactly the k transformations in order",
+    "the first-index table never changes"
+   ],
+   "chooseWhen": [
+    "Deferred pipelines where queries can be answered through the inverse transformation"
+   ],
+   "tradeoffs": [
+    "Composition is O(1) per map but only works for an invertible-by-algebra family; arbitrary functions force materializing the array"
+   ],
+   "variantLabel": "Inferred single variant: deferred affine maps with first-index lookup",
+   "examples": [
+    {
+     "input": [
+      [
+       "LazyArray"
+      ],
+      [
+       [
+        []
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "LazyArray",
+       "indexOf",
+       "map",
+       "map",
+       "indexOf",
+       "indexOf",
+       "indexOf",
+       "indexOf",
+       "map",
+       "indexOf",
+       "map",
+       "map",
+       "indexOf",
+       "indexOf"
+      ],
+      [
+       [
+        [
+         -5,
+         -3,
+         5,
+         1,
+         4,
+         2
+        ]
+       ],
+       [
+        -27
+       ],
+       [
+        "multiply",
+        -1
+       ],
+       [
+        "multiply",
+        -2
+       ],
+       [
+        -12
+       ],
+       [
+        -8
+       ],
+       [
+        -14
+       ],
+       [
+        10
+       ],
+       [
+        "multiply",
+        2
+       ],
+       [
+        4
+       ],
+       [
+        "multiply",
+        1
+       ],
+       [
+        "add",
+        2
+       ],
+       [
+        18
+       ],
+       [
+        22
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1,
+      null,
+      null,
+      -1,
+      -1,
+      -1,
+      2,
+      null,
+      3,
+      null,
+      null,
+      4,
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697460b3a0697bac5fdca97e": {
+   "constraints": [
+    "0 <= positions.length = costs.length <= 1e5",
+    "positions are distinct, non-zero, |position| <= 1e9",
+    "1 <= costs[i] <= 1e9",
+    "0 <= energy <= 1e15"
+   ],
+   "clarifyingQuestions": [
+    "Does each move cost energy, or only wall crossings?",
+    "Does re-crossing a wall cost again?",
+    "Is a wall at position 0 possible?"
+   ],
+   "hints": [
+    "An optimal route turns at most once: some walls on one side, back through them, then walls on the other side.",
+    "On each side, crossing the nearest walls first is forced, so prefix sums describe every choice.",
+    "For a fixed number on the first side the cost grows with the number on the other side, so two pointers (or binary search) find the best partner."
+   ],
+   "invariants": [
+    "the walls crossed on each side are a prefix by distance",
+    "the first side is paid twice and the second side once"
+   ],
+   "chooseWhen": [
+    "Budgeted two-sided expansion with prefix costs"
+   ],
+   "tradeoffs": [
+    "Two pointers are linear after sorting; binary search per i is simpler to reason about at an extra log factor"
+   ],
+   "variantLabel": "Inferred single variant: maximize distinct walls with a one-turn route",
+   "examples": [
+    {
+     "input": [
+      0,
+      [],
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      43,
+      [
+       20,
+       -6,
+       18,
+       -20,
+       5,
+       7,
+       -10,
+       -17,
+       -14,
+       -7
+      ],
+      [
+       4,
+       2,
+       9,
+       2,
+       9,
+       3,
+       9,
+       7,
+       2,
+       1
+      ]
+     ],
+     "output": 7,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:681bc967a73bd75b806cb994": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "1 <= m <= 1e5",
+    "0 <= player < m",
+    "0 <= room < n",
+    "1 <= k <= 1000",
+    "at most 1e5 calls per trace"
+   ],
+   "clarifyingQuestions": [
+    "What happens when a player in the last room solves its puzzle?",
+    "How are players in the same room ranked?",
+    "What exactly does a top-performer query return: ids, rooms or both?"
+   ],
+   "hints": [
+    "Players only move up by one room, so the set of occupied rooms changes locally.",
+    "Keep each room's players in entry order; a move appends to the next room's list.",
+    "Link the non-empty rooms in decreasing order and walk them from the top until k players are collected."
+   ],
+   "invariants": [
+    "the per-room counts sum to m",
+    "each room list is ordered by entry time",
+    "the non-empty room list is sorted and contains exactly the rooms with count > 0"
+   ],
+   "chooseWhen": [
+    "Leaderboards where scores only increase by one step"
+   ],
+   "tradeoffs": [
+    "Linked lists give O(k) queries; a heap or balanced tree handles arbitrary score jumps at O(log m) per update"
+   ],
+   "variantLabel": "Inferred single variant: room leaderboard with arrival-order ties",
+   "examples": [
+    {
+     "input": [
+      [
+       "EscapeRoom"
+      ],
+      [
+       [
+        2,
+        6
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "EscapeRoom",
+       "advance",
+       "advance",
+       "countInRoom",
+       "topPlayers",
+       "advance",
+       "advance",
+       "advance",
+       "advance",
+       "advance",
+       "advance",
+       "topPlayers",
+       "advance",
+       "advance",
+       "advance",
+       "advance",
+       "advance"
+      ],
+      [
+       [
+        4,
+        6
+       ],
+       [
+        2
+       ],
+       [
+        1
+       ],
+       [
+        1
+       ],
+       [
+        1
+       ],
+       [
+        1
+       ],
+       [
+        4
+       ],
+       [
+        4
+       ],
+       [
+        3
+       ],
+       [
+        2
+       ],
+       [
+        5
+       ],
+       [
+        3
+       ],
+       [
+        1
+       ],
+       [
+        3
+       ],
+       [
+        1
+       ],
+       [
+        0
+       ],
+       [
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      2,
+      [
+       2
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      [
+       1,
+       4,
+       2
+      ],
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68edc9c15abdefad4f6693fc": {
+   "constraints": [
+    "1 <= window <= 1e9",
+    "0 <= timestamp <= 1e9, non-decreasing",
+    "names are 1 to 10 lowercase letters",
+    "at most 1e5 calls per trace"
+   ],
+   "clarifyingQuestions": [
+    "Is an event exactly window seconds after the last print allowed?",
+    "Do suppressed events restart the cooldown?",
+    "What should the method return?"
+   ],
+   "hints": [
+    "Only the last printed time of each name matters.",
+    "Suppressed events do not change any state.",
+    "Compare timestamp - last against window and update only on print."
+   ],
+   "invariants": [
+    "the stored time for a name is the time of its latest printed event"
+   ],
+   "chooseWhen": [
+    "Per-key throttling of monotone event streams"
+   ],
+   "tradeoffs": [
+    "A map of last times is O(names); evicting old names needs an extra queue but saves memory on long streams"
+   ],
+   "variantLabel": "Inferred single variant: per-name cooldown logger",
+   "examples": [
+    {
+     "input": [
+      [
+       "EventLogger"
+      ],
+      [
+       [
+        5
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "EventLogger",
+       "logEvent",
+       "logEvent",
+       "logEvent",
+       "logEvent",
+       "logEvent",
+       "logEvent",
+       "logEvent",
+       "logEvent",
+       "logEvent",
+       "logEvent",
+       "logEvent",
+       "logEvent"
+      ],
+      [
+       [
+        1
+       ],
+       [
+        "a",
+        2
+       ],
+       [
+        "c",
+        2
+       ],
+       [
+        "a",
+        5
+       ],
+       [
+        "c",
+        5
+       ],
+       [
+        "b",
+        5
+       ],
+       [
+        "a",
+        7
+       ],
+       [
+        "b",
+        10
+       ],
+       [
+        "b",
+        12
+       ],
+       [
+        "c",
+        15
+       ],
+       [
+        "c",
+        16
+       ],
+       [
+        "a",
+        19
+       ],
+       [
+        "a",
+        21
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a987edf0ca9cc4e1c78a9a5": {
+   "constraints": [
+    "0 <= sources.length <= 1000",
+    "all rows have the same length, 0 to 1000",
+    "total entries <= 2e5",
+    "keys are 1 to 10 characters from lowercase letters, digits and \"_\"",
+    "values are 0 to 10 characters from lowercase letters, digits, \"_\" and \":\""
+   ],
+   "clarifyingQuestions": [
+    "If one source lists the same key twice, which entry wins?",
+    "Is the result a map, or a list, and in what order?",
+    "Can a key be empty?"
+   ],
+   "hints": [
+    "Splitting at the first colon keeps colons inside the value.",
+    "Processing in preference order means the last write for a key is the final value.",
+    "Collect the map, then sort its keys and rebuild \"key:value\" strings."
+   ],
+   "invariants": [
+    "after processing a prefix of entries the map holds, per key, the latest entry in that prefix"
+   ],
+   "chooseWhen": [
+    "Layered configuration merging"
+   ],
+   "tradeoffs": [
+    "A forward overwrite pass is simplest; a reverse pass with first-wins can stop early once all keys are known"
+   ],
+   "variantLabel": "Inferred single variant: last write wins by source preference",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "k2:x:y",
+        "k:",
+        "k::",
+        "k2:v"
+       ],
+       [
+        "k1:null",
+        "a_b:",
+        "k:1",
+        "a_b:null"
+       ],
+       [
+        "a_b:null",
+        "a_b::",
+        "k:null",
+        "k10:"
+       ]
+      ]
+     ],
+     "output": [
+      "a_b::",
+      "k:null",
+      "k1:null",
+      "k10:",
+      "k2:v"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6782d18f3cd890ccd3798fc5": {
+   "constraints": [
+    "start and end follow the format exactly",
+    "a range spans less than one week (at most 2016 outputs)"
+   ],
+   "clarifyingQuestions": [
+    "Are times aligned to multiples of 5 or stepped from start?",
+    "Are both ends inclusive?",
+    "What if end is earlier in the week than start?",
+    "Is the hour zero-padded?"
+   ],
+   "hints": [
+    "Map each time to minutes since Monday 12:00 AM.",
+    "Round the start up to a multiple of 5; if end is smaller, add one week to it.",
+    "Step by 5 minutes and convert back, taking the result modulo one week and using 12 for hour 0."
+   ],
+   "invariants": [
+    "every emitted minute value is a multiple of 5 and lies in the (possibly wrapped) range"
+   ],
+   "chooseWhen": [
+    "Enumerating schedule slots in a cyclic week"
+   ],
+   "tradeoffs": [
+    "Integer minutes avoid date libraries; a library would be needed for real calendars with time zones"
+   ],
+   "variantLabel": "Inferred single variant: aligned 5-minute times in a weekly range",
+   "examples": [
+    {
+     "input": [
+      "Tue 3:03 PM",
+      "Tue 3:04 PM"
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "Mon 10:00 AM",
+      "Mon 10:20 AM"
+     ],
+     "output": [
+      "Mon 10:00 AM",
+      "Mon 10:05 AM",
+      "Mon 10:10 AM",
+      "Mon 10:15 AM",
+      "Mon 10:20 AM"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c8719bdf5a6365aa774b15": {
+   "constraints": [
+    "1 <= words.length <= 1000",
+    "1 <= words[i].length <= 50",
+    "words are distinct lowercase strings",
+    "0 <= s.length <= 1e4, lowercase"
+   ],
+   "clarifyingQuestions": [
+    "Are words distinct?",
+    "What should be returned when no word fits?",
+    "Can s be shorter than every word?"
+   ],
+   "hints": [
+    "A substring is an anagram of a word exactly when both have the same 26 letter counts.",
+    "All words of the same length can share one sliding window over s.",
+    "Encode the window counts as an exact key and look it up among word keys of that length; keep the smallest word index found."
+   ],
+   "invariants": [
+    "the window key always equals the counts of the current window of fixed length"
+   ],
+   "chooseWhen": [
+    "Multi-pattern anagram search"
+   ],
+   "tradeoffs": [
+    "Sharing windows by length avoids one pass per word; exact count keys avoid hash false positives"
+   ],
+   "variantLabel": "Single variant: first word whose anagram occurs in s",
+   "examples": [
+    {
+     "input": [
+      [
+       "abc"
+      ],
+      ""
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "cccb",
+       "baca",
+       "abaa",
+       "ccaa"
+      ],
+      "dabacdccbdddb"
+     ],
+     "output": "baca",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f131b096981f58ae1f7654": {
+   "constraints": [
+    "1 <= arr.length <= 1e5",
+    "1 <= arr[i] <= 1e5",
+    "1 <= k <= arr.length"
+   ],
+   "clarifyingQuestions": [
+    "Is \"at least k\" or \"exactly k\" distinct required?",
+    "What is returned when no subarray qualifies?"
+   ],
+   "hints": [
+    "If a window has at least k distinct values, so does every window containing it.",
+    "Use two pointers with a count per value.",
+    "After each extension, shrink from the left while the window stays good, recording the length each time."
+   ],
+   "invariants": [
+    "distinct equals the number of values with positive count in the window"
+   ],
+   "chooseWhen": [
+    "Minimum-length windows with a monotone property"
+   ],
+   "tradeoffs": [
+    "Two pointers are linear; binary search on the length with a fixed window is O(n log n)"
+   ],
+   "variantLabel": "Single variant: shortest window with at least k distinct values",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5,
+       5,
+       1,
+       5,
+       2,
+       4,
+       2,
+       2,
+       5,
+       6,
+       4,
+       2,
+       4,
+       5,
+       2,
+       6,
+       3,
+       6,
+       5,
+       6,
+       3,
+       3,
+       3,
+       6,
+       5,
+       6,
+       4,
+       1,
+       4
+      ],
+      6
+     ],
+     "output": 14,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6772e2e1dd9437f8aa275b01": {
+   "constraints": [
+    "1 <= nodes <= 1e4",
+    "1 <= value <= 1e5",
+    "1 <= path.length <= 1000"
+   ],
+   "clarifyingQuestions": [
+    "How is the tree given as input?",
+    "Must the path end at a leaf?",
+    "With repeated values, is any matching branch enough?"
+   ],
+   "hints": [
+    "Because values repeat, several nodes can match the same prefix.",
+    "Keep the whole frontier of matching nodes for each depth.",
+    "Each node is examined at most once, at its own depth."
+   ],
+   "invariants": [
+    "the frontier at step i contains exactly the depth-i nodes whose root chain matches path[0..i]"
+   ],
+   "chooseWhen": [
+    "Pattern lookup along root paths with duplicate labels"
+   ],
+   "tradeoffs": [
+    "A frontier search is iterative and depth-safe; recursion is shorter but limited by stack depth"
+   ],
+   "variantLabel": "Variant 1: root-anchored downward path",
+   "examples": [
+    {
+     "input": [
+      [
+       7
+      ],
+      [
+       7
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       2,
+       null,
+       1,
+       3,
+       null,
+       1,
+       2,
+       null,
+       null,
+       1,
+       3,
+       null,
+       3,
+       3,
+       null,
+       3,
+       null,
+       null,
+       null,
+       3,
+       2,
+       3,
+       null,
+       1,
+       null,
+       1,
+       null,
+       null,
+       null,
+       null,
+       3,
+       3,
+       null,
+       1,
+       null,
+       1,
+       3,
+       null,
+       2,
+       null,
+       null,
+       2,
+       null,
+       1,
+       null,
+       null,
+       1,
+       null,
+       1,
+       null,
+       1,
+       null,
+       1,
+       3
+      ],
+      [
+       2,
+       1,
+       2
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6772e85ddd9437f8aa275b02": {
+   "constraints": [
+    "1 <= nodes <= 1e4",
+    "1 <= value <= 1e5",
+    "1 <= path.length <= 1000"
+   ],
+   "clarifyingQuestions": [
+    "Can the path start below the root?",
+    "Must it go strictly downward?"
+   ],
+   "hints": [
+    "Every root-to-node chain is a string of values; the question is whether path is a substring ending at some node.",
+    "Run KMP along each root chain; children resume from their parent's state.",
+    "Branching breaks KMP's amortization, so memoize the automaton transition for each (state, value) pair."
+   ],
+   "invariants": [
+    "the state at a node is the longest path prefix that is a suffix of its root chain"
+   ],
+   "chooseWhen": [
+    "Substring search over every root-to-node string of a tree"
+   ],
+   "tradeoffs": [
+    "Memoized KMP transitions avoid repeated failure walks; trying every start is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred variant 2: downward path starting anywhere",
+   "examples": [
+    {
+     "input": [
+      [
+       7
+      ],
+      [
+       7
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       null,
+       3,
+       2,
+       null,
+       1,
+       3,
+       null,
+       null,
+       3,
+       null,
+       2,
+       2,
+       2,
+       null,
+       null,
+       3,
+       null,
+       3,
+       null,
+       2,
+       null,
+       1,
+       null,
+       3,
+       null,
+       1,
+       3,
+       null,
+       null,
+       1,
+       null,
+       null,
+       null,
+       1,
+       3,
+       3,
+       1,
+       null,
+       null,
+       1,
+       null,
+       1,
+       null,
+       2,
+       null,
+       null,
+       null,
+       3,
+       null,
+       3,
+       null,
+       2,
+       1,
+       null,
+       1
+      ],
+      [
+       2,
+       3,
+       3,
+       1,
+       1,
+       2
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6833f407c7e9643eccb00bf5": {
+   "constraints": [
+    "0 <= open < close <= 1e9",
+    "1 <= capacity <= 1e9",
+    "0 <= reservations.length <= 1e5",
+    "open <= start < end <= close",
+    "1 <= seats",
+    "reserved seats never exceed capacity",
+    "1 <= partySize <= capacity"
+   ],
+   "clarifyingQuestions": [
+    "What is the question: free intervals, fully booked intervals, or whether a party fits?",
+    "Are reservation intervals half-open?",
+    "Should touching intervals be merged?"
+   ],
+   "hints": [
+    "Free seats only change at reservation starts and ends.",
+    "Sort +seats and -seats events by time and process all events at one time together.",
+    "Track where the current qualifying stretch began and close it when free seats drop below partySize or the day ends."
+   ],
+   "invariants": [
+    "between consecutive event times the reserved total is constant",
+    "emitted intervals are disjoint, sorted and non-adjacent"
+   ],
+   "chooseWhen": [
+    "Capacity timelines from interval bookings"
+   ],
+   "tradeoffs": [
+    "A sweep is O(n log n); a difference array over minutes is simpler but needs bounded time ranges"
+   ],
+   "variantLabel": "Inferred single variant: free-seat intervals for a party",
+   "examples": [
+    {
+     "input": [
+      0,
+      10,
+      2,
+      [],
+      1
+     ],
+     "output": [
+      [
+       0,
+       10
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      1,
+      22,
+      3,
+      [
+       [
+        4,
+        9,
+        1
+       ],
+       [
+        6,
+        12,
+        1
+       ],
+       [
+        7,
+        22,
+        1
+       ],
+       [
+        17,
+        18,
+        2
+       ],
+       [
+        21,
+        22,
+        1
+       ]
+      ],
+      2
+     ],
+     "output": [
+      [
+       1,
+       6
+      ],
+      [
+       12,
+       17
+      ],
+      [
+       18,
+       21
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:688e62068cf2da976a9c6903": {
+   "constraints": [
+    "0 <= loans.length <= 1e5",
+    "names are 1 to 10 lowercase letters; borrower != lender",
+    "amount is a decimal string without leading zeros, 0 <= amount < 1e9",
+    "1 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Does the answer report a name, an amount, or both?",
+    "Are people with zero or negative net debt ranked?",
+    "How are equal debts ordered?",
+    "How large can amounts be?"
+   ],
+   "hints": [
+    "Each loan adds the amount to the borrower and subtracts it from the lender.",
+    "Keep only positive nets.",
+    "Sort by debt descending and name ascending, then index k - 1."
+   ],
+   "invariants": [
+    "the sum of all nets is zero"
+   ],
+   "chooseWhen": [
+    "Ranking aggregated balances"
+   ],
+   "tradeoffs": [
+    "A full sort is simplest; a size-k heap or quickselect saves time when k is small"
+   ],
+   "variantLabel": "Inferred single variant: k-th largest positive net debt",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "dan",
+        "eve",
+        "14"
+       ],
+       [
+        "amy",
+        "cat",
+        "9"
+       ],
+       [
+        "bob",
+        "amy",
+        "12"
+       ],
+       [
+        "eve",
+        "amy",
+        "13"
+       ],
+       [
+        "amy",
+        "bob",
+        "12"
+       ],
+       [
+        "amy",
+        "eve",
+        "17"
+       ],
+       [
+        "cat",
+        "amy",
+        "13"
+       ],
+       [
+        "amy",
+        "cat",
+        "3"
+       ],
+       [
+        "eve",
+        "bob",
+        "11"
+       ],
+       [
+        "amy",
+        "eve",
+        "12"
+       ],
+       [
+        "cat",
+        "dan",
+        "2"
+       ],
+       [
+        "eve",
+        "cat",
+        "9"
+       ]
+      ],
+      3
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:680d8976286d3dbf97693ad5": {
+   "constraints": [
+    "1 <= rows, cols <= 300",
+    "cells are \"a\", \"b\" or \"\"",
+    "board[x][y] == \"\"",
+    "player is \"a\" or \"b\""
+   ],
+   "clarifyingQuestions": [
+    "Does five or more in a row count?",
+    "Do pieces fall to the lowest empty cell?",
+    "Is the target cell guaranteed empty?"
+   ],
+   "hints": [
+    "Only lines through the new piece can be completed by it.",
+    "For each direction count matching pieces going forward and backward from the cell.",
+    "The move wins when 1 + forward + backward >= 4 in some direction."
+   ],
+   "invariants": [
+    "the board is never modified"
+   ],
+   "chooseWhen": [
+    "Local win checks after a move"
+   ],
+   "tradeoffs": [
+    "Counting outward is O(1); rescanning the board is simpler but O(rows cols)"
+   ],
+   "variantLabel": "Single variant: does a move complete four in a row",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        ""
+       ]
+      ],
+      [
+       0,
+       0
+      ],
+      "a"
+     ],
+     "output": false,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "",
+        "",
+        "a",
+        "",
+        "a",
+        "a"
+       ],
+       [
+        "",
+        "b",
+        "",
+        "b",
+        "",
+        ""
+       ],
+       [
+        "a",
+        "b",
+        "a",
+        "a",
+        "a",
+        "a"
+       ],
+       [
+        "b",
+        "",
+        "",
+        "a",
+        "a",
+        "a"
+       ],
+       [
+        "a",
+        "a",
+        "b",
+        "a",
+        "b",
+        "a"
+       ],
+       [
+        "b",
+        "a",
+        "",
+        "",
+        "",
+        "a"
+       ],
+       [
+        "b",
+        "a",
+        "",
+        "a",
+        "a",
+        "a"
+       ]
+      ],
+      [
+       0,
+       3
+      ],
+      "a"
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a26ae89056d103b4aafc72": {
+   "constraints": [
+    "1 <= server.length <= 1e5",
+    "0 <= replaced.length = newId.length <= 1e5",
+    "1 <= ids <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is the total reported after or before the day's replacement?",
+    "What if no server has id replaced[j]?",
+    "Can newId[j] equal replaced[j]?"
+   ],
+   "hints": [
+    "Servers with the same id always change together, so only counts per id matter.",
+    "Keep the total; a replacement changes it by count * (new - old).",
+    "Move the count to the new id (adding to any existing count) and delete the old id."
+   ],
+   "invariants": [
+    "total equals the sum of id * count over the map"
+   ],
+   "chooseWhen": [
+    "Bulk relabelling with aggregate queries"
+   ],
+   "tradeoffs": [
+    "Counting by id is linear; simulating every server is O(n q)"
+   ],
+   "variantLabel": "Single variant: totals after each day's replacement",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       2,
+       4,
+       3,
+       5,
+       3,
+       3,
+       4,
+       1,
+       3
+      ],
+      [
+       2,
+       1,
+       3,
+       2,
+       2,
+       6,
+       3,
+       2,
+       6,
+       1
+      ],
+      [
+       5,
+       6,
+       5,
+       1,
+       5,
+       5,
+       5,
+       6,
+       2,
+       6
+      ]
+     ],
+     "output": [
+      31,
+      36,
+      44,
+      44,
+      44,
+      43,
+      43,
+      43,
+      43,
+      43
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

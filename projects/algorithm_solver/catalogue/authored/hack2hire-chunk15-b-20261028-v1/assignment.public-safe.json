@@ -1,0 +1,1429 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk15-b (16 Hack2Hire groups, 20 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:68d8465eae12841706c1fc6e",
+   "title": "Design File Search Tool",
+   "variant_ordinal": 1,
+   "group_post_id": "68d836e8ae12841706c1fc5c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "searchFiles",
+     "params": [
+      {
+       "name": "files",
+       "type": "(string|string[])[][]"
+      },
+      {
+       "name": "word",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "split every line on non-alphanumeric characters with a regular expression and compare lowercased tokens",
+    "candidate_design": "single left-to-right scan per line that collects alphanumeric runs, lowercases them and compares with the lowercased word",
+    "complexity_target": "O(total characters) time/O(longest line + output) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c56f39f8ede3b290bb03f9655aaec0aa9236755bda6c162b956e622e5139aa55",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:689505e73a1d9e6d6042d51a",
+   "title": "Design In-memory Database with Backup",
+   "variant_ordinal": 1,
+   "group_post_id": "689505de3a1d9e6d6042d519",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "InMemoryDB",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "setData",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getData",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "deleteData",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "InMemoryDB"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "flat list of (key, field, value) entries with linear search",
+    "candidate_design": "hash map from key to a hash map from field to value",
+    "complexity_target": "O(1) expected per call/O(stored fields) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5a0dd3c445d6a4a137aaedc18a37ebe73a0f98d67dd834299f9b408a07eaf438",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68961c873a1d9e6d6042d57a",
+   "title": "Design In-memory Database with Backup",
+   "variant_ordinal": 2,
+   "group_post_id": "689505de3a1d9e6d6042d519",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "InMemoryDB",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "setData",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getData",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "deleteData",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "scanData",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "scanDataByPrefix",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "prefix",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "InMemoryDB"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "flat list of entries with linear search; scans filter the list and sort",
+    "candidate_design": "nested hash maps; scans sort the record's (filtered) field names",
+    "complexity_target": "O(1) per set/get/delete, O(f log f) per scan of a record with f fields"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5a0dd3c445d6a4a137aaedc18a37ebe73a0f98d67dd834299f9b408a07eaf438",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:689641c83a1d9e6d6042d585",
+   "title": "Design In-memory Database with Backup",
+   "variant_ordinal": 3,
+   "group_post_id": "689505de3a1d9e6d6042d519",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "InMemoryDB",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "setDataAt",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "setDataAtWithTtl",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "ttl",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "deleteDataAt",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getDataAt",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "scanDataAt",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "scanDataByPrefixAt",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "prefix",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "InMemoryDB"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "flat list of (key, field, value, expiry) entries with linear search and liveness checks",
+    "candidate_design": "nested hash maps holding (value, expiry); liveness checked on read; scans filter live fields and sort",
+    "complexity_target": "O(1) per point call, O(f log f) per scan"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5a0dd3c445d6a4a137aaedc18a37ebe73a0f98d67dd834299f9b408a07eaf438",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:689bb2061126a03aace65e39",
+   "title": "Design In-memory Database with Backup",
+   "variant_ordinal": 4,
+   "group_post_id": "689505de3a1d9e6d6042d519",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "InMemoryDB",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "setDataAt",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "setDataAtWithTtl",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "ttl",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "deleteDataAt",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getDataAt",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "field",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "scanDataAt",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "scanDataByPrefixAt",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "prefix",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "backup",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "restore",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "timestampToRestore",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      }
+     ]
+    },
+    "native_class": "InMemoryDB"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "flat entry list; backups store filtered copies with remaining lifetimes; restore scans the backup list for the latest eligible one",
+    "candidate_design": "nested hash maps as in level 3; backups kept in timestamp order as (time, live fields with remaining lifetime); restore binary-searches the backup list and rebuilds the maps",
+    "complexity_target": "O(1) per point call, O(f log f) per scan, O(live fields) per backup and per restore"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5a0dd3c445d6a4a137aaedc18a37ebe73a0f98d67dd834299f9b408a07eaf438",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:677df76b052a260e0165706c",
+   "title": "Design Infinite Queue with GetRandom O(1)",
+   "variant_ordinal": 1,
+   "group_post_id": "677df6bb052a260e0165706b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "InfiniteQueue",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "add",
+       "params": [
+        {
+         "name": "value",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "poll",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getRandom",
+       "params": [
+        {
+         "name": "r",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "InfiniteQueue"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "plain list with removal from the front and direct indexing",
+    "candidate_design": "growable array plus a head index (slots before the head are dead and compacted when they reach half the array); getRandom indexes head + r mod size",
+    "complexity_target": "O(1) amortized per call/O(live elements) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "27949239e49ad4061e893ee092f645c0038e443f9e56c5f34088133e3d08d672",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68539b6bd3dbd4fb8b026e9f",
+   "title": "Design Lazy Array",
+   "variant_ordinal": 1,
+   "group_post_id": "68539976d3dbd4fb8b026e9e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "LazyArray",
+     "constructor": {
+      "params": [
+       {
+        "name": "arr",
+        "type": "integer[]"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "map",
+       "params": [
+        {
+         "name": "operation",
+         "type": "string"
+        },
+        {
+         "name": "operand",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "indexOf",
+       "params": [
+        {
+         "name": "target",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "LazyArray"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "apply each transformation eagerly to a copied array and search it linearly",
+    "candidate_design": "compose all transformations into one affine map a x + b; indexOf inverts it ((target - b) / a when divisible) and looks the preimage up in a first-index hash map; a = 0 means every element maps to b",
+    "complexity_target": "O(n) construction, O(1) per map and indexOf/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "f046d80ba8e3df7725c393925f27ba733d78df8d16fec455e0170304e993c3ef",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:697460b3a0697bac5fdca97e",
+   "title": "Distinct Wall Crossing on Number Line",
+   "variant_ordinal": 1,
+   "group_post_id": "697460ada0697bac5fdca97d",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxDistinctWalls",
+     "params": [
+      {
+       "name": "energy",
+       "type": "integer"
+      },
+      {
+       "name": "positions",
+       "type": "integer[]"
+      },
+      {
+       "name": "costs",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every pair (i, j) with prefix sums and both visiting orders",
+    "candidate_design": "sort walls on each side by distance, build prefix sums, and run two pointers over i (right count) and j (left count) for both visiting orders",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0b4cf3a563a6d448b96f25a3a2e6c0a885aa3a67603df394af86c748d07d0398",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:681bc967a73bd75b806cb994",
+   "title": "Escape Room",
+   "variant_ordinal": 1,
+   "group_post_id": "681bc4c3a73bd75b806cb98f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "EscapeRoom",
+     "constructor": {
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       },
+       {
+        "name": "m",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "advance",
+       "params": [
+        {
+         "name": "player",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "countInRoom",
+       "params": [
+        {
+         "name": "room",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "topPlayers",
+       "params": [
+        {
+         "name": "k",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer[]"
+       }
+      }
+     ]
+    },
+    "native_class": "EscapeRoom"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "sort all players by (room descending, entry time) on every topPlayers call",
+    "candidate_design": "per-room counts; per-room doubly linked lists in entry order; a sorted doubly linked list of non-empty rooms (a move from r to r + 1 inserts r + 1 right after r and unlinks r when it empties); topPlayers walks rooms from the highest",
+    "complexity_target": "O(1) per advance and countInRoom, O(k) per topPlayers/O(n + m) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "fa685752782deace7fba97b0244ced38030ae90b6b85c3218241b53066bd2885",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68edc9c15abdefad4f6693fc",
+   "title": "Event Logger with Rate Limiting",
+   "variant_ordinal": 1,
+   "group_post_id": "68edc9bc5abdefad4f6693fb",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "EventLogger",
+     "constructor": {
+      "params": [
+       {
+        "name": "window",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "logEvent",
+       "params": [
+        {
+         "name": "name",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "EventLogger"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep every printed (name, time) pair and scan them all for a recent print of the same name",
+    "candidate_design": "hash map from name to its last printed timestamp",
+    "complexity_target": "O(1) expected per call/O(distinct names) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "fb1bba0a5cb44864afc5a2fc79769113341911ea89c03797867ca641a33f7597",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a987edf0ca9cc4e1c78a9a5",
+   "title": "Final Values by Source Priority",
+   "variant_ordinal": 1,
+   "group_post_id": "6a987edb0ca9cc4e1c78a9a4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "finalValues",
+     "params": [
+      {
+       "name": "sources",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan sources from highest to lowest preference and entries right to left, keeping the first value seen per key",
+    "candidate_design": "one forward pass overwriting a hash map, then sort the keys",
+    "complexity_target": "O(E + K log K) time/O(K) space for E entries and K keys"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "510d9de213fb6b94e1a5a03556564c33a75567469b8355324f8f1f55bad7f8ec",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6782d18f3cd890ccd3798fc5",
+   "title": "Find All 5-Minute Intervals",
+   "variant_ordinal": 1,
+   "group_post_id": "6782d1833cd890ccd3798fc4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "fiveMinuteIntervals",
+     "params": [
+      {
+       "name": "start",
+       "type": "string"
+      },
+      {
+       "name": "end",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "walk minute by minute from start to end around the week and keep minutes divisible by 5",
+    "candidate_design": "convert both ends to minutes of the week, round start up to a multiple of 5, and step by 5 minutes, formatting each value",
+    "complexity_target": "O(number of output times) time/O(output) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5f527f052ddad4fd57e985e32b73882e1afcbb822437e0303d7c02f5262fee3f",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68c8719bdf5a6365aa774b15",
+   "title": "Find Anagram in String",
+   "variant_ordinal": 1,
+   "group_post_id": "68c87196df5a6365aa774b14",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "firstAnagramWord",
+     "params": [
+      {
+       "name": "words",
+       "type": "string[]"
+      },
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each word in order, compare its sorted letters with the sorted letters of every window of s",
+    "candidate_design": "group words by length; for each length slide one window over s keeping an exact count signature (four base-51 numbers over the 26 counts) and look it up in a map from word signatures to word indices; answer the smallest index found",
+    "complexity_target": "O(D |s| + total word length) time for D distinct word lengths/O(number of words) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "f5e022f19065818199c5d44de5054a6c70d4c4abfee7943dc96c13e3c5a3995b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69f131b096981f58ae1f7654",
+   "title": "Find K Distinct Element Subarray",
+   "variant_ordinal": 1,
+   "group_post_id": "69f131a496981f58ae1f7653",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "shortestGoodSubarray",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every start, extend to the right with a set until k distinct values are seen",
+    "candidate_design": "sliding window: extend right, and while the window still has k distinct values record its length and shrink from the left",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "269a258429258019258fa2f815f20e785e0c0c446f6c1431a18be08dc91a3f3d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6772e2e1dd9437f8aa275b01",
+   "title": "Find Path in N-ary Tree",
+   "variant_ordinal": 1,
+   "group_post_id": "6772e0d9dd9437f8aa275b00",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "pathExists",
+     "params": [
+      {
+       "name": "tree",
+       "type": "(integer|null)[]"
+      },
+      {
+       "name": "path",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rebuild child lists and run a recursive depth-first search from the root",
+    "candidate_design": "level-by-level frontier: keep the set of nodes matching the path prefix and expand to children equal to the next path value",
+    "complexity_target": "O(nodes + path) time/O(nodes) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "eaaa3d7dda8b8ddfd43a46377b467e9ebfe73319332a136791fef43ffbdf7ff9",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6772e85ddd9437f8aa275b02",
+   "title": "Find Path in N-ary Tree",
+   "variant_ordinal": 2,
+   "group_post_id": "6772e0d9dd9437f8aa275b00",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "pathExistsAnywhere",
+     "params": [
+      {
+       "name": "tree",
+       "type": "(integer|null)[]"
+      },
+      {
+       "name": "path",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every node as a start and run a recursive depth-first search along the path",
+    "candidate_design": "depth-first traversal carrying a KMP automaton state for the root-to-node value string; transitions are memoized per (state, value) so failure links are followed at most once per pair",
+    "complexity_target": "O(nodes + memoized transitions) time/O(nodes + path) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "eaaa3d7dda8b8ddfd43a46377b467e9ebfe73319332a136791fef43ffbdf7ff9",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6833f407c7e9643eccb00bf5",
+   "title": "Find Restaurant Intervals",
+   "variant_ordinal": 1,
+   "group_post_id": "6833ebf4c7e9643eccb00bf3",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "availableIntervals",
+     "params": [
+      {
+       "name": "open",
+       "type": "integer"
+      },
+      {
+       "name": "close",
+       "type": "integer"
+      },
+      {
+       "name": "capacity",
+       "type": "integer"
+      },
+      {
+       "name": "reservations",
+       "type": "integer[][]"
+      },
+      {
+       "name": "partySize",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "cut the day at every reservation boundary and sum overlapping seats for each piece",
+    "candidate_design": "sweep: turn reservations into +seats/-seats events, sort them, walk times keeping the reserved total, and open/close output intervals when free seats cross partySize",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5226e1fb879699981860a17755cdd3545c775a246a86049aa87a66d52631b876",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:688e62068cf2da976a9c6903",
+   "title": "Find the K-th Highest Debit",
+   "variant_ordinal": 1,
+   "group_post_id": "688e61fe8cf2da976a9c6902",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "kthHighestDebtor",
+     "params": [
+      {
+       "name": "loans",
+       "type": "string[][]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "accumulate nets in a map by repeated lookups and sort all debtors",
+    "candidate_design": "one pass accumulating nets in a hash map, then sort the positive entries by (-net, name)",
+    "complexity_target": "O(L + P log P) time/O(P) space for L loans and P people"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3014750a4d15b0ca244d1807aada7a474220881020258fc00c7e6c6241b89e8a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:680d8976286d3dbf97693ad5",
+   "title": "Four-in-a-row Game",
+   "variant_ordinal": 1,
+   "group_post_id": "680d8514286d3dbf97693ad4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "isWinningMove",
+     "params": [
+      {
+       "name": "board",
+       "type": "string[][]"
+      },
+      {
+       "name": "move",
+       "type": "integer[]"
+      },
+      {
+       "name": "player",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every length-4 window through the cell in each direction on a copied board",
+    "candidate_design": "for each of the four directions count same-player pieces outward on both sides of the cell, stopping after three",
+    "complexity_target": "O(1) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ede5a768e73ad273367108d04ef498149ceac75f9ef15bc6b19f82a1c4ea2da6",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67a26ae89056d103b4aafc72",
+   "title": "Get Total Requests",
+   "variant_ordinal": 1,
+   "group_post_id": "67a25be7c5f86173882e3d90",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "getTotalRequests",
+     "params": [
+      {
+       "name": "server",
+       "type": "integer[]"
+      },
+      {
+       "name": "replaced",
+       "type": "integer[]"
+      },
+      {
+       "name": "newId",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rewrite the whole server list each day and sum it",
+    "candidate_design": "hash map from id to how many servers have it plus a running total; a day moves the count of replaced[j] to newId[j]",
+    "complexity_target": "O(n + q) expected time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3bda810a25175fa3749a73aecd14aa556af79acd1c97af80244978b1f9d69209",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

@@ -1,0 +1,104 @@
+{
+ "problems": {
+  "hack2hire:68d8465eae12841706c1fc6e": {
+   "reference": "split every line on non-alphanumeric characters with a regular expression and compare lowercased tokens",
+   "candidate_design": "single left-to-right scan per line that collects alphanumeric runs, lowercases them and compares with the lowercased word",
+   "complexity_target": "O(total characters) time/O(longest line + output) space"
+  },
+  "hack2hire:689505e73a1d9e6d6042d51a": {
+   "reference": "flat list of (key, field, value) entries with linear search",
+   "candidate_design": "hash map from key to a hash map from field to value",
+   "complexity_target": "O(1) expected per call/O(stored fields) space"
+  },
+  "hack2hire:68961c873a1d9e6d6042d57a": {
+   "reference": "flat list of entries with linear search; scans filter the list and sort",
+   "candidate_design": "nested hash maps; scans sort the record's (filtered) field names",
+   "complexity_target": "O(1) per set/get/delete, O(f log f) per scan of a record with f fields"
+  },
+  "hack2hire:689641c83a1d9e6d6042d585": {
+   "reference": "flat list of (key, field, value, expiry) entries with linear search and liveness checks",
+   "candidate_design": "nested hash maps holding (value, expiry); liveness checked on read; scans filter live fields and sort",
+   "complexity_target": "O(1) per point call, O(f log f) per scan"
+  },
+  "hack2hire:689bb2061126a03aace65e39": {
+   "reference": "flat entry list; backups store filtered copies with remaining lifetimes; restore scans the backup list for the latest eligible one",
+   "candidate_design": "nested hash maps as in level 3; backups kept in timestamp order as (time, live fields with remaining lifetime); restore binary-searches the backup list and rebuilds the maps",
+   "complexity_target": "O(1) per point call, O(f log f) per scan, O(live fields) per backup and per restore"
+  },
+  "hack2hire:677df76b052a260e0165706c": {
+   "reference": "plain list with removal from the front and direct indexing",
+   "candidate_design": "growable array plus a head index (slots before the head are dead and compacted when they reach half the array); getRandom indexes head + r mod size",
+   "complexity_target": "O(1) amortized per call/O(live elements) space"
+  },
+  "hack2hire:68539b6bd3dbd4fb8b026e9f": {
+   "reference": "apply each transformation eagerly to a copied array and search it linearly",
+   "candidate_design": "compose all transformations into one affine map a x + b; indexOf inverts it ((target - b) / a when divisible) and looks the preimage up in a first-index hash map; a = 0 means every element maps to b",
+   "complexity_target": "O(n) construction, O(1) per map and indexOf/O(n) space"
+  },
+  "hack2hire:697460b3a0697bac5fdca97e": {
+   "reference": "try every pair (i, j) with prefix sums and both visiting orders",
+   "candidate_design": "sort walls on each side by distance, build prefix sums, and run two pointers over i (right count) and j (left count) for both visiting orders",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:681bc967a73bd75b806cb994": {
+   "reference": "sort all players by (room descending, entry time) on every topPlayers call",
+   "candidate_design": "per-room counts; per-room doubly linked lists in entry order; a sorted doubly linked list of non-empty rooms (a move from r to r + 1 inserts r + 1 right after r and unlinks r when it empties); topPlayers walks rooms from the highest",
+   "complexity_target": "O(1) per advance and countInRoom, O(k) per topPlayers/O(n + m) space"
+  },
+  "hack2hire:68edc9c15abdefad4f6693fc": {
+   "reference": "keep every printed (name, time) pair and scan them all for a recent print of the same name",
+   "candidate_design": "hash map from name to its last printed timestamp",
+   "complexity_target": "O(1) expected per call/O(distinct names) space"
+  },
+  "hack2hire:6a987edf0ca9cc4e1c78a9a5": {
+   "reference": "scan sources from highest to lowest preference and entries right to left, keeping the first value seen per key",
+   "candidate_design": "one forward pass overwriting a hash map, then sort the keys",
+   "complexity_target": "O(E + K log K) time/O(K) space for E entries and K keys"
+  },
+  "hack2hire:6782d18f3cd890ccd3798fc5": {
+   "reference": "walk minute by minute from start to end around the week and keep minutes divisible by 5",
+   "candidate_design": "convert both ends to minutes of the week, round start up to a multiple of 5, and step by 5 minutes, formatting each value",
+   "complexity_target": "O(number of output times) time/O(output) space"
+  },
+  "hack2hire:68c8719bdf5a6365aa774b15": {
+   "reference": "for each word in order, compare its sorted letters with the sorted letters of every window of s",
+   "candidate_design": "group words by length; for each length slide one window over s keeping an exact count signature (four base-51 numbers over the 26 counts) and look it up in a map from word signatures to word indices; answer the smallest index found",
+   "complexity_target": "O(D |s| + total word length) time for D distinct word lengths/O(number of words) space"
+  },
+  "hack2hire:69f131b096981f58ae1f7654": {
+   "reference": "for every start, extend to the right with a set until k distinct values are seen",
+   "candidate_design": "sliding window: extend right, and while the window still has k distinct values record its length and shrink from the left",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6772e2e1dd9437f8aa275b01": {
+   "reference": "rebuild child lists and run a recursive depth-first search from the root",
+   "candidate_design": "level-by-level frontier: keep the set of nodes matching the path prefix and expand to children equal to the next path value",
+   "complexity_target": "O(nodes + path) time/O(nodes) space"
+  },
+  "hack2hire:6772e85ddd9437f8aa275b02": {
+   "reference": "try every node as a start and run a recursive depth-first search along the path",
+   "candidate_design": "depth-first traversal carrying a KMP automaton state for the root-to-node value string; transitions are memoized per (state, value) so failure links are followed at most once per pair",
+   "complexity_target": "O(nodes + memoized transitions) time/O(nodes + path) space"
+  },
+  "hack2hire:6833f407c7e9643eccb00bf5": {
+   "reference": "cut the day at every reservation boundary and sum overlapping seats for each piece",
+   "candidate_design": "sweep: turn reservations into +seats/-seats events, sort them, walk times keeping the reserved total, and open/close output intervals when free seats cross partySize",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:688e62068cf2da976a9c6903": {
+   "reference": "accumulate nets in a map by repeated lookups and sort all debtors",
+   "candidate_design": "one pass accumulating nets in a hash map, then sort the positive entries by (-net, name)",
+   "complexity_target": "O(L + P log P) time/O(P) space for L loans and P people"
+  },
+  "hack2hire:680d8976286d3dbf97693ad5": {
+   "reference": "enumerate every length-4 window through the cell in each direction on a copied board",
+   "candidate_design": "for each of the four directions count same-player pieces outward on both sides of the cell, stopping after three",
+   "complexity_target": "O(1) time/O(1) space"
+  },
+  "hack2hire:67a26ae89056d103b4aafc72": {
+   "reference": "rewrite the whole server list each day and sum it",
+   "candidate_design": "hash map from id to how many servers have it plus a running total; a day moves the count of replaced[j] to newId[j]",
+   "complexity_target": "O(n + q) expected time/O(n) space"
+  }
+ }
+}

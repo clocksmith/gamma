@@ -1,0 +1,715 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:689505de3a1d9e6d6042d519:689bb2061126a03aace65e39:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+   "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+   "selector": "/problems/4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/689505de3a1d9e6d6042d519.json",
+   "sha256": "f1c607f16864cd7973a5ef07cf8d528e939c22487a543ac3823a112e19114a6f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+   "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+   "selector": "/variants/hack2hire:689bb2061126a03aace65e39"
+  }
+ ],
+ "problemId": "hack2hire:689505de3a1d9e6d6042d519",
+ "variantId": "689bb2061126a03aace65e39",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 4: backup and restore",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:689bb2061126a03aace65e39/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Level 4 (inferred): InMemoryDB() starts empty; records hold string fields with string values. Every method takes a timestamp; timestamps across all calls are strictly increasing. setDataAt(key, field, value, timestamp) stores a value that never expires. setDataAtWithTtl(key, field, value, timestamp, ttl) stores a value that is live at times t with timestamp <= t < timestamp + ttl. Setting a field replaces its value and expiry. getDataAt(key, field, timestamp) returns the live value or \"\". deleteDataAt(key, field, timestamp) removes a live field and returns true, otherwise false. scanDataAt(key, timestamp) and scanDataByPrefixAt(key, prefix, timestamp) return the live fields of the record as \"field(value)\" strings ordered by field name, all of them or only those whose field starts with prefix. backup(timestamp) saves a copy of all fields live at timestamp together with their remaining lifetimes (expiry minus timestamp; no expiry stays no expiry) and returns the number of records that have at least one live field. restore(timestamp, timestampToRestore) replaces the whole database with the latest backup taken at or before timestampToRestore; a restored field with remaining lifetime r expires at timestamp + r. At least one backup taken at or before timestampToRestore always exists, and timestampToRestore < timestamp. Backups stay available after a restore. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Level 4 (inferred): InMemoryDB() starts empty; records hold string fields with string values.",
+   "Every method takes a timestamp; timestamps across all calls are strictly increasing.",
+   "setDataAt(key, field, value, timestamp) stores a value that never expires.",
+   "setDataAtWithTtl(key, field, value, timestamp, ttl) stores a value that is live at times t with timestamp <= t < timestamp + ttl.",
+   "Setting a field replaces its value and expiry.",
+   "getDataAt(key, field, timestamp) returns the live value or \"\".",
+   "deleteDataAt(key, field, timestamp) removes a live field and returns true, otherwise false.",
+   "scanDataAt(key, timestamp) and scanDataByPrefixAt(key, prefix, timestamp) return the live fields of the record as \"field(value)\" strings ordered by field name, all of them or only those whose field starts with prefix.",
+   "backup(timestamp) saves a copy of all fields live at timestamp together with their remaining lifetimes (expiry minus timestamp; no expiry stays no expiry) and returns the number of records that have at least one live field.",
+   "restore(timestamp, timestampToRestore) replaces the whole database with the latest backup taken at or before timestampToRestore; a restored field with remaining lifetime r expires at timestamp + r.",
+   "At least one backup taken at or before timestampToRestore always exists, and timestampToRestore < timestamp.",
+   "Backups stay available after a restore.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "keys are 1 to 4 characters, fields 1 to 8 characters, from lowercase letters and digits",
+   "values are 0 to 8 lowercase letters or digits; prefixes 0 to 8 such characters",
+   "at most 1e5 calls per trace",
+   "timestamps are strictly increasing integers in [1, 1e9]",
+   "1 <= ttl <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:689bb2061126a03aace65e39/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title (mentions backup); contentPreview: InMemoryDB stores records by string key, each record holds string field-value pairs; setData(key, field, value) inserts or replaces and creates missing records; getData(key, field) returns the value or \"\" when the record or field is missing; deleteData(key, field) returns true when it removed a field and false when the key or field is absent (later levels are cut off); algorithmTags: DESIGN; four variant ids under one group; preview response sha256 5a0dd3c445d6a4a137aaedc18a37ebe73a0f98d67dd834299f9b408a07eaf438"
+   },
+   {
+    "statement": "Uncertainty: very high: only the title mentions backup; the backup count, the restore rule (latest backup at or before the target, remaining TTL re-anchored at the restore time) and the guarantee that a backup exists are inferred",
+    "basis": "the public group preview is partial (985 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 4 of 4 (the title's backup) adds backup and restore on top of level 3",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/4/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/4/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/4/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are later levels cumulative, and are earlier methods still called once timestamps are introduced?",
+   "How are scan results formatted and ordered?",
+   "Is a TTL interval half-open, so a field set at t with ttl d expires exactly at t + d?",
+   "Which backup does restore use, and how are remaining TTLs carried over?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:689bb2061126a03aace65e39/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "InMemoryDB"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "InMemoryDB",
+      "backup",
+      "deleteDataAt",
+      "setDataAtWithTtl",
+      "scanDataByPrefixAt",
+      "scanDataByPrefixAt",
+      "restore",
+      "deleteDataAt",
+      "scanDataAt"
+     ],
+     [
+      [],
+      [
+       2
+      ],
+      [
+       "c",
+       "fb",
+       3
+      ],
+      [
+       "a",
+       "f",
+       "x",
+       5,
+       2
+      ],
+      [
+       "b",
+       "fa",
+       7
+      ],
+      [
+       "a",
+       "g",
+       9
+      ],
+      [
+       10,
+       4
+      ],
+      [
+       "a",
+       "fb",
+       11
+      ],
+      [
+       "b",
+       14
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     0,
+     false,
+     null,
+     [],
+     [],
+     null,
+     false,
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:689bb2061126a03aace65e39/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/oracles.py",
+    "sha256": "91ac545e76e3dc0c0ecd12646904fa2075cfd3386905038f7253a8004f74a0de",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class InMemoryDB:\n    def __init__(self)\n    def setDataAt(self, key, field, value, timestamp) -> void\n    def setDataAtWithTtl(self, key, field, value, timestamp, ttl) -> void\n    def deleteDataAt(self, key, field, timestamp) -> boolean\n    def getDataAt(self, key, field, timestamp) -> string\n    def scanDataAt(self, key, timestamp) -> string[]\n    def scanDataByPrefixAt(self, key, prefix, timestamp) -> string[]\n    def backup(self, timestamp) -> integer\n    def restore(self, timestamp, timestampToRestore) -> void",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/689bb2061126a03aace65e39-python.json",
+     "inferredInterface": {
+      "classname": "InMemoryDB",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "setDataAt",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "setDataAtWithTtl",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "ttl",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "deleteDataAt",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getDataAt",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "scanDataAt",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "scanDataByPrefixAt",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "prefix",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "backup",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "restore",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "timestampToRestore",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/689bb2061126a03aace65e39-python.json",
+      "sha256": "6f2daf903a335ff4686a63a19a850bb916018935ee60106cc7aa5a938c79f1cf",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class InMemoryDB {\n  constructor()\n  setDataAt(key, field, value, timestamp) /* -> void */\n  setDataAtWithTtl(key, field, value, timestamp, ttl) /* -> void */\n  deleteDataAt(key, field, timestamp) /* -> boolean */\n  getDataAt(key, field, timestamp) /* -> string */\n  scanDataAt(key, timestamp) /* -> string[] */\n  scanDataByPrefixAt(key, prefix, timestamp) /* -> string[] */\n  backup(timestamp) /* -> integer */\n  restore(timestamp, timestampToRestore) /* -> void */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/689bb2061126a03aace65e39-javascript.json",
+     "inferredInterface": {
+      "classname": "InMemoryDB",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "setDataAt",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "setDataAtWithTtl",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "ttl",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "deleteDataAt",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getDataAt",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "scanDataAt",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "scanDataByPrefixAt",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "prefix",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "backup",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "restore",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "timestampToRestore",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/689bb2061126a03aace65e39-javascript.json",
+      "sha256": "13c6f0e3149c067736262d701b64d13c0a1f32529ba36834e4d95cb1b15e1c2e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/4/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/4/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

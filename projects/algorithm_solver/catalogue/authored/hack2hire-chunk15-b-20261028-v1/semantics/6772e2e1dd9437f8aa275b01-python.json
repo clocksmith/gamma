@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6772e2e1dd9437f8aa275b01",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "tree",
+  "path"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "pathExists",
+  "params": [
+   {
+    "name": "tree",
+    "type": "(integer|null)[]"
+   },
+   {
+    "name": "path",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rebuild child lists and run a recursive depth-first search from the root",
+  "candidate_design": "level-by-level frontier: keep the set of nodes matching the path prefix and expand to children equal to the next path value",
+  "complexity_target": "O(nodes + path) time/O(nodes) space"
+ },
+ "source_sha256": "d4ecfc4489c6419a8ea44be5b98d344e06d7fb0e6f38eae34486daf5c3e41477",
+ "wrapper": "Solution.pathExists"
+}

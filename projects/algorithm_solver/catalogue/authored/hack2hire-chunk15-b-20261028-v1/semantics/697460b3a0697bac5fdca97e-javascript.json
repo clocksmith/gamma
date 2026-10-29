@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697460b3a0697bac5fdca97e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "energy",
+  "positions",
+  "costs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxDistinctWalls",
+  "params": [
+   {
+    "name": "energy",
+    "type": "integer"
+   },
+   {
+    "name": "positions",
+    "type": "integer[]"
+   },
+   {
+    "name": "costs",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every pair (i, j) with prefix sums and both visiting orders",
+  "candidate_design": "sort walls on each side by distance, build prefix sums, and run two pointers over i (right count) and j (left count) for both visiting orders",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "e5cf73f7b6d28b8076094988da02dd0c785f39a218bb88d30a35c471924d9bb7",
+ "wrapper": "named export maxDistinctWalls"
+}

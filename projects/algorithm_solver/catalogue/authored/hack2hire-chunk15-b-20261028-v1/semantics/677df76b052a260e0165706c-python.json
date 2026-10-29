@@ -1,0 +1,72 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:677df76b052a260e0165706c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "InfiniteQueue",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "add",
+    "params": [
+     {
+      "name": "value",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "poll",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "getRandom",
+    "params": [
+     {
+      "name": "r",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "plain list with removal from the front and direct indexing",
+  "candidate_design": "growable array plus a head index (slots before the head are dead and compacted when they reach half the array); getRandom indexes head + r mod size",
+  "complexity_target": "O(1) amortized per call/O(live elements) space"
+ },
+ "source_sha256": "d8790d9adf09e727cdcc8c966fe6eeac05e1b1f04e6cedc3cce304daa45aee37",
+ "native_class": "InfiniteQueue",
+ "native_symbol": "module global InfiniteQueue",
+ "void_methods": [
+  "add"
+ ]
+}

@@ -1,0 +1,476 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:677df6bb052a260e0165706b:677df76b052a260e0165706c:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+   "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/677df6bb052a260e0165706b.json",
+   "sha256": "187a7153efe173bd084cf454185759f564f2c5fc5553baabdca148098c1ada42",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+   "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+   "selector": "/variants/hack2hire:677df76b052a260e0165706c"
+  }
+ ],
+ "problemId": "hack2hire:677df6bb052a260e0165706b",
+ "variantId": "677df76b052a260e0165706c",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: unbounded queue with O(1) indexed random access",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:677df76b052a260e0165706c/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "InfiniteQueue() starts empty and has no capacity limit. add(value) appends value at the back. poll() removes and returns the front value, or -1 when the queue is empty. getRandom(r) returns, without removing it, the value at position (r mod size) counted from the front (position 0), or -1 when the queue is empty. Randomness is injected: r is a caller-supplied non-negative integer, so a uniform r gives a uniform element. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "InfiniteQueue() starts empty and has no capacity limit.",
+   "add(value) appends value at the back.",
+   "poll() removes and returns the front value, or -1 when the queue is empty.",
+   "getRandom(r) returns, without removing it, the value at position (r mod size) counted from the front (position 0), or -1 when the queue is empty.",
+   "Randomness is injected: r is a caller-supplied non-negative integer, so a uniform r gives a uniform element.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "at most 1e5 calls per trace",
+   "0 <= value <= 1e9",
+   "0 <= r <= 1e15"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:677df76b052a260e0165706c/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title (queue plus O(1) random access); contentPreview: an infinite queue grows without a size limit and holds integers; the list of operations is cut off; algorithmTags: LINKED_LIST, HASH_TABLE; preview response sha256 27949239e49ad4061e893ee092f645c0038e443f9e56c5f34088133e3d08d672"
+   },
+   {
+    "statement": "Uncertainty: very high: only the unbounded integer queue is in the preview; the operation names, the -1 results, and especially the injected-randomness getRandom(r) mapping to a position are inferred (the official getRandom presumably takes no argument and is random)",
+    "basis": "the public group preview is partial (201 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does poll or getRandom return on an empty queue?",
+   "Does getRandom remove the element?",
+   "How is randomness made testable: a seed, an injected index, or statistical checks?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:677df76b052a260e0165706c/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "InfiniteQueue"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "InfiniteQueue",
+      "getRandom",
+      "poll",
+      "poll",
+      "getRandom",
+      "add",
+      "add",
+      "poll",
+      "add",
+      "add",
+      "getRandom",
+      "poll",
+      "add",
+      "add",
+      "add",
+      "add",
+      "getRandom",
+      "poll"
+     ],
+     [
+      [],
+      [
+       645363223444768
+      ],
+      [],
+      [],
+      [
+       2
+      ],
+      [
+       16
+      ],
+      [
+       6
+      ],
+      [],
+      [
+       6
+      ],
+      [
+       7
+      ],
+      [
+       5
+      ],
+      [],
+      [
+       10
+      ],
+      [
+       9
+      ],
+      [
+       10
+      ],
+      [
+       9
+      ],
+      [
+       600052667071935
+      ],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     -1,
+     -1,
+     -1,
+     -1,
+     null,
+     null,
+     16,
+     null,
+     null,
+     7,
+     6,
+     null,
+     null,
+     null,
+     null,
+     9,
+     6
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:677df76b052a260e0165706c/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/oracles.py",
+    "sha256": "91ac545e76e3dc0c0ecd12646904fa2075cfd3386905038f7253a8004f74a0de",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class InfiniteQueue:\n    def __init__(self)\n    def add(self, value) -> void\n    def poll(self) -> integer\n    def getRandom(self, r) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/677df76b052a260e0165706c-python.json",
+     "inferredInterface": {
+      "classname": "InfiniteQueue",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "add",
+        "params": [
+         {
+          "name": "value",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "poll",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getRandom",
+        "params": [
+         {
+          "name": "r",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/677df76b052a260e0165706c-python.json",
+      "sha256": "bd57332143e4bf9fe375324db2547a494542feb39725786bdedfdc506897d15b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class InfiniteQueue {\n  constructor()\n  add(value) /* -> void */\n  poll() /* -> integer */\n  getRandom(r) /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/677df76b052a260e0165706c-javascript.json",
+     "inferredInterface": {
+      "classname": "InfiniteQueue",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "add",
+        "params": [
+         {
+          "name": "value",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "poll",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getRandom",
+        "params": [
+         {
+          "name": "r",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/677df76b052a260e0165706c-javascript.json",
+      "sha256": "01f7d8e4aaec34dc86de6e59c3ed3958dd89864ee055bfc50d4b34b11c7a01b7",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

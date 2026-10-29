@@ -1,0 +1,524 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+   "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+   "selector": "/problems/8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/681bc4c3a73bd75b806cb98f.json",
+   "sha256": "c9dbab3866b21f10456b7936090ff6d9ffb129dd716fc7aca09d9bfd65ef1111",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+   "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+   "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+  }
+ ],
+ "problemId": "hack2hire:681bc4c3a73bd75b806cb98f",
+ "variantId": "681bc967a73bd75b806cb994",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: room leaderboard with arrival-order ties",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:681bc967a73bd75b806cb994/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "EscapeRoom(n, m) creates rooms 0..n-1 and players 0..m-1, all in room 0. advance(player) moves the player to the next room; a player already in room n - 1 stays there (the call is ignored). countInRoom(room) returns how many players are in that room. topPlayers(k) returns up to k player ids ranked by current room (higher first), then by the time they entered that room (earlier first); players who have never moved rank by id. It returns min(k, m) ids. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "EscapeRoom(n, m) creates rooms 0..n-1 and players 0..m-1, all in room 0.",
+   "advance(player) moves the player to the next room; a player already in room n - 1 stays there (the call is ignored).",
+   "countInRoom(room) returns how many players are in that room.",
+   "topPlayers(k) returns up to k player ids ranked by current room (higher first), then by the time they entered that room (earlier first); players who have never moved rank by id.",
+   "It returns min(k, m) ids.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n <= 1e5",
+   "1 <= m <= 1e5",
+   "0 <= player < m",
+   "0 <= room < n",
+   "1 <= k <= 1000",
+   "at most 1e5 calls per trace"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:681bc967a73bd75b806cb994/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a live leaderboard for n sequential rooms 0..n-1 and m participants who all start in room 0 and move to the next room after solving its puzzle, independently; it must answer fast queries about room populations and top performers whenever a player advances (method names and the ranking rule are cut off); algorithmTags: HEAP; preview response sha256 fa685752782deace7fba97b0244ced38030ae90b6b85c3218241b53066bd2885"
+   },
+   {
+    "statement": "Uncertainty: very high: rooms, players, room 0 start and the population/top-performer query themes are in the preview; the method names, the tie rule by entry time, ignoring advances from the last room and returning player ids are inferred",
+    "basis": "the public group preview is partial (536 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/8/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/8/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/8/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What happens when a player in the last room solves its puzzle?",
+   "How are players in the same room ranked?",
+   "What exactly does a top-performer query return: ids, rooms or both?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:681bc967a73bd75b806cb994/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "EscapeRoom"
+     ],
+     [
+      [
+       2,
+       6
+      ]
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "EscapeRoom",
+      "advance",
+      "advance",
+      "countInRoom",
+      "topPlayers",
+      "advance",
+      "advance",
+      "advance",
+      "advance",
+      "advance",
+      "advance",
+      "topPlayers",
+      "advance",
+      "advance",
+      "advance",
+      "advance",
+      "advance"
+     ],
+     [
+      [
+       4,
+       6
+      ],
+      [
+       2
+      ],
+      [
+       1
+      ],
+      [
+       1
+      ],
+      [
+       1
+      ],
+      [
+       1
+      ],
+      [
+       4
+      ],
+      [
+       4
+      ],
+      [
+       3
+      ],
+      [
+       2
+      ],
+      [
+       5
+      ],
+      [
+       3
+      ],
+      [
+       1
+      ],
+      [
+       3
+      ],
+      [
+       1
+      ],
+      [
+       0
+      ],
+      [
+       3
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     2,
+     [
+      2
+     ],
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     [
+      1,
+      4,
+      2
+     ],
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:681bc967a73bd75b806cb994/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/oracles.py",
+    "sha256": "91ac545e76e3dc0c0ecd12646904fa2075cfd3386905038f7253a8004f74a0de",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class EscapeRoom:\n    def __init__(self, n, m)\n    def advance(self, player) -> void\n    def countInRoom(self, room) -> integer\n    def topPlayers(self, k) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/681bc967a73bd75b806cb994-python.json",
+     "inferredInterface": {
+      "classname": "EscapeRoom",
+      "constructor": {
+       "params": [
+        {
+         "name": "n",
+         "type": "integer"
+        },
+        {
+         "name": "m",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "advance",
+        "params": [
+         {
+          "name": "player",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "countInRoom",
+        "params": [
+         {
+          "name": "room",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "topPlayers",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/681bc967a73bd75b806cb994-python.json",
+      "sha256": "0bed9508c6a5485cefdbb2ceea0f1356403bbc8510d41bc51a1aead6689bb0ab",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class EscapeRoom {\n  constructor(n, m)\n  advance(player) /* -> void */\n  countInRoom(room) /* -> integer */\n  topPlayers(k) /* -> integer[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/681bc967a73bd75b806cb994-javascript.json",
+     "inferredInterface": {
+      "classname": "EscapeRoom",
+      "constructor": {
+       "params": [
+        {
+         "name": "n",
+         "type": "integer"
+        },
+        {
+         "name": "m",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "advance",
+        "params": [
+         {
+          "name": "player",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "countInRoom",
+        "params": [
+         {
+          "name": "room",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "topPlayers",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/681bc967a73bd75b806cb994-javascript.json",
+      "sha256": "5ae0e563062f55eb1af7a7c10def40bced245499b6eade46511b09db1cabfd87",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/8/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/8/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

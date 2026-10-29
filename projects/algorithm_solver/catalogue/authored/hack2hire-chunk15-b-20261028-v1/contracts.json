@@ -1,0 +1,1803 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:68d8465eae12841706c1fc6e",
+   "variant_id": "68d8465eae12841706c1fc6e",
+   "variant_ordinal": 1,
+   "title": "Design File Search Tool",
+   "source": {
+    "post_id": "68d836e8ae12841706c1fc5c",
+    "group_title": "Design File Search Tool",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d836e8ae12841706c1fc5c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d836e8ae12841706c1fc5c/practice?questionId=68d8465eae12841706c1fc6e",
+    "preview_response_sha256": "c56f39f8ede3b290bb03f9655aaec0aa9236755bda6c162b956e622e5139aa55",
+    "preview_content_sha256": "2560eb75f6f5c15957726baca449ce5ad2d32c7cc529e5db38fa1083328d14b8",
+    "preview_characters": 610,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68d836e8ae12841706c1fc5c.json",
+    "algorithm_tags": [
+     "STRING",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "BLOOMBERG"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: a command-line style tool searches a word across several text files ignoring case; each file is a name plus a list of lines; for every file with at least one match the output row is the file name, the total match count written as a string, then the lines that contain matches (the matching rule and ordering details are cut off)",
+    "algorithmTags: STRING, HASH_TABLE"
+   ],
+   "inferred_spec": "files is a list of [name, lines] pairs (lines is a list of strings); word is a non-empty string of ASCII letters and digits. A token is a maximal run of ASCII letters and digits inside a line; an occurrence is a token equal to word when ASCII letter case is ignored. For each file, in input order, that has at least one occurrence, output the row [name, total occurrence count in the file as a decimal string, then every line with at least one occurrence, verbatim, in line order, each listed once]. Files without occurrences are omitted. Return the list of rows.",
+   "inference_uncertainty": "high: the input shape, case-insensitivity and the output row layout are in the preview; whole-token matching (rather than raw substring matching), the token alphabet, listing each matching line once and keeping input file order are inferred",
+   "inferred_interface": {
+    "name": "searchFiles",
+    "params": [
+     {
+      "name": "files",
+      "type": "(string|string[])[][]"
+     },
+     {
+      "name": "word",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FST"
+  },
+  {
+   "uid": "hack2hire:689505e73a1d9e6d6042d51a",
+   "variant_id": "689505e73a1d9e6d6042d51a",
+   "variant_ordinal": 1,
+   "title": "Design In-memory Database with Backup",
+   "source": {
+    "post_id": "689505de3a1d9e6d6042d519",
+    "group_title": "Design In-memory Database with Backup",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689505de3a1d9e6d6042d519",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689505de3a1d9e6d6042d519/practice?questionId=689505e73a1d9e6d6042d51a",
+    "preview_response_sha256": "5a0dd3c445d6a4a137aaedc18a37ebe73a0f98d67dd834299f9b408a07eaf438",
+    "preview_content_sha256": "4897718bf4d953ae3da1b2d542e657167b577e11407891aea519e76499490023",
+    "preview_characters": 985,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/689505de3a1d9e6d6042d519.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "MAI",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title (mentions backup)",
+    "contentPreview: InMemoryDB stores records by string key, each record holds string field-value pairs; setData(key, field, value) inserts or replaces and creates missing records; getData(key, field) returns the value or \"\" when the record or field is missing; deleteData(key, field) returns true when it removed a field and false when the key or field is absent (later levels are cut off)",
+    "algorithmTags: DESIGN",
+    "four variant ids under one group"
+   ],
+   "inferred_spec": "InMemoryDB() starts empty. Records are addressed by key and hold field-value pairs (all strings). setData(key, field, value) stores value in the field, replacing an existing value and creating the record when needed. getData(key, field) returns the stored value, or \"\" when the record or field is absent. deleteData(key, field) removes the field and returns true, or returns false when the record or field is absent. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "low: the three methods, their names, signatures and edge results are in the preview; the trace format and character bounds are inferred",
+   "inferred_interface": {
+    "classname": "InMemoryDB",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "setData",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "getData",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "deleteData",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred: variant 1 of 4 is the basic set/get/delete level shown in the preview",
+   "oracle_constant": "IMD1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68961c873a1d9e6d6042d57a",
+   "variant_id": "68961c873a1d9e6d6042d57a",
+   "variant_ordinal": 2,
+   "title": "Design In-memory Database with Backup",
+   "source": {
+    "post_id": "689505de3a1d9e6d6042d519",
+    "group_title": "Design In-memory Database with Backup",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689505de3a1d9e6d6042d519",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689505de3a1d9e6d6042d519/practice?questionId=68961c873a1d9e6d6042d57a",
+    "preview_response_sha256": "5a0dd3c445d6a4a137aaedc18a37ebe73a0f98d67dd834299f9b408a07eaf438",
+    "preview_content_sha256": "4897718bf4d953ae3da1b2d542e657167b577e11407891aea519e76499490023",
+    "preview_characters": 985,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/689505de3a1d9e6d6042d519.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "MAI",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title (mentions backup)",
+    "contentPreview: InMemoryDB stores records by string key, each record holds string field-value pairs; setData(key, field, value) inserts or replaces and creates missing records; getData(key, field) returns the value or \"\" when the record or field is missing; deleteData(key, field) returns true when it removed a field and false when the key or field is absent (later levels are cut off)",
+    "algorithmTags: DESIGN",
+    "four variant ids under one group"
+   ],
+   "inferred_spec": "InMemoryDB() starts empty. Records are addressed by key and hold field-value pairs (all strings). setData(key, field, value) stores value in the field, replacing an existing value and creating the record when needed. getData(key, field) returns the stored value, or \"\" when the record or field is absent. deleteData(key, field) removes the field and returns true, or returns false when the record or field is absent. scanData(key) returns every field of the record as the string \"field(value)\", ordered by field name (code point order); an absent or empty record gives an empty list. scanDataByPrefix(key, prefix) returns the same strings restricted to fields that start with prefix (the empty prefix matches every field). Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: the preview stops after level 1; the scan methods, their names, the \"field(value)\" format and field ordering are inferred from the common multi-level version of this exercise",
+   "inferred_interface": {
+    "classname": "InMemoryDB",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "setData",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "getData",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "deleteData",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "scanData",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "scanDataByPrefix",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "prefix",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred: variant 2 of 4 adds sorted scans of one record (whole and by field prefix), following the common four-level in-memory database exercise",
+   "oracle_constant": "IMD2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:689641c83a1d9e6d6042d585",
+   "variant_id": "689641c83a1d9e6d6042d585",
+   "variant_ordinal": 3,
+   "title": "Design In-memory Database with Backup",
+   "source": {
+    "post_id": "689505de3a1d9e6d6042d519",
+    "group_title": "Design In-memory Database with Backup",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689505de3a1d9e6d6042d519",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689505de3a1d9e6d6042d519/practice?questionId=689641c83a1d9e6d6042d585",
+    "preview_response_sha256": "5a0dd3c445d6a4a137aaedc18a37ebe73a0f98d67dd834299f9b408a07eaf438",
+    "preview_content_sha256": "4897718bf4d953ae3da1b2d542e657167b577e11407891aea519e76499490023",
+    "preview_characters": 985,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/689505de3a1d9e6d6042d519.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "MAI",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title (mentions backup)",
+    "contentPreview: InMemoryDB stores records by string key, each record holds string field-value pairs; setData(key, field, value) inserts or replaces and creates missing records; getData(key, field) returns the value or \"\" when the record or field is missing; deleteData(key, field) returns true when it removed a field and false when the key or field is absent (later levels are cut off)",
+    "algorithmTags: DESIGN",
+    "four variant ids under one group"
+   ],
+   "inferred_spec": "Level 3 (inferred): InMemoryDB() starts empty; records hold string fields with string values. Every method takes a timestamp; timestamps across all calls are strictly increasing. setDataAt(key, field, value, timestamp) stores a value that never expires. setDataAtWithTtl(key, field, value, timestamp, ttl) stores a value that is live at times t with timestamp <= t < timestamp + ttl. Setting a field replaces its value and expiry. getDataAt(key, field, timestamp) returns the live value or \"\". deleteDataAt(key, field, timestamp) removes a live field and returns true, otherwise false. scanDataAt(key, timestamp) and scanDataByPrefixAt(key, prefix, timestamp) return the live fields of the record as \"field(value)\" strings ordered by field name, all of them or only those whose field starts with prefix. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: no level 3 text is public; the timestamped method names, the half-open TTL interval, strictly increasing timestamps and dropping the untimestamped methods are inferred",
+   "inferred_interface": {
+    "classname": "InMemoryDB",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "setDataAt",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "setDataAtWithTtl",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "ttl",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "deleteDataAt",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getDataAt",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "scanDataAt",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "scanDataByPrefixAt",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "prefix",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred: variant 3 of 4 replaces the methods with timestamped versions and adds per-field TTL",
+   "oracle_constant": "IMD3",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:689bb2061126a03aace65e39",
+   "variant_id": "689bb2061126a03aace65e39",
+   "variant_ordinal": 4,
+   "title": "Design In-memory Database with Backup",
+   "source": {
+    "post_id": "689505de3a1d9e6d6042d519",
+    "group_title": "Design In-memory Database with Backup",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689505de3a1d9e6d6042d519",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689505de3a1d9e6d6042d519/practice?questionId=689bb2061126a03aace65e39",
+    "preview_response_sha256": "5a0dd3c445d6a4a137aaedc18a37ebe73a0f98d67dd834299f9b408a07eaf438",
+    "preview_content_sha256": "4897718bf4d953ae3da1b2d542e657167b577e11407891aea519e76499490023",
+    "preview_characters": 985,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/689505de3a1d9e6d6042d519.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "MAI",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title (mentions backup)",
+    "contentPreview: InMemoryDB stores records by string key, each record holds string field-value pairs; setData(key, field, value) inserts or replaces and creates missing records; getData(key, field) returns the value or \"\" when the record or field is missing; deleteData(key, field) returns true when it removed a field and false when the key or field is absent (later levels are cut off)",
+    "algorithmTags: DESIGN",
+    "four variant ids under one group"
+   ],
+   "inferred_spec": "Level 4 (inferred): InMemoryDB() starts empty; records hold string fields with string values. Every method takes a timestamp; timestamps across all calls are strictly increasing. setDataAt(key, field, value, timestamp) stores a value that never expires. setDataAtWithTtl(key, field, value, timestamp, ttl) stores a value that is live at times t with timestamp <= t < timestamp + ttl. Setting a field replaces its value and expiry. getDataAt(key, field, timestamp) returns the live value or \"\". deleteDataAt(key, field, timestamp) removes a live field and returns true, otherwise false. scanDataAt(key, timestamp) and scanDataByPrefixAt(key, prefix, timestamp) return the live fields of the record as \"field(value)\" strings ordered by field name, all of them or only those whose field starts with prefix. backup(timestamp) saves a copy of all fields live at timestamp together with their remaining lifetimes (expiry minus timestamp; no expiry stays no expiry) and returns the number of records that have at least one live field. restore(timestamp, timestampToRestore) replaces the whole database with the latest backup taken at or before timestampToRestore; a restored field with remaining lifetime r expires at timestamp + r. At least one backup taken at or before timestampToRestore always exists, and timestampToRestore < timestamp. Backups stay available after a restore. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: only the title mentions backup; the backup count, the restore rule (latest backup at or before the target, remaining TTL re-anchored at the restore time) and the guarantee that a backup exists are inferred",
+   "inferred_interface": {
+    "classname": "InMemoryDB",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "setDataAt",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "setDataAtWithTtl",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "ttl",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "deleteDataAt",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getDataAt",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "field",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "scanDataAt",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "scanDataByPrefixAt",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "prefix",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "backup",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "restore",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "timestampToRestore",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred: variant 4 of 4 (the title's backup) adds backup and restore on top of level 3",
+   "oracle_constant": "IMD4",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:677df76b052a260e0165706c",
+   "variant_id": "677df76b052a260e0165706c",
+   "variant_ordinal": 1,
+   "title": "Design Infinite Queue with GetRandom O(1)",
+   "source": {
+    "post_id": "677df6bb052a260e0165706b",
+    "group_title": "Design Infinite Queue with GetRandom O(1)",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677df6bb052a260e0165706b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677df6bb052a260e0165706b/practice?questionId=677df76b052a260e0165706c",
+    "preview_response_sha256": "27949239e49ad4061e893ee092f645c0038e443f9e56c5f34088133e3d08d672",
+    "preview_content_sha256": "5fe599409c8e8c2c2f4f35b07bbcc9bf31279e2e2a65182d25cdfe1dc8c721b7",
+    "preview_characters": 201,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677df6bb052a260e0165706b.json",
+    "algorithm_tags": [
+     "LINKED_LIST",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "CONFLUENT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title (queue plus O(1) random access)",
+    "contentPreview: an infinite queue grows without a size limit and holds integers; the list of operations is cut off",
+    "algorithmTags: LINKED_LIST, HASH_TABLE"
+   ],
+   "inferred_spec": "InfiniteQueue() starts empty and has no capacity limit. add(value) appends value at the back. poll() removes and returns the front value, or -1 when the queue is empty. getRandom(r) returns, without removing it, the value at position (r mod size) counted from the front (position 0), or -1 when the queue is empty. Randomness is injected: r is a caller-supplied non-negative integer, so a uniform r gives a uniform element. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: only the unbounded integer queue is in the preview; the operation names, the -1 results, and especially the injected-randomness getRandom(r) mapping to a position are inferred (the official getRandom presumably takes no argument and is random)",
+   "inferred_interface": {
+    "classname": "InfiniteQueue",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "add",
+      "params": [
+       {
+        "name": "value",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "poll",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getRandom",
+      "params": [
+       {
+        "name": "r",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "IQR",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68539b6bd3dbd4fb8b026e9f",
+   "variant_id": "68539b6bd3dbd4fb8b026e9f",
+   "variant_ordinal": 1,
+   "title": "Design Lazy Array",
+   "source": {
+    "post_id": "68539976d3dbd4fb8b026e9e",
+    "group_title": "Design Lazy Array",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68539976d3dbd4fb8b026e9e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68539976d3dbd4fb8b026e9e/practice?questionId=68539b6bd3dbd4fb8b026e9f",
+    "preview_response_sha256": "f046d80ba8e3df7725c393925f27ba733d78df8d16fec455e0170304e993c3ef",
+    "preview_content_sha256": "48a7d19628767ef513b2319d4e0db39d4495498d270e373cbd2e58f3e46c3928",
+    "preview_characters": 354,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68539976d3dbd4fb8b026e9e.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "DATABRICKS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: LazyArray(int[] arr) holds an integer array; map adds chained transformations whose execution is deferred until indexOf is queried (the transformation type and the rest of the interface are cut off)",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "LazyArray(arr) stores an integer array. map(operation, operand) appends a deferred transformation applied to every element: operation is \"add\" (x becomes x + operand) or \"multiply\" (x becomes x * operand). indexOf(target) returns the smallest index i such that arr[i], after all transformations recorded so far applied in order, equals target, or -1 when none does. map changes this instance (it does not return a new array); the stored input array is never modified. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: the class name, constructor and deferred map/indexOf idea are in the preview; encoding the mapped function as an \"add\"/\"multiply\" operation with an integer operand, map returning nothing instead of a new chained array, and first-index semantics are inferred",
+   "inferred_interface": {
+    "classname": "LazyArray",
+    "constructor": {
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "map",
+      "params": [
+       {
+        "name": "operation",
+        "type": "string"
+       },
+       {
+        "name": "operand",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "indexOf",
+      "params": [
+       {
+        "name": "target",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LZA",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:697460b3a0697bac5fdca97e",
+   "variant_id": "697460b3a0697bac5fdca97e",
+   "variant_ordinal": 1,
+   "title": "Distinct Wall Crossing on Number Line",
+   "source": {
+    "post_id": "697460ada0697bac5fdca97d",
+    "group_title": "Distinct Wall Crossing on Number Line",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697460ada0697bac5fdca97d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697460ada0697bac5fdca97d/practice?questionId=697460b3a0697bac5fdca97e",
+    "preview_response_sha256": "0b4cf3a563a6d448b96f25a3a2e6c0a885aa3a67603df394af86c748d07d0398",
+    "preview_content_sha256": "dff76cce0f1422ccd96d6f88b8100c22ef5aeddae4954e2afea79e8a0a634823",
+    "preview_characters": 457,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697460ada0697bac5fdca97d.json",
+    "algorithm_tags": [
+     "PREFIX_SUM"
+    ],
+    "companies": [
+     "SCALEAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: start at position 0 with energy E on an infinite line, moving one unit left or right per move; walls sit at distinct positions and each has an energy cost to cross; maximize the number of distinct walls crossed with at most E energy (the cost model for moves and repeated crossings is cut off)",
+    "algorithmTags: PREFIX_SUM"
+   ],
+   "inferred_spec": "energy is the starting energy E; positions[i] and costs[i] describe wall i (positions are distinct and non-zero). Moving costs nothing; every crossing of a wall costs its cost, including crossing the same wall again. Return the largest number of distinct walls that can be crossed with total cost at most E. Any route crosses the nearest i walls on one side and the nearest j on the other; going right first costs 2 R(i) + L(j) and going left first costs R(i) + 2 L(j), where R and L are the summed costs of those walls.",
+   "inference_uncertainty": "high: the start, energy, distinct wall positions and costs are in the preview; free movement, paying again on every re-crossing and the input encoding as two parallel lists are inferred",
+   "inferred_interface": {
+    "name": "maxDistinctWalls",
+    "params": [
+     {
+      "name": "energy",
+      "type": "integer"
+     },
+     {
+      "name": "positions",
+      "type": "integer[]"
+     },
+     {
+      "name": "costs",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "DWC"
+  },
+  {
+   "uid": "hack2hire:681bc967a73bd75b806cb994",
+   "variant_id": "681bc967a73bd75b806cb994",
+   "variant_ordinal": 1,
+   "title": "Escape Room",
+   "source": {
+    "post_id": "681bc4c3a73bd75b806cb98f",
+    "group_title": "Escape Room",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/681bc4c3a73bd75b806cb98f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/681bc4c3a73bd75b806cb98f/practice?questionId=681bc967a73bd75b806cb994",
+    "preview_response_sha256": "fa685752782deace7fba97b0244ced38030ae90b6b85c3218241b53066bd2885",
+    "preview_content_sha256": "6705390f3300e359c194c68b903c75c6c98370e68381e63b3e021003aba02393",
+    "preview_characters": 536,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/681bc4c3a73bd75b806cb98f.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: a live leaderboard for n sequential rooms 0..n-1 and m participants who all start in room 0 and move to the next room after solving its puzzle, independently; it must answer fast queries about room populations and top performers whenever a player advances (method names and the ranking rule are cut off)",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "EscapeRoom(n, m) creates rooms 0..n-1 and players 0..m-1, all in room 0. advance(player) moves the player to the next room; a player already in room n - 1 stays there (the call is ignored). countInRoom(room) returns how many players are in that room. topPlayers(k) returns up to k player ids ranked by current room (higher first), then by the time they entered that room (earlier first); players who have never moved rank by id. It returns min(k, m) ids. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: rooms, players, room 0 start and the population/top-performer query themes are in the preview; the method names, the tie rule by entry time, ignoring advances from the last room and returning player ids are inferred",
+   "inferred_interface": {
+    "classname": "EscapeRoom",
+    "constructor": {
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "m",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "advance",
+      "params": [
+       {
+        "name": "player",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "countInRoom",
+      "params": [
+       {
+        "name": "room",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "topPlayers",
+      "params": [
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "ESC",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68edc9c15abdefad4f6693fc",
+   "variant_id": "68edc9c15abdefad4f6693fc",
+   "variant_ordinal": 1,
+   "title": "Event Logger with Rate Limiting",
+   "source": {
+    "post_id": "68edc9bc5abdefad4f6693fb",
+    "group_title": "Event Logger with Rate Limiting",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68edc9bc5abdefad4f6693fb",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68edc9bc5abdefad4f6693fb/practice?questionId=68edc9c15abdefad4f6693fc",
+    "preview_response_sha256": "fb1bba0a5cb44864afc5a2fc79769113341911ea89c03797867ca641a33f7597",
+    "preview_content_sha256": "976eaea37cc86e7ec33ee32b596cfeba9dc958d3405b6c5b3c7c0c5f792f4255",
+    "preview_characters": 569,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68edc9bc5abdefad4f6693fb.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "NETFLIX"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: events with a name and a timestamp arrive in non-decreasing timestamp order; a name is printed only if no event with that name was printed in the last window seconds; EventLogger(int window) sets the minimum interval before the same name can print again (the logging method is cut off)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "EventLogger(window) sets the cooldown. logEvent(name, timestamp) is called with non-decreasing timestamps. It prints (returns true) when the name was never printed or timestamp - (time the name was last printed) >= window, and then records timestamp as that name's last print time; otherwise it returns false and records nothing. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "medium: the cooldown rule and constructor are in the preview; the method name, boolean result, and the reading of \"minimum interval\" as allowing a print exactly window seconds later are inferred",
+   "inferred_interface": {
+    "classname": "EventLogger",
+    "constructor": {
+     "params": [
+      {
+       "name": "window",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "logEvent",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "ELR",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6a987edf0ca9cc4e1c78a9a5",
+   "variant_id": "6a987edf0ca9cc4e1c78a9a5",
+   "variant_ordinal": 1,
+   "title": "Final Values by Source Priority",
+   "source": {
+    "post_id": "6a987edb0ca9cc4e1c78a9a4",
+    "group_title": "Final Values by Source Priority",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a987edb0ca9cc4e1c78a9a4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a987edb0ca9cc4e1c78a9a4/practice?questionId=6a987edf0ca9cc4e1c78a9a5",
+    "preview_response_sha256": "510d9de213fb6b94e1a5a03556564c33a75567469b8355324f8f1f55bad7f8ec",
+    "preview_content_sha256": "459dd4e5e039463bbebbc585042e6a5883744296dacd1711f90641eb51c36ec0",
+    "preview_characters": 525,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a987edb0ca9cc4e1c78a9a4.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "GOLDMAN_SACHS"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: a rectangular 2D string array sources, one row per source, entries \"<key>:<value>\" split at the first colon with the value kept as written (so \"null\" is just a string); sources ordered from lowest to highest preference and entries processed left to right (the output rule and format are cut off)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "sources is a rectangular list of rows of \"key:value\" entries. Each entry splits at its first \":\" into key and value (the value may contain further colons and may be empty). Processing rows from lowest to highest preference and entries left to right, a later entry for the same key overrides an earlier one, so a key's final value comes from the most preferred source that mentions it (its rightmost entry there). Return the final entries as \"key:value\" strings sorted by key (code point order).",
+   "inference_uncertainty": "high: the input, the splitting rule and the processing order are in the preview; last-write-wins inside one source, and returning sorted \"key:value\" strings (rather than a map) are inferred",
+   "inferred_interface": {
+    "name": "finalValues",
+    "params": [
+     {
+      "name": "sources",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FVS"
+  },
+  {
+   "uid": "hack2hire:6782d18f3cd890ccd3798fc5",
+   "variant_id": "6782d18f3cd890ccd3798fc5",
+   "variant_ordinal": 1,
+   "title": "Find All 5-Minute Intervals",
+   "source": {
+    "post_id": "6782d1833cd890ccd3798fc4",
+    "group_title": "Find All 5-Minute Intervals",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6782d1833cd890ccd3798fc4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6782d1833cd890ccd3798fc4/practice?questionId=6782d18f3cd890ccd3798fc5",
+    "preview_response_sha256": "5f527f052ddad4fd57e985e32b73882e1afcbb822437e0303d7c02f5262fee3f",
+    "preview_content_sha256": "0fa3f26054b5d972420c1151da4382fe535e8aebcd6b6c4dcb7758a296c53428",
+    "preview_characters": 250,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6782d1833cd890ccd3798fc4.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "DOORDASH"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: list every 5-minute timestamp between a start and an end datetime written as \"Day HH:MM AM/PM\" (examples \"Mon 10:00 AM\", \"Fri 12:00 PM\"), ascending; the alignment and wrap-around rules are cut off",
+    "algorithmTags: STRING"
+   ],
+   "inferred_spec": "start and end are weekly times written \"Day H:MM AM\" or \"Day H:MM PM\": Day is one of Mon Tue Wed Thu Fri Sat Sun, H is 1 to 12 without a leading zero, MM is two digits; 12:MM AM is just after midnight and 12:MM PM just after noon. The week runs Mon to Sun. Return, in chronological order and in the same format, every time t from start to end inclusive whose minute is a multiple of 5. When end is earlier in the week than start, the range wraps from Sun into the following Mon.",
+   "inference_uncertainty": "high: the format and ascending order are in the preview; alignment to clock multiples of 5 (rather than steps from start), inclusive ends, wrapping past Sunday and the hour written without a leading zero are inferred",
+   "inferred_interface": {
+    "name": "fiveMinuteIntervals",
+    "params": [
+     {
+      "name": "start",
+      "type": "string"
+     },
+     {
+      "name": "end",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FMI"
+  },
+  {
+   "uid": "hack2hire:68c8719bdf5a6365aa774b15",
+   "variant_id": "68c8719bdf5a6365aa774b15",
+   "variant_ordinal": 1,
+   "title": "Find Anagram in String",
+   "source": {
+    "post_id": "68c87196df5a6365aa774b14",
+    "group_title": "Find Anagram in String",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c87196df5a6365aa774b14",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c87196df5a6365aa774b14/practice?questionId=68c8719bdf5a6365aa774b15",
+    "preview_response_sha256": "f5e022f19065818199c5d44de5054a6c70d4c4abfee7943dc96c13e3c5a3995b",
+    "preview_content_sha256": "cd93ce218b2d761bf7d63bef7325c62b87f4bd837319a245d12aba23158a8b19",
+    "preview_characters": 513,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68c87196df5a6365aa774b14.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "ATLASSIAN"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: given distinct lowercase words and a lowercase string s, return the first word (in list order) that has some anagram appearing as a substring of s, or \"\" when none does (a variation of LeetCode 438)",
+    "algorithmTags: HASH_TABLE, SLIDING_WINDOW"
+   ],
+   "inferred_spec": "words is a list of distinct lowercase words and s a lowercase string. Return the first word in list order such that some substring of s has exactly the same letter counts as the word; return \"\" when no word qualifies.",
+   "inference_uncertainty": "low: the task is in the preview; the bounds are inferred",
+   "inferred_interface": {
+    "name": "firstAnagramWord",
+    "params": [
+     {
+      "name": "words",
+      "type": "string[]"
+     },
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FAS"
+  },
+  {
+   "uid": "hack2hire:69f131b096981f58ae1f7654",
+   "variant_id": "69f131b096981f58ae1f7654",
+   "variant_ordinal": 1,
+   "title": "Find K Distinct Element Subarray",
+   "source": {
+    "post_id": "69f131a496981f58ae1f7653",
+    "group_title": "Find K Distinct Element Subarray",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f131a496981f58ae1f7653",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f131a496981f58ae1f7653/practice?questionId=69f131b096981f58ae1f7654",
+    "preview_response_sha256": "269a258429258019258fa2f815f20e785e0c0c446f6c1431a18be08dc91a3f3d",
+    "preview_content_sha256": "373fd999031d6fcc65c1de61e793a993f9db9ef4682078d59f99fad45babc688",
+    "preview_characters": 598,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69f131a496981f58ae1f7653.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "GOOGLE",
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a subarray is good when it contains at least k distinct integers; return the length of the shortest good subarray or -1; constraints 1 <= arr.length <= 1e5, 1 <= arr[i] <= 1e5, 1 <= k <= arr.length (a variation of LeetCode 992)",
+    "algorithmTags: SLIDING_WINDOW"
+   ],
+   "inferred_spec": "Given arr and k, return the length of the shortest contiguous subarray containing at least k distinct values, or -1 when no subarray does.",
+   "inference_uncertainty": "low: the task and constraints are in the preview",
+   "inferred_interface": {
+    "name": "shortestGoodSubarray",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FKD"
+  },
+  {
+   "uid": "hack2hire:6772e2e1dd9437f8aa275b01",
+   "variant_id": "6772e2e1dd9437f8aa275b01",
+   "variant_ordinal": 1,
+   "title": "Find Path in N-ary Tree",
+   "source": {
+    "post_id": "6772e0d9dd9437f8aa275b00",
+    "group_title": "Find Path in N-ary Tree",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6772e0d9dd9437f8aa275b00",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6772e0d9dd9437f8aa275b00/practice?questionId=6772e2e1dd9437f8aa275b01",
+    "preview_response_sha256": "eaaa3d7dda8b8ddfd43a46377b467e9ebfe73319332a136791fef43ffbdf7ff9",
+    "preview_content_sha256": "be941ec203a1870e3ce79941cf34b76892e3a892d3c2f918a4cd4dc77e79809f",
+    "preview_characters": 568,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6772e0d9dd9437f8aa275b00.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: given the root of an N-ary tree with possibly repeated values and a sequence of integers, decide whether the path exists; it starts at the root and need not end at a leaf; constraints: 1 to 1e4 nodes, 1 <= value <= 1e5, 1 <= path.length <= 1000",
+    "algorithmTags: DEPTH_FIRST_SEARCH",
+    "two variant ids"
+   ],
+   "inferred_spec": "tree is the level-order serialization used for N-ary trees: the root value, then null, then for each node in breadth-first order its children's values followed by null (trailing nulls omitted). A path [p0, ..., pL-1] matches a chain of nodes v0, ..., vL-1 where each v(i+1) is a child of v(i) and each value equals its path entry. Variant 1: return true when some matching chain starts at the root (it may stop before a leaf), else false.",
+   "inference_uncertainty": "low: the task and constraints are in the preview; the input serialization of the tree is inferred",
+   "inferred_interface": {
+    "name": "pathExists",
+    "params": [
+     {
+      "name": "tree",
+      "type": "(integer|null)[]"
+     },
+     {
+      "name": "path",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred: variant 1 of 2 is the root-anchored check described in the preview",
+   "oracle_constant": "FPT1"
+  },
+  {
+   "uid": "hack2hire:6772e85ddd9437f8aa275b02",
+   "variant_id": "6772e85ddd9437f8aa275b02",
+   "variant_ordinal": 2,
+   "title": "Find Path in N-ary Tree",
+   "source": {
+    "post_id": "6772e0d9dd9437f8aa275b00",
+    "group_title": "Find Path in N-ary Tree",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6772e0d9dd9437f8aa275b00",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6772e0d9dd9437f8aa275b00/practice?questionId=6772e85ddd9437f8aa275b02",
+    "preview_response_sha256": "eaaa3d7dda8b8ddfd43a46377b467e9ebfe73319332a136791fef43ffbdf7ff9",
+    "preview_content_sha256": "be941ec203a1870e3ce79941cf34b76892e3a892d3c2f918a4cd4dc77e79809f",
+    "preview_characters": 568,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6772e0d9dd9437f8aa275b00.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: given the root of an N-ary tree with possibly repeated values and a sequence of integers, decide whether the path exists; it starts at the root and need not end at a leaf; constraints: 1 to 1e4 nodes, 1 <= value <= 1e5, 1 <= path.length <= 1000",
+    "algorithmTags: DEPTH_FIRST_SEARCH",
+    "two variant ids"
+   ],
+   "inferred_spec": "tree is the level-order serialization used for N-ary trees: the root value, then null, then for each node in breadth-first order its children's values followed by null (trailing nulls omitted). A path [p0, ..., pL-1] matches a chain of nodes v0, ..., vL-1 where each v(i+1) is a child of v(i) and each value equals its path entry. Variant 2 (inferred follow-up): the matching chain may start at any node (it still goes downward through children); return true when one exists, else false.",
+   "inference_uncertainty": "very high: there is no public text for variant 2; allowing the path to start at any node is an inferred follow-up",
+   "inferred_interface": {
+    "name": "pathExistsAnywhere",
+    "params": [
+     {
+      "name": "tree",
+      "type": "(integer|null)[]"
+     },
+     {
+      "name": "path",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred: variant 2 of 2 relaxes the start to any node",
+   "oracle_constant": "FPT2"
+  },
+  {
+   "uid": "hack2hire:6833f407c7e9643eccb00bf5",
+   "variant_id": "6833f407c7e9643eccb00bf5",
+   "variant_ordinal": 1,
+   "title": "Find Restaurant Intervals",
+   "source": {
+    "post_id": "6833ebf4c7e9643eccb00bf3",
+    "group_title": "Find Restaurant Intervals",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6833ebf4c7e9643eccb00bf3",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6833ebf4c7e9643eccb00bf3/practice?questionId=6833f407c7e9643eccb00bf5",
+    "preview_response_sha256": "5226e1fb879699981860a17755cdd3545c775a246a86049aa87a66d52631b876",
+    "preview_content_sha256": "5c7a4d70bf938478eecf5282bfd4d70f90bb3e57e75503d4ec2a5db988c844aa",
+    "preview_characters": 381,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6833ebf4c7e9643eccb00bf3.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: a restaurant opens at open, closes at close and has a fixed seating capacity; existing reservations [start, end, seats] are sorted by start (the requested output is cut off)",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "Times are integers. A reservation [start, end, seats] holds seats during [start, end) and lies inside [open, close]; reservations are sorted by start and never exceed capacity in total at any time. Return the maximal intervals [a, b] (a < b) inside [open, close) during which at least partySize seats are free at every moment, sorted by start; adjacent qualifying stretches are merged.",
+   "inference_uncertainty": "very high: the restaurant model and the sorted reservation triples are in the preview; the question itself (free intervals for a party of partySize), half-open reservation times and merging are inferred",
+   "inferred_interface": {
+    "name": "availableIntervals",
+    "params": [
+     {
+      "name": "open",
+      "type": "integer"
+     },
+     {
+      "name": "close",
+      "type": "integer"
+     },
+     {
+      "name": "capacity",
+      "type": "integer"
+     },
+     {
+      "name": "reservations",
+      "type": "integer[][]"
+     },
+     {
+      "name": "partySize",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FRI"
+  },
+  {
+   "uid": "hack2hire:688e62068cf2da976a9c6903",
+   "variant_id": "688e62068cf2da976a9c6903",
+   "variant_ordinal": 1,
+   "title": "Find the K-th Highest Debit",
+   "source": {
+    "post_id": "688e61fe8cf2da976a9c6902",
+    "group_title": "Find the K-th Highest Debit",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688e61fe8cf2da976a9c6902",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688e61fe8cf2da976a9c6902/practice?questionId=688e62068cf2da976a9c6903",
+    "preview_response_sha256": "3014750a4d15b0ca244d1807aada7a474220881020258fc00c7e6c6241b89e8a",
+    "preview_content_sha256": "8c3bc2386f271dba5553cf4d821dc49a29fc4a9ea21520fe1d98a74bc9024088",
+    "preview_characters": 442,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/688e61fe8cf2da976a9c6902.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "ORACLE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: loans are triplets [borrower, lender, amount] with non-empty names and amount a string holding a non-negative integer; a person's net debt is total borrowed minus total lent, positive meaning they owe overall (what to report is cut off)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "loans lists [borrower, lender, amount] with amount a decimal string. A person's net debt is the sum of amounts they borrowed minus the sum they lent. Among people with positive net debt, rank by net debt (larger first) and then by name (code point order). Return the name ranked k (1-based), or \"\" when fewer than k people have positive net debt.",
+   "inference_uncertainty": "very high: the loan format and net debt are in the preview; what is returned (the k-th debtor's name), ranking only positive debts, the name tie-break and the \"\" result are inferred",
+   "inferred_interface": {
+    "name": "kthHighestDebtor",
+    "params": [
+     {
+      "name": "loans",
+      "type": "string[][]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "KHD"
+  },
+  {
+   "uid": "hack2hire:680d8976286d3dbf97693ad5",
+   "variant_id": "680d8976286d3dbf97693ad5",
+   "variant_ordinal": 1,
+   "title": "Four-in-a-row Game",
+   "source": {
+    "post_id": "680d8514286d3dbf97693ad4",
+    "group_title": "Four-in-a-row Game",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680d8514286d3dbf97693ad4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680d8514286d3dbf97693ad4/practice?questionId=680d8976286d3dbf97693ad5",
+    "preview_response_sha256": "ede5a768e73ad273367108d04ef498149ceac75f9ef15bc6b19f82a1c4ea2da6",
+    "preview_content_sha256": "a2cec1406bb3c0e33ab40375ddf6438146deab1456f93eeb128d9b1bcc777763",
+    "preview_characters": 207,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/680d8514286d3dbf97693ad4.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "SNOWFLAKE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a 2D board holds \"a\", \"b\" or \"\" cells; decide whether a move [x, y] by player \"a\" or \"b\" completes four consecutive pieces in a row, column or either diagonal",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "board is a rectangular grid of \"a\", \"b\" and \"\" (empty); move = [x, y] names an empty cell (row x, column y) and player is \"a\" or \"b\". Place the piece and return true when the cell becomes part of at least four consecutive pieces of that player along its row, its column or one of its two diagonals; otherwise false. Gravity is not modelled.",
+   "inference_uncertainty": "medium: the board, move and four directions are in the preview; the argument order, that the target cell is empty, \"at least four\" counting and the absence of gravity are inferred",
+   "inferred_interface": {
+    "name": "isWinningMove",
+    "params": [
+     {
+      "name": "board",
+      "type": "string[][]"
+     },
+     {
+      "name": "move",
+      "type": "integer[]"
+     },
+     {
+      "name": "player",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FIR"
+  },
+  {
+   "uid": "hack2hire:67a26ae89056d103b4aafc72",
+   "variant_id": "67a26ae89056d103b4aafc72",
+   "variant_ordinal": 1,
+   "title": "Get Total Requests",
+   "source": {
+    "post_id": "67a25be7c5f86173882e3d90",
+    "group_title": "Get Total Requests",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a25be7c5f86173882e3d90",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a25be7c5f86173882e3d90/practice?questionId=67a26ae89056d103b4aafc72",
+    "preview_response_sha256": "3bda810a25175fa3749a73aecd14aa556af79acd1c97af80244978b1f9d69209",
+    "preview_content_sha256": "6e0ff87de2b38da5cee6d8c781d01360b8dff2b4914c04b4bef992e970adba32",
+    "preview_characters": 533,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67a25be7c5f86173882e3d90.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: n servers where server i has id server[i] and serves that many requests; on day j every server whose id equals replaced[j] is replaced by one with id newId[j]; the day's total is the sum of current ids (the output list is cut off)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "server lists the initial ids. For each day j in order, every server whose current id equals replaced[j] gets id newId[j]; then the day total is the sum of all current ids. Return the list of day totals.",
+   "inference_uncertainty": "low: the process is in the preview; returning one total per day after that day's replacement is inferred from the usual version of this task",
+   "inferred_interface": {
+    "name": "getTotalRequests",
+    "params": [
+     {
+      "name": "server",
+      "type": "integer[]"
+     },
+     {
+      "name": "replaced",
+      "type": "integer[]"
+     },
+     {
+      "name": "newId",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "GTR"
+  }
+ ]
+}

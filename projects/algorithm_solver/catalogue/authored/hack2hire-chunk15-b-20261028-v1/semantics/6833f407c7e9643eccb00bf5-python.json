@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6833f407c7e9643eccb00bf5",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "open",
+  "close",
+  "capacity",
+  "reservations",
+  "partySize"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "availableIntervals",
+  "params": [
+   {
+    "name": "open",
+    "type": "integer"
+   },
+   {
+    "name": "close",
+    "type": "integer"
+   },
+   {
+    "name": "capacity",
+    "type": "integer"
+   },
+   {
+    "name": "reservations",
+    "type": "integer[][]"
+   },
+   {
+    "name": "partySize",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "cut the day at every reservation boundary and sum overlapping seats for each piece",
+  "candidate_design": "sweep: turn reservations into +seats/-seats events, sort them, walk times keeping the reserved total, and open/close output intervals when free seats cross partySize",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "3233d2c1335ad605a09e39b9d9bf21e9a4487ff6c8c67370d99886109b770473",
+ "wrapper": "Solution.availableIntervals"
+}
