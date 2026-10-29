@@ -1,0 +1,97 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:691cfb5cba2fba0a9e173e8c",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "SQLManager",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "createTable",
+    "params": [
+     {
+      "name": "tableName",
+      "type": "string"
+     },
+     {
+      "name": "columnNames",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "insert",
+    "params": [
+     {
+      "name": "tableName",
+      "type": "string"
+     },
+     {
+      "name": "values",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "select",
+    "params": [
+     {
+      "name": "tableName",
+      "type": "string"
+     },
+     {
+      "name": "conditions",
+      "type": "list<[string,string,string]>"
+     },
+     {
+      "name": "orderBy",
+      "type": "string"
+     },
+     {
+      "name": "ascending",
+      "type": "boolean"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rows as lists; every select re-derives column positions and types and orders hits with a stable insertion sort",
+  "candidate_design": "table objects with a column index map, fixed column types and rows stored with pre-parsed typed values; select compiles conditions once, filters, then one stable library sort",
+  "complexity_target": "O(r * c + h log h) per select/O(total cells) space"
+ },
+ "source_sha256": "96b845d1b881fe9013ff2965d53a1fb1e1292f2efdba0004d154a2eb7484defb",
+ "native_class": "SQLManager",
+ "native_symbol": "property SQLManager of the CommonJS solve export",
+ "void_methods": [
+  "createTable"
+ ]
+}

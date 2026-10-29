@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6792d9906828628f54397d99",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "records",
+  "filters",
+  "pageSize",
+  "pageNumber"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "queryTransactions",
+  "params": [
+   {
+    "name": "records",
+    "type": "list<[string,string,string,string,string]>"
+   },
+   {
+    "name": "filters",
+    "type": "string[]"
+   },
+   {
+    "name": "pageSize",
+    "type": "integer"
+   },
+   {
+    "name": "pageNumber",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "filter with per-record parsing, insertion-sort the hits by timestamp, slice the page",
+  "candidate_design": "parse the filters once, convert amounts to integer cents, filter in one pass, stable library sort by integer timestamp, slice",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "393e68bce8be6ea365f63534bd9fb9d48214f3ea8cd3e5b051409b78ed7667a6",
+ "wrapper": "Solution.queryTransactions"
+}

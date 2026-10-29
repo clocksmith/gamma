@@ -1,0 +1,72 @@
+{
+ "kind": "artifact",
+ "id": "artifact:hack2hire:688d0798b6c09ad9a4fcc2da:688d0850b6c09ad9a4fcc2db:approach-native:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/design.json",
+   "sha256": "cebc296220cff9a3308f993820dbfc3171fadea7e898e5afc2396e1e0b4c2751",
+   "selector": "/problems/hack2hire:688d0850b6c09ad9a4fcc2db"
+  }
+ ],
+ "type": "source-native",
+ "title": "Design Cache with Eviction variant 1 design entry",
+ "problemId": "hack2hire:688d0798b6c09ad9a4fcc2da",
+ "approachId": "approach:hack2hire:688d0798b6c09ad9a4fcc2da:688d0850b6c09ad9a4fcc2db:v1",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:688d0798b6c09ad9a4fcc2da:688d0850b6c09ad9a4fcc2db:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-records/contract--contract_hack2hire_688d0798b6c09ad9a4fcc2da_688d0850b6c09ad9a4fcc2db_authored-v1.json",
+  "sha256": "b47c67f8cd3ea4f593fc3d67e49511e75f65d9a02a6daa0a095bf75277fd4ea8"
+ },
+ "file": {
+  "status": "present",
+  "value": {
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/design.json",
+   "sha256": "cebc296220cff9a3308f993820dbfc3171fadea7e898e5afc2396e1e0b4c2751",
+   "bytes": 12015,
+   "mediaType": "application/json"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/design.json",
+    "sha256": "cebc296220cff9a3308f993820dbfc3171fadea7e898e5afc2396e1e0b4c2751",
+    "selector": "/problems/hack2hire:688d0850b6c09ad9a4fcc2db"
+   }
+  ]
+ },
+ "externalLocator": {
+  "status": "not-applicable",
+  "reason": "Native design entry is in the referenced cohort file"
+ },
+ "language": null,
+ "documentSchema": null,
+ "executionKind": "reference-only",
+ "complexityClaims": {
+  "status": "not-applicable",
+  "reason": "Complexity claims live on the implementation artifacts"
+ },
+ "nativeMetadata": {
+  "status": "present",
+  "value": {
+   "reference": "dict of entries; each eviction scans all entries for the smallest (rank, write sequence)",
+   "candidate_design": "hash map plus a min-heap of (rank, write sequence, key) with lazy deletion: stale heap entries whose sequence no longer matches the map are skipped",
+   "complexity_target": "O(log n) amortised per put, O(1) per get/O(capacity + writes) space"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/design.json",
+    "sha256": "cebc296220cff9a3308f993820dbfc3171fadea7e898e5afc2396e1e0b4c2751",
+    "selector": "/problems/hack2hire:688d0850b6c09ad9a4fcc2db"
+   }
+  ]
+ }
+}

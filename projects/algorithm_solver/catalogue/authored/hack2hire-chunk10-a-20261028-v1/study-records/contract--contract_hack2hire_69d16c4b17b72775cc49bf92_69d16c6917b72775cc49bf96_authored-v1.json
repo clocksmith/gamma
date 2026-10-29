@@ -1,0 +1,487 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69d16c4b17b72775cc49bf92:69d16c6917b72775cc49bf96:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/29"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69d16c4b17b72775cc49bf92.json",
+   "sha256": "69d5a268bb3db4649c40c158915bd79ae0c8b590ce29d31b4374f966eee53f2d",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:69d16c6917b72775cc49bf96"
+  }
+ ],
+ "problemId": "hack2hire:69d16c4b17b72775cc49bf92",
+ "variantId": "69d16c6917b72775cc49bf96",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: overwrite-on-wrap byte ring",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69d16c6917b72775cc49bf96/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "RingBuffer(capacity) owns capacity cells, a write pointer and a read pointer (both start at 0) and an unread counter. Each character is one byte. write(data) stores each character at the write pointer and advances it modulo capacity; the unread counter grows by one per character up to capacity, and the read pointer does not move even when unread data is overwritten. read(n) returns min(n, unread) characters starting at the read pointer (wrapping), advances the read pointer by that many and decreases the unread counter. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/29/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "RingBuffer(capacity) owns capacity cells, a write pointer and a read pointer (both start at 0) and an unread counter.",
+   "Each character is one byte.",
+   "write(data) stores each character at the write pointer and advances it modulo capacity; the unread counter grows by one per character up to capacity, and the read pointer does not move even when unread data is overwritten.",
+   "read(n) returns min(n, unread) characters starting at the read pointer (wrapping), advances the read pointer by that many and decreases the unread counter.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/29/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= capacity <= 1e5",
+   "data is printable ASCII up to 1e5 characters",
+   "0 <= n <= 1e5",
+   "up to 1e5 calls"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69d16c6917b72775cc49bf96/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: ring buffer of a fixed byte capacity storing strings; independent write and read pointers over one fixed array; writes may silently overwrite older data after wrapping (method signatures cut off); algorithmTags: DESIGN; preview response sha256 39a9ec211b5d7e641f471c86a312ade6c9133388b11ec72243611413dc1647dd"
+   },
+   {
+    "statement": "Uncertainty: very high: fixed capacity, independent pointers and silent overwrite are in the preview; the method names, the unread counter capped at capacity and the read pointer staying put on overwrite are inferred",
+    "basis": "the public group preview is partial (422 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/29/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/29/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/29/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What happens to the read pointer when unread data is overwritten?",
+   "How many bytes can read return?",
+   "Is a character one byte?",
+   "Does read block or return fewer bytes?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69d16c6917b72775cc49bf96/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "RingBuffer",
+      "read"
+     ],
+     [
+      [
+       6
+      ],
+      [
+       3
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "RingBuffer",
+      "write",
+      "write",
+      "read",
+      "write",
+      "write",
+      "write",
+      "write",
+      "read",
+      "read",
+      "write",
+      "read",
+      "read",
+      "write",
+      "write",
+      "read",
+      "write"
+     ],
+     [
+      [
+       6
+      ],
+      [
+       "~XXc~"
+      ],
+      [
+       "X ~ XbY"
+      ],
+      [
+       7
+      ],
+      [
+       "Xcc~"
+      ],
+      [
+       "Z  bZY"
+      ],
+      [
+       "YXZbY"
+      ],
+      [
+       "~X Z"
+      ],
+      [
+       2
+      ],
+      [
+       5
+      ],
+      [
+       ""
+      ],
+      [
+       7
+      ],
+      [
+       2
+      ],
+      [
+       "YY"
+      ],
+      [
+       "Z~bX"
+      ],
+      [
+       8
+      ],
+      [
+       " YcY"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     " ~ XbY",
+     null,
+     null,
+     null,
+     null,
+     "Zb",
+     "Y~X ",
+     null,
+     "",
+     "",
+     null,
+     null,
+     "XYYZ~b",
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69d16c6917b72775cc49bf96/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class RingBuffer:\n    def __init__(self, capacity)\n    def write(self, data) -> void\n    def read(self, n) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/29/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69d16c6917b72775cc49bf96-python.json",
+     "inferredInterface": {
+      "classname": "RingBuffer",
+      "constructor": {
+       "params": [
+        {
+         "name": "capacity",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "write",
+        "params": [
+         {
+          "name": "data",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "read",
+        "params": [
+         {
+          "name": "n",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69d16c6917b72775cc49bf96-python.json",
+      "sha256": "94b1f67eb60cd38881be14b04cbced0a2423ea29509212a1add61f5677745144",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class RingBuffer {\n  constructor(capacity)\n  write(data) /* -> void */\n  read(n) /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/29/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69d16c6917b72775cc49bf96-javascript.json",
+     "inferredInterface": {
+      "classname": "RingBuffer",
+      "constructor": {
+       "params": [
+        {
+         "name": "capacity",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "write",
+        "params": [
+         {
+          "name": "data",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "read",
+        "params": [
+         {
+          "name": "n",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69d16c6917b72775cc49bf96-javascript.json",
+      "sha256": "bbcacc7496e76a7952526b597b327180af19ff782688fac6a728039012dd1c28",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/29/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/29/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

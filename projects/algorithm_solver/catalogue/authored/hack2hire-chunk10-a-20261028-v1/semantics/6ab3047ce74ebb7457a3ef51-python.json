@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6ab3047ce74ebb7457a3ef51",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "numPlayers",
+  "deck"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "playTable",
+  "params": [
+   {
+    "name": "numPlayers",
+    "type": "integer"
+   },
+   {
+    "name": "deck",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string[][],integer[]]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "slice hands with a stride, compute every (category, tie-break list) with list.count, compare with max",
+  "candidate_design": "one histogram strength key per player, track the best key and the list of players reaching it in one pass",
+  "complexity_target": "O(p) time/O(p) space"
+ },
+ "source_sha256": "f113025406dcafc04baefd2577f33246a9a75933488795fd4e679c480bbf6bf2",
+ "wrapper": "Solution.playTable"
+}

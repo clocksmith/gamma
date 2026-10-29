@@ -1,0 +1,539 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6920d00b94b324049c3251bc:6920d07794b324049c3251be:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6920d00b94b324049c3251bc.json",
+   "sha256": "5b982b9cb5face9a662e8d2effbfaf1ba958b3c9004a76a4553667634ef0ece1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:6920d07794b324049c3251be"
+  }
+ ],
+ "problemId": "hack2hire:6920d00b94b324049c3251bc",
+ "variantId": "6920d07794b324049c3251be",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: nested transactions",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6920d07794b324049c3251be/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "KeyValueStore() starts empty. set(key, value) stores or overwrites; get(key) returns the value or \"\" when absent; unset(key) removes the key (no effect when absent). begin() opens a nested transaction. rollback() undoes every change made since the innermost open begin and closes it, returning true, or returns false when no transaction is open. commit() makes all changes permanent and closes every open transaction, returning true, or false when none is open. Values are non-empty. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "KeyValueStore() starts empty.",
+   "set(key, value) stores or overwrites; get(key) returns the value or \"\" when absent; unset(key) removes the key (no effect when absent).",
+   "begin() opens a nested transaction.",
+   "rollback() undoes every change made since the innermost open begin and closes it, returning true, or returns false when no transaction is open.",
+   "commit() makes all changes permanent and closes every open transaction, returning true, or false when none is open.",
+   "Values are non-empty.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "keys and values match [a-z0-9]{1,10}",
+   "transactions may nest up to the call count"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6920d07794b324049c3251be/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: KeyValueStore with set, get and unset of string keys and values; set overwrites (the remaining methods are cut off); algorithmTags: HASH_TABLE, DESIGN; codingQuestions (variant count/order); preview response sha256 76f0978afbcde90f77b623ba08e6fdc0e895d6c010fd140a06e94a8979175648"
+   },
+   {
+    "statement": "Uncertainty: high: rollback is in the title; the begin/rollback/commit interface, nesting, commit closing every transaction and the boolean results are inferred",
+    "basis": "the public group preview is partial (553 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as three cumulative levels: 1 = set/get/unset, 2 = adds nested transactions (begin, rollback, commit), 3 = adds count(value)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does get return for a missing key?",
+   "Are transactions nested, and does commit close all of them?",
+   "What do rollback and commit return without an open transaction?",
+   "Must count be fast inside transactions?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6920d07794b324049c3251be/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "KeyValueStore",
+      "unset"
+     ],
+     [
+      [],
+      [
+       "a"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "KeyValueStore",
+      "unset",
+      "commit",
+      "set",
+      "begin",
+      "begin",
+      "commit",
+      "set",
+      "unset",
+      "set",
+      "commit",
+      "get",
+      "begin",
+      "rollback",
+      "commit",
+      "unset",
+      "begin",
+      "commit",
+      "commit"
+     ],
+     [
+      [],
+      [
+       "b"
+      ],
+      [],
+      [
+       "b",
+       "x"
+      ],
+      [],
+      [],
+      [],
+      [
+       "b",
+       "2"
+      ],
+      [
+       "b"
+      ],
+      [
+       "c",
+       "x"
+      ],
+      [],
+      [
+       "a"
+      ],
+      [],
+      [],
+      [],
+      [
+       "b"
+      ],
+      [],
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     false,
+     null,
+     null,
+     null,
+     true,
+     null,
+     null,
+     null,
+     false,
+     "",
+     null,
+     true,
+     false,
+     null,
+     null,
+     true,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6920d07794b324049c3251be/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class KeyValueStore:\n    def __init__(self)\n    def set(self, key, value) -> void\n    def get(self, key) -> string\n    def unset(self, key) -> void\n    def begin(self) -> void\n    def rollback(self) -> boolean\n    def commit(self) -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6920d07794b324049c3251be-python.json",
+     "inferredInterface": {
+      "classname": "KeyValueStore",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "unset",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "begin",
+        "params": [],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "rollback",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "commit",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6920d07794b324049c3251be-python.json",
+      "sha256": "2fbd1de9e68564fc42c472e6995c6a32f25401ee55458ab7ea4c0918047b39a0",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class KeyValueStore {\n  constructor()\n  set(key, value) /* -> void */\n  get(key) /* -> string */\n  unset(key) /* -> void */\n  begin() /* -> void */\n  rollback() /* -> boolean */\n  commit() /* -> boolean */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6920d07794b324049c3251be-javascript.json",
+     "inferredInterface": {
+      "classname": "KeyValueStore",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "unset",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "begin",
+        "params": [],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "rollback",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "commit",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6920d07794b324049c3251be-javascript.json",
+      "sha256": "29f9e2b4c4e097043c8827d0fd05d1402259c1d86e180c8f1b28830bcfbac916",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

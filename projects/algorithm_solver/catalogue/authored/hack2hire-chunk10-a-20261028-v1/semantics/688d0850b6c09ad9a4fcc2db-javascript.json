@@ -1,0 +1,78 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:688d0850b6c09ad9a4fcc2db",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "RankedCache",
+  "constructor": {
+   "params": [
+    {
+     "name": "capacity",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "put",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "value",
+      "type": "string"
+     },
+     {
+      "name": "rank",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "get",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "dict of entries; each eviction scans all entries for the smallest (rank, write sequence)",
+  "candidate_design": "hash map plus a min-heap of (rank, write sequence, key) with lazy deletion: stale heap entries whose sequence no longer matches the map are skipped",
+  "complexity_target": "O(log n) amortised per put, O(1) per get/O(capacity + writes) space"
+ },
+ "source_sha256": "05551df03e9bf01dc02226983691e22834fcfbc25501b458e136abd890aad1f9",
+ "native_class": "RankedCache",
+ "native_symbol": "property RankedCache of the CommonJS solve export",
+ "void_methods": [
+  "put"
+ ]
+}

@@ -1,0 +1,458 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67d448ff488516fd8ad5a0b9:67d44fdf488516fd8ad5a0ba:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/24"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67d448ff488516fd8ad5a0b9.json",
+   "sha256": "aa926ef2fe2db8591dc3f0d22167d191f5298d2d887a94287dec381530a9d2b0",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:67d44fdf488516fd8ad5a0ba"
+  }
+ ],
+ "problemId": "hack2hire:67d448ff488516fd8ad5a0b9",
+ "variantId": "67d44fdf488516fd8ad5a0ba",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: k most recent files",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:67d44fdf488516fd8ad5a0ba/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "FileStorageSystem() starts empty. storeFile(file, date) records a file with a unique name and a \"yyyy-MM-dd\" date. getKthRecentFiles(k) returns the names of the min(k, stored) files first in order of date descending, then name ascending (code points). returnAllFiles() returns all names in insertion order. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/24/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "FileStorageSystem() starts empty.",
+   "storeFile(file, date) records a file with a unique name and a \"yyyy-MM-dd\" date.",
+   "getKthRecentFiles(k) returns the names of the min(k, stored) files first in order of date descending, then name ascending (code points).",
+   "returnAllFiles() returns all names in insertion order.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/24/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "file names match [a-z0-9_.]{1,20} and are unique",
+   "valid \"yyyy-MM-dd\" dates",
+   "1 <= k <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:67d44fdf488516fd8ad5a0ba/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: FileStorageSystem with storeFile(file, date \"yyyy-MM-dd\"), getKthRecentFiles(k) returning the k most recent names by date descending then name, all if fewer, and returnAllFiles() in insertion order; algorithmTags: HEAP; preview response sha256 be4821a50a6fb7d227313b25a22722289e212fba064e7e27f1f0c5ab2495d029"
+   },
+   {
+    "statement": "Uncertainty: low: all three methods and the ordering are in the preview; unique file names, code-point name order and the bounds are inferred",
+    "basis": "the public group preview is partial (674 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/24/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/24/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/24/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Can the same file name be stored twice?",
+   "How are names compared on equal dates?",
+   "Is k ever larger than the number of files?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:67d44fdf488516fd8ad5a0ba/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "FileStorageSystem",
+      "getKthRecentFiles"
+     ],
+     [
+      [],
+      [
+       2
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "FileStorageSystem",
+      "getKthRecentFiles",
+      "getKthRecentFiles",
+      "getKthRecentFiles",
+      "getKthRecentFiles",
+      "storeFile",
+      "storeFile",
+      "storeFile",
+      "storeFile"
+     ],
+     [
+      [],
+      [
+       2
+      ],
+      [
+       1
+      ],
+      [
+       1
+      ],
+      [
+       50
+      ],
+      [
+       "a1",
+       "2023-12-31"
+      ],
+      [
+       "a2",
+       "2024-01-10"
+      ],
+      [
+       "b.txt3",
+       "2024-01-10"
+      ],
+      [
+       "z_14",
+       "2024-01-02"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [],
+     [],
+     [],
+     [],
+     null,
+     null,
+     null,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:67d44fdf488516fd8ad5a0ba/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class FileStorageSystem:\n    def __init__(self)\n    def storeFile(self, file, date) -> void\n    def getKthRecentFiles(self, k) -> string[]\n    def returnAllFiles(self) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/24/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/67d44fdf488516fd8ad5a0ba-python.json",
+     "inferredInterface": {
+      "classname": "FileStorageSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "storeFile",
+        "params": [
+         {
+          "name": "file",
+          "type": "string"
+         },
+         {
+          "name": "date",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getKthRecentFiles",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "returnAllFiles",
+        "params": [],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/67d44fdf488516fd8ad5a0ba-python.json",
+      "sha256": "c5194741b0ad842d922729e2406d8151b419bc1b334e57ff16fecaa8401b4681",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class FileStorageSystem {\n  constructor()\n  storeFile(file, date) /* -> void */\n  getKthRecentFiles(k) /* -> string[] */\n  returnAllFiles() /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/24/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/67d44fdf488516fd8ad5a0ba-javascript.json",
+     "inferredInterface": {
+      "classname": "FileStorageSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "storeFile",
+        "params": [
+         {
+          "name": "file",
+          "type": "string"
+         },
+         {
+          "name": "date",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getKthRecentFiles",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "returnAllFiles",
+        "params": [],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/67d44fdf488516fd8ad5a0ba-javascript.json",
+      "sha256": "6a8c317f2c004f54453100054f35abac842d7ecfcf959a8bf6a8f78b1cd4b1cd",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/24/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/24/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

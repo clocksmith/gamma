@@ -1,0 +1,89 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69d3f7fd79bf03c0074bce16",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "TemporalKVStore",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "set",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "value",
+      "type": "string"
+     },
+     {
+      "name": "timestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "get",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "timestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "remove",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "append every write to one global event list; get rescans all events of the key",
+  "candidate_design": "hash map from key to parallel arrays of times and values (append-only because writes are time-ordered); get binary-searches the times",
+  "complexity_target": "O(log v) per get, O(1) amortised per set/remove/O(total writes) space"
+ },
+ "source_sha256": "8eaef8f17ef98d7aba785be21387643d2c9d24602473194ce91b83476019e398",
+ "native_class": "TemporalKVStore",
+ "native_symbol": "module global TemporalKVStore",
+ "void_methods": [
+  "set"
+ ]
+}

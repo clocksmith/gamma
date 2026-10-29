@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:67ce4e968f73eb6319edd1f0",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "RateLimiter",
+  "constructor": {
+   "params": [
+    {
+     "name": "limit",
+     "type": "integer"
+    },
+    {
+     "name": "ttl",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "allowRequest",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "list of accepted timestamps rescanned on every request",
+  "candidate_design": "queue of accepted timestamps; pop expired ones from the front, then compare the queue length with limit",
+  "complexity_target": "O(1) amortised per request/O(limit) space"
+ },
+ "source_sha256": "5f7394f3d345cc0aa976d8bfa2c07b837351e9c4a68bc9de70ed1d0953a7548e",
+ "native_class": "RateLimiter",
+ "native_symbol": "property RateLimiter of the CommonJS solve export",
+ "void_methods": []
+}

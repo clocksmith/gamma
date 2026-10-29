@@ -1,0 +1,107 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69f2665342791c82ab992694",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "RecipeManager",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addRecipe",
+    "params": [
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "ingredients",
+      "type": "string[]"
+     },
+     {
+      "name": "steps",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "getRecipe",
+    "params": [
+     {
+      "name": "recipeId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string[],string[]]>"
+    }
+   },
+   {
+    "name": "updateRecipe",
+    "params": [
+     {
+      "name": "recipeId",
+      "type": "string"
+     },
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "ingredients",
+      "type": "string[]"
+     },
+     {
+      "name": "steps",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "deleteRecipe",
+    "params": [
+     {
+      "name": "recipeId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "dict of recipes; name clashes, ingredient search, rating order (with Fraction) and prefix listing all rescan every recipe",
+  "candidate_design": "hash map of recipes plus a lower-cased-name-to-id map for O(1) clash checks; inputs copied on store and outputs copied on read",
+  "complexity_target": "O(size of the recipe) per call/O(total text) space"
+ },
+ "source_sha256": "bfd5774783d36675d3dbb6e362d5b913f8a5623118f3fdb1c5c89548a9bef818",
+ "native_class": "RecipeManager",
+ "native_symbol": "module global RecipeManager",
+ "void_methods": []
+}

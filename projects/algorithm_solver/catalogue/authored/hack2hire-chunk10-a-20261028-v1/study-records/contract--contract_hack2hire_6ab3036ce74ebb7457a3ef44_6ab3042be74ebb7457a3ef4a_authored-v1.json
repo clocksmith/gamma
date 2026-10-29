@@ -1,0 +1,350 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6ab3036ce74ebb7457a3ef44:6ab3042be74ebb7457a3ef4a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6ab3036ce74ebb7457a3ef44.json",
+   "sha256": "0da2cd00fd2cbde3fc469c3d8e0d957c1538291072fb41ff7ce37c592857eb84",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:6ab3042be74ebb7457a3ef4a"
+  }
+ ],
+ "problemId": "hack2hire:6ab3036ce74ebb7457a3ef44",
+ "variantId": "6ab3042be74ebb7457a3ef4a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: adds straights and flushes",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6ab3042be74ebb7457a3ef4a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "A card is a string: rank (\"2\"..\"10\", \"J\", \"Q\", \"K\", \"A\") followed by a suit letter S, H, D or C; cards in the deck are distinct. Same deal and output as level 1, with three-card poker categories from strongest: straight flush, three of a kind, straight, flush, pair, high card. A straight is three consecutive ranks with the ace high only (Q-K-A is a straight, A-2-3 is not); a flush is three cards of one suit. Straights, flushes and high cards compare all ranks from highest to lowest; three of a kind and pairs as in level 1. Return [hand1, hand2, winner] with winner 1, 2 or 0.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "A card is a string: rank (\"2\"..\"10\", \"J\", \"Q\", \"K\", \"A\") followed by a suit letter S, H, D or C; cards in the deck are distinct.",
+   "Same deal and output as level 1, with three-card poker categories from strongest: straight flush, three of a kind, straight, flush, pair, high card.",
+   "A straight is three consecutive ranks with the ace high only (Q-K-A is a straight, A-2-3 is not); a flush is three cards of one suit.",
+   "Straights, flushes and high cards compare all ranks from highest to lowest; three of a kind and pairs as in level 1.",
+   "Return [hand1, hand2, winner] with winner 1, 2 or 0."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "deck.length == 6",
+   "cards are distinct and well formed"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6ab3042be74ebb7457a3ef4a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: two players, deal one card at a time alternating until each has three; ranks 2..10, J, Q, K, A; categories three of a kind > pair > high card with stated tie-breaks; suits never matter; equal strength is a draw; algorithmTags: DESIGN, SIMULATION; codingQuestions (variant count/order); preview response sha256 5a0348bced18f05de51849826b5d1ef1fa91eb743dbb9bc94c590fd3a035753a"
+   },
+   {
+    "statement": "Uncertainty: very high: no public text covers level 2; the extra categories, their order and the ace-high-only straight are inferred from common three-card variants",
+    "basis": "the public group preview is partial (936 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as three levels: 1 = the preview game, 2 = adds straight and flush categories, 3 = 2 to 17 players with the level-1 categories",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/6/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/6/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/6/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is the input: a deck to deal from, or the hands directly?",
+   "How should the result be reported?",
+   "Do straights or flushes exist in this game?",
+   "Is the ace ever low?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6ab3042be74ebb7457a3ef4a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "2S",
+      "3S",
+      "2H",
+      "3H",
+      "2D",
+      "AS"
+     ]
+    ],
+    "output": [
+     [
+      "2S",
+      "2H",
+      "2D"
+     ],
+     [
+      "3S",
+      "3H",
+      "AS"
+     ],
+     1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "10H",
+      "QD",
+      "10S",
+      "10C",
+      "QC",
+      "10D"
+     ]
+    ],
+    "output": [
+     [
+      "10H",
+      "10S",
+      "QC"
+     ],
+     [
+      "QD",
+      "10C",
+      "10D"
+     ],
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6ab3042be74ebb7457a3ef4a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def playRound(deck) -> list<[string[],string[],integer]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6ab3042be74ebb7457a3ef4a-python.json",
+     "inferredInterface": {
+      "name": "playRound",
+      "params": [
+       {
+        "name": "deck",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "list<[string[],string[],integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6ab3042be74ebb7457a3ef4a-python.json",
+      "sha256": "d1fd191f8e1bc0a7ea2817ff0cb3d28c00e6ed3c99dc753876bebe3f61f3859c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function playRound(deck) /* -> list<[string[],string[],integer]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6ab3042be74ebb7457a3ef4a-javascript.json",
+     "inferredInterface": {
+      "name": "playRound",
+      "params": [
+       {
+        "name": "deck",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "list<[string[],string[],integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6ab3042be74ebb7457a3ef4a-javascript.json",
+      "sha256": "aef565e9448fa84d3d164685dfc43d442b3b5bbda80a35437ac85d2844ac5488",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/6/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

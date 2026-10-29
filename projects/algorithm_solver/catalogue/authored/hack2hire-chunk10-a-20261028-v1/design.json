@@ -1,0 +1,159 @@
+{
+ "problems": {
+  "hack2hire:67ce7ab08f73eb6319edd207": {
+   "reference": "insertion sort with an explicit character-by-character comparator that looks positions up with str.index",
+   "candidate_design": "map every letter to its rank, translate each word into a key string of rank characters once, then one library sort comparing keys by code unit",
+   "complexity_target": "O(L + n log n * w) time/O(L) space for total length L"
+  },
+  "hack2hire:69d3f7fd79bf03c0074bce16": {
+   "reference": "append every write to one global event list; get rescans all events of the key",
+   "candidate_design": "hash map from key to parallel arrays of times and values (append-only because writes are time-ordered); get binary-searches the times",
+   "complexity_target": "O(log v) per get, O(1) amortised per set/remove/O(total writes) space"
+  },
+  "hack2hire:69dd59d595e80ae213e5b7fc": {
+   "reference": "append writes and deletions to one global event list; get rescans all events of the key and keeps the last one not after the query time",
+   "candidate_design": "per-key parallel arrays of times and values where a deletion is stored as a null value; get and remove binary-search the times",
+   "complexity_target": "O(log v) per get/remove, O(1) amortised per set/O(total writes) space"
+  },
+  "hack2hire:688d0850b6c09ad9a4fcc2db": {
+   "reference": "dict of entries; each eviction scans all entries for the smallest (rank, write sequence)",
+   "candidate_design": "hash map plus a min-heap of (rank, write sequence, key) with lazy deletion: stale heap entries whose sequence no longer matches the map are skipped",
+   "complexity_target": "O(log n) amortised per put, O(1) per get/O(capacity + writes) space"
+  },
+  "hack2hire:68aba144fc2e86fe2162e8a1": {
+   "reference": "dicts for the cache and the source; each eviction scans all cached entries for the smallest (rank, write sequence)",
+   "candidate_design": "private copy of the source in a hash map, cache map plus a lazy-deletion min-heap of (rank, write sequence, key)",
+   "complexity_target": "O(log n) amortised per put or loading get/O(source + capacity + writes) space"
+  },
+  "hack2hire:6ab30396e74ebb7457a3ef46": {
+   "reference": "sort ranks, count repeats with list.count and compare (category, tie-break list) tuples",
+   "candidate_design": "rank histogram per hand giving a fixed-length strength key, compared lexicographically",
+   "complexity_target": "O(1) time/O(1) space"
+  },
+  "hack2hire:6ab3042be74ebb7457a3ef4a": {
+   "reference": "sort ranks, count repeats with list.count and test consecutive differences and suit sets, then compare tuples",
+   "candidate_design": "rank histogram, sorted rank list and a single-suit flag combined into a strength key",
+   "complexity_target": "O(1) time/O(1) space"
+  },
+  "hack2hire:6ab3047ce74ebb7457a3ef51": {
+   "reference": "slice hands with a stride, compute every (category, tie-break list) with list.count, compare with max",
+   "candidate_design": "one histogram strength key per player, track the best key and the list of players reaching it in one pass",
+   "complexity_target": "O(p) time/O(p) space"
+  },
+  "hack2hire:69190b156723130c5456345c": {
+   "reference": "one list of bots scanned for duplicate names and a literal if-chain per bot kind on every message",
+   "candidate_design": "bot registry: a name set plus an ordered list of bot objects created from a type-to-class table; each bot implements react",
+   "complexity_target": "O(b) per message, O(k) per read/O(log size) space"
+  },
+  "hack2hire:691b8695419c66014d71411a": {
+   "reference": "dict of channels holding a log, a bot list scanned for duplicates and a literal if-chain per bot kind",
+   "candidate_design": "channel objects each owning a log, a user counter and a bot registry built from the type-to-class table",
+   "complexity_target": "O(b) per message, O(k) per read/O(total log) space"
+  },
+  "hack2hire:677ed3ec052a260e0165706f": {
+   "reference": "list of pending (run time, sequence, id); runDue sorts the due ones and rebuilds the list; cancel filters the list",
+   "candidate_design": "min-heap of (run time, sequence, id) plus a map of pending ids; cancel just deletes from the map and stale heap entries are skipped when popped",
+   "complexity_target": "O(log n) per schedule and per executed task, O(1) per cancel/O(n) space"
+  },
+  "hack2hire:691cfb5cba2fba0a9e173e8c": {
+   "reference": "rows as lists; every select re-derives column positions and types and orders hits with a stable insertion sort",
+   "candidate_design": "table objects with a column index map, fixed column types and rows stored with pre-parsed typed values; select compiles conditions once, filters, then one stable library sort",
+   "complexity_target": "O(r * c + h log h) per select/O(total cells) space"
+  },
+  "hack2hire:6920d01494b324049c3251bd": {
+   "reference": "plain dict",
+   "candidate_design": "hash map",
+   "complexity_target": "O(1) per call/O(keys) space"
+  },
+  "hack2hire:6920d07794b324049c3251be": {
+   "reference": "stack of full dict snapshots taken at begin",
+   "candidate_design": "undo log per open transaction: the first change to a key inside a transaction records its previous value (or absence); rollback replays that log",
+   "complexity_target": "O(1) per change, O(changes) per rollback/O(keys + logged changes) space"
+  },
+  "hack2hire:6920d4a994b324049c3251c1": {
+   "reference": "stack of full dict snapshots; count scans every value",
+   "candidate_design": "undo log per transaction plus a value-to-count map updated by one helper that every set, unset and undo goes through",
+   "complexity_target": "O(1) per call except rollback O(changes)/O(keys + logged changes) space"
+  },
+  "hack2hire:69b35205a4e93c007df404fe": {
+   "reference": "dict of notes; search scans every note; tag queries scan every note; versions kept as a full list",
+   "candidate_design": "hash map of note records keyed by id, a tag-to-id-set index, and per-note version lists; search scans notes once and sorts the hits",
+   "complexity_target": "O(1) per call/O(total text) space"
+  },
+  "hack2hire:69b38216a4e93c007df405de": {
+   "reference": "dict of notes; search scans every note; tag queries scan every note; versions kept as a full list",
+   "candidate_design": "hash map of note records keyed by id, a tag-to-id-set index, and per-note version lists; search scans notes once and sorts the hits",
+   "complexity_target": "O(1) per CRUD call, O(n * text + h log h) per search/O(total text) space"
+  },
+  "hack2hire:69b38409a4e93c007df405e6": {
+   "reference": "dict of notes; search scans every note; tag queries scan every note; versions kept as a full list",
+   "candidate_design": "hash map of note records keyed by id, a tag-to-id-set index, and per-note version lists; search scans notes once and sorts the hits",
+   "complexity_target": "O(1) per tag change, O(t log t) per tag query/O(total text + tags) space"
+  },
+  "hack2hire:69b385d3a4e93c007df405f1": {
+   "reference": "dict of notes; search scans every note; tag queries scan every note; versions kept as a full list",
+   "candidate_design": "hash map of note records keyed by id, a tag-to-id-set index, and per-note version lists; search scans notes once and sorts the hits",
+   "complexity_target": "O(1) per version operation/O(total versions) space"
+  },
+  "hack2hire:691523d03f8671d8f7a56571": {
+   "reference": "explicit encoder and decoder that build and parse the byte list field by field",
+   "candidate_design": "hash map; save sorts the keys and writes length-prefixed fields into one array; load parses with a cursor into a fresh map",
+   "complexity_target": "O(total bytes + k log k) per save/load, O(1) per set/get/delete/O(total bytes) space"
+  },
+  "hack2hire:691523d43f8671d8f7a56572": {
+   "reference": "explicit encoder and decoder with a try/except around parsing",
+   "candidate_design": "parse into a temporary map with a bounds-checked cursor and validate every field; swap it in only after the checksum and the end position match",
+   "complexity_target": "O(total bytes + k log k) per save/load/O(total bytes) space"
+  },
+  "hack2hire:6792d9906828628f54397d99": {
+   "reference": "filter with per-record parsing, insertion-sort the hits by timestamp, slice the page",
+   "candidate_design": "parse the filters once, convert amounts to integer cents, filter in one pass, stable library sort by integer timestamp, slice",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:67ce4e968f73eb6319edd1f0": {
+   "reference": "list of accepted timestamps rescanned on every request",
+   "candidate_design": "queue of accepted timestamps; pop expired ones from the front, then compare the queue length with limit",
+   "complexity_target": "O(1) amortised per request/O(limit) space"
+  },
+  "hack2hire:67e0bdefa59c3d249d3625fe": {
+   "reference": "list of accepted (client, timestamp) pairs rescanned on every request",
+   "candidate_design": "hash map from client to its own queue of accepted timestamps",
+   "complexity_target": "O(1) amortised per request/O(clients * limit) space"
+  },
+  "hack2hire:67d44fdf488516fd8ad5a0ba": {
+   "reference": "store (file, date) pairs; every query sorts all files twice (by name, then stably by date descending)",
+   "candidate_design": "keep a list sorted by a composed key (inverted date digits followed by the name) using binary-search insertion; queries slice the front",
+   "complexity_target": "O(n) per store (memmove), O(k) per query/O(n) space"
+  },
+  "hack2hire:69f2665342791c82ab992694": {
+   "reference": "dict of recipes; name clashes, ingredient search, rating order (with Fraction) and prefix listing all rescan every recipe",
+   "candidate_design": "hash map of recipes plus a lower-cased-name-to-id map for O(1) clash checks; inputs copied on store and outputs copied on read",
+   "complexity_target": "O(size of the recipe) per call/O(total text) space"
+  },
+  "hack2hire:69f266df42791c82ab992697": {
+   "reference": "dict of recipes; name clashes, ingredient search, rating order (with Fraction) and prefix listing all rescan every recipe",
+   "candidate_design": "level-1 maps plus an ingredient (lower-cased) to id-set index maintained on add, update and delete",
+   "complexity_target": "O(size of the recipe) per change, O(h log h) per search/O(total text) space"
+  },
+  "hack2hire:69f2674342791c82ab99269a": {
+   "reference": "dict of recipes; name clashes, ingredient search, rating order (with Fraction) and prefix listing all rescan every recipe",
+   "candidate_design": "level-2 indexes plus per-recipe rating sum and count; getTopRated sorts rated ids with an exact cross-multiplication comparator",
+   "complexity_target": "O(1) per rating, O(r log r) per top-k query/O(total text) space"
+  },
+  "hack2hire:69f2676842791c82ab99269b": {
+   "reference": "dict of recipes; name clashes, ingredient search, rating order (with Fraction) and prefix listing all rescan every recipe",
+   "candidate_design": "level-3 structures; listByNamePrefix scans the lower-cased name index and sorts the matching names",
+   "complexity_target": "O(n + h log h) per prefix query/O(total text) space"
+  },
+  "hack2hire:69d16c6917b72775cc49bf96": {
+   "reference": "keep the whole written stream; for each read position find the last stream index that landed in that cell by modular arithmetic",
+   "candidate_design": "fixed array of single-character cells; write copies only the last capacity characters of long data after advancing the pointer, read slices at most two contiguous runs",
+   "complexity_target": "O(min(len, capacity)) per write, O(returned) per read/O(capacity) space"
+  },
+  "hack2hire:696bebd76b040fa4d120bb7a": {
+   "reference": "per-location list of level fill counts, filled level by level and emptied from the top",
+   "candidate_design": "store only the total per location; precompute Fibonacci prefix sums once and binary-search the first prefix sum >= total",
+   "complexity_target": "O(log levels) per call/O(locations) space"
+  }
+ }
+}

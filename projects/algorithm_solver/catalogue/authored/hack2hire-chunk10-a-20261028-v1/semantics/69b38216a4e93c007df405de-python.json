@@ -1,0 +1,119 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69b38216a4e93c007df405de",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "SecondBrainSystem",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "createNote",
+    "params": [
+     {
+      "name": "title",
+      "type": "string"
+     },
+     {
+      "name": "content",
+      "type": "string"
+     },
+     {
+      "name": "timestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "getNote",
+    "params": [
+     {
+      "name": "noteId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string,integer,integer]>"
+    }
+   },
+   {
+    "name": "updateNote",
+    "params": [
+     {
+      "name": "noteId",
+      "type": "string"
+     },
+     {
+      "name": "title",
+      "type": "string"
+     },
+     {
+      "name": "content",
+      "type": "string"
+     },
+     {
+      "name": "timestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "deleteNote",
+    "params": [
+     {
+      "name": "noteId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "searchNotes",
+    "params": [
+     {
+      "name": "keyword",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "dict of notes; search scans every note; tag queries scan every note; versions kept as a full list",
+  "candidate_design": "hash map of note records keyed by id, a tag-to-id-set index, and per-note version lists; search scans notes once and sorts the hits",
+  "complexity_target": "O(1) per CRUD call, O(n * text + h log h) per search/O(total text) space"
+ },
+ "source_sha256": "ff0c48fb70c68432a6a2443e108f8ce02515337965c93371a1868fa884e7b490",
+ "native_class": "SecondBrainSystem",
+ "native_symbol": "module global SecondBrainSystem",
+ "void_methods": []
+}

@@ -1,0 +1,540 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69190ae16723130c5456345b:691b8695419c66014d71411a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/9"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69190ae16723130c5456345b.json",
+   "sha256": "2b67a249d5c71f63466bc65b686a178db97902ff6a12c4befc233bbd9a3e9cd3",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:691b8695419c66014d71411a"
+  }
+ ],
+ "problemId": "hack2hire:69190ae16723130c5456345b",
+ "variantId": "691b8695419c66014d71411a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: several channels",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691b8695419c66014d71411a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "ChatApp() starts with no channels. createChannel(channelId) returns true, or false when it already exists. addBot(channelId, botName, botType) returns false when the channel is missing, the type is unknown or the name is already used by a bot in that channel, otherwise adds the bot and returns true. sendMessage(channelId, userId, text) returns false for a missing channel, otherwise logs and returns true. getRecentMessages(channelId, k) returns the last min(k, log size) entries of that channel, oldest first, or [] for a missing channel. Bot types (inferred, since the preview cuts them off): \"echo\" answers a message starting with \"/echo \" with the rest of the text; \"reverse\" answers a message starting with \"/reverse \" with the rest reversed; \"count\" answers the exact message \"/count\" with the number of user messages in the channel so far, including this one, in decimal. Log entries are \"<sender>: <text>\". After a user message is logged, bots react in the order they were added; bot replies are logged but never trigger bots.  Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "ChatApp() starts with no channels.",
+   "createChannel(channelId) returns true, or false when it already exists.",
+   "addBot(channelId, botName, botType) returns false when the channel is missing, the type is unknown or the name is already used by a bot in that channel, otherwise adds the bot and returns true.",
+   "sendMessage(channelId, userId, text) returns false for a missing channel, otherwise logs and returns true.",
+   "getRecentMessages(channelId, k) returns the last min(k, log size) entries of that channel, oldest first, or [] for a missing channel.",
+   "Bot types (inferred, since the preview cuts them off): \"echo\" answers a message starting with \"/echo \" with the rest of the text; \"reverse\" answers a message starting with \"/reverse \" with the rest reversed; \"count\" answers the exact message \"/count\" with the number of user messages in the channel so far, including this one, in decimal.",
+   "Log entries are \"<sender>: <text>\".",
+   "After a user message is logged, bots react in the order they were added; bot replies are logged but never trigger bots.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "channel ids match [a-z0-9]{1,10}",
+   "names match [A-Za-z0-9_]{1,15}",
+   "text is printable ASCII up to 60 characters",
+   "0 <= k <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691b8695419c66014d71411a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: ChatApp with human users and bots; one shared channel; a user message is logged first, then each bot may react and log its own output; extensible bot types; three bot types (their definitions are cut off); algorithmTags: DESIGN; codingQuestions (variant count/order); preview response sha256 e4e6dfc2a063e078e3413416c6cc8bfed507c949df253836920d953cfbaa7b86"
+   },
+   {
+    "statement": "Uncertainty: very high: the preview limits itself to one channel; multiple channels, the boolean results and everything about bots are inferred",
+    "basis": "the public group preview is partial (738 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = the single shared channel from the preview, 2 = several named channels",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/9/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/9/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/9/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What are the three bot types and their commands?",
+   "Can two bots share a name?",
+   "In which order do bots react?",
+   "Do bot messages trigger other bots?",
+   "How is the log read back?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691b8695419c66014d71411a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ChatApp",
+      "addBot"
+     ],
+     [
+      [],
+      [
+       "g",
+       "E",
+       "reverse"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ChatApp",
+      "getRecentMessages",
+      "sendMessage",
+      "createChannel",
+      "sendMessage",
+      "getRecentMessages",
+      "sendMessage",
+      "getRecentMessages",
+      "addBot"
+     ],
+     [
+      [],
+      [
+       "h",
+       1
+      ],
+      [
+       "h",
+       "ann",
+       "/reverse abc"
+      ],
+      [
+       "h"
+      ],
+      [
+       "h",
+       "Bo",
+       "hi"
+      ],
+      [
+       "g",
+       100
+      ],
+      [
+       "h",
+       "ann",
+       "hi"
+      ],
+      [
+       "g",
+       100
+      ],
+      [
+       "h",
+       "C",
+       "count"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [],
+     false,
+     true,
+     true,
+     [],
+     true,
+     [],
+     true
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691b8695419c66014d71411a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ChatApp:\n    def __init__(self)\n    def createChannel(self, channelId) -> boolean\n    def addBot(self, channelId, botName, botType) -> boolean\n    def sendMessage(self, channelId, userId, text) -> boolean\n    def getRecentMessages(self, channelId, k) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691b8695419c66014d71411a-python.json",
+     "inferredInterface": {
+      "classname": "ChatApp",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "createChannel",
+        "params": [
+         {
+          "name": "channelId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "addBot",
+        "params": [
+         {
+          "name": "channelId",
+          "type": "string"
+         },
+         {
+          "name": "botName",
+          "type": "string"
+         },
+         {
+          "name": "botType",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "sendMessage",
+        "params": [
+         {
+          "name": "channelId",
+          "type": "string"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "text",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getRecentMessages",
+        "params": [
+         {
+          "name": "channelId",
+          "type": "string"
+         },
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691b8695419c66014d71411a-python.json",
+      "sha256": "5b2dcc5287e8642c5ced302bbf2e0dfa4e66e2f6b37f2843b79d8f67aa7ccc3d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ChatApp {\n  constructor()\n  createChannel(channelId) /* -> boolean */\n  addBot(channelId, botName, botType) /* -> boolean */\n  sendMessage(channelId, userId, text) /* -> boolean */\n  getRecentMessages(channelId, k) /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691b8695419c66014d71411a-javascript.json",
+     "inferredInterface": {
+      "classname": "ChatApp",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "createChannel",
+        "params": [
+         {
+          "name": "channelId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "addBot",
+        "params": [
+         {
+          "name": "channelId",
+          "type": "string"
+         },
+         {
+          "name": "botName",
+          "type": "string"
+         },
+         {
+          "name": "botType",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "sendMessage",
+        "params": [
+         {
+          "name": "channelId",
+          "type": "string"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "text",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getRecentMessages",
+        "params": [
+         {
+          "name": "channelId",
+          "type": "string"
+         },
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691b8695419c66014d71411a-javascript.json",
+      "sha256": "9d7cf599784ef5ae07567d89a303b37817cfac71dfed129121a74a8a0dd04ffc",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/9/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/9/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

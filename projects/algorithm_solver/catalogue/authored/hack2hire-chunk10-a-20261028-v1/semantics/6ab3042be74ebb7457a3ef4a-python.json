@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6ab3042be74ebb7457a3ef4a",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "deck"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "playRound",
+  "params": [
+   {
+    "name": "deck",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string[],string[],integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sort ranks, count repeats with list.count and test consecutive differences and suit sets, then compare tuples",
+  "candidate_design": "rank histogram, sorted rank list and a single-suit flag combined into a strength key",
+  "complexity_target": "O(1) time/O(1) space"
+ },
+ "source_sha256": "0a44a8673d051d786626f1dcddf4c786debf1348f012ba870843fe2553fff0fd",
+ "wrapper": "Solution.playRound"
+}

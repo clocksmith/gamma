@@ -1,0 +1,549 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:691cfb44ba2fba0a9e173e8b:691cfb5cba2fba0a9e173e8c:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/691cfb44ba2fba0a9e173e8b.json",
+   "sha256": "7a2ffd5a62e201db602b235907d58cc22ce533bc5eadd1144d7c17e399022c1c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:691cfb5cba2fba0a9e173e8c"
+  }
+ ],
+ "problemId": "hack2hire:691cfb44ba2fba0a9e173e8b",
+ "variantId": "691cfb5cba2fba0a9e173e8c",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: typed-on-first-insert table with filtered, sorted selects",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691cfb5cba2fba0a9e173e8c/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "SQLManager() starts empty. createTable(tableName, columnNames) creates a table (names are unique). insert(tableName, values) adds a row of strings: a value is an integer when it matches 0 or -?[1-9][0-9]{0,8}, otherwise a string. The first row stored in a table fixes each column's type; insert returns false (storing nothing) for a missing table, a wrong number of values, or a row whose value types differ from the fixed types, and true otherwise. select(tableName, conditions, orderBy, ascending) returns the stored rows (as their original strings, fresh lists) that satisfy every condition [column, op, literal] with op one of =, !=, <, <=, >, >=: integer columns compare numerically and a non-integer literal matches nothing; string columns compare by code points. orderBy \"\" keeps insertion order; otherwise rows are stably sorted by that column ascending or descending (ties keep insertion order). A missing table or a condition or order column that does not exist returns []. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "SQLManager() starts empty.",
+   "createTable(tableName, columnNames) creates a table (names are unique).",
+   "insert(tableName, values) adds a row of strings: a value is an integer when it matches 0 or -?[1-9][0-9]{0,8}, otherwise a string.",
+   "The first row stored in a table fixes each column's type; insert returns false (storing nothing) for a missing table, a wrong number of values, or a row whose value types differ from the fixed types, and true otherwise.",
+   "select(tableName, conditions, orderBy, ascending) returns the stored rows (as their original strings, fresh lists) that satisfy every condition [column, op, literal] with op one of =, !=, <, <=, >, >=: integer columns compare numerically and a non-integer literal matches nothing; string columns compare by code points.",
+   "orderBy \"\" keeps insertion order; otherwise rows are stably sorted by that column ascending or descending (ties keep insertion order).",
+   "A missing table or a condition or order column that does not exist returns [].",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 2e4 calls",
+   "table and column names match [a-z]{1,10}",
+   "1 to 5 distinct columns",
+   "values match -?[a-z0-9]{1,10}",
+   "at most 3 conditions"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691cfb5cba2fba0a9e173e8c/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: variation of LeetCode 2408; SQLManager() and createTable(tableName, columnNames) with unique table names and untyped columns whose type is inferred as integer or string from inserted data; queries filter and sort (later methods cut off); algorithmTags: DESIGN, HASH_TABLE; preview response sha256 148281a7a9b82bad5032c6f1f4a5980e5ac156afb7a66eceb450186b0fa366cd"
+   },
+   {
+    "statement": "Uncertainty: very high: the class, createTable and integer/string type inference are in the preview; the insert and select signatures, first-row type fixing, rejection rules, condition operators, the stable descending sort and the empty-result rules are inferred",
+    "basis": "the public group preview is partial (780 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/11/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/11/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How are types inferred, and what happens when a later row disagrees?",
+   "What are the query methods and their parameters?",
+   "Which comparison operators exist?",
+   "How are ties ordered when sorting?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691cfb5cba2fba0a9e173e8c/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "SQLManager",
+      "createTable",
+      "select"
+     ],
+     [
+      [],
+      [
+       "p",
+       [
+        "a",
+        "b"
+       ]
+      ],
+      [
+       "p",
+       [],
+       "a",
+       true
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "SQLManager",
+      "createTable",
+      "createTable",
+      "insert",
+      "select",
+      "insert",
+      "insert",
+      "insert"
+     ],
+     [
+      [],
+      [
+       "p",
+       [
+        "a",
+        "b"
+       ]
+      ],
+      [
+       "q",
+       [
+        "x",
+        "y",
+        "z"
+       ]
+      ],
+      [
+       "p",
+       [
+        "10"
+       ]
+      ],
+      [
+       "r",
+       [
+        [
+         "w",
+         "=",
+         "ab"
+        ],
+        [
+         "x",
+         ">=",
+         "z9"
+        ]
+       ],
+       "a",
+       false
+      ],
+      [
+       "p",
+       [
+        "10",
+        "ab",
+        "z9"
+       ]
+      ],
+      [
+       "p",
+       [
+        "0",
+        "0",
+        "b"
+       ]
+      ],
+      [
+       "p",
+       [
+        "10",
+        "-0",
+        "-0"
+       ]
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     false,
+     [],
+     false,
+     false,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691cfb5cba2fba0a9e173e8c/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class SQLManager:\n    def __init__(self)\n    def createTable(self, tableName, columnNames) -> void\n    def insert(self, tableName, values) -> boolean\n    def select(self, tableName, conditions, orderBy, ascending) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691cfb5cba2fba0a9e173e8c-python.json",
+     "inferredInterface": {
+      "classname": "SQLManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "createTable",
+        "params": [
+         {
+          "name": "tableName",
+          "type": "string"
+         },
+         {
+          "name": "columnNames",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "insert",
+        "params": [
+         {
+          "name": "tableName",
+          "type": "string"
+         },
+         {
+          "name": "values",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "select",
+        "params": [
+         {
+          "name": "tableName",
+          "type": "string"
+         },
+         {
+          "name": "conditions",
+          "type": "list<[string,string,string]>"
+         },
+         {
+          "name": "orderBy",
+          "type": "string"
+         },
+         {
+          "name": "ascending",
+          "type": "boolean"
+         }
+        ],
+        "return": {
+         "type": "string[][]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691cfb5cba2fba0a9e173e8c-python.json",
+      "sha256": "6c8f298106cdaacca1293454b048f569ce648027ff26846e154dd77f2744fb6d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class SQLManager {\n  constructor()\n  createTable(tableName, columnNames) /* -> void */\n  insert(tableName, values) /* -> boolean */\n  select(tableName, conditions, orderBy, ascending) /* -> string[][] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691cfb5cba2fba0a9e173e8c-javascript.json",
+     "inferredInterface": {
+      "classname": "SQLManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "createTable",
+        "params": [
+         {
+          "name": "tableName",
+          "type": "string"
+         },
+         {
+          "name": "columnNames",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "insert",
+        "params": [
+         {
+          "name": "tableName",
+          "type": "string"
+         },
+         {
+          "name": "values",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "select",
+        "params": [
+         {
+          "name": "tableName",
+          "type": "string"
+         },
+         {
+          "name": "conditions",
+          "type": "list<[string,string,string]>"
+         },
+         {
+          "name": "orderBy",
+          "type": "string"
+         },
+         {
+          "name": "ascending",
+          "type": "boolean"
+         }
+        ],
+        "return": {
+         "type": "string[][]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691cfb5cba2fba0a9e173e8c-javascript.json",
+      "sha256": "a708605203e89083d27c2ba99bcc45b7f738e50d1d2188ceec2c6fc4e24b270e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

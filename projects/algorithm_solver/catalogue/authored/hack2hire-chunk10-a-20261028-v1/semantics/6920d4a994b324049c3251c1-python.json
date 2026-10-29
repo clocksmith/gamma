@@ -1,0 +1,116 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6920d4a994b324049c3251c1",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "KeyValueStore",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "set",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "value",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "get",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "unset",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "begin",
+    "params": [],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "rollback",
+    "params": [],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "commit",
+    "params": [],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "count",
+    "params": [
+     {
+      "name": "value",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "stack of full dict snapshots; count scans every value",
+  "candidate_design": "undo log per transaction plus a value-to-count map updated by one helper that every set, unset and undo goes through",
+  "complexity_target": "O(1) per call except rollback O(changes)/O(keys + logged changes) space"
+ },
+ "source_sha256": "e997a3fdccc322e278c3d893c21f25c49a5a184e3f270d53d3098bf8910477b1",
+ "native_class": "KeyValueStore",
+ "native_symbol": "module global KeyValueStore",
+ "void_methods": [
+  "begin",
+  "set",
+  "unset"
+ ]
+}

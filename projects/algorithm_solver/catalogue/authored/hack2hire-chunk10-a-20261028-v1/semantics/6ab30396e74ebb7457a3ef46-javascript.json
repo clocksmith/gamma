@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6ab30396e74ebb7457a3ef46",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "deck"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "playRound",
+  "params": [
+   {
+    "name": "deck",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string[],string[],integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sort ranks, count repeats with list.count and compare (category, tie-break list) tuples",
+  "candidate_design": "rank histogram per hand giving a fixed-length strength key, compared lexicographically",
+  "complexity_target": "O(1) time/O(1) space"
+ },
+ "source_sha256": "e6f4231237ad86bad089cab0d61c8f0a8f722244f37388a2be5adc9b76fc5bd6",
+ "wrapper": "named export playRound"
+}

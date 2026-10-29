@@ -1,0 +1,723 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69b351ffa4e93c007df404fd:69b385d3a4e93c007df405f1:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/18"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69b351ffa4e93c007df404fd.json",
+   "sha256": "5ab4b49e7bb90db088927599d997f7050373b9fbcfeb7925d645b1bc6c6564d0",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:69b385d3a4e93c007df405f1"
+  }
+ ],
+ "problemId": "hack2hire:69b351ffa4e93c007df404fd",
+ "variantId": "69b385d3a4e93c007df405f1",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 4: version history and revert",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69b385d3a4e93c007df405f1/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "SecondBrainSystem() starts empty. Times are passed in by the caller and never decrease across createNote, updateNote and revertNote calls. createNote(title, content, timestamp) returns the next id \"note1\", \"note2\", ... (ids are never reused). getNote(noteId) returns [title, content, createdAt, updatedAt] or [] when absent. updateNote(noteId, title, content, timestamp) replaces title and content, sets updatedAt and returns true, or returns false when absent. deleteNote(noteId) returns whether a note was removed. searchNotes(keyword) returns the ids of notes whose title or content contains keyword, ignoring ASCII case, ordered by updatedAt descending then by id number ascending. addTag(noteId, tag) returns false when the note is missing or already has the tag, otherwise adds it; removeTag(noteId, tag) returns whether the tag was removed; getNotesByTag(tag) returns the ids holding the tag by id number ascending. Tags do not change updatedAt and disappear with their note. Every createNote, updateNote and successful revertNote stores a version (title, content). getVersionCount(noteId) returns the number of versions, 0 when absent. revertNote(noteId, version, timestamp) restores the 1-based version's title and content as a new version, sets updatedAt and returns true, or returns false when the note or the version does not exist. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/18/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "SecondBrainSystem() starts empty.",
+   "Times are passed in by the caller and never decrease across createNote, updateNote and revertNote calls.",
+   "createNote(title, content, timestamp) returns the next id \"note1\", \"note2\", ..",
+   "(ids are never reused).",
+   "getNote(noteId) returns [title, content, createdAt, updatedAt] or [] when absent.",
+   "updateNote(noteId, title, content, timestamp) replaces title and content, sets updatedAt and returns true, or returns false when absent.",
+   "deleteNote(noteId) returns whether a note was removed.",
+   "searchNotes(keyword) returns the ids of notes whose title or content contains keyword, ignoring ASCII case, ordered by updatedAt descending then by id number ascending.",
+   "addTag(noteId, tag) returns false when the note is missing or already has the tag, otherwise adds it; removeTag(noteId, tag) returns whether the tag was removed; getNotesByTag(tag) returns the ids holding the tag by id number ascending.",
+   "Tags do not change updatedAt and disappear with their note.",
+   "Every createNote, updateNote and successful revertNote stores a version (title, content).",
+   "getVersionCount(noteId) returns the number of versions, 0 when absent.",
+   "revertNote(noteId, version, timestamp) restores the 1-based version's title and content as a new version, sets updatedAt and returns true, or returns false when the note or the version does not exist.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/18/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "title and content match [A-Za-z0-9 ]{0,30}",
+   "times between 1 and 1e9, non-decreasing",
+   "tags match [a-z0-9]{1,10}",
+   "0 <= version <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69b385d3a4e93c007df405f1/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: SecondBrainSystem in memory with CRUD on notes, unique note identifiers, lookup by identifier, creation and modification time metadata (methods after the constructor are cut off); algorithmTags: DESIGN; codingQuestions (variant count/order); preview response sha256 a98db1e312802946ff5b6dae4ddfee7940c6778ed69c247c73f34f0a85da7729"
+   },
+   {
+    "statement": "Uncertainty: very high: level 4 has no public text; version history, 1-based versions and revert-as-new-version are inferred",
+    "basis": "the public group preview is partial (428 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as four cumulative levels: 1 = CRUD with times, 2 = keyword search, 3 = tags, 4 = version history with revert",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/18/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/18/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/18/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Where do creation and modification times come from?",
+   "What is the id format, and are ids reused?",
+   "Is search case-sensitive, and how are results ordered?",
+   "Do tags or reverts change the modification time?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69b385d3a4e93c007df405f1/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "SecondBrainSystem",
+      "addTag"
+     ],
+     [
+      [],
+      [
+       "note1",
+       "home"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "SecondBrainSystem",
+      "getNotesByTag",
+      "removeTag",
+      "deleteNote",
+      "revertNote",
+      "createNote",
+      "removeTag",
+      "revertNote",
+      "getNotesByTag",
+      "revertNote"
+     ],
+     [
+      [],
+      [
+       "work"
+      ],
+      [
+       "note1",
+       "work"
+      ],
+      [
+       "note1"
+      ],
+      [
+       "note1",
+       3,
+       5
+      ],
+      [
+       "x",
+       "Plan",
+       5
+      ],
+      [
+       "note1",
+       "work"
+      ],
+      [
+       "note1",
+       0,
+       7
+      ],
+      [
+       "home"
+      ],
+      [
+       "note1",
+       1,
+       10
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [],
+     false,
+     false,
+     false,
+     "note1",
+     false,
+     false,
+     [],
+     true
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69b385d3a4e93c007df405f1/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class SecondBrainSystem:\n    def __init__(self)\n    def createNote(self, title, content, timestamp) -> string\n    def getNote(self, noteId) -> list<[string,string,integer,integer]>\n    def updateNote(self, noteId, title, content, timestamp) -> boolean\n    def deleteNote(self, noteId) -> boolean\n    def searchNotes(self, keyword) -> string[]\n    def addTag(self, noteId, tag) -> boolean\n    def removeTag(self, noteId, tag) -> boolean\n    def getNotesByTag(self, tag) -> string[]\n    def getVersionCount(self, noteId) -> integer\n    def revertNote(self, noteId, version, timestamp) -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/18/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69b385d3a4e93c007df405f1-python.json",
+     "inferredInterface": {
+      "classname": "SecondBrainSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "createNote",
+        "params": [
+         {
+          "name": "title",
+          "type": "string"
+         },
+         {
+          "name": "content",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "getNote",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "list<[string,string,integer,integer]>"
+        }
+       },
+       {
+        "name": "updateNote",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         },
+         {
+          "name": "title",
+          "type": "string"
+         },
+         {
+          "name": "content",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "deleteNote",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "searchNotes",
+        "params": [
+         {
+          "name": "keyword",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "addTag",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         },
+         {
+          "name": "tag",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "removeTag",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         },
+         {
+          "name": "tag",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getNotesByTag",
+        "params": [
+         {
+          "name": "tag",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "getVersionCount",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "revertNote",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         },
+         {
+          "name": "version",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69b385d3a4e93c007df405f1-python.json",
+      "sha256": "832df3117ccf1d0d8d587213759b9940c9b4f06422453ab7300a08dfc2566ebc",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class SecondBrainSystem {\n  constructor()\n  createNote(title, content, timestamp) /* -> string */\n  getNote(noteId) /* -> list<[string,string,integer,integer]> */\n  updateNote(noteId, title, content, timestamp) /* -> boolean */\n  deleteNote(noteId) /* -> boolean */\n  searchNotes(keyword) /* -> string[] */\n  addTag(noteId, tag) /* -> boolean */\n  removeTag(noteId, tag) /* -> boolean */\n  getNotesByTag(tag) /* -> string[] */\n  getVersionCount(noteId) /* -> integer */\n  revertNote(noteId, version, timestamp) /* -> boolean */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/18/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69b385d3a4e93c007df405f1-javascript.json",
+     "inferredInterface": {
+      "classname": "SecondBrainSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "createNote",
+        "params": [
+         {
+          "name": "title",
+          "type": "string"
+         },
+         {
+          "name": "content",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "getNote",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "list<[string,string,integer,integer]>"
+        }
+       },
+       {
+        "name": "updateNote",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         },
+         {
+          "name": "title",
+          "type": "string"
+         },
+         {
+          "name": "content",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "deleteNote",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "searchNotes",
+        "params": [
+         {
+          "name": "keyword",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "addTag",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         },
+         {
+          "name": "tag",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "removeTag",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         },
+         {
+          "name": "tag",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getNotesByTag",
+        "params": [
+         {
+          "name": "tag",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "getVersionCount",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "revertNote",
+        "params": [
+         {
+          "name": "noteId",
+          "type": "string"
+         },
+         {
+          "name": "version",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69b385d3a4e93c007df405f1-javascript.json",
+      "sha256": "7c05cf6f69c5919887e7e0cd5fa34f3a3b1d15e45707ca48b7f983a659e7e1ee",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/18/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/18/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
