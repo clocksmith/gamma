@@ -1,0 +1,40 @@
+{
+  "candidate_design": "min-heap of recycled user IDs plus bidirectional user-chunk and chunk-user sets",
+  "comparison": "exact typed JSON result",
+  "complexity_target": "O(log U + |chunks|) join/leave, O(U log U) request / O(U * M) space",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "FileSharing",
+    "params": [
+      {
+        "name": "operation_names",
+        "type": "string[]"
+      },
+      {
+        "name": "argument_lists",
+        "type": "any[][]"
+      }
+    ],
+    "return": {
+      "type": "any[]"
+    }
+  },
+  "parameters": [
+    "operation_names",
+    "argument_lists"
+  ],
+  "problem_id": 1500,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "min-heap of recycled user IDs plus bidirectional user-chunk and chunk-user sets",
+    "complexity_target": "O(log U + |chunks|) join/leave, O(U log U) request / O(U * M) space",
+    "reference": "linear scan for smallest available user ID and chunk owner filtering"
+  },
+  "source_sha256": "dc89a913fd51d5c80e0890e91da65c8a2ce430904ea2be5d97cefebe934ed9f3"
+}

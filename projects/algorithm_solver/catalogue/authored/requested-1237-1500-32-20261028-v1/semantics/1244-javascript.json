@@ -1,0 +1,40 @@
+{
+  "candidate_design": "hash map playerId-to-score with sorted top-K aggregation",
+  "comparison": "exact typed JSON result",
+  "complexity_target": "O(1) addScore/reset, O(n log n) top time / O(n) space",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "Leaderboard",
+    "params": [
+      {
+        "name": "operation_names",
+        "type": "string[]"
+      },
+      {
+        "name": "argument_lists",
+        "type": "any[][]"
+      }
+    ],
+    "return": {
+      "type": "any[]"
+    }
+  },
+  "parameters": [
+    "operation_names",
+    "argument_lists"
+  ],
+  "problem_id": 1244,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "hash map playerId-to-score with sorted top-K aggregation",
+    "complexity_target": "O(1) addScore/reset, O(n log n) top time / O(n) space",
+    "reference": "Counter accumulation and descending slice sum"
+  },
+  "source_sha256": "d3ca2d4310c91642f3a258b584663018ab3a0253562ad76e61976491b89b1873"
+}

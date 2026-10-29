@@ -1,0 +1,166 @@
+{
+  "problems": {
+    "1237": {
+      "reference": "exhaustive 2D grid evaluation over 1..1000 x 1..1000",
+      "candidate_design": "two-pointer monotonic scan over x=1..1000 and y=1000..1",
+      "complexity_target": "O(X + Y) time / O(1) auxiliary space"
+    },
+    "1244": {
+      "reference": "Counter accumulation and descending slice sum",
+      "candidate_design": "hash map playerId-to-score with sorted top-K aggregation",
+      "complexity_target": "O(1) addScore/reset, O(n log n) top time / O(n) space"
+    },
+    "1245": {
+      "reference": "independent two-pass BFS over undirected adjacency list",
+      "candidate_design": "two-pass breadth-first search from node 0 to farthest endpoint and back",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "1246": {
+      "reference": "top-down memoized recursive interval DP",
+      "candidate_design": "bottom-up interval DP pairing arr[i] with matching arr[k] inside [i..j]",
+      "complexity_target": "O(n^3) time / O(n^2) space"
+    },
+    "1261": {
+      "reference": "recursive DFS tree recovery into set",
+      "candidate_design": "iterative stack tree recovery into hash set with O(1) membership lookup",
+      "complexity_target": "O(n) init, O(1) find time / O(n) space"
+    },
+    "1265": {
+      "reference": "slice reversal of sequence",
+      "candidate_design": "stack reversal of immutable list traversal",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "1273": {
+      "reference": "recursive postorder DFS zero-sum subtree pruning",
+      "candidate_design": "reverse topological bottom-up subtree sum and count aggregation pruning zero-sum subtrees",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "1274": {
+      "reference": "direct point-in-rectangle inclusion count",
+      "candidate_design": "2D quadtree divide-and-conquer pruning empty quadrants via hasShips",
+      "complexity_target": "O(S log2(max(W,H))) queries / O(log(W+H)) stack"
+    },
+    "1278": {
+      "reference": "memoized recursive partition search recomputing substring mismatch cost",
+      "candidate_design": "precomputed substring palindrome mismatch matrix plus rolling k-part DP",
+      "complexity_target": "O(n^2 * k) time / O(n^2) space"
+    },
+    "1286": {
+      "reference": "pregenerated itertools.combinations list with cursor",
+      "candidate_design": "lexicographical k-index tuple stepping rightmost incrementable index",
+      "complexity_target": "O(k) per next, O(1) hasNext / O(k) space"
+    },
+    "1302": {
+      "reference": "level queue sum over dictionary tree",
+      "candidate_design": "breadth-first level traversal overwriting level sum until deepest level",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "1315": {
+      "reference": "recursive traversal passing parent and grandparent values",
+      "candidate_design": "iterative stack carrying (node, parent_val, grandparent_val) parity",
+      "complexity_target": "O(n) time / O(h) space"
+    },
+    "1348": {
+      "reference": "reference per-tweet timestamp filtering into interval buckets",
+      "candidate_design": "per-tweet timestamp list bucketed by (t - startTime) // delta",
+      "complexity_target": "O(1) recordTweet, O(N_tweet) query / O(N) space"
+    },
+    "1352": {
+      "reference": "direct suffix slice multiplication of last k elements",
+      "candidate_design": "prefix product array reset to [1] on zero with O(1) ratio query",
+      "complexity_target": "O(1) add and getProduct time / O(n) space"
+    },
+    "1357": {
+      "reference": "reference price dictionary lookup and modulo discount",
+      "candidate_design": "product-to-price map with customer modulo counter discount",
+      "complexity_target": "O(|products|) init, O(|bill|) getBill / O(|products|) space"
+    },
+    "1367": {
+      "reference": "brute-force downward path matching from every tree node",
+      "candidate_design": "KMP prefix automaton over linked list values propagated down tree DFS",
+      "complexity_target": "O(n + m) time / O(h + m) space"
+    },
+    "1379": {
+      "reference": "target identity verification",
+      "candidate_design": "synchronized dual-tree DFS stack matching target node",
+      "complexity_target": "O(n) time / O(h) space"
+    },
+    "1381": {
+      "reference": "eager bottom-k loop increment on array stack",
+      "candidate_design": "lazy increment offset array propagating bonuses downward on pop",
+      "complexity_target": "O(1) push, pop, and increment time / O(maxSize) space"
+    },
+    "1396": {
+      "reference": "reference check-in dictionary and route sum/count table",
+      "candidate_design": "active check-in map plus route (total_time, count) aggregate map",
+      "complexity_target": "O(1) checkIn, checkOut, and getAverageTime / O(P + S^2) space"
+    },
+    "1428": {
+      "reference": "column-by-column scan for first column containing 1",
+      "candidate_design": "top-right staircase search moving left on 1 and down on 0",
+      "complexity_target": "O(rows + cols) time / O(1) space"
+    },
+    "1429": {
+      "reference": "frequency Counter with linear scan over insertion list",
+      "candidate_design": "insertion-ordered unique set plus seen set evicting on duplicate",
+      "complexity_target": "O(1) amortized add and showFirstUnique / O(n) space"
+    },
+    "1430": {
+      "reference": "recursive root-to-leaf sequence check",
+      "candidate_design": "iterative stack matching (node, depth) against sequence and leaf condition",
+      "complexity_target": "O(n) time / O(h) space"
+    },
+    "1448": {
+      "reference": "recursive DFS with path maximum",
+      "candidate_design": "iterative DFS stack tracking path maximum from root",
+      "complexity_target": "O(n) time / O(h) space"
+    },
+    "1457": {
+      "reference": "recursive parity bitmask traversal",
+      "candidate_design": "iterative DFS toggling 9-bit parity mask and checking mask & (mask - 1) == 0 at leaves",
+      "complexity_target": "O(n) time / O(h) space"
+    },
+    "1469": {
+      "reference": "recursive preorder single-child collection",
+      "candidate_design": "iterative preorder stack recording single-child values",
+      "complexity_target": "O(n) time / O(h) space"
+    },
+    "1472": {
+      "reference": "list truncation on visit with clamped cursor steps",
+      "candidate_design": "array buffer with cursor and logical end index",
+      "complexity_target": "O(1) visit, back, and forward time / O(n) space"
+    },
+    "1474": {
+      "reference": "array slice stride retention",
+      "candidate_design": "in-place linked list pointer advance keeping m nodes and skipping n nodes",
+      "complexity_target": "O(L) time / O(1) auxiliary pointer state"
+    },
+    "1476": {
+      "reference": "direct cell-by-cell 2D matrix mutation",
+      "candidate_design": "reverse-chronological rectangle update log with base matrix fallback",
+      "complexity_target": "O(1) updateSubrectangle, O(U) getValue / O(R*C + U) space"
+    },
+    "1483": {
+      "reference": "step-by-step parent pointer walk",
+      "candidate_design": "16-level binary lifting jump table",
+      "complexity_target": "O(n log n) init, O(log k) getKthAncestor / O(n log n) space"
+    },
+    "1485": {
+      "reference": "deep copy of serialized [val, random_index] array",
+      "candidate_design": "two-pass hash map cloning nodes and wiring left, right, and random pointers",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "1490": {
+      "reference": "deep copy of level-order N-ary representation",
+      "candidate_design": "iterative stack deep clone of N-ary tree nodes and children lists",
+      "complexity_target": "O(n) time / O(n) space"
+    },
+    "1500": {
+      "reference": "linear scan for smallest available user ID and chunk owner filtering",
+      "candidate_design": "min-heap of recycled user IDs plus bidirectional user-chunk and chunk-user sets",
+      "complexity_target": "O(log U + |chunks|) join/leave, O(U log U) request / O(U * M) space"
+    }
+  },
+  "numeric": "All integer and floating-point operations stay within exact IEEE-754 double / safe integer bounds.",
+  "effects": "input arrays, nested grids, and trace lists unchanged; fresh outputs only"
+}

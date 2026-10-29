@@ -1,0 +1,40 @@
+{
+  "candidate_design": "per-tweet timestamp list bucketed by (t - startTime) // delta",
+  "comparison": "exact typed JSON result",
+  "complexity_target": "O(1) recordTweet, O(N_tweet) query / O(N) space",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "TweetCounts",
+    "params": [
+      {
+        "name": "operation_names",
+        "type": "string[]"
+      },
+      {
+        "name": "argument_lists",
+        "type": "any[][]"
+      }
+    ],
+    "return": {
+      "type": "any[]"
+    }
+  },
+  "parameters": [
+    "operation_names",
+    "argument_lists"
+  ],
+  "problem_id": 1348,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "per-tweet timestamp list bucketed by (t - startTime) // delta",
+    "complexity_target": "O(1) recordTweet, O(N_tweet) query / O(N) space",
+    "reference": "reference per-tweet timestamp filtering into interval buckets"
+  },
+  "source_sha256": "ba6a7fbc75ca768fdec087df397e76c84f0174fcbb5cc89f174cf317a3cbebe4"
+}
