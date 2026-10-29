@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "findCameraAdmins",
+  "params": [
+   {
+    "name": "permissions",
+    "type": "string[][] ([entity, relationship, object])"
+   },
+   {
+    "name": "cameraId",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "language": "javascript",
+ "named_wrapper": "module.exports.findCameraAdmins",
+ "parameters": [
+  "permissions",
+  "cameraId"
+ ],
+ "problem_uid": "hack2hire:6a0b5e8dc84b6e8a3be18bbb",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "reverse adjacency; BFS from the camera over owners, member groups and member users",
+  "complexity_target": "O(T + U log U) time/O(T) space",
+  "reference": "per-user forward fixpoint closure over all triples (<=80 triples)"
+ },
+ "source_sha256": "f5921da26c4cd376a916cc6c3b533e9cc80d9f64563d96c1b0d717627f9b059c",
+ "spec_basis": "inferred"
+}

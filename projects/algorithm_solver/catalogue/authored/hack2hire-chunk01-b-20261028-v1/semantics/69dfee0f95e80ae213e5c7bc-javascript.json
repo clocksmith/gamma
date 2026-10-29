@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "streamBeforeStopWords",
+  "params": [
+   {
+    "name": "chunks",
+    "type": "string[]"
+   },
+   {
+    "name": "stopWords",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "language": "javascript",
+ "named_wrapper": "module.exports.streamBeforeStopWords",
+ "parameters": [
+  "chunks",
+  "stopWords"
+ ],
+ "problem_uid": "hack2hire:69dfee0f95e80ae213e5c7bc",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "pending buffer = held suffix + chunk; native search for stop words in pending; proper-prefix set for the hold",
+  "complexity_target": "O(sum(chunk + 50) * W) time/O(sum stop lengths) space",
+  "reference": "recompute safety by brute-force position scan over the whole received text at each step (<=3000 chars)"
+ },
+ "source_sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c",
+ "spec_basis": "inferred"
+}

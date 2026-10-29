@@ -1,0 +1,55 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "countSockPairs",
+  "params": [
+   {
+    "name": "ids",
+    "type": "integer[]"
+   },
+   {
+    "name": "colors",
+    "type": "string[]"
+   },
+   {
+    "name": "feet",
+    "type": "string[] (\"left\"|\"right\")"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "language": "javascript",
+ "named_wrapper": "module.exports.countSockPairs",
+ "parameters": [
+  "ids",
+  "colors",
+  "feet"
+ ],
+ "problem_uid": "hack2hire:68dee4164b499ddb216af5ec",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "hash counts per color, sum of min(left, right)",
+  "complexity_target": "O(n) time/O(colors) space",
+  "reference": "repeated smallest-left / smallest-right selection (<=200 socks)"
+ },
+ "source_sha256": "3cbf1f1c5971f90e1fff3fcf23347c6cf296f72a6249e370c84908a7cad54be0",
+ "spec_basis": "inferred"
+}

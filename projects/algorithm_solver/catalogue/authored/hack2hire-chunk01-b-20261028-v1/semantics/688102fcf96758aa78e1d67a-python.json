@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "minShoppers",
+  "params": [
+   {
+    "name": "orders",
+    "type": "integer[][] ([duration, arrivalTime])"
+   },
+   {
+    "name": "maxAverageWait",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "language": "python",
+ "named_wrapper": "Solution.minShoppers",
+ "parameters": [
+  "orders",
+  "maxAverageWait"
+ ],
+ "problem_uid": "hack2hire:688102fcf96758aa78e1d67a",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "binary search on shopper count (wait is monotone) with min-heap simulation and integer comparison total <= target*n",
+  "complexity_target": "O(n log^2 n) time/O(n) space",
+  "reference": "increasing shopper counts with linear-scan simulation and exact Fraction comparison (<=60 orders)"
+ },
+ "source_sha256": "a7121285b8e37703dfceec8908eb12451b5f41346a46dab9fd300e1c771a8384",
+ "spec_basis": "inferred"
+}

@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "filterUnsafeMessages",
+  "params": [
+   {
+    "name": "messages",
+    "type": "string[][] ([username, text])"
+   },
+   {
+    "name": "unsafeWords",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "language": "javascript",
+ "named_wrapper": "module.exports.filterUnsafeMessages",
+ "parameters": [
+  "messages",
+  "unsafeWords"
+ ],
+ "problem_uid": "hack2hire:6a2194828b879849ebc11fd5",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "trie of unsafe words; walk the trie from each text position for at most 20 characters",
+  "complexity_target": "O(total text * 20) time/O(sum word lengths) space",
+  "reference": "Python substring operator for every word"
+ },
+ "source_sha256": "f378a433c8460cc2e5ab15898422839ffd80ca78f89dc5494de0373d152313ab",
+ "spec_basis": "inferred"
+}

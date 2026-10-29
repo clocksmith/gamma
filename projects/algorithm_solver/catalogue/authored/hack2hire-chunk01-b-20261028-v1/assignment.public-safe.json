@@ -1,0 +1,1246 @@
+{
+  "authorization": "Owner-delegated authoring of 16 Hack2Hire groups (24 variants) from local public previews only; no solution or full-content endpoint read",
+  "problems": [
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "operation_names",
+          "argument_lists"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "classname": "BufferedFile",
+          "constructor": {
+            "params": [
+              {
+                "name": "capacity",
+                "type": "integer"
+              }
+            ]
+          },
+          "methods": [
+            {
+              "name": "write",
+              "params": [
+                {
+                  "name": "data",
+                  "type": "integer[] (bytes -128..127)"
+                }
+              ],
+              "return": {
+                "type": "integer[]"
+              }
+            },
+            {
+              "name": "flush",
+              "params": [],
+              "return": {
+                "type": "integer[]"
+              }
+            }
+          ],
+          "transcript_interface": {
+            "argument_order": [
+              "operation_names",
+              "argument_lists"
+            ],
+            "name": "solve",
+            "note": "class trace adapter: solve(operation_names, argument_lists) returns null for the constructor then each method result"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "array buffer with fill index; copy min(space, remaining) slices, flush on full",
+        "complexity_target": "O(len(data)) per write, O(capacity) space",
+        "reference": "stream-offset model: disk length after write = previous + largest multiple of capacity not exceeding pending; after flush = whole stream"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "695aed835242f618a4d2fa2e",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/695aed835242f618a4d2fa2e.json)",
+        "inferred_domain": "capacity 1..10^4; up to 10^4 method calls; each write 0..10^4 bytes, each byte -128..127; total written bytes <= 2*10^5",
+        "preview_content_sha256": "5d79111ca6d13e3049dbe0912e88bacee9854f92c6c2d80946e9f897169789c6",
+        "preview_response_sha256": "f72bc031abffb8d774b07d3fdb05c6098180a76176b3b6a786bcb1cc52fd1156"
+      },
+      "title": "Design a Buffered File Writer",
+      "uid": "hack2hire:695aed975242f618a4d2fa2f",
+      "variant_id": "695aed975242f618a4d2fa2f",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "root"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "minEncryptOperations",
+          "params": [
+            {
+              "name": "root",
+              "type": "DirectoryNode {name, directories, files:[{name,isEncrypted}]}"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "iterative post-order: a directory whose subtree has >=1 file and only flagged files costs 1, otherwise sum of children plus flagged direct files",
+        "complexity_target": "O(nodes) time/space",
+        "reference": "enumerate every subset of nodes to operate on (<=14 nodes) and check the resulting encrypted set"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6aa303e40ca9cc4e1c7901ad",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6aa303e40ca9cc4e1c7901ad.json)",
+        "inferred_domain": "<= 10^5 nodes (directories plus files); depth <= 200 (JSON-transport nesting bound); names [A-Za-z0-9._-]{1,30}, unique among siblings",
+        "preview_content_sha256": "8ca8ea2c6fb5460dc7e720be09b0f8f4a84b4ceef09e402abb17c5b8b392410d",
+        "preview_response_sha256": "a9ee5a1c47a7df78a58c699d41442c70375e85bac19dd14f0ede624f886eb099"
+      },
+      "title": "Directory Encryption Optimization",
+      "uid": "hack2hire:6aa303f10ca9cc4e1c7901af",
+      "variant_id": "6aa303f10ca9cc4e1c7901af",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "root"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "minStateOperations",
+          "params": [
+            {
+              "name": "root",
+              "type": "DirectoryNode {name, directories, files:[{name,isEncrypted}]}"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "tree DP over inherited state s: cost(node,s)=min(sum children at s, 1 + sum children at not s); files cost 0 or 1",
+        "complexity_target": "O(nodes) time/space",
+        "reference": "enumerate none/encrypt/decrypt for every node (<=9 nodes) and resolve the nearest operation top-down"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6aa303e40ca9cc4e1c7901ad",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6aa303e40ca9cc4e1c7901ad.json)",
+        "inferred_domain": "as variant 1",
+        "preview_content_sha256": "8ca8ea2c6fb5460dc7e720be09b0f8f4a84b4ceef09e402abb17c5b8b392410d",
+        "preview_response_sha256": "a9ee5a1c47a7df78a58c699d41442c70375e85bac19dd14f0ede624f886eb099"
+      },
+      "title": "Directory Encryption Optimization",
+      "uid": "hack2hire:6aa304120ca9cc4e1c7901b3",
+      "variant_id": "6aa304120ca9cc4e1c7901b3",
+      "variant_ordinal": 2
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "n"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "countFancyNumbers",
+          "params": [
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "scan base-4 digits of n from the top; digit 1 adds 2^rest, digit >=2 adds 2^(rest+1) and stops; subtract zero",
+        "complexity_target": "O(log n) time/O(log n) space",
+        "reference": "enumerate every binary mask below 2^16 read as base 4, sort, bisect"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "69c0a13221f6ab42269647a5",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/69c0a13221f6ab42269647a5.json)",
+        "inferred_domain": "1 <= n <= 10^9 (stated in the preview)",
+        "preview_content_sha256": "72b30f751a84b0dd71941f22e382c40b0b524a8f23fabeb6a73a5cecda1f49ab",
+        "preview_response_sha256": "3b4125b4d34dda3f6de87867604b33c76450004748afac5d88e8a89875cc0b76"
+      },
+      "title": "Fancy Number",
+      "uid": "hack2hire:69c0a3ed21f6ab42269647c2",
+      "variant_id": "69c0a3ed21f6ab42269647c2",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "messages",
+          "unsafeWords"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "filterUnsafeMessages",
+          "params": [
+            {
+              "name": "messages",
+              "type": "string[][] ([username, text])"
+            },
+            {
+              "name": "unsafeWords",
+              "type": "string[]"
+            }
+          ],
+          "return": {
+            "type": "string[][]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "hash set of unsafe words; split text on spaces skipping empty tokens",
+        "complexity_target": "O(total text) expected time/O(words) space",
+        "reference": "Python list membership of each word in text.split()"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6a2194398b879849ebc11fd3",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6a2194398b879849ebc11fd3.json)",
+        "inferred_domain": "<= 10^4 messages; username [a-z0-9_]{1,20}; text [a-z ]{0,1000}, total text <= 2*10^5; <= 10^3 unsafe words [a-z]{1,20}",
+        "preview_content_sha256": "0158113e2c56d517fd1bf93e4445a43dc8e7b88734ed9bad749d1db50a3073cd",
+        "preview_response_sha256": "c5920fc0d8d5f11983ef0f84790b81950baaaece0e53ded5af6bec4802087d63"
+      },
+      "title": "Filter Unsafe Messages",
+      "uid": "hack2hire:6a21945a8b879849ebc11fd4",
+      "variant_id": "6a21945a8b879849ebc11fd4",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "messages",
+          "unsafeWords"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "filterUnsafeMessages",
+          "params": [
+            {
+              "name": "messages",
+              "type": "string[][] ([username, text])"
+            },
+            {
+              "name": "unsafeWords",
+              "type": "string[]"
+            }
+          ],
+          "return": {
+            "type": "string[][]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "trie of unsafe words; walk the trie from each text position for at most 20 characters",
+        "complexity_target": "O(total text * 20) time/O(sum word lengths) space",
+        "reference": "Python substring operator for every word"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6a2194398b879849ebc11fd3",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6a2194398b879849ebc11fd3.json)",
+        "inferred_domain": "as variant 1",
+        "preview_content_sha256": "0158113e2c56d517fd1bf93e4445a43dc8e7b88734ed9bad749d1db50a3073cd",
+        "preview_response_sha256": "c5920fc0d8d5f11983ef0f84790b81950baaaece0e53ded5af6bec4802087d63"
+      },
+      "title": "Filter Unsafe Messages",
+      "uid": "hack2hire:6a2194828b879849ebc11fd5",
+      "variant_id": "6a2194828b879849ebc11fd5",
+      "variant_ordinal": 2
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "permissions",
+          "cameraId"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "findCameraAdmins",
+          "params": [
+            {
+              "name": "permissions",
+              "type": "string[][] ([entity, relationship, object])"
+            },
+            {
+              "name": "cameraId",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "string[]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "reverse adjacency; BFS from the camera over owners, member groups and member users",
+        "complexity_target": "O(T + U log U) time/O(T) space",
+        "reference": "per-user forward fixpoint closure over all triples (<=80 triples)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6a0b5e85c84b6e8a3be18bba",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6a0b5e85c84b6e8a3be18bba.json)",
+        "inferred_domain": "<= 10^5 triples; ids [A-Za-z0-9_]{1,20}; users, groups and cameras are disjoint id sets; cameraId may be absent (answer empty)",
+        "preview_content_sha256": "a1c9986b96815043a05b556e0c9c08d5bec5e1d0fb3e171ce91daf2ca92863f9",
+        "preview_response_sha256": "688c8888a3a99ea738f17b4a65fb1b87c0f89f6dbeb0ea014b6f7e246ed6f287"
+      },
+      "title": "Find Camera Admin User",
+      "uid": "hack2hire:6a0b5e8dc84b6e8a3be18bbb",
+      "variant_id": "6a0b5e8dc84b6e8a3be18bbb",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "city",
+          "locations"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "closestDashmartDistances",
+          "params": [
+            {
+              "name": "city",
+              "type": "string[] (D, space, X)"
+            },
+            {
+              "name": "locations",
+              "type": "integer[][] ([row, col])"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "single multi-source BFS from every D, then lookup",
+        "complexity_target": "O(area + queries) time/O(area) space",
+        "reference": "independent per-query level-set BFS until a D is in the frontier (area <= 400)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "689bcafe1126a03aace65e50",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/689bcafe1126a03aace65e50.json)",
+        "inferred_domain": "rows equal length; area <= 10^5; <= 10^5 in-bounds locations",
+        "preview_content_sha256": "111da0d0f0eef65fa4f88867b3a5b17399caee932fe8ce0c29ede7fb844ef0fb",
+        "preview_response_sha256": "ce3667f42ad1758022dcb0b6c95ee7c720c8d4c3b74fae37db0448defce8cfb1"
+      },
+      "title": "Find Closest Dashmart",
+      "uid": "hack2hire:689bcb111126a03aace65e51",
+      "variant_id": "689bcb111126a03aace65e51",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "slices"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "findClusterMode",
+          "params": [
+            {
+              "name": "slices",
+              "type": "integer[][] (one per worker)"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "per-worker hash counts, partition by value mod k, per-partition max, coordinator min-key max-count",
+        "complexity_target": "O(N) expected time/O(N) space",
+        "reference": "sort the flattened data and take the longest run (first on ties)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6935ba711553144e303f6769",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6935ba711553144e303f6769.json)",
+        "inferred_domain": "1..100 slices whose lengths differ by at most 1; total 1..2*10^5 values in [-10^9, 10^9]",
+        "preview_content_sha256": "01f1de0b878d39716274ccc1f86fa959f40c43b3c789d872138c7d009b3e9dc9",
+        "preview_response_sha256": "8ecde079e4bd7974ed43b2f29d82eda47286c938955c8f6d98bd96bc75cda23f"
+      },
+      "title": "Find Cluster Mode and Median",
+      "uid": "hack2hire:6935ba921553144e303f676a",
+      "variant_id": "6935ba921553144e303f676a",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result; JavaScript compares number values (no int/float distinction)"
+      },
+      "external_interface": {
+        "argument_order": [
+          "slices"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "findClusterMedian",
+          "params": [
+            {
+              "name": "slices",
+              "type": "integer[][] (one per worker)"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "local sort per worker; value-range binary search for the k-th smallest with per-worker bisect counts",
+        "complexity_target": "O(N log N + log(range) * k * log m) time/O(N) space",
+        "reference": "sort the flattened data, exact Fraction mean of the middle pair"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6935ba711553144e303f6769",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6935ba711553144e303f6769.json)",
+        "inferred_domain": "as the mode variant",
+        "preview_content_sha256": "01f1de0b878d39716274ccc1f86fa959f40c43b3c789d872138c7d009b3e9dc9",
+        "preview_response_sha256": "8ecde079e4bd7974ed43b2f29d82eda47286c938955c8f6d98bd96bc75cda23f"
+      },
+      "title": "Find Cluster Mode and Median",
+      "uid": "hack2hire:69361ab01553144e303f6805",
+      "variant_id": "69361ab01553144e303f6805",
+      "variant_ordinal": 2
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "edges",
+          "start"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "findDestinationNode",
+          "params": [
+            {
+              "name": "edges",
+              "type": "integer[][] ([u, v])"
+            },
+            {
+              "name": "start",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "hash map successor walk with visited set",
+        "complexity_target": "O(E) time/O(E) space",
+        "reference": "walk at most |edges|+1 steps without a visited set"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "67fab1d5ba41b3368f4e585f",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/67fab1d5ba41b3368f4e585f.json)",
+        "inferred_domain": "<= 10^5 edges; node labels 0..10^9; out-degree <= 1; start 0..10^9",
+        "preview_content_sha256": "0cf183c92daa23bb2c4a2cc1262775573cca5ba4372cc757507ca72e2600e398",
+        "preview_response_sha256": "cb41a1b678572e1c293330c74e1854882513d6e540d464e46edc8305441ccf5d"
+      },
+      "title": "Find Destination Node",
+      "uid": "hack2hire:67fab475ba41b3368f4e5861",
+      "variant_id": "67fab475ba41b3368f4e5861",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "edges",
+          "start"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "findDestinationNodes",
+          "params": [
+            {
+              "name": "edges",
+              "type": "integer[][] ([u, v])"
+            },
+            {
+              "name": "start",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "adjacency map + BFS, collect sinks, numeric sort",
+        "complexity_target": "O(E + V log V) time/O(E) space",
+        "reference": "edge-relaxation fixpoint for reachability (<=300 edges)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "67fab1d5ba41b3368f4e585f",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/67fab1d5ba41b3368f4e585f.json)",
+        "inferred_domain": "<= 10^5 edges; node labels 0..10^9; start 0..10^9",
+        "preview_content_sha256": "0cf183c92daa23bb2c4a2cc1262775573cca5ba4372cc757507ca72e2600e398",
+        "preview_response_sha256": "cb41a1b678572e1c293330c74e1854882513d6e540d464e46edc8305441ccf5d"
+      },
+      "title": "Find Destination Node",
+      "uid": "hack2hire:67fac1b6ba41b3368f4e5865",
+      "variant_id": "67fac1b6ba41b3368f4e5865",
+      "variant_ordinal": 2
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "root"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "findDuplicateFiles",
+          "params": [
+            {
+              "name": "root",
+              "type": "DirectoryNode {name, directories, files:[{name, content:int[]}]}"
+            }
+          ],
+          "return": {
+            "type": "string[][]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "iterative traversal; bucket by size, then by exact content key inside each size bucket",
+        "complexity_target": "O(total bytes + F log F) time/O(total bytes) space",
+        "reference": "pairwise byte-list comparison with union-find (<=300 files)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6934db5e5f306485cc5f08b9",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6934db5e5f306485cc5f08b9.json)",
+        "inferred_domain": "<= 10^4 nodes; depth <= 200; total bytes <= 2*10^5; bytes 0..255",
+        "preview_content_sha256": "55813a31667238b91319ba6e64ce388f89b9e5bf8d0e6d12fac6b5dacbd43eb3",
+        "preview_response_sha256": "15207bf5441708b334fb6e4c22f6985a06fbc804d6383eea3e10a636abad2516"
+      },
+      "title": "Find Duplicate Files",
+      "uid": "hack2hire:6934db665f306485cc5f08ba",
+      "variant_id": "6934db665f306485cc5f08ba",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "root"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "findDuplicateFiles",
+          "params": [
+            {
+              "name": "root",
+              "type": "DirectoryNode {name, directories, files:[{name, chunks:int[][]}]}"
+            }
+          ],
+          "return": {
+            "type": "string[][]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "bucket by total size, then refine candidate groups block by block (64-byte re-chunked blocks) until groups are singletons or streams end",
+        "complexity_target": "O(total bytes + F log F) time/O(F + block) space beyond input",
+        "reference": "pairwise comparison of flattened chunk lists (<=300 files)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6934db5e5f306485cc5f08b9",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6934db5e5f306485cc5f08b9.json)",
+        "inferred_domain": "as variant 1; chunk lists may contain empty chunks",
+        "preview_content_sha256": "55813a31667238b91319ba6e64ce388f89b9e5bf8d0e6d12fac6b5dacbd43eb3",
+        "preview_response_sha256": "15207bf5441708b334fb6e4c22f6985a06fbc804d6383eea3e10a636abad2516"
+      },
+      "title": "Find Duplicate Files",
+      "uid": "hack2hire:6934e59f5f306485cc5f08be",
+      "variant_id": "6934e59f5f306485cc5f08be",
+      "variant_ordinal": 2
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "orders"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "maxTradedShares",
+          "params": [
+            {
+              "name": "orders",
+              "type": "[price, quantity, \"buy\"|\"sell\"][]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "min-heap of sells, max-heap of buys",
+        "complexity_target": "O(n log n) time/O(n) space",
+        "reference": "list book with linear best-price search (<=400 orders)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "67e4c55150b60b77022f3867",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/67e4c55150b60b77022f3867.json)",
+        "inferred_domain": "<= 10^5 orders; price and quantity integers 1..10^9",
+        "preview_content_sha256": "5165406d39e02e6fa2a5a088a4a09b8ac0da320e88e33d12af3cb9f26c9e68d8",
+        "preview_response_sha256": "af5140ca29a8f0f64aa31ec6944c1ea8067b4bbe2655ddc0dc8329c0505f281d"
+      },
+      "title": "Find Maximum Trade Shares",
+      "uid": "hack2hire:67e8af3a7131f7c901ffd7a1",
+      "variant_id": "67e8af3a7131f7c901ffd7a1",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "orders",
+          "maxAverageWait"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "minShoppers",
+          "params": [
+            {
+              "name": "orders",
+              "type": "integer[][] ([duration, arrivalTime])"
+            },
+            {
+              "name": "maxAverageWait",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "binary search on shopper count (wait is monotone) with min-heap simulation and integer comparison total <= target*n",
+        "complexity_target": "O(n log^2 n) time/O(n) space",
+        "reference": "increasing shopper counts with linear-scan simulation and exact Fraction comparison (<=60 orders)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "688102f5f96758aa78e1d679",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/688102f5f96758aa78e1d679.json)",
+        "inferred_domain": "1..10^4 orders; duration 1..10^4; arrival 0..10^9; maxAverageWait 0..10^9",
+        "preview_content_sha256": "b6256862317ff29754042819a3687ee943ae246466159b3346c9c7eb6e21ee7e",
+        "preview_response_sha256": "4962fc04c0ef28e5db9375bae5b1ee026e71410bae3b45919f9240ecf8640332"
+      },
+      "title": "Find Minimal Shoppers",
+      "uid": "hack2hire:688102fcf96758aa78e1d67a",
+      "variant_id": "688102fcf96758aa78e1d67a",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "s",
+          "t"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "findMissingWords",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            },
+            {
+              "name": "t",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "string[]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "two pointers over the word arrays",
+        "complexity_target": "O(|s|) time/O(|s|) space",
+        "reference": "lexicographically first index combination that spells t (<=16 words)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6a7921e3d713d873ca7aa5e9",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6a7921e3d713d873ca7aa5e9.json)",
+        "inferred_domain": "s 1..10^5 chars of [A-Za-z] words; t 0..10^5 chars (may be empty)",
+        "preview_content_sha256": "df273ff488b273349a428b256b292a142bdda2ded137b93e53a264856f3ec74c",
+        "preview_response_sha256": "7e6f32ab0532dd9253c0276dc674c6f3f70b407c91ec39053c2b9c24faa09f7e"
+      },
+      "title": "Find Missing Subsequence Words",
+      "uid": "hack2hire:6a7921edd713d873ca7aa5eb",
+      "variant_id": "6a7921edd713d873ca7aa5eb",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "grid",
+          "modes",
+          "times",
+          "costs"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "optimalCommuteMode",
+          "params": [
+            {
+              "name": "grid",
+              "type": "string[]"
+            },
+            {
+              "name": "modes",
+              "type": "string[]"
+            },
+            {
+              "name": "times",
+              "type": "integer[]"
+            },
+            {
+              "name": "costs",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "string"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "per-mode BFS for the fewest charged cells; totals scale linearly",
+        "complexity_target": "O(k * area) time/O(area) space",
+        "reference": "Bellman-Ford over (time, cost) pairs per mode (<=150 cells)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "68521e291af0034b322764c7",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/68521e291af0034b322764c7.json)",
+        "inferred_domain": "grid 1..100 x 1..100 with one S and one D; 1..9 distinct mode names [A-Za-z]{1,10}; times 1..10^4; costs 0..10^4",
+        "preview_content_sha256": "09f39009979a6878e9da9eaee1135abbaa41a815424395c7bd98e3df768afcf0",
+        "preview_response_sha256": "4ccff4854688141c0a4b7e0d24e9e6a9eb6affbfc52923d10563d2cfd0ea3e5e"
+      },
+      "title": "Find Optimal Commute",
+      "uid": "hack2hire:68523a801af0034b322764d9",
+      "variant_id": "68523a801af0034b322764d9",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "grid",
+          "modes",
+          "times",
+          "costs"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "optimalCommuteCost",
+          "params": [
+            {
+              "name": "grid",
+              "type": "string[]"
+            },
+            {
+              "name": "modes",
+              "type": "string[]"
+            },
+            {
+              "name": "times",
+              "type": "integer[]"
+            },
+            {
+              "name": "costs",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Dijkstra on lexicographic (time, cost) with node-departure weights",
+        "complexity_target": "O(area log area) time/O(area) space",
+        "reference": "Bellman-Ford over (time, cost) pairs (<=150 cells)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "68521e291af0034b322764c7",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/68521e291af0034b322764c7.json)",
+        "inferred_domain": "as variant 1",
+        "preview_content_sha256": "09f39009979a6878e9da9eaee1135abbaa41a815424395c7bd98e3df768afcf0",
+        "preview_response_sha256": "4ccff4854688141c0a4b7e0d24e9e6a9eb6affbfc52923d10563d2cfd0ea3e5e"
+      },
+      "title": "Find Optimal Commute",
+      "uid": "hack2hire:6944670d867a3f9f539ff548",
+      "variant_id": "6944670d867a3f9f539ff548",
+      "variant_ordinal": 2
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "board",
+          "distances"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "findRobotPositions",
+          "params": [
+            {
+              "name": "board",
+              "type": "string[][] (O, E, X)"
+            },
+            {
+              "name": "distances",
+              "type": "integer[4] ([left, top, bottom, right])"
+            }
+          ],
+          "return": {
+            "type": "integer[][]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "four directional sweeps keeping the last blocker index",
+        "complexity_target": "O(area) time/O(area) space",
+        "reference": "walk outward from every robot in four directions"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "6789faf011318cc872dd83f2",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/6789faf011318cc872dd83f2.json)",
+        "inferred_domain": "area <= 10^5; distances 1..100001",
+        "preview_content_sha256": "c3e5f6d4ff9355037036bb0f32352aae131b620c45561b7e49c4a5cec467363d",
+        "preview_response_sha256": "079cea0f372190bdf7d766a63211540bd68f4bc3c81f35f308d4b07e4fbfed15"
+      },
+      "title": "Find Robots Position",
+      "uid": "hack2hire:6789faf811318cc872dd83f3",
+      "variant_id": "6789faf811318cc872dd83f3",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "text",
+          "stopWords"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "textBeforeStopWords",
+          "params": [
+            {
+              "name": "text",
+              "type": "string"
+            },
+            {
+              "name": "stopWords",
+              "type": "string[]"
+            }
+          ],
+          "return": {
+            "type": "string"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "native indexOf per stop word, keep the minimum",
+        "complexity_target": "O(W * |text|) worst time via native search/O(1) extra space",
+        "reference": "check every position with startswith for every word"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "69dfe74795e80ae213e5c78f",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/69dfe74795e80ae213e5c78f.json)",
+        "inferred_domain": "text printable ASCII, 0..10^5 chars; 0..100 stop words of 1..50 printable chars",
+        "preview_content_sha256": "f822b60548efb970a50f089e14b9c9d204c9ec2a23098b8bc8daa45c05f6b314",
+        "preview_response_sha256": "7c4bfc7bd18db2e690c85ea529ce2e5ada3835eb3e4186860262f568182f4f74"
+      },
+      "title": "Find Text Before Stop Words",
+      "uid": "hack2hire:69dfe86895e80ae213e5c79a",
+      "variant_id": "69dfe86895e80ae213e5c79a",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "chunks",
+          "stopWords"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "streamBeforeStopWords",
+          "params": [
+            {
+              "name": "chunks",
+              "type": "string[]"
+            },
+            {
+              "name": "stopWords",
+              "type": "string[]"
+            }
+          ],
+          "return": {
+            "type": "string[]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "pending buffer = held suffix + chunk; native search for stop words in pending; proper-prefix set for the hold",
+        "complexity_target": "O(sum(chunk + 50) * W) time/O(sum stop lengths) space",
+        "reference": "recompute safety by brute-force position scan over the whole received text at each step (<=3000 chars)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "69dfe74795e80ae213e5c78f",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/69dfe74795e80ae213e5c78f.json)",
+        "inferred_domain": "0..10^4 chunks of 0..100 printable chars, total <= 10^5; stop words as variant 1",
+        "preview_content_sha256": "f822b60548efb970a50f089e14b9c9d204c9ec2a23098b8bc8daa45c05f6b314",
+        "preview_response_sha256": "7c4bfc7bd18db2e690c85ea529ce2e5ada3835eb3e4186860262f568182f4f74"
+      },
+      "title": "Find Text Before Stop Words",
+      "uid": "hack2hire:69dfee0f95e80ae213e5c7bc",
+      "variant_id": "69dfee0f95e80ae213e5c7bc",
+      "variant_ordinal": 2
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "ids",
+          "colors",
+          "feet"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "countSockPairs",
+          "params": [
+            {
+              "name": "ids",
+              "type": "integer[]"
+            },
+            {
+              "name": "colors",
+              "type": "string[]"
+            },
+            {
+              "name": "feet",
+              "type": "string[] (\"left\"|\"right\")"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "hash counts per color, sum of min(left, right)",
+        "complexity_target": "O(n) time/O(colors) space",
+        "reference": "repeated smallest-left / smallest-right selection (<=200 socks)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "68dee3e64b499ddb216af5eb",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/68dee3e64b499ddb216af5eb.json)",
+        "inferred_domain": "0..10^5 socks; distinct ids in [-10^9, 10^9]; colors [a-z]{1,10}",
+        "preview_content_sha256": "b535eb2cc8298244db8d633cc8ea2a87ec474d4f09d6d9b9108c252493f19822",
+        "preview_response_sha256": "0da473ee643f41ea24bb3cbfd2d36e72e6048126f25a4086c729a2df5f010ecb"
+      },
+      "title": "Find Valid Sock Pairs",
+      "uid": "hack2hire:68dee4164b499ddb216af5ec",
+      "variant_id": "68dee4164b499ddb216af5ec",
+      "variant_ordinal": 1
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "ids",
+          "colors",
+          "feet"
+        ],
+        "canonical": "solve",
+        "inferred": {
+          "name": "findSockPairs",
+          "params": [
+            {
+              "name": "ids",
+              "type": "integer[]"
+            },
+            {
+              "name": "colors",
+              "type": "string[]"
+            },
+            {
+              "name": "feet",
+              "type": "string[] (\"left\"|\"right\")"
+            }
+          ],
+          "return": {
+            "type": "integer[][]"
+          }
+        },
+        "spec_basis": "inferred"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "group by color, sort each side, zip, numeric sort by left id",
+        "complexity_target": "O(n log n) time/O(n) space",
+        "reference": "repeated global smallest left with smallest same-color right (<=200 socks)"
+      },
+      "qualification_status": "unknown",
+      "source_post_id": "68dee3e64b499ddb216af5eb",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "none; only a partial group preview exists locally (data/question_bank/hack2hire/details/68dee3e64b499ddb216af5eb.json)",
+        "inferred_domain": "as variant 1",
+        "preview_content_sha256": "b535eb2cc8298244db8d633cc8ea2a87ec474d4f09d6d9b9108c252493f19822",
+        "preview_response_sha256": "0da473ee643f41ea24bb3cbfd2d36e72e6048126f25a4086c729a2df5f010ecb"
+      },
+      "title": "Find Valid Sock Pairs",
+      "uid": "hack2hire:68e1734e0fdcf62632c38cdc",
+      "variant_id": "68e1734e0fdcf62632c38cdc",
+      "variant_ordinal": 2
+    }
+  ],
+  "schema": "gamma.authored-assignment-public-safe.v1",
+  "spec_basis": "inferred",
+  "status": "new development variants with inferred specifications; independent isolated qualification pending"
+}

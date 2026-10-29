@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "filterUnsafeMessages",
+  "params": [
+   {
+    "name": "messages",
+    "type": "string[][] ([username, text])"
+   },
+   {
+    "name": "unsafeWords",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "language": "javascript",
+ "named_wrapper": "module.exports.filterUnsafeMessages",
+ "parameters": [
+  "messages",
+  "unsafeWords"
+ ],
+ "problem_uid": "hack2hire:6a21945a8b879849ebc11fd4",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "hash set of unsafe words; split text on spaces skipping empty tokens",
+  "complexity_target": "O(total text) expected time/O(words) space",
+  "reference": "Python list membership of each word in text.split()"
+ },
+ "source_sha256": "1446881ce05e730e87e610a11202bb80fef7cf49a0cf9411dee1f8749c51da6f",
+ "spec_basis": "inferred"
+}

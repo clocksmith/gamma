@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "findDestinationNodes",
+  "params": [
+   {
+    "name": "edges",
+    "type": "integer[][] ([u, v])"
+   },
+   {
+    "name": "start",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "language": "javascript",
+ "named_wrapper": "module.exports.findDestinationNodes",
+ "parameters": [
+  "edges",
+  "start"
+ ],
+ "problem_uid": "hack2hire:67fac1b6ba41b3368f4e5865",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "adjacency map + BFS, collect sinks, numeric sort",
+  "complexity_target": "O(E + V log V) time/O(E) space",
+  "reference": "edge-relaxation fixpoint for reachability (<=300 edges)"
+ },
+ "source_sha256": "1fb5d4a85b09a2d986510355cc19634ffe674ed9b67ae15b579d77d7e21814e9",
+ "spec_basis": "inferred"
+}

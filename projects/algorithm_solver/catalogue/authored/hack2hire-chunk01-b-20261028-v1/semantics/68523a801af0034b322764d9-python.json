@@ -1,0 +1,61 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title",
+   "reviews.json synopsis"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "optimalCommuteMode",
+  "params": [
+   {
+    "name": "grid",
+    "type": "string[]"
+   },
+   {
+    "name": "modes",
+    "type": "string[]"
+   },
+   {
+    "name": "times",
+    "type": "integer[]"
+   },
+   {
+    "name": "costs",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "language": "python",
+ "named_wrapper": "Solution.optimalCommuteMode",
+ "parameters": [
+  "grid",
+  "modes",
+  "times",
+  "costs"
+ ],
+ "problem_uid": "hack2hire:68523a801af0034b322764d9",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "per-mode BFS for the fewest charged cells; totals scale linearly",
+  "complexity_target": "O(k * area) time/O(area) space",
+  "reference": "Bellman-Ford over (time, cost) pairs per mode (<=150 cells)"
+ },
+ "source_sha256": "6e28375fd207f9e30f7a1642095a1f4bd6356e61a3b4326ed08ab632412388d7",
+ "spec_basis": "inferred"
+}

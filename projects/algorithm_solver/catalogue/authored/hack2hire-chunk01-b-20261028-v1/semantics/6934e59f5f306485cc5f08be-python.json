@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "findDuplicateFiles",
+  "params": [
+   {
+    "name": "root",
+    "type": "DirectoryNode {name, directories, files:[{name, chunks:int[][]}]}"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "language": "python",
+ "named_wrapper": "Solution.findDuplicateFiles",
+ "parameters": [
+  "root"
+ ],
+ "problem_uid": "hack2hire:6934e59f5f306485cc5f08be",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "bucket by total size, then refine candidate groups block by block (64-byte re-chunked blocks) until groups are singletons or streams end",
+  "complexity_target": "O(total bytes + F log F) time/O(F + block) space beyond input",
+  "reference": "pairwise comparison of flattened chunk lists (<=300 files)"
+ },
+ "source_sha256": "90f35bdc28dff2c8adcce883db581823a69b3c48671e9431cfcea7072ed772e2",
+ "spec_basis": "inferred"
+}

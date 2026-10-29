@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "findDuplicateFiles",
+  "params": [
+   {
+    "name": "root",
+    "type": "DirectoryNode {name, directories, files:[{name, content:int[]}]}"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "language": "python",
+ "named_wrapper": "Solution.findDuplicateFiles",
+ "parameters": [
+  "root"
+ ],
+ "problem_uid": "hack2hire:6934db665f306485cc5f08ba",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "iterative traversal; bucket by size, then by exact content key inside each size bucket",
+  "complexity_target": "O(total bytes + F log F) time/O(total bytes) space",
+  "reference": "pairwise byte-list comparison with union-find (<=300 files)"
+ },
+ "source_sha256": "028cd07c2d3db9e2f1db3da5d78ec3bc19abd516fb522dd02bfbbaf8f1ae49c4",
+ "spec_basis": "inferred"
+}

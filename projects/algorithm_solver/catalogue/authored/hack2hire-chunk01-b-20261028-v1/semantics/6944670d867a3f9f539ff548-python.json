@@ -1,0 +1,61 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title",
+   "reviews.json synopsis"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "optimalCommuteCost",
+  "params": [
+   {
+    "name": "grid",
+    "type": "string[]"
+   },
+   {
+    "name": "modes",
+    "type": "string[]"
+   },
+   {
+    "name": "times",
+    "type": "integer[]"
+   },
+   {
+    "name": "costs",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "language": "python",
+ "named_wrapper": "Solution.optimalCommuteCost",
+ "parameters": [
+  "grid",
+  "modes",
+  "times",
+  "costs"
+ ],
+ "problem_uid": "hack2hire:6944670d867a3f9f539ff548",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "Dijkstra on lexicographic (time, cost) with node-departure weights",
+  "complexity_target": "O(area log area) time/O(area) space",
+  "reference": "Bellman-Ford over (time, cost) pairs (<=150 cells)"
+ },
+ "source_sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375",
+ "spec_basis": "inferred"
+}

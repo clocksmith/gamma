@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result; JavaScript compares number values (no int/float distinction)",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "findClusterMedian",
+  "params": [
+   {
+    "name": "slices",
+    "type": "integer[][] (one per worker)"
+   }
+  ],
+  "return": {
+   "type": "number"
+  }
+ },
+ "language": "javascript",
+ "named_wrapper": "module.exports.findClusterMedian",
+ "parameters": [
+  "slices"
+ ],
+ "problem_uid": "hack2hire:69361ab01553144e303f6805",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "local sort per worker; value-range binary search for the k-th smallest with per-worker bisect counts",
+  "complexity_target": "O(N log N + log(range) * k * log m) time/O(N) space",
+  "reference": "sort the flattened data, exact Fraction mean of the middle pair"
+ },
+ "source_sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283",
+ "spec_basis": "inferred"
+}
