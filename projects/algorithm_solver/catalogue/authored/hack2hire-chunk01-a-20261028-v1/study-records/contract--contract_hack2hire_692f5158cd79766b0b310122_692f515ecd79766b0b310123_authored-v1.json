@@ -1,0 +1,327 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:692f5158cd79766b0b310122:692f515ecd79766b0b310123:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+   "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+   "selector": "/problems/4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/692f5158cd79766b0b310122.json",
+   "sha256": "afcbe7a21533f6ced1e844fb5e80e00fb90e3e59afa21ff011c41d29489ac26b",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+   "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+   "selector": "/variants/hack2hire:692f515ecd79766b0b310123"
+  }
+ ],
+ "problemId": "hack2hire:692f5158cd79766b0b310122",
+ "variantId": "692f515ecd79766b0b310123",
+ "variantLabel": {
+  "status": "present",
+  "value": "Deterministic model of the concurrent crawler",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:692f515ecd79766b0b310123/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Deterministic model of the concurrent crawler: the HTML parser is injected as a map from URL to the URLs found on that page (absent key = no links). Starting at startUrl, visit every reachable URL whose hostname (text between \"http://\" and the next \"/\") equals the start hostname exactly; other hosts are neither recorded nor crawled. Return the unique visited URLs sorted lexicographically, since concurrent discovery order is not deterministic.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Deterministic model of the concurrent crawler: the HTML parser is injected as a map from URL to the URLs found on that page (absent key = no links).",
+   "Starting at startUrl, visit every reachable URL whose hostname (text between \"http://\" and the next \"/\") equals the start hostname exactly; other hosts are neither recorded nor crawled.",
+   "Return the unique visited URLs sorted lexicographically, since concurrent discovery order is not deterministic."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 5000 pages with outgoing links, 50000 links total",
+   "URLs are http:// with a lowercase host and optional path"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:692f515ecd79766b0b310123/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview start/hostname rules and cited multithreaded-crawler relationship; preview response sha256 195b24598c6631f7c9c9bf4a6a6bd22a0cbf602b6c4029665a04639f30c8fb55"
+   },
+   {
+    "statement": "Uncertainty: medium: concurrency replaced by an injected link map; sorted output and http-only hostnames are inferred",
+    "basis": "the public group preview is partial (654 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/4/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/4/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How should concurrency be represented in a deterministic test?",
+   "Is the output order significant?",
+   "Does a port or https count as part of the hostname?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:692f515ecd79766b0b310123/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     "http://b.com/",
+     {
+      "http://b.com": [
+       "http://b.com/",
+       "http://b.com/"
+      ],
+      "http://b.com/": [
+       "http://b.com"
+      ]
+     }
+    ],
+    "output": [
+     "http://b.com",
+     "http://b.com/"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     "http://a.com",
+     {
+      "http://a.com": [
+       "http://a.com",
+       "http://a.com",
+       "http://a.com"
+      ]
+     }
+    ],
+    "output": [
+     "http://a.com"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:692f515ecd79766b0b310123/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/oracles.py",
+    "sha256": "6a83180c2958f73c61479798fc30b43fb574ebf69cf0d2efdf714028d5f4a414",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def crawl(startUrl, links) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/692f515ecd79766b0b310123-python.json",
+     "inferredInterface": {
+      "name": "crawl",
+      "params": [
+       {
+        "name": "startUrl",
+        "type": "string"
+       },
+       {
+        "name": "links",
+        "type": "map<string,string[]>"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/692f515ecd79766b0b310123-python.json",
+      "sha256": "8c63394c51576334f7d6b589aca85b4667c7edff3f51dcda20ecf44d87b229bb",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function crawl(startUrl, links) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/692f515ecd79766b0b310123-javascript.json",
+     "inferredInterface": {
+      "name": "crawl",
+      "params": [
+       {
+        "name": "startUrl",
+        "type": "string"
+       },
+       {
+        "name": "links",
+        "type": "map<string,string[]>"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/692f515ecd79766b0b310123-javascript.json",
+      "sha256": "135df140f753e28835a95a83298edb56be16590658211c3ddb14bb5310c9136e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/4/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/4/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

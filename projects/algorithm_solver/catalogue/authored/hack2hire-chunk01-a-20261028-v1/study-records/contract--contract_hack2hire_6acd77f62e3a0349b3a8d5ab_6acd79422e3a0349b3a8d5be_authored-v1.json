@@ -1,0 +1,300 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6acd77f62e3a0349b3a8d5ab:6acd79422e3a0349b3a8d5be:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+   "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6acd77f62e3a0349b3a8d5ab.json",
+   "sha256": "1016c7ae41ac78887b10fa1525788eff61a6ad68f7edfa9ba1efdbd2a3c179a7",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+   "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+   "selector": "/variants/hack2hire:6acd79422e3a0349b3a8d5be"
+  }
+ ],
+ "problemId": "hack2hire:6acd77f62e3a0349b3a8d5ab",
+ "variantId": "6acd79422e3a0349b3a8d5be",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 1: deployable minute count",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6acd79422e3a0349b3a8d5be/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Each record \"<start>,<end>,<type>\" is a half-open window within the 10080-minute week, type allowed or freeze. A minute is deployable if some allowed window covers it and no freeze window covers it. Return the number of deployable minutes.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Each record \"<start>,<end>,<type>\" is a half-open window within the 10080-minute week, type allowed or freeze.",
+   "A minute is deployable if some allowed window covers it and no freeze window covers it.",
+   "Return the number of deployable minutes."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0..20000 records",
+   "records \"<start>,<end>,<type>\" with 0 <= start < end <= 10080"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6acd79422e3a0349b3a8d5be/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview week length, half-open windows and record format; preview response sha256 010ba02d6230a3d1866c5ab3f481afd59c35911258ea6e37ad49869082aa0f08"
+   },
+   {
+    "statement": "Uncertainty: medium-high: freeze precedence and the counted output are inferred; records are assumed well formed",
+    "basis": "the public group preview is partial (421 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/13/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does a freeze override an allowed window?",
+   "What should malformed records do?",
+   "Is the answer a minute count or a list of windows?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6acd79422e3a0349b3a8d5be/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "0,10080,allowed"
+     ]
+    ],
+    "output": 10080,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6acd79422e3a0349b3a8d5be/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/oracles.py",
+    "sha256": "6a83180c2958f73c61479798fc30b43fb574ebf69cf0d2efdf714028d5f4a414",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def deployableMinutes(inputCsv) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6acd79422e3a0349b3a8d5be-python.json",
+     "inferredInterface": {
+      "name": "deployableMinutes",
+      "params": [
+       {
+        "name": "inputCsv",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6acd79422e3a0349b3a8d5be-python.json",
+      "sha256": "8238d4e372e21fcfd59d1b48321a7094e410bdfab430f83aa79834b4497e4d1f",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function deployableMinutes(inputCsv) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6acd79422e3a0349b3a8d5be-javascript.json",
+     "inferredInterface": {
+      "name": "deployableMinutes",
+      "params": [
+       {
+        "name": "inputCsv",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6acd79422e3a0349b3a8d5be-javascript.json",
+      "sha256": "baf473face5f89ce43c144c40a3e4a076c124b4c6193e426a6bf9d9915f4a060",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

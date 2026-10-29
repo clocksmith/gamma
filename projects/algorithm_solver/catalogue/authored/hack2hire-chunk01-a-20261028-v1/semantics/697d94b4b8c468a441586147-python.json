@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697d94b4b8c468a441586147",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "shuffledDeck"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "dealAndSortHands",
+  "params": [
+   {
+    "name": "shuffledDeck",
+    "type": "list<[string,string]>"
+   }
+  ],
+  "return": {
+   "type": "list<list<[string,string]>>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "stride slicing plus sort by canonical deck index",
+  "candidate_design": "counting placement by canonical index per player",
+  "complexity_target": "O(52) time/O(52) space"
+ },
+ "source_sha256": "b63bc70fba5e76c0195772aac384785e73d4ca789e034874aed08030dc7d0546",
+ "wrapper": "Solution.dealAndSortHands"
+}

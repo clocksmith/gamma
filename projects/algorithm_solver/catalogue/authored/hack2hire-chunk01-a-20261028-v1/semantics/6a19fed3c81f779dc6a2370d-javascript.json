@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a19fed3c81f779dc6a2370d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "browserPositions",
+  "candidateAds",
+  "userAdState",
+  "randomIndices"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "assignAds",
+  "params": [
+   {
+    "name": "browserPositions",
+    "type": "string[]"
+   },
+   {
+    "name": "candidateAds",
+    "type": "list<{adId:string,maxDisplay:integer}>"
+   },
+   {
+    "name": "userAdState",
+    "type": "map<string,integer>"
+   },
+   {
+    "name": "randomIndices",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "list<string|null>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "refilter whole candidate list per position",
+  "candidate_design": "Fenwick tree over still-eligible candidate slots; k-th order statistic per position",
+  "complexity_target": "O((P+A) log A) time/O(A) space"
+ },
+ "source_sha256": "63d478cc1089624a6f092f420abb1a25dcc507826364fc299f0229aafcbf954a",
+ "wrapper": "named export assignAds"
+}

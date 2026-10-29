@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a08e02abd4165b6d480ffa1",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "timesA",
+  "intensitiesA",
+  "timesB",
+  "intensitiesB",
+  "threshold"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "overlappingMotion",
+  "params": [
+   {
+    "name": "timesA",
+    "type": "integer[]"
+   },
+   {
+    "name": "intensitiesA",
+    "type": "integer[]"
+   },
+   {
+    "name": "timesB",
+    "type": "integer[]"
+   },
+   {
+    "name": "intensitiesB",
+    "type": "integer[]"
+   },
+   {
+    "name": "threshold",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "all-pairs period intersections then sort",
+  "candidate_design": "linear period extraction plus two-pointer intersection",
+  "complexity_target": "O(n+m) time/O(n+m) space"
+ },
+ "source_sha256": "d560f9efb65476e1c894edd23a96af916c9a0d59989c7e3efa768d1dd6985e1e",
+ "wrapper": "Solution.overlappingMotion"
+}

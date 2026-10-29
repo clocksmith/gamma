@@ -1,0 +1,316 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a7ce047d713d873ca7ac767:6a7ce081d713d873ca7ac76a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+   "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+   "selector": "/problems/8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a7ce047d713d873ca7ac767.json",
+   "sha256": "3fc06ddd0b8cadd50e37ac12f5266b48fca27b1453187298a331bda417970dc1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+   "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+   "selector": "/variants/hack2hire:6a7ce081d713d873ca7ac76a"
+  }
+ ],
+ "problemId": "hack2hire:6a7ce047d713d873ca7ac767",
+ "variantId": "6a7ce081d713d873ca7ac76a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 1: one deletion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a7ce081d713d873ca7ac76a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "parentIndex describes a valid forest (roots are their own parent; parents may have larger indices). Delete node and all of its descendants; return a fresh array where deleted entries are -1 and all others are unchanged.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "parentIndex describes a valid forest (roots are their own parent; parents may have larger indices).",
+   "Delete node and all of its descendants; return a fresh array where deleted entries are -1 and all others are unchanged."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n <= 1e5",
+   "parentIndex forms a valid forest; roots are self-parents"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a7ce081d713d873ca7ac76a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview forest encoding and \"no deleted nodes initially\"; preview response sha256 85058d623a9417e6d57ca07d880358d7579de2fa2b37367138093b74b92834f8"
+   },
+   {
+    "statement": "Uncertainty: medium: deletion marking with -1 is inferred from the mention of deleted nodes",
+    "basis": "the public group preview is partial (323 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/8/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/8/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How should deleted nodes be represented in the result?",
+   "Can a parent index be larger than the child index?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a7ce081d713d873ca7ac76a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      0
+     ],
+     0
+    ],
+    "output": [
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      1,
+      1
+     ],
+     1
+    ],
+    "output": [
+     -1,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a7ce081d713d873ca7ac76a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/oracles.py",
+    "sha256": "6a83180c2958f73c61479798fc30b43fb574ebf69cf0d2efdf714028d5f4a414",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def deleteSubtree(parentIndex, node) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a7ce081d713d873ca7ac76a-python.json",
+     "inferredInterface": {
+      "name": "deleteSubtree",
+      "params": [
+       {
+        "name": "parentIndex",
+        "type": "integer[]"
+       },
+       {
+        "name": "node",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a7ce081d713d873ca7ac76a-python.json",
+      "sha256": "261c601cce9cd1d3be86195d89af975ca14c69d8c1c111bb50bb8815228cabe3",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function deleteSubtree(parentIndex, node) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a7ce081d713d873ca7ac76a-javascript.json",
+     "inferredInterface": {
+      "name": "deleteSubtree",
+      "params": [
+       {
+        "name": "parentIndex",
+        "type": "integer[]"
+       },
+       {
+        "name": "node",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a7ce081d713d873ca7ac76a-javascript.json",
+      "sha256": "1f2525c47cb94ec10334bf5c30af0c1acce84e0dc74ac65aeb610a6254188ee1",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/8/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/8/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

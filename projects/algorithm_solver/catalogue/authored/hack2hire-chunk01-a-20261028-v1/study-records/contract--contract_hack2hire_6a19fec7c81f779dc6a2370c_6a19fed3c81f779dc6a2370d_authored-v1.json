@@ -1,0 +1,343 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a19fec7c81f779dc6a2370c:6a19fed3c81f779dc6a2370d:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+   "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a19fec7c81f779dc6a2370c.json",
+   "sha256": "57839a795c2c615c18e373353749bf729a7aa245b35e353f1dd25400803a8d9f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+   "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+   "selector": "/variants/hack2hire:6a19fed3c81f779dc6a2370d"
+  }
+ ],
+ "problemId": "hack2hire:6a19fec7c81f779dc6a2370c",
+ "variantId": "6a19fed3c81f779dc6a2370d",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 1: injected random index per position",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a19fed3c81f779dc6a2370d/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Visit positions in order. An ad is eligible for a position if its prior display count (userAdState, missing = 0) is below its maxDisplay and it has not already been assigned earlier in this call. Randomness is injected: with eligible ads listed in candidateAds order, position i receives eligible[randomIndices[i] mod |eligible|]; a position with no eligible ad receives null. Returns one entry per position. Positions and adIds are unique; state entries for non-candidate ads are ignored.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Visit positions in order.",
+   "An ad is eligible for a position if its prior display count (userAdState, missing = 0) is below its maxDisplay and it has not already been assigned earlier in this call.",
+   "Randomness is injected: with eligible ads listed in candidateAds order, position i receives eligible[randomIndices[i] mod |eligible|]; a position with no eligible ad receives null.",
+   "Returns one entry per position.",
+   "Positions and adIds are unique; state entries for non-candidate ads are ignored."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= positions <= 2000, unique names",
+   "0 <= candidate ads <= 2000, unique adIds",
+   "0 <= maxDisplay, display counts <= 1e9",
+   "randomIndices has one entry per position, 0..2^31-1"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a19fed3c81f779dc6a2370d/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview inputs browserPositions/candidateAds/userAdState and Ad{adId,maxDisplay}; preview response sha256 dcf0aa3c34fc215399b2910f0ef34814149708d5eb655f3dec4c9d0d2a92f13d"
+   },
+   {
+    "statement": "Uncertainty: high: the preview stops before the assignment and output rules; at-most-once-per-call, the injected index rule and the null output are inferred",
+    "basis": "the public group preview is partial (807 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/0/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "May one ad fill several positions in a single call?",
+   "How is randomness supplied or seeded, and is a uniform choice required?",
+   "What is returned for a position with no eligible ad?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a19fed3c81f779dc6a2370d/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [],
+     {},
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "top"
+     ],
+     [
+      {
+       "adId": "x",
+       "maxDisplay": 0
+      }
+     ],
+     {},
+     [
+      5
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a19fed3c81f779dc6a2370d/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/oracles.py",
+    "sha256": "6a83180c2958f73c61479798fc30b43fb574ebf69cf0d2efdf714028d5f4a414",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def assignAds(browserPositions, candidateAds, userAdState, randomIndices) -> list<string|null>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a19fed3c81f779dc6a2370d-python.json",
+     "inferredInterface": {
+      "name": "assignAds",
+      "params": [
+       {
+        "name": "browserPositions",
+        "type": "string[]"
+       },
+       {
+        "name": "candidateAds",
+        "type": "list<{adId:string,maxDisplay:integer}>"
+       },
+       {
+        "name": "userAdState",
+        "type": "map<string,integer>"
+       },
+       {
+        "name": "randomIndices",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "list<string|null>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a19fed3c81f779dc6a2370d-python.json",
+      "sha256": "733b59feed05356aa184e16e61ad96549c6af4ccbc696136d0fedd27eb546ba5",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function assignAds(browserPositions, candidateAds, userAdState, randomIndices) /* -> list<string|null> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a19fed3c81f779dc6a2370d-javascript.json",
+     "inferredInterface": {
+      "name": "assignAds",
+      "params": [
+       {
+        "name": "browserPositions",
+        "type": "string[]"
+       },
+       {
+        "name": "candidateAds",
+        "type": "list<{adId:string,maxDisplay:integer}>"
+       },
+       {
+        "name": "userAdState",
+        "type": "map<string,integer>"
+       },
+       {
+        "name": "randomIndices",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "list<string|null>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a19fed3c81f779dc6a2370d-javascript.json",
+      "sha256": "8b14f2922c4d679496c956074566c3728b79f35e9f16ddb97fafea420e1d2140",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

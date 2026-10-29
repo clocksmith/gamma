@@ -1,0 +1,283 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6977f6c391e8f239329f44db:697d94b4b8c468a441586147:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+   "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+   "selector": "/problems/19"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6977f6c391e8f239329f44db.json",
+   "sha256": "7fad2ee66d8edeec82d4beed75cf08b5ee248582163e4be24da8254de8981aad",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+   "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+   "selector": "/variants/hack2hire:697d94b4b8c468a441586147"
+  }
+ ],
+ "problemId": "hack2hire:6977f6c391e8f239329f44db",
+ "variantId": "697d94b4b8c468a441586147",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 1: four players",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:697d94b4b8c468a441586147/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "A card is [suit, rank]; suits order CLUBS<DIAMONDS<HEARTS<SPADES, ranks A<2<...<10<J<Q<K. Shuffling is injected: the argument is the already shuffled 52-card deck. Cards are dealt one at a time round-robin from the top (card i goes to player i mod players). Four players receive 13 cards each; return the four hands, each sorted by suit then rank.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "A card is [suit, rank]; suits order CLUBS<DIAMONDS<HEARTS<SPADES, ranks A<2<...<10<J<Q<K.",
+   "Shuffling is injected: the argument is the already shuffled 52-card deck.",
+   "Cards are dealt one at a time round-robin from the top (card i goes to player i mod players).",
+   "Four players receive 13 cards each; return the four hands, each sorted by suit then rank."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "shuffledDeck is a permutation of the 52 [suit, rank] cards"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:697d94b4b8c468a441586147/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview Suit/Rank/Card/Deck/Player, deal evenly to four players, sort by suit and rank; preview response sha256 97998759c2d3e8b5d3c6377e0ed1d07f1980d847d5fa6297c5379764b90a8a52"
+   },
+   {
+    "statement": "Uncertainty: medium: round-robin dealing and enum ordering are inferred; randomness is replaced by an injected deck",
+    "basis": "the public group preview is partial (618 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/19/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/19/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is dealing round-robin or in contiguous blocks?",
+   "How should shuffling be made testable?",
+   "Is the ace low or high in the sort order?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:697d94b4b8c468a441586147/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:697d94b4b8c468a441586147/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/oracles.py",
+    "sha256": "6a83180c2958f73c61479798fc30b43fb574ebf69cf0d2efdf714028d5f4a414",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def dealAndSortHands(shuffledDeck) -> list<list<[string,string]>>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/697d94b4b8c468a441586147-python.json",
+     "inferredInterface": {
+      "name": "dealAndSortHands",
+      "params": [
+       {
+        "name": "shuffledDeck",
+        "type": "list<[string,string]>"
+       }
+      ],
+      "return": {
+       "type": "list<list<[string,string]>>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/697d94b4b8c468a441586147-python.json",
+      "sha256": "cb214b6ba8c3708f7c115a083edd2042a982cc3c185ec6b50983144e8972e48d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function dealAndSortHands(shuffledDeck) /* -> list<list<[string,string]>> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/697d94b4b8c468a441586147-javascript.json",
+     "inferredInterface": {
+      "name": "dealAndSortHands",
+      "params": [
+       {
+        "name": "shuffledDeck",
+        "type": "list<[string,string]>"
+       }
+      ],
+      "return": {
+       "type": "list<list<[string,string]>>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/697d94b4b8c468a441586147-javascript.json",
+      "sha256": "38d6f3d40a01212ff6f514b35adef2062627408ed92f419292b0a845d9d5ed08",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/19/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/19/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

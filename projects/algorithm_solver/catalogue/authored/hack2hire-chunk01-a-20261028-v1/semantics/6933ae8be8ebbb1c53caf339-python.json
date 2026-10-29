@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6933ae8be8ebbb1c53caf339",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "grid"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "islandStats",
+  "params": [
+   {
+    "name": "grid",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "union-find then per-cell side counting",
+  "candidate_design": "iterative BFS flood fill counting water sides",
+  "complexity_target": "O(mn) time/O(mn) space"
+ },
+ "source_sha256": "d60f409804a4ab9d4680c33c658d7e710824e18a8839474d09a38c0f55a8d641",
+ "wrapper": "Solution.islandStats"
+}

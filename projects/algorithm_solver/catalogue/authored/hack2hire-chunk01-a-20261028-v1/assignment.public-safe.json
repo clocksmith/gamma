@@ -1,0 +1,2179 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk01-a (16 Hack2Hire groups, 30 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:6a19fed3c81f779dc6a2370d",
+   "title": "Assign Random Ads",
+   "variant_ordinal": 1,
+   "group_post_id": "6a19fec7c81f779dc6a2370c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "assignAds",
+     "params": [
+      {
+       "name": "browserPositions",
+       "type": "string[]"
+      },
+      {
+       "name": "candidateAds",
+       "type": "list<{adId:string,maxDisplay:integer}>"
+      },
+      {
+       "name": "userAdState",
+       "type": "map<string,integer>"
+      },
+      {
+       "name": "randomIndices",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "list<string|null>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "refilter whole candidate list per position",
+    "candidate_design": "Fenwick tree over still-eligible candidate slots; k-th order statistic per position",
+    "complexity_target": "O((P+A) log A) time/O(A) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "dcf0aa3c34fc215399b2910f0ef34814149708d5eb655f3dec4c9d0d2a92f13d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a08df61bd4165b6d480ff97",
+   "title": "Camera Motion Detection",
+   "variant_ordinal": 1,
+   "group_post_id": "6a08df5bbd4165b6d480ff96",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "motionPeriods",
+     "params": [
+      {
+       "name": "times",
+       "type": "integer[]"
+      },
+      {
+       "name": "intensities",
+       "type": "integer[]"
+      },
+      {
+       "name": "threshold",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "run-start labelling then grouping",
+    "candidate_design": "single linear scan",
+    "complexity_target": "O(n) time/O(1) auxiliary"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "749631b7275a805702e491db917645b20f2f1fcd2a7b4a515a7407a7a11842c0",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a08e02abd4165b6d480ffa1",
+   "title": "Camera Motion Detection",
+   "variant_ordinal": 2,
+   "group_post_id": "6a08df5bbd4165b6d480ff96",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "overlappingMotion",
+     "params": [
+      {
+       "name": "timesA",
+       "type": "integer[]"
+      },
+      {
+       "name": "intensitiesA",
+       "type": "integer[]"
+      },
+      {
+       "name": "timesB",
+       "type": "integer[]"
+      },
+      {
+       "name": "intensitiesB",
+       "type": "integer[]"
+      },
+      {
+       "name": "threshold",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "all-pairs period intersections then sort",
+    "candidate_design": "linear period extraction plus two-pointer intersection",
+    "complexity_target": "O(n+m) time/O(n+m) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "749631b7275a805702e491db917645b20f2f1fcd2a7b4a515a7407a7a11842c0",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69ff9cd5574d87bc49006f98",
+   "title": "Card Packets with Identical Distribution",
+   "variant_ordinal": 1,
+   "group_post_id": "69ff9cc5574d87bc49006f97",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minAdditionalCards",
+     "params": [
+      {
+       "name": "cardTypes",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every p from 2 to max+1 directly",
+    "candidate_design": "only primes need checking; per prime, bucket costs from prefix counts/sums over multiples",
+    "complexity_target": "O(n + V log log V) time/O(V) space, V = max count"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "bb39045a243850e43606ffdfe5797f58035b20f3c019a145901f1546e9c84fd0",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:692f515ecd79766b0b310123",
+   "title": "Concurrent Web Crawler",
+   "variant_ordinal": 1,
+   "group_post_id": "692f5158cd79766b0b310122",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "crawl",
+     "params": [
+      {
+       "name": "startUrl",
+       "type": "string"
+      },
+      {
+       "name": "links",
+       "type": "map<string,string[]>"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "fixed-point set expansion",
+    "candidate_design": "BFS with visited set (thread pool scheduling modelled away)",
+    "complexity_target": "O(U + L) time/O(U) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "195b24598c6631f7c9c9bf4a6a6bd22a0cbf602b6c4029665a04639f30c8fb55",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6782bd403cd890ccd3798fc3",
+   "title": "Construct Restaurant Daily Menu",
+   "variant_ordinal": 1,
+   "group_post_id": "6782b2763cd890ccd3798fc2",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "buildDailyMenu",
+     "params": [
+      {
+       "name": "menu",
+       "type": "{key,value,active,children}"
+      }
+     ],
+     "return": {
+      "type": "{key,value,active,children}|null"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recursive filter",
+    "candidate_design": "iterative explicit-stack copy that skips inactive subtrees",
+    "complexity_target": "O(N) time/O(N) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "7a25f039bf2b6bc7305a8ef1dd3f50397b74031c6e542926f75f96b16e3339ee",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6933ae8be8ebbb1c53caf339",
+   "title": "Count Islands and Water Boundary",
+   "variant_ordinal": 1,
+   "group_post_id": "6933a7a0e8ebbb1c53caf333",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "islandStats",
+     "params": [
+      {
+       "name": "grid",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "union-find then per-cell side counting",
+    "candidate_design": "iterative BFS flood fill counting water sides",
+    "complexity_target": "O(mn) time/O(mn) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "29c0e4ec31f8b3ac8dc8c46f267050f662cdc03db57d474e1862a66682dbad1a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a18ebdbc81f779dc6a23112",
+   "title": "Count and Flip Binary Operations",
+   "variant_ordinal": 1,
+   "group_post_id": "6a18eb3cc81f779dc6a2310e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processRequests",
+     "params": [
+      {
+       "name": "binaryString",
+       "type": "string"
+      },
+      {
+       "name": "requests",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal string flipping and counting",
+    "candidate_design": "prefix counts once plus a flip parity bit",
+    "complexity_target": "O(n+q) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b21b489abd7dc2672498c6fcc65c1424fc3181bf4abe05b6385cec109887bb13",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a7ce081d713d873ca7ac76a",
+   "title": "Delete a Forest Subtree",
+   "variant_ordinal": 1,
+   "group_post_id": "6a7ce047d713d873ca7ac767",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "deleteSubtree",
+     "params": [
+      {
+       "name": "parentIndex",
+       "type": "integer[]"
+      },
+      {
+       "name": "node",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "ancestor walk from every node",
+    "candidate_design": "children adjacency and iterative DFS from node",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "85058d623a9417e6d57ca07d880358d7579de2fa2b37367138093b74b92834f8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a7ceda7d713d873ca7ac7f8",
+   "title": "Delete a Forest Subtree",
+   "variant_ordinal": 2,
+   "group_post_id": "6a7ce047d713d873ca7ac767",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "deleteSubtrees",
+     "params": [
+      {
+       "name": "parentIndex",
+       "type": "integer[]"
+      },
+      {
+       "name": "nodes",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "ancestor walk per deletion",
+    "candidate_design": "one adjacency build; DFS that never re-enters deleted nodes",
+    "complexity_target": "O(n+q) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "85058d623a9417e6d57ca07d880358d7579de2fa2b37367138093b74b92834f8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69178d9a10632c00111ca20d",
+   "title": "Delivery Cost Calculate",
+   "variant_ordinal": 1,
+   "group_post_id": "69178aee10632c00111ca206",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "DeliverySystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addDriver",
+       "params": [
+        {
+         "name": "driverId",
+         "type": "integer"
+        },
+        {
+         "name": "hourlyRateCents",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "addDelivery",
+       "params": [
+        {
+         "name": "driverId",
+         "type": "integer"
+        },
+        {
+         "name": "startTime",
+         "type": "integer"
+        },
+        {
+         "name": "endTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getTotalCost",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "DeliverySystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "Fraction sum over all deliveries",
+    "candidate_design": "running integer cent-seconds sum",
+    "complexity_target": "O(1) per operation/O(D) space",
+    "numeric": "integer cent-seconds below 2**53; JS Number exact; half-up via integer remainder"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "60466be38d30dc1c26e4cd6a5ab0f269d98fcf236cfcfa78e8112f6023294196",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6917944e10632c00111ca217",
+   "title": "Delivery Cost Calculate",
+   "variant_ordinal": 2,
+   "group_post_id": "69178aee10632c00111ca206",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "DeliverySystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addDriver",
+       "params": [
+        {
+         "name": "driverId",
+         "type": "integer"
+        },
+        {
+         "name": "hourlyRateCents",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "addDelivery",
+       "params": [
+        {
+         "name": "driverId",
+         "type": "integer"
+        },
+        {
+         "name": "startTime",
+         "type": "integer"
+        },
+        {
+         "name": "endTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getTotalCost",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "payUpTo",
+       "params": [
+        {
+         "name": "upToTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getTotalCostUnpaid",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "DeliverySystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per-delivery paid flags and full recomputation",
+    "candidate_design": "min-heap by endTime of unpaid deliveries with running sums",
+    "complexity_target": "O(log D) amortized per operation/O(D) space",
+    "numeric": "integer cent-seconds below 2**53"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "60466be38d30dc1c26e4cd6a5ab0f269d98fcf236cfcfa78e8112f6023294196",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6917944f10632c00111ca218",
+   "title": "Delivery Cost Calculate",
+   "variant_ordinal": 3,
+   "group_post_id": "69178aee10632c00111ca206",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "DeliverySystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addDriver",
+       "params": [
+        {
+         "name": "driverId",
+         "type": "integer"
+        },
+        {
+         "name": "hourlyRateCents",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "addDelivery",
+       "params": [
+        {
+         "name": "driverId",
+         "type": "integer"
+        },
+        {
+         "name": "startTime",
+         "type": "integer"
+        },
+        {
+         "name": "endTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getTotalCost",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "payUpTo",
+       "params": [
+        {
+         "name": "upToTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getTotalCostUnpaid",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "getMaxActiveDriversInLast24Hours",
+       "params": [
+        {
+         "name": "currentTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "DeliverySystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "evaluate distinct active drivers at the window start and every start inside the window",
+    "candidate_design": "clip and union intervals per driver, then sweep events",
+    "complexity_target": "O(D log D) per query/O(D) space",
+    "numeric": "integer cent-seconds below 2**53"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "60466be38d30dc1c26e4cd6a5ab0f269d98fcf236cfcfa78e8112f6023294196",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6acd79422e3a0349b3a8d5be",
+   "title": "Deployment Window Scheduler",
+   "variant_ordinal": 1,
+   "group_post_id": "6acd77f62e3a0349b3a8d5ab",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "deployableMinutes",
+     "params": [
+      {
+       "name": "inputCsv",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per-minute sets",
+    "candidate_design": "two difference arrays and a prefix scan",
+    "complexity_target": "O(R + W) time/O(W) space, W=10080"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "010ba02d6230a3d1866c5ab3f481afd59c35911258ea6e37ad49869082aa0f08",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6acd79662e3a0349b3a8d5c0",
+   "title": "Deployment Window Scheduler",
+   "variant_ordinal": 2,
+   "group_post_id": "6acd77f62e3a0349b3a8d5ab",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "deployableWindows",
+     "params": [
+      {
+       "name": "inputCsv",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "interval merge and subtraction algebra",
+    "candidate_design": "difference arrays and run extraction",
+    "complexity_target": "O(R + W) time/O(W) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "010ba02d6230a3d1866c5ab3f481afd59c35911258ea6e37ad49869082aa0f08",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:687c3a5eaa2b26b0b64b39e5",
+   "title": "Design Banking System",
+   "variant_ordinal": 1,
+   "group_post_id": "687c23f9aa2b26b0b64b39d4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "BankingSystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "createAccount",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "deposit",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        },
+        {
+         "name": "amount",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "transfer",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "sourceAccountId",
+         "type": "string"
+        },
+        {
+         "name": "targetAccountId",
+         "type": "string"
+        },
+        {
+         "name": "amount",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "BankingSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "event-sourced replay of every successful operation for each answer",
+    "candidate_design": "hash maps of balances",
+    "complexity_target": "O(1) per operation/O(A) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0649bcc2a0619d68f1c46dd265479a563f5db24f3d1d1352b478254153f5512d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:687c4741aa2b26b0b64b39ee",
+   "title": "Design Banking System",
+   "variant_ordinal": 2,
+   "group_post_id": "687c23f9aa2b26b0b64b39d4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "BankingSystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "createAccount",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "deposit",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        },
+        {
+         "name": "amount",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "transfer",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "sourceAccountId",
+         "type": "string"
+        },
+        {
+         "name": "targetAccountId",
+         "type": "string"
+        },
+        {
+         "name": "amount",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "topSpenders",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "BankingSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "event-sourced replay",
+    "candidate_design": "hash maps plus sort on query",
+    "complexity_target": "O(A log A) per ranking/O(1) otherwise"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0649bcc2a0619d68f1c46dd265479a563f5db24f3d1d1352b478254153f5512d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:687c4e56024483ac76db8c9b",
+   "title": "Design Banking System",
+   "variant_ordinal": 3,
+   "group_post_id": "687c23f9aa2b26b0b64b39d4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "BankingSystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "createAccount",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "deposit",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        },
+        {
+         "name": "amount",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "transfer",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "sourceAccountId",
+         "type": "string"
+        },
+        {
+         "name": "targetAccountId",
+         "type": "string"
+        },
+        {
+         "name": "amount",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "topSpenders",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "pay",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        },
+        {
+         "name": "amount",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string|null"
+       }
+      },
+      {
+       "name": "getPaymentStatus",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        },
+        {
+         "name": "payment",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string|null"
+       }
+      }
+     ]
+    },
+    "native_class": "BankingSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "event-sourced replay",
+    "candidate_design": "cashback FIFO queue (due times increase with timestamps) applied lazily",
+    "complexity_target": "O(1) amortized per operation plus ranking sort"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0649bcc2a0619d68f1c46dd265479a563f5db24f3d1d1352b478254153f5512d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:687c5c0b024483ac76db8ca2",
+   "title": "Design Banking System",
+   "variant_ordinal": 4,
+   "group_post_id": "687c23f9aa2b26b0b64b39d4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "BankingSystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "createAccount",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "deposit",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        },
+        {
+         "name": "amount",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "transfer",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "sourceAccountId",
+         "type": "string"
+        },
+        {
+         "name": "targetAccountId",
+         "type": "string"
+        },
+        {
+         "name": "amount",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "topSpenders",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "pay",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        },
+        {
+         "name": "amount",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string|null"
+       }
+      },
+      {
+       "name": "getPaymentStatus",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        },
+        {
+         "name": "payment",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string|null"
+       }
+      },
+      {
+       "name": "mergeAccounts",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId1",
+         "type": "string"
+        },
+        {
+         "name": "accountId2",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getBalance",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "accountId",
+         "type": "string"
+        },
+        {
+         "name": "timeAt",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "BankingSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "event-sourced replay up to timeAt",
+    "candidate_design": "per-id balance history (time, balance or absent) with binary search",
+    "complexity_target": "O(log H) per history query"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0649bcc2a0619d68f1c46dd265479a563f5db24f3d1d1352b478254153f5512d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:697d94b4b8c468a441586147",
+   "title": "Design Card Game II",
+   "variant_ordinal": 1,
+   "group_post_id": "6977f6c391e8f239329f44db",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "dealAndSortHands",
+     "params": [
+      {
+       "name": "shuffledDeck",
+       "type": "list<[string,string]>"
+      }
+     ],
+     "return": {
+      "type": "list<list<[string,string]>>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "stride slicing plus sort by canonical deck index",
+    "candidate_design": "counting placement by canonical index per player",
+    "complexity_target": "O(52) time/O(52) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "97998759c2d3e8b5d3c6377e0ed1d07f1980d847d5fa6297c5379764b90a8a52",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6986db08fedd959e9aa443ca",
+   "title": "Design Card Game II",
+   "variant_ordinal": 2,
+   "group_post_id": "6977f6c391e8f239329f44db",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "dealAndSortHands",
+     "params": [
+      {
+       "name": "shuffledDeck",
+       "type": "list<[string,string]>"
+      },
+      {
+       "name": "players",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "list<list<[string,string]>>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "stride slicing plus sort",
+    "candidate_design": "counting placement by canonical index",
+    "complexity_target": "O(52) time/O(52) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "97998759c2d3e8b5d3c6377e0ed1d07f1980d847d5fa6297c5379764b90a8a52",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6986df8bfedd959e9aa443d6",
+   "title": "Design Card Game II",
+   "variant_ordinal": 3,
+   "group_post_id": "6977f6c391e8f239329f44db",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "playRounds",
+     "params": [
+      {
+       "name": "shuffledDeck",
+       "type": "list<[string,string]>"
+      },
+      {
+       "name": "players",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal max-remove per player per round",
+    "candidate_design": "sort hands by strength descending and compare round-wise",
+    "complexity_target": "O(52 log 52) time/O(52) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "97998759c2d3e8b5d3c6377e0ed1d07f1980d847d5fa6297c5379764b90a8a52",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69c19a8521f6ab4226964bf7",
+   "title": "Design Connect K Board",
+   "variant_ordinal": 1,
+   "group_post_id": "69c19a7421f6ab4226964bf5",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "ConnectKGame",
+     "constructor": {
+      "params": [
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "placePiece",
+       "params": [
+        {
+         "name": "player",
+         "type": "string"
+        },
+        {
+         "name": "column",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "ConnectKGame"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every k-segment on the whole board",
+    "candidate_design": "per height in the column, bounded runs in four directions",
+    "complexity_target": "O(h*k) per move/O(pieces) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "90d0876ad8a7ccc23060abf1b0c4ef31fd231bd6833270fffab756656af4d326",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69d16c5617b72775cc49bf93",
+   "title": "Design Document Layer System",
+   "variant_ordinal": 1,
+   "group_post_id": "69d16be017b72775cc49bf8b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "Document",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "setProperty",
+       "params": [
+        {
+         "name": "layerId",
+         "type": "integer"
+        },
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getProperty",
+       "params": [
+        {
+         "name": "layerId",
+         "type": "integer"
+        },
+        {
+         "name": "key",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string|null"
+       }
+      },
+      {
+       "name": "undo",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "Document"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "replay change log prefix for every query",
+    "candidate_design": "undo stack of (layer,key,previous) entries",
+    "complexity_target": "O(1) per operation/O(changes) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0cc325eeb9a354035fb1b8612112cb890da838921caad4d4e01583d6d6f7455b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69d1730e17b72775cc49bfc6",
+   "title": "Design Document Layer System",
+   "variant_ordinal": 2,
+   "group_post_id": "69d16be017b72775cc49bf8b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "Document",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "setProperty",
+       "params": [
+        {
+         "name": "layerId",
+         "type": "integer"
+        },
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getProperty",
+       "params": [
+        {
+         "name": "layerId",
+         "type": "integer"
+        },
+        {
+         "name": "key",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string|null"
+       }
+      },
+      {
+       "name": "undo",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "redo",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "Document"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "replay change log prefix",
+    "candidate_design": "undo and redo stacks storing before/after values",
+    "complexity_target": "O(1) per operation"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0cc325eeb9a354035fb1b8612112cb890da838921caad4d4e01583d6d6f7455b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69d1735f17b72775cc49bfc7",
+   "title": "Design Document Layer System",
+   "variant_ordinal": 3,
+   "group_post_id": "69d16be017b72775cc49bf8b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "Document",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "setProperty",
+       "params": [
+        {
+         "name": "layerId",
+         "type": "integer"
+        },
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getProperty",
+       "params": [
+        {
+         "name": "layerId",
+         "type": "integer"
+        },
+        {
+         "name": "key",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string|null"
+       }
+      },
+      {
+       "name": "undo",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "redo",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "removeProperty",
+       "params": [
+        {
+         "name": "layerId",
+         "type": "integer"
+        },
+        {
+         "name": "key",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getProperties",
+       "params": [
+        {
+         "name": "layerId",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "list<[string,string]>"
+       }
+      }
+     ]
+    },
+    "native_class": "Document"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "replay change log prefix",
+    "candidate_design": "undo/redo stacks with absent-sentinel values; sort on listing",
+    "complexity_target": "O(1) per change, O(p log p) per listing"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0cc325eeb9a354035fb1b8612112cb890da838921caad4d4e01583d6d6f7455b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6941be52b9d646bec48c68cc",
+   "title": "Design Tennis Game",
+   "variant_ordinal": 1,
+   "group_post_id": "6941be40b9d646bec48c68cb",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "TennisGame",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "pointTo",
+       "params": [
+        {
+         "name": "player",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getPoints",
+       "params": [],
+       "return": {
+        "type": "integer[]"
+       }
+      },
+      {
+       "name": "getScore",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "getWinner",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "TennisGame"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recount from the literal point log",
+    "candidate_design": "two counters and a winner field",
+    "complexity_target": "O(1) per operation"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "8418033dee28c74690f6f982866230a1cb156bd164d8ea92b98ec57cfd694ae2",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6941c912e79fe20cf9ff4435",
+   "title": "Design Tennis Game",
+   "variant_ordinal": 2,
+   "group_post_id": "6941be40b9d646bec48c68cb",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "TennisSet",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "pointTo",
+       "params": [
+        {
+         "name": "player",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getGames",
+       "params": [],
+       "return": {
+        "type": "integer[]"
+       }
+      },
+      {
+       "name": "getGameScore",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "getWinner",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "TennisSet"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "replay the full point log for every query",
+    "candidate_design": "incremental game/tiebreak state machine",
+    "complexity_target": "O(1) per operation"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "8418033dee28c74690f6f982866230a1cb156bd164d8ea92b98ec57cfd694ae2",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:683e86418d3dfb7c9bd756ab",
+   "title": "Design Unix Find Command",
+   "variant_ordinal": 1,
+   "group_post_id": "683e7b308d3dfb7c9bd756aa",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "FileSystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addFile",
+       "params": [
+        {
+         "name": "path",
+         "type": "string"
+        },
+        {
+         "name": "size",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "find",
+       "params": [
+        {
+         "name": "directory",
+         "type": "string"
+        },
+        {
+         "name": "filters",
+         "type": "list<filter>"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "FileSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "linear scan with string prefix test",
+    "candidate_design": "directory trie; DFS of the target subtree then filter and sort",
+    "complexity_target": "O(subtree + r log r) per find"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5e20c34eb6413dd9bb6ea756c309b364ed64e05efff941aabc44a6e92548d24a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:683f1dc68d3dfb7c9bd756da",
+   "title": "Design Unix Find Command",
+   "variant_ordinal": 2,
+   "group_post_id": "683e7b308d3dfb7c9bd756aa",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "FileSystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addFile",
+       "params": [
+        {
+         "name": "path",
+         "type": "string"
+        },
+        {
+         "name": "size",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "find",
+       "params": [
+        {
+         "name": "directory",
+         "type": "string"
+        },
+        {
+         "name": "filters",
+         "type": "filter-expression"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "FileSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "linear scan with recursive filter evaluation",
+    "candidate_design": "directory trie plus compiled filter closures",
+    "complexity_target": "O(subtree*|filter| + r log r) per find"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5e20c34eb6413dd9bb6ea756c309b364ed64e05efff941aabc44a6e92548d24a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

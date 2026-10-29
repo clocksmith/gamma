@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a7ceda7d713d873ca7ac7f8",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "parentIndex",
+  "nodes"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "deleteSubtrees",
+  "params": [
+   {
+    "name": "parentIndex",
+    "type": "integer[]"
+   },
+   {
+    "name": "nodes",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "ancestor walk per deletion",
+  "candidate_design": "one adjacency build; DFS that never re-enters deleted nodes",
+  "complexity_target": "O(n+q) time/O(n) space"
+ },
+ "source_sha256": "4d824a55bd3dbaf773384f17d368337b48bfab0241639d97b11a40248b1f3705",
+ "wrapper": "Solution.deleteSubtrees"
+}

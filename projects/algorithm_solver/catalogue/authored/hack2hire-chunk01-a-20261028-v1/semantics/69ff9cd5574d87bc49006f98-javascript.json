@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69ff9cd5574d87bc49006f98",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "cardTypes"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minAdditionalCards",
+  "params": [
+   {
+    "name": "cardTypes",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every p from 2 to max+1 directly",
+  "candidate_design": "only primes need checking; per prime, bucket costs from prefix counts/sums over multiples",
+  "complexity_target": "O(n + V log log V) time/O(V) space, V = max count"
+ },
+ "source_sha256": "0db09d6d3e32549d377c8b59e446edfdf9afceeb2f25c30c6a1372ce0c84ff1a",
+ "wrapper": "named export minAdditionalCards"
+}

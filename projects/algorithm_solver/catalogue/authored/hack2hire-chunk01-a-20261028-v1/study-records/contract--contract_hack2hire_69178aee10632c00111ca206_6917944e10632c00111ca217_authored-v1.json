@@ -1,0 +1,473 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69178aee10632c00111ca206:6917944e10632c00111ca217:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+   "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69178aee10632c00111ca206.json",
+   "sha256": "4b0180e55305c4b5c9a46450ee72d32dfdcc0356839f3510791ae2b174d9dad1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+   "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+   "selector": "/variants/hack2hire:6917944e10632c00111ca217"
+  }
+ ],
+ "problemId": "hack2hire:69178aee10632c00111ca206",
+ "variantId": "6917944e10632c00111ca217",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 2: payouts",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6917944e10632c00111ca217/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Rates are integer cents per hour; times are integer seconds; a delivery [startTime,endTime) costs rate*(end-start)/3600 cents exactly. Drivers are added once before their deliveries and may overlap deliveries. Cost results are the exact rational total rounded half-up to whole cents and formatted \"<dollars>.<cc>\". payUpTo(t) marks every recorded delivery with endTime <= t as paid (later deliveries stay unpaid until a later payUpTo covers them); getTotalCostUnpaid returns the total of unpaid deliveries.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Rates are integer cents per hour; times are integer seconds; a delivery [startTime,endTime) costs rate*(end-start)/3600 cents exactly.",
+   "Drivers are added once before their deliveries and may overlap deliveries.",
+   "Cost results are the exact rational total rounded half-up to whole cents and formatted \"<dollars>.<cc>\". payUpTo(t) marks every recorded delivery with endTime <= t as paid (later deliveries stay unpaid until a later payUpTo covers them); getTotalCostUnpaid returns the total of unpaid deliveries."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "driver ids 0..1e9, added once before use",
+   "rates 1..1e5 cents per hour",
+   "times 0..1e9 seconds, 0 < duration <= 86400",
+   "up to 5000 operations",
+   "payUpTo times 0..1e9, not necessarily increasing"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6917944e10632c00111ca217/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview; variant count; preview response sha256 60466be38d30dc1c26e4cd6a5ab0f269d98fcf236cfcfa78e8112f6023294196"
+   },
+   {
+    "statement": "Uncertainty: high: the payout follow-up is inferred from the dashboard framing and the variant count",
+    "basis": "the public group preview is partial (629 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   },
+   {
+    "statement": "variant 2 inferred as paid/unpaid tracking",
+    "basis": "group lists 3 variants with no per-variant text; ordinal 2"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/11/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does payUpTo pay deliveries by end time or by start time?",
+   "Are later-added deliveries that ended before a past payUpTo paid automatically?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6917944e10632c00111ca217/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "DeliverySystem",
+      "getTotalCost"
+     ],
+     [
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     "0.00"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "DeliverySystem",
+      "addDriver",
+      "addDelivery",
+      "getTotalCost"
+     ],
+     [
+      [],
+      [
+       1,
+       1000
+      ],
+      [
+       1,
+       0,
+       5400
+      ],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     "15.00"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6917944e10632c00111ca217/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/oracles.py",
+    "sha256": "6a83180c2958f73c61479798fc30b43fb574ebf69cf0d2efdf714028d5f4a414",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class DeliverySystem: __init__(self); addDriver(driverId, hourlyRateCents) -> void; addDelivery(driverId, startTime, endTime) -> void; getTotalCost() -> string; payUpTo(upToTime) -> void; getTotalCostUnpaid() -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6917944e10632c00111ca217-python.json",
+     "inferredInterface": {
+      "classname": "DeliverySystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addDriver",
+        "params": [
+         {
+          "name": "driverId",
+          "type": "integer"
+         },
+         {
+          "name": "hourlyRateCents",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "addDelivery",
+        "params": [
+         {
+          "name": "driverId",
+          "type": "integer"
+         },
+         {
+          "name": "startTime",
+          "type": "integer"
+         },
+         {
+          "name": "endTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getTotalCost",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "payUpTo",
+        "params": [
+         {
+          "name": "upToTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getTotalCostUnpaid",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6917944e10632c00111ca217-python.json",
+      "sha256": "a1b51c3a51524a5e4a25bf01fd18725f5abbd15f645e0c6ea2c1513d88deae7c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class DeliverySystem { constructor(); addDriver(driverId, hourlyRateCents) -> void; addDelivery(driverId, startTime, endTime) -> void; getTotalCost() -> string; payUpTo(upToTime) -> void; getTotalCostUnpaid() -> string }",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6917944e10632c00111ca217-javascript.json",
+     "inferredInterface": {
+      "classname": "DeliverySystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addDriver",
+        "params": [
+         {
+          "name": "driverId",
+          "type": "integer"
+         },
+         {
+          "name": "hourlyRateCents",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "addDelivery",
+        "params": [
+         {
+          "name": "driverId",
+          "type": "integer"
+         },
+         {
+          "name": "startTime",
+          "type": "integer"
+         },
+         {
+          "name": "endTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getTotalCost",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "payUpTo",
+        "params": [
+         {
+          "name": "upToTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getTotalCostUnpaid",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6917944e10632c00111ca217-javascript.json",
+      "sha256": "be458be9d8e2cf5662c6eb061c55107dd65acd31ab274943ca20ac8088d5309d",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
