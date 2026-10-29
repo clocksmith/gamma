@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67fdb0ced2adf72ba62b0eda",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countVowelSubstrings",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every start and extend while characters are vowels, tracking which vowels have been seen",
+  "candidate_design": "one pass: for each end position keep the start of the current vowel run and the last position of each vowel; add (smallest last position - run start + 1) when all five have appeared in the run",
+  "complexity_target": "O(n) time/O(1) space"
+ },
+ "source_sha256": "3734041abab7bc3d5ea33a596b464ddcf26c88258f8f9f916785e692c24ad1e5",
+ "wrapper": "named export countVowelSubstrings"
+}

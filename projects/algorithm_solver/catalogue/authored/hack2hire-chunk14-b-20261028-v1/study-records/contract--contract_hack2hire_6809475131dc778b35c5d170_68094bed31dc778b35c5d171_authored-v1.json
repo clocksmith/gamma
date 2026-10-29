@@ -1,0 +1,507 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6809475131dc778b35c5d170:68094bed31dc778b35c5d171:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+   "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6809475131dc778b35c5d170.json",
+   "sha256": "2f93723fdfe7de6b09d4d6122ac93f7878a22a683ee4c6fb588c1a2811caf60a",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+   "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+   "selector": "/variants/hack2hire:68094bed31dc778b35c5d171"
+  }
+ ],
+ "problemId": "hack2hire:6809475131dc778b35c5d170",
+ "variantId": "68094bed31dc778b35c5d171",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: date-ranged unique violation counts",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:68094bed31dc778b35c5d171/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "ViolationLogAnalyzer(logs) receives logs as [postId, policy, date] triples, sorted by date (non-decreasing; dates are \"YYYY-MM-DD\" so string order is date order; duplicate triples may occur). countPolicies(postId, startDate, endDate) returns how many distinct policies the post violated on dates within [startDate, endDate]. countPosts(policy, startDate, endDate) returns how many distinct posts violated the policy within the range. countViolations(startDate, endDate) returns how many distinct (postId, policy) pairs occur within the range. Ranges are inclusive and an empty range (startDate > endDate) gives 0. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "ViolationLogAnalyzer(logs) receives logs as [postId, policy, date] triples, sorted by date (non-decreasing; dates are \"YYYY-MM-DD\" so string order is date order; duplicate triples may occur).",
+   "countPolicies(postId, startDate, endDate) returns how many distinct policies the post violated on dates within [startDate, endDate].",
+   "countPosts(policy, startDate, endDate) returns how many distinct posts violated the policy within the range.",
+   "countViolations(startDate, endDate) returns how many distinct (postId, policy) pairs occur within the range.",
+   "Ranges are inclusive and an empty range (startDate > endDate) gives 0.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= logs.length <= 1e4",
+   "post ids match [a-z0-9]{1,8}",
+   "policies match [a-z]{1,10}",
+   "dates are valid days of 2000 to 2099 (days 01 to 28)",
+   "up to 100 queries"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:68094bed31dc778b35c5d171/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: an analyzer is built from logs sorted by date; each log has a post id, a policy name and a date \"YYYY-MM-DD\"; queries return unique violation counts by post id, policy and date (method names and signatures are cut off); algorithmTags: HASH_TABLE, BINARY_SEARCH; preview response sha256 4f6de68a489940b5c9dd2008bd8a86c8bd0499c080197bd911928f6761e7cbcc"
+   },
+   {
+    "statement": "Uncertainty: very high: the log fields, the sorting and the idea of unique counts by post, policy and date are in the preview; the three method names, the inclusive date ranges and what each count counts are inferred",
+    "basis": "the public group preview is partial (525 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What exactly does each query count: policies per post, posts per policy, or log entries?",
+   "Is the date filter a single day or an inclusive range?",
+   "Are duplicate log lines counted once?",
+   "What do unknown ids return?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:68094bed31dc778b35c5d171/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ViolationLogAnalyzer"
+     ],
+     [
+      [
+       [
+        [
+         "p0",
+         "spam",
+         "2024-01-18"
+        ]
+       ]
+      ]
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ViolationLogAnalyzer",
+      "countPosts"
+     ],
+     [
+      [
+       [
+        [
+         "p3",
+         "child",
+         "2024-01-06"
+        ],
+        [
+         "p3",
+         "child",
+         "2024-01-09"
+        ],
+        [
+         "p1",
+         "hate",
+         "2024-01-11"
+        ],
+        [
+         "p3",
+         "hate",
+         "2024-01-19"
+        ],
+        [
+         "p0",
+         "privacy",
+         "2024-01-27"
+        ]
+       ]
+      ],
+      [
+       "hate",
+       "2024-01-03",
+       "2024-01-26"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     2
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:68094bed31dc778b35c5d171/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/oracles.py",
+    "sha256": "f6b1b4df34a1cdc3a204377a5fe7dd60e83bd05632390acec3afcf71cd0127fa",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ViolationLogAnalyzer:\n    def __init__(self, logs)\n    def countPolicies(self, postId, startDate, endDate) -> integer\n    def countPosts(self, policy, startDate, endDate) -> integer\n    def countViolations(self, startDate, endDate) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/68094bed31dc778b35c5d171-python.json",
+     "inferredInterface": {
+      "classname": "ViolationLogAnalyzer",
+      "constructor": {
+       "params": [
+        {
+         "name": "logs",
+         "type": "string[][]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "countPolicies",
+        "params": [
+         {
+          "name": "postId",
+          "type": "string"
+         },
+         {
+          "name": "startDate",
+          "type": "string"
+         },
+         {
+          "name": "endDate",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "countPosts",
+        "params": [
+         {
+          "name": "policy",
+          "type": "string"
+         },
+         {
+          "name": "startDate",
+          "type": "string"
+         },
+         {
+          "name": "endDate",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "countViolations",
+        "params": [
+         {
+          "name": "startDate",
+          "type": "string"
+         },
+         {
+          "name": "endDate",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/68094bed31dc778b35c5d171-python.json",
+      "sha256": "7f08faedf9c99c6cadbdfda06d9542c55b7b083fa50fcdf9460fb00b2d31addb",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ViolationLogAnalyzer {\n  constructor(logs)\n  countPolicies(postId, startDate, endDate) /* -> integer */\n  countPosts(policy, startDate, endDate) /* -> integer */\n  countViolations(startDate, endDate) /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/68094bed31dc778b35c5d171-javascript.json",
+     "inferredInterface": {
+      "classname": "ViolationLogAnalyzer",
+      "constructor": {
+       "params": [
+        {
+         "name": "logs",
+         "type": "string[][]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "countPolicies",
+        "params": [
+         {
+          "name": "postId",
+          "type": "string"
+         },
+         {
+          "name": "startDate",
+          "type": "string"
+         },
+         {
+          "name": "endDate",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "countPosts",
+        "params": [
+         {
+          "name": "policy",
+          "type": "string"
+         },
+         {
+          "name": "startDate",
+          "type": "string"
+         },
+         {
+          "name": "endDate",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "countViolations",
+        "params": [
+         {
+          "name": "startDate",
+          "type": "string"
+         },
+         {
+          "name": "endDate",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/68094bed31dc778b35c5d171-javascript.json",
+      "sha256": "9c4680d7cb4acd908b47a68c8709295be805be4e865a037ea8ddf508e8c1bccc",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

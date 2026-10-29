@@ -1,0 +1,365 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68ad9604cdaebe9459ce9a82:68ad961ccdaebe9459ce9a83:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+   "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68ad9604cdaebe9459ce9a82.json",
+   "sha256": "873186200a7e66db66b6485111b5c96f13fb1d972fc0990f7c8ae41220db7983",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+   "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+   "selector": "/variants/hack2hire:68ad961ccdaebe9459ce9a83"
+  }
+ ],
+ "problemId": "hack2hire:68ad9604cdaebe9459ce9a82",
+ "variantId": "68ad961ccdaebe9459ce9a83",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: grouped violation summary text",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:68ad961ccdaebe9459ce9a83/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "detectedWords lists flagged keywords (repeats allowed); categories maps each keyword to one category through [keyword, category] pairs (keywords are distinct); username names the recipient. Ignore detected words with no category. Return the email body as lines joined by \"\\n\": first \"Dear <username>,\"; then, if nothing was mapped, \"No violations found.\"; otherwise one line per category in ascending string order, \"<category>: \" followed by that category's distinct keywords in order of first detection, each written \"<keyword> (<times detected>)\" and separated by \", \".",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "detectedWords lists flagged keywords (repeats allowed); categories maps each keyword to one category through [keyword, category] pairs (keywords are distinct); username names the recipient.",
+   "Ignore detected words with no category.",
+   "Return the email body as lines joined by \"\\n\": first \"Dear <username>,\"; then, if nothing was mapped, \"No violations found.\"; otherwise one line per category in ascending string order, \"<category>: \" followed by that category's distinct keywords in order of first detection, each written \"<keyword> (<times detected>)\" and separated by \", \"."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= detectedWords.length <= 1e4",
+   "keywords match [a-z]{1,15}",
+   "0 <= categories.length <= 1000",
+   "categories match [A-Za-z]{1,15}",
+   "username matches [A-Za-z0-9]{1,20}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:68ad961ccdaebe9459ce9a83/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: build a moderation notification body from flagged keywords; inputs include detectedWords (keywords, possibly repeated) and categories ([keyword, category] pairs) grouped by category (the third input and the exact format are cut off); algorithmTags: HASH_TABLE; preview response sha256 bbf643d70ae6d798bcf7a79f393d69c02b6a0fb82d2325940fc37e4c6c9619ab"
+   },
+   {
+    "statement": "Uncertainty: very high: grouping keywords by category is in the preview; the third input (here username), unmapped words being ignored, the category order, the counts and the whole text format are inferred",
+    "basis": "the public group preview is partial (660 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is the third input?",
+   "What text format does the body use?",
+   "How are categories ordered?",
+   "What happens to detected words without a category?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:68ad961ccdaebe9459ce9a83/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [],
+     "Sam"
+    ],
+    "output": "Dear Sam,\nNo violations found.",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "hack",
+      "spam",
+      "bot",
+      "cheat",
+      "bot",
+      "bot",
+      "scam",
+      "spam",
+      "spam",
+      "hack",
+      "troll",
+      "bot",
+      "scam",
+      "spam"
+     ],
+     [
+      [
+       "troll",
+       "abuse"
+      ],
+      [
+       "bot",
+       "Gameplay"
+      ],
+      [
+       "cheat",
+       "Gameplay"
+      ],
+      [
+       "hack",
+       "Fraud"
+      ]
+     ],
+     "player1"
+    ],
+    "output": "Dear player1,\nFraud: hack (2)\nGameplay: bot (4), cheat (1)\nabuse: troll (1)",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:68ad961ccdaebe9459ce9a83/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/oracles.py",
+    "sha256": "f6b1b4df34a1cdc3a204377a5fe7dd60e83bd05632390acec3afcf71cd0127fa",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def generateEmail(detectedWords, categories, username) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/68ad961ccdaebe9459ce9a83-python.json",
+     "inferredInterface": {
+      "name": "generateEmail",
+      "params": [
+       {
+        "name": "detectedWords",
+        "type": "string[]"
+       },
+       {
+        "name": "categories",
+        "type": "string[][]"
+       },
+       {
+        "name": "username",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/68ad961ccdaebe9459ce9a83-python.json",
+      "sha256": "22a36274394c149d991f3d2b6003637c865655d63b6111250b56ad28a1e158c3",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function generateEmail(detectedWords, categories, username) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/68ad961ccdaebe9459ce9a83-javascript.json",
+     "inferredInterface": {
+      "name": "generateEmail",
+      "params": [
+       {
+        "name": "detectedWords",
+        "type": "string[]"
+       },
+       {
+        "name": "categories",
+        "type": "string[][]"
+       },
+       {
+        "name": "username",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/68ad961ccdaebe9459ce9a83-javascript.json",
+      "sha256": "c8ca25cde14ec3cef668de6f80eca57cd79a1070221f9c0cd7f3a884373db7a1",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

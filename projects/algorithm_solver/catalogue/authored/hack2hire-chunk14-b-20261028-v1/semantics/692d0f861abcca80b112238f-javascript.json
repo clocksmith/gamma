@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:692d0f861abcca80b112238f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "calculate",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive descent with exact fractions, truncating each quotient toward zero",
+  "candidate_design": "one left-to-right pass with an explicit stack of frames (sum, pending term, pending operator, sign) per parenthesis level; exact integer truncating division",
+  "complexity_target": "O(n) time/O(depth) space"
+ },
+ "source_sha256": "e226845bc7d93f718084407c4b6a5315413b078207f776551b35590c4aced704",
+ "wrapper": "named export calculate"
+}

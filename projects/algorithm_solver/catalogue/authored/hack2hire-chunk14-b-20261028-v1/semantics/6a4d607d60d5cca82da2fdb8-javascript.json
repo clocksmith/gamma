@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a4d607d60d5cca82da2fdb8",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "scores"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "greedyDecode",
+  "params": [
+   {
+    "name": "scores",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each step sort token indices by (-score, index) and take the first",
+  "candidate_design": "one linear arg-max scan per step with strict comparison",
+  "complexity_target": "O(T V) time/O(T) output"
+ },
+ "source_sha256": "d119fec523ef2826770a4bcb5f4f6e74132930fc9edb5df0028a73a8fbf907b4",
+ "wrapper": "named export greedyDecode"
+}

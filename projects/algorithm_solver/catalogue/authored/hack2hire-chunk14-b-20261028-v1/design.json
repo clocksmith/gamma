@@ -1,0 +1,104 @@
+{
+ "problems": {
+  "hack2hire:69166e5710632c00111ca0eb": {
+   "reference": "recursive string building with explicit concatenation per node",
+   "candidate_design": "one recursive formatter shared by parameters and return type, joining child strings",
+   "complexity_target": "O(total node count + output length) time/O(depth) stack"
+  },
+  "hack2hire:6916714410632c00111ca0f3": {
+   "reference": "substitute first-seen bindings into the parameters and compare the formatted strings of the substituted parameters and the arguments",
+   "candidate_design": "simultaneous recursive walk of parameter and argument nodes, storing each generic binding by its formatted string in a hash map and failing on the first conflict",
+   "complexity_target": "O(total node count + output length) time/O(number of generics + depth) space"
+  },
+  "hack2hire:68094bed31dc778b35c5d171": {
+   "reference": "scan every log for every query and collect matching keys in a set",
+   "candidate_design": "group logs by post and by policy keeping date order; binary-search the date range in the group (or the whole log) and count distinct keys in that slice with a hash set",
+   "complexity_target": "O(n) build, O(log n + k) per query for k logs in range/O(n) space"
+  },
+  "hack2hire:67fdb0ced2adf72ba62b0eda": {
+   "reference": "enumerate every start and extend while characters are vowels, tracking which vowels have been seen",
+   "candidate_design": "one pass: for each end position keep the start of the current vowel run and the last position of each vowel; add (smallest last position - run start + 1) when all five have appeared in the run",
+   "complexity_target": "O(n) time/O(1) space"
+  },
+  "hack2hire:699926ca6e73e4abccc9a376": {
+   "reference": "simulate package by package, finding the next open center by a linear scan over all indices",
+   "candidate_design": "simulate with a circular doubly linked list of open centers, so passing the turn and closing a center are O(1)",
+   "complexity_target": "O(n + log length) time/O(n) space"
+  },
+  "hack2hire:68d30311d490dee995152f5b": {
+   "reference": "keep items in a plain list and find the heaviest oldest item by a full scan for each eviction",
+   "candidate_design": "hash map key -> (value, weight, write stamp) plus a max-heap of (weight, -stamp, key) with lazy deletion of stale entries",
+   "complexity_target": "O(log n) amortised per put, O(1) get/O(n) space"
+  },
+  "hack2hire:68815970f96758aa78e1d6b1": {
+   "reference": "for every start, dynamic programming of pattern prefixes against string positions from that start",
+   "candidate_design": "split the pattern on \"*\"; the answer is the first occurrence of the first piece (found with KMP), provided the remaining pieces can then be found in order with KMP from where each previous piece ended",
+   "complexity_target": "O(|pattern| + |str|) time/O(|pattern|) space"
+  },
+  "hack2hire:69c81f4621f6ab4226966b28": {
+   "reference": "after every move recount every completed square on the board and credit the mover with the increase",
+   "candidate_design": "keep a set of placed sticks and, per move, test only the one or two squares that the new stick borders",
+   "complexity_target": "O(moves) time/O(moves) space"
+  },
+  "hack2hire:68e86c2f80f69c7a01706886": {
+   "reference": "build every row, column and diagonal as a string in both directions and test whether word is a substring of any of them",
+   "candidate_design": "for every cell matching the first letter and every direction, step along and compare letters until a mismatch or the board edge",
+   "complexity_target": "O(m n 8 L) time worst case/O(1) space"
+  },
+  "hack2hire:697a5a552ae9e181e44b7b96": {
+   "reference": "scan every worker for every task to find the least loaded one",
+   "candidate_design": "min-heap of (workload, name, index); pop the top, assign, push back with the new workload",
+   "complexity_target": "O((w + t) log w) time/O(w + t) space"
+  },
+  "hack2hire:697a5dbe2ae9e181e44b7b9d": {
+   "reference": "scan every worker for every task, filtering by specialty",
+   "candidate_design": "one lazy min-heap per task type holding (workload, name, index, version); on assignment bump the worker version and push fresh entries into the heaps of all its specialties",
+   "complexity_target": "O((w s + t s) log(w s + t s)) time for s specialties per worker/O(w s + t s) space"
+  },
+  "hack2hire:697a5dbf2ae9e181e44b7b9e": {
+   "reference": "scan every worker for every task, filtering by specialty and remaining limit",
+   "candidate_design": "lazy per-type min-heaps as in level 2; a worker at its limit simply gets no fresh entries, so its old entries are discarded as stale",
+   "complexity_target": "O((w s + t s) log(w s + t s)) time/O(w s + t s) space"
+  },
+  "hack2hire:69a35cd56e73e4abccc9bfb7": {
+   "reference": "apply each \"1\" by scanning from the left for the first 0",
+   "candidate_design": "copy the array and keep a min-heap of indices that may hold 0, skipping indices that are already 1 when popped",
+   "complexity_target": "O((n + q) log(n + q)) time/O(n + q) space"
+  },
+  "hack2hire:68ad961ccdaebe9459ce9a83": {
+   "reference": "for every category (sorted), rescan all detected words and count each keyword by another scan",
+   "candidate_design": "hash maps keyword -> category, category -> ordered keyword counts; sort the category names once",
+   "complexity_target": "O(d + c log c) time/O(d + c) space"
+  },
+  "hack2hire:6763722dcc8f5deed53ccd73": {
+   "reference": "simulate every start position until it fails",
+   "candidate_design": "prefix sums P; for each start s (right to left) binary-search a monotonic stack for the first index j > s with P[j] < P[s] - initialBalance; served = j - 1 - s",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:692d0f861abcca80b112238f": {
+   "reference": "recursive descent with exact fractions, truncating each quotient toward zero",
+   "candidate_design": "one left-to-right pass with an explicit stack of frames (sum, pending term, pending operator, sign) per parenthesis level; exact integer truncating division",
+   "complexity_target": "O(n) time/O(depth) space"
+  },
+  "hack2hire:6a4d607d60d5cca82da2fdb8": {
+   "reference": "for each step sort token indices by (-score, index) and take the first",
+   "candidate_design": "one linear arg-max scan per step with strict comparison",
+   "complexity_target": "O(T V) time/O(T) output"
+  },
+  "hack2hire:6a4d62db60d5cca82da2fdda": {
+   "reference": "enumerate every sequence (Cartesian product) and sort by (-total, sequence)",
+   "candidate_design": "keep the beam sorted by (-total, lexicographic rank); each step extend every beam entry with the step's best beamWidth tokens and keep the best beamWidth candidates, ranking ties by (parent lexicographic rank, token)",
+   "complexity_target": "O(T k^2 log k + T V log V) time/O(T k) space"
+  },
+  "hack2hire:68eabd503a3bb8f8354249a7": {
+   "reference": "for every block touched by some black cell, count black cells by scanning all coordinates",
+   "candidate_design": "hash map from block corner to count, incrementing the up to four blocks around each black cell; then bucket and sort the corners",
+   "complexity_target": "O(c log c) time/O(c) space"
+  },
+  "hack2hire:687e9cfe7bd121d1f502daa2": {
+   "reference": "backtracking over target positions with a used-block set",
+   "candidate_design": "bipartite matching (Kuhn augmenting paths) between target positions and blocks",
+   "complexity_target": "O(L B (L + B)) time/O(B L) space"
+  }
+ }
+}

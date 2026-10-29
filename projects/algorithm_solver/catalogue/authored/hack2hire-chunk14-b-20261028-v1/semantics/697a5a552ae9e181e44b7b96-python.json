@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697a5a552ae9e181e44b7b96",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "workers",
+  "tasks"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "assignTasks",
+  "params": [
+   {
+    "name": "workers",
+    "type": "string[]"
+   },
+   {
+    "name": "tasks",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan every worker for every task to find the least loaded one",
+  "candidate_design": "min-heap of (workload, name, index); pop the top, assign, push back with the new workload",
+  "complexity_target": "O((w + t) log w) time/O(w + t) space"
+ },
+ "source_sha256": "da8602ea4a7a3d96af80dabf53f55bdd816a561e66ca94061ddcf8a228420cba",
+ "wrapper": "Solution.assignTasks"
+}

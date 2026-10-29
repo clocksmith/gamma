@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68e86c2f80f69c7a01706886",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "board",
+  "word"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "existsInStraightLine",
+  "params": [
+   {
+    "name": "board",
+    "type": "string[][]"
+   },
+   {
+    "name": "word",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "build every row, column and diagonal as a string in both directions and test whether word is a substring of any of them",
+  "candidate_design": "for every cell matching the first letter and every direction, step along and compare letters until a mismatch or the board edge",
+  "complexity_target": "O(m n 8 L) time worst case/O(1) space"
+ },
+ "source_sha256": "8deedcc1beb3970b4bfd91dfb6e606d104d7187b5757b6f7011194b52fdbf3fa",
+ "wrapper": "named export existsInStraightLine"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:699926ca6e73e4abccc9a376",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "centerCapacity",
+  "dailyLog"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "busiestCenter",
+  "params": [
+   {
+    "name": "centerCapacity",
+    "type": "integer[]"
+   },
+   {
+    "name": "dailyLog",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate package by package, finding the next open center by a linear scan over all indices",
+  "candidate_design": "simulate with a circular doubly linked list of open centers, so passing the turn and closing a center are O(1)",
+  "complexity_target": "O(n + log length) time/O(n) space"
+ },
+ "source_sha256": "8872d4ee714cf994a59b501b4d97742b235da0b680c8c7e5b20a0e3d869a48e2",
+ "wrapper": "named export busiestCenter"
+}

@@ -1,0 +1,78 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68d30311d490dee995152f5b",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "WeightedCache",
+  "constructor": {
+   "params": [
+    {
+     "name": "maxTotalWeight",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "put",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "value",
+      "type": "integer"
+     },
+     {
+      "name": "weight",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "get",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep items in a plain list and find the heaviest oldest item by a full scan for each eviction",
+  "candidate_design": "hash map key -> (value, weight, write stamp) plus a max-heap of (weight, -stamp, key) with lazy deletion of stale entries",
+  "complexity_target": "O(log n) amortised per put, O(1) get/O(n) space"
+ },
+ "source_sha256": "303d5be393ae379949c102af509b922d35647725103ad31d728b568aee0b479d",
+ "native_class": "WeightedCache",
+ "native_symbol": "property WeightedCache of the CommonJS solve export",
+ "void_methods": [
+  "put"
+ ]
+}

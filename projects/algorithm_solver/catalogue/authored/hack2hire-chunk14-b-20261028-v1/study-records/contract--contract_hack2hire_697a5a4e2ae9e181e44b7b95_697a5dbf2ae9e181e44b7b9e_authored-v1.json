@@ -1,0 +1,500 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:697a5a4e2ae9e181e44b7b95:697a5dbf2ae9e181e44b7b9e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+   "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/697a5a4e2ae9e181e44b7b95.json",
+   "sha256": "e455d436b5d62d30aea93f4da867aef8518cf8b7f31fb7954cd0d020400f1c3c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+   "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+   "selector": "/variants/hack2hire:697a5dbf2ae9e181e44b7b9e"
+  }
+ ],
+ "problemId": "hack2hire:697a5a4e2ae9e181e44b7b95",
+ "variantId": "697a5dbf2ae9e181e44b7b9e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 3: specialist assignment with per-worker task limits",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:697a5dbf2ae9e181e44b7b9e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "workers lists distinct worker names; tasks lists [id, duration] pairs (distinct ids, positive durations) processed in the given order. A worker's workload is the sum of durations of tasks already given to that worker. Level 3 (inferred): as level 2, and additionally worker i can take at most maxTasks[i] tasks; a worker that has reached its limit is no longer eligible. Return the per-worker id lists in worker order followed by one list of unassigned task ids in task order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "workers lists distinct worker names; tasks lists [id, duration] pairs (distinct ids, positive durations) processed in the given order.",
+   "A worker's workload is the sum of durations of tasks already given to that worker.",
+   "Level 3 (inferred): as level 2, and additionally worker i can take at most maxTasks[i] tasks; a worker that has reached its limit is no longer eligible.",
+   "Return the per-worker id lists in worker order followed by one list of unassigned task ids in task order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= workers.length <= 1000",
+   "0 <= specialties[i].length <= 5",
+   "0 <= maxTasks[i] <= 1e5",
+   "0 <= tasks.length <= 1e5",
+   "1 <= duration <= 1e4"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:697a5dbf2ae9e181e44b7b9e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: distribute tasks sequentially among named workers to keep workloads balanced; each task (integer id, positive duration) goes to the worker with the lowest current total workload, ties to the lexicographically smallest name (the output format and the specialty rule are cut off); algorithmTags: HEAP; preview response sha256 7b3646ab59ab2f75a1387ee54733dcaada23ad0b3ca003dfc87c3a0ac5645b5c"
+   },
+   {
+    "statement": "Uncertainty: very high: level 3 has no public text; the per-worker task limit is an inferred extension, as is everything inherited from level 2",
+    "basis": "the public group preview is partial (655 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 3 of 3 adds a per-worker limit on the number of tasks",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/11/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/11/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is returned: per-worker task lists, a map, or the final workloads?",
+   "How are specialties matched to tasks?",
+   "What happens to a task no worker can take?",
+   "Is there a limit on how many tasks a worker takes?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:697a5dbf2ae9e181e44b7b9e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "dee"
+     ],
+     [
+      []
+     ],
+     [
+      1
+     ],
+     [
+      [
+       1,
+       5
+      ]
+     ],
+     [
+      "z"
+     ]
+    ],
+    "output": [
+     [],
+     [
+      1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "al",
+      "dee",
+      "bob",
+      "b"
+     ],
+     [
+      [],
+      [
+       "z"
+      ],
+      [
+       "z"
+      ],
+      [
+       "x"
+      ]
+     ],
+     [
+      5,
+      3,
+      0,
+      1
+     ],
+     [
+      [
+       2,
+       3
+      ],
+      [
+       5,
+       2
+      ],
+      [
+       7,
+       5
+      ],
+      [
+       9,
+       5
+      ],
+      [
+       14,
+       5
+      ],
+      [
+       15,
+       1
+      ],
+      [
+       18,
+       1
+      ],
+      [
+       22,
+       5
+      ],
+      [
+       24,
+       3
+      ],
+      [
+       28,
+       4
+      ],
+      [
+       31,
+       4
+      ],
+      [
+       33,
+       1
+      ],
+      [
+       38,
+       1
+      ],
+      [
+       39,
+       2
+      ],
+      [
+       43,
+       5
+      ],
+      [
+       46,
+       2
+      ]
+     ],
+     [
+      "y",
+      "y",
+      "x",
+      "y",
+      "y",
+      "y",
+      "x",
+      "w",
+      "w",
+      "z",
+      "x",
+      "y",
+      "w",
+      "y",
+      "w",
+      "w"
+     ]
+    ],
+    "output": [
+     [],
+     [
+      28
+     ],
+     [],
+     [
+      7
+     ],
+     [
+      2,
+      5,
+      9,
+      14,
+      15,
+      18,
+      22,
+      24,
+      31,
+      33,
+      38,
+      39,
+      43,
+      46
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/study-content.json",
+    "sha256": "90267897413b9114782b4c1b25ed595332467eaf1afb5f40e3f248bcca137078",
+    "selector": "/variants/hack2hire:697a5dbf2ae9e181e44b7b9e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/oracles.py",
+    "sha256": "f6b1b4df34a1cdc3a204377a5fe7dd60e83bd05632390acec3afcf71cd0127fa",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def assignTasksWithLimits(workers, specialties, maxTasks, tasks, taskTypes) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/697a5dbf2ae9e181e44b7b9e-python.json",
+     "inferredInterface": {
+      "name": "assignTasksWithLimits",
+      "params": [
+       {
+        "name": "workers",
+        "type": "string[]"
+       },
+       {
+        "name": "specialties",
+        "type": "string[][]"
+       },
+       {
+        "name": "maxTasks",
+        "type": "integer[]"
+       },
+       {
+        "name": "tasks",
+        "type": "integer[][]"
+       },
+       {
+        "name": "taskTypes",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/697a5dbf2ae9e181e44b7b9e-python.json",
+      "sha256": "2865b0212eb7b317aff15e9ba1136547a3767c1f1151c113cbb5d09d66df5467",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function assignTasksWithLimits(workers, specialties, maxTasks, tasks, taskTypes) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+      "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/697a5dbf2ae9e181e44b7b9e-javascript.json",
+     "inferredInterface": {
+      "name": "assignTasksWithLimits",
+      "params": [
+       {
+        "name": "workers",
+        "type": "string[]"
+       },
+       {
+        "name": "specialties",
+        "type": "string[][]"
+       },
+       {
+        "name": "maxTasks",
+        "type": "integer[]"
+       },
+       {
+        "name": "tasks",
+        "type": "integer[][]"
+       },
+       {
+        "name": "taskTypes",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/semantics/697a5dbf2ae9e181e44b7b9e-javascript.json",
+      "sha256": "5e09f4acc7913451e4d50c31203eebd23d4a1174062571645bf82899dc0e1f9b",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-b-20261028-v1/contracts.json",
+    "sha256": "b35820841cd135e642d97d01760efaa22c1543d1b7a528d49b94fe2c371163b4",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

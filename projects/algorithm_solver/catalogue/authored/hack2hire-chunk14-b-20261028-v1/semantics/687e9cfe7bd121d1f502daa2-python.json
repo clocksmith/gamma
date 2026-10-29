@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:687e9cfe7bd121d1f502daa2",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "blocks",
+  "target"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "canAssemble",
+  "params": [
+   {
+    "name": "blocks",
+    "type": "string[][]"
+   },
+   {
+    "name": "target",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "backtracking over target positions with a used-block set",
+  "candidate_design": "bipartite matching (Kuhn augmenting paths) between target positions and blocks",
+  "complexity_target": "O(L B (L + B)) time/O(B L) space"
+ },
+ "source_sha256": "5cee0aba23ba6e8888ccb5a952694b52d7e126b438b77960e0b44a9e488c536f",
+ "wrapper": "Solution.canAssemble"
+}
