@@ -1,0 +1,323 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6865a598cb498a83f3920c40:6866f15ea2d59460201f2c7e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+   "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6865a598cb498a83f3920c40.json",
+   "sha256": "5257b9b76d25fc4f3c3ab6b914439cfbae40d619229cd032f9d7da2ef40cc563",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/study-content.json",
+   "sha256": "76e02d0b47c6947d4b4605cf1efff6c465c29bef0f73e45df861a269bd985c3b",
+   "selector": "/variants/hack2hire:6866f15ea2d59460201f2c7e"
+  }
+ ],
+ "problemId": "hack2hire:6865a598cb498a83f3920c40",
+ "variantId": "6866f15ea2d59460201f2c7e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: reach the border ahead of a spreading threat",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/study-content.json",
+    "sha256": "76e02d0b47c6947d4b4605cf1efff6c465c29bef0f73e45df861a269bd985c3b",
+    "selector": "/variants/hack2hire:6866f15ea2d59460201f2c7e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "grid is a list of equal-length rows over U, P, . and X with exactly one U. Each minute you move to an orthogonally adjacent cell that is not X, and the threat spreads from every threatened cell to its adjacent non-X cells (P cells are threatened at minute 0). A cell is threatened from minute T(c), its breadth-first distance from the nearest P through non-X cells. You may be in cell c at minute t only if t < T(c) (a tie catches you). Return the fewest minutes after which you stand on a border cell (0 when U is on the border), or -1 if impossible.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "grid is a list of equal-length rows over U, P, . and X with exactly one U.",
+   "Each minute you move to an orthogonally adjacent cell that is not X, and the threat spreads from every threatened cell to its adjacent non-X cells (P cells are threatened at minute 0).",
+   "A cell is threatened from minute T(c), its breadth-first distance from the nearest P through non-X cells.",
+   "You may be in cell c at minute t only if t < T(c) (a tie catches you).",
+   "Return the fewest minutes after which you stand on a border cell (0 when U is on the border), or -1 if impossible."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= m * n <= 2e5",
+   "rows have equal length and contain only U P . X",
+   "exactly one U"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/study-content.json",
+    "sha256": "76e02d0b47c6947d4b4605cf1efff6c465c29bef0f73e45df861a269bd985c3b",
+    "selector": "/variants/hack2hire:6866f15ea2d59460201f2c7e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: variation of LeetCode 2258 (Escape the Spreading Fire) and 1926 (Nearest Exit from Entrance in Maze); matrix cells U start, P spreading threat, . open, X wall (the task is cut off); algorithmTags: BREADTH_FIRST_SEARCH, SIMULATION; preview response sha256 faa347ebb6b8a355ae90459c8decb5a95872f202a03c1884dc26fbd693f35d7d"
+   },
+   {
+    "statement": "Uncertainty: high: the cell meanings and the link to LeetCode 2258 and 1926 are in the preview; the task (reach any border cell), the strict tie rule, and the return value are inferred",
+    "basis": "the public group preview is partial (584 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/6/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/6/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/6/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the exit any border cell or a marked cell?",
+   "Who moves first in a minute, you or the threat?",
+   "Can you share a cell with the threat at the moment it arrives?",
+   "Does a border start count as escaped?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/study-content.json",
+    "sha256": "76e02d0b47c6947d4b4605cf1efff6c465c29bef0f73e45df861a269bd985c3b",
+    "selector": "/variants/hack2hire:6866f15ea2d59460201f2c7e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "U"
+     ]
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "...XXXPX.P",
+      "PX...P..XX",
+      ".XX.....P.",
+      "..P....X.P",
+      "....XX..X.",
+      "...X.X.P.X",
+      ".X.X.U..X."
+     ]
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/study-content.json",
+    "sha256": "76e02d0b47c6947d4b4605cf1efff6c465c29bef0f73e45df861a269bd985c3b",
+    "selector": "/variants/hack2hire:6866f15ea2d59460201f2c7e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/oracles.py",
+    "sha256": "6562a7253b838898641fc5d8ad0c3f487b8ae6e701dd3cd49dbcf7617d2cc75d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def escapeMatrix(grid) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+      "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/semantics/6866f15ea2d59460201f2c7e-python.json",
+     "inferredInterface": {
+      "name": "escapeMatrix",
+      "params": [
+       {
+        "name": "grid",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/semantics/6866f15ea2d59460201f2c7e-python.json",
+      "sha256": "93c1b1ecc52913daaab81f6f41d0ce631fd8dde0238ce753df172840b04cc6c7",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function escapeMatrix(grid) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+      "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/semantics/6866f15ea2d59460201f2c7e-javascript.json",
+     "inferredInterface": {
+      "name": "escapeMatrix",
+      "params": [
+       {
+        "name": "grid",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/semantics/6866f15ea2d59460201f2c7e-javascript.json",
+      "sha256": "6d641176ff377b4c95d6d6300cd58b321651365fadc32bacb02956d4e263c5da",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/6/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

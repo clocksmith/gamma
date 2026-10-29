@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69953e87312381f4e70fdb95",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "days"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxVacation",
+  "params": [
+   {
+    "name": "days",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "week-by-week DP over every (previous city, city) pair, comparing (days, -flights) tuples",
+  "candidate_design": "week-by-week DP keeping (days, flights) per city; the best flight into city c comes from the best other city, so keep the top two previous cities and compare lexicographically",
+  "complexity_target": "O(m * n) time/O(m) space"
+ },
+ "source_sha256": "630b6f6394338b552a8e3a4e46586b8c516734f1684c9363900cdc300cd22be5",
+ "wrapper": "Solution.maxVacation"
+}

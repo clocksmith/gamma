@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697c3db29731315964cfb08b",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "records",
+  "weights",
+  "threshold"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "linkedPairs",
+  "params": [
+   {
+    "name": "records",
+    "type": "string[][]"
+   },
+   {
+    "name": "weights",
+    "type": "string[]"
+   },
+   {
+    "name": "threshold",
+    "type": "number"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "score every pair of rows with Fraction arithmetic and keep the pairs reaching the threshold",
+  "candidate_design": "convert weights and threshold to integer ten-thousandths; bucket rows by (field, value) so each row adds its shared-field weights to a score array of later rows, then scan the array against the threshold",
+  "complexity_target": "O(n^2 + n * fields) time/O(n * fields) space"
+ },
+ "source_sha256": "4294b55b32cda2f4365c5ba4b54310b70c35dcbed2f80da595385e0f52357850",
+ "wrapper": "named export linkedPairs"
+}

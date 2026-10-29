@@ -1,0 +1,1113 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:68dc2e1c9736cfa4e906240c",
+   "variant_id": "68dc2e1c9736cfa4e906240c",
+   "variant_ordinal": 1,
+   "title": "Level With Maximum Nodes in an N-ary Tree",
+   "source": {
+    "post_id": "68dc07829736cfa4e90623e2",
+    "group_title": "Level With Maximum Nodes in an N-ary Tree",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68dc07829736cfa4e90623e2",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68dc07829736cfa4e90623e2/practice?questionId=68dc2e1c9736cfa4e906240c",
+    "preview_response_sha256": "687bb9c0fde0f1e9dd97f098336386af65dbe01e884597d2824a9543f04fcc69",
+    "preview_content_sha256": "6e8c504e7e1d3cfe8620cfa8085e99866c96a24fa8746c42116f4eac6e7c1a17",
+    "preview_characters": 354,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68dc07829736cfa4e90623e2.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "BLOOMBERG"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: find the level with the most nodes in an N-ary tree, levels 1-indexed from the root, smallest level on a tie, 0 for an empty tree",
+    "algorithmTags: BREADTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "The tree uses the LeetCode N-ary level-order list: the root value, null, then the children of each node in breadth-first order with every child group closed by null, trailing nulls removed; [] is the empty tree. Return the 1-indexed level (the root is level 1) holding the most nodes; on a tie return the smallest such level; return 0 for the empty tree.",
+   "inference_uncertainty": "low: the task, tie rule and empty-tree answer are in the preview; the input encoding as a level-order list is inferred",
+   "inferred_interface": {
+    "name": "levelWithMaxNodes",
+    "params": [
+     {
+      "name": "root",
+      "type": "(integer|null)[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LMN"
+  },
+  {
+   "uid": "hack2hire:697c3db29731315964cfb08b",
+   "variant_id": "697c3db29731315964cfb08b",
+   "variant_ordinal": 1,
+   "title": "Linked User Records by Similarity",
+   "source": {
+    "post_id": "697c3da69731315964cfb08a",
+    "group_title": "Linked User Records by Similarity",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697c3da69731315964cfb08a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697c3da69731315964cfb08a/practice?questionId=697c3db29731315964cfb08b",
+    "preview_response_sha256": "238fe389a1daa020b966f49c96b8b5161e75307449cd264bec91a92352499df5",
+    "preview_content_sha256": "dc769f0e36b7d5750d52e6bdddf4e87effad06f1fa65259b084eebd6b33e3243",
+    "preview_characters": 694,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697c3da69731315964cfb08a.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: profiles are rows of a 2D string array whose first row is a header (examples id, name, email, company); weights are \"<field>:<weight>\" strings for non-id fields, decimals in [0, 1] summing to 1, a higher weight meaning a more important match (the task itself is cut off)",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions: three variant ids in this order"
+   ],
+   "inferred_spec": "records[0] is a header of distinct field names that includes \"id\"; every later row holds one string per field and the ids are distinct and non-empty. weights holds \"<field>:<weight>\" strings naming distinct non-id header fields, each weight a decimal in [0, 1] with at most 4 decimal places, summing to exactly 1; unlisted fields weigh 0. threshold is a number in [0, 1] with at most 4 decimal places. The similarity of two records is the sum of the weights of the weighted fields on which both hold the same non-empty value (an empty value never matches); two records are linked when their similarity is at least threshold. All weight arithmetic is exact (decimal, not binary floating point). Level 1: return every linked pair [idA, idB] where record A comes before record B, ordered by A's row and then B's row.",
+   "inference_uncertainty": "very high: the record table and weight format are in the preview; the similarity rule (sum of weights of equal non-empty fields), the threshold argument, the link rule and this level's output are inferred",
+   "inferred_interface": {
+    "name": "linkedPairs",
+    "params": [
+     {
+      "name": "records",
+      "type": "string[][]"
+     },
+     {
+      "name": "weights",
+      "type": "string[]"
+     },
+     {
+      "name": "threshold",
+      "type": "number"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants with no per-variant text; the author assigned level 1 = linked pairs, level 2 = transitive groups, level 3 = best match per record",
+   "oracle_constant": "LUR1"
+  },
+  {
+   "uid": "hack2hire:697d9ce2b8c468a441586158",
+   "variant_id": "697d9ce2b8c468a441586158",
+   "variant_ordinal": 2,
+   "title": "Linked User Records by Similarity",
+   "source": {
+    "post_id": "697c3da69731315964cfb08a",
+    "group_title": "Linked User Records by Similarity",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697c3da69731315964cfb08a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697c3da69731315964cfb08a/practice?questionId=697d9ce2b8c468a441586158",
+    "preview_response_sha256": "238fe389a1daa020b966f49c96b8b5161e75307449cd264bec91a92352499df5",
+    "preview_content_sha256": "dc769f0e36b7d5750d52e6bdddf4e87effad06f1fa65259b084eebd6b33e3243",
+    "preview_characters": 694,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697c3da69731315964cfb08a.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: profiles are rows of a 2D string array whose first row is a header (examples id, name, email, company); weights are \"<field>:<weight>\" strings for non-id fields, decimals in [0, 1] summing to 1, a higher weight meaning a more important match (the task itself is cut off)",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions: three variant ids in this order"
+   ],
+   "inferred_spec": "records[0] is a header of distinct field names that includes \"id\"; every later row holds one string per field and the ids are distinct and non-empty. weights holds \"<field>:<weight>\" strings naming distinct non-id header fields, each weight a decimal in [0, 1] with at most 4 decimal places, summing to exactly 1; unlisted fields weigh 0. threshold is a number in [0, 1] with at most 4 decimal places. The similarity of two records is the sum of the weights of the weighted fields on which both hold the same non-empty value (an empty value never matches); two records are linked when their similarity is at least threshold. All weight arithmetic is exact (decimal, not binary floating point). Level 2: links are transitive. Return every group of at least two records connected through links, each group listing ids in row order, groups ordered by the row of their first record.",
+   "inference_uncertainty": "very high: as level 1, plus the transitive grouping, the size-2 minimum and the group ordering are inferred; no level-2 text is public",
+   "inferred_interface": {
+    "name": "linkedGroups",
+    "params": [
+     {
+      "name": "records",
+      "type": "string[][]"
+     },
+     {
+      "name": "weights",
+      "type": "string[]"
+     },
+     {
+      "name": "threshold",
+      "type": "number"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants with no per-variant text; the author assigned level 1 = linked pairs, level 2 = transitive groups, level 3 = best match per record",
+   "oracle_constant": "LUR2"
+  },
+  {
+   "uid": "hack2hire:697da047b8c468a441586160",
+   "variant_id": "697da047b8c468a441586160",
+   "variant_ordinal": 3,
+   "title": "Linked User Records by Similarity",
+   "source": {
+    "post_id": "697c3da69731315964cfb08a",
+    "group_title": "Linked User Records by Similarity",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697c3da69731315964cfb08a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697c3da69731315964cfb08a/practice?questionId=697da047b8c468a441586160",
+    "preview_response_sha256": "238fe389a1daa020b966f49c96b8b5161e75307449cd264bec91a92352499df5",
+    "preview_content_sha256": "dc769f0e36b7d5750d52e6bdddf4e87effad06f1fa65259b084eebd6b33e3243",
+    "preview_characters": 694,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697c3da69731315964cfb08a.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: profiles are rows of a 2D string array whose first row is a header (examples id, name, email, company); weights are \"<field>:<weight>\" strings for non-id fields, decimals in [0, 1] summing to 1, a higher weight meaning a more important match (the task itself is cut off)",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions: three variant ids in this order"
+   ],
+   "inferred_spec": "records[0] is a header of distinct field names that includes \"id\"; every later row holds one string per field and the ids are distinct and non-empty. weights holds \"<field>:<weight>\" strings naming distinct non-id header fields, each weight a decimal in [0, 1] with at most 4 decimal places, summing to exactly 1; unlisted fields weigh 0. threshold is a number in [0, 1] with at most 4 decimal places. The similarity of two records is the sum of the weights of the weighted fields on which both hold the same non-empty value (an empty value never matches); two records are linked when their similarity is at least threshold. All weight arithmetic is exact (decimal, not binary floating point). Level 3: return one string per data row: the id of the other record with the highest similarity among those linked to it, the earliest row on a tie, or \"\" when no record is linked to it.",
+   "inference_uncertainty": "very high: as level 1, plus the best-match output and its tie rule are inferred; no level-3 text is public",
+   "inferred_interface": {
+    "name": "bestMatches",
+    "params": [
+     {
+      "name": "records",
+      "type": "string[][]"
+     },
+     {
+      "name": "weights",
+      "type": "string[]"
+     },
+     {
+      "name": "threshold",
+      "type": "number"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants with no per-variant text; the author assigned level 1 = linked pairs, level 2 = transitive groups, level 3 = best match per record",
+   "oracle_constant": "LUR3"
+  },
+  {
+   "uid": "hack2hire:67cf7ef7aca6a2fa74a72d1f",
+   "variant_id": "67cf7ef7aca6a2fa74a72d1f",
+   "variant_ordinal": 1,
+   "title": "Load Factor Calculation",
+   "source": {
+    "post_id": "67cf7c4eaca6a2fa74a72d1c",
+    "group_title": "Load Factor Calculation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67cf7c4eaca6a2fa74a72d1c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67cf7c4eaca6a2fa74a72d1c/practice?questionId=67cf7ef7aca6a2fa74a72d1f",
+    "preview_response_sha256": "6aeb3aea20758ed857f102179c36ef7a16829187332ff58ba4ac9f571c787e77",
+    "preview_content_sha256": "b554b73928a45125a4af703b02bc63f6e88d3ad0ed98919306e00b19edbda02a",
+    "preview_characters": 679,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67cf7c4eaca6a2fa74a72d1c.json",
+    "algorithm_tags": [
+     "QUEUE",
+     "GRAPH"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: services form a DAG of dependencies; the entry point receives a request and every service calls each of its dependencies; the load factor is the load a service handles when the entry receives 1 unit, accumulating over multiple paths (input and output formats cut off)",
+    "algorithmTags: QUEUE, GRAPH"
+   ],
+   "inferred_spec": "dependencies lists distinct [caller, callee] pairs of service names forming a directed acyclic graph (no self edges). When a service receives one unit of load it sends one unit to each of its callees, so the load factor of a service equals the number of distinct call paths from entry to it (entry itself has 1). Return [service, loadFactor] for every service named in dependencies or as entry, sorted by name; services that entry cannot reach have 0. Every load factor is at most 2**53 - 1.",
+   "inference_uncertainty": "medium: the DAG, the unit load at the entry point and the accumulation over paths are in the preview; the edge-list input, the output list sorted by name and the inclusion of unreachable services with 0 are inferred",
+   "inferred_interface": {
+    "name": "loadFactors",
+    "params": [
+     {
+      "name": "dependencies",
+      "type": "string[][]"
+     },
+     {
+      "name": "entry",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "(string|integer)[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LFC"
+  },
+  {
+   "uid": "hack2hire:6789c01711318cc872dd83ee",
+   "variant_id": "6789c01711318cc872dd83ee",
+   "variant_ordinal": 1,
+   "title": "Longest Valid Parentheses",
+   "source": {
+    "post_id": "6789bea411318cc872dd83ed",
+    "group_title": "Longest Valid Parentheses",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6789bea411318cc872dd83ed",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6789bea411318cc872dd83ed/practice?questionId=6789c01711318cc872dd83ee",
+    "preview_response_sha256": "ccbc8328fd8b9f9fdf6019d3ad9eaa3b72834ceaebcca788bb1cdb5b5e217590",
+    "preview_content_sha256": "55a06a4621c427ade4c72254129982f592e5d1c912ea27e1e327ab95b834a5c2",
+    "preview_characters": 151,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6789bea411318cc872dd83ed.json",
+    "algorithm_tags": [
+     "STACK"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: a string with curly, square and round brackets and nesting rules (the rules are cut off)",
+    "algorithmTags: STACK"
+   ],
+   "inferred_spec": "s contains only the characters (){}[]. Brackets rank ( ) lowest, [ ] middle and { } highest. A valid string is empty or a concatenation of pairs, where a pair is an opening bracket, a valid string, and the matching closing bracket, and every pair directly or indirectly inside a pair has the same or a lower rank. Return the length of the longest valid substring of s.",
+   "inference_uncertainty": "high: three bracket types with nesting rules and the title are in the preview; the rules themselves are cut off, so the rank rule (a bracket may hold only the same or lower kinds) and the longest-substring task (from the title) are inferred",
+   "inferred_interface": {
+    "name": "longestValidBrackets",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LVP"
+  },
+  {
+   "uid": "hack2hire:6866f15ea2d59460201f2c7e",
+   "variant_id": "6866f15ea2d59460201f2c7e",
+   "variant_ordinal": 1,
+   "title": "Matrix Escape",
+   "source": {
+    "post_id": "6865a598cb498a83f3920c40",
+    "group_title": "Matrix Escape",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6865a598cb498a83f3920c40",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6865a598cb498a83f3920c40/practice?questionId=6866f15ea2d59460201f2c7e",
+    "preview_response_sha256": "faa347ebb6b8a355ae90459c8decb5a95872f202a03c1884dc26fbd693f35d7d",
+    "preview_content_sha256": "f3c8d909008dcc2ddc8d1c576fe42ed48ed253212ce2ff9fa198e1625b8ffbde",
+    "preview_characters": 584,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6865a598cb498a83f3920c40.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH",
+     "SIMULATION"
+    ],
+    "companies": [
+     "TIKTOK"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 2258 (Escape the Spreading Fire) and 1926 (Nearest Exit from Entrance in Maze); matrix cells U start, P spreading threat, . open, X wall (the task is cut off)",
+    "algorithmTags: BREADTH_FIRST_SEARCH, SIMULATION"
+   ],
+   "inferred_spec": "grid is a list of equal-length rows over U, P, . and X with exactly one U. Each minute you move to an orthogonally adjacent cell that is not X, and the threat spreads from every threatened cell to its adjacent non-X cells (P cells are threatened at minute 0). A cell is threatened from minute T(c), its breadth-first distance from the nearest P through non-X cells. You may be in cell c at minute t only if t < T(c) (a tie catches you). Return the fewest minutes after which you stand on a border cell (0 when U is on the border), or -1 if impossible.",
+   "inference_uncertainty": "high: the cell meanings and the link to LeetCode 2258 and 1926 are in the preview; the task (reach any border cell), the strict tie rule, and the return value are inferred",
+   "inferred_interface": {
+    "name": "escapeMatrix",
+    "params": [
+     {
+      "name": "grid",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MES"
+  },
+  {
+   "uid": "hack2hire:67800c576fee41e51af73dd8",
+   "variant_id": "67800c576fee41e51af73dd8",
+   "variant_ordinal": 1,
+   "title": "Max Consecutive ON Servers",
+   "source": {
+    "post_id": "678005e76fee41e51af73dd7",
+    "group_title": "Max Consecutive ON Servers",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678005e76fee41e51af73dd7",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678005e76fee41e51af73dd7/practice?questionId=67800c576fee41e51af73dd8",
+    "preview_response_sha256": "ae8e1540b7291ebd3df03bb9ea11cc67caf3c57b9fd8867b4f8f4ae16276e279",
+    "preview_content_sha256": "10da29d08b17efcbc5601a82fd1fbd3c0e1e1ce60f922dfe90d84754a41a7aea",
+    "preview_characters": 437,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/678005e76fee41e51af73dd7.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n servers ON or OFF; one operation flips a contiguous range; at most k operations (the question is cut off)",
+    "algorithmTags: SLIDING_WINDOW"
+   ],
+   "inferred_spec": "states is a string over 0 and 1 where 1 means ON. One operation flips every state of a contiguous range. Using at most k operations, return the largest possible number of consecutive ON servers.",
+   "inference_uncertainty": "medium: the cluster, the contiguous-range flip and the limit of k operations are in the preview; the 0/1 string encoding and the task of maximising the ON run (from the title) are inferred",
+   "inferred_interface": {
+    "name": "maxConsecutiveOn",
+    "params": [
+     {
+      "name": "states",
+      "type": "string"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MCO"
+  },
+  {
+   "uid": "hack2hire:67fd5511d2adf72ba62b0ec8",
+   "variant_id": "67fd5511d2adf72ba62b0ec8",
+   "variant_ordinal": 1,
+   "title": "Max Fly Distance",
+   "source": {
+    "post_id": "67fd53c9d2adf72ba62b0ec7",
+    "group_title": "Max Fly Distance",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67fd53c9d2adf72ba62b0ec7",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67fd53c9d2adf72ba62b0ec7/practice?questionId=67fd5511d2adf72ba62b0ec8",
+    "preview_response_sha256": "b84b3cb3949923dc0d63a0ecc274fc62b22d2c09f90312ca5cfe93218daa6ed7",
+    "preview_content_sha256": "52d5c6c2276309511353a53ba518af46a46331267d76a235ea95b79f91ad94d9",
+    "preview_characters": 339,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67fd53c9d2adf72ba62b0ec7.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "GOOGLE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: arr[i] is the distance flyable on day i; start with k energy, also the cap; each day fly (1 energy, arr[i] distance) or rest (+1 energy up to k)",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "arr[i] is the distance you can fly on day i. You start with k energy, also the maximum. Each day you either fly (needs at least 1 energy, uses 1, adds arr[i]) or rest (energy becomes min(k, energy + 1)). Return the maximum total distance.",
+   "inference_uncertainty": "low: the fly and rest rules and the energy cap are in the preview; that flying needs at least 1 energy and the answer is the maximum total distance are inferred",
+   "inferred_interface": {
+    "name": "maxFlyDistance",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MFD"
+  },
+  {
+   "uid": "hack2hire:69efd5e296981f58ae1f6dc7",
+   "variant_id": "69efd5e296981f58ae1f6dc7",
+   "variant_ordinal": 1,
+   "title": "Max Levels from Each Index",
+   "source": {
+    "post_id": "69efd5d696981f58ae1f6dc6",
+    "group_title": "Max Levels from Each Index",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69efd5d696981f58ae1f6dc6",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69efd5d696981f58ae1f6dc6/practice?questionId=69efd5e296981f58ae1f6dc7",
+    "preview_response_sha256": "717b97940337889af7d36082c7668516832cc93c2d10133bfd62e62b9631f7bd",
+    "preview_content_sha256": "38a421a99779c38d8092033dba2cb2bf851e516d757153a8a7af171589ae63df",
+    "preview_characters": 618,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69efd5d696981f58ae1f6dc6.json",
+    "algorithm_tags": [
+     "PREFIX_SUM"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n levels with arrays layers and energy and start energy K; from level i consume layers[j] at each level and pass while remaining energy >= energy[j], stopping at the first failure; each start uses a fresh K",
+    "algorithmTags: PREFIX_SUM"
+   ],
+   "inferred_spec": "For each start i, begin with K energy and attempt levels i, i+1, ... in order: level j subtracts layers[j]; if the remaining energy is at least energy[j] the level is passed and scores one point, otherwise the run stops. Return the score of every start index.",
+   "inference_uncertainty": "low: the run rules are in the preview; the non-negative values and the output as one score per start index are inferred",
+   "inferred_interface": {
+    "name": "maxLevels",
+    "params": [
+     {
+      "name": "layers",
+      "type": "integer[]"
+     },
+     {
+      "name": "energy",
+      "type": "integer[]"
+     },
+     {
+      "name": "K",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MLE"
+  },
+  {
+   "uid": "hack2hire:6a8615b8701a76fc6843aed0",
+   "variant_id": "6a8615b8701a76fc6843aed0",
+   "variant_ordinal": 1,
+   "title": "Maximum Balanced Task Assignment",
+   "source": {
+    "post_id": "6a8614f1701a76fc6843aeca",
+    "group_title": "Maximum Balanced Task Assignment",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a8614f1701a76fc6843aeca",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a8614f1701a76fc6843aeca/practice?questionId=6a8615b8701a76fc6843aed0",
+    "preview_response_sha256": "ce0503aad9456cdc74503bb0789d1ce254e75cea11082653fd7719b11377ac97",
+    "preview_content_sha256": "bb9ff2c8e8c867efe0630d0bcc561d9ca37a0a7b8180831a4a72a8ca5b9d353e",
+    "preview_characters": 419,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a8614f1701a76fc6843aeca.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "IBM"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: m nodes and task types; every node receives the same number of tasks, at most one task of each type, each task to at most one node (the objective is cut off)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "task[i] is the type of task i. Assign some tasks to m nodes so that every node gets the same number t of tasks, no node gets two tasks of the same type, and each task goes to at most one node. Return the largest possible total number of assigned tasks, m * t.",
+   "inference_uncertainty": "medium: the three assignment rules are in the preview; returning the total m * t (rather than t) is inferred",
+   "inferred_interface": {
+    "name": "maxBalancedTasks",
+    "params": [
+     {
+      "name": "m",
+      "type": "integer"
+     },
+     {
+      "name": "task",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MBT"
+  },
+  {
+   "uid": "hack2hire:67c766dc6c89e288437c3026",
+   "variant_id": "67c766dc6c89e288437c3026",
+   "variant_ordinal": 1,
+   "title": "Maximum Building Height",
+   "source": {
+    "post_id": "67c763516c89e288437c3025",
+    "group_title": "Maximum Building Height",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67c763516c89e288437c3025",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67c763516c89e288437c3025/practice?questionId=67c766dc6c89e288437c3026",
+    "preview_response_sha256": "6d6756acd6f609c0a1c08dc5c6b936f7afb06073070747a475411fe219f315f8",
+    "preview_content_sha256": "26cbe4c559b6762f04fcf72499c199de37f0265334fab15f4615c8ecfeb563a7",
+    "preview_characters": 578,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67c763516c89e288437c3025.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "GOOGLE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: grid tiles P parking, - buildable, X unusable; adjacent heights differ by at most one, so a building's maximum height is its minimum number of moves to a parking lot (the question is cut off)",
+    "algorithmTags: BREADTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "grid is a list of equal-length rows over P (parking, height 0), - (building) and X (unusable, no height and no adjacency constraint). The height of a building tile is the fewest orthogonal moves from it to a P tile through non-X tiles. Return the largest building height; 0 when there is no building tile; -1 when some building tile cannot reach any P (its height is unbounded).",
+   "inference_uncertainty": "high: the tile kinds, the adjacency rule and height = minimum moves to a parking lot are in the preview; that X blocks moves, the maximum as output and the 0 and -1 cases are inferred",
+   "inferred_interface": {
+    "name": "maxBuildingHeight",
+    "params": [
+     {
+      "name": "grid",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MBH"
+  },
+  {
+   "uid": "hack2hire:68eda9cd5abdefad4f6693be",
+   "variant_id": "68eda9cd5abdefad4f6693be",
+   "variant_ordinal": 1,
+   "title": "Maximum Interval Overlap Count",
+   "source": {
+    "post_id": "68eda9b25abdefad4f6693bd",
+    "group_title": "Maximum Interval Overlap Count",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68eda9b25abdefad4f6693bd",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68eda9b25abdefad4f6693bd/practice?questionId=68eda9cd5abdefad4f6693be",
+    "preview_response_sha256": "fdef8f9b969b158e17350aed25459f087c1163e799557274639c52102972e9dd",
+    "preview_content_sha256": "e3e77c568a01693149d6e3f274fafddc6894d3a491ec427b8be4f4053a570e95",
+    "preview_characters": 559,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68eda9b25abdefad4f6693bd.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "AMAZON",
+     "NETFLIX"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 253 (Meeting Rooms II); closed intervals [start, end] including both ends; maximum number overlapping at any single point",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "intervals holds closed integer intervals [start, end] with start <= end. Return the maximum number of intervals that contain one common point (0 for no intervals).",
+   "inference_uncertainty": "low: closed intervals and the maximum point overlap are in the preview; integer endpoints and 0 for an empty list are inferred",
+   "inferred_interface": {
+    "name": "maxOverlap",
+    "params": [
+     {
+      "name": "intervals",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MIO"
+  },
+  {
+   "uid": "hack2hire:67e4468750b60b77022f381c",
+   "variant_id": "67e4468750b60b77022f381c",
+   "variant_ordinal": 1,
+   "title": "Maximum Multiplier Path",
+   "source": {
+    "post_id": "67e4438350b60b77022f381b",
+    "group_title": "Maximum Multiplier Path",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4438350b60b77022f381b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4438350b60b77022f381b/practice?questionId=67e4468750b60b77022f381c",
+    "preview_response_sha256": "0e3f292e5c1289bb7e121b8afad0f35c9bae29880d7c77f8fae296dfb2c0981f",
+    "preview_content_sha256": "bf57429ad42eb0fb8f5234fe65258734e361ca5df8ca34e339b94db5e656c0e3",
+    "preview_characters": 593,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67e4438350b60b77022f381b.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH",
+     "GRAPH"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 1514 (Path with Maximum Probability); directed graph of n nodes whose edges carry multipliers; maximum product along a simple path from start to end",
+    "algorithmTags: DEPTH_FIRST_SEARCH, GRAPH"
+   ],
+   "inferred_spec": "A directed graph has nodes 0..n-1 and distinct edges [u, v, multiplier] with u != v. Return the largest product of multipliers along any simple path from start to end (1 when start == end, the empty path), or -1 when no path exists. Multipliers are integers 0..10 so products are exact.",
+   "inference_uncertainty": "high: the directed graph, multipliers on edges and the maximum product over simple paths are in the preview; integer multipliers 0..10 (to keep exact arithmetic; the original likely uses real numbers), n <= 12, the edge format and the -1 and start == end answers are inferred",
+   "inferred_interface": {
+    "name": "maxMultiplierProduct",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "edges",
+      "type": "integer[][]"
+     },
+     {
+      "name": "start",
+      "type": "integer"
+     },
+     {
+      "name": "end",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MMP"
+  },
+  {
+   "uid": "hack2hire:69953e87312381f4e70fdb95",
+   "variant_id": "69953e87312381f4e70fdb95",
+   "variant_ordinal": 1,
+   "title": "Maximum Vacation With Minimum Flights",
+   "source": {
+    "post_id": "69952fd9312381f4e70fdb57",
+    "group_title": "Maximum Vacation With Minimum Flights",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69952fd9312381f4e70fdb57",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69952fd9312381f4e70fdb57/practice?questionId=69953e87312381f4e70fdb95",
+    "preview_response_sha256": "3568e953dfa36fcbe8cdf13e3a8874bbefcc3facc67930fd9aadf65da1604144",
+    "preview_content_sha256": "6b38095d17ea18b56fc974e50e0333645627ea9b9fa814b9bb274beda8eb8a7a",
+    "preview_characters": 836,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69952fd9312381f4e70fdb57.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "DATADOG"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 568 (Maximum Vacation Days); n weeks, m cities, start in city 0; direct flights between all cities; each week stay or fly, a flight counts one and staying counts none (the objective is cut off)",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "days[c][w] is the number of vacation days available in city c during week w (m cities, n weeks). You start in city 0 before week 0; at the start of each week you stay or fly directly to any other city (one flight). Return [maximum total vacation days, fewest flights among the plans reaching that maximum].",
+   "inference_uncertainty": "medium: the setting, the complete flight network and the flight counting are in the preview; the days matrix layout (as in LeetCode 568), the values 0..7 and the [days, flights] output are inferred",
+   "inferred_interface": {
+    "name": "maxVacation",
+    "params": [
+     {
+      "name": "days",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MVF"
+  },
+  {
+   "uid": "hack2hire:688b838d3867670cfb89414c",
+   "variant_id": "688b838d3867670cfb89414c",
+   "variant_ordinal": 1,
+   "title": "Merge N-ary Tree",
+   "source": {
+    "post_id": "688b83823867670cfb89414b",
+    "group_title": "Merge N-ary Tree",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688b83823867670cfb89414b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688b83823867670cfb89414b/practice?questionId=688b838d3867670cfb89414c",
+    "preview_response_sha256": "a2176a4311491bb9e75783c725f5789445504b0b3bfbc1dc56c14738885af307",
+    "preview_content_sha256": "a0ab94a4f8615a03f5d9c802e88e760455a98dcdd351dc42cb03e9606a54c9f9",
+    "preview_characters": 790,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/688b83823867670cfb89414b.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH",
+     "RECURSION"
+    ],
+    "companies": [
+     "LINKEDIN",
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 617 (Merge Two Binary Trees); mergeTrees(root1, root2) on n-ary trees with values and children lists aligned by index; sum where both exist, copy the subtree where only one does",
+    "algorithmTags: DEPTH_FIRST_SEARCH, RECURSION"
+   ],
+   "inferred_spec": "The tree uses the LeetCode N-ary level-order list: the root value, null, then the children of each node in breadth-first order with every child group closed by null, trailing nulls removed; [] is the empty tree. Merge the two trees position by position, children aligned by index: where both trees have a node the merged node's value is the sum; where only one has a node the merged tree holds a copy of that subtree. Return the merged tree in the same format (inputs are not modified).",
+   "inference_uncertainty": "low: the position-wise merge rules are in the preview; the level-order list encoding of the input and output trees is inferred",
+   "inferred_interface": {
+    "name": "mergeTrees",
+    "params": [
+     {
+      "name": "root1",
+      "type": "(integer|null)[]"
+     },
+     {
+      "name": "root2",
+      "type": "(integer|null)[]"
+     }
+    ],
+    "return": {
+     "type": "(integer|null)[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MNT"
+  },
+  {
+   "uid": "hack2hire:68d849afae12841706c1fc74",
+   "variant_id": "68d849afae12841706c1fc74",
+   "variant_ordinal": 1,
+   "title": "Min Root-to-Leaf Path Sum of N-ary Tree",
+   "source": {
+    "post_id": "68d84917ae12841706c1fc73",
+    "group_title": "Min Root-to-Leaf Path Sum of N-ary Tree",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d84917ae12841706c1fc73",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d84917ae12841706c1fc73/practice?questionId=68d849afae12841706c1fc74",
+    "preview_response_sha256": "9648bb907e5bddb619039c12999d7a53a4282886e60693917605c38ab8d033ab",
+    "preview_content_sha256": "93b72f7d0aa3f81350e9ce4aa119ee919b9612eb972cf831f829cdec6d5e0985",
+    "preview_characters": 351,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68d84917ae12841706c1fc73.json",
+    "algorithm_tags": [
+     "RECURSION",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "BLOOMBERG"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: N-ary tree; minimum sum of values over root-to-leaf paths, a leaf having no children",
+    "algorithmTags: RECURSION, DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "The tree uses the LeetCode N-ary level-order list: the root value, null, then the children of each node in breadth-first order with every child group closed by null, trailing nulls removed; [] is the empty tree. Return the minimum sum of values along a path from the root to a leaf (a node without children); return 0 for the empty tree.",
+   "inference_uncertainty": "low: the task is in the preview; the level-order list encoding and 0 for the empty tree are inferred",
+   "inferred_interface": {
+    "name": "minPathSum",
+    "params": [
+     {
+      "name": "root",
+      "type": "(integer|null)[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MRP"
+  },
+  {
+   "uid": "hack2hire:68d84fa6ae12841706c1fc81",
+   "variant_id": "68d84fa6ae12841706c1fc81",
+   "variant_ordinal": 1,
+   "title": "MinMax Queue",
+   "source": {
+    "post_id": "68d84f7eae12841706c1fc80",
+    "group_title": "MinMax Queue",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d84f7eae12841706c1fc80",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d84f7eae12841706c1fc80/practice?questionId=68d84fa6ae12841706c1fc81",
+    "preview_response_sha256": "8db2d07a2d104f1950f0373a5ffc45733047ccaaed1ac6f82d1b8eef9eca5e7e",
+    "preview_content_sha256": "94f89b76553e5294c24e9275aca4fe59c6980ffc03346e6bf25061b371b64db1",
+    "preview_characters": 478,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68d84f7eae12841706c1fc80.json",
+    "algorithm_tags": [
+     "QUEUE"
+    ],
+    "companies": [
+     "BLOOMBERG",
+     "GOOGLE",
+     "TIKTOK"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: queue with enqueue and dequeue that also reports the current minimum and maximum, all in O(1); MinMaxQueue(), void enqueue(int val), int dequeue() (the min and max method names are cut off)",
+    "algorithmTags: QUEUE"
+   ],
+   "inferred_spec": "MinMaxQueue() creates an empty queue. enqueue(val) adds val at the back. dequeue() removes and returns the front element. getMin() and getMax() return the smallest and largest element currently in the queue. dequeue, getMin and getMax are only called on a non-empty queue. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "medium: the class, constructor, enqueue, dequeue and O(1) operations are in the preview; the names getMin/getMax and the non-empty precondition are inferred",
+   "inferred_interface": {
+    "classname": "MinMaxQueue",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "enqueue",
+      "params": [
+       {
+        "name": "val",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "dequeue",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getMin",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getMax",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MMQ",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  }
+ ]
+}

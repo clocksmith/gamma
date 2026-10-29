@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67c766dc6c89e288437c3026",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "grid"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxBuildingHeight",
+  "params": [
+   {
+    "name": "grid",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "a separate BFS from every building tile to its nearest P",
+  "candidate_design": "one multi-source BFS from all P tiles through non-X tiles; take the largest distance and check every building tile was reached",
+  "complexity_target": "O(m * n) time/O(m * n) space"
+ },
+ "source_sha256": "cd08c3a8edbcc76ddc063f706cd11c7470e74a8e820ddb389fd9bf35434d1d9b",
+ "wrapper": "named export maxBuildingHeight"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a8615b8701a76fc6843aed0",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "m",
+  "task"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxBalancedTasks",
+  "params": [
+   {
+    "name": "m",
+    "type": "integer"
+   },
+   {
+    "name": "task",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for t from the largest possible down, test the assignment with augmenting-path maximum flow (source to nodes with capacity t, node to type 1, type to sink its count)",
+  "candidate_design": "count each type with a hash map; a type can serve at most min(count, m) nodes, and t per node is feasible exactly when the sum of min(count, m) is at least m * t (the counting function is concave), so t = floor(sum / m)",
+  "complexity_target": "O(n) time/O(distinct types) space"
+ },
+ "source_sha256": "16e0ab4d6ddf3e7c5629fb7e12796439ce1bcc8bda695b8f371fd1a8bb0b5b4c",
+ "wrapper": "Solution.maxBalancedTasks"
+}

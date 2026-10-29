@@ -1,0 +1,391 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:697c3da69731315964cfb08a:697c3db29731315964cfb08b:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+   "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/697c3da69731315964cfb08a.json",
+   "sha256": "3374de150ac1739223457ac2e5f7f74cb3ead8462a9555d15d72703dbaa7d508",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/study-content.json",
+   "sha256": "76e02d0b47c6947d4b4605cf1efff6c465c29bef0f73e45df861a269bd985c3b",
+   "selector": "/variants/hack2hire:697c3db29731315964cfb08b"
+  }
+ ],
+ "problemId": "hack2hire:697c3da69731315964cfb08a",
+ "variantId": "697c3db29731315964cfb08b",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1 of 3: list linked record pairs",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/study-content.json",
+    "sha256": "76e02d0b47c6947d4b4605cf1efff6c465c29bef0f73e45df861a269bd985c3b",
+    "selector": "/variants/hack2hire:697c3db29731315964cfb08b/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "records[0] is a header of distinct field names that includes \"id\"; every later row holds one string per field and the ids are distinct and non-empty. weights holds \"<field>:<weight>\" strings naming distinct non-id header fields, each weight a decimal in [0, 1] with at most 4 decimal places, summing to exactly 1; unlisted fields weigh 0. threshold is a number in [0, 1] with at most 4 decimal places. The similarity of two records is the sum of the weights of the weighted fields on which both hold the same non-empty value (an empty value never matches); two records are linked when their similarity is at least threshold. All weight arithmetic is exact (decimal, not binary floating point). Level 1: return every linked pair [idA, idB] where record A comes before record B, ordered by A's row and then B's row.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "records[0] is a header of distinct field names that includes \"id\"; every later row holds one string per field and the ids are distinct and non-empty. weights holds \"<field>:<weight>\" strings naming distinct non-id header fields, each weight a decimal in [0, 1] with at most 4 decimal places, summing to exactly 1; unlisted fields weigh 0. threshold is a number in [0, 1] with at most 4 decimal places.",
+   "The similarity of two records is the sum of the weights of the weighted fields on which both hold the same non-empty value (an empty value never matches); two records are linked when their similarity is at least threshold.",
+   "All weight arithmetic is exact (decimal, not binary floating point).",
+   "Level 1: return every linked pair [idA, idB] where record A comes before record B, ordered by A's row and then B's row."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= records.length <= 501 (header plus up to 500 rows)",
+   "2 <= header length <= 6; field names match [a-z]{1,10}",
+   "cell values match [A-Za-z0-9@._-]{0,12}",
+   "weights: decimals with at most 4 places summing to exactly 1",
+   "threshold in [0, 1] with at most 4 decimal places"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/study-content.json",
+    "sha256": "76e02d0b47c6947d4b4605cf1efff6c465c29bef0f73e45df861a269bd985c3b",
+    "selector": "/variants/hack2hire:697c3db29731315964cfb08b/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: profiles are rows of a 2D string array whose first row is a header (examples id, name, email, company); weights are \"<field>:<weight>\" strings for non-id fields, decimals in [0, 1] summing to 1, a higher weight meaning a more important match (the task itself is cut off); algorithmTags: HASH_TABLE; codingQuestions: three variant ids in this order; preview response sha256 238fe389a1daa020b966f49c96b8b5161e75307449cd264bec91a92352499df5"
+   },
+   {
+    "statement": "Uncertainty: very high: the record table and weight format are in the preview; the similarity rule (sum of weights of equal non-empty fields), the threshold argument, the link rule and this level's output are inferred",
+    "basis": "the public group preview is partial (694 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: three variants with no per-variant text; the author assigned level 1 = linked pairs, level 2 = transitive groups, level 3 = best match per record",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is the similarity of two records computed from the weights?",
+   "Do two empty values count as a match?",
+   "Is the threshold inclusive?",
+   "In which order should pairs be listed?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/study-content.json",
+    "sha256": "76e02d0b47c6947d4b4605cf1efff6c465c29bef0f73e45df861a269bd985c3b",
+    "selector": "/variants/hack2hire:697c3db29731315964cfb08b/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "id",
+       "name"
+      ]
+     ],
+     [
+      "name:1"
+     ],
+     0.5
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "id",
+       "name",
+       "email",
+       "company"
+      ],
+      [
+       "1",
+       "Ann",
+       "a@x.io",
+       "Acme"
+      ],
+      [
+       "2",
+       "Ann",
+       "a@x.io",
+       "Bolt"
+      ],
+      [
+       "3",
+       "Bo",
+       "b@x.io",
+       "Acme"
+      ],
+      [
+       "4",
+       "Bo",
+       "a@x.io",
+       ""
+      ],
+      [
+       "5",
+       "Cy",
+       "",
+       ""
+      ]
+     ],
+     [
+      "name:0.5",
+      "email:0.3",
+      "company:0.2"
+     ],
+     0.5
+    ],
+    "output": [
+     [
+      "1",
+      "2"
+     ],
+     [
+      "3",
+      "4"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/study-content.json",
+    "sha256": "76e02d0b47c6947d4b4605cf1efff6c465c29bef0f73e45df861a269bd985c3b",
+    "selector": "/variants/hack2hire:697c3db29731315964cfb08b/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/oracles.py",
+    "sha256": "6562a7253b838898641fc5d8ad0c3f487b8ae6e701dd3cd49dbcf7617d2cc75d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def linkedPairs(records, weights, threshold) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+      "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/semantics/697c3db29731315964cfb08b-python.json",
+     "inferredInterface": {
+      "name": "linkedPairs",
+      "params": [
+       {
+        "name": "records",
+        "type": "string[][]"
+       },
+       {
+        "name": "weights",
+        "type": "string[]"
+       },
+       {
+        "name": "threshold",
+        "type": "number"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/semantics/697c3db29731315964cfb08b-python.json",
+      "sha256": "6ed5b748c6723ffeb2753b3f3a0242bff1497a660471417c9a29e48a44ab5861",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function linkedPairs(records, weights, threshold) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+      "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/semantics/697c3db29731315964cfb08b-javascript.json",
+     "inferredInterface": {
+      "name": "linkedPairs",
+      "params": [
+       {
+        "name": "records",
+        "type": "string[][]"
+       },
+       {
+        "name": "weights",
+        "type": "string[]"
+       },
+       {
+        "name": "threshold",
+        "type": "number"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/semantics/697c3db29731315964cfb08b-javascript.json",
+      "sha256": "ac6b7532d60c4f35812b800472c6d256352735ce15589f681fba6464fc68c579",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk12-a-20261028-v1/contracts.json",
+    "sha256": "824077afae6f66431aaef9caf4f326b1b87641e4cc7a55dd34e8ba4f053f8476",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
