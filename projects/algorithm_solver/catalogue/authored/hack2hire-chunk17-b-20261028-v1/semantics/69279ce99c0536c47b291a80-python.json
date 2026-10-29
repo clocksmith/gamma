@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69279ce99c0536c47b291a80",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "intervals"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findPeakMoment",
+  "params": [
+   {
+    "name": "intervals",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every entry time count the guests present then (the maximum is attained at some entry time) and keep the earliest best",
+  "candidate_design": "sort entry times and exit times separately and sweep in time order, processing exits before entries at equal times, recording the first time the count exceeds the best",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "ae4da51fea558eb29f06b658037eba71add7e4e2c8b1bdbed9594c0a26f7d9fe",
+ "wrapper": "Solution.findPeakMoment"
+}

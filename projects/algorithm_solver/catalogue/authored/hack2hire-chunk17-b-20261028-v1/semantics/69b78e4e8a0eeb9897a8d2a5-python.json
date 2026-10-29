@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69b78e4e8a0eeb9897a8d2a5",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "tickets"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "getOccupancy",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "tickets",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "add one to every timestamp of every ticket",
+  "candidate_design": "difference array: +1 at entry and -1 at exit + 1, then a prefix sum",
+  "complexity_target": "O(n + tickets) time/O(n) space"
+ },
+ "source_sha256": "ae18ba6ddbb7b64cddc687e5e2f80943e5ff8bb69ca980337045d364b8194dd3",
+ "wrapper": "Solution.getOccupancy"
+}

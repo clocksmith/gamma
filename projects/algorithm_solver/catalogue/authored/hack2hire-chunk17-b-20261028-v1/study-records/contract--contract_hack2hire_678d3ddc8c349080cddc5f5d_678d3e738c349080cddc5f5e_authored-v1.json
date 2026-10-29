@@ -1,0 +1,314 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:678d3ddc8c349080cddc5f5d:678d3e738c349080cddc5f5e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+   "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/678d3ddc8c349080cddc5f5d.json",
+   "sha256": "b6ec823c36803b5b63aeec22fc42dc57cdb36811c4578167fa41f2761a6d8b9b",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+   "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+   "selector": "/variants/hack2hire:678d3e738c349080cddc5f5e"
+  }
+ ],
+ "problemId": "hack2hire:678d3ddc8c349080cddc5f5d",
+ "variantId": "678d3e738c349080cddc5f5e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: prefix add/mul expressions",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:678d3e738c349080cddc5f5e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "expression is an integer literal or a parenthesised call \"(op e1 e2 ... ek)\" with op \"add\" or \"mul\" and k >= 2 argument expressions. Tokens are separated by one or more spaces, spaces next to parentheses and at either end are optional. Literals are an optional \"-\" followed by decimal digits without leading zeros (absolute value at most 1e9, no \"-0\"). add returns the sum and mul the product of the arguments. Return the integer value of the whole expression.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "expression is an integer literal or a parenthesised call \"(op e1 e2 ..",
+   "ek)\" with op \"add\" or \"mul\" and k >= 2 argument expressions.",
+   "Tokens are separated by one or more spaces, spaces next to parentheses and at either end are optional.",
+   "Literals are an optional \"-\" followed by decimal digits without leading zeros (absolute value at most 1e9, no \"-0\").",
+   "add returns the sum and mul the product of the arguments.",
+   "Return the integer value of the whole expression."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= expression.length <= 1e5",
+   "nesting depth at most 5e4",
+   "|literal| <= 1e9",
+   "every intermediate value is at most 2**53 - 1 in absolute value"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:678d3e738c349080cddc5f5e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: stated as a variation of LeetCode 224; an expression made of spaces, numbers, parentheses and the operations \"add\" and \"mul\"; evaluate it; algorithmTags: DEPTH_FIRST_SEARCH; preview response sha256 f3ee1b47733021e5464fb4123c715d426069d2daac344e5b05a11867f95a41c6"
+   },
+   {
+    "statement": "Uncertainty: high: the token kinds and the two operations are in the preview, but the syntax is not; the prefix \"(op args...)\" form (suggested by spaces and parentheses being the only separators), at least two arguments per call, signed literals and the bounds are inferred; every intermediate value is kept within 2**53 - 1 in absolute value by the domain",
+    "basis": "the public group preview is partial (444 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the syntax prefix \"(add 1 2)\", function-call \"add(1, 2)\" or infix?",
+   "How many arguments can add and mul take?",
+   "Can literals be negative?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:678d3e738c349080cddc5f5e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     "7"
+    ],
+    "output": 7,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     "( mul ( add ( add 4 2) ( add  0  7  -2 )) (add  ( mul 4 7 -5 )  (add 5 -6)  ( add -1 4)) (add  (add  -1  1  2)  ( add -3 0 -3 )  6 ) )"
+    ],
+    "output": -3036,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:678d3e738c349080cddc5f5e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/oracles.py",
+    "sha256": "46291096cb8f7f5ce660e0fd59eb4a1e4b0d94358503f0da447cb7aa9324d3e3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def evaluate(expression) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/678d3e738c349080cddc5f5e-python.json",
+     "inferredInterface": {
+      "name": "evaluate",
+      "params": [
+       {
+        "name": "expression",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/678d3e738c349080cddc5f5e-python.json",
+      "sha256": "e558d0b48072234abf9db86e5f9c3217620d0181098aa60fc647359ab40d52a1",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function evaluate(expression) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/678d3e738c349080cddc5f5e-javascript.json",
+     "inferredInterface": {
+      "name": "evaluate",
+      "params": [
+       {
+        "name": "expression",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/678d3e738c349080cddc5f5e-javascript.json",
+      "sha256": "15547f52ea59d488b4e797c0dca10c42829d30017d0d8ca8579f967961188364",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

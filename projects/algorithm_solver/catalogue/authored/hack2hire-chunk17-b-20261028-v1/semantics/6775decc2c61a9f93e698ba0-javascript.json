@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6775decc2c61a9f93e698ba0",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "edges"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "longestPath",
+  "params": [
+   {
+    "name": "edges",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every path by depth-first search from every node and keep the longest, then the lexicographically smallest",
+  "candidate_design": "topological order (Kahn), then in reverse order compute for each node the longest path length and its best next node (smallest name among successors of maximum length); start from the smallest-named node of maximum length",
+  "complexity_target": "O(V log V + E) time/O(V + E) space"
+ },
+ "source_sha256": "6d2ddad36f8d217dd3fa5ef115a616cb77daadeef6c469277d7628c9d8f5a975",
+ "wrapper": "named export longestPath"
+}

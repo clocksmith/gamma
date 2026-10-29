@@ -1,0 +1,391 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:687e65afeab243475a7dfbf6:687e65b7eab243475a7dfbf7:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+   "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/687e65afeab243475a7dfbf6.json",
+   "sha256": "a64c7edaab0f0548f95d46807626b26111e41b6648b17087ff6d252584369916",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+   "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+   "selector": "/variants/hack2hire:687e65b7eab243475a7dfbf7"
+  }
+ ],
+ "problemId": "hack2hire:687e65afeab243475a7dfbf6",
+ "variantId": "687e65b7eab243475a7dfbf7",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: event types some user repeats k times within 24 hours",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:687e65b7eab243475a7dfbf7/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "logs is a list of rows [userId, timestamp, eventType] with string userId and eventType and integer timestamp in seconds; rows are in any order and may repeat. Return, sorted ascending and without duplicates, the event types e for which some user has at least k rows of type e whose timestamps all lie within a window of 24 hours (largest minus smallest timestamp below 86400).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "logs is a list of rows [userId, timestamp, eventType] with string userId and eventType and integer timestamp in seconds; rows are in any order and may repeat.",
+   "Return, sorted ascending and without duplicates, the event types e for which some user has at least k rows of type e whose timestamps all lie within a window of 24 hours (largest minus smallest timestamp below 86400)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= logs.length <= 1e5",
+   "userId is 1 to 10 characters from a-z and 0-9",
+   "eventType is 1 to 10 characters from a-z and \"_\"",
+   "0 <= timestamp <= 1e9",
+   "1 <= k <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:687e65b7eab243475a7dfbf7/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: an array of log entries, each with a user id, a timestamp and an event type, one event performed by a user at a time (the question is cut off); algorithmTags: SLIDING_WINDOW, HASH_TABLE; preview response sha256 b449c3c845657d44389d83195c1b441ff129f1894a66305fd38e690d78a18d43"
+   },
+   {
+    "statement": "Uncertainty: high: only the log row content is in the preview; the threshold k, the per-user per-event counting, the half-open 86400-second window and the sorted event-type output are inferred from the title and tags",
+    "basis": "the public group preview is partial (179 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/11/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/11/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What exactly is \"frequent\": a count threshold, the most frequent type, or per user?",
+   "Is the 24-hour window inclusive at the end?",
+   "What order should the result use?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:687e65b7eab243475a7dfbf7/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     1
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "u2",
+       40370,
+       "b"
+      ],
+      [
+       "u1",
+       148522,
+       "a"
+      ],
+      [
+       "u1",
+       54821,
+       "b"
+      ],
+      [
+       "u1",
+       7722,
+       "a"
+      ],
+      [
+       "u1",
+       57271,
+       "b"
+      ],
+      [
+       "u2",
+       196445,
+       "c_d"
+      ],
+      [
+       "u2",
+       169209,
+       "b"
+      ],
+      [
+       "u2",
+       155952,
+       "b"
+      ],
+      [
+       "u2",
+       122389,
+       "a"
+      ],
+      [
+       "u1",
+       175314,
+       "a"
+      ],
+      [
+       "u0",
+       10192,
+       "b"
+      ],
+      [
+       "u1",
+       138401,
+       "c_d"
+      ],
+      [
+       "u2",
+       126769,
+       "b"
+      ]
+     ],
+     1
+    ],
+    "output": [
+     "a",
+     "b",
+     "c_d"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:687e65b7eab243475a7dfbf7/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/oracles.py",
+    "sha256": "46291096cb8f7f5ce660e0fd59eb4a1e4b0d94358503f0da447cb7aa9324d3e3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findFrequentEvents(logs, k) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/687e65b7eab243475a7dfbf7-python.json",
+     "inferredInterface": {
+      "name": "findFrequentEvents",
+      "params": [
+       {
+        "name": "logs",
+        "type": "[string, integer, string][]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/687e65b7eab243475a7dfbf7-python.json",
+      "sha256": "179624f50877d084f310157f8cfdd14fda859250eaa18a736dcea40fd71d7df3",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findFrequentEvents(logs, k) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/687e65b7eab243475a7dfbf7-javascript.json",
+     "inferredInterface": {
+      "name": "findFrequentEvents",
+      "params": [
+       {
+        "name": "logs",
+        "type": "[string, integer, string][]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/687e65b7eab243475a7dfbf7-javascript.json",
+      "sha256": "ad7f56f1c2144d158c1668f959ade4d29b9d202c0fc85a700ab199dba18c3742",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

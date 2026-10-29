@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:678876fe402dc47b67a14944",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr",
+  "state",
+  "m"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "getMaximumArray",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   },
+   {
+    "name": "state",
+    "type": "string"
+   },
+   {
+    "name": "m",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate every operation: pick the largest available value, then rewrite the state string by the unblocking rule",
+  "candidate_design": "index i becomes available before operation d(i) + 1, where d(i) is its distance to the nearest \"1\" at or to its left; bucket values by d, then S[t] is the running maximum over buckets 0..t",
+  "complexity_target": "O(n + m) time/O(n + m) space"
+ },
+ "source_sha256": "f032de5403450ccb36027144a8da3194c8dc051c39b7fe9e911785881ea7a595",
+ "wrapper": "Solution.getMaximumArray"
+}

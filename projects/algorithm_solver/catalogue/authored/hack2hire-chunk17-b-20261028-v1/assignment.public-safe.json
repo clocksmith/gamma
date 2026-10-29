@@ -1,0 +1,791 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk17-b (16 Hack2Hire groups, 16 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:68fa7c5e0fa32e4d82f4fc1f",
+   "title": "URL Router Design",
+   "variant_ordinal": 1,
+   "group_post_id": "68fa76eb0fa32e4d82f4fc1a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "Router",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addRoute",
+       "params": [
+        {
+         "name": "pattern",
+         "type": "string"
+        },
+        {
+         "name": "handler",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "callRoute",
+       "params": [
+        {
+         "name": "path",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "Router"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep a dictionary of pattern to handler and, per query, test every pattern of the right length and keep the best (wildcard count, wildcard positions) key",
+    "candidate_design": "segment trie whose children are literal segments plus one \"*\" child; a query walks the trie depth first, literal child before \"*\", carrying the wildcard count, pruning branches whose count already exceeds the best complete match, and keeps the first best match found in that order",
+    "complexity_target": "O(min(T, 2^L)) per call worst case, T = trie nodes, L = path segments; O(L) per addRoute/O(total pattern segments) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6bfd0383a841916360d598e99d936d435c8c3ffbc6ea7336cd58fb275175fe14",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:686b0a7af56e0403f35f23ee",
+   "title": "Unequal Elements",
+   "variant_ordinal": 1,
+   "group_post_id": "686add4bf56e0403f35f23d1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maximumLength",
+     "params": [
+      {
+       "name": "elements",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "quadratic dynamic programme over the last chosen index and the number of changes used so far, trying every earlier index as the predecessor",
+    "candidate_design": "dynamic programme keyed by value: best[v][j] is the longest subsequence ending in value v with j changes, and top[j] the best over all values; each element extends best[v][j] by one or starts a new run after top[j - 1], updating j from k down to 0",
+    "complexity_target": "O(n * k) time/O(d * k) space, d = distinct values"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0043f1141ebecccd960dc90fb83df23ae57ae78edf628c6b23351793bbcb3c98",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67799006dcf91f8e3c1c310d",
+   "title": "Wildcard Matching",
+   "variant_ordinal": 1,
+   "group_post_id": "67798becdcf91f8e3c1c310c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "isMatch",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      },
+      {
+       "name": "p",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "bottom-up dynamic programming table over prefixes of s and p",
+    "candidate_design": "split p at \"*\" into literal pieces; the first piece must be a prefix of s and the last a suffix (when p has a \"*\"), and each middle piece is placed at its leftmost occurrence after the previous one, which is optimal because \"*\" absorbs any gap",
+    "complexity_target": "O(|s| * |p|) worst case with a linear substring search, usually near linear/O(|p|) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "fca02f22073a2abd40ccee444d7a445f3a4047eedf8af67bd0a961ee45a445df",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67e45b2850b60b77022f382e",
+   "title": "Word Pattern Match",
+   "variant_ordinal": 1,
+   "group_post_id": "67e45b2050b60b77022f382d",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "matchWords",
+     "params": [
+      {
+       "name": "pattern",
+       "type": "string"
+      },
+      {
+       "name": "words",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "boolean[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every pair of positions i < j check pattern[i] == pattern[j] exactly when word[i] == word[j]",
+    "candidate_design": "per word, one pass with two maps (pattern character to word character and back), failing at the first conflict",
+    "complexity_target": "O(total characters) time/O(alphabet) space per word"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "30115f086023eb2dd4d961e7a962f3bfaa80d8682425ce58d1f4b44a2c5c0a15",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67730b5ddd9437f8aa275b04",
+   "title": "Write Disk Block With Cycle",
+   "variant_ordinal": 1,
+   "group_post_id": "67730896dd9437f8aa275b03",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "DiskBlockManager",
+     "constructor": {
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       },
+       {
+        "name": "maximumCycles",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "write",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "DiskBlockManager"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan every block on every write",
+    "candidate_design": "min-heap of (remaining writes, id) over writable blocks; a write decrements the top and pops it when it reaches zero",
+    "complexity_target": "O(n) to build plus O(log n) per write/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "527b709f517f78d0f11b4e3af585cf59ec2db02cddb49328c9389ce32e0f2e91",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:679da470996c3c60bd38b5ba",
+   "title": "Alien Base Attack",
+   "variant_ordinal": 1,
+   "group_post_id": "6798653e4b8bccaed413d52c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "AlienBaseAttack",
+     "constructor": {
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "attack",
+       "params": [
+        {
+         "name": "x",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "isDestroyed",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "AlienBaseAttack"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "remember every attack and, per query, test each unit segment of the base",
+    "candidate_design": "set of destroyed in-range segment starts plus a counter; the base is destroyed when the counter equals n",
+    "complexity_target": "O(1) expected per call/O(min(n, attacks)) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "db486635928557ac7555d76cbf5560a2a3411c64abf68d3c9e2881de059dcee7",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:678876fe402dc47b67a14944",
+   "title": "Array Generation Service",
+   "variant_ordinal": 1,
+   "group_post_id": "67887337402dc47b67a14941",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "getMaximumArray",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      },
+      {
+       "name": "state",
+       "type": "string"
+      },
+      {
+       "name": "m",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate every operation: pick the largest available value, then rewrite the state string by the unblocking rule",
+    "candidate_design": "index i becomes available before operation d(i) + 1, where d(i) is its distance to the nearest \"1\" at or to its left; bucket values by d, then S[t] is the running maximum over buckets 0..t",
+    "complexity_target": "O(n + m) time/O(n + m) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "d7fd7ad0fb81fab2af29ef2479fd19e9cc0f52ba7210cf11b2967c6b890056b5",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67a56d81b571d6ff0a4bd238",
+   "title": "Bring Servers Down",
+   "variant_ordinal": 1,
+   "group_post_id": "67a536f62a9ed767fa215434",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "getMinRequests",
+     "params": [
+      {
+       "name": "request",
+       "type": "integer[]"
+      },
+      {
+       "name": "health",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "dynamic programme over subsets of servers already brought down (the elapsed rounds are the sum of their hit counts)",
+    "candidate_design": "server i needs t_i = ceil(health[i] / k) consecutive hits and costs request[i] per round until it falls; ordering servers by t_i / request[i] ascending (exchange argument, compared by integer cross-multiplication) minimises sum request[i] * finish round",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6abc540cac84b06f36e38e7bea5337f1da50a1d08bcb3883c3a9d614a209ce26",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67840e27d0faf7ec64cc3adb",
+   "title": "Count Reversing Triples",
+   "variant_ordinal": 1,
+   "group_post_id": "67840acad0faf7ec64cc3ada",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countTriplets",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "three nested loops over all index triples",
+    "candidate_design": "compress values to ranks; for each middle index multiply the number of larger values to its left by the number of smaller values to its right, both counted with Fenwick trees",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "08bd5ec80d1f7fbd8682f36f8a9a17f1bfec9741e840e61f5a5548fca580b01d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6897c08aa543d38b79706ca6",
+   "title": "Cross-Day User Trust Scoring",
+   "variant_ordinal": 1,
+   "group_post_id": "6897b2e8a543d38b79706c98",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "PurchaseAnalyzer",
+     "constructor": {
+      "params": [
+       {
+        "name": "logsDay1",
+        "type": "string[][]"
+       },
+       {
+        "name": "logsDay2",
+        "type": "string[][]"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "crossDayDiverseUsers",
+       "params": [],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "PurchaseAnalyzer"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per call, collect the users of each day and test every candidate by rescanning both logs for its order types",
+    "candidate_design": "build once in the constructor: per user, presence flags for each day and the set of order types; the answer list is computed once and a fresh copy returned per call",
+    "complexity_target": "O(R + U log U) construction and O(U) per call/O(R) space, R = rows, U = users"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a6469ad545b8e603e6c27ca8ab91b18f18f1a0caf78e797546706c1600f4b420",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:678d3e738c349080cddc5f5e",
+   "title": "Evaluate String Expression II",
+   "variant_ordinal": 1,
+   "group_post_id": "678d3ddc8c349080cddc5f5d",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "evaluate",
+     "params": [
+      {
+       "name": "expression",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recursive descent over a regular-expression token list",
+    "candidate_design": "one left-to-right scan with an explicit stack of (operation, accumulator) frames; a literal or a closed call folds its value into the frame below",
+    "complexity_target": "O(length) time/O(nesting depth) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "f3ee1b47733021e5464fb4123c715d426069d2daac344e5b05a11867f95a41c6",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:687e65b7eab243475a7dfbf7",
+   "title": "Find Frequent Events in 24 Hours",
+   "variant_ordinal": 1,
+   "group_post_id": "687e65afeab243475a7dfbf6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findFrequentEvents",
+     "params": [
+      {
+       "name": "logs",
+       "type": "[string, integer, string][]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every (user, event) group and every row of it, count the group rows with timestamps in [t, t + 86400)",
+    "candidate_design": "group timestamps by (user, event), sort each group and slide a window whose span stays below 86400 seconds",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b449c3c845657d44389d83195c1b441ff129f1894a66305fd38e690d78a18d43",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6775decc2c61a9f93e698ba0",
+   "title": "Find Longest Path in DAG",
+   "variant_ordinal": 1,
+   "group_post_id": "6775dd632c61a9f93e698b9f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "longestPath",
+     "params": [
+      {
+       "name": "edges",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every path by depth-first search from every node and keep the longest, then the lexicographically smallest",
+    "candidate_design": "topological order (Kahn), then in reverse order compute for each node the longest path length and its best next node (smallest name among successors of maximum length); start from the smallest-named node of maximum length",
+    "complexity_target": "O(V log V + E) time/O(V + E) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "d36f61995aab7b0a82f3b3511b4e45e0c6a0a2cdf8565c7f814a889ac01ddbeb",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69279ce99c0536c47b291a80",
+   "title": "Find Peak Event Moment",
+   "variant_ordinal": 1,
+   "group_post_id": "69279c3a9c0536c47b291a7f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findPeakMoment",
+     "params": [
+      {
+       "name": "intervals",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every entry time count the guests present then (the maximum is attained at some entry time) and keep the earliest best",
+    "candidate_design": "sort entry times and exit times separately and sweep in time order, processing exits before entries at equal times, recording the first time the count exceeds the best",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "48dfa75d82a0160e132ddb14ced74f29a067809545abed85da53d18fca7c956c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:677041e0366afdc1233e4ff4",
+   "title": "Find Redundant Substring",
+   "variant_ordinal": 1,
+   "group_post_id": "676f9b81366afdc1233e4ff3",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countRedundantSubstrings",
+     "params": [
+      {
+       "name": "word",
+       "type": "string"
+      },
+      {
+       "name": "a",
+       "type": "integer"
+      },
+      {
+       "name": "b",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "check every substring with running vowel and consonant counts",
+    "candidate_design": "length = V + C, so the rule is (1 - a) V + (1 - b) C = 0; count equal prefix keys (1 - a) Vp + (1 - b) Cp with a hash map",
+    "complexity_target": "O(n) expected time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "790fa77f892e993ff1eb8e1a946d9d28c6265c18bd8cb5a82972bc8d16174758",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69b78e4e8a0eeb9897a8d2a5",
+   "title": "Garage Occupancy per Timestamp",
+   "variant_ordinal": 1,
+   "group_post_id": "69b78e3f8a0eeb9897a8d2a4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "getOccupancy",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "tickets",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "add one to every timestamp of every ticket",
+    "candidate_design": "difference array: +1 at entry and -1 at exit + 1, then a prefix sum",
+    "complexity_target": "O(n + tickets) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "715223c075b02a61fc4f8e51618af5b66b1c2e592483ab7af9cc300339f549fc",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

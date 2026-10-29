@@ -1,0 +1,1034 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:68fa7c5e0fa32e4d82f4fc1f",
+   "variant_id": "68fa7c5e0fa32e4d82f4fc1f",
+   "variant_ordinal": 1,
+   "title": "URL Router Design",
+   "source": {
+    "post_id": "68fa76eb0fa32e4d82f4fc1a",
+    "group_title": "URL Router Design",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fa76eb0fa32e4d82f4fc1a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fa76eb0fa32e4d82f4fc1a/practice?questionId=68fa7c5e0fa32e4d82f4fc1f",
+    "preview_response_sha256": "6bfd0383a841916360d598e99d936d435c8c3ffbc6ea7336cd58fb275175fe14",
+    "preview_content_sha256": "1dc54a6edb5f239763de6deda9111b57afe4d5de8499428a3359da3528532093",
+    "preview_characters": 497,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68fa76eb0fa32e4d82f4fc1a.json",
+    "algorithm_tags": [
+     "TRIE"
+    ],
+    "companies": [
+     "ATLASSIAN",
+     "GOOGLE",
+     "TESLA"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a router maps handler names to registered URL patterns; segments match exactly or through a \"*\" wildcard that matches any single segment; a query returns the handler of the most specific matching pattern, preferring fewest wildcards, and \"\" when nothing matches (further tie rules are cut off)",
+    "algorithmTags: TRIE"
+   ],
+   "inferred_spec": "Router() starts with no routes. A path is \"/\" (no segments) or \"/\" followed by segments joined with \"/\"; a pattern has the same form but any segment may be \"*\". addRoute(pattern, handler) registers pattern with handler, replacing the handler of an identical earlier pattern. callRoute(path) considers the registered patterns with as many segments as path whose every non-\"*\" segment equals the path segment at the same position; it returns the handler of the one with the fewest \"*\" segments, breaking ties by preferring a literal segment over \"*\" at the leftmost position where two candidates differ; it returns \"\" when no pattern matches. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "medium: exact segments, the single-segment \"*\", fewest wildcards first and \"\" for no match are in the preview; the class and method names, re-registration replacing the handler, the left-to-right literal-first tie rule (the preview list is cut off after its first rule) and the path syntax and bounds are inferred",
+   "inferred_interface": {
+    "classname": "Router",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addRoute",
+      "params": [
+       {
+        "name": "pattern",
+        "type": "string"
+       },
+       {
+        "name": "handler",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "callRoute",
+      "params": [
+       {
+        "name": "path",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "URD",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:686b0a7af56e0403f35f23ee",
+   "variant_id": "686b0a7af56e0403f35f23ee",
+   "variant_ordinal": 1,
+   "title": "Unequal Elements",
+   "source": {
+    "post_id": "686add4bf56e0403f35f23d1",
+    "group_title": "Unequal Elements",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/686add4bf56e0403f35f23d1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/686add4bf56e0403f35f23d1/practice?questionId=686b0a7af56e0403f35f23ee",
+    "preview_response_sha256": "0043f1141ebecccd960dc90fb83df23ae57ae78edf628c6b23351793bbcb3c98",
+    "preview_content_sha256": "48877faec2e08ba8eeaee573002a5bf3ddc0f69bbf767a9ccf7f19de688d5d81",
+    "preview_characters": 437,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/686add4bf56e0403f35f23d1.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "SNOWFLAKE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: given an integer array elements and k, choose a subsequence with at most k adjacent positions whose values differ, and return the maximum possible length",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "elements is a non-empty list of integers and k is a non-negative integer. A subsequence keeps some elements in their original order. Return the maximum length of a subsequence in which at most k adjacent pairs hold different values.",
+   "inference_uncertainty": "low: the task is fully stated in the preview; the parameter name k, its type and the bounds (taken from the usual constraints of this task, n <= 5000 and k <= 50) are inferred",
+   "inferred_interface": {
+    "name": "maximumLength",
+    "params": [
+     {
+      "name": "elements",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "UNE"
+  },
+  {
+   "uid": "hack2hire:67799006dcf91f8e3c1c310d",
+   "variant_id": "67799006dcf91f8e3c1c310d",
+   "variant_ordinal": 1,
+   "title": "Wildcard Matching",
+   "source": {
+    "post_id": "67798becdcf91f8e3c1c310c",
+    "group_title": "Wildcard Matching",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67798becdcf91f8e3c1c310c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67798becdcf91f8e3c1c310c/practice?questionId=67799006dcf91f8e3c1c310d",
+    "preview_response_sha256": "fca02f22073a2abd40ccee444d7a445f3a4047eedf8af67bd0a961ee45a445df",
+    "preview_content_sha256": "0f57d222529c48faf2c2d04a4a70724d58bd8a289f9bec237ea01b62a51cc78b",
+    "preview_characters": 720,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67798becdcf91f8e3c1c310c.json",
+    "algorithm_tags": [
+     "TWO_POINTER",
+     "STRING"
+    ],
+    "companies": [
+     "CONFLUENT"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 44; match string s against pattern p where \"*\" matches any sequence (including empty) and the match covers all of s; both lengths at most 2000; s is lowercase letters and p lowercase letters and \"*\"; a two-pointer solution is recommended",
+    "algorithmTags: TWO_POINTER, STRING"
+   ],
+   "inferred_spec": "s is a string of lowercase letters and p a string of lowercase letters and \"*\". \"*\" matches any sequence of characters, including the empty one, and a letter matches itself. Return true exactly when p matches the whole of s.",
+   "inference_uncertainty": "low: the matching rule, alphabet and the 2000 length bound are in the preview (there is no \"?\" in this variant); the function name and boolean return are inferred from LeetCode 44",
+   "inferred_interface": {
+    "name": "isMatch",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     },
+     {
+      "name": "p",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "WCM"
+  },
+  {
+   "uid": "hack2hire:67e45b2850b60b77022f382e",
+   "variant_id": "67e45b2850b60b77022f382e",
+   "variant_ordinal": 1,
+   "title": "Word Pattern Match",
+   "source": {
+    "post_id": "67e45b2050b60b77022f382d",
+    "group_title": "Word Pattern Match",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e45b2050b60b77022f382d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e45b2050b60b77022f382d/practice?questionId=67e45b2850b60b77022f382e",
+    "preview_response_sha256": "30115f086023eb2dd4d961e7a962f3bfaa80d8682425ce58d1f4b44a2c5c0a15",
+    "preview_content_sha256": "4456082d69ff6bd701c9658702906ddb17dc98107ecc380419ad729fe8e370af",
+    "preview_characters": 763,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67e45b2050b60b77022f382d.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "META"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 290; given a pattern string and a list of words, decide for each word whether a one-to-one mapping between the pattern characters and the word characters exists",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "pattern is a non-empty string and words a list of strings, all of lowercase letters. A word follows pattern when it has the same length and there is a one-to-one correspondence between characters such that pattern[i] corresponds to word[i] for every i. Return a list of booleans, one per word in order.",
+   "inference_uncertainty": "medium: the bijection rule and the per-word decision are in the preview; the boolean list output, that different lengths mean false, the alphabet and the bounds are inferred",
+   "inferred_interface": {
+    "name": "matchWords",
+    "params": [
+     {
+      "name": "pattern",
+      "type": "string"
+     },
+     {
+      "name": "words",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "boolean[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "WPM"
+  },
+  {
+   "uid": "hack2hire:67730b5ddd9437f8aa275b04",
+   "variant_id": "67730b5ddd9437f8aa275b04",
+   "variant_ordinal": 1,
+   "title": "Write Disk Block With Cycle",
+   "source": {
+    "post_id": "67730896dd9437f8aa275b03",
+    "group_title": "Write Disk Block With Cycle",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67730896dd9437f8aa275b03",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67730896dd9437f8aa275b03/practice?questionId=67730b5ddd9437f8aa275b04",
+    "preview_response_sha256": "527b709f517f78d0f11b4e3af585cf59ec2db02cddb49328c9389ce32e0f2e91",
+    "preview_content_sha256": "be2601002d15355b453ef04d46ec24d5d52ae8e34d7153d844094fe5fc9eead8",
+    "preview_characters": 384,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67730896dd9437f8aa275b03.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: n disk blocks, each writable at most maximumCycles times; a write picks the block with the fewest remaining write cycles, ties to the smallest id (the interface and anything else are cut off)",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "DiskBlockManager(n, maximumCycles) creates blocks 0..n-1, each with maximumCycles remaining writes. write() chooses, among blocks with at least one remaining write, the one with the fewest remaining writes, ties broken by the smallest id; it uses one write of that block and returns its id, or returns -1 when every block is worn out. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: only the two selection rules are visible; the class and method names, that a write takes no arguments and returns the block id, that worn-out blocks are skipped and that -1 means none is left are inferred; the preview may continue with more operations that this contract does not cover",
+   "inferred_interface": {
+    "classname": "DiskBlockManager",
+    "constructor": {
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "maximumCycles",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "write",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "WDB",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:679da470996c3c60bd38b5ba",
+   "variant_id": "679da470996c3c60bd38b5ba",
+   "variant_ordinal": 1,
+   "title": "Alien Base Attack",
+   "source": {
+    "post_id": "6798653e4b8bccaed413d52c",
+    "group_title": "Alien Base Attack",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6798653e4b8bccaed413d52c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6798653e4b8bccaed413d52c/practice?questionId=679da470996c3c60bd38b5ba",
+    "preview_response_sha256": "db486635928557ac7555d76cbf5560a2a3411c64abf68d3c9e2881de059dcee7",
+    "preview_content_sha256": "1afd4702817dd3a2d4325dc8058b54528db856bd07f1ae8718d60cfbd9b38884",
+    "preview_characters": 391,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6798653e4b8bccaed413d52c.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "LYFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: the base is the interval [0, n]; an attack at coordinate x destroys [x, x + 1]; after attacks, decide whether the whole base is destroyed; class AlienBaseAttack (its operations are cut off)",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "AlienBaseAttack(n) creates a base covering [0, n] with n unit segments [i, i + 1], 0 <= i < n. attack(x) destroys the segment [x, x + 1]; coordinates are integers and an attack outside the base, or repeating an earlier attack, changes nothing. isDestroyed() returns true exactly when every unit segment of the base has been destroyed. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: the base, the effect of one attack and the destroyed question are in the preview; the method names attack/isDestroyed, integer coordinates, attacks outside the base being allowed and ignored, and the bounds are inferred",
+   "inferred_interface": {
+    "classname": "AlienBaseAttack",
+    "constructor": {
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "attack",
+      "params": [
+       {
+        "name": "x",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "isDestroyed",
+      "params": [],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "ABA",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:678876fe402dc47b67a14944",
+   "variant_id": "678876fe402dc47b67a14944",
+   "variant_ordinal": 1,
+   "title": "Array Generation Service",
+   "source": {
+    "post_id": "67887337402dc47b67a14941",
+    "group_title": "Array Generation Service",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67887337402dc47b67a14941",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67887337402dc47b67a14941/practice?questionId=678876fe402dc47b67a14944",
+    "preview_response_sha256": "d7fd7ad0fb81fab2af29ef2479fd19e9cc0f52ba7210cf11b2967c6b890056b5",
+    "preview_content_sha256": "f8c100a8369f172f4f6d4e0b2070a933c38c69a3b2869a51bbe855ecbb550dc9",
+    "preview_characters": 390,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67887337402dc47b67a14941.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: arr holds n positive integers and state is a 0/1 string of length n; state[i] = 1 means arr[i] is available and 0 means blocked; a generator builds an array S under rules (the operations and the goal are cut off)",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "arr is a list of n positive integers, state a string of n characters \"0\"/\"1\" with at least one \"1\", and m a positive integer. S starts empty. Each of m operations appends arr[i] for some currently available index i (an index may be chosen again later); afterwards every blocked index whose left neighbour was available before this operation becomes available. Return the lexicographically largest S that can be produced (a list of m integers).",
+   "inference_uncertainty": "high: arr, state and the available/blocked meaning are in the preview; the operation count m, reuse of chosen elements, the rightward unblocking rule and the lexicographically-largest goal are inferred from a commonly reported version of this task and are not visible",
+   "inferred_interface": {
+    "name": "getMaximumArray",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     },
+     {
+      "name": "state",
+      "type": "string"
+     },
+     {
+      "name": "m",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "AGS"
+  },
+  {
+   "uid": "hack2hire:67a56d81b571d6ff0a4bd238",
+   "variant_id": "67a56d81b571d6ff0a4bd238",
+   "variant_ordinal": 1,
+   "title": "Bring Servers Down",
+   "source": {
+    "post_id": "67a536f62a9ed767fa215434",
+    "group_title": "Bring Servers Down",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a536f62a9ed767fa215434",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a536f62a9ed767fa215434/practice?questionId=67a56d81b571d6ff0a4bd238",
+    "preview_response_sha256": "6abc540cac84b06f36e38e7bea5337f1da50a1d08bcb3883c3a9d614a209ce26",
+    "preview_content_sha256": "3f55806910e48336b74e36eb77b796f285af8d647cc4774f41319dcf28a99693",
+    "preview_characters": 314,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67a536f62a9ed767fa215434.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: arrays request and health of length n; server i handles request[i] requests and starts with health[i]; find the minimum total number of requests needed to bring all servers down during a drill (the attack rule is cut off)",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "request and health are equal-length lists of positive integers and k is a positive integer. Time runs in rounds. In each round every server that is still up handles request[i] requests, all of which count towards the total; then one chosen server that is still up loses k health and goes down when its health reaches 0 or less. Return the minimum possible total number of requests handled before every server is down.",
+   "inference_uncertainty": "high: the two arrays and the minimise-total-requests goal are in the preview; the attack parameter k, the round model (every live server handles its requests each round, one server is hit per round) and the counting are inferred from a commonly reported version and are not visible",
+   "inferred_interface": {
+    "name": "getMinRequests",
+    "params": [
+     {
+      "name": "request",
+      "type": "integer[]"
+     },
+     {
+      "name": "health",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "BSD"
+  },
+  {
+   "uid": "hack2hire:67840e27d0faf7ec64cc3adb",
+   "variant_id": "67840e27d0faf7ec64cc3adb",
+   "variant_ordinal": 1,
+   "title": "Count Reversing Triples",
+   "source": {
+    "post_id": "67840acad0faf7ec64cc3ada",
+    "group_title": "Count Reversing Triples",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67840acad0faf7ec64cc3ada",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67840acad0faf7ec64cc3ada/practice?questionId=67840e27d0faf7ec64cc3adb",
+    "preview_response_sha256": "08bd5ec80d1f7fbd8682f36f8a9a17f1bfec9741e840e61f5a5548fca580b01d",
+    "preview_content_sha256": "b904872d296e6bf33fe67caf750d610fe16907fceeefddfd21a7c15d2ccd1646",
+    "preview_characters": 426,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67840acad0faf7ec64cc3ada.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "AFFIRM"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 334; count index triples i < j < k with nums[i] > nums[j] > nums[k]",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "nums is a list of integers. Return the number of index triples (i, j, k) with i < j < k and nums[i] > nums[j] > nums[k] (strictly decreasing values).",
+   "inference_uncertainty": "low: the counting rule is in the preview; the function name and the bounds are inferred (the count stays below 2**53 at n <= 1e5)",
+   "inferred_interface": {
+    "name": "countTriplets",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CRT"
+  },
+  {
+   "uid": "hack2hire:6897c08aa543d38b79706ca6",
+   "variant_id": "6897c08aa543d38b79706ca6",
+   "variant_ordinal": 1,
+   "title": "Cross-Day User Trust Scoring",
+   "source": {
+    "post_id": "6897b2e8a543d38b79706c98",
+    "group_title": "Cross-Day User Trust Scoring",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6897b2e8a543d38b79706c98",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6897b2e8a543d38b79706c98/practice?questionId=6897c08aa543d38b79706ca6",
+    "preview_response_sha256": "a6469ad545b8e603e6c27ca8ab91b18f18f1a0caf78e797546706c1600f4b420",
+    "preview_content_sha256": "d59590a8e7860188fbd648f3b37a42cb5cace3848e6fcbd9a09dfc19f223a7a0",
+    "preview_characters": 537,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6897b2e8a543d38b79706c98.json",
+    "algorithm_tags": [
+     "STRING",
+     "MATH"
+    ],
+    "companies": [
+     "AFFIRM"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: class PurchaseAnalyzer built from two days of logs, rows [date, userId, orderType, amount] with amount a string; crossDayDiverseUsers() returns the sorted userIds that appear on both days and have at least two distinct order types over both days combined (the trust-score methods are cut off)",
+    "algorithmTags: STRING, MATH"
+   ],
+   "inferred_spec": "PurchaseAnalyzer(logsDay1, logsDay2) receives two lists of rows [date, userId, orderType, amount], all strings. crossDayDiverseUsers() returns, sorted ascending, the userIds that occur in at least one row of each day and whose rows on both days together contain at least two distinct orderType values. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: the constructor and crossDayDiverseUsers are in the preview with their rules; the title promises trust scores for new purchases, but those methods are cut off and are not specified or implemented here, so this contract covers only crossDayDiverseUsers; field formats and bounds are inferred",
+   "inferred_interface": {
+    "classname": "PurchaseAnalyzer",
+    "constructor": {
+     "params": [
+      {
+       "name": "logsDay1",
+       "type": "string[][]"
+      },
+      {
+       "name": "logsDay2",
+       "type": "string[][]"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "crossDayDiverseUsers",
+      "params": [],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant (covers only the previewed method)",
+   "oracle_constant": "CDT",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:678d3e738c349080cddc5f5e",
+   "variant_id": "678d3e738c349080cddc5f5e",
+   "variant_ordinal": 1,
+   "title": "Evaluate String Expression II",
+   "source": {
+    "post_id": "678d3ddc8c349080cddc5f5d",
+    "group_title": "Evaluate String Expression II",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678d3ddc8c349080cddc5f5d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678d3ddc8c349080cddc5f5d/practice?questionId=678d3e738c349080cddc5f5e",
+    "preview_response_sha256": "f3ee1b47733021e5464fb4123c715d426069d2daac344e5b05a11867f95a41c6",
+    "preview_content_sha256": "8ff35ffab4c57690e89b76890bd0d1435ad5dae433f2e581d052ed3c4f39fa8b",
+    "preview_characters": 444,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/678d3ddc8c349080cddc5f5d.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "AFFIRM"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 224; an expression made of spaces, numbers, parentheses and the operations \"add\" and \"mul\"; evaluate it",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "expression is an integer literal or a parenthesised call \"(op e1 e2 ... ek)\" with op \"add\" or \"mul\" and k >= 2 argument expressions. Tokens are separated by one or more spaces, spaces next to parentheses and at either end are optional. Literals are an optional \"-\" followed by decimal digits without leading zeros (absolute value at most 1e9, no \"-0\"). add returns the sum and mul the product of the arguments. Return the integer value of the whole expression.",
+   "inference_uncertainty": "high: the token kinds and the two operations are in the preview, but the syntax is not; the prefix \"(op args...)\" form (suggested by spaces and parentheses being the only separators), at least two arguments per call, signed literals and the bounds are inferred; every intermediate value is kept within 2**53 - 1 in absolute value by the domain",
+   "inferred_interface": {
+    "name": "evaluate",
+    "params": [
+     {
+      "name": "expression",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "ESE"
+  },
+  {
+   "uid": "hack2hire:687e65b7eab243475a7dfbf7",
+   "variant_id": "687e65b7eab243475a7dfbf7",
+   "variant_ordinal": 1,
+   "title": "Find Frequent Events in 24 Hours",
+   "source": {
+    "post_id": "687e65afeab243475a7dfbf6",
+    "group_title": "Find Frequent Events in 24 Hours",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/687e65afeab243475a7dfbf6",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/687e65afeab243475a7dfbf6/practice?questionId=687e65b7eab243475a7dfbf7",
+    "preview_response_sha256": "b449c3c845657d44389d83195c1b441ff129f1894a66305fd38e690d78a18d43",
+    "preview_content_sha256": "ebaf5cceb33e0cde7db9c02e5cc00815c1c1085eb6aea7de56036fdc822f0fdd",
+    "preview_characters": 179,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/687e65afeab243475a7dfbf6.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: an array of log entries, each with a user id, a timestamp and an event type, one event performed by a user at a time (the question is cut off)",
+    "algorithmTags: SLIDING_WINDOW, HASH_TABLE"
+   ],
+   "inferred_spec": "logs is a list of rows [userId, timestamp, eventType] with string userId and eventType and integer timestamp in seconds; rows are in any order and may repeat. Return, sorted ascending and without duplicates, the event types e for which some user has at least k rows of type e whose timestamps all lie within a window of 24 hours (largest minus smallest timestamp below 86400).",
+   "inference_uncertainty": "high: only the log row content is in the preview; the threshold k, the per-user per-event counting, the half-open 86400-second window and the sorted event-type output are inferred from the title and tags",
+   "inferred_interface": {
+    "name": "findFrequentEvents",
+    "params": [
+     {
+      "name": "logs",
+      "type": "[string, integer, string][]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FFE"
+  },
+  {
+   "uid": "hack2hire:6775decc2c61a9f93e698ba0",
+   "variant_id": "6775decc2c61a9f93e698ba0",
+   "variant_ordinal": 1,
+   "title": "Find Longest Path in DAG",
+   "source": {
+    "post_id": "6775dd632c61a9f93e698b9f",
+    "group_title": "Find Longest Path in DAG",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6775dd632c61a9f93e698b9f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6775dd632c61a9f93e698b9f/practice?questionId=6775decc2c61a9f93e698ba0",
+    "preview_response_sha256": "d36f61995aab7b0a82f3b3511b4e45e0c6a0a2cdf8565c7f814a889ac01ddbeb",
+    "preview_content_sha256": "dc1f4c57bb19c52c12bf7aac28299c5894d25275ae90d2df115deec23785e068",
+    "preview_characters": 546,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6775dd632c61a9f93e698b9f.json",
+    "algorithm_tags": [
+     "MEMOIZATION",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a DAG given as directed edges between string node names; return the node names along a longest path; the graph is acyclic, has at most 1e4 edges, and names are 1 to 5 uppercase letters",
+    "algorithmTags: MEMOIZATION, DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "edges is a list of [from, to] pairs of node names (1 to 5 uppercase letters) forming a directed acyclic graph without repeated edges or self-loops. A path follows edges; its length is its number of edges. Return the node names of a longest path in order; among several longest paths return the lexicographically smallest list (compared name by name). Return [] when there are no edges.",
+   "inference_uncertainty": "medium: the input, output and edge bound are in the preview; the tie rule (lexicographically smallest node list), [] for an empty graph and the absence of repeated edges are inferred",
+   "inferred_interface": {
+    "name": "longestPath",
+    "params": [
+     {
+      "name": "edges",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LPD"
+  },
+  {
+   "uid": "hack2hire:69279ce99c0536c47b291a80",
+   "variant_id": "69279ce99c0536c47b291a80",
+   "variant_ordinal": 1,
+   "title": "Find Peak Event Moment",
+   "source": {
+    "post_id": "69279c3a9c0536c47b291a7f",
+    "group_title": "Find Peak Event Moment",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69279c3a9c0536c47b291a7f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69279c3a9c0536c47b291a7f/practice?questionId=69279ce99c0536c47b291a80",
+    "preview_response_sha256": "48dfa75d82a0160e132ddb14ced74f29a067809545abed85da53d18fca7c956c",
+    "preview_content_sha256": "fadf0054cb68ddb7f37cbb7e268078b9f860e4d87897c9993d61bf61bfb7ac02",
+    "preview_characters": 474,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69279c3a9c0536c47b291a7f.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "SNAPCHAT"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 253; each guest is present over [entry, exit), at every integer time t with entry <= t < exit (the question is cut off)",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "intervals is a non-empty list of [entry, exit] integer pairs with entry < exit; a guest is present at every integer t with entry <= t < exit. Return the earliest integer time at which the number of guests present is maximum.",
+   "inference_uncertainty": "medium: the half-open presence rule is in the preview; the output (the earliest time of the maximum, rather than the maximum count or a range) is inferred from the title, and the bounds are inferred",
+   "inferred_interface": {
+    "name": "findPeakMoment",
+    "params": [
+     {
+      "name": "intervals",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FPE"
+  },
+  {
+   "uid": "hack2hire:677041e0366afdc1233e4ff4",
+   "variant_id": "677041e0366afdc1233e4ff4",
+   "variant_ordinal": 1,
+   "title": "Find Redundant Substring",
+   "source": {
+    "post_id": "676f9b81366afdc1233e4ff3",
+    "group_title": "Find Redundant Substring",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/676f9b81366afdc1233e4ff3",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/676f9b81366afdc1233e4ff3/practice?questionId=677041e0366afdc1233e4ff4",
+    "preview_response_sha256": "790fa77f892e993ff1eb8e1a946d9d28c6265c18bd8cb5a82972bc8d16174758",
+    "preview_content_sha256": "527c11200433489dc72edcc923e9c6f6c145be21a8fe4f60424e63660a2fe51c",
+    "preview_characters": 345,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/676f9b81366afdc1233e4ff3.json",
+    "algorithm_tags": [
+     "PREFIX_SUM",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a string is redundant when its length equals a * V + b * C, with V its vowels, C its consonants and a, b given integers (the question is cut off)",
+    "algorithmTags: PREFIX_SUM, HASH_TABLE"
+   ],
+   "inferred_spec": "word is a non-empty string of lowercase letters and a, b are integers. Vowels are a, e, i, o, u; every other letter is a consonant. Return the number of non-empty substrings (by position) whose length equals a * V + b * C, where V and C count their vowels and consonants.",
+   "inference_uncertainty": "medium: the redundancy rule is in the preview; counting non-empty substrings by position, the vowel set without y and the bounds are inferred",
+   "inferred_interface": {
+    "name": "countRedundantSubstrings",
+    "params": [
+     {
+      "name": "word",
+      "type": "string"
+     },
+     {
+      "name": "a",
+      "type": "integer"
+     },
+     {
+      "name": "b",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FRS"
+  },
+  {
+   "uid": "hack2hire:69b78e4e8a0eeb9897a8d2a5",
+   "variant_id": "69b78e4e8a0eeb9897a8d2a5",
+   "variant_ordinal": 1,
+   "title": "Garage Occupancy per Timestamp",
+   "source": {
+    "post_id": "69b78e3f8a0eeb9897a8d2a4",
+    "group_title": "Garage Occupancy per Timestamp",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69b78e3f8a0eeb9897a8d2a4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69b78e3f8a0eeb9897a8d2a4/practice?questionId=69b78e4e8a0eeb9897a8d2a5",
+    "preview_response_sha256": "715223c075b02a61fc4f8e51618af5b66b1c2e592483ab7af9cc300339f549fc",
+    "preview_content_sha256": "0cb299fb50ef6c79d5eaff578e9af5d229b1045d5a361215daea99651d322119",
+    "preview_characters": 516,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69b78e3f8a0eeb9897a8d2a4.json",
+    "algorithm_tags": [
+     "PREFIX_SUM"
+    ],
+    "companies": [
+     "WAYMO"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: n timestamps 0..n-1 and tickets [entry, exit]; a car counts from entry through exit inclusive and stops counting at exit + 1",
+    "algorithmTags: PREFIX_SUM"
+   ],
+   "inferred_spec": "n is a positive integer and tickets a list of [entry, exit] pairs with 0 <= entry <= exit <= n - 1. A car is counted at every timestamp t with entry <= t <= exit. Return the list of n occupancy counts for timestamps 0..n-1.",
+   "inference_uncertainty": "low: the counting rule is in the preview; the output as a length-n list, the function name, entry <= exit within range and the bounds are inferred",
+   "inferred_interface": {
+    "name": "getOccupancy",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "tickets",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "GOT"
+  }
+ ]
+}

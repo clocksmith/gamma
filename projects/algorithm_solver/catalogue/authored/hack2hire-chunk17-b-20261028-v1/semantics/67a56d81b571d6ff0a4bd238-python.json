@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67a56d81b571d6ff0a4bd238",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "request",
+  "health",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "getMinRequests",
+  "params": [
+   {
+    "name": "request",
+    "type": "integer[]"
+   },
+   {
+    "name": "health",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "dynamic programme over subsets of servers already brought down (the elapsed rounds are the sum of their hit counts)",
+  "candidate_design": "server i needs t_i = ceil(health[i] / k) consecutive hits and costs request[i] per round until it falls; ordering servers by t_i / request[i] ascending (exchange argument, compared by integer cross-multiplication) minimises sum request[i] * finish round",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "a4aca34ff2d6e74bee11338dc3687039b59e76cded17fb7bbfe31678e7b0a687",
+ "wrapper": "Solution.getMinRequests"
+}

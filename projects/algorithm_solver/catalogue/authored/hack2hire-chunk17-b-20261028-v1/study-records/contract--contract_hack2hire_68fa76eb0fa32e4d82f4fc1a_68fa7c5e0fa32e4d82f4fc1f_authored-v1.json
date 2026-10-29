@@ -1,0 +1,455 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68fa76eb0fa32e4d82f4fc1a:68fa7c5e0fa32e4d82f4fc1f:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+   "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68fa76eb0fa32e4d82f4fc1a.json",
+   "sha256": "e7d43fe976da4861233f0ae95e268414b6f9f20ac67bc3c0b0ffe7b06fe3b766",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+   "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+   "selector": "/variants/hack2hire:68fa7c5e0fa32e4d82f4fc1f"
+  }
+ ],
+ "problemId": "hack2hire:68fa76eb0fa32e4d82f4fc1a",
+ "variantId": "68fa7c5e0fa32e4d82f4fc1f",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: most specific wildcard route per path",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:68fa7c5e0fa32e4d82f4fc1f/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Router() starts with no routes. A path is \"/\" (no segments) or \"/\" followed by segments joined with \"/\"; a pattern has the same form but any segment may be \"*\". addRoute(pattern, handler) registers pattern with handler, replacing the handler of an identical earlier pattern. callRoute(path) considers the registered patterns with as many segments as path whose every non-\"*\" segment equals the path segment at the same position; it returns the handler of the one with the fewest \"*\" segments, breaking ties by preferring a literal segment over \"*\" at the leftmost position where two candidates differ; it returns \"\" when no pattern matches. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Router() starts with no routes.",
+   "A path is \"/\" (no segments) or \"/\" followed by segments joined with \"/\"; a pattern has the same form but any segment may be \"*\".",
+   "addRoute(pattern, handler) registers pattern with handler, replacing the handler of an identical earlier pattern.",
+   "callRoute(path) considers the registered patterns with as many segments as path whose every non-\"*\" segment equals the path segment at the same position; it returns the handler of the one with the fewest \"*\" segments, breaking ties by preferring a literal segment over \"*\" at the leftmost position where two candidates differ; it returns \"\" when no pattern matches.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "at most 1e4 calls",
+   "a path or pattern has at most 8 segments",
+   "literal segments are 1 to 10 characters from a-z and 0-9; a pattern segment may also be \"*\"",
+   "handler names are 1 to 20 characters: a letter followed by letters, digits or \"_\""
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:68fa7c5e0fa32e4d82f4fc1f/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: a router maps handler names to registered URL patterns; segments match exactly or through a \"*\" wildcard that matches any single segment; a query returns the handler of the most specific matching pattern, preferring fewest wildcards, and \"\" when nothing matches (further tie rules are cut off); algorithmTags: TRIE; preview response sha256 6bfd0383a841916360d598e99d936d435c8c3ffbc6ea7336cd58fb275175fe14"
+   },
+   {
+    "statement": "Uncertainty: medium: exact segments, the single-segment \"*\", fewest wildcards first and \"\" for no match are in the preview; the class and method names, re-registration replacing the handler, the left-to-right literal-first tie rule (the preview list is cut off after its first rule) and the path syntax and bounds are inferred",
+    "basis": "the public group preview is partial (497 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How are ties between patterns with the same number of wildcards broken?",
+   "Does registering the same pattern again replace the handler?",
+   "Does \"*\" match exactly one segment, or also zero or several?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:68fa7c5e0fa32e4d82f4fc1f/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "Router"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "Router",
+      "callRoute",
+      "addRoute",
+      "callRoute",
+      "addRoute",
+      "addRoute",
+      "callRoute",
+      "callRoute",
+      "addRoute",
+      "callRoute",
+      "callRoute",
+      "addRoute"
+     ],
+     [
+      [],
+      [
+       "/a/a/a"
+      ],
+      [
+       "/*/c1",
+       "h7"
+      ],
+      [
+       "/c1/c1"
+      ],
+      [
+       "/*/b",
+       "h6"
+      ],
+      [
+       "/*",
+       "h3"
+      ],
+      [
+       "/"
+      ],
+      [
+       "/a/b/c1"
+      ],
+      [
+       "/b/*",
+       "h7"
+      ],
+      [
+       "/"
+      ],
+      [
+       "/a/b"
+      ],
+      [
+       "/",
+       "h6"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     "",
+     null,
+     "h7",
+     null,
+     null,
+     "",
+     "",
+     null,
+     "",
+     "h6",
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:68fa7c5e0fa32e4d82f4fc1f/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/oracles.py",
+    "sha256": "46291096cb8f7f5ce660e0fd59eb4a1e4b0d94358503f0da447cb7aa9324d3e3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Router:\n    def __init__(self)\n    def addRoute(self, pattern, handler) -> void\n    def callRoute(self, path) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/68fa7c5e0fa32e4d82f4fc1f-python.json",
+     "inferredInterface": {
+      "classname": "Router",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addRoute",
+        "params": [
+         {
+          "name": "pattern",
+          "type": "string"
+         },
+         {
+          "name": "handler",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "callRoute",
+        "params": [
+         {
+          "name": "path",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/68fa7c5e0fa32e4d82f4fc1f-python.json",
+      "sha256": "478940a6e580652ae0c98de8517951cc60d33f8a8ec15f8d46130d6296080ed2",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Router {\n  constructor()\n  addRoute(pattern, handler) /* -> void */\n  callRoute(path) /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/68fa7c5e0fa32e4d82f4fc1f-javascript.json",
+     "inferredInterface": {
+      "classname": "Router",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addRoute",
+        "params": [
+         {
+          "name": "pattern",
+          "type": "string"
+         },
+         {
+          "name": "handler",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "callRoute",
+        "params": [
+         {
+          "name": "path",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/68fa7c5e0fa32e4d82f4fc1f-javascript.json",
+      "sha256": "6bb80c9e13fd846bd95feba5d7deb0533c153fea32d659047570d48f1a113346",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

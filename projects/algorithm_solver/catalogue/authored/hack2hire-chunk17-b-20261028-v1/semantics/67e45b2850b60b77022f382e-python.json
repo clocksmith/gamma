@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67e45b2850b60b77022f382e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "pattern",
+  "words"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "matchWords",
+  "params": [
+   {
+    "name": "pattern",
+    "type": "string"
+   },
+   {
+    "name": "words",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "boolean[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every pair of positions i < j check pattern[i] == pattern[j] exactly when word[i] == word[j]",
+  "candidate_design": "per word, one pass with two maps (pattern character to word character and back), failing at the first conflict",
+  "complexity_target": "O(total characters) time/O(alphabet) space per word"
+ },
+ "source_sha256": "ffd8038add38d6ad283f1e170d22c359c05ed5763ae4a0181fae2a90e8292a1c",
+ "wrapper": "Solution.matchWords"
+}

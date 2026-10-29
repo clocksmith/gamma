@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+   "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+   "selector": "/problems/hack2hire:6775decc2c61a9f93e698ba0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+   "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+   "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0"
+  }
+ ],
+ "problemId": "hack2hire:6775dd632c61a9f93e698b9f",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/contract--contract_hack2hire_6775dd632c61a9f93e698b9f_6775decc2c61a9f93e698ba0_authored-v1.json",
+  "sha256": "2c22d2561c4cd2aaf97078b976246d198d3a8d25cc8f04a6a1fb3d4d4392917f"
+ },
+ "title": {
+  "status": "present",
+  "value": "topological order (Kahn), then in reverse order compute for each node the longest path length and its best next node (smallest name among successors of maximum length); start from the smallest-named node of maximum length",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+    "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+    "selector": "/problems/hack2hire:6775decc2c61a9f93e698ba0/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "topological order (Kahn), then in reverse order compute for each node the longest path length and its best next node (smallest name among successors of maximum length); start from the smallest-named node of maximum length. Complexity target: O(V log V + E) time/O(V + E) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+    "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+    "selector": "/problems/hack2hire:6775decc2c61a9f93e698ba0"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Longest or critical path in a dependency graph"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Kahn order avoids deep recursion on long chains; memoised DFS is shorter but recursive"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "len[v] = 1 + max len[successor], or 0 for a sink",
+   "the chosen continuation of v is lexicographically smallest among longest ones"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Longest paths in a DAG are a dynamic programme over a topological order.",
+   "Compute, for every node, the longest path starting there and its next node.",
+   "Breaking ties by the smallest next name gives the lexicographically smallest list, because all candidates start with the same node."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "topological order (Kahn), then in reverse order compute for each node the longest path length and its best next node (smallest name among successors of maximum length); start from the smallest-named node of maximum length",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+      "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+      "selector": "/problems/hack2hire:6775decc2c61a9f93e698ba0/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(V log V + E) time/O(V + E) space; the independent reference (enumerate every path by depth-first search from every node and keep the longest, then the lexicographically smallest) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+      "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+      "selector": "/problems/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Longest paths in a DAG are a dynamic programme over a topological order.",
+     "Compute, for every node, the longest path starting there and its next node."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_6775dd632c61a9f93e698b9f_6775decc2c61a9f93e698ba0_approach-native_v1.json",
+    "sha256": "74a4d244dc6ad2599b6181c5998ea42e148bf62bcb2cae4ca7403ddaf2fce5c8"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper longestPath, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+      "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+      "selector": "/problems/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Breaking ties by the smallest next name gives the lexicographically smallest list, because all candidates start with the same node."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_6775dd632c61a9f93e698b9f_6775decc2c61a9f93e698ba0_python_v1.json",
+     "sha256": "46056ddbcb0f655a9d49a32f3d3eddaa5f1d8a5c3c689d9852f1b73695d07c6b"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_6775dd632c61a9f93e698b9f_6775decc2c61a9f93e698ba0_javascript_v1.json",
+     "sha256": "47447d6f300e6220d3d2a21c796d5843821871d0253e355feaaa18911f832b5c"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_6775dd632c61a9f93e698b9f_6775decc2c61a9f93e698ba0_approach-native_v1.json",
+    "sha256": "74a4d244dc6ad2599b6181c5998ea42e148bf62bcb2cae4ca7403ddaf2fce5c8"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (enumerate every path by depth-first search from every node and keep the longest, then the lexicographically smallest) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+      "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+      "selector": "/problems/hack2hire:6775decc2c61a9f93e698ba0/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/12/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/test_oracles.py",
+      "sha256": "9f8c1e7493be177d8db0007741d55b6261214b93d7ca26a43c2b59bfed18f752",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:6775decc2c61a9f93e698ba0"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_6775dd632c61a9f93e698b9f_6775decc2c61a9f93e698ba0_approach-native_v1.json",
+    "sha256": "74a4d244dc6ad2599b6181c5998ea42e148bf62bcb2cae4ca7403ddaf2fce5c8"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6775dd632c61a9f93e698b9f:6775decc2c61a9f93e698ba0:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_6775dd632c61a9f93e698b9f_6775decc2c61a9f93e698ba0_approach-native_v1.json",
+  "sha256": "74a4d244dc6ad2599b6181c5998ea42e148bf62bcb2cae4ca7403ddaf2fce5c8"
+ }
+}

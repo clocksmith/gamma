@@ -1,0 +1,434 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67730896dd9437f8aa275b03:67730b5ddd9437f8aa275b04:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+   "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+   "selector": "/problems/4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67730896dd9437f8aa275b03.json",
+   "sha256": "9f3d1010e1d8c7a4a4b9edc57caf993acd18a3bd969616899abe6f8bff8fc403",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+   "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+   "selector": "/variants/hack2hire:67730b5ddd9437f8aa275b04"
+  }
+ ],
+ "problemId": "hack2hire:67730896dd9437f8aa275b03",
+ "variantId": "67730b5ddd9437f8aa275b04",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: least-remaining-cycles block allocation",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:67730b5ddd9437f8aa275b04/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "DiskBlockManager(n, maximumCycles) creates blocks 0..n-1, each with maximumCycles remaining writes. write() chooses, among blocks with at least one remaining write, the one with the fewest remaining writes, ties broken by the smallest id; it uses one write of that block and returns its id, or returns -1 when every block is worn out. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "DiskBlockManager(n, maximumCycles) creates blocks 0..n-1, each with maximumCycles remaining writes.",
+   "write() chooses, among blocks with at least one remaining write, the one with the fewest remaining writes, ties broken by the smallest id; it uses one write of that block and returns its id, or returns -1 when every block is worn out.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n <= 1e5",
+   "1 <= maximumCycles <= 1e9",
+   "at most 1e5 calls"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:67730b5ddd9437f8aa275b04/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: n disk blocks, each writable at most maximumCycles times; a write picks the block with the fewest remaining write cycles, ties to the smallest id (the interface and anything else are cut off); algorithmTags: HEAP; preview response sha256 527b709f517f78d0f11b4e3af585cf59ec2db02cddb49328c9389ce32e0f2e91"
+   },
+   {
+    "statement": "Uncertainty: high: only the two selection rules are visible; the class and method names, that a write takes no arguments and returns the block id, that worn-out blocks are skipped and that -1 means none is left are inferred; the preview may continue with more operations that this contract does not cover",
+    "basis": "the public group preview is partial (384 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/4/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/4/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/4/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are blocks with zero remaining cycles skipped?",
+   "What does a write return, and what happens when all blocks are worn out?",
+   "Are there other operations, such as erase or reads?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:67730b5ddd9437f8aa275b04/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "DiskBlockManager"
+     ],
+     [
+      [
+       5,
+       4
+      ]
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "DiskBlockManager",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write",
+      "write"
+     ],
+     [
+      [
+       5,
+       1
+      ],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     0,
+     1,
+     2,
+     3,
+     4,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:67730b5ddd9437f8aa275b04/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/oracles.py",
+    "sha256": "46291096cb8f7f5ce660e0fd59eb4a1e4b0d94358503f0da447cb7aa9324d3e3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class DiskBlockManager:\n    def __init__(self, n, maximumCycles)\n    def write(self) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/67730b5ddd9437f8aa275b04-python.json",
+     "inferredInterface": {
+      "classname": "DiskBlockManager",
+      "constructor": {
+       "params": [
+        {
+         "name": "n",
+         "type": "integer"
+        },
+        {
+         "name": "maximumCycles",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "write",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/67730b5ddd9437f8aa275b04-python.json",
+      "sha256": "7c10f9885c778004a5d88a3aaad01759a68ea300bccc14c8e8d1df9d270b6684",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class DiskBlockManager {\n  constructor(n, maximumCycles)\n  write() /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/67730b5ddd9437f8aa275b04-javascript.json",
+     "inferredInterface": {
+      "classname": "DiskBlockManager",
+      "constructor": {
+       "params": [
+        {
+         "name": "n",
+         "type": "integer"
+        },
+        {
+         "name": "maximumCycles",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "write",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/67730b5ddd9437f8aa275b04-javascript.json",
+      "sha256": "98ee3a77a0f5e18be7843df1aecfef5fd790dc328fc62bf612fa35311f754607",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/4/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/4/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

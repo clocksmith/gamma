@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:678d3e738c349080cddc5f5e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "expression"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "evaluate",
+  "params": [
+   {
+    "name": "expression",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive descent over a regular-expression token list",
+  "candidate_design": "one left-to-right scan with an explicit stack of (operation, accumulator) frames; a literal or a closed call folds its value into the frame below",
+  "complexity_target": "O(length) time/O(nesting depth) space"
+ },
+ "source_sha256": "773beeb1c27df06c32770084597b2882b3ce98ea92f41119ae1918ceda1068ae",
+ "wrapper": "named export evaluate"
+}

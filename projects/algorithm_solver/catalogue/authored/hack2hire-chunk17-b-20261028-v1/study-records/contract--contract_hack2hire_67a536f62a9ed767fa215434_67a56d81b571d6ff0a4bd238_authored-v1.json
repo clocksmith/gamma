@@ -1,0 +1,354 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67a536f62a9ed767fa215434:67a56d81b571d6ff0a4bd238:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+   "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67a536f62a9ed767fa215434.json",
+   "sha256": "2a004d73b3050018768accf7bcc791aca205a1cf6ab688f929842ae23bec7559",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+   "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+   "selector": "/variants/hack2hire:67a56d81b571d6ff0a4bd238"
+  }
+ ],
+ "problemId": "hack2hire:67a536f62a9ed767fa215434",
+ "variantId": "67a56d81b571d6ff0a4bd238",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: order attacks to minimise handled requests",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:67a56d81b571d6ff0a4bd238/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "request and health are equal-length lists of positive integers and k is a positive integer. Time runs in rounds. In each round every server that is still up handles request[i] requests, all of which count towards the total; then one chosen server that is still up loses k health and goes down when its health reaches 0 or less. Return the minimum possible total number of requests handled before every server is down.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "request and health are equal-length lists of positive integers and k is a positive integer.",
+   "Time runs in rounds.",
+   "In each round every server that is still up handles request[i] requests, all of which count towards the total; then one chosen server that is still up loses k health and goes down when its health reaches 0 or less.",
+   "Return the minimum possible total number of requests handled before every server is down."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n <= 5e4",
+   "1 <= request[i] <= 100",
+   "1 <= health[i] <= 1e4",
+   "1 <= k <= 1e4"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:67a56d81b571d6ff0a4bd238/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: arrays request and health of length n; server i handles request[i] requests and starts with health[i]; find the minimum total number of requests needed to bring all servers down during a drill (the attack rule is cut off); algorithmTags: GREEDY; preview response sha256 6abc540cac84b06f36e38e7bea5337f1da50a1d08bcb3883c3a9d614a209ce26"
+   },
+   {
+    "statement": "Uncertainty: high: the two arrays and the minimise-total-requests goal are in the preview; the attack parameter k, the round model (every live server handles its requests each round, one server is hit per round) and the counting are inferred from a commonly reported version and are not visible",
+    "basis": "the public group preview is partial (314 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How much health does one attack remove, and how many servers can be attacked per round?",
+   "Do the requests of the round in which a server falls still count?",
+   "Is the answer the requests handled, or the number of attacks?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:67a56d81b571d6ff0a4bd238/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      1
+     ],
+     [
+      5
+     ],
+     2
+    ],
+    "output": 3,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      5,
+      6,
+      3,
+      6,
+      7,
+      1,
+      7,
+      1
+     ],
+     [
+      20,
+      19,
+      4,
+      11,
+      16,
+      16,
+      12,
+      12
+     ],
+     4
+    ],
+    "output": 403,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:67a56d81b571d6ff0a4bd238/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/oracles.py",
+    "sha256": "46291096cb8f7f5ce660e0fd59eb4a1e4b0d94358503f0da447cb7aa9324d3e3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def getMinRequests(request, health, k) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/67a56d81b571d6ff0a4bd238-python.json",
+     "inferredInterface": {
+      "name": "getMinRequests",
+      "params": [
+       {
+        "name": "request",
+        "type": "integer[]"
+       },
+       {
+        "name": "health",
+        "type": "integer[]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/67a56d81b571d6ff0a4bd238-python.json",
+      "sha256": "a45e4cf28e9335e684b6a558f8b80f19c643ff7f8eaf19c4734d981bc921fccd",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function getMinRequests(request, health, k) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/67a56d81b571d6ff0a4bd238-javascript.json",
+     "inferredInterface": {
+      "name": "getMinRequests",
+      "params": [
+       {
+        "name": "request",
+        "type": "integer[]"
+       },
+       {
+        "name": "health",
+        "type": "integer[]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/67a56d81b571d6ff0a4bd238-javascript.json",
+      "sha256": "34a5ed5cff578fba3e664c969af067365e6a9971b7450fc0701fe7075cba2668",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

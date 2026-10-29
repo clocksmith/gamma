@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67840e27d0faf7ec64cc3adb",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countTriplets",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "three nested loops over all index triples",
+  "candidate_design": "compress values to ranks; for each middle index multiply the number of larger values to its left by the number of smaller values to its right, both counted with Fenwick trees",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "0283e08c0d8e7c9350860c75c34a84b9fa9b826c3109e91f08fa0e404e586554",
+ "wrapper": "Solution.countTriplets"
+}

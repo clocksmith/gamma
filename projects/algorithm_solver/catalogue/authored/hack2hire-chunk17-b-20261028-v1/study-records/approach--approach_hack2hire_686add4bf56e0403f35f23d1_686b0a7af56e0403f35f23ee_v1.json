@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+   "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+   "selector": "/problems/hack2hire:686b0a7af56e0403f35f23ee"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+   "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+   "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee"
+  }
+ ],
+ "problemId": "hack2hire:686add4bf56e0403f35f23d1",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/contract--contract_hack2hire_686add4bf56e0403f35f23d1_686b0a7af56e0403f35f23ee_authored-v1.json",
+  "sha256": "d37ae065174e13c3bc5b3f368fbb7180bd933db165efca0fc276cc43d322c9e5"
+ },
+ "title": {
+  "status": "present",
+  "value": "dynamic programme keyed by value: best[v][j] is the longest subsequence ending in value v with j changes, and top[j] the best over all values; each element extends best[v][j] by one or starts a new run after top[j - 1], updating j from k down to 0",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+    "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+    "selector": "/problems/hack2hire:686b0a7af56e0403f35f23ee/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "dynamic programme keyed by value: best[v][j] is the longest subsequence ending in value v with j changes, and top[j] the best over all values; each element extends best[v][j] by one or starts a new run after top[j - 1], updating j from k down to 0. Complexity target: O(n * k) time/O(d * k) space, d = distinct values.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+    "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+    "selector": "/problems/hack2hire:686b0a7af56e0403f35f23ee"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Subsequence problems with a budget on value changes"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Keying the state by value avoids the quadratic scan over predecessors; the index-pair programme is simpler but O(n^2 k)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "best[v][j] never decreases as more elements are read",
+   "top[j] equals the maximum of best[v][j] over all values seen so far"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Taking an element never hurts except through the change budget; the question is only where the last chosen element came from.",
+   "For each value v and budget j, remember the longest subsequence that ends with v and uses j changes.",
+   "An element x either continues its own value at the same budget or follows the best subsequence of any value at budget j - 1; keep a running best per budget and update budgets downwards."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "dynamic programme keyed by value: best[v][j] is the longest subsequence ending in value v with j changes, and top[j] the best over all values; each element extends best[v][j] by one or starts a new run after top[j - 1], updating j from k down to 0",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+      "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+      "selector": "/problems/hack2hire:686b0a7af56e0403f35f23ee/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n * k) time/O(d * k) space, d = distinct values; the independent reference (quadratic dynamic programme over the last chosen index and the number of changes used so far, trying every earlier index as the predecessor) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+      "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+      "selector": "/problems/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Taking an element never hurts except through the change budget; the question is only where the last chosen element came from.",
+     "For each value v and budget j, remember the longest subsequence that ends with v and uses j changes."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_686add4bf56e0403f35f23d1_686b0a7af56e0403f35f23ee_approach-native_v1.json",
+    "sha256": "001c510281683783e86e90f90d4800883d93df625d6c0790405e176a5c6965dd"
+   }
+  },
+  {
+   "id": "approach:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper maximumLength, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+      "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+      "selector": "/problems/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "An element x either continues its own value at the same budget or follows the best subsequence of any value at budget j - 1; keep a running best per budget and update budgets downwards."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_686add4bf56e0403f35f23d1_686b0a7af56e0403f35f23ee_python_v1.json",
+     "sha256": "0b51bcd754d9cbf31e76345ec015590850afe6ce1eba7dc8ece1805cbcf3d54b"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_686add4bf56e0403f35f23d1_686b0a7af56e0403f35f23ee_javascript_v1.json",
+     "sha256": "770b663389cede57ccb8ccc9998abd82c7c2debaabc276884ad8ae2a35448af0"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_686add4bf56e0403f35f23d1_686b0a7af56e0403f35f23ee_approach-native_v1.json",
+    "sha256": "001c510281683783e86e90f90d4800883d93df625d6c0790405e176a5c6965dd"
+   }
+  },
+  {
+   "id": "approach:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (quadratic dynamic programme over the last chosen index and the number of changes used so far, trying every earlier index as the predecessor) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+      "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+      "selector": "/problems/hack2hire:686b0a7af56e0403f35f23ee/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/1/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/test_oracles.py",
+      "sha256": "9f8c1e7493be177d8db0007741d55b6261214b93d7ca26a43c2b59bfed18f752",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+      "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+      "selector": "/variants/hack2hire:686b0a7af56e0403f35f23ee"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_686add4bf56e0403f35f23d1_686b0a7af56e0403f35f23ee_approach-native_v1.json",
+    "sha256": "001c510281683783e86e90f90d4800883d93df625d6c0790405e176a5c6965dd"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:686add4bf56e0403f35f23d1:686b0a7af56e0403f35f23ee:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/artifact--artifact_hack2hire_686add4bf56e0403f35f23d1_686b0a7af56e0403f35f23ee_approach-native_v1.json",
+  "sha256": "001c510281683783e86e90f90d4800883d93df625d6c0790405e176a5c6965dd"
+ }
+}
