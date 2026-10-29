@@ -1,0 +1,492 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:696bebbc6b040fa4d120bb79:696bebd76b040fa4d120bb7a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/30"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/696bebbc6b040fa4d120bb79.json",
+   "sha256": "d4a39cf36103a4125695830d5f8daf1b42e3bf12e22c64d9af6bd0c9283d7c2f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:696bebd76b040fa4d120bb7a"
+  }
+ ],
+ "problemId": "hack2hire:696bebbc6b040fa4d120bb79",
+ "variantId": "696bebd76b040fa4d120bb7a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: Fibonacci-level nut storage",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:696bebd76b040fa4d120bb7a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "SquirrelResearch() tracks locations by id; an unseen location is empty. Level i has capacity F(i + 2) (1, 2, 3, 5, 8, ...). hideNuts(locationId, count) places nuts greedily from the deepest level upward, filling each level before the next, and returns the highest non-empty level index (-1 if the location is empty). retrieveNuts(locationId, count) removes min(count, stored) nuts from the highest levels downward and returns how many were removed. getHighestLevel(locationId) returns the highest non-empty level or -1. Because filling is bottom-up and removal top-down, the occupied levels always form a prefix. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/30/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "SquirrelResearch() tracks locations by id; an unseen location is empty.",
+   "Level i has capacity F(i + 2) (1, 2, 3, 5, 8, ...).",
+   "hideNuts(locationId, count) places nuts greedily from the deepest level upward, filling each level before the next, and returns the highest non-empty level index (-1 if the location is empty).",
+   "retrieveNuts(locationId, count) removes min(count, stored) nuts from the highest levels downward and returns how many were removed.",
+   "getHighestLevel(locationId) returns the highest non-empty level or -1.",
+   "Because filling is bottom-up and removal top-down, the occupied levels always form a prefix.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/30/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "location ids match [a-z0-9]{1,10}",
+   "0 <= count <= 1e9",
+   "total nuts hidden in a trace <= 1e14"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:696bebd76b040fa4d120bb7a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: SquirrelResearch tracks storage locations with levels from 0 (deepest) upward; level capacities follow Fibonacci 1, 2, 3, 5, 8, ... (hide and retrieve rules cut off); algorithmTags: GREEDY; preview response sha256 d5f4faf3b4b7af31e3f266056033ac4f37840141ae78ed7f70e7345b5e091283"
+   },
+   {
+    "statement": "Uncertainty: very high: the levels and Fibonacci capacities are in the preview; the hide and retrieve rules, return values and method names are inferred",
+    "basis": "the public group preview is partial (619 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/30/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/30/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/30/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are nuts hidden bottom-up and retrieved top-down?",
+   "What does each operation return?",
+   "Can a location hold unlimited levels?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:696bebd76b040fa4d120bb7a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "SquirrelResearch",
+      "hideNuts"
+     ],
+     [
+      [],
+      [
+       "oak",
+       5
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     2
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "SquirrelResearch",
+      "hideNuts",
+      "retrieveNuts",
+      "hideNuts",
+      "retrieveNuts",
+      "getHighestLevel",
+      "getHighestLevel",
+      "retrieveNuts",
+      "hideNuts",
+      "retrieveNuts",
+      "getHighestLevel"
+     ],
+     [
+      [],
+      [
+       "oak",
+       100
+      ],
+      [
+       "oak",
+       1
+      ],
+      [
+       "elm",
+       2
+      ],
+      [
+       "elm",
+       1
+      ],
+      [
+       "oak"
+      ],
+      [
+       "oak"
+      ],
+      [
+       "elm",
+       0
+      ],
+      [
+       "elm",
+       2
+      ],
+      [
+       "oak",
+       2
+      ],
+      [
+       "elm"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     8,
+     1,
+     1,
+     1,
+     8,
+     8,
+     0,
+     1,
+     2,
+     1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:696bebd76b040fa4d120bb7a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class SquirrelResearch:\n    def __init__(self)\n    def hideNuts(self, locationId, count) -> integer\n    def retrieveNuts(self, locationId, count) -> integer\n    def getHighestLevel(self, locationId) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/30/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/696bebd76b040fa4d120bb7a-python.json",
+     "inferredInterface": {
+      "classname": "SquirrelResearch",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "hideNuts",
+        "params": [
+         {
+          "name": "locationId",
+          "type": "string"
+         },
+         {
+          "name": "count",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "retrieveNuts",
+        "params": [
+         {
+          "name": "locationId",
+          "type": "string"
+         },
+         {
+          "name": "count",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getHighestLevel",
+        "params": [
+         {
+          "name": "locationId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/696bebd76b040fa4d120bb7a-python.json",
+      "sha256": "f01be9a8f803db70c0ecb44279e64dfb9e90e9b03c3b3ba5f28c667b1dedcd27",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class SquirrelResearch {\n  constructor()\n  hideNuts(locationId, count) /* -> integer */\n  retrieveNuts(locationId, count) /* -> integer */\n  getHighestLevel(locationId) /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/30/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/696bebd76b040fa4d120bb7a-javascript.json",
+     "inferredInterface": {
+      "classname": "SquirrelResearch",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "hideNuts",
+        "params": [
+         {
+          "name": "locationId",
+          "type": "string"
+         },
+         {
+          "name": "count",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "retrieveNuts",
+        "params": [
+         {
+          "name": "locationId",
+          "type": "string"
+         },
+         {
+          "name": "count",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getHighestLevel",
+        "params": [
+         {
+          "name": "locationId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/696bebd76b040fa4d120bb7a-javascript.json",
+      "sha256": "cf1f5ab8f30228f7f425da04e191c167b5af255edb0959dfd1c4fa04493fac41",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/30/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/30/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

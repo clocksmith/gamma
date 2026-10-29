@@ -1,0 +1,76 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:67d44fdf488516fd8ad5a0ba",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "FileStorageSystem",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "storeFile",
+    "params": [
+     {
+      "name": "file",
+      "type": "string"
+     },
+     {
+      "name": "date",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getKthRecentFiles",
+    "params": [
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "returnAllFiles",
+    "params": [],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "store (file, date) pairs; every query sorts all files twice (by name, then stably by date descending)",
+  "candidate_design": "keep a list sorted by a composed key (inverted date digits followed by the name) using binary-search insertion; queries slice the front",
+  "complexity_target": "O(n) per store (memmove), O(k) per query/O(n) space"
+ },
+ "source_sha256": "bc59c8481c5d6eaa6bc3bd1bd4267b491fa988cad1d9bd2af1b2b84eb30a6169",
+ "native_class": "FileStorageSystem",
+ "native_symbol": "module global FileStorageSystem",
+ "void_methods": [
+  "storeFile"
+ ]
+}

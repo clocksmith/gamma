@@ -1,0 +1,560 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:691523c93f8671d8f7a56570:691523d03f8671d8f7a56571:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/19"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/691523c93f8671d8f7a56570.json",
+   "sha256": "a931b9f3b487dce04d4ed1c89137e225b1dcd13ab7a9e368f8ad06b9502cfc97",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:691523d03f8671d8f7a56571"
+  }
+ ],
+ "problemId": "hack2hire:691523c93f8671d8f7a56570",
+ "variantId": "691523d03f8671d8f7a56571",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: length-prefixed binary snapshot",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691523d03f8671d8f7a56571/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "PersistentKVStore() starts empty. set(key, value) stores or overwrites; get(key) returns the value or \"\" when absent; delete(key) returns whether a key was removed. save() returns the blob of the current state. The blob is a list of byte values 0..255: a 4-byte big-endian entry count, then for each entry in ascending key order a 4-byte big-endian key length, the key's ASCII bytes, a 4-byte big-endian value length and the value's ASCII bytes. load(blob) replaces the whole state with the entries of a well-formed blob (level 1 only receives blobs in this format). The Medium is modelled by the caller holding the blob. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "PersistentKVStore() starts empty.",
+   "set(key, value) stores or overwrites; get(key) returns the value or \"\" when absent; delete(key) returns whether a key was removed.",
+   "save() returns the blob of the current state.",
+   "The blob is a list of byte values 0..255: a 4-byte big-endian entry count, then for each entry in ascending key order a 4-byte big-endian key length, the key's ASCII bytes, a 4-byte big-endian value length and the value's ASCII bytes.",
+   "load(blob) replaces the whole state with the entries of a well-formed blob (level 1 only receives blobs in this format).",
+   "The Medium is modelled by the caller holding the blob.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "keys match [a-z0-9]{1,10}",
+   "values are printable ASCII, 1 to 20 characters",
+   "blobs up to 2e6 bytes"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691523d03f8671d8f7a56571/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: key-value store of string keys and values that serialises its whole state to a binary blob through a provided Medium interface (InMemoryMedium) and restores it after restarts (method details cut off); algorithmTags: HASH_TABLE; codingQuestions (variant count/order); preview response sha256 4b3719a508f4a57ed6581b5d8aefd623ecab9d64ae262ceb1e983ee66bf0be7d"
+   },
+   {
+    "statement": "Uncertainty: very high: serialising to a binary blob is in the preview; the Medium interface is replaced by save returning and load taking the blob, and the byte layout, method names and value alphabet are all inferred",
+    "basis": "the public group preview is partial (447 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = save/load of a length-prefixed blob, 2 = blob with a magic header and checksum where load validates and rejects corrupt data",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/19/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/19/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/19/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the Medium passed in or owned by the store?",
+   "What exact binary layout must be used?",
+   "How should a corrupt blob be handled?",
+   "Which characters may keys and values contain?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691523d03f8671d8f7a56571/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "PersistentKVStore",
+      "get",
+      "save"
+     ],
+     [
+      [],
+      [
+       "b"
+      ],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     "",
+     [
+      0,
+      0,
+      0,
+      0
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "PersistentKVStore",
+      "set",
+      "load",
+      "load",
+      "save",
+      "get",
+      "get",
+      "save",
+      "set",
+      "set",
+      "set",
+      "get",
+      "set",
+      "set"
+     ],
+     [
+      [],
+      [
+       "b",
+       "1"
+      ],
+      [
+       [
+        0,
+        0,
+        0,
+        0
+       ]
+      ],
+      [
+       [
+        0,
+        0,
+        0,
+        0
+       ]
+      ],
+      [],
+      [
+       "k9"
+      ],
+      [
+       "b"
+      ],
+      [],
+      [
+       "a",
+       " x~"
+      ],
+      [
+       "a",
+       "hello world"
+      ],
+      [
+       "k9",
+       " x~"
+      ],
+      [
+       "a"
+      ],
+      [
+       "a",
+       "hello world"
+      ],
+      [
+       "a",
+       "hello world"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     null,
+     [
+      0,
+      0,
+      0,
+      0
+     ],
+     "",
+     "",
+     [
+      0,
+      0,
+      0,
+      0
+     ],
+     null,
+     null,
+     null,
+     "hello world",
+     null,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:691523d03f8671d8f7a56571/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class PersistentKVStore:\n    def __init__(self)\n    def set(self, key, value) -> void\n    def get(self, key) -> string\n    def delete(self, key) -> boolean\n    def save(self) -> integer[]\n    def load(self, blob) -> void",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691523d03f8671d8f7a56571-python.json",
+     "inferredInterface": {
+      "classname": "PersistentKVStore",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "delete",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "save",
+        "params": [],
+        "return": {
+         "type": "integer[]"
+        }
+       },
+       {
+        "name": "load",
+        "params": [
+         {
+          "name": "blob",
+          "type": "integer[]"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691523d03f8671d8f7a56571-python.json",
+      "sha256": "4f0daf012da95b20852bb5db5071bb91e64ab38a2d1b0f266c53fc99c076e138",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class PersistentKVStore {\n  constructor()\n  set(key, value) /* -> void */\n  get(key) /* -> string */\n  delete(key) /* -> boolean */\n  save() /* -> integer[] */\n  load(blob) /* -> void */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691523d03f8671d8f7a56571-javascript.json",
+     "inferredInterface": {
+      "classname": "PersistentKVStore",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "delete",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "save",
+        "params": [],
+        "return": {
+         "type": "integer[]"
+        }
+       },
+       {
+        "name": "load",
+        "params": [
+         {
+          "name": "blob",
+          "type": "integer[]"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/691523d03f8671d8f7a56571-javascript.json",
+      "sha256": "3f48720047cac44374185535e7540454849ccb05d1c20771daa6c9aac7603dec",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/19/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/19/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

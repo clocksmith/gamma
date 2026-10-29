@@ -1,0 +1,3954 @@
+{
+ "schema": "gamma.hack2hire-chunk10-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:67ce7ab08f73eb6319edd207": {
+   "constraints": [
+    "1 <= customOrder.length <= 26, distinct lowercase letters",
+    "0 <= words.length <= 2e4",
+    "0 <= words[i].length <= 50, letters from customOrder",
+    "total characters <= 2e5"
+   ],
+   "clarifyingQuestions": [
+    "May words contain characters missing from customOrder?",
+    "Is the input sorted in place or returned as a new list?",
+    "Can words be empty strings?"
+   ],
+   "hints": [
+    "Plain lexicographic order with a permuted alphabet is still lexicographic order.",
+    "Translate each word once into a key over the ordinary alphabet whose order matches customOrder.",
+    "Sort by translated keys with the library sort; the prefix rule then comes for free."
+   ],
+   "invariants": [
+    "translation preserves the custom order: key(x) < key(y) exactly when x precedes y",
+    "a proper prefix always sorts first"
+   ],
+   "chooseWhen": [
+    "Many comparisons under a fixed non-standard alphabet"
+   ],
+   "tradeoffs": [
+    "Precomputed keys cost O(L) extra memory but make every comparison a native string comparison"
+   ],
+   "variantLabel": "Inferred single variant: sort words under a custom alphabet",
+   "examples": [
+    {
+     "input": [
+      "ba",
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "cbdea",
+      [
+       "e",
+       "abce",
+       "c",
+       "c",
+       "eac",
+       "abb",
+       "",
+       "cbeb",
+       "dcab",
+       "aadb",
+       "dde"
+      ]
+     ],
+     "output": [
+      "",
+      "c",
+      "c",
+      "cbeb",
+      "dcab",
+      "dde",
+      "e",
+      "eac",
+      "abce",
+      "abb",
+      "aadb"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d3f7fd79bf03c0074bce16": {
+   "constraints": [
+    "up to 1e5 calls",
+    "keys and values match [a-z0-9]{1,10}",
+    "1 <= timestamp <= 1e9",
+    "set timestamps non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "Do timestamps of writes arrive in increasing order?",
+    "What does get return when no version is old enough?",
+    "Does remove erase the past, or only hide the key from that time on?",
+    "What happens to a second write at the same timestamp?"
+   ],
+   "hints": [
+    "Because write times only grow, each key's versions are already sorted when appended.",
+    "A query for time t needs the last version with time <= t: a binary search for the insertion point.",
+    "Equal timestamps replace the last version instead of appending; remove simply drops the key's arrays."
+   ],
+   "invariants": [
+    "each key's time array is strictly increasing",
+    "get never sees a version newer than its timestamp"
+   ],
+   "chooseWhen": [
+    "Point-in-time lookups over append-only histories"
+   ],
+   "tradeoffs": [
+    "Keeping every version costs memory proportional to all writes; a compaction policy would bound it"
+   ],
+   "variantLabel": "Inferred level 1: versioned get with whole-key removal",
+   "examples": [
+    {
+     "input": [
+      [
+       "TemporalKVStore",
+       "get"
+      ],
+      [
+       [],
+       [
+        "a",
+        5
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TemporalKVStore",
+       "set",
+       "set",
+       "get",
+       "remove",
+       "remove",
+       "set",
+       "get",
+       "get",
+       "set",
+       "remove",
+       "remove",
+       "set",
+       "get",
+       "get"
+      ],
+      [
+       [],
+       [
+        "c",
+        "x",
+        3
+       ],
+       [
+        "b",
+        "x",
+        3
+       ],
+       [
+        "c",
+        4
+       ],
+       [
+        "a"
+       ],
+       [
+        "c"
+       ],
+       [
+        "c",
+        "z1",
+        7
+       ],
+       [
+        "a",
+        2
+       ],
+       [
+        "c",
+        12
+       ],
+       [
+        "c",
+        "z1",
+        11
+       ],
+       [
+        "a"
+       ],
+       [
+        "a"
+       ],
+       [
+        "b",
+        "y",
+        17
+       ],
+       [
+        "c",
+        16
+       ],
+       [
+        "c",
+        19
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      "x",
+      false,
+      true,
+      null,
+      "",
+      "z1",
+      null,
+      false,
+      false,
+      null,
+      "z1",
+      "z1"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69dd59d595e80ae213e5b7fc": {
+   "constraints": [
+    "up to 1e5 calls",
+    "keys and values match [a-z0-9]{1,10}",
+    "1 <= timestamp <= 1e9",
+    "set and remove timestamps non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "Do timestamps of writes arrive in increasing order?",
+    "What does get return when no version is old enough?",
+    "Does remove erase the past, or only hide the key from that time on?",
+    "What happens to a second write at the same timestamp?"
+   ],
+   "hints": [
+    "Treat a deletion as just another version whose value is \"absent\".",
+    "Reads before the deletion time still find the older value by binary search.",
+    "remove first answers get(key, timestamp), then appends (or replaces) the tombstone."
+   ],
+   "invariants": [
+    "each key's time array is strictly increasing",
+    "a tombstone hides the key only from its own time until the next set"
+   ],
+   "chooseWhen": [
+    "Audit-style stores where deletes must not rewrite history"
+   ],
+   "tradeoffs": [
+    "Tombstones are never compacted, so deleted keys keep their memory"
+   ],
+   "variantLabel": "Inferred level 2: deletions are versions too (time travel keeps old values)",
+   "examples": [
+    {
+     "input": [
+      [
+       "TemporalKVStore",
+       "get"
+      ],
+      [
+       [],
+       [
+        "a",
+        5
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TemporalKVStore",
+       "set",
+       "set",
+       "remove",
+       "get",
+       "remove",
+       "get",
+       "set",
+       "get",
+       "set",
+       "get",
+       "get",
+       "remove",
+       "get"
+      ],
+      [
+       [],
+       [
+        "c",
+        "y",
+        4
+       ],
+       [
+        "c",
+        "x",
+        5
+       ],
+       [
+        "a",
+        7
+       ],
+       [
+        "a",
+        5
+       ],
+       [
+        "c",
+        9
+       ],
+       [
+        "a",
+        9
+       ],
+       [
+        "b",
+        "y",
+        10
+       ],
+       [
+        "b",
+        11
+       ],
+       [
+        "b",
+        "z1",
+        12
+       ],
+       [
+        "c",
+        11
+       ],
+       [
+        "a",
+        3
+       ],
+       [
+        "c",
+        14
+       ],
+       [
+        "a",
+        12
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      false,
+      "",
+      true,
+      "",
+      null,
+      "y",
+      null,
+      "",
+      "",
+      false,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:688d0850b6c09ad9a4fcc2db": {
+   "constraints": [
+    "1 <= capacity <= 1e5",
+    "up to 1e5 calls",
+    "keys and values match [a-z0-9]{1,10}",
+    "-1e9 <= rank <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Which entry is evicted among several with the same lowest rank?",
+    "Does get refresh an entry or change its rank?",
+    "Does updating an existing key ever evict?",
+    "Must the cache be thread-safe, and how would that be tested?"
+   ],
+   "hints": [
+    "Eviction needs the minimum of (rank, age) over the live entries: a priority queue.",
+    "Updating a key would require decrease-key; push a fresh heap entry instead and mark the old one stale.",
+    "When popping, skip entries whose write sequence differs from the map's current one."
+   ],
+   "invariants": [
+    "the map holds at most capacity keys",
+    "every live key has exactly one non-stale heap entry"
+   ],
+   "chooseWhen": [
+    "Priority-based eviction instead of recency"
+   ],
+   "tradeoffs": [
+    "Lazy deletion lets the heap grow with the number of writes, not the capacity"
+   ],
+   "variantLabel": "Inferred level 1: lowest-rank eviction cache",
+   "examples": [
+    {
+     "input": [
+      [
+       "RankedCache",
+       "get"
+      ],
+      [
+       [
+        1
+       ],
+       [
+        "b"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RankedCache",
+       "put",
+       "get",
+       "get",
+       "put",
+       "get",
+       "put",
+       "get",
+       "put",
+       "put",
+       "put",
+       "put",
+       "put",
+       "get"
+      ],
+      [
+       [
+        2
+       ],
+       [
+        "a",
+        "x9",
+        2
+       ],
+       [
+        "a"
+       ],
+       [
+        "c"
+       ],
+       [
+        "f",
+        "x9",
+        1000000000
+       ],
+       [
+        "a"
+       ],
+       [
+        "a",
+        "w",
+        1000000000
+       ],
+       [
+        "a"
+       ],
+       [
+        "e",
+        "w",
+        1
+       ],
+       [
+        "f",
+        "v",
+        1
+       ],
+       [
+        "b",
+        "w",
+        -1
+       ],
+       [
+        "a",
+        "v",
+        0
+       ],
+       [
+        "c",
+        "w",
+        1
+       ],
+       [
+        "b"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      "x9",
+      "",
+      null,
+      "x9",
+      null,
+      "w",
+      null,
+      null,
+      null,
+      null,
+      null,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68aba144fc2e86fe2162e8a1": {
+   "constraints": [
+    "1 <= capacity <= 1e5",
+    "source has at most 1e5 rows with unique keys",
+    "up to 1e5 calls",
+    "keys and values match [a-z0-9]{1,10}",
+    "-1e9 <= rank <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Which entry is evicted among several with the same lowest rank?",
+    "Does get refresh an entry or change its rank?",
+    "Does updating an existing key ever evict?",
+    "Must the cache be thread-safe, and how would that be tested?"
+   ],
+   "hints": [
+    "A miss that the source can answer becomes a write into the cache.",
+    "Write-through keeps the source in sync, so evicted entries can be reloaded later with their latest value and rank.",
+    "Reuse the level-1 lazy heap for eviction and count loads separately."
+   ],
+   "invariants": [
+    "the cache is always a subset of the source",
+    "getLoadCount equals the number of misses answered by the source"
+   ],
+   "chooseWhen": [
+    "Caches in front of slow stores"
+   ],
+   "tradeoffs": [
+    "Write-through doubles the work of each put but never loses updates on eviction"
+   ],
+   "variantLabel": "Inferred level 2: read-through, write-through ranked cache with a load counter",
+   "examples": [
+    {
+     "input": [
+      [
+       "RankedCache",
+       "get"
+      ],
+      [
+       [
+        1,
+        [
+         [
+          "c",
+          "sc",
+          -2
+         ],
+         [
+          "b",
+          "sb",
+          3
+         ]
+        ]
+       ],
+       [
+        "f"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RankedCache",
+       "put",
+       "get",
+       "put",
+       "getLoadCount",
+       "put",
+       "get",
+       "getLoadCount",
+       "put",
+       "put",
+       "get",
+       "put",
+       "get",
+       "put"
+      ],
+      [
+       [
+        1,
+        []
+       ],
+       [
+        "c",
+        "v",
+        1
+       ],
+       [
+        "b"
+       ],
+       [
+        "b",
+        "w",
+        0
+       ],
+       [],
+       [
+        "e",
+        "v",
+        2
+       ],
+       [
+        "e"
+       ],
+       [],
+       [
+        "c",
+        "v",
+        1000000000
+       ],
+       [
+        "a",
+        "x9",
+        -1
+       ],
+       [
+        "e"
+       ],
+       [
+        "a",
+        "v",
+        1
+       ],
+       [
+        "c"
+       ],
+       [
+        "d",
+        "w",
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      "",
+      null,
+      0,
+      null,
+      "v",
+      0,
+      null,
+      null,
+      "v",
+      null,
+      "v",
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ab30396e74ebb7457a3ef46": {
+   "constraints": [
+    "deck.length == 6",
+    "cards are distinct and well formed"
+   ],
+   "clarifyingQuestions": [
+    "What is the input: a deck to deal from, or the hands directly?",
+    "How should the result be reported?",
+    "Do straights or flushes exist in this game?",
+    "Is the ace ever low?"
+   ],
+   "hints": [
+    "Turn each hand into a strength key: category first, then tie-break ranks in significance order.",
+    "Count how often each rank occurs to find triples and pairs.",
+    "Compare the two keys lexicographically; equal keys mean a draw."
+   ],
+   "invariants": [
+    "suits never influence the key",
+    "the key fully orders hands by the stated rules"
+   ],
+   "chooseWhen": [
+    "Ranking small hands by a composite key"
+   ],
+   "tradeoffs": [
+    "A key tuple is simple; a numeric score would need careful base choice"
+   ],
+   "variantLabel": "Inferred level 1: two hands, three categories",
+   "examples": [
+    {
+     "input": [
+      [
+       "2S",
+       "3S",
+       "2H",
+       "3H",
+       "2D",
+       "AS"
+      ]
+     ],
+     "output": [
+      [
+       "2S",
+       "2H",
+       "2D"
+      ],
+      [
+       "3S",
+       "3H",
+       "AS"
+      ],
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "6D",
+       "10S",
+       "10C",
+       "10H",
+       "6S",
+       "6C"
+      ]
+     ],
+     "output": [
+      [
+       "6D",
+       "10C",
+       "6S"
+      ],
+      [
+       "10S",
+       "10H",
+       "6C"
+      ],
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ab3042be74ebb7457a3ef4a": {
+   "constraints": [
+    "deck.length == 6",
+    "cards are distinct and well formed"
+   ],
+   "clarifyingQuestions": [
+    "What is the input: a deck to deal from, or the hands directly?",
+    "How should the result be reported?",
+    "Do straights or flushes exist in this game?",
+    "Is the ace ever low?"
+   ],
+   "hints": [
+    "Detect the new categories first: same suit, and consecutive sorted ranks.",
+    "Order of categories matters: in three-card games a straight beats a flush and three of a kind beats a straight.",
+    "Keep the tie-break list as all ranks descending for straights and flushes."
+   ],
+   "invariants": [
+    "the ace is high only",
+    "a straight flush outranks every other hand"
+   ],
+   "chooseWhen": [
+    "Extending a ranking with new categories"
+   ],
+   "tradeoffs": [
+    "A category table keeps the order explicit; nested ifs are shorter but easier to get wrong"
+   ],
+   "variantLabel": "Inferred level 2: adds straights and flushes",
+   "examples": [
+    {
+     "input": [
+      [
+       "2S",
+       "3S",
+       "2H",
+       "3H",
+       "2D",
+       "AS"
+      ]
+     ],
+     "output": [
+      [
+       "2S",
+       "2H",
+       "2D"
+      ],
+      [
+       "3S",
+       "3H",
+       "AS"
+      ],
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "10H",
+       "QD",
+       "10S",
+       "10C",
+       "QC",
+       "10D"
+      ]
+     ],
+     "output": [
+      [
+       "10H",
+       "10S",
+       "QC"
+      ],
+      [
+       "QD",
+       "10C",
+       "10D"
+      ],
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ab3047ce74ebb7457a3ef51": {
+   "constraints": [
+    "2 <= numPlayers <= 17",
+    "deck.length == 3 * numPlayers",
+    "cards are distinct and well formed"
+   ],
+   "clarifyingQuestions": [
+    "What is the input: a deck to deal from, or the hands directly?",
+    "How should the result be reported?",
+    "Do straights or flushes exist in this game?",
+    "Is the ace ever low?"
+   ],
+   "hints": [
+    "Player p receives cards p, p + n, p + 2n of the deck.",
+    "Compute the same strength key as level 1 for every hand.",
+    "Scan once, resetting the winner list whenever a strictly better key appears."
+   ],
+   "invariants": [
+    "winners is non-empty and ascending",
+    "every winner has the maximal key"
+   ],
+   "chooseWhen": [
+    "Picking all maxima under a composite order"
+   ],
+   "tradeoffs": [
+    "A single pass avoids sorting players"
+   ],
+   "variantLabel": "Inferred level 3: many players and shared wins",
+   "examples": [
+    {
+     "input": [
+      2,
+      [
+       "2S",
+       "3S",
+       "2H",
+       "3H",
+       "2D",
+       "AS"
+      ]
+     ],
+     "output": [
+      [
+       [
+        "2S",
+        "2H",
+        "2D"
+       ],
+       [
+        "3S",
+        "3H",
+        "AS"
+       ]
+      ],
+      [
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      5,
+      [
+       "3C",
+       "7H",
+       "6C",
+       "10H",
+       "5C",
+       "QH",
+       "2C",
+       "3D",
+       "4C",
+       "AC",
+       "5H",
+       "10S",
+       "3H",
+       "10C",
+       "6H"
+      ]
+     ],
+     "output": [
+      [
+       [
+        "3C",
+        "QH",
+        "5H"
+       ],
+       [
+        "7H",
+        "2C",
+        "10S"
+       ],
+       [
+        "6C",
+        "3D",
+        "3H"
+       ],
+       [
+        "10H",
+        "4C",
+        "10C"
+       ],
+       [
+        "5C",
+        "AC",
+        "6H"
+       ]
+      ],
+      [
+       4
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69190b156723130c5456345c": {
+   "constraints": [
+    "up to 1e5 calls",
+    "names match [A-Za-z0-9_]{1,15}",
+    "text is printable ASCII up to 60 characters",
+    "0 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "What are the three bot types and their commands?",
+    "Can two bots share a name?",
+    "In which order do bots react?",
+    "Do bot messages trigger other bots?",
+    "How is the log read back?"
+   ],
+   "hints": [
+    "Model each bot type as an object with one react(text, state) method returning a reply or nothing; new types only add a class.",
+    "Log the user message before asking bots, and keep a per-channel user-message counter for the count bot.",
+    "Return the tail of the log with a slice starting at max(0, length - k)."
+   ],
+   "invariants": [
+    "the log grows by one user entry plus at most one entry per bot per message",
+    "bot replies never trigger bots"
+   ],
+   "chooseWhen": [
+    "Plug-in style command handlers"
+   ],
+   "tradeoffs": [
+    "A registry table adds a level of indirection but keeps ChatApp closed to modification"
+   ],
+   "variantLabel": "Inferred level 1: one channel, three bot types",
+   "examples": [
+    {
+     "input": [
+      [
+       "ChatApp",
+       "sendMessage"
+      ],
+      [
+       [],
+       [
+        "ann",
+        "/count"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ChatApp",
+       "addBot",
+       "addBot",
+       "addBot",
+       "addBot",
+       "sendMessage",
+       "sendMessage",
+       "sendMessage",
+       "getRecentMessages",
+       "getRecentMessages"
+      ],
+      [
+       [],
+       [
+        "E",
+        "echo"
+       ],
+       [
+        "C",
+        "count"
+       ],
+       [
+        "E",
+        "reverse"
+       ],
+       [
+        "R",
+        "reverse"
+       ],
+       [
+        "ann",
+        "/echo hi there"
+       ],
+       [
+        "bo",
+        "/count"
+       ],
+       [
+        "ann",
+        "/reverse abc"
+       ],
+       [
+        10
+       ],
+       [
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      true,
+      false,
+      true,
+      null,
+      null,
+      null,
+      [
+       "ann: /echo hi there",
+       "E: hi there",
+       "bo: /count",
+       "C: 2",
+       "ann: /reverse abc",
+       "R: cba"
+      ],
+      [
+       "ann: /reverse abc",
+       "R: cba"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:691b8695419c66014d71411a": {
+   "constraints": [
+    "up to 1e5 calls",
+    "channel ids match [a-z0-9]{1,10}",
+    "names match [A-Za-z0-9_]{1,15}",
+    "text is printable ASCII up to 60 characters",
+    "0 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "What are the three bot types and their commands?",
+    "Can two bots share a name?",
+    "In which order do bots react?",
+    "Do bot messages trigger other bots?",
+    "How is the log read back?"
+   ],
+   "hints": [
+    "Model each bot type as an object with one react(text, state) method returning a reply or nothing; new types only add a class.",
+    "Log the user message before asking bots, and keep a per-channel user-message counter for the count bot.",
+    "Return the tail of the log with a slice starting at max(0, length - k)."
+   ],
+   "invariants": [
+    "each channel's log and counters are independent",
+    "bot names are unique within a channel"
+   ],
+   "chooseWhen": [
+    "Partitioning shared state by a key"
+   ],
+   "tradeoffs": [
+    "Per-channel registries duplicate bot objects but keep channels isolated"
+   ],
+   "variantLabel": "Inferred level 2: several channels",
+   "examples": [
+    {
+     "input": [
+      [
+       "ChatApp",
+       "addBot"
+      ],
+      [
+       [],
+       [
+        "g",
+        "E",
+        "reverse"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ChatApp",
+       "getRecentMessages",
+       "sendMessage",
+       "createChannel",
+       "sendMessage",
+       "getRecentMessages",
+       "sendMessage",
+       "getRecentMessages",
+       "addBot"
+      ],
+      [
+       [],
+       [
+        "h",
+        1
+       ],
+       [
+        "h",
+        "ann",
+        "/reverse abc"
+       ],
+       [
+        "h"
+       ],
+       [
+        "h",
+        "Bo",
+        "hi"
+       ],
+       [
+        "g",
+        100
+       ],
+       [
+        "h",
+        "ann",
+        "hi"
+       ],
+       [
+        "g",
+        100
+       ],
+       [
+        "h",
+        "C",
+        "count"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      false,
+      true,
+      true,
+      [],
+      true,
+      [],
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677ed3ec052a260e0165706f": {
+   "constraints": [
+    "up to 1e5 calls",
+    "task ids match [a-z0-9]{1,10} and are unique",
+    "0 <= delayTime, currentTime <= 1e9",
+    "currentTime non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "How is time observed: a real clock or a simulated one?",
+    "What is printed, and can it be returned instead?",
+    "In which order do tasks with the same run time execute?",
+    "Is cancellation required?"
+   ],
+   "hints": [
+    "A real scheduler wakes up for the earliest deadline: a priority queue keyed by run time.",
+    "Break ties with a sequence number so equal run times keep scheduling order.",
+    "Cancellation by id is easiest with a pending map; skip heap entries that are no longer pending."
+   ],
+   "invariants": [
+    "every pending task has exactly one live heap entry",
+    "runDue output is ordered by (run time, sequence)"
+   ],
+   "chooseWhen": [
+    "Timers and delayed jobs"
+   ],
+   "tradeoffs": [
+    "Lazy cancellation keeps cancel O(1) but leaves dead heap entries until they surface"
+   ],
+   "variantLabel": "Inferred single variant: simulated-clock delayed scheduler",
+   "examples": [
+    {
+     "input": [
+      [
+       "DelayedTaskScheduler",
+       "runDue"
+      ],
+      [
+       [],
+       [
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "DelayedTaskScheduler",
+       "schedule",
+       "schedule",
+       "schedule",
+       "schedule",
+       "runDue",
+       "schedule",
+       "cancel",
+       "runDue",
+       "runDue",
+       "runDue",
+       "runDue",
+       "runDue",
+       "schedule"
+      ],
+      [
+       [],
+       [
+        "t1",
+        2,
+        3
+       ],
+       [
+        "t2",
+        1,
+        3
+       ],
+       [
+        "t3",
+        1,
+        4
+       ],
+       [
+        "t4",
+        1,
+        7
+       ],
+       [
+        7
+       ],
+       [
+        "t5",
+        1,
+        7
+       ],
+       [
+        "t1"
+       ],
+       [
+        8
+       ],
+       [
+        8
+       ],
+       [
+        9
+       ],
+       [
+        9
+       ],
+       [
+        10
+       ],
+       [
+        "t6",
+        5,
+        11
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      5,
+      4,
+      5,
+      8,
+      [
+       "t2",
+       "t1",
+       "t3"
+      ],
+      8,
+      false,
+      [
+       "t4",
+       "t5"
+      ],
+      [],
+      [],
+      [],
+      [],
+      16
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:691cfb5cba2fba0a9e173e8c": {
+   "constraints": [
+    "up to 2e4 calls",
+    "table and column names match [a-z]{1,10}",
+    "1 to 5 distinct columns",
+    "values match -?[a-z0-9]{1,10}",
+    "at most 3 conditions"
+   ],
+   "clarifyingQuestions": [
+    "How are types inferred, and what happens when a later row disagrees?",
+    "What are the query methods and their parameters?",
+    "Which comparison operators exist?",
+    "How are ties ordered when sorting?"
+   ],
+   "hints": [
+    "Store each row twice: the original strings for output and parsed typed values for comparisons.",
+    "Resolve column names to positions once per query and reject unknown columns early.",
+    "A stable sort with reverse ordering keeps insertion order among equal keys in both directions."
+   ],
+   "invariants": [
+    "every stored row matches the table's fixed types",
+    "select output never aliases stored rows"
+   ],
+   "chooseWhen": [
+    "Small query engines over in-memory rows"
+   ],
+   "tradeoffs": [
+    "Pre-parsing costs memory per cell but avoids re-parsing on every query"
+   ],
+   "variantLabel": "Inferred single variant: typed-on-first-insert table with filtered, sorted selects",
+   "examples": [
+    {
+     "input": [
+      [
+       "SQLManager",
+       "createTable",
+       "select"
+      ],
+      [
+       [],
+       [
+        "p",
+        [
+         "a",
+         "b"
+        ]
+       ],
+       [
+        "p",
+        [],
+        "a",
+        true
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SQLManager",
+       "createTable",
+       "createTable",
+       "insert",
+       "select",
+       "insert",
+       "insert",
+       "insert"
+      ],
+      [
+       [],
+       [
+        "p",
+        [
+         "a",
+         "b"
+        ]
+       ],
+       [
+        "q",
+        [
+         "x",
+         "y",
+         "z"
+        ]
+       ],
+       [
+        "p",
+        [
+         "10"
+        ]
+       ],
+       [
+        "r",
+        [
+         [
+          "w",
+          "=",
+          "ab"
+         ],
+         [
+          "x",
+          ">=",
+          "z9"
+         ]
+        ],
+        "a",
+        false
+       ],
+       [
+        "p",
+        [
+         "10",
+         "ab",
+         "z9"
+        ]
+       ],
+       [
+        "p",
+        [
+         "0",
+         "0",
+         "b"
+        ]
+       ],
+       [
+        "p",
+        [
+         "10",
+         "-0",
+         "-0"
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      false,
+      [],
+      false,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6920d01494b324049c3251bd": {
+   "constraints": [
+    "up to 1e5 calls",
+    "keys and values match [a-z0-9]{1,10}"
+   ],
+   "clarifyingQuestions": [
+    "What does get return for a missing key?",
+    "Are transactions nested, and does commit close all of them?",
+    "What do rollback and commit return without an open transaction?",
+    "Must count be fast inside transactions?"
+   ],
+   "hints": [
+    "A hash map gives O(1) set, get and unset.",
+    "Use a sentinel (\"\") for missing keys since values are non-empty.",
+    "Removing an absent key must not fail."
+   ],
+   "invariants": [
+    "the map holds exactly the keys set and not unset since"
+   ],
+   "chooseWhen": [
+    "Any keyed storage"
+   ],
+   "tradeoffs": [
+    "None at this level"
+   ],
+   "variantLabel": "Inferred level 1: basic store",
+   "examples": [
+    {
+     "input": [
+      [
+       "KeyValueStore",
+       "get"
+      ],
+      [
+       [],
+       [
+        "a"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "KeyValueStore",
+       "unset",
+       "set",
+       "unset",
+       "get",
+       "set",
+       "set",
+       "unset",
+       "set",
+       "set",
+       "get",
+       "set",
+       "set",
+       "set",
+       "get",
+       "set"
+      ],
+      [
+       [],
+       [
+        "c"
+       ],
+       [
+        "a",
+        "x"
+       ],
+       [
+        "b"
+       ],
+       [
+        "c"
+       ],
+       [
+        "c",
+        "2"
+       ],
+       [
+        "b",
+        "1"
+       ],
+       [
+        "c"
+       ],
+       [
+        "c",
+        "x"
+       ],
+       [
+        "c",
+        "2"
+       ],
+       [
+        "a"
+       ],
+       [
+        "b",
+        "1"
+       ],
+       [
+        "b",
+        "x"
+       ],
+       [
+        "b",
+        "1"
+       ],
+       [
+        "c"
+       ],
+       [
+        "a",
+        "1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      null,
+      "",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "x",
+      null,
+      null,
+      null,
+      "2",
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6920d07794b324049c3251be": {
+   "constraints": [
+    "up to 1e5 calls",
+    "keys and values match [a-z0-9]{1,10}",
+    "transactions may nest up to the call count"
+   ],
+   "clarifyingQuestions": [
+    "What does get return for a missing key?",
+    "Are transactions nested, and does commit close all of them?",
+    "What do rollback and commit return without an open transaction?",
+    "Must count be fast inside transactions?"
+   ],
+   "hints": [
+    "Copying the whole map at begin is simple but O(keys) per begin.",
+    "Instead record, per transaction, the old value of each key the first time it changes.",
+    "Rollback restores those old values; commit just drops all logs."
+   ],
+   "invariants": [
+    "applying the innermost log restores the state at its begin",
+    "commit leaves the data unchanged"
+   ],
+   "chooseWhen": [
+    "Undo with cheap begin"
+   ],
+   "tradeoffs": [
+    "An undo log makes rollback cost proportional to changes rather than to store size"
+   ],
+   "variantLabel": "Inferred level 2: nested transactions",
+   "examples": [
+    {
+     "input": [
+      [
+       "KeyValueStore",
+       "unset"
+      ],
+      [
+       [],
+       [
+        "a"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "KeyValueStore",
+       "unset",
+       "commit",
+       "set",
+       "begin",
+       "begin",
+       "commit",
+       "set",
+       "unset",
+       "set",
+       "commit",
+       "get",
+       "begin",
+       "rollback",
+       "commit",
+       "unset",
+       "begin",
+       "commit",
+       "commit"
+      ],
+      [
+       [],
+       [
+        "b"
+       ],
+       [],
+       [
+        "b",
+        "x"
+       ],
+       [],
+       [],
+       [],
+       [
+        "b",
+        "2"
+       ],
+       [
+        "b"
+       ],
+       [
+        "c",
+        "x"
+       ],
+       [],
+       [
+        "a"
+       ],
+       [],
+       [],
+       [],
+       [
+        "b"
+       ],
+       [],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      false,
+      null,
+      null,
+      null,
+      true,
+      null,
+      null,
+      null,
+      false,
+      "",
+      null,
+      true,
+      false,
+      null,
+      null,
+      true,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6920d4a994b324049c3251c1": {
+   "constraints": [
+    "up to 1e5 calls",
+    "keys and values match [a-z0-9]{1,10}"
+   ],
+   "clarifyingQuestions": [
+    "What does get return for a missing key?",
+    "Are transactions nested, and does commit close all of them?",
+    "What do rollback and commit return without an open transaction?",
+    "Must count be fast inside transactions?"
+   ],
+   "hints": [
+    "Maintain a value-to-count map alongside the data.",
+    "Route every write (including undo during rollback) through one assign helper so counts stay right.",
+    "The undo log stays as in level 2."
+   ],
+   "invariants": [
+    "count(v) always equals the number of keys holding v",
+    "rollback restores counts with the data"
+   ],
+   "chooseWhen": [
+    "Aggregates that must survive undo"
+   ],
+   "tradeoffs": [
+    "A single write helper keeps every invariant in one place at a small call overhead"
+   ],
+   "variantLabel": "Inferred level 3: transactions plus value counts",
+   "examples": [
+    {
+     "input": [
+      [
+       "KeyValueStore",
+       "count"
+      ],
+      [
+       [],
+       [
+        "1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "KeyValueStore",
+       "count",
+       "commit",
+       "unset",
+       "commit",
+       "count",
+       "begin",
+       "unset",
+       "count",
+       "set",
+       "set",
+       "set",
+       "set",
+       "commit",
+       "set",
+       "get",
+       "begin",
+       "begin"
+      ],
+      [
+       [],
+       [
+        "2"
+       ],
+       [],
+       [
+        "a"
+       ],
+       [],
+       [
+        "1"
+       ],
+       [],
+       [
+        "a"
+       ],
+       [
+        "1"
+       ],
+       [
+        "c",
+        "2"
+       ],
+       [
+        "c",
+        "1"
+       ],
+       [
+        "b",
+        "x"
+       ],
+       [
+        "a",
+        "1"
+       ],
+       [],
+       [
+        "c",
+        "1"
+       ],
+       [
+        "b"
+       ],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      0,
+      false,
+      null,
+      false,
+      0,
+      null,
+      null,
+      0,
+      null,
+      null,
+      null,
+      null,
+      true,
+      null,
+      "x",
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b35205a4e93c007df404fe": {
+   "constraints": [
+    "up to 1e5 calls",
+    "title and content match [A-Za-z0-9 ]{0,30}",
+    "times between 1 and 1e9, non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "Where do creation and modification times come from?",
+    "What is the id format, and are ids reused?",
+    "Is search case-sensitive, and how are results ordered?",
+    "Do tags or reverts change the modification time?"
+   ],
+   "hints": [
+    "A counter generates ids; a hash map stores the notes.",
+    "Keep createdAt fixed and overwrite updatedAt on every update.",
+    "Return a fresh list from getNote so callers cannot alter stored state."
+   ],
+   "invariants": [
+    "ids are strictly increasing and never reused",
+    "createdAt <= updatedAt"
+   ],
+   "chooseWhen": [
+    "Record stores with generated ids"
+   ],
+   "tradeoffs": [
+    "A counter id is predictable; random ids would be harder to test"
+   ],
+   "variantLabel": "Inferred level 1: CRUD with time metadata",
+   "examples": [
+    {
+     "input": [
+      [
+       "SecondBrainSystem",
+       "createNote"
+      ],
+      [
+       [],
+       [
+        "Todo",
+        "plan b",
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "note1"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SecondBrainSystem",
+       "deleteNote",
+       "createNote",
+       "createNote",
+       "createNote",
+       "updateNote",
+       "createNote",
+       "updateNote"
+      ],
+      [
+       [],
+       [
+        "note1"
+       ],
+       [
+        "Shop list",
+        "Shop list",
+        5
+       ],
+       [
+        "Shop list",
+        "",
+        5
+       ],
+       [
+        "",
+        "",
+        5
+       ],
+       [
+        "note4",
+        "x",
+        "Shop list",
+        5
+       ],
+       [
+        "plan b",
+        "x",
+        5
+       ],
+       [
+        "note1",
+        "x",
+        "Todo",
+        6
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      "note1",
+      "note2",
+      "note3",
+      false,
+      "note4",
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b38216a4e93c007df405de": {
+   "constraints": [
+    "up to 1e5 calls",
+    "title and content match [A-Za-z0-9 ]{0,30}",
+    "times between 1 and 1e9, non-decreasing",
+    "keyword matches [A-Za-z0-9]{1,10}"
+   ],
+   "clarifyingQuestions": [
+    "Where do creation and modification times come from?",
+    "What is the id format, and are ids reused?",
+    "Is search case-sensitive, and how are results ordered?",
+    "Do tags or reverts change the modification time?"
+   ],
+   "hints": [
+    "Store lower-cased copies of title and content for searching.",
+    "Scan all notes, collect hits, then sort by (-updatedAt, id number).",
+    "Comparing id numbers, not id strings, keeps note10 after note9."
+   ],
+   "invariants": [
+    "search output is ordered by (-updatedAt, id number)"
+   ],
+   "chooseWhen": [
+    "Small collections where a scan is acceptable"
+   ],
+   "tradeoffs": [
+    "An inverted index would speed search but complicates substring matching"
+   ],
+   "variantLabel": "Inferred level 2: case-insensitive keyword search",
+   "examples": [
+    {
+     "input": [
+      [
+       "SecondBrainSystem",
+       "searchNotes"
+      ],
+      [
+       [],
+       [
+        "plan"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SecondBrainSystem",
+       "getNote",
+       "deleteNote",
+       "createNote",
+       "createNote",
+       "updateNote",
+       "getNote",
+       "updateNote"
+      ],
+      [
+       [],
+       [
+        "note1"
+       ],
+       [
+        "note1"
+       ],
+       [
+        "x",
+        "x",
+        2
+       ],
+       [
+        "",
+        "Todo",
+        4
+       ],
+       [
+        "note2",
+        "Plan",
+        "",
+        6
+       ],
+       [
+        "note1"
+       ],
+       [
+        "note1",
+        "Plan",
+        "plan b",
+        8
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      false,
+      "note1",
+      "note2",
+      true,
+      [
+       "x",
+       "x",
+       2,
+       2
+      ],
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b38409a4e93c007df405e6": {
+   "constraints": [
+    "up to 1e5 calls",
+    "title and content match [A-Za-z0-9 ]{0,30}",
+    "times between 1 and 1e9, non-decreasing",
+    "tags match [a-z0-9]{1,10}"
+   ],
+   "clarifyingQuestions": [
+    "Where do creation and modification times come from?",
+    "What is the id format, and are ids reused?",
+    "Is search case-sensitive, and how are results ordered?",
+    "Do tags or reverts change the modification time?"
+   ],
+   "hints": [
+    "Keep a tag-to-id-set index next to each note's own tag set.",
+    "Deleting a note must also remove it from every tag set it belongs to.",
+    "Sort tag query results by id number."
+   ],
+   "invariants": [
+    "note tags and the tag index always agree"
+   ],
+   "chooseWhen": [
+    "Many-to-many labels on records"
+   ],
+   "tradeoffs": [
+    "A reverse index costs memory but makes tag lookups independent of the number of notes"
+   ],
+   "variantLabel": "Inferred level 3: tags",
+   "examples": [
+    {
+     "input": [
+      [
+       "SecondBrainSystem",
+       "searchNotes"
+      ],
+      [
+       [],
+       [
+        "b"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SecondBrainSystem",
+       "removeTag",
+       "createNote",
+       "deleteNote",
+       "removeTag",
+       "getNotesByTag",
+       "removeTag",
+       "updateNote",
+       "addTag"
+      ],
+      [
+       [],
+       [
+        "note1",
+        "home"
+       ],
+       [
+        "Plan",
+        "Shop list",
+        4
+       ],
+       [
+        "note1"
+       ],
+       [
+        "note2",
+        "home"
+       ],
+       [
+        "home"
+       ],
+       [
+        "note1",
+        "home"
+       ],
+       [
+        "note1",
+        "Shop list",
+        "plan b",
+        11
+       ],
+       [
+        "note2",
+        "work"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      "note1",
+      true,
+      false,
+      [],
+      false,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b385d3a4e93c007df405f1": {
+   "constraints": [
+    "up to 1e5 calls",
+    "title and content match [A-Za-z0-9 ]{0,30}",
+    "times between 1 and 1e9, non-decreasing",
+    "tags match [a-z0-9]{1,10}",
+    "0 <= version <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Where do creation and modification times come from?",
+    "What is the id format, and are ids reused?",
+    "Is search case-sensitive, and how are results ordered?",
+    "Do tags or reverts change the modification time?"
+   ],
+   "hints": [
+    "Store every (title, content) pair in a per-note list; the current state is the last entry.",
+    "Reverting appends a copy of an old entry instead of truncating history.",
+    "Validate 1 <= version <= count before reverting."
+   ],
+   "invariants": [
+    "getVersionCount equals 1 + successful updates and reverts",
+    "the current title and content are the last version"
+   ],
+   "chooseWhen": [
+    "Append-only histories with undo"
+   ],
+   "tradeoffs": [
+    "Keeping every version grows memory with each edit"
+   ],
+   "variantLabel": "Inferred level 4: version history and revert",
+   "examples": [
+    {
+     "input": [
+      [
+       "SecondBrainSystem",
+       "addTag"
+      ],
+      [
+       [],
+       [
+        "note1",
+        "home"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SecondBrainSystem",
+       "getNotesByTag",
+       "removeTag",
+       "deleteNote",
+       "revertNote",
+       "createNote",
+       "removeTag",
+       "revertNote",
+       "getNotesByTag",
+       "revertNote"
+      ],
+      [
+       [],
+       [
+        "work"
+       ],
+       [
+        "note1",
+        "work"
+       ],
+       [
+        "note1"
+       ],
+       [
+        "note1",
+        3,
+        5
+       ],
+       [
+        "x",
+        "Plan",
+        5
+       ],
+       [
+        "note1",
+        "work"
+       ],
+       [
+        "note1",
+        0,
+        7
+       ],
+       [
+        "home"
+       ],
+       [
+        "note1",
+        1,
+        10
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      false,
+      false,
+      false,
+      "note1",
+      false,
+      false,
+      [],
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:691523d03f8671d8f7a56571": {
+   "constraints": [
+    "up to 1e5 calls",
+    "keys match [a-z0-9]{1,10}",
+    "values are printable ASCII, 1 to 20 characters",
+    "blobs up to 2e6 bytes"
+   ],
+   "clarifyingQuestions": [
+    "Is the Medium passed in or owned by the store?",
+    "What exact binary layout must be used?",
+    "How should a corrupt blob be handled?",
+    "Which characters may keys and values contain?"
+   ],
+   "hints": [
+    "Length prefixes let values contain any character, including separators.",
+    "Sort keys before encoding so equal states give equal blobs.",
+    "Decode with a cursor that reads 4-byte lengths, then that many bytes."
+   ],
+   "invariants": [
+    "decode(encode(state)) == state",
+    "equal states encode to equal blobs"
+   ],
+   "chooseWhen": [
+    "Snapshots of small stores"
+   ],
+   "tradeoffs": [
+    "Length prefixes cost 8 bytes per entry but need no escaping"
+   ],
+   "variantLabel": "Inferred level 1: length-prefixed binary snapshot",
+   "examples": [
+    {
+     "input": [
+      [
+       "PersistentKVStore",
+       "get",
+       "save"
+      ],
+      [
+       [],
+       [
+        "b"
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      "",
+      [
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "PersistentKVStore",
+       "set",
+       "load",
+       "load",
+       "save",
+       "get",
+       "get",
+       "save",
+       "set",
+       "set",
+       "set",
+       "get",
+       "set",
+       "set"
+      ],
+      [
+       [],
+       [
+        "b",
+        "1"
+       ],
+       [
+        [
+         0,
+         0,
+         0,
+         0
+        ]
+       ],
+       [
+        [
+         0,
+         0,
+         0,
+         0
+        ]
+       ],
+       [],
+       [
+        "k9"
+       ],
+       [
+        "b"
+       ],
+       [],
+       [
+        "a",
+        " x~"
+       ],
+       [
+        "a",
+        "hello world"
+       ],
+       [
+        "k9",
+        " x~"
+       ],
+       [
+        "a"
+       ],
+       [
+        "a",
+        "hello world"
+       ],
+       [
+        "a",
+        "hello world"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      null,
+      [
+       0,
+       0,
+       0,
+       0
+      ],
+      "",
+      "",
+      [
+       0,
+       0,
+       0,
+       0
+      ],
+      null,
+      null,
+      null,
+      "hello world",
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:691523d43f8671d8f7a56572": {
+   "constraints": [
+    "up to 1e5 calls",
+    "keys match [a-z0-9]{1,10}",
+    "values are printable ASCII, 1 to 20 characters",
+    "blob entries are integers 0..255, up to 2e6 of them"
+   ],
+   "clarifyingQuestions": [
+    "Is the Medium passed in or owned by the store?",
+    "What exact binary layout must be used?",
+    "How should a corrupt blob be handled?",
+    "Which characters may keys and values contain?"
+   ],
+   "hints": [
+    "Never mutate the live map while parsing; build a new one and swap it in at the end.",
+    "Check every length against the remaining bytes before reading.",
+    "Verify magic first and checksum before trusting the body."
+   ],
+   "invariants": [
+    "a rejected load leaves the state unchanged",
+    "every saved blob loads back successfully"
+   ],
+   "chooseWhen": [
+    "Persisting state that may be corrupted on disk"
+   ],
+   "tradeoffs": [
+    "A sum checksum is cheap but weaker than a CRC"
+   ],
+   "variantLabel": "Inferred level 2: validated, checksummed snapshots",
+   "examples": [
+    {
+     "input": [
+      [
+       "PersistentKVStore",
+       "save"
+      ],
+      [
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      [
+       80,
+       75,
+       86,
+       50,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "PersistentKVStore",
+       "set",
+       "get",
+       "load",
+       "load",
+       "set",
+       "set",
+       "set",
+       "set",
+       "set"
+      ],
+      [
+       [],
+       [
+        "b",
+        "1"
+       ],
+       [
+        "k9"
+       ],
+       [
+        [
+         80,
+         75,
+         86,
+         50,
+         0,
+         0,
+         255,
+         0,
+         0,
+         0,
+         0,
+         0
+        ]
+       ],
+       [
+        [
+         80,
+         75,
+         86,
+         50,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ]
+       ],
+       [
+        "b",
+        "1"
+       ],
+       [
+        "k9",
+        "hello world"
+       ],
+       [
+        "b",
+        " x~"
+       ],
+       [
+        "k9",
+        "1"
+       ],
+       [
+        "a",
+        "hello world"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      "",
+      false,
+      true,
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6792d9906828628f54397d99": {
+   "constraints": [
+    "0 <= records.length <= 1e5",
+    "0 <= timestamp <= 999999999",
+    "amounts up to 999999999.99",
+    "1 <= pageSize, pageNumber <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "What order should results have before paging?",
+    "Are pages 0-based or 1-based?",
+    "Are ranges inclusive?",
+    "How are decimal amounts compared exactly?"
+   ],
+   "hints": [
+    "Compare money as integer cents, never as floating point.",
+    "Filter first, then sort only the hits by integer timestamp with a stable sort.",
+    "The page is hits[(page - 1) * size : page * size]."
+   ],
+   "invariants": [
+    "every returned record satisfies every active filter",
+    "pages partition the ordered hits"
+   ],
+   "chooseWhen": [
+    "Offset pagination over filtered data"
+   ],
+   "tradeoffs": [
+    "Offset paging re-filters on every call; cursor paging would avoid that"
+   ],
+   "variantLabel": "Inferred single variant: filtered, time-ordered pages",
+   "examples": [
+    {
+     "input": [
+      [],
+      [
+       "",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ],
+      1,
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "9",
+        "i0",
+        "u2",
+        "USD",
+        "5.5"
+       ],
+       [
+        "5",
+        "i1",
+        "u2",
+        "USD",
+        "5.05"
+       ],
+       [
+        "9",
+        "i2",
+        "u1",
+        "USD",
+        "5.5"
+       ],
+       [
+        "9",
+        "i3",
+        "u1",
+        "USD",
+        "10.00"
+       ],
+       [
+        "5",
+        "i4",
+        "u1",
+        "EUR",
+        "99.99"
+       ],
+       [
+        "5",
+        "i5",
+        "u1",
+        "USD",
+        "10.00"
+       ],
+       [
+        "0",
+        "i6",
+        "u1",
+        "USD",
+        "5"
+       ]
+      ],
+      [
+       "",
+       "9",
+       "5.05",
+       "10",
+       "",
+       ""
+      ],
+      1,
+      2
+     ],
+     "output": [
+      [
+       "5",
+       "i5",
+       "u1",
+       "USD",
+       "10.00"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67ce4e968f73eb6319edd1f0": {
+   "constraints": [
+    "1 <= limit <= 1e5",
+    "1 <= ttl <= 1e9",
+    "0 <= timestamp <= 1e9, non-decreasing",
+    "up to 1e5 calls"
+   ],
+   "clarifyingQuestions": [
+    "Is the window sliding or fixed?",
+    "Do rejected requests count toward the limit?",
+    "Is the window boundary inclusive?",
+    "Is the limit global or per client?"
+   ],
+   "hints": [
+    "Only accepted requests inside the window matter: keep their timestamps in a queue.",
+    "Because time never goes back, expired timestamps always sit at the front.",
+    "Accept when the queue is shorter than limit after expiring."
+   ],
+   "invariants": [
+    "the queue holds exactly the accepted timestamps in the window",
+    "the queue never exceeds limit"
+   ],
+   "chooseWhen": [
+    "Exact sliding-window limits"
+   ],
+   "tradeoffs": [
+    "A log stores up to limit timestamps; a fixed-window counter is O(1) memory but bursty"
+   ],
+   "variantLabel": "Inferred level 1: global sliding-window log",
+   "examples": [
+    {
+     "input": [
+      [
+       "RateLimiter",
+       "allowRequest"
+      ],
+      [
+       [
+        1,
+        1000000000
+       ],
+       [
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RateLimiter",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest"
+      ],
+      [
+       [
+        1,
+        1000000000
+       ],
+       [
+        7
+       ],
+       [
+        10
+       ],
+       [
+        11
+       ],
+       [
+        12
+       ],
+       [
+        13
+       ],
+       [
+        14
+       ],
+       [
+        16
+       ],
+       [
+        16
+       ],
+       [
+        16
+       ],
+       [
+        18
+       ],
+       [
+        19
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67e0bdefa59c3d249d3625fe": {
+   "constraints": [
+    "1 <= limit <= 1e5",
+    "1 <= ttl <= 1e9",
+    "client ids match [a-z0-9]{1,10}",
+    "0 <= timestamp <= 1e9, non-decreasing",
+    "up to 1e5 calls"
+   ],
+   "clarifyingQuestions": [
+    "Is the window sliding or fixed?",
+    "Do rejected requests count toward the limit?",
+    "Is the window boundary inclusive?",
+    "Is the limit global or per client?"
+   ],
+   "hints": [
+    "Each client needs its own window.",
+    "Map client ids to queues created on first use.",
+    "Expire and compare only the queue of the requesting client."
+   ],
+   "invariants": [
+    "clients never affect each other"
+   ],
+   "chooseWhen": [
+    "Multi-tenant limits"
+   ],
+   "tradeoffs": [
+    "Idle clients keep their queues; a sweep could reclaim them"
+   ],
+   "variantLabel": "Inferred level 2: per-client sliding windows",
+   "examples": [
+    {
+     "input": [
+      [
+       "RateLimiter",
+       "allowRequest"
+      ],
+      [
+       [
+        1,
+        2
+       ],
+       [
+        "b",
+        6
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RateLimiter",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest",
+       "allowRequest"
+      ],
+      [
+       [
+        2,
+        2
+       ],
+       [
+        "a",
+        5
+       ],
+       [
+        "a",
+        5
+       ],
+       [
+        "b",
+        8
+       ],
+       [
+        "b",
+        11
+       ],
+       [
+        "a",
+        12
+       ],
+       [
+        "b",
+        12
+       ],
+       [
+        "b",
+        12
+       ],
+       [
+        "b",
+        13
+       ],
+       [
+        "b",
+        13
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67d44fdf488516fd8ad5a0ba": {
+   "constraints": [
+    "up to 1e5 calls",
+    "file names match [a-z0-9_.]{1,20} and are unique",
+    "valid \"yyyy-MM-dd\" dates",
+    "1 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Can the same file name be stored twice?",
+    "How are names compared on equal dates?",
+    "Is k ever larger than the number of files?"
+   ],
+   "hints": [
+    "\"yyyy-MM-dd\" strings already sort chronologically.",
+    "Invert each date digit (9 - d) so that ascending key order means descending date, then append the name.",
+    "Keep the keys sorted with binary-search insertion; the answer is the first k entries."
+   ],
+   "invariants": [
+    "the sorted list always matches the stated order",
+    "returnAllFiles is the insertion log"
+   ],
+   "chooseWhen": [
+    "Top-k queries that are frequent relative to inserts"
+   ],
+   "tradeoffs": [
+    "Sorted insertion is O(n) per store; a heap gives O(log n) stores but O(k log n) queries"
+   ],
+   "variantLabel": "Inferred single variant: k most recent files",
+   "examples": [
+    {
+     "input": [
+      [
+       "FileStorageSystem",
+       "getKthRecentFiles"
+      ],
+      [
+       [],
+       [
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "FileStorageSystem",
+       "getKthRecentFiles",
+       "getKthRecentFiles",
+       "getKthRecentFiles",
+       "getKthRecentFiles",
+       "storeFile",
+       "storeFile",
+       "storeFile",
+       "storeFile"
+      ],
+      [
+       [],
+       [
+        2
+       ],
+       [
+        1
+       ],
+       [
+        1
+       ],
+       [
+        50
+       ],
+       [
+        "a1",
+        "2023-12-31"
+       ],
+       [
+        "a2",
+        "2024-01-10"
+       ],
+       [
+        "b.txt3",
+        "2024-01-10"
+       ],
+       [
+        "z_14",
+        "2024-01-02"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      [],
+      [],
+      [],
+      null,
+      null,
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f2665342791c82ab992694": {
+   "constraints": [
+    "up to 1e5 calls",
+    "names match [A-Za-z0-9 ]{1,20}",
+    "up to 10 ingredients matching [A-Za-z ]{1,15} and up to 10 printable steps of 1 to 40 characters"
+   ],
+   "clarifyingQuestions": [
+    "Is the name check case-insensitive on update too?",
+    "What does getRecipe return for a missing id?",
+    "Is ingredient search exact or substring, and case-sensitive?",
+    "How are average ratings compared and tied?"
+   ],
+   "hints": [
+    "Index recipes by lower-cased name to check uniqueness in O(1).",
+    "On rename, the clash check must ignore the recipe being renamed.",
+    "Copy ingredient and step lists in and out so callers never share stored lists."
+   ],
+   "invariants": [
+    "the name index maps each lower-cased name to exactly one live id"
+   ],
+   "chooseWhen": [
+    "CRUD with a secondary unique key"
+   ],
+   "tradeoffs": [
+    "A second index must be updated on every rename and delete"
+   ],
+   "variantLabel": "Inferred level 1: CRUD with case-insensitive unique names",
+   "examples": [
+    {
+     "input": [
+      [
+       "RecipeManager",
+       "getRecipe"
+      ],
+      [
+       [],
+       [
+        "recipe1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RecipeManager",
+       "addRecipe",
+       "updateRecipe",
+       "addRecipe",
+       "getRecipe",
+       "deleteRecipe",
+       "addRecipe"
+      ],
+      [
+       [],
+       [
+        "Soup",
+        [
+         "Salt"
+        ],
+        [
+         "Mix."
+        ]
+       ],
+       [
+        "recipe2",
+        "soup",
+        [
+         "egg"
+        ],
+        []
+       ],
+       [
+        "pie 2",
+        [
+         "salt",
+         "egg"
+        ],
+        [
+         "Mix.",
+         "Serve"
+        ]
+       ],
+       [
+        "recipe2"
+       ],
+       [
+        "recipe1"
+       ],
+       [
+        "pie 2",
+        [
+         "Flour"
+        ],
+        [
+         "Bake 20m",
+         "Serve"
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "recipe1",
+      false,
+      "recipe2",
+      [
+       "pie 2",
+       [
+        "salt",
+        "egg"
+       ],
+       [
+        "Mix.",
+        "Serve"
+       ]
+      ],
+      true,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f266df42791c82ab992697": {
+   "constraints": [
+    "up to 1e5 calls",
+    "names match [A-Za-z0-9 ]{1,20}",
+    "up to 10 ingredients matching [A-Za-z ]{1,15} and up to 10 printable steps of 1 to 40 characters"
+   ],
+   "clarifyingQuestions": [
+    "Is the name check case-insensitive on update too?",
+    "What does getRecipe return for a missing id?",
+    "Is ingredient search exact or substring, and case-sensitive?",
+    "How are average ratings compared and tied?"
+   ],
+   "hints": [
+    "Build a reverse index from lower-cased ingredient to recipe ids.",
+    "Update must remove the old ingredients from the index before adding the new ones.",
+    "Sort hits by id number on output."
+   ],
+   "invariants": [
+    "the ingredient index matches the stored recipes exactly"
+   ],
+   "chooseWhen": [
+    "Lookups by a multi-valued attribute"
+   ],
+   "tradeoffs": [
+    "Index maintenance makes updates slower but searches independent of the catalogue size"
+   ],
+   "variantLabel": "Inferred level 2: ingredient search",
+   "examples": [
+    {
+     "input": [
+      [
+       "RecipeManager",
+       "searchByIngredient"
+      ],
+      [
+       [],
+       [
+        "egg"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RecipeManager",
+       "getRecipe",
+       "addRecipe",
+       "deleteRecipe",
+       "updateRecipe",
+       "updateRecipe",
+       "addRecipe"
+      ],
+      [
+       [],
+       [
+        "recipe1"
+       ],
+       [
+        "Pasta",
+        [],
+        [
+         "Bake 20m"
+        ]
+       ],
+       [
+        "recipe2"
+       ],
+       [
+        "recipe2",
+        "soup",
+        [
+         "egg",
+         "Flour"
+        ],
+        [
+         "Bake 20m"
+        ]
+       ],
+       [
+        "recipe1",
+        "pie 2",
+        [],
+        [
+         "Mix."
+        ]
+       ],
+       [
+        "soup",
+        [
+         "Flour"
+        ],
+        [
+         "Bake 20m"
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      "recipe1",
+      false,
+      false,
+      true,
+      "recipe2"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f2674342791c82ab99269a": {
+   "constraints": [
+    "up to 1e5 calls",
+    "names match [A-Za-z0-9 ]{1,20}",
+    "up to 10 ingredients matching [A-Za-z ]{1,15} and up to 10 printable steps of 1 to 40 characters",
+    "1 <= rating <= 5",
+    "1 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Is the name check case-insensitive on update too?",
+    "What does getRecipe return for a missing id?",
+    "Is ingredient search exact or substring, and case-sensitive?",
+    "How are average ratings compared and tied?"
+   ],
+   "hints": [
+    "Keep a sum and a count per recipe; never store floating averages.",
+    "Compare a/b against c/d by a*d versus c*b (all small integers).",
+    "Break ties by id number."
+   ],
+   "invariants": [
+    "sum and count reflect every successful rating of a live recipe"
+   ],
+   "chooseWhen": [
+    "Ranking by ratios"
+   ],
+   "tradeoffs": [
+    "Sorting per query is simple; a balanced tree would make queries cheaper"
+   ],
+   "variantLabel": "Inferred level 3: ratings and top-rated",
+   "examples": [
+    {
+     "input": [
+      [
+       "RecipeManager",
+       "deleteRecipe"
+      ],
+      [
+       [],
+       [
+        "recipe1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RecipeManager",
+       "addRecipe",
+       "addRecipe",
+       "updateRecipe",
+       "getTopRated",
+       "updateRecipe"
+      ],
+      [
+       [],
+       [
+        "soup",
+        [
+         "Flour",
+         "egg"
+        ],
+        [
+         "Bake 20m",
+         "Mix."
+        ]
+       ],
+       [
+        "Pasta",
+        [
+         "salt",
+         "Flour"
+        ],
+        []
+       ],
+       [
+        "recipe1",
+        "Pasta",
+        [
+         "Salt"
+        ],
+        []
+       ],
+       [
+        2
+       ],
+       [
+        "recipe1",
+        "pie 2",
+        [
+         "Flour",
+         "Salt"
+        ],
+        [
+         "Serve",
+         "Bake 20m"
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "recipe1",
+      "recipe2",
+      false,
+      [],
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f2676842791c82ab99269b": {
+   "constraints": [
+    "up to 1e5 calls",
+    "names match [A-Za-z0-9 ]{1,20}",
+    "up to 10 ingredients matching [A-Za-z ]{1,15} and up to 10 printable steps of 1 to 40 characters",
+    "1 <= rating <= 5",
+    "1 <= k <= 1e5",
+    "prefix matches [A-Za-z0-9 ]{0,20}"
+   ],
+   "clarifyingQuestions": [
+    "Is the name check case-insensitive on update too?",
+    "What does getRecipe return for a missing id?",
+    "Is ingredient search exact or substring, and case-sensitive?",
+    "How are average ratings compared and tied?"
+   ],
+   "hints": [
+    "Lower-cased names are unique, so they are a total order key.",
+    "Filter the name index by prefix, then sort the matching names.",
+    "An empty prefix lists every recipe."
+   ],
+   "invariants": [
+    "output names are ascending and all start with the prefix"
+   ],
+   "chooseWhen": [
+    "Autocomplete-style listings"
+   ],
+   "tradeoffs": [
+    "A trie or sorted list would avoid the full scan per query"
+   ],
+   "variantLabel": "Inferred level 4: listing by name prefix",
+   "examples": [
+    {
+     "input": [
+      [
+       "RecipeManager",
+       "listByNamePrefix"
+      ],
+      [
+       [],
+       [
+        ""
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RecipeManager",
+       "searchByIngredient",
+       "getTopRated",
+       "rateRecipe",
+       "updateRecipe",
+       "listByNamePrefix",
+       "rateRecipe",
+       "addRecipe",
+       "rateRecipe"
+      ],
+      [
+       [],
+       [
+        "EGG"
+       ],
+       [
+        1
+       ],
+       [
+        "recipe1",
+        2
+       ],
+       [
+        "recipe1",
+        "Pasta",
+        [
+         "Salt"
+        ],
+        []
+       ],
+       [
+        "PI"
+       ],
+       [
+        "recipe1",
+        3
+       ],
+       [
+        "Pie",
+        [
+         "salt"
+        ],
+        [
+         "Bake 20m"
+        ]
+       ],
+       [
+        "recipe2",
+        4
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      [],
+      false,
+      false,
+      [],
+      false,
+      "recipe1",
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d16c6917b72775cc49bf96": {
+   "constraints": [
+    "1 <= capacity <= 1e5",
+    "data is printable ASCII up to 1e5 characters",
+    "0 <= n <= 1e5",
+    "up to 1e5 calls"
+   ],
+   "clarifyingQuestions": [
+    "What happens to the read pointer when unread data is overwritten?",
+    "How many bytes can read return?",
+    "Is a character one byte?",
+    "Does read block or return fewer bytes?"
+   ],
+   "hints": [
+    "Each pointer is an index modulo capacity; the unread count is separate state.",
+    "A write longer than capacity only leaves its last capacity characters, so skip the rest.",
+    "A read wraps at most once: copy two slices."
+   ],
+   "invariants": [
+    "0 <= unread <= capacity",
+    "the cell at index i holds the last character written there"
+   ],
+   "chooseWhen": [
+    "Fixed-memory streaming buffers"
+   ],
+   "tradeoffs": [
+    "Silent overwrite never blocks writers but can hand readers newer data out of order"
+   ],
+   "variantLabel": "Inferred single variant: overwrite-on-wrap byte ring",
+   "examples": [
+    {
+     "input": [
+      [
+       "RingBuffer",
+       "read"
+      ],
+      [
+       [
+        6
+       ],
+       [
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RingBuffer",
+       "write",
+       "write",
+       "read",
+       "write",
+       "write",
+       "write",
+       "write",
+       "read",
+       "read",
+       "write",
+       "read",
+       "read",
+       "write",
+       "write",
+       "read",
+       "write"
+      ],
+      [
+       [
+        6
+       ],
+       [
+        "~XXc~"
+       ],
+       [
+        "X ~ XbY"
+       ],
+       [
+        7
+       ],
+       [
+        "Xcc~"
+       ],
+       [
+        "Z  bZY"
+       ],
+       [
+        "YXZbY"
+       ],
+       [
+        "~X Z"
+       ],
+       [
+        2
+       ],
+       [
+        5
+       ],
+       [
+        ""
+       ],
+       [
+        7
+       ],
+       [
+        2
+       ],
+       [
+        "YY"
+       ],
+       [
+        "Z~bX"
+       ],
+       [
+        8
+       ],
+       [
+        " YcY"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      " ~ XbY",
+      null,
+      null,
+      null,
+      null,
+      "Zb",
+      "Y~X ",
+      null,
+      "",
+      "",
+      null,
+      null,
+      "XYYZ~b",
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696bebd76b040fa4d120bb7a": {
+   "constraints": [
+    "up to 1e5 calls",
+    "location ids match [a-z0-9]{1,10}",
+    "0 <= count <= 1e9",
+    "total nuts hidden in a trace <= 1e14"
+   ],
+   "clarifyingQuestions": [
+    "Are nuts hidden bottom-up and retrieved top-down?",
+    "What does each operation return?",
+    "Can a location hold unlimited levels?"
+   ],
+   "hints": [
+    "Bottom-up filling and top-down removal mean only the total matters.",
+    "The first L + 1 levels hold F(L + 4) - 2 nuts in total.",
+    "Binary-search (or scan) the prefix sums for the first one that reaches the total."
+   ],
+   "invariants": [
+    "occupied levels are always a prefix",
+    "the highest level depends only on the total"
+   ],
+   "chooseWhen": [
+    "Simulations that collapse to a counter"
+   ],
+   "tradeoffs": [
+    "Prefix sums need about 70 entries for 1e14 nuts"
+   ],
+   "variantLabel": "Inferred single variant: Fibonacci-level nut storage",
+   "examples": [
+    {
+     "input": [
+      [
+       "SquirrelResearch",
+       "hideNuts"
+      ],
+      [
+       [],
+       [
+        "oak",
+        5
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SquirrelResearch",
+       "hideNuts",
+       "retrieveNuts",
+       "hideNuts",
+       "retrieveNuts",
+       "getHighestLevel",
+       "getHighestLevel",
+       "retrieveNuts",
+       "hideNuts",
+       "retrieveNuts",
+       "getHighestLevel"
+      ],
+      [
+       [],
+       [
+        "oak",
+        100
+       ],
+       [
+        "oak",
+        1
+       ],
+       [
+        "elm",
+        2
+       ],
+       [
+        "elm",
+        1
+       ],
+       [
+        "oak"
+       ],
+       [
+        "oak"
+       ],
+       [
+        "elm",
+        0
+       ],
+       [
+        "elm",
+        2
+       ],
+       [
+        "oak",
+        2
+       ],
+       [
+        "elm"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      8,
+      1,
+      1,
+      1,
+      8,
+      8,
+      0,
+      1,
+      2,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

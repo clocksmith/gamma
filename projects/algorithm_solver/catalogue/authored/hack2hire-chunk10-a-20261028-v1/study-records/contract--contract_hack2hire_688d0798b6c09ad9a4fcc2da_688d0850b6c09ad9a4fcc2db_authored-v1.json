@@ -1,0 +1,505 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:688d0798b6c09ad9a4fcc2da:688d0850b6c09ad9a4fcc2db:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/688d0798b6c09ad9a4fcc2da.json",
+   "sha256": "37ce5a23b9570c2be6bd02b5653a15fceb639a69ef9136dc1adf62f40bb23959",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:688d0850b6c09ad9a4fcc2db"
+  }
+ ],
+ "problemId": "hack2hire:688d0798b6c09ad9a4fcc2da",
+ "variantId": "688d0850b6c09ad9a4fcc2db",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: lowest-rank eviction cache",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:688d0850b6c09ad9a4fcc2db/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "RankedCache(capacity) holds at most capacity entries. put(key, value, rank) on a key already cached replaces its value and rank. On a new key when the cache already holds capacity entries, it first evicts the entry with the smallest rank; among equal ranks, the one whose last write is oldest (the preview allows any, so this tie rule is chosen for determinism). get never changes the cache order. get(key) returns the cached value or \"\" when the key is not cached. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "RankedCache(capacity) holds at most capacity entries.",
+   "put(key, value, rank) on a key already cached replaces its value and rank.",
+   "On a new key when the cache already holds capacity entries, it first evicts the entry with the smallest rank; among equal ranks, the one whose last write is oldest (the preview allows any, so this tie rule is chosen for determinism).",
+   "get never changes the cache order.",
+   "get(key) returns the cached value or \"\" when the key is not cached.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= capacity <= 1e5",
+   "up to 1e5 calls",
+   "keys and values match [a-z0-9]{1,10}",
+   "-1e9 <= rank <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:688d0850b6c09ad9a4fcc2db/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: key-value cache where each value has a rank; when full, evict an entry with the lowest rank (any among ties); slow primary data source; provided interfaces cut off; algorithmTags: DESIGN, CONCURRENCY; codingQuestions (variant count/order); preview response sha256 1ec1b78380125b6e375c1782219437006477aac73452cf8a468e8ab3cce7c390"
+   },
+   {
+    "statement": "Uncertainty: high: rank-based eviction is in the preview; class and method names, the miss value, the oldest-write tie rule and update semantics are inferred",
+    "basis": "the public group preview is partial (513 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = ranked cache with put/get, 2 = read-through and write-through over a slower data source with a load counter; the CONCURRENCY tag (thread safety) is not observable in single-threaded traces and is not modelled",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/3/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/3/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/3/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which entry is evicted among several with the same lowest rank?",
+   "Does get refresh an entry or change its rank?",
+   "Does updating an existing key ever evict?",
+   "Must the cache be thread-safe, and how would that be tested?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:688d0850b6c09ad9a4fcc2db/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "RankedCache",
+      "get"
+     ],
+     [
+      [
+       1
+      ],
+      [
+       "b"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "RankedCache",
+      "put",
+      "get",
+      "get",
+      "put",
+      "get",
+      "put",
+      "get",
+      "put",
+      "put",
+      "put",
+      "put",
+      "put",
+      "get"
+     ],
+     [
+      [
+       2
+      ],
+      [
+       "a",
+       "x9",
+       2
+      ],
+      [
+       "a"
+      ],
+      [
+       "c"
+      ],
+      [
+       "f",
+       "x9",
+       1000000000
+      ],
+      [
+       "a"
+      ],
+      [
+       "a",
+       "w",
+       1000000000
+      ],
+      [
+       "a"
+      ],
+      [
+       "e",
+       "w",
+       1
+      ],
+      [
+       "f",
+       "v",
+       1
+      ],
+      [
+       "b",
+       "w",
+       -1
+      ],
+      [
+       "a",
+       "v",
+       0
+      ],
+      [
+       "c",
+       "w",
+       1
+      ],
+      [
+       "b"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     "x9",
+     "",
+     null,
+     "x9",
+     null,
+     "w",
+     null,
+     null,
+     null,
+     null,
+     null,
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:688d0850b6c09ad9a4fcc2db/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class RankedCache:\n    def __init__(self, capacity)\n    def put(self, key, value, rank) -> void\n    def get(self, key) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/688d0850b6c09ad9a4fcc2db-python.json",
+     "inferredInterface": {
+      "classname": "RankedCache",
+      "constructor": {
+       "params": [
+        {
+         "name": "capacity",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "put",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         },
+         {
+          "name": "rank",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/688d0850b6c09ad9a4fcc2db-python.json",
+      "sha256": "a67adab26aac8fe69ed526f1a61ca44c3a51c0a86f9bc00597cb0d77fc12deda",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class RankedCache {\n  constructor(capacity)\n  put(key, value, rank) /* -> void */\n  get(key) /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/688d0850b6c09ad9a4fcc2db-javascript.json",
+     "inferredInterface": {
+      "classname": "RankedCache",
+      "constructor": {
+       "params": [
+        {
+         "name": "capacity",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "put",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         },
+         {
+          "name": "rank",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/688d0850b6c09ad9a4fcc2db-javascript.json",
+      "sha256": "ba9ff9324c333a8a2bb79f89eb2d0a6d553b9d6c13866a5a51785a2f1804fdf3",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/3/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/3/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

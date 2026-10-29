@@ -1,0 +1,147 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69f2674342791c82ab99269a",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "RecipeManager",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addRecipe",
+    "params": [
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "ingredients",
+      "type": "string[]"
+     },
+     {
+      "name": "steps",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "getRecipe",
+    "params": [
+     {
+      "name": "recipeId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string[],string[]]>"
+    }
+   },
+   {
+    "name": "updateRecipe",
+    "params": [
+     {
+      "name": "recipeId",
+      "type": "string"
+     },
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "ingredients",
+      "type": "string[]"
+     },
+     {
+      "name": "steps",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "deleteRecipe",
+    "params": [
+     {
+      "name": "recipeId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "searchByIngredient",
+    "params": [
+     {
+      "name": "ingredient",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "rateRecipe",
+    "params": [
+     {
+      "name": "recipeId",
+      "type": "string"
+     },
+     {
+      "name": "rating",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getTopRated",
+    "params": [
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "dict of recipes; name clashes, ingredient search, rating order (with Fraction) and prefix listing all rescan every recipe",
+  "candidate_design": "level-2 indexes plus per-recipe rating sum and count; getTopRated sorts rated ids with an exact cross-multiplication comparator",
+  "complexity_target": "O(1) per rating, O(r log r) per top-k query/O(total text) space"
+ },
+ "source_sha256": "2d7db56ef2c797ccf6bf7eaafff588b9f254908cd6cf856d704cbddc6195a4e1",
+ "native_class": "RecipeManager",
+ "native_symbol": "module global RecipeManager",
+ "void_methods": []
+}

@@ -1,0 +1,85 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69190b156723130c5456345c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "ChatApp",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addBot",
+    "params": [
+     {
+      "name": "botName",
+      "type": "string"
+     },
+     {
+      "name": "botType",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "sendMessage",
+    "params": [
+     {
+      "name": "userId",
+      "type": "string"
+     },
+     {
+      "name": "text",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getRecentMessages",
+    "params": [
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "one list of bots scanned for duplicate names and a literal if-chain per bot kind on every message",
+  "candidate_design": "bot registry: a name set plus an ordered list of bot objects created from a type-to-class table; each bot implements react",
+  "complexity_target": "O(b) per message, O(k) per read/O(log size) space"
+ },
+ "source_sha256": "bd23b19b49b2954edce5f9b57819f7ccb8fc56b95ecba5930fd95357b79e424a",
+ "native_class": "ChatApp",
+ "native_symbol": "module global ChatApp",
+ "void_methods": [
+  "sendMessage"
+ ]
+}

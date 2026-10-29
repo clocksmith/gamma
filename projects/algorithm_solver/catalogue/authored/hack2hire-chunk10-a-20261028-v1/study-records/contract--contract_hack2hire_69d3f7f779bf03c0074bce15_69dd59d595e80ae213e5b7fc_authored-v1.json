@@ -1,0 +1,533 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69d3f7f779bf03c0074bce15:69dd59d595e80ae213e5b7fc:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69d3f7f779bf03c0074bce15.json",
+   "sha256": "a3cc29a8a66467f9bad98f0eeeb3b035818f2da90fd0e1fe377260ff5ae07316",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:69dd59d595e80ae213e5b7fc"
+  }
+ ],
+ "problemId": "hack2hire:69d3f7f779bf03c0074bce15",
+ "variantId": "69dd59d595e80ae213e5b7fc",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: deletions are versions too (time travel keeps old values)",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69dd59d595e80ae213e5b7fc/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "TemporalKVStore() starts empty. set(key, value, timestamp) stores value for key at timestamp; timestamps passed to set and remove never decrease over the whole call sequence, and a set at the same timestamp as the key's latest version replaces that version. get(key, timestamp) returns the value of the key's latest version with version time <= timestamp, or \"\" when there is none (get timestamps may be any value). remove(key, timestamp) records a deletion version at timestamp (same replacement rule as set): a later get at or after that time, and before the next set, returns \"\". It returns true when get(key, timestamp) would have returned a non-empty value just before the call. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "TemporalKVStore() starts empty.",
+   "set(key, value, timestamp) stores value for key at timestamp; timestamps passed to set and remove never decrease over the whole call sequence, and a set at the same timestamp as the key's latest version replaces that version.",
+   "get(key, timestamp) returns the value of the key's latest version with version time <= timestamp, or \"\" when there is none (get timestamps may be any value).",
+   "remove(key, timestamp) records a deletion version at timestamp (same replacement rule as set): a later get at or after that time, and before the next set, returns \"\".",
+   "It returns true when get(key, timestamp) would have returned a non-empty value just before the call.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "keys and values match [a-z0-9]{1,10}",
+   "1 <= timestamp <= 1e9",
+   "set and remove timestamps non-decreasing"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69dd59d595e80ae213e5b7fc/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: TemporalKVStore class keeping several values per key at different timestamps; operations initialization, get, set and remove; high throughput (signatures cut off); algorithmTags: DESIGN, HASH_TABLE; codingQuestions (variant count/order); preview response sha256 265b3f63079c910a9824a80f5bd5f32cdbd5d5087c7b17d590494253d559458f"
+   },
+   {
+    "statement": "Uncertainty: very high: the class name and the four operations are in the preview; everything about remove taking a timestamp and leaving older versions visible, the empty-string miss value and the ordering rules are inferred",
+    "basis": "the public group preview is partial (436 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = remove deletes the whole history of a key, 2 = remove records a deletion at a timestamp so earlier times still see old values",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Do timestamps of writes arrive in increasing order?",
+   "What does get return when no version is old enough?",
+   "Does remove erase the past, or only hide the key from that time on?",
+   "What happens to a second write at the same timestamp?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69dd59d595e80ae213e5b7fc/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "TemporalKVStore",
+      "get"
+     ],
+     [
+      [],
+      [
+       "a",
+       5
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "TemporalKVStore",
+      "set",
+      "set",
+      "remove",
+      "get",
+      "remove",
+      "get",
+      "set",
+      "get",
+      "set",
+      "get",
+      "get",
+      "remove",
+      "get"
+     ],
+     [
+      [],
+      [
+       "c",
+       "y",
+       4
+      ],
+      [
+       "c",
+       "x",
+       5
+      ],
+      [
+       "a",
+       7
+      ],
+      [
+       "a",
+       5
+      ],
+      [
+       "c",
+       9
+      ],
+      [
+       "a",
+       9
+      ],
+      [
+       "b",
+       "y",
+       10
+      ],
+      [
+       "b",
+       11
+      ],
+      [
+       "b",
+       "z1",
+       12
+      ],
+      [
+       "c",
+       11
+      ],
+      [
+       "a",
+       3
+      ],
+      [
+       "c",
+       14
+      ],
+      [
+       "a",
+       12
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     false,
+     "",
+     true,
+     "",
+     null,
+     "y",
+     null,
+     "",
+     "",
+     false,
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69dd59d595e80ae213e5b7fc/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TemporalKVStore:\n    def __init__(self)\n    def set(self, key, value, timestamp) -> void\n    def get(self, key, timestamp) -> string\n    def remove(self, key, timestamp) -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69dd59d595e80ae213e5b7fc-python.json",
+     "inferredInterface": {
+      "classname": "TemporalKVStore",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "remove",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69dd59d595e80ae213e5b7fc-python.json",
+      "sha256": "07aaa1df8fddc5dd8f1c3e598b39688a0581b71aee0d596c0fda874fe08df349",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TemporalKVStore {\n  constructor()\n  set(key, value, timestamp) /* -> void */\n  get(key, timestamp) /* -> string */\n  remove(key, timestamp) /* -> boolean */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69dd59d595e80ae213e5b7fc-javascript.json",
+     "inferredInterface": {
+      "classname": "TemporalKVStore",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "remove",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69dd59d595e80ae213e5b7fc-javascript.json",
+      "sha256": "16a840456182a369fd89ff29cef02f1c41eae3d743430d79e19e32c35447aacf",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

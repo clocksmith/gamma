@@ -1,0 +1,414 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6792ce956828628f54397d98:6792d9906828628f54397d99:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/21"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6792ce956828628f54397d98.json",
+   "sha256": "fe59f2995d972de43e68dd0670c51d2456f1d8b8047f2d57b21431ae8d84942e",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:6792d9906828628f54397d99"
+  }
+ ],
+ "problemId": "hack2hire:6792ce956828628f54397d98",
+ "variantId": "6792d9906828628f54397d99",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: filtered, time-ordered pages",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6792d9906828628f54397d99/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "records are [timestamp, id, userId, currency, amount] strings with canonical integer timestamps, unique ids, three-letter currencies and amounts with up to two decimals. filters is [minTime, maxTime, minAmount, maxAmount, userId, currency], where \"\" disables that filter; ranges are inclusive and amounts compare exactly. Keep the matching records, order them by timestamp ascending (ties keep input order), and return page pageNumber (1-based) of size pageSize as fresh lists; a page past the end is [].",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/21/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "records are [timestamp, id, userId, currency, amount] strings with canonical integer timestamps, unique ids, three-letter currencies and amounts with up to two decimals.",
+   "filters is [minTime, maxTime, minAmount, maxAmount, userId, currency], where \"\" disables that filter; ranges are inclusive and amounts compare exactly.",
+   "Keep the matching records, order them by timestamp ascending (ties keep input order), and return page pageNumber (1-based) of size pageSize as fresh lists; a page past the end is []."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/21/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= records.length <= 1e5",
+   "0 <= timestamp <= 999999999",
+   "amounts up to 999999999.99",
+   "1 <= pageSize, pageNumber <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6792d9906828628f54397d99/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: transaction records as string lists [timestamp, id, userId, currency, amount]; filters for time range, amount range, user id and currency; pagination (page parameters and order cut off); algorithmTags: DESIGN; preview response sha256 f214152c4cecd7c57cb133a3f0032f32224e4bd69995cebb260016217fe4854f"
+   },
+   {
+    "statement": "Uncertainty: high: the record format and the four filter kinds are in the preview; the single-function interface, the filter list layout, timestamp ordering, 1-based pages and exact decimal comparison are inferred",
+    "basis": "the public group preview is partial (313 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/21/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/21/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/21/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What order should results have before paging?",
+   "Are pages 0-based or 1-based?",
+   "Are ranges inclusive?",
+   "How are decimal amounts compared exactly?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6792d9906828628f54397d99/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     1,
+     1
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "9",
+       "i0",
+       "u2",
+       "USD",
+       "5.5"
+      ],
+      [
+       "5",
+       "i1",
+       "u2",
+       "USD",
+       "5.05"
+      ],
+      [
+       "9",
+       "i2",
+       "u1",
+       "USD",
+       "5.5"
+      ],
+      [
+       "9",
+       "i3",
+       "u1",
+       "USD",
+       "10.00"
+      ],
+      [
+       "5",
+       "i4",
+       "u1",
+       "EUR",
+       "99.99"
+      ],
+      [
+       "5",
+       "i5",
+       "u1",
+       "USD",
+       "10.00"
+      ],
+      [
+       "0",
+       "i6",
+       "u1",
+       "USD",
+       "5"
+      ]
+     ],
+     [
+      "",
+      "9",
+      "5.05",
+      "10",
+      "",
+      ""
+     ],
+     1,
+     2
+    ],
+    "output": [
+     [
+      "5",
+      "i5",
+      "u1",
+      "USD",
+      "10.00"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:6792d9906828628f54397d99/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def queryTransactions(records, filters, pageSize, pageNumber) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/21/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6792d9906828628f54397d99-python.json",
+     "inferredInterface": {
+      "name": "queryTransactions",
+      "params": [
+       {
+        "name": "records",
+        "type": "list<[string,string,string,string,string]>"
+       },
+       {
+        "name": "filters",
+        "type": "string[]"
+       },
+       {
+        "name": "pageSize",
+        "type": "integer"
+       },
+       {
+        "name": "pageNumber",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6792d9906828628f54397d99-python.json",
+      "sha256": "6bcf6ba8403cfdcede6ccca195c65f0c66950378bf49382ab4b670a1bf7fac91",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function queryTransactions(records, filters, pageSize, pageNumber) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/21/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6792d9906828628f54397d99-javascript.json",
+     "inferredInterface": {
+      "name": "queryTransactions",
+      "params": [
+       {
+        "name": "records",
+        "type": "list<[string,string,string,string,string]>"
+       },
+       {
+        "name": "filters",
+        "type": "string[]"
+       },
+       {
+        "name": "pageSize",
+        "type": "integer"
+       },
+       {
+        "name": "pageNumber",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/6792d9906828628f54397d99-javascript.json",
+      "sha256": "93c7e58db10cbc51a3c886ecafd5f956fac6e030a80a771317e3b0b9638c4b3f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/21/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/21/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

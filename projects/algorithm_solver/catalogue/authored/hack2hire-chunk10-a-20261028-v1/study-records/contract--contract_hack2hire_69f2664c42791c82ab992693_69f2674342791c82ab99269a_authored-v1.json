@@ -1,0 +1,618 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69f2664c42791c82ab992693:69f2674342791c82ab99269a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+   "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+   "selector": "/problems/27"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69f2664c42791c82ab992693.json",
+   "sha256": "9c2e6576a9ae2e00af0c2ff1186e7ba8e5f142c0dea450cca4836869bd8f8014",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+   "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+   "selector": "/variants/hack2hire:69f2674342791c82ab99269a"
+  }
+ ],
+ "problemId": "hack2hire:69f2664c42791c82ab992693",
+ "variantId": "69f2674342791c82ab99269a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 3: ratings and top-rated",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69f2674342791c82ab99269a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "RecipeManager() starts empty. addRecipe(name, ingredients, steps) returns the next id \"recipe<k>\" (k counts successful adds from 1; ids are never reused) or \"\" when another stored recipe has the same name ignoring case. getRecipe(recipeId) returns [name, ingredients, steps] as fresh lists or [] when absent. updateRecipe(recipeId, name, ingredients, steps) replaces all three and returns true, or returns false when the recipe is absent or the new name equals another recipe's name ignoring case. deleteRecipe(recipeId) returns whether a recipe was removed. searchByIngredient(ingredient) returns the ids of recipes with an ingredient equal to it ignoring case, by id number ascending. rateRecipe(recipeId, rating) adds a rating 1..5 and returns true, or returns false when absent; ratings survive updates and vanish on delete. getTopRated(k) returns up to k ids of rated recipes by exact average rating descending, then id number ascending. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/27/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "RecipeManager() starts empty.",
+   "addRecipe(name, ingredients, steps) returns the next id \"recipe<k>\" (k counts successful adds from 1; ids are never reused) or \"\" when another stored recipe has the same name ignoring case.",
+   "getRecipe(recipeId) returns [name, ingredients, steps] as fresh lists or [] when absent.",
+   "updateRecipe(recipeId, name, ingredients, steps) replaces all three and returns true, or returns false when the recipe is absent or the new name equals another recipe's name ignoring case.",
+   "deleteRecipe(recipeId) returns whether a recipe was removed.",
+   "searchByIngredient(ingredient) returns the ids of recipes with an ingredient equal to it ignoring case, by id number ascending.",
+   "rateRecipe(recipeId, rating) adds a rating 1..5 and returns true, or returns false when absent; ratings survive updates and vanish on delete.",
+   "getTopRated(k) returns up to k ids of rated recipes by exact average rating descending, then id number ascending.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/27/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "names match [A-Za-z0-9 ]{1,20}",
+   "up to 10 ingredients matching [A-Za-z ]{1,15} and up to 10 printable steps of 1 to 40 characters",
+   "1 <= rating <= 5",
+   "1 <= k <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69f2674342791c82ab99269a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: RecipeManager with CRUD; unique case-insensitive names; ordered ingredients and steps; addRecipe returns sequential ids \"recipe1\", \"recipe2\", ... never reused, or \"\" for a duplicate name (other methods cut off); algorithmTags: HASH_TABLE, DESIGN; codingQuestions (variant count/order); preview response sha256 6e5837f829a34dbe61ca1b6f1bdf9e7e467e0b13ca582687dec69f8bad54873f"
+   },
+   {
+    "statement": "Uncertainty: very high: level 3 has no public text; ratings, exact averages and the tie rule are inferred",
+    "basis": "the public group preview is partial (739 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as four cumulative levels: 1 = CRUD, 2 = search by ingredient, 3 = ratings with top-rated listing, 4 = listing by name prefix",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/27/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/27/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/27/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the name check case-insensitive on update too?",
+   "What does getRecipe return for a missing id?",
+   "Is ingredient search exact or substring, and case-sensitive?",
+   "How are average ratings compared and tied?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69f2674342791c82ab99269a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "RecipeManager",
+      "deleteRecipe"
+     ],
+     [
+      [],
+      [
+       "recipe1"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "RecipeManager",
+      "addRecipe",
+      "addRecipe",
+      "updateRecipe",
+      "getTopRated",
+      "updateRecipe"
+     ],
+     [
+      [],
+      [
+       "soup",
+       [
+        "Flour",
+        "egg"
+       ],
+       [
+        "Bake 20m",
+        "Mix."
+       ]
+      ],
+      [
+       "Pasta",
+       [
+        "salt",
+        "Flour"
+       ],
+       []
+      ],
+      [
+       "recipe1",
+       "Pasta",
+       [
+        "Salt"
+       ],
+       []
+      ],
+      [
+       2
+      ],
+      [
+       "recipe1",
+       "pie 2",
+       [
+        "Flour",
+        "Salt"
+       ],
+       [
+        "Serve",
+        "Bake 20m"
+       ]
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     "recipe1",
+     "recipe2",
+     false,
+     [],
+     true
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/study-content.json",
+    "sha256": "f1a825f2c2ebb5b19ba1974ef75108ed5d1af9a6a194092cf76d3f50209c61f8",
+    "selector": "/variants/hack2hire:69f2674342791c82ab99269a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/oracles.py",
+    "sha256": "e10dbd171a68f34a388067667ea9889b19d0a40956374592b75247fe814eaa3e",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class RecipeManager:\n    def __init__(self)\n    def addRecipe(self, name, ingredients, steps) -> string\n    def getRecipe(self, recipeId) -> list<[string,string[],string[]]>\n    def updateRecipe(self, recipeId, name, ingredients, steps) -> boolean\n    def deleteRecipe(self, recipeId) -> boolean\n    def searchByIngredient(self, ingredient) -> string[]\n    def rateRecipe(self, recipeId, rating) -> boolean\n    def getTopRated(self, k) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/27/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69f2674342791c82ab99269a-python.json",
+     "inferredInterface": {
+      "classname": "RecipeManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addRecipe",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "ingredients",
+          "type": "string[]"
+         },
+         {
+          "name": "steps",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "getRecipe",
+        "params": [
+         {
+          "name": "recipeId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "list<[string,string[],string[]]>"
+        }
+       },
+       {
+        "name": "updateRecipe",
+        "params": [
+         {
+          "name": "recipeId",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "ingredients",
+          "type": "string[]"
+         },
+         {
+          "name": "steps",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "deleteRecipe",
+        "params": [
+         {
+          "name": "recipeId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "searchByIngredient",
+        "params": [
+         {
+          "name": "ingredient",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "rateRecipe",
+        "params": [
+         {
+          "name": "recipeId",
+          "type": "string"
+         },
+         {
+          "name": "rating",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getTopRated",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69f2674342791c82ab99269a-python.json",
+      "sha256": "01118297fa9983b742bcfeb73082df71650c457e213fc4a84f663939acd3bdf6",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class RecipeManager {\n  constructor()\n  addRecipe(name, ingredients, steps) /* -> string */\n  getRecipe(recipeId) /* -> list<[string,string[],string[]]> */\n  updateRecipe(recipeId, name, ingredients, steps) /* -> boolean */\n  deleteRecipe(recipeId) /* -> boolean */\n  searchByIngredient(ingredient) /* -> string[] */\n  rateRecipe(recipeId, rating) /* -> boolean */\n  getTopRated(k) /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+      "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+      "selector": "/problems/27/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69f2674342791c82ab99269a-javascript.json",
+     "inferredInterface": {
+      "classname": "RecipeManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addRecipe",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "ingredients",
+          "type": "string[]"
+         },
+         {
+          "name": "steps",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "getRecipe",
+        "params": [
+         {
+          "name": "recipeId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "list<[string,string[],string[]]>"
+        }
+       },
+       {
+        "name": "updateRecipe",
+        "params": [
+         {
+          "name": "recipeId",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "ingredients",
+          "type": "string[]"
+         },
+         {
+          "name": "steps",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "deleteRecipe",
+        "params": [
+         {
+          "name": "recipeId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "searchByIngredient",
+        "params": [
+         {
+          "name": "ingredient",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "rateRecipe",
+        "params": [
+         {
+          "name": "recipeId",
+          "type": "string"
+         },
+         {
+          "name": "rating",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getTopRated",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/semantics/69f2674342791c82ab99269a-javascript.json",
+      "sha256": "01e8c9905c9e3c16bc61a250126aa52257f3f3b60ba162e8de4ea72de80ae3b4",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/27/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-a-20261028-v1/contracts.json",
+    "sha256": "be5d798382a43847401e76609d79932746e664be0d91c81b132bf6b46cd69126",
+    "selector": "/problems/27/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

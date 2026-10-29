@@ -1,0 +1,3648 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:67ce7ab08f73eb6319edd207",
+   "variant_id": "67ce7ab08f73eb6319edd207",
+   "variant_ordinal": 1,
+   "title": "Custom String Sorting",
+   "source": {
+    "post_id": "67ce799a8f73eb6319edd206",
+    "group_title": "Custom String Sorting",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ce799a8f73eb6319edd206",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ce799a8f73eb6319edd206/practice?questionId=67ce7ab08f73eb6319edd207",
+    "preview_response_sha256": "1d9fdedeefcde295a3fd6b5a1ee8d2ed55bb000333629f9e5b52680835f33e32",
+    "preview_content_sha256": "c4fc4b1ffc40ccc04b8b37e0225ec3a00a5bc2476c06ce7a94e28f101abd4e50",
+    "preview_characters": 556,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67ce799a8f73eb6319edd206.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: customOrder string gives character precedence; a prefix is smaller; otherwise the first differing character decides by its position in customOrder",
+    "algorithmTags: STRING"
+   ],
+   "inferred_spec": "customOrder is a string of distinct lowercase letters and words a list of strings that use only letters of customOrder (empty strings allowed). Return a new list with the words in ascending order, where x is smaller than y when x is a proper prefix of y, or when at the first index where they differ the letter of x comes earlier in customOrder. Equal words stay adjacent.",
+   "inference_uncertainty": "low: the comparison rule is in the preview; the function name, returning a new list, the allowed alphabet (only letters of customOrder) and the bounds are inferred",
+   "inferred_interface": {
+    "name": "customSort",
+    "params": [
+     {
+      "name": "customOrder",
+      "type": "string"
+     },
+     {
+      "name": "words",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CSS"
+  },
+  {
+   "uid": "hack2hire:69d3f7fd79bf03c0074bce16",
+   "variant_id": "69d3f7fd79bf03c0074bce16",
+   "variant_ordinal": 1,
+   "title": "Design A Temporal Key-Value Store",
+   "source": {
+    "post_id": "69d3f7f779bf03c0074bce15",
+    "group_title": "Design A Temporal Key-Value Store",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d3f7f779bf03c0074bce15",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d3f7f779bf03c0074bce15/practice?questionId=69d3f7fd79bf03c0074bce16",
+    "preview_response_sha256": "265b3f63079c910a9824a80f5bd5f32cdbd5d5087c7b17d590494253d559458f",
+    "preview_content_sha256": "9932bffd6c15445aede75107d71fedde7f1847e51ac674258886a5aad459aa2b",
+    "preview_characters": 436,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d3f7f779bf03c0074bce15.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "MICROSOFT",
+     "PERPLEXITY"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: TemporalKVStore class keeping several values per key at different timestamps; operations initialization, get, set and remove; high throughput (signatures cut off)",
+    "algorithmTags: DESIGN, HASH_TABLE",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "TemporalKVStore() starts empty. set(key, value, timestamp) stores value for key at timestamp; timestamps passed to set never decrease over the whole call sequence, and a set at the same timestamp as the key's latest version replaces that version. get(key, timestamp) returns the value of the key's latest version with version time <= timestamp, or \"\" when there is none (get timestamps may be any value). remove(key) deletes every version of key and returns true when the key had at least one version, otherwise false. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: the class name and the four operations are in the preview; method signatures, the empty-string miss value, non-decreasing write timestamps, same-timestamp replacement and remove deleting the whole history are inferred",
+   "inferred_interface": {
+    "classname": "TemporalKVStore",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "set",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "remove",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = remove deletes the whole history of a key, 2 = remove records a deletion at a timestamp so earlier times still see old values",
+   "oracle_constant": "TKV1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69dd59d595e80ae213e5b7fc",
+   "variant_id": "69dd59d595e80ae213e5b7fc",
+   "variant_ordinal": 2,
+   "title": "Design A Temporal Key-Value Store",
+   "source": {
+    "post_id": "69d3f7f779bf03c0074bce15",
+    "group_title": "Design A Temporal Key-Value Store",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d3f7f779bf03c0074bce15",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d3f7f779bf03c0074bce15/practice?questionId=69dd59d595e80ae213e5b7fc",
+    "preview_response_sha256": "265b3f63079c910a9824a80f5bd5f32cdbd5d5087c7b17d590494253d559458f",
+    "preview_content_sha256": "9932bffd6c15445aede75107d71fedde7f1847e51ac674258886a5aad459aa2b",
+    "preview_characters": 436,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d3f7f779bf03c0074bce15.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "MICROSOFT",
+     "PERPLEXITY"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: TemporalKVStore class keeping several values per key at different timestamps; operations initialization, get, set and remove; high throughput (signatures cut off)",
+    "algorithmTags: DESIGN, HASH_TABLE",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "TemporalKVStore() starts empty. set(key, value, timestamp) stores value for key at timestamp; timestamps passed to set and remove never decrease over the whole call sequence, and a set at the same timestamp as the key's latest version replaces that version. get(key, timestamp) returns the value of the key's latest version with version time <= timestamp, or \"\" when there is none (get timestamps may be any value). remove(key, timestamp) records a deletion version at timestamp (same replacement rule as set): a later get at or after that time, and before the next set, returns \"\". It returns true when get(key, timestamp) would have returned a non-empty value just before the call. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: the class name and the four operations are in the preview; everything about remove taking a timestamp and leaving older versions visible, the empty-string miss value and the ordering rules are inferred",
+   "inferred_interface": {
+    "classname": "TemporalKVStore",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "set",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "remove",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = remove deletes the whole history of a key, 2 = remove records a deletion at a timestamp so earlier times still see old values",
+   "oracle_constant": "TKV2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:688d0850b6c09ad9a4fcc2db",
+   "variant_id": "688d0850b6c09ad9a4fcc2db",
+   "variant_ordinal": 1,
+   "title": "Design Cache with Eviction",
+   "source": {
+    "post_id": "688d0798b6c09ad9a4fcc2da",
+    "group_title": "Design Cache with Eviction",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688d0798b6c09ad9a4fcc2da",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688d0798b6c09ad9a4fcc2da/practice?questionId=688d0850b6c09ad9a4fcc2db",
+    "preview_response_sha256": "1ec1b78380125b6e375c1782219437006477aac73452cf8a468e8ab3cce7c390",
+    "preview_content_sha256": "19760375d5e58c09eacb955b3d467087e98f900a821eb1e560150bc9823a121b",
+    "preview_characters": 513,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/688d0798b6c09ad9a4fcc2da.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "CONCURRENCY"
+    ],
+    "companies": [
+     "LINKEDIN"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: key-value cache where each value has a rank; when full, evict an entry with the lowest rank (any among ties); slow primary data source; provided interfaces cut off",
+    "algorithmTags: DESIGN, CONCURRENCY",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "RankedCache(capacity) holds at most capacity entries. put(key, value, rank) on a key already cached replaces its value and rank. On a new key when the cache already holds capacity entries, it first evicts the entry with the smallest rank; among equal ranks, the one whose last write is oldest (the preview allows any, so this tie rule is chosen for determinism). get never changes the cache order. get(key) returns the cached value or \"\" when the key is not cached. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: rank-based eviction is in the preview; class and method names, the miss value, the oldest-write tie rule and update semantics are inferred",
+   "inferred_interface": {
+    "classname": "RankedCache",
+    "constructor": {
+     "params": [
+      {
+       "name": "capacity",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "put",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       },
+       {
+        "name": "rank",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = ranked cache with put/get, 2 = read-through and write-through over a slower data source with a load counter; the CONCURRENCY tag (thread safety) is not observable in single-threaded traces and is not modelled",
+   "oracle_constant": "CEV1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68aba144fc2e86fe2162e8a1",
+   "variant_id": "68aba144fc2e86fe2162e8a1",
+   "variant_ordinal": 2,
+   "title": "Design Cache with Eviction",
+   "source": {
+    "post_id": "688d0798b6c09ad9a4fcc2da",
+    "group_title": "Design Cache with Eviction",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688d0798b6c09ad9a4fcc2da",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688d0798b6c09ad9a4fcc2da/practice?questionId=68aba144fc2e86fe2162e8a1",
+    "preview_response_sha256": "1ec1b78380125b6e375c1782219437006477aac73452cf8a468e8ab3cce7c390",
+    "preview_content_sha256": "19760375d5e58c09eacb955b3d467087e98f900a821eb1e560150bc9823a121b",
+    "preview_characters": 513,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/688d0798b6c09ad9a4fcc2da.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "CONCURRENCY"
+    ],
+    "companies": [
+     "LINKEDIN"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: key-value cache where each value has a rank; when full, evict an entry with the lowest rank (any among ties); slow primary data source; provided interfaces cut off",
+    "algorithmTags: DESIGN, CONCURRENCY",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "RankedCache(capacity, source) wraps a slow data source given as rows [key, value, rank] with unique keys (copied, never modified). put(key, value, rank) on a key already cached replaces its value and rank. On a new key when the cache already holds capacity entries, it first evicts the entry with the smallest rank; among equal ranks, the one whose last write is oldest (the preview allows any, so this tie rule is chosen for determinism). get never changes the cache order. put also writes the entry through to the data source. get(key) returns the cached value; on a miss it loads the key from the data source when present (counting one load and inserting it into the cache exactly like a put of its stored value and rank, without writing back) and returns the value, otherwise returns \"\". getLoadCount() returns the number of loads so far. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: the slow primary source is mentioned in the preview, but the read-through/write-through behaviour, the source rows in the constructor, the load counter, the tie rule and all names are inferred; thread safety is not modelled",
+   "inferred_interface": {
+    "classname": "RankedCache",
+    "constructor": {
+     "params": [
+      {
+       "name": "capacity",
+       "type": "integer"
+      },
+      {
+       "name": "source",
+       "type": "list<[string,string,integer]>"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "put",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       },
+       {
+        "name": "rank",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "getLoadCount",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = ranked cache with put/get, 2 = read-through and write-through over a slower data source with a load counter; the CONCURRENCY tag (thread safety) is not observable in single-threaded traces and is not modelled",
+   "oracle_constant": "CEV2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6ab30396e74ebb7457a3ef46",
+   "variant_id": "6ab30396e74ebb7457a3ef46",
+   "variant_ordinal": 1,
+   "title": "Design Card Game III",
+   "source": {
+    "post_id": "6ab3036ce74ebb7457a3ef44",
+    "group_title": "Design Card Game III",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab3036ce74ebb7457a3ef44",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab3036ce74ebb7457a3ef44/practice?questionId=6ab30396e74ebb7457a3ef46",
+    "preview_response_sha256": "5a0348bced18f05de51849826b5d1ef1fa91eb743dbb9bc94c590fd3a035753a",
+    "preview_content_sha256": "249e6935286584a3d878db1ab9d5cb777bd22a38c17e17c782f6c558c8509607",
+    "preview_characters": 936,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ab3036ce74ebb7457a3ef44.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "SIMULATION"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two players, deal one card at a time alternating until each has three; ranks 2..10, J, Q, K, A; categories three of a kind > pair > high card with stated tie-breaks; suits never matter; equal strength is a draw",
+    "algorithmTags: DESIGN, SIMULATION",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "A card is a string: rank (\"2\"..\"10\", \"J\", \"Q\", \"K\", \"A\") followed by a suit letter S, H, D or C; cards in the deck are distinct. deck holds exactly six cards dealt in order: cards 1, 3, 5 go to player 1 and cards 2, 4, 6 to player 2. Hand categories from strongest: three of a kind, pair, high card; ties within a category compare the triple rank, then the pair rank and kicker, then all ranks from highest to lowest; suits never matter. Return [hand1, hand2, winner] with the hands in deal order and winner 1, 2 or 0 for a draw.",
+   "inference_uncertainty": "medium: dealing and hand ranking are in the preview; taking a six-card deck as input and the [hand1, hand2, winner] output with 0 for a draw are inferred",
+   "inferred_interface": {
+    "name": "playRound",
+    "params": [
+     {
+      "name": "deck",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "list<[string[],string[],integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as three levels: 1 = the preview game, 2 = adds straight and flush categories, 3 = 2 to 17 players with the level-1 categories",
+   "oracle_constant": "CG1"
+  },
+  {
+   "uid": "hack2hire:6ab3042be74ebb7457a3ef4a",
+   "variant_id": "6ab3042be74ebb7457a3ef4a",
+   "variant_ordinal": 2,
+   "title": "Design Card Game III",
+   "source": {
+    "post_id": "6ab3036ce74ebb7457a3ef44",
+    "group_title": "Design Card Game III",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab3036ce74ebb7457a3ef44",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab3036ce74ebb7457a3ef44/practice?questionId=6ab3042be74ebb7457a3ef4a",
+    "preview_response_sha256": "5a0348bced18f05de51849826b5d1ef1fa91eb743dbb9bc94c590fd3a035753a",
+    "preview_content_sha256": "249e6935286584a3d878db1ab9d5cb777bd22a38c17e17c782f6c558c8509607",
+    "preview_characters": 936,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ab3036ce74ebb7457a3ef44.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "SIMULATION"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two players, deal one card at a time alternating until each has three; ranks 2..10, J, Q, K, A; categories three of a kind > pair > high card with stated tie-breaks; suits never matter; equal strength is a draw",
+    "algorithmTags: DESIGN, SIMULATION",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "A card is a string: rank (\"2\"..\"10\", \"J\", \"Q\", \"K\", \"A\") followed by a suit letter S, H, D or C; cards in the deck are distinct. Same deal and output as level 1, with three-card poker categories from strongest: straight flush, three of a kind, straight, flush, pair, high card. A straight is three consecutive ranks with the ace high only (Q-K-A is a straight, A-2-3 is not); a flush is three cards of one suit. Straights, flushes and high cards compare all ranks from highest to lowest; three of a kind and pairs as in level 1. Return [hand1, hand2, winner] with winner 1, 2 or 0.",
+   "inference_uncertainty": "very high: no public text covers level 2; the extra categories, their order and the ace-high-only straight are inferred from common three-card variants",
+   "inferred_interface": {
+    "name": "playRound",
+    "params": [
+     {
+      "name": "deck",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "list<[string[],string[],integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as three levels: 1 = the preview game, 2 = adds straight and flush categories, 3 = 2 to 17 players with the level-1 categories",
+   "oracle_constant": "CG2"
+  },
+  {
+   "uid": "hack2hire:6ab3047ce74ebb7457a3ef51",
+   "variant_id": "6ab3047ce74ebb7457a3ef51",
+   "variant_ordinal": 3,
+   "title": "Design Card Game III",
+   "source": {
+    "post_id": "6ab3036ce74ebb7457a3ef44",
+    "group_title": "Design Card Game III",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab3036ce74ebb7457a3ef44",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab3036ce74ebb7457a3ef44/practice?questionId=6ab3047ce74ebb7457a3ef51",
+    "preview_response_sha256": "5a0348bced18f05de51849826b5d1ef1fa91eb743dbb9bc94c590fd3a035753a",
+    "preview_content_sha256": "249e6935286584a3d878db1ab9d5cb777bd22a38c17e17c782f6c558c8509607",
+    "preview_characters": 936,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ab3036ce74ebb7457a3ef44.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "SIMULATION"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two players, deal one card at a time alternating until each has three; ranks 2..10, J, Q, K, A; categories three of a kind > pair > high card with stated tie-breaks; suits never matter; equal strength is a draw",
+    "algorithmTags: DESIGN, SIMULATION",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "A card is a string: rank (\"2\"..\"10\", \"J\", \"Q\", \"K\", \"A\") followed by a suit letter S, H, D or C; cards in the deck are distinct. numPlayers players (2..17) each receive three cards: deck has 3 * numPlayers distinct cards and card i (0-based) goes to player (i mod numPlayers) + 1. Hands are ranked with the level-1 categories and tie-breaks. Return [hands, winners]: hands lists every player's cards in deal order and winners lists, ascending, every player whose hand is strongest (several on a tie).",
+   "inference_uncertainty": "very high: no public text covers level 3; the multi-player deal order, the bound of 17 players and returning all tied winners are inferred",
+   "inferred_interface": {
+    "name": "playTable",
+    "params": [
+     {
+      "name": "numPlayers",
+      "type": "integer"
+     },
+     {
+      "name": "deck",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "list<[string[][],integer[]]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as three levels: 1 = the preview game, 2 = adds straight and flush categories, 3 = 2 to 17 players with the level-1 categories",
+   "oracle_constant": "CG3"
+  },
+  {
+   "uid": "hack2hire:69190b156723130c5456345c",
+   "variant_id": "69190b156723130c5456345c",
+   "variant_ordinal": 1,
+   "title": "Design ChatBot System",
+   "source": {
+    "post_id": "69190ae16723130c5456345b",
+    "group_title": "Design ChatBot System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69190ae16723130c5456345b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69190ae16723130c5456345b/practice?questionId=69190b156723130c5456345c",
+    "preview_response_sha256": "e4e6dfc2a063e078e3413416c6cc8bfed507c949df253836920d953cfbaa7b86",
+    "preview_content_sha256": "544dcf43b5025ac111ddcbbcb270c141db54791b3ac1322967177d30ae3c2404",
+    "preview_characters": 738,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69190ae16723130c5456345b.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: ChatApp with human users and bots; one shared channel; a user message is logged first, then each bot may react and log its own output; extensible bot types; three bot types (their definitions are cut off)",
+    "algorithmTags: DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "ChatApp() has one shared channel. addBot(botName, botType) adds a bot and returns true, or returns false when the type is unknown or a bot with that name already exists. sendMessage(userId, text) logs the user message and the bot replies. getRecentMessages(k) returns the last min(k, log size) log entries, oldest first. Bot types (inferred, since the preview cuts them off): \"echo\" answers a message starting with \"/echo \" with the rest of the text; \"reverse\" answers a message starting with \"/reverse \" with the rest reversed; \"count\" answers the exact message \"/count\" with the number of user messages in the channel so far, including this one, in decimal. Log entries are \"<sender>: <text>\". After a user message is logged, bots react in the order they were added; bot replies are logged but never trigger bots.  Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: the class, the shared channel and the log-then-react order are in the preview; the three bot types, all method names, the log entry format and the duplicate-name rule are inferred",
+   "inferred_interface": {
+    "classname": "ChatApp",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addBot",
+      "params": [
+       {
+        "name": "botName",
+        "type": "string"
+       },
+       {
+        "name": "botType",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "sendMessage",
+      "params": [
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "text",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "getRecentMessages",
+      "params": [
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = the single shared channel from the preview, 2 = several named channels",
+   "oracle_constant": "CBS1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:691b8695419c66014d71411a",
+   "variant_id": "691b8695419c66014d71411a",
+   "variant_ordinal": 2,
+   "title": "Design ChatBot System",
+   "source": {
+    "post_id": "69190ae16723130c5456345b",
+    "group_title": "Design ChatBot System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69190ae16723130c5456345b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69190ae16723130c5456345b/practice?questionId=691b8695419c66014d71411a",
+    "preview_response_sha256": "e4e6dfc2a063e078e3413416c6cc8bfed507c949df253836920d953cfbaa7b86",
+    "preview_content_sha256": "544dcf43b5025ac111ddcbbcb270c141db54791b3ac1322967177d30ae3c2404",
+    "preview_characters": 738,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69190ae16723130c5456345b.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: ChatApp with human users and bots; one shared channel; a user message is logged first, then each bot may react and log its own output; extensible bot types; three bot types (their definitions are cut off)",
+    "algorithmTags: DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "ChatApp() starts with no channels. createChannel(channelId) returns true, or false when it already exists. addBot(channelId, botName, botType) returns false when the channel is missing, the type is unknown or the name is already used by a bot in that channel, otherwise adds the bot and returns true. sendMessage(channelId, userId, text) returns false for a missing channel, otherwise logs and returns true. getRecentMessages(channelId, k) returns the last min(k, log size) entries of that channel, oldest first, or [] for a missing channel. Bot types (inferred, since the preview cuts them off): \"echo\" answers a message starting with \"/echo \" with the rest of the text; \"reverse\" answers a message starting with \"/reverse \" with the rest reversed; \"count\" answers the exact message \"/count\" with the number of user messages in the channel so far, including this one, in decimal. Log entries are \"<sender>: <text>\". After a user message is logged, bots react in the order they were added; bot replies are logged but never trigger bots.  Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: the preview limits itself to one channel; multiple channels, the boolean results and everything about bots are inferred",
+   "inferred_interface": {
+    "classname": "ChatApp",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "createChannel",
+      "params": [
+       {
+        "name": "channelId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "addBot",
+      "params": [
+       {
+        "name": "channelId",
+        "type": "string"
+       },
+       {
+        "name": "botName",
+        "type": "string"
+       },
+       {
+        "name": "botType",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "sendMessage",
+      "params": [
+       {
+        "name": "channelId",
+        "type": "string"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "text",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getRecentMessages",
+      "params": [
+       {
+        "name": "channelId",
+        "type": "string"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = the single shared channel from the preview, 2 = several named channels",
+   "oracle_constant": "CBS2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:677ed3ec052a260e0165706f",
+   "variant_id": "677ed3ec052a260e0165706f",
+   "variant_ordinal": 1,
+   "title": "Design Delayed Tasks Scheduler",
+   "source": {
+    "post_id": "677ed3e4052a260e0165706e",
+    "group_title": "Design Delayed Tasks Scheduler",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677ed3e4052a260e0165706e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677ed3e4052a260e0165706e/practice?questionId=677ed3ec052a260e0165706f",
+    "preview_response_sha256": "ef291c11549f63efe0201c7c8c96e72b70889c2694edbc3545c1bd0732b14db2",
+    "preview_content_sha256": "feabeae22d836040b149fa6492fd49e3593a454a581da9e0cf17582f5417e3b2",
+    "preview_characters": 280,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677ed3e4052a260e0165706e.json",
+    "algorithm_tags": [
+     "CONCURRENCY"
+    ],
+    "companies": [
+     "CONFLUENT",
+     "PINTEREST"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: scheduler for many tasks, each run after a delay in milliseconds; schedule(runnable, delayTime) prints the delay and the expected run time",
+    "algorithmTags: CONCURRENCY"
+   ],
+   "inferred_spec": "Threads, runnables and printing are replaced by a deterministic clock passed in by the caller. DelayedTaskScheduler() starts empty. schedule(taskId, delayTime, currentTime) registers a pending task to run at currentTime + delayTime and returns that run time (instead of printing it). runDue(currentTime) runs every pending task whose run time is <= currentTime and returns their ids ordered by run time, then by scheduling order; they are no longer pending. cancel(taskId) returns true and removes the task when it is pending, otherwise false. currentTime never decreases across schedule and runDue calls, and task ids are unique among schedule calls. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: the preview describes a real-time, multi-threaded scheduler that prints messages; the simulated clock, runDue, cancel, the tie order and returning the run time are all inferred to make the behaviour checkable",
+   "inferred_interface": {
+    "classname": "DelayedTaskScheduler",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "schedule",
+      "params": [
+       {
+        "name": "taskId",
+        "type": "string"
+       },
+       {
+        "name": "delayTime",
+        "type": "integer"
+       },
+       {
+        "name": "currentTime",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "runDue",
+      "params": [
+       {
+        "name": "currentTime",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "cancel",
+      "params": [
+       {
+        "name": "taskId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "DTS",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:691cfb5cba2fba0a9e173e8c",
+   "variant_id": "691cfb5cba2fba0a9e173e8c",
+   "variant_ordinal": 1,
+   "title": "Design In-Memory SQL",
+   "source": {
+    "post_id": "691cfb44ba2fba0a9e173e8b",
+    "group_title": "Design In-Memory SQL",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691cfb44ba2fba0a9e173e8b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691cfb44ba2fba0a9e173e8b/practice?questionId=691cfb5cba2fba0a9e173e8c",
+    "preview_response_sha256": "148281a7a9b82bad5032c6f1f4a5980e5ac156afb7a66eceb450186b0fa366cd",
+    "preview_content_sha256": "287006fe973652648a1fd688e238feaefb75f249cacc61641310285f054d8507",
+    "preview_characters": 780,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/691cfb44ba2fba0a9e173e8b.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "META",
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 2408; SQLManager() and createTable(tableName, columnNames) with unique table names and untyped columns whose type is inferred as integer or string from inserted data; queries filter and sort (later methods cut off)",
+    "algorithmTags: DESIGN, HASH_TABLE"
+   ],
+   "inferred_spec": "SQLManager() starts empty. createTable(tableName, columnNames) creates a table (names are unique). insert(tableName, values) adds a row of strings: a value is an integer when it matches 0 or -?[1-9][0-9]{0,8}, otherwise a string. The first row stored in a table fixes each column's type; insert returns false (storing nothing) for a missing table, a wrong number of values, or a row whose value types differ from the fixed types, and true otherwise. select(tableName, conditions, orderBy, ascending) returns the stored rows (as their original strings, fresh lists) that satisfy every condition [column, op, literal] with op one of =, !=, <, <=, >, >=: integer columns compare numerically and a non-integer literal matches nothing; string columns compare by code points. orderBy \"\" keeps insertion order; otherwise rows are stably sorted by that column ascending or descending (ties keep insertion order). A missing table or a condition or order column that does not exist returns []. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: the class, createTable and integer/string type inference are in the preview; the insert and select signatures, first-row type fixing, rejection rules, condition operators, the stable descending sort and the empty-result rules are inferred",
+   "inferred_interface": {
+    "classname": "SQLManager",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "createTable",
+      "params": [
+       {
+        "name": "tableName",
+        "type": "string"
+       },
+       {
+        "name": "columnNames",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "insert",
+      "params": [
+       {
+        "name": "tableName",
+        "type": "string"
+       },
+       {
+        "name": "values",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "select",
+      "params": [
+       {
+        "name": "tableName",
+        "type": "string"
+       },
+       {
+        "name": "conditions",
+        "type": "list<[string,string,string]>"
+       },
+       {
+        "name": "orderBy",
+        "type": "string"
+       },
+       {
+        "name": "ascending",
+        "type": "boolean"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "SQL",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6920d01494b324049c3251bd",
+   "variant_id": "6920d01494b324049c3251bd",
+   "variant_ordinal": 1,
+   "title": "Design KV Store with Rollback",
+   "source": {
+    "post_id": "6920d00b94b324049c3251bc",
+    "group_title": "Design KV Store with Rollback",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6920d00b94b324049c3251bc",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6920d00b94b324049c3251bc/practice?questionId=6920d01494b324049c3251bd",
+    "preview_response_sha256": "76f0978afbcde90f77b623ba08e6fdc0e895d6c010fd140a06e94a8979175648",
+    "preview_content_sha256": "26fe59a53a178932b3b1cbad9b678d0ac59eb00f729d728f5c29d4c4cf5fe528",
+    "preview_characters": 553,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6920d00b94b324049c3251bc.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "RIPPLING",
+     "XAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: KeyValueStore with set, get and unset of string keys and values; set overwrites (the remaining methods are cut off)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "KeyValueStore() starts empty. set(key, value) stores or overwrites; get(key) returns the value or \"\" when absent; unset(key) removes the key (no effect when absent). Values are non-empty. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "medium: set, get and unset are in the preview; the empty-string miss value is inferred",
+   "inferred_interface": {
+    "classname": "KeyValueStore",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "set",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "unset",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as three cumulative levels: 1 = set/get/unset, 2 = adds nested transactions (begin, rollback, commit), 3 = adds count(value)",
+   "oracle_constant": "KVR1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6920d07794b324049c3251be",
+   "variant_id": "6920d07794b324049c3251be",
+   "variant_ordinal": 2,
+   "title": "Design KV Store with Rollback",
+   "source": {
+    "post_id": "6920d00b94b324049c3251bc",
+    "group_title": "Design KV Store with Rollback",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6920d00b94b324049c3251bc",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6920d00b94b324049c3251bc/practice?questionId=6920d07794b324049c3251be",
+    "preview_response_sha256": "76f0978afbcde90f77b623ba08e6fdc0e895d6c010fd140a06e94a8979175648",
+    "preview_content_sha256": "26fe59a53a178932b3b1cbad9b678d0ac59eb00f729d728f5c29d4c4cf5fe528",
+    "preview_characters": 553,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6920d00b94b324049c3251bc.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "RIPPLING",
+     "XAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: KeyValueStore with set, get and unset of string keys and values; set overwrites (the remaining methods are cut off)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "KeyValueStore() starts empty. set(key, value) stores or overwrites; get(key) returns the value or \"\" when absent; unset(key) removes the key (no effect when absent). begin() opens a nested transaction. rollback() undoes every change made since the innermost open begin and closes it, returning true, or returns false when no transaction is open. commit() makes all changes permanent and closes every open transaction, returning true, or false when none is open. Values are non-empty. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: rollback is in the title; the begin/rollback/commit interface, nesting, commit closing every transaction and the boolean results are inferred",
+   "inferred_interface": {
+    "classname": "KeyValueStore",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "set",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "unset",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "begin",
+      "params": [],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "rollback",
+      "params": [],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "commit",
+      "params": [],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as three cumulative levels: 1 = set/get/unset, 2 = adds nested transactions (begin, rollback, commit), 3 = adds count(value)",
+   "oracle_constant": "KVR2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6920d4a994b324049c3251c1",
+   "variant_id": "6920d4a994b324049c3251c1",
+   "variant_ordinal": 3,
+   "title": "Design KV Store with Rollback",
+   "source": {
+    "post_id": "6920d00b94b324049c3251bc",
+    "group_title": "Design KV Store with Rollback",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6920d00b94b324049c3251bc",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6920d00b94b324049c3251bc/practice?questionId=6920d4a994b324049c3251c1",
+    "preview_response_sha256": "76f0978afbcde90f77b623ba08e6fdc0e895d6c010fd140a06e94a8979175648",
+    "preview_content_sha256": "26fe59a53a178932b3b1cbad9b678d0ac59eb00f729d728f5c29d4c4cf5fe528",
+    "preview_characters": 553,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6920d00b94b324049c3251bc.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "RIPPLING",
+     "XAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: KeyValueStore with set, get and unset of string keys and values; set overwrites (the remaining methods are cut off)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "KeyValueStore() starts empty. set(key, value) stores or overwrites; get(key) returns the value or \"\" when absent; unset(key) removes the key (no effect when absent). begin() opens a nested transaction. rollback() undoes every change made since the innermost open begin and closes it, returning true, or returns false when no transaction is open. commit() makes all changes permanent and closes every open transaction, returning true, or false when none is open. count(value) returns how many keys currently hold value. Values are non-empty. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: count is the usual third level of this problem family and is inferred along with everything about transactions",
+   "inferred_interface": {
+    "classname": "KeyValueStore",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "set",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "unset",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "begin",
+      "params": [],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "rollback",
+      "params": [],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "commit",
+      "params": [],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "count",
+      "params": [
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as three cumulative levels: 1 = set/get/unset, 2 = adds nested transactions (begin, rollback, commit), 3 = adds count(value)",
+   "oracle_constant": "KVR3",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69b35205a4e93c007df404fe",
+   "variant_id": "69b35205a4e93c007df404fe",
+   "variant_ordinal": 1,
+   "title": "Design Note-Taking System",
+   "source": {
+    "post_id": "69b351ffa4e93c007df404fd",
+    "group_title": "Design Note-Taking System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69b351ffa4e93c007df404fd",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69b351ffa4e93c007df404fd/practice?questionId=69b35205a4e93c007df404fe",
+    "preview_response_sha256": "a98db1e312802946ff5b6dae4ddfee7940c6778ed69c247c73f34f0a85da7729",
+    "preview_content_sha256": "429456545b09d10c6a9a6bf31a0a392d79ff02ad964ed68c60d6344d4789c3b9",
+    "preview_characters": 428,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69b351ffa4e93c007df404fd.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: SecondBrainSystem in memory with CRUD on notes, unique note identifiers, lookup by identifier, creation and modification time metadata (methods after the constructor are cut off)",
+    "algorithmTags: DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "SecondBrainSystem() starts empty. Times are passed in by the caller and never decrease across createNote, updateNote and revertNote calls. createNote(title, content, timestamp) returns the next id \"note1\", \"note2\", ... (ids are never reused). getNote(noteId) returns [title, content, createdAt, updatedAt] or [] when absent. updateNote(noteId, title, content, timestamp) replaces title and content, sets updatedAt and returns true, or returns false when absent. deleteNote(noteId) returns whether a note was removed. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: the class, CRUD, unique ids and time metadata are in the preview; method names, caller-supplied times, the id format and the [title, content, createdAt, updatedAt] shape are inferred",
+   "inferred_interface": {
+    "classname": "SecondBrainSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "createNote",
+      "params": [
+       {
+        "name": "title",
+        "type": "string"
+       },
+       {
+        "name": "content",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "getNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,integer,integer]>"
+      }
+     },
+     {
+      "name": "updateNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       },
+       {
+        "name": "title",
+        "type": "string"
+       },
+       {
+        "name": "content",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "deleteNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four cumulative levels: 1 = CRUD with times, 2 = keyword search, 3 = tags, 4 = version history with revert",
+   "oracle_constant": "NTS1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69b38216a4e93c007df405de",
+   "variant_id": "69b38216a4e93c007df405de",
+   "variant_ordinal": 2,
+   "title": "Design Note-Taking System",
+   "source": {
+    "post_id": "69b351ffa4e93c007df404fd",
+    "group_title": "Design Note-Taking System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69b351ffa4e93c007df404fd",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69b351ffa4e93c007df404fd/practice?questionId=69b38216a4e93c007df405de",
+    "preview_response_sha256": "a98db1e312802946ff5b6dae4ddfee7940c6778ed69c247c73f34f0a85da7729",
+    "preview_content_sha256": "429456545b09d10c6a9a6bf31a0a392d79ff02ad964ed68c60d6344d4789c3b9",
+    "preview_characters": 428,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69b351ffa4e93c007df404fd.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: SecondBrainSystem in memory with CRUD on notes, unique note identifiers, lookup by identifier, creation and modification time metadata (methods after the constructor are cut off)",
+    "algorithmTags: DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "SecondBrainSystem() starts empty. Times are passed in by the caller and never decrease across createNote, updateNote and revertNote calls. createNote(title, content, timestamp) returns the next id \"note1\", \"note2\", ... (ids are never reused). getNote(noteId) returns [title, content, createdAt, updatedAt] or [] when absent. updateNote(noteId, title, content, timestamp) replaces title and content, sets updatedAt and returns true, or returns false when absent. deleteNote(noteId) returns whether a note was removed. searchNotes(keyword) returns the ids of notes whose title or content contains keyword, ignoring ASCII case, ordered by updatedAt descending then by id number ascending. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: level 2 has no public text; keyword search, its case rule and its ordering are inferred",
+   "inferred_interface": {
+    "classname": "SecondBrainSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "createNote",
+      "params": [
+       {
+        "name": "title",
+        "type": "string"
+       },
+       {
+        "name": "content",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "getNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,integer,integer]>"
+      }
+     },
+     {
+      "name": "updateNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       },
+       {
+        "name": "title",
+        "type": "string"
+       },
+       {
+        "name": "content",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "deleteNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "searchNotes",
+      "params": [
+       {
+        "name": "keyword",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four cumulative levels: 1 = CRUD with times, 2 = keyword search, 3 = tags, 4 = version history with revert",
+   "oracle_constant": "NTS2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69b38409a4e93c007df405e6",
+   "variant_id": "69b38409a4e93c007df405e6",
+   "variant_ordinal": 3,
+   "title": "Design Note-Taking System",
+   "source": {
+    "post_id": "69b351ffa4e93c007df404fd",
+    "group_title": "Design Note-Taking System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69b351ffa4e93c007df404fd",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69b351ffa4e93c007df404fd/practice?questionId=69b38409a4e93c007df405e6",
+    "preview_response_sha256": "a98db1e312802946ff5b6dae4ddfee7940c6778ed69c247c73f34f0a85da7729",
+    "preview_content_sha256": "429456545b09d10c6a9a6bf31a0a392d79ff02ad964ed68c60d6344d4789c3b9",
+    "preview_characters": 428,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69b351ffa4e93c007df404fd.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: SecondBrainSystem in memory with CRUD on notes, unique note identifiers, lookup by identifier, creation and modification time metadata (methods after the constructor are cut off)",
+    "algorithmTags: DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "SecondBrainSystem() starts empty. Times are passed in by the caller and never decrease across createNote, updateNote and revertNote calls. createNote(title, content, timestamp) returns the next id \"note1\", \"note2\", ... (ids are never reused). getNote(noteId) returns [title, content, createdAt, updatedAt] or [] when absent. updateNote(noteId, title, content, timestamp) replaces title and content, sets updatedAt and returns true, or returns false when absent. deleteNote(noteId) returns whether a note was removed. searchNotes(keyword) returns the ids of notes whose title or content contains keyword, ignoring ASCII case, ordered by updatedAt descending then by id number ascending. addTag(noteId, tag) returns false when the note is missing or already has the tag, otherwise adds it; removeTag(noteId, tag) returns whether the tag was removed; getNotesByTag(tag) returns the ids holding the tag by id number ascending. Tags do not change updatedAt and disappear with their note. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: level 3 has no public text; tags and their methods are inferred",
+   "inferred_interface": {
+    "classname": "SecondBrainSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "createNote",
+      "params": [
+       {
+        "name": "title",
+        "type": "string"
+       },
+       {
+        "name": "content",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "getNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,integer,integer]>"
+      }
+     },
+     {
+      "name": "updateNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       },
+       {
+        "name": "title",
+        "type": "string"
+       },
+       {
+        "name": "content",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "deleteNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "searchNotes",
+      "params": [
+       {
+        "name": "keyword",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "addTag",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       },
+       {
+        "name": "tag",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "removeTag",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       },
+       {
+        "name": "tag",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getNotesByTag",
+      "params": [
+       {
+        "name": "tag",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four cumulative levels: 1 = CRUD with times, 2 = keyword search, 3 = tags, 4 = version history with revert",
+   "oracle_constant": "NTS3",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69b385d3a4e93c007df405f1",
+   "variant_id": "69b385d3a4e93c007df405f1",
+   "variant_ordinal": 4,
+   "title": "Design Note-Taking System",
+   "source": {
+    "post_id": "69b351ffa4e93c007df404fd",
+    "group_title": "Design Note-Taking System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69b351ffa4e93c007df404fd",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69b351ffa4e93c007df404fd/practice?questionId=69b385d3a4e93c007df405f1",
+    "preview_response_sha256": "a98db1e312802946ff5b6dae4ddfee7940c6778ed69c247c73f34f0a85da7729",
+    "preview_content_sha256": "429456545b09d10c6a9a6bf31a0a392d79ff02ad964ed68c60d6344d4789c3b9",
+    "preview_characters": 428,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69b351ffa4e93c007df404fd.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: SecondBrainSystem in memory with CRUD on notes, unique note identifiers, lookup by identifier, creation and modification time metadata (methods after the constructor are cut off)",
+    "algorithmTags: DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "SecondBrainSystem() starts empty. Times are passed in by the caller and never decrease across createNote, updateNote and revertNote calls. createNote(title, content, timestamp) returns the next id \"note1\", \"note2\", ... (ids are never reused). getNote(noteId) returns [title, content, createdAt, updatedAt] or [] when absent. updateNote(noteId, title, content, timestamp) replaces title and content, sets updatedAt and returns true, or returns false when absent. deleteNote(noteId) returns whether a note was removed. searchNotes(keyword) returns the ids of notes whose title or content contains keyword, ignoring ASCII case, ordered by updatedAt descending then by id number ascending. addTag(noteId, tag) returns false when the note is missing or already has the tag, otherwise adds it; removeTag(noteId, tag) returns whether the tag was removed; getNotesByTag(tag) returns the ids holding the tag by id number ascending. Tags do not change updatedAt and disappear with their note. Every createNote, updateNote and successful revertNote stores a version (title, content). getVersionCount(noteId) returns the number of versions, 0 when absent. revertNote(noteId, version, timestamp) restores the 1-based version's title and content as a new version, sets updatedAt and returns true, or returns false when the note or the version does not exist. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: level 4 has no public text; version history, 1-based versions and revert-as-new-version are inferred",
+   "inferred_interface": {
+    "classname": "SecondBrainSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "createNote",
+      "params": [
+       {
+        "name": "title",
+        "type": "string"
+       },
+       {
+        "name": "content",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "getNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,integer,integer]>"
+      }
+     },
+     {
+      "name": "updateNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       },
+       {
+        "name": "title",
+        "type": "string"
+       },
+       {
+        "name": "content",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "deleteNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "searchNotes",
+      "params": [
+       {
+        "name": "keyword",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "addTag",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       },
+       {
+        "name": "tag",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "removeTag",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       },
+       {
+        "name": "tag",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getNotesByTag",
+      "params": [
+       {
+        "name": "tag",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "getVersionCount",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "revertNote",
+      "params": [
+       {
+        "name": "noteId",
+        "type": "string"
+       },
+       {
+        "name": "version",
+        "type": "integer"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four cumulative levels: 1 = CRUD with times, 2 = keyword search, 3 = tags, 4 = version history with revert",
+   "oracle_constant": "NTS4",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:691523d03f8671d8f7a56571",
+   "variant_id": "691523d03f8671d8f7a56571",
+   "variant_ordinal": 1,
+   "title": "Design Persistent Key-Value Store",
+   "source": {
+    "post_id": "691523c93f8671d8f7a56570",
+    "group_title": "Design Persistent Key-Value Store",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691523c93f8671d8f7a56570",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691523c93f8671d8f7a56570/practice?questionId=691523d03f8671d8f7a56571",
+    "preview_response_sha256": "4b3719a508f4a57ed6581b5d8aefd623ecab9d64ae262ceb1e983ee66bf0be7d",
+    "preview_content_sha256": "9c1c2284d9370e054a9c6f4f90186553ced29155de2ef29246838dd5e09ba526",
+    "preview_characters": 447,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/691523c93f8671d8f7a56570.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: key-value store of string keys and values that serialises its whole state to a binary blob through a provided Medium interface (InMemoryMedium) and restores it after restarts (method details cut off)",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "PersistentKVStore() starts empty. set(key, value) stores or overwrites; get(key) returns the value or \"\" when absent; delete(key) returns whether a key was removed. save() returns the blob of the current state. The blob is a list of byte values 0..255: a 4-byte big-endian entry count, then for each entry in ascending key order a 4-byte big-endian key length, the key's ASCII bytes, a 4-byte big-endian value length and the value's ASCII bytes. load(blob) replaces the whole state with the entries of a well-formed blob (level 1 only receives blobs in this format). The Medium is modelled by the caller holding the blob. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: serialising to a binary blob is in the preview; the Medium interface is replaced by save returning and load taking the blob, and the byte layout, method names and value alphabet are all inferred",
+   "inferred_interface": {
+    "classname": "PersistentKVStore",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "set",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "delete",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "save",
+      "params": [],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     {
+      "name": "load",
+      "params": [
+       {
+        "name": "blob",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = save/load of a length-prefixed blob, 2 = blob with a magic header and checksum where load validates and rejects corrupt data",
+   "oracle_constant": "PKV1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:691523d43f8671d8f7a56572",
+   "variant_id": "691523d43f8671d8f7a56572",
+   "variant_ordinal": 2,
+   "title": "Design Persistent Key-Value Store",
+   "source": {
+    "post_id": "691523c93f8671d8f7a56570",
+    "group_title": "Design Persistent Key-Value Store",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691523c93f8671d8f7a56570",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691523c93f8671d8f7a56570/practice?questionId=691523d43f8671d8f7a56572",
+    "preview_response_sha256": "4b3719a508f4a57ed6581b5d8aefd623ecab9d64ae262ceb1e983ee66bf0be7d",
+    "preview_content_sha256": "9c1c2284d9370e054a9c6f4f90186553ced29155de2ef29246838dd5e09ba526",
+    "preview_characters": 447,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/691523c93f8671d8f7a56570.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: key-value store of string keys and values that serialises its whole state to a binary blob through a provided Medium interface (InMemoryMedium) and restores it after restarts (method details cut off)",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "PersistentKVStore() starts empty. set(key, value) stores or overwrites; get(key) returns the value or \"\" when absent; delete(key) returns whether a key was removed. save() returns the blob of the current state. The blob is the magic bytes 80, 75, 86, 50 (\"PKV2\"), then a body in the level-1 layout, then a 4-byte big-endian checksum equal to the sum of the body bytes modulo 2**32. The body is a list of byte values 0..255: a 4-byte big-endian entry count, then for each entry in ascending key order a 4-byte big-endian key length, the key's ASCII bytes, a 4-byte big-endian value length and the value's ASCII bytes. load(blob) returns true and replaces the state when the blob is well formed; it returns false and leaves the state unchanged when the magic, any length, the checksum, the key order (strictly ascending), the key alphabet [a-z0-9]{1,10} or the value alphabet (printable ASCII, 1 to 20) is wrong, or when bytes are missing or left over. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: level 2 has no public text; the magic header, the additive checksum, strict validation and the boolean result are inferred",
+   "inferred_interface": {
+    "classname": "PersistentKVStore",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "set",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "delete",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "save",
+      "params": [],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     {
+      "name": "load",
+      "params": [
+       {
+        "name": "blob",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = save/load of a length-prefixed blob, 2 = blob with a magic header and checksum where load validates and rejects corrupt data",
+   "oracle_constant": "PKV2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6792d9906828628f54397d99",
+   "variant_id": "6792d9906828628f54397d99",
+   "variant_ordinal": 1,
+   "title": "Design Query Pagination",
+   "source": {
+    "post_id": "6792ce956828628f54397d98",
+    "group_title": "Design Query Pagination",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6792ce956828628f54397d98",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6792ce956828628f54397d98/practice?questionId=6792d9906828628f54397d99",
+    "preview_response_sha256": "f214152c4cecd7c57cb133a3f0032f32224e4bd69995cebb260016217fe4854f",
+    "preview_content_sha256": "f151d3cc5d1e20f42e6a3c733afc59e536db8f3e8f4b70e6907c6b914fc856af",
+    "preview_characters": 313,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6792ce956828628f54397d98.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "COINBASE",
+     "LYFT"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: transaction records as string lists [timestamp, id, userId, currency, amount]; filters for time range, amount range, user id and currency; pagination (page parameters and order cut off)",
+    "algorithmTags: DESIGN"
+   ],
+   "inferred_spec": "records are [timestamp, id, userId, currency, amount] strings with canonical integer timestamps, unique ids, three-letter currencies and amounts with up to two decimals. filters is [minTime, maxTime, minAmount, maxAmount, userId, currency], where \"\" disables that filter; ranges are inclusive and amounts compare exactly. Keep the matching records, order them by timestamp ascending (ties keep input order), and return page pageNumber (1-based) of size pageSize as fresh lists; a page past the end is [].",
+   "inference_uncertainty": "high: the record format and the four filter kinds are in the preview; the single-function interface, the filter list layout, timestamp ordering, 1-based pages and exact decimal comparison are inferred",
+   "inferred_interface": {
+    "name": "queryTransactions",
+    "params": [
+     {
+      "name": "records",
+      "type": "list<[string,string,string,string,string]>"
+     },
+     {
+      "name": "filters",
+      "type": "string[]"
+     },
+     {
+      "name": "pageSize",
+      "type": "integer"
+     },
+     {
+      "name": "pageNumber",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "QPG"
+  },
+  {
+   "uid": "hack2hire:67ce4e968f73eb6319edd1f0",
+   "variant_id": "67ce4e968f73eb6319edd1f0",
+   "variant_ordinal": 1,
+   "title": "Design Rate Limiter",
+   "source": {
+    "post_id": "67ce44ae8f73eb6319edd1ed",
+    "group_title": "Design Rate Limiter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ce44ae8f73eb6319edd1ed",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ce44ae8f73eb6319edd1ed/practice?questionId=67ce4e968f73eb6319edd1f0",
+    "preview_response_sha256": "91a0ed97fe59a014d98b929429a22eb85b8affdffb255e23309036a69b4a7891",
+    "preview_content_sha256": "ab5c13d472d4b91c31c51f781c3083ccbd5e8a70d3dc4a745e281e21934262d2",
+    "preview_characters": 301,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67ce44ae8f73eb6319edd1ed.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "QUEUE"
+    ],
+    "companies": [
+     "ATLASSIAN",
+     "MICROSOFT",
+     "STRIPE",
+     "WAYMO"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: limiter with a capacity limit of requests per ttl milliseconds; each arriving request returns true when accepted, else false",
+    "algorithmTags: DESIGN, QUEUE",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "RateLimiter(limit, ttl). allowRequest(timestamp) accepts (returns true and records the request) when fewer than limit accepted requests have timestamps s with s > timestamp - ttl; otherwise returns false and records nothing. Timestamps are milliseconds and never decrease. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "medium: limit, ttl and the boolean answer are in the preview; the method name, the sliding half-open window (timestamp - ttl, timestamp] and not counting rejections are inferred",
+   "inferred_interface": {
+    "classname": "RateLimiter",
+    "constructor": {
+     "params": [
+      {
+       "name": "limit",
+       "type": "integer"
+      },
+      {
+       "name": "ttl",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "allowRequest",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = one global limiter, 2 = one independent limiter per client id",
+   "oracle_constant": "RLM1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:67e0bdefa59c3d249d3625fe",
+   "variant_id": "67e0bdefa59c3d249d3625fe",
+   "variant_ordinal": 2,
+   "title": "Design Rate Limiter",
+   "source": {
+    "post_id": "67ce44ae8f73eb6319edd1ed",
+    "group_title": "Design Rate Limiter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ce44ae8f73eb6319edd1ed",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ce44ae8f73eb6319edd1ed/practice?questionId=67e0bdefa59c3d249d3625fe",
+    "preview_response_sha256": "91a0ed97fe59a014d98b929429a22eb85b8affdffb255e23309036a69b4a7891",
+    "preview_content_sha256": "ab5c13d472d4b91c31c51f781c3083ccbd5e8a70d3dc4a745e281e21934262d2",
+    "preview_characters": 301,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67ce44ae8f73eb6319edd1ed.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "QUEUE"
+    ],
+    "companies": [
+     "ATLASSIAN",
+     "MICROSOFT",
+     "STRIPE",
+     "WAYMO"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: limiter with a capacity limit of requests per ttl milliseconds; each arriving request returns true when accepted, else false",
+    "algorithmTags: DESIGN, QUEUE",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "RateLimiter(limit, ttl). allowRequest(clientId, timestamp) applies the level-1 rule separately for each client: it accepts when fewer than limit accepted requests of that client have timestamps s > timestamp - ttl. Timestamps never decrease across all calls. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: level 2 has no public text; per-client limits are inferred along with the level-1 window rules",
+   "inferred_interface": {
+    "classname": "RateLimiter",
+    "constructor": {
+     "params": [
+      {
+       "name": "limit",
+       "type": "integer"
+      },
+      {
+       "name": "ttl",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "allowRequest",
+      "params": [
+       {
+        "name": "clientId",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = one global limiter, 2 = one independent limiter per client id",
+   "oracle_constant": "RLM2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:67d44fdf488516fd8ad5a0ba",
+   "variant_id": "67d44fdf488516fd8ad5a0ba",
+   "variant_ordinal": 1,
+   "title": "Design Recent File Tracker",
+   "source": {
+    "post_id": "67d448ff488516fd8ad5a0b9",
+    "group_title": "Design Recent File Tracker",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d448ff488516fd8ad5a0b9",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d448ff488516fd8ad5a0b9/practice?questionId=67d44fdf488516fd8ad5a0ba",
+    "preview_response_sha256": "be4821a50a6fb7d227313b25a22722289e212fba064e7e27f1f0c5ab2495d029",
+    "preview_content_sha256": "647f343ae32a8189dbb9a385df3a9d9e4892bd4931db597ea0358955cf903751",
+    "preview_characters": 674,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67d448ff488516fd8ad5a0b9.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: FileStorageSystem with storeFile(file, date \"yyyy-MM-dd\"), getKthRecentFiles(k) returning the k most recent names by date descending then name, all if fewer, and returnAllFiles() in insertion order",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "FileStorageSystem() starts empty. storeFile(file, date) records a file with a unique name and a \"yyyy-MM-dd\" date. getKthRecentFiles(k) returns the names of the min(k, stored) files first in order of date descending, then name ascending (code points). returnAllFiles() returns all names in insertion order. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "low: all three methods and the ordering are in the preview; unique file names, code-point name order and the bounds are inferred",
+   "inferred_interface": {
+    "classname": "FileStorageSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "storeFile",
+      "params": [
+       {
+        "name": "file",
+        "type": "string"
+       },
+       {
+        "name": "date",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "getKthRecentFiles",
+      "params": [
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "returnAllFiles",
+      "params": [],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "RFT",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69f2665342791c82ab992694",
+   "variant_id": "69f2665342791c82ab992694",
+   "variant_ordinal": 1,
+   "title": "Design Recipe Management System",
+   "source": {
+    "post_id": "69f2664c42791c82ab992693",
+    "group_title": "Design Recipe Management System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f2664c42791c82ab992693",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f2664c42791c82ab992693/practice?questionId=69f2665342791c82ab992694",
+    "preview_response_sha256": "6e5837f829a34dbe61ca1b6f1bdf9e7e467e0b13ca582687dec69f8bad54873f",
+    "preview_content_sha256": "22d92fbb68d0c1ac7789af92557218c58d7be17d17f2180963ee5cba46e95605",
+    "preview_characters": 739,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69f2664c42791c82ab992693.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: RecipeManager with CRUD; unique case-insensitive names; ordered ingredients and steps; addRecipe returns sequential ids \"recipe1\", \"recipe2\", ... never reused, or \"\" for a duplicate name (other methods cut off)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "RecipeManager() starts empty. addRecipe(name, ingredients, steps) returns the next id \"recipe<k>\" (k counts successful adds from 1; ids are never reused) or \"\" when another stored recipe has the same name ignoring case. getRecipe(recipeId) returns [name, ingredients, steps] as fresh lists or [] when absent. updateRecipe(recipeId, name, ingredients, steps) replaces all three and returns true, or returns false when the recipe is absent or the new name equals another recipe's name ignoring case. deleteRecipe(recipeId) returns whether a recipe was removed. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "medium: addRecipe, its id format and the case-insensitive uniqueness are in the preview; get/update/delete signatures and results are inferred",
+   "inferred_interface": {
+    "classname": "RecipeManager",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addRecipe",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "ingredients",
+        "type": "string[]"
+       },
+       {
+        "name": "steps",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "getRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string[],string[]]>"
+      }
+     },
+     {
+      "name": "updateRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "ingredients",
+        "type": "string[]"
+       },
+       {
+        "name": "steps",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "deleteRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four cumulative levels: 1 = CRUD, 2 = search by ingredient, 3 = ratings with top-rated listing, 4 = listing by name prefix",
+   "oracle_constant": "RMS1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69f266df42791c82ab992697",
+   "variant_id": "69f266df42791c82ab992697",
+   "variant_ordinal": 2,
+   "title": "Design Recipe Management System",
+   "source": {
+    "post_id": "69f2664c42791c82ab992693",
+    "group_title": "Design Recipe Management System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f2664c42791c82ab992693",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f2664c42791c82ab992693/practice?questionId=69f266df42791c82ab992697",
+    "preview_response_sha256": "6e5837f829a34dbe61ca1b6f1bdf9e7e467e0b13ca582687dec69f8bad54873f",
+    "preview_content_sha256": "22d92fbb68d0c1ac7789af92557218c58d7be17d17f2180963ee5cba46e95605",
+    "preview_characters": 739,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69f2664c42791c82ab992693.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: RecipeManager with CRUD; unique case-insensitive names; ordered ingredients and steps; addRecipe returns sequential ids \"recipe1\", \"recipe2\", ... never reused, or \"\" for a duplicate name (other methods cut off)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "RecipeManager() starts empty. addRecipe(name, ingredients, steps) returns the next id \"recipe<k>\" (k counts successful adds from 1; ids are never reused) or \"\" when another stored recipe has the same name ignoring case. getRecipe(recipeId) returns [name, ingredients, steps] as fresh lists or [] when absent. updateRecipe(recipeId, name, ingredients, steps) replaces all three and returns true, or returns false when the recipe is absent or the new name equals another recipe's name ignoring case. deleteRecipe(recipeId) returns whether a recipe was removed. searchByIngredient(ingredient) returns the ids of recipes with an ingredient equal to it ignoring case, by id number ascending. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: level 2 has no public text; exact case-insensitive ingredient search is inferred",
+   "inferred_interface": {
+    "classname": "RecipeManager",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addRecipe",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "ingredients",
+        "type": "string[]"
+       },
+       {
+        "name": "steps",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "getRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string[],string[]]>"
+      }
+     },
+     {
+      "name": "updateRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "ingredients",
+        "type": "string[]"
+       },
+       {
+        "name": "steps",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "deleteRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "searchByIngredient",
+      "params": [
+       {
+        "name": "ingredient",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four cumulative levels: 1 = CRUD, 2 = search by ingredient, 3 = ratings with top-rated listing, 4 = listing by name prefix",
+   "oracle_constant": "RMS2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69f2674342791c82ab99269a",
+   "variant_id": "69f2674342791c82ab99269a",
+   "variant_ordinal": 3,
+   "title": "Design Recipe Management System",
+   "source": {
+    "post_id": "69f2664c42791c82ab992693",
+    "group_title": "Design Recipe Management System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f2664c42791c82ab992693",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f2664c42791c82ab992693/practice?questionId=69f2674342791c82ab99269a",
+    "preview_response_sha256": "6e5837f829a34dbe61ca1b6f1bdf9e7e467e0b13ca582687dec69f8bad54873f",
+    "preview_content_sha256": "22d92fbb68d0c1ac7789af92557218c58d7be17d17f2180963ee5cba46e95605",
+    "preview_characters": 739,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69f2664c42791c82ab992693.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: RecipeManager with CRUD; unique case-insensitive names; ordered ingredients and steps; addRecipe returns sequential ids \"recipe1\", \"recipe2\", ... never reused, or \"\" for a duplicate name (other methods cut off)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "RecipeManager() starts empty. addRecipe(name, ingredients, steps) returns the next id \"recipe<k>\" (k counts successful adds from 1; ids are never reused) or \"\" when another stored recipe has the same name ignoring case. getRecipe(recipeId) returns [name, ingredients, steps] as fresh lists or [] when absent. updateRecipe(recipeId, name, ingredients, steps) replaces all three and returns true, or returns false when the recipe is absent or the new name equals another recipe's name ignoring case. deleteRecipe(recipeId) returns whether a recipe was removed. searchByIngredient(ingredient) returns the ids of recipes with an ingredient equal to it ignoring case, by id number ascending. rateRecipe(recipeId, rating) adds a rating 1..5 and returns true, or returns false when absent; ratings survive updates and vanish on delete. getTopRated(k) returns up to k ids of rated recipes by exact average rating descending, then id number ascending. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: level 3 has no public text; ratings, exact averages and the tie rule are inferred",
+   "inferred_interface": {
+    "classname": "RecipeManager",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addRecipe",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "ingredients",
+        "type": "string[]"
+       },
+       {
+        "name": "steps",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "getRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string[],string[]]>"
+      }
+     },
+     {
+      "name": "updateRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "ingredients",
+        "type": "string[]"
+       },
+       {
+        "name": "steps",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "deleteRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "searchByIngredient",
+      "params": [
+       {
+        "name": "ingredient",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "rateRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       },
+       {
+        "name": "rating",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getTopRated",
+      "params": [
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four cumulative levels: 1 = CRUD, 2 = search by ingredient, 3 = ratings with top-rated listing, 4 = listing by name prefix",
+   "oracle_constant": "RMS3",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69f2676842791c82ab99269b",
+   "variant_id": "69f2676842791c82ab99269b",
+   "variant_ordinal": 4,
+   "title": "Design Recipe Management System",
+   "source": {
+    "post_id": "69f2664c42791c82ab992693",
+    "group_title": "Design Recipe Management System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f2664c42791c82ab992693",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f2664c42791c82ab992693/practice?questionId=69f2676842791c82ab99269b",
+    "preview_response_sha256": "6e5837f829a34dbe61ca1b6f1bdf9e7e467e0b13ca582687dec69f8bad54873f",
+    "preview_content_sha256": "22d92fbb68d0c1ac7789af92557218c58d7be17d17f2180963ee5cba46e95605",
+    "preview_characters": 739,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69f2664c42791c82ab992693.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: RecipeManager with CRUD; unique case-insensitive names; ordered ingredients and steps; addRecipe returns sequential ids \"recipe1\", \"recipe2\", ... never reused, or \"\" for a duplicate name (other methods cut off)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "RecipeManager() starts empty. addRecipe(name, ingredients, steps) returns the next id \"recipe<k>\" (k counts successful adds from 1; ids are never reused) or \"\" when another stored recipe has the same name ignoring case. getRecipe(recipeId) returns [name, ingredients, steps] as fresh lists or [] when absent. updateRecipe(recipeId, name, ingredients, steps) replaces all three and returns true, or returns false when the recipe is absent or the new name equals another recipe's name ignoring case. deleteRecipe(recipeId) returns whether a recipe was removed. searchByIngredient(ingredient) returns the ids of recipes with an ingredient equal to it ignoring case, by id number ascending. rateRecipe(recipeId, rating) adds a rating 1..5 and returns true, or returns false when absent; ratings survive updates and vanish on delete. getTopRated(k) returns up to k ids of rated recipes by exact average rating descending, then id number ascending. listByNamePrefix(prefix) returns the ids of recipes whose lower-cased name starts with the lower-cased prefix, ordered by lower-cased name. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: level 4 has no public text; prefix listing by name is inferred",
+   "inferred_interface": {
+    "classname": "RecipeManager",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addRecipe",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "ingredients",
+        "type": "string[]"
+       },
+       {
+        "name": "steps",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "getRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string[],string[]]>"
+      }
+     },
+     {
+      "name": "updateRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "ingredients",
+        "type": "string[]"
+       },
+       {
+        "name": "steps",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "deleteRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "searchByIngredient",
+      "params": [
+       {
+        "name": "ingredient",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "rateRecipe",
+      "params": [
+       {
+        "name": "recipeId",
+        "type": "string"
+       },
+       {
+        "name": "rating",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getTopRated",
+      "params": [
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "listByNamePrefix",
+      "params": [
+       {
+        "name": "prefix",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four cumulative levels: 1 = CRUD, 2 = search by ingredient, 3 = ratings with top-rated listing, 4 = listing by name prefix",
+   "oracle_constant": "RMS4",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69d16c6917b72775cc49bf96",
+   "variant_id": "69d16c6917b72775cc49bf96",
+   "variant_ordinal": 1,
+   "title": "Design Ring Buffer",
+   "source": {
+    "post_id": "69d16c4b17b72775cc49bf92",
+    "group_title": "Design Ring Buffer",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d16c4b17b72775cc49bf92",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d16c4b17b72775cc49bf92/practice?questionId=69d16c6917b72775cc49bf96",
+    "preview_response_sha256": "39a9ec211b5d7e641f471c86a312ade6c9133388b11ec72243611413dc1647dd",
+    "preview_content_sha256": "4a8c1c8ef7b250da3910ce48ec49daaa81013fdf9c132a664fcf3aa09a39a462",
+    "preview_characters": 422,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d16c4b17b72775cc49bf92.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "JANE_STREET"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: ring buffer of a fixed byte capacity storing strings; independent write and read pointers over one fixed array; writes may silently overwrite older data after wrapping (method signatures cut off)",
+    "algorithmTags: DESIGN"
+   ],
+   "inferred_spec": "RingBuffer(capacity) owns capacity cells, a write pointer and a read pointer (both start at 0) and an unread counter. Each character is one byte. write(data) stores each character at the write pointer and advances it modulo capacity; the unread counter grows by one per character up to capacity, and the read pointer does not move even when unread data is overwritten. read(n) returns min(n, unread) characters starting at the read pointer (wrapping), advances the read pointer by that many and decreases the unread counter. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: fixed capacity, independent pointers and silent overwrite are in the preview; the method names, the unread counter capped at capacity and the read pointer staying put on overwrite are inferred",
+   "inferred_interface": {
+    "classname": "RingBuffer",
+    "constructor": {
+     "params": [
+      {
+       "name": "capacity",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "write",
+      "params": [
+       {
+        "name": "data",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "read",
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "RBF",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:696bebd76b040fa4d120bb7a",
+   "variant_id": "696bebd76b040fa4d120bb7a",
+   "variant_ordinal": 1,
+   "title": "Design Squirrel Nut Tracker",
+   "source": {
+    "post_id": "696bebbc6b040fa4d120bb79",
+    "group_title": "Design Squirrel Nut Tracker",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696bebbc6b040fa4d120bb79",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696bebbc6b040fa4d120bb79/practice?questionId=696bebd76b040fa4d120bb7a",
+    "preview_response_sha256": "d5f4faf3b4b7af31e3f266056033ac4f37840141ae78ed7f70e7345b5e091283",
+    "preview_content_sha256": "b296114e6bdcb7753eab7e0e74e35dd4f4302e3ce15deffc0f3c73ec2968a69c",
+    "preview_characters": 619,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/696bebbc6b040fa4d120bb79.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "OPTIVER"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: SquirrelResearch tracks storage locations with levels from 0 (deepest) upward; level capacities follow Fibonacci 1, 2, 3, 5, 8, ... (hide and retrieve rules cut off)",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "SquirrelResearch() tracks locations by id; an unseen location is empty. Level i has capacity F(i + 2) (1, 2, 3, 5, 8, ...). hideNuts(locationId, count) places nuts greedily from the deepest level upward, filling each level before the next, and returns the highest non-empty level index (-1 if the location is empty). retrieveNuts(locationId, count) removes min(count, stored) nuts from the highest levels downward and returns how many were removed. getHighestLevel(locationId) returns the highest non-empty level or -1. Because filling is bottom-up and removal top-down, the occupied levels always form a prefix. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: the levels and Fibonacci capacities are in the preview; the hide and retrieve rules, return values and method names are inferred",
+   "inferred_interface": {
+    "classname": "SquirrelResearch",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "hideNuts",
+      "params": [
+       {
+        "name": "locationId",
+        "type": "string"
+       },
+       {
+        "name": "count",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "retrieveNuts",
+      "params": [
+       {
+        "name": "locationId",
+        "type": "string"
+       },
+       {
+        "name": "count",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getHighestLevel",
+      "params": [
+       {
+        "name": "locationId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "SQN",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  }
+ ]
+}
