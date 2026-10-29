@@ -1,0 +1,33 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "nums unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "splitArraySameAverage",
+    "params": [
+      {
+        "name": "nums",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    }
+  },
+  "parameters": [
+    "nums"
+  ],
+  "problem_id": 805,
+  "qualification": {
+    "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "scale each value to n*x-total; meet-in-the-middle subset sums of two halves, excluding the full array via complement argument",
+    "complexity_target": "O(2**(n/2)) time/O(2**(n/2)) space",
+    "reference": "proper nonempty subsets with exact Fraction averages for n<=12; per-size sum bitsets otherwise"
+  },
+  "source_sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+}

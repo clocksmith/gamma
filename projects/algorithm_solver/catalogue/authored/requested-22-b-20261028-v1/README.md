@@ -1,0 +1,11 @@
+# Requested 22-b: seven newly authored development pairs
+
+IDs 745,749,753,756,757,761,765. Scope: authored, not qualified. Official public definitions were read only on the private executor; this directory holds their response/content SHA-256, the official metaData interface and summaries in the author's own words. No statement text or examples are stored here. No Git operation.
+
+Independent reference code, domain validators, contracts, case generator, design and the 745 native observer helpers were frozen before candidates (`pre-source-reference-freeze.json`). References use reverse linear word scans, an explicit wall-edge virus simulation that also enforces the public no-tie guarantee, the Fredricksen-Kessler-Maiorana Lyndon construction, memoized literal Cartesian products of pyramid rows, increasing-size subset search, BFS over literal special-substring swaps and BFS over canonical seat-pair multisets. No language-agreement oracle.
+
+745 is a real WordFilter class in both languages (Python class, JavaScript named export `{WordFilter}`), following the continuation-M native-class route: `native_harness.py/.cjs` call the original constructor and prototype with one fresh receiver per trace, `native_protocol.py` projects host-only observations, and `native-bindings.json` pins the unchanged generic transport/sandbox dependencies. No solve fallback. The other six problems use canonical `solve` plus the official delegating wrapper (`Solution` method in Python, named function export in JavaScript).
+
+753 accepts any valid answer: `oracles.compare` requires exactly k**n+n-1 digits below k whose length-n windows cover all k**n passwords; its case set enumerates the whole (n,k) domain. 761's answer (lexicographic maximum) and all other results are unique and compared exactly; 756 rejects numeric truthiness. 749 inputs that violate the public no-tie guarantee are domain-invalid and excluded from cases.
+
+All inputs, nested grids and word lists are unchanged and outputs exact. The author ran these candidates locally against every generated case (python3, node, node --jitless); `checks.json` records pass counts and heaviest-case CPU. These are development runs, not qualification. Actual official ABI, effects, resource constraints and independent result checks require the coordinator's existing isolated runner. No resource cap changed.

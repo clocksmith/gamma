@@ -1,0 +1,39 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "every original node val/next and nums unchanged; no nodes allocated or relinked",
+  "entrypoint": "solve",
+  "language": "python",
+  "native_binding": "native-bindings.json",
+  "official_interface": {
+    "name": "numComponents",
+    "params": [
+      {
+        "name": "head",
+        "type": "ListNode"
+      },
+      {
+        "name": "nums",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "parameters": [
+    "head",
+    "nums"
+  ],
+  "problem_id": 817,
+  "qualification": {
+    "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "native ListNode walk counting member nodes whose successor is null or nonmember, using a set of nums",
+    "complexity_target": "O(n+len(nums)) time/O(len(nums)) space",
+    "reference": "indexed values list membership groupby run count"
+  },
+  "source_sha256": "fe21aa8f9b50da17e027b869e2bd5f3563684db0a0652d549f2c8ca36e45f6ad"
+}

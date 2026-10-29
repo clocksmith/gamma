@@ -1,0 +1,46 @@
+{
+  "comparison": {
+    "absolute_tolerance": 1e-05,
+    "policy": "finite float absolute tolerance"
+  },
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "champagneTower",
+    "params": [
+      {
+        "name": "poured",
+        "type": "integer"
+      },
+      {
+        "name": "query_row",
+        "type": "integer"
+      },
+      {
+        "name": "query_glass",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "double"
+    }
+  },
+  "parameters": [
+    "poured",
+    "query_row",
+    "query_glass"
+  ],
+  "problem_id": 799,
+  "qualification": {
+    "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "float row-by-row overflow simulation down to the queried row only",
+    "complexity_target": "O(query_row**2) time/O(query_row) space",
+    "reference": "exact Fraction top-down inflow per glass, capped at one"
+  },
+  "source_sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+}

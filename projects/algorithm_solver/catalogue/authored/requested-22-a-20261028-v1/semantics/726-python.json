@@ -1,0 +1,33 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "countOfAtoms",
+    "params": [
+      {
+        "name": "formula",
+        "type": "string"
+      }
+    ],
+    "return": {
+      "type": "string"
+    }
+  },
+  "parameters": [
+    "formula"
+  ],
+  "problem_id": 726,
+  "qualification": {
+    "reason": "Author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "right-to-left scan with multiplier stack; each atom adds trailing count times enclosing group product; sorted names",
+    "complexity_target": "O(L+U log U) time/O(L) space",
+    "reference": "recursive-descent formula tree; budgeted literal atom expansion counted by Counter"
+  },
+  "source_sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+}

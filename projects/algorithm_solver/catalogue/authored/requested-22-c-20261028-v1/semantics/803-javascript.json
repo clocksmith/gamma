@@ -1,0 +1,38 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "grid rows and hit pairs unchanged; fresh result list",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "hitBricks",
+    "params": [
+      {
+        "name": "grid",
+        "type": "integer[][]"
+      },
+      {
+        "name": "hits",
+        "type": "integer[][]"
+      }
+    ],
+    "return": {
+      "type": "integer[]"
+    }
+  },
+  "parameters": [
+    "grid",
+    "hits"
+  ],
+  "problem_id": 803,
+  "qualification": {
+    "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "reverse-time union-find with virtual roof node and component sizes; restored brick reports roof-size growth minus one",
+    "complexity_target": "O((m*n+hits) alpha) time/O(m*n) space",
+    "reference": "literal per-hit erase then BFS from top row; drop every unreached brick"
+  },
+  "source_sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+}

@@ -1,0 +1,38 @@
+{
+  "comparison": "validity via oracles.compare: minimum length k**n+n-1, digits below k, every length-n window distinct and all k**n present",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "crackSafe",
+    "params": [
+      {
+        "name": "n",
+        "type": "integer"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "string"
+    }
+  },
+  "parameters": [
+    "n",
+    "k"
+  ],
+  "problem_id": 753,
+  "qualification": {
+    "reason": "Not qualified: author-local development runs only (oracles cases, python3 and node); no independent isolated execution or qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "iterative Hierholzer Eulerian circuit over k-ary (n-1)-digit suffix nodes",
+    "complexity_target": "O(k**n) time/space",
+    "reference": "Fredricksen-Kessler-Maiorana Lyndon-word de Bruijn construction, validity-checked"
+  },
+  "source_sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+}

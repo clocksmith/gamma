@@ -1,0 +1,46 @@
+{
+  "problems": {
+    "770": {
+      "reference": "shunting-yard postfix evaluation into Counter polynomials keyed by sorted variable tuples; every intermediate coefficient checked against int32",
+      "candidate_design": "character tokenizer and recursive-descent expression/term/factor parser over polynomial maps keyed by sorted variable lists; evalvars substituted at leaf; zero terms dropped; ordered by degree desc then variable sequence",
+      "complexity_target": "O(L + sum over multiplications of |P|*|Q|*d log d) time/O(output terms*d) space"
+    },
+    "782": {
+      "reference": "every row permutation x column permutation; minimum (n-cycles(rows))+(n-cycles(cols)) over chessboard results",
+      "candidate_design": "rectangle parity check against first row/column, balanced row/column counts, then per-axis misplaced count with odd/even parity choice",
+      "complexity_target": "O(n**2) time/O(1) space"
+    },
+    "799": {
+      "reference": "exact Fraction top-down inflow per glass, capped at one",
+      "candidate_design": "float row-by-row overflow simulation down to the queried row only",
+      "complexity_target": "O(query_row**2) time/O(query_row) space"
+    },
+    "803": {
+      "reference": "literal per-hit erase then BFS from top row; drop every unreached brick",
+      "candidate_design": "reverse-time union-find with virtual roof node and component sizes; restored brick reports roof-size growth minus one",
+      "complexity_target": "O((m*n+hits) alpha) time/O(m*n) space"
+    },
+    "805": {
+      "reference": "proper nonempty subsets with exact Fraction averages for n<=12; per-size sum bitsets otherwise",
+      "candidate_design": "scale each value to n*x-total; meet-in-the-middle subset sums of two halves, excluding the full array via complement argument",
+      "complexity_target": "O(2**(n/2)) time/O(2**(n/2)) space"
+    },
+    "808": {
+      "reference": "45-digit Decimal bottom-up table over 25 mL units up to 1000 units; Hoeffding certificate (tail<1e-6) returns 1.0 beyond; exact Fraction millilitre recursion cross-check for n<=1500",
+      "candidate_design": "units=ceil(n/25); units>=200 returns 1.0 (table error there <=3.3e-6); else float bottom-up DP",
+      "complexity_target": "O(min(units,200)**2) time/space"
+    },
+    "817": {
+      "reference": "indexed values list membership groupby run count",
+      "candidate_design": "native ListNode walk counting member nodes whose successor is null or nonmember, using a set of nums",
+      "complexity_target": "O(n+len(nums)) time/O(len(nums)) space"
+    },
+    "818": {
+      "reference": "single BFS over (position,speed) with bounds position in [-2*10**4-2,4*10**4+4], |speed|<=2**16 (wider than the usual 2*target prune; bound assumed, not proved); first distance per position",
+      "candidate_design": "dp over targets: exact 2**k-1 hits; else overshoot k accelerations and reverse, or k-1 accelerations, reverse, j back accelerations, reverse",
+      "complexity_target": "O(target log target) time/O(target) space"
+    }
+  },
+  "numeric": "770 JS BigInt coefficients (pairwise products may exceed 2**53 before combining), Python int;799/808 finite doubles compared with absolute tolerance 1e-5 (808 official statement tolerance; 799 statement gives none, 1e-5 matches its 5-decimal outputs and is an inference);all other results exact integers/booleans/lists below 2**53",
+  "effects": "input strings/arrays/nested grids/hit lists/linked-list nodes unchanged; fresh result lists; scalar outputs otherwise"
+}

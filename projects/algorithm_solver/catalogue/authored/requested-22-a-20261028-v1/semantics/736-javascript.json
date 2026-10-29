@@ -1,0 +1,33 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "unchanged",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "evaluate",
+    "params": [
+      {
+        "name": "expression",
+        "type": "string"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "parameters": [
+    "expression"
+  ],
+  "problem_id": 736,
+  "qualification": {
+    "reason": "Author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "iterative token scan with explicit frame stack; per-name value stacks for shadowing undone at let exit",
+    "complexity_target": "O(L) time/O(L) space",
+    "reference": "recursive tree evaluator with copied dictionary scopes"
+  },
+  "source_sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+}

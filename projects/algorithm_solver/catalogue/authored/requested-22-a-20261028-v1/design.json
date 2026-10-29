@@ -1,0 +1,41 @@
+{
+  "problems": {
+    "726": {
+      "reference": "recursive-descent formula tree; budgeted literal atom expansion counted by Counter",
+      "candidate_design": "right-to-left scan with multiplier stack; each atom adds trailing count times enclosing group product; sorted names",
+      "complexity_target": "O(L+U log U) time/O(L) space"
+    },
+    "729": {
+      "reference": "pairwise overlap test against every accepted booking",
+      "candidate_design": "sorted disjoint starts/ends; binary search for successor booking, check predecessor end and successor start, sorted insertion",
+      "complexity_target": "O(log q) search plus O(q) insertion per book/O(q) space"
+    },
+    "730": {
+      "reference": "set of all palindromic subsequences for n<=12; separate outermost-letter interval classification for n<=300",
+      "candidate_design": "interval DP: unequal ends inclusion-exclusion; equal ends double inner count adjusted by nearest inner equal-letter positions",
+      "complexity_target": "O(n**2) time/O(n**2) space"
+    },
+    "731": {
+      "reference": "maximum coverage at new start and accepted starts inside new interval by direct counting",
+      "candidate_design": "accepted bookings plus pairwise-disjoint double-booked overlap list; reject on overlap contact else add overlaps",
+      "complexity_target": "O(q) per book/O(q) space"
+    },
+    "732": {
+      "reference": "after each book, maximum direct cover count over all accepted starts",
+      "candidate_design": "on-demand segment tree on [0,1e9) with range add and lazy subtree maximum",
+      "complexity_target": "O(log C) per book, C=1e9/O(q log C) nodes"
+    },
+    "736": {
+      "reference": "recursive tree evaluator with copied dictionary scopes",
+      "candidate_design": "iterative token scan with explicit frame stack; per-name value stacks for shadowing undone at let exit",
+      "complexity_target": "O(L) time/O(L) space"
+    },
+    "741": {
+      "reference": "all pairs of thorn-free monotone paths for n<=6, cherries over path union",
+      "candidate_design": "two simultaneous walkers by step with rows r1<=r2, rolling table with unreachable sentinel",
+      "complexity_target": "O(n**3) time/O(n**2) space"
+    }
+  },
+  "numeric": "730 modular sums only (no products), every intermediate below 2**35 so JS Number exact; 726 per-atom multiplier products bounded by final 32-bit counts; 736 intermediates guaranteed 32-bit; 741 at most 196; calendar outputs booleans/integers<=400",
+  "effects": "input strings/grids/trace lists unchanged; scalar or fresh list results; native calendar state changes only through book"
+}

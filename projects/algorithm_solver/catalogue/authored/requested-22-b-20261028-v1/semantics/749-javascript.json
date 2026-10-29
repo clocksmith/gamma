@@ -1,0 +1,33 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "containVirus",
+    "params": [
+      {
+        "name": "isInfected",
+        "type": "integer[][]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "parameters": [
+    "isInfected"
+  ],
+  "problem_id": 749,
+  "qualification": {
+    "reason": "Not qualified: author-local development runs only (oracles cases, python3 and node); no independent isolated execution or qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "daily DFS over active infected cells collecting threatened cells and boundary edges; wall maximum-threat region by marking it inert; other regions spread",
+    "complexity_target": "O(D*m*n) time with D days (D<=m*n); O(m*n) space",
+    "reference": "explicit wall-edge set simulation; regions connected through unwalled edges; enforces public no-tie guarantee"
+  },
+  "source_sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+}

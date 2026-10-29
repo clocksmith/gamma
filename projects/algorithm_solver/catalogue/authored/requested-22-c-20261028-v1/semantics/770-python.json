@@ -1,0 +1,43 @@
+{
+  "comparison": "exact ordered string list",
+  "effects": "arguments unchanged; fresh list of fresh strings",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "basicCalculatorIV",
+    "params": [
+      {
+        "name": "expression",
+        "type": "string"
+      },
+      {
+        "name": "evalvars",
+        "type": "string[]"
+      },
+      {
+        "name": "evalints",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "list<string>"
+    }
+  },
+  "parameters": [
+    "expression",
+    "evalvars",
+    "evalints"
+  ],
+  "problem_id": 770,
+  "qualification": {
+    "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "character tokenizer and recursive-descent expression/term/factor parser over polynomial maps keyed by sorted variable lists; evalvars substituted at leaf; zero terms dropped; ordered by degree desc then variable sequence",
+    "complexity_target": "O(L + sum over multiplications of |P|*|Q|*d log d) time/O(output terms*d) space",
+    "reference": "shunting-yard postfix evaluation into Counter polynomials keyed by sorted variable tuples; every intermediate coefficient checked against int32"
+  },
+  "source_sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+}
