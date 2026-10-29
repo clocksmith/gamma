@@ -1,0 +1,63 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 863,
+  "language": "javascript",
+  "entrypoint": "solve",
+  "parameters": [
+    "root",
+    "target",
+    "k"
+  ],
+  "official_interface": {
+    "name": "distanceK",
+    "params": [
+      {
+        "name": "root",
+        "type": "TreeNode"
+      },
+      {
+        "name": "target",
+        "type": "integer"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "list<integer>"
+    },
+    "manual": true,
+    "languages": [
+      "cpp",
+      "java",
+      "python",
+      "c",
+      "csharp",
+      "javascript",
+      "ruby",
+      "swift",
+      "golang",
+      "python3",
+      "scala",
+      "kotlin",
+      "rust",
+      "php",
+      "typescript"
+    ]
+  },
+  "comparison": "unordered unique integer values",
+  "effects": "Arguments and host tree unchanged. Mutable result list is fresh and unaliased to inputs; scalar result immutable.",
+  "complexity_target": "O(n) time and space.",
+  "candidate_design": "Iteratively build value-keyed undirected tree adjacency; BFS from official integer target value until distance k.",
+  "source_reasoning": {
+    "candidate_design": "Iteratively build value-keyed undirected tree adjacency; BFS from official integer target value until distance k.",
+    "complexity_target": "O(n) time and space.",
+    "independent_reference": "Root-to-node value paths; distance from target computed via longest shared root-path prefix, without graph search."
+  },
+  "source_sha256": "7c1fa6085cc1ccc8567b65749b6d531bfbe7473cbf7a9a87300ce39163928afb",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Actual local development tests only; no isolated qualification/admission."
+  }
+}

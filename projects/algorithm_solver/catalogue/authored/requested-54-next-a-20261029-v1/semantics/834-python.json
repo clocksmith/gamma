@@ -1,0 +1,35 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 834,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "n",
+    "edges"
+  ],
+  "official_interface": {
+    "name": "sumOfDistancesInTree",
+    "params": [
+      {
+        "name": "n",
+        "type": "integer"
+      },
+      {
+        "name": "edges",
+        "type": "integer[][]"
+      }
+    ],
+    "return": {
+      "type": "integer[]"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "arguments unchanged; mutable results freshly allocated",
+  "complexity_target": "O(n) time and space",
+  "candidate_design": "Iterative rooted traversal; postorder subtree sizes and downward sums; preorder reroot by n-2*subtree size.",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks only; independent isolated qualification pending"
+  },
+  "source_sha256": "136bdc31079a9fee9dc36a02bd1365c355634261c9a31db929c713c4c3347733"
+}

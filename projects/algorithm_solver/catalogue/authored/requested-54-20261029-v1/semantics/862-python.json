@@ -1,0 +1,39 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 862,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "nums",
+    "k"
+  ],
+  "official_interface": {
+    "name": "shortestSubarray",
+    "params": [
+      {
+        "name": "nums",
+        "type": "integer[]"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(n) time and space",
+  "candidate_design": "Monotone deque of prefix sums; pop qualifying starts and dominated suffix starts.",
+  "source_reasoning": {
+    "candidate_design": "Monotone deque of prefix sums; pop qualifying starts and dominated suffix starts.",
+    "complexity_target": "O(n) time and space"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "6cc852bc318630b68f0d97544b686928fcaf18f3fe030f388c89364ef6e66db2"
+}

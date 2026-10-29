@@ -1,0 +1,27 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 959,
+  "language": "javascript",
+  "entrypoint": "solve",
+  "parameters": [
+    "grid"
+  ],
+  "official_interface": {
+    "name": "regionsBySlashes",
+    "params": [
+      {
+        "name": "grid",
+        "type": "string[]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result; snapshot each get_root observation",
+  "effects": "inputs unchanged; fresh mutable result or declared receiver mutation",
+  "candidate_design": "Four triangular regions per cell; union internal triangles across nonblocking edges and adjacent cells.",
+  "complexity_target": "O(n^2 alpha(n^2)) time, O(n^2) space",
+  "source_sha256": "bdf5ba53e74e3e6917ff9e7eabc9f7b806e8f779c48622c569eac3f3e7eeb2ad",
+  "qualification_status": "unknown"
+}

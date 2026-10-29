@@ -1,0 +1,85 @@
+{
+  "candidate_design": "Affine normalization stores x=(value-offset)/scale mod prime. Nonzero multipliers 1..100 preserve invertibility; maintain inverse scale using modular exponentiation. JS uses BigInt internally and returns exact Number residues.",
+  "comparison": "exact native method outputs; void returns checked before null observation",
+  "complexity_target": "append/addAll/getIndex O(1); multAll O(log MOD) time; O(number of appended values) space; MOD=1000000007 fixed.",
+  "effects": {
+    "inputs": "unchanged",
+    "receiver": "native state mutated by declared methods",
+    "returns": "fresh array per OrderedStream.insert; no mutable input aliases"
+  },
+  "entrypoint": "Fancy",
+  "language": "python",
+  "official_interface": {
+    "classname": "Fancy",
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "append",
+        "params": [
+          {
+            "name": "val",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "addAll",
+        "params": [
+          {
+            "name": "inc",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "multAll",
+        "params": [
+          {
+            "name": "m",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "getIndex",
+        "params": [
+          {
+            "name": "idx",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [],
+  "problem_id": 1622,
+  "qualification": {
+    "reason": "Local development checks are not independent isolated qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-native-class-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "Affine normalization stores x=(value-offset)/scale mod prime. Nonzero multipliers 1..100 preserve invertibility; maintain inverse scale using modular exponentiation. JS uses BigInt internally and returns exact Number residues.",
+    "complexity_target": "append/addAll/getIndex O(1); multAll O(log MOD) time; O(number of appended values) space; MOD=1000000007 fixed.",
+    "reference": "Literal sequence update on every addAll/multAll; small traces only."
+  },
+  "source_sha256": "cb1b23049a8e8038895afef5c2a7b5479c781e637201fc32ec081dc502db8384"
+}

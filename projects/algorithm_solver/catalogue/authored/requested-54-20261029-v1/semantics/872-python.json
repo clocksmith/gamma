@@ -1,0 +1,39 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 872,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "root1",
+    "root2"
+  ],
+  "official_interface": {
+    "name": "leafSimilar",
+    "params": [
+      {
+        "name": "root1",
+        "type": "TreeNode"
+      },
+      {
+        "name": "root2",
+        "type": "TreeNode"
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(n1+n2) time and space",
+  "candidate_design": "Iterative left-to-right leaf traversal for each host tree.",
+  "source_reasoning": {
+    "candidate_design": "Iterative left-to-right leaf traversal for each host tree.",
+    "complexity_target": "O(n1+n2) time and space"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "1914e861154595457e2d28e7653a25019f77f931dc6264124d5392f2191c5e66"
+}

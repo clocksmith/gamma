@@ -1,0 +1,60 @@
+{
+  "candidate_design": "Store values by id and advance the first-unemitted pointer, returning a fresh contiguous chunk.",
+  "comparison": "exact native method outputs; void returns checked before null observation",
+  "complexity_target": "O(n) construction space/time; insert O(1+returned chunk length), O(n) aggregate after n inserts.",
+  "effects": {
+    "inputs": "unchanged",
+    "receiver": "native state mutated by declared methods",
+    "returns": "fresh array per OrderedStream.insert; no mutable input aliases"
+  },
+  "entrypoint": "OrderedStream",
+  "language": "javascript",
+  "official_interface": {
+    "classname": "OrderedStream",
+    "constructor": {
+      "params": [
+        {
+          "name": "n",
+          "type": "integer"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "insert",
+        "params": [
+          {
+            "name": "idKey",
+            "type": "integer"
+          },
+          {
+            "name": "value",
+            "type": "string"
+          }
+        ],
+        "return": {
+          "type": "list<string>"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "n"
+  ],
+  "problem_id": 1656,
+  "qualification": {
+    "reason": "Local development checks are not independent isolated qualification",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-native-class-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "Store values by id and advance the first-unemitted pointer, returning a fresh contiguous chunk.",
+    "complexity_target": "O(n) construction space/time; insert O(1+returned chunk length), O(n) aggregate after n inserts.",
+    "reference": "Dictionary of arrivals and set of emitted IDs; recompute earliest missing prefix from scratch each insertion."
+  },
+  "source_sha256": "c8c0f0fac5a8815c5047f2c7a6fd2e052ba96b78d39af574b866460d00d9d8b0"
+}

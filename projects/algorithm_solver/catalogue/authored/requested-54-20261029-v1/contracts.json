@@ -1,0 +1,877 @@
+{
+  "schema": "gamma.original-problem-contracts.v1",
+  "problems": [
+    {
+      "id": 827,
+      "title": "Making A Large Island",
+      "slug": "making-a-large-island",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "grid"
+        ],
+        "official": {
+          "name": "largestIsland",
+          "params": [
+            {
+              "name": "grid",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Square binary grid, 1<=n<=500; at most one zero flip; largest 4-connected area.",
+        "official_response_sha256": "e71001d710cd8ea989b2d27e033a945491fa07463fdfaf28a14031e083f6f7b6",
+        "statement_html_sha256": "95e971bacf8454c5b072ca08f0e438d069b610430679e3b62915eb1457c55322",
+        "reference_url": "https://leetcode.com/problems/making-a-large-island/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Iterative component labeling in a separate grid; deduplicate neighboring components for each zero.",
+        "complexity_target": "O(n^2) time and space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 828,
+      "title": "Count Unique Characters of All Substrings of a Given String",
+      "slug": "count-unique-characters-of-all-substrings-of-a-given-string",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "s"
+        ],
+        "official": {
+          "name": "uniqueLetterString",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Uppercase ASCII, length1..100000; sum singleton-letter counts over all nonempty positional substrings; answer promised int32.",
+        "official_response_sha256": "662a5c0ad9442932a79c4b77f700b0f8bda0cba7402ff5d46acf023513d42ef4",
+        "statement_html_sha256": "81879ba02e918eeb9a248f722fdf9d33f7618d40b4709a63f940861a2fe32f0c",
+        "reference_url": "https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Sum each occurrence contribution using previous and next equal-letter positions.",
+        "complexity_target": "O(n) time, O(26) auxiliary space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 847,
+      "title": "Shortest Path Visiting All Nodes",
+      "slug": "shortest-path-visiting-all-nodes",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "graph"
+        ],
+        "official": {
+          "name": "shortestPathLength",
+          "params": [
+            {
+              "name": "graph",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Connected simple undirected graph on1..12 vertices; shortest walk covering all vertices; revisits allowed.",
+        "official_response_sha256": "195cdd23e100e72c5bf445bade7a563b1b316298f56a075f30a74536bbda6b75",
+        "statement_html_sha256": "d48e123ba367780c5c2b6f1c07dc1f094eb5e37bbb0962da7e647dde3fda1ad8",
+        "reference_url": "https://leetcode.com/problems/shortest-path-visiting-all-nodes/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Multisource BFS over current vertex and visited bit mask.",
+        "complexity_target": "O((n+m)*2^n) time, O(n*2^n) space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 851,
+      "title": "Loud and Rich",
+      "slug": "loud-and-rich",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "richer",
+          "quiet"
+        ],
+        "official": {
+          "name": "loudAndRich",
+          "params": [
+            {
+              "name": "richer",
+              "type": "integer[][]"
+            },
+            {
+              "name": "quiet",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "1..500 people; quiet is permutation0..n-1; unique consistent directed richer edges, at most n(n-1)/2; minimize quiet among transitive richer ancestors and self.",
+        "official_response_sha256": "74edda41acd0945858bda54fc78132eda6c3fd6d75d1ba380b28f9de072af6eb",
+        "statement_html_sha256": "bf19975641a922b3774cbb46697dd0d71010d916d618ea57d4d9b6e42dd56979",
+        "reference_url": "https://leetcode.com/problems/loud-and-rich/description/"
+      },
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Propagate quietest known richer ancestor along a topological ordering.",
+        "complexity_target": "O(n+m) time and space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 854,
+      "title": "K-Similar Strings",
+      "slug": "k-similar-strings",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "s1",
+          "s2"
+        ],
+        "official": {
+          "name": "kSimilarity",
+          "params": [
+            {
+              "name": "s1",
+              "type": "string"
+            },
+            {
+              "name": "s2",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Anagrams of equal length1..20 over abcdef; minimum arbitrary-position swaps.",
+        "official_response_sha256": "4284b2e049623905a1df861dadc8a9850bda9027fee9ebcf7bee2ce6df168f03",
+        "statement_html_sha256": "75b484342603481a012490472a85447ab5dc640164f318499a37d289922813f8",
+        "reference_url": "https://leetcode.com/problems/k-similar-strings/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "BFS fixing the first mismatch by swapping in a matching character from an incorrect suffix position.",
+        "complexity_target": "O(n^2*S) time, O(n*S) space for S reachable pruned string states; exponential worst case"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 862,
+      "title": "Shortest Subarray with Sum at Least K",
+      "slug": "shortest-subarray-with-sum-at-least-k",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "nums",
+          "k"
+        ],
+        "official": {
+          "name": "shortestSubarray",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Length1..100000, values[-100000,100000], k[1,1e9]; shortest nonempty interval sum>=k or -1.",
+        "official_response_sha256": "c2a501b36db40762e21d76583c6b7924fe1a0110b7e032fa63e68f527d2504a2",
+        "statement_html_sha256": "d7ea443c2c0f922265628e7b79711109366990b89210e77993e45e59f5975a94",
+        "reference_url": "https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Monotone deque of prefix sums; pop qualifying starts and dominated suffix starts.",
+        "complexity_target": "O(n) time and space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 864,
+      "title": "Shortest Path to Get All Keys",
+      "slug": "shortest-path-to-get-all-keys",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "grid"
+        ],
+        "official": {
+          "name": "shortestPathAllKeys",
+          "params": [
+            {
+              "name": "grid",
+              "type": "string[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Grid1..30 by1..30; one start,1..6 unique keys a.. and matching locks A..; walls and empty cells; minimum orthogonal steps to all keys.",
+        "official_response_sha256": "9c97bb490477375bbd036353ea31036ef6da288940a72a379e82b0c2353dc363",
+        "statement_html_sha256": "0b4065bfeed618ee1a350a684bd76c4dfab9223bfa3f168e7828f593b515b99d",
+        "reference_url": "https://leetcode.com/problems/shortest-path-to-get-all-keys/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "BFS on cell and acquired-key mask, testing a lock before entering its cell.",
+        "complexity_target": "O(m*n*2^k) time and space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 872,
+      "title": "Leaf-Similar Trees",
+      "slug": "leaf-similar-trees",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "root1",
+          "root2"
+        ],
+        "official": {
+          "name": "leafSimilar",
+          "params": [
+            {
+              "name": "root1",
+              "type": "TreeNode"
+            },
+            {
+              "name": "root2",
+              "type": "TreeNode"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Two host TreeNode trees, each1..200 nodes, values0..200; compare left-to-right leaf sequences.",
+        "official_response_sha256": "12237bdb61f6584cd76e6c40affd49a27bb5bf871f91df69c2abfd8d31a89e1a",
+        "statement_html_sha256": "cd23a0deec5a1534811e12f345876f90570a85d8481e0f31598e5bd3a968cd7c",
+        "reference_url": "https://leetcode.com/problems/leaf-similar-trees/description/"
+      },
+      "return_domain": {
+        "type": "boolean"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Iterative left-to-right leaf traversal for each host tree.",
+        "complexity_target": "O(n1+n2) time and space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 882,
+      "title": "Reachable Nodes In Subdivided Graph",
+      "slug": "reachable-nodes-in-subdivided-graph",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "edges",
+          "maxMoves",
+          "n"
+        ],
+        "official": {
+          "name": "reachableNodes",
+          "params": [
+            {
+              "name": "edges",
+              "type": "integer[][]"
+            },
+            {
+              "name": "maxMoves",
+              "type": "integer"
+            },
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "n1..3000, unique ordered undirected edges u<v with subdivision count0..10000, m<=min(n(n-1)/2,10000), moves0..1e9; count reachable expanded vertices.",
+        "official_response_sha256": "47234cf6f5b8b4c1f11830acbc469defea32487b9c856b3f190c83d7c1a99e00",
+        "statement_html_sha256": "fee18265c077477228902163cfbadafd50af2ef6fdb432ad3404613637fcc595",
+        "reference_url": "https://leetcode.com/problems/reachable-nodes-in-subdivided-graph/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Dense-selection Dijkstra on original weighted edges; count each subdivided edge from both endpoint budgets with overlap capped.",
+        "complexity_target": "O(n^2+m) time, O(n+m) space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 894,
+      "title": "All Possible Full Binary Trees",
+      "slug": "all-possible-full-binary-trees",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "n"
+        ],
+        "official": {
+          "name": "allPossibleFBT",
+          "params": [
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "list<TreeNode>"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "n1..20; return all distinct full binary trees with n zero-valued host TreeNodes, any order; fresh disjoint node allocations.",
+        "official_response_sha256": "c7aefc2b9a58f48b6282641d00a1a74a074eed71eb9af72adcfcd64f3730c153",
+        "statement_html_sha256": "778617d7ea71333bbe1f150d12da5fecd417306739c8747638f7ae2c99fbce7e",
+        "reference_url": "https://leetcode.com/problems/all-possible-full-binary-trees/description/"
+      },
+      "return_domain": {
+        "type": "list<TreeNode>"
+      },
+      "comparison": {
+        "policy": "unordered unique full-tree shapes"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Memoize immutable full-tree shapes by odd size, then allocate each result independently through the host TreeNode constructor.",
+        "complexity_target": "O(n*C) time and space for C=Catalan((n-1)/2) returned trees"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 895,
+      "title": "Maximum Frequency Stack",
+      "slug": "maximum-frequency-stack",
+      "external_interface": {
+        "canonical": "FreqStack",
+        "argument_order": [],
+        "official": {
+          "classname": "FreqStack",
+          "maxbytesperline": 200000,
+          "constructor": {
+            "params": []
+          },
+          "methods": [
+            {
+              "name": "push",
+              "params": [
+                {
+                  "type": "integer",
+                  "name": "val"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "pop",
+              "params": [],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ],
+          "systemdesign": true,
+          "params": [
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            },
+            {
+              "name": "inputs",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "list<String>",
+            "dealloc": true
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Official FreqStack class: constructor(),push(val0..1e9),pop(); <=20000 method calls; pop only nonempty; highest frequency with recency tie-break.",
+        "official_response_sha256": "a05b8fed9df4ba879846d1d0fafab70b49e8235d9bbe6d82fc3ba3fefbfd8266",
+        "statement_html_sha256": "d6ffab382cef66d9d2fb032fbe758e45ed9f4d50b25291237938996e1f01e9cd",
+        "reference_url": "https://leetcode.com/problems/maximum-frequency-stack/description/"
+      },
+      "return_domain": {
+        "type": "list<String>",
+        "dealloc": true
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Maintain value frequencies and a stack per frequency; pop from the current maximum frequency stack.",
+        "complexity_target": "O(1) amortized time per method and O(push calls) space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 902,
+      "title": "Numbers At Most N Given Digit Set",
+      "slug": "numbers-at-most-n-given-digit-set",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "digits",
+          "n"
+        ],
+        "official": {
+          "name": "atMostNGivenDigitSet",
+          "params": [
+            {
+              "name": "digits",
+              "type": "string[]"
+            },
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Sorted unique1..9 nonzero digit strings, n1..1e9; count positive constructible integers<=n.",
+        "official_response_sha256": "1492cb88ea9d4f4232496ec4602ace5a48922f91576a343873ee0b2c0318b914",
+        "statement_html_sha256": "6f5c3ea1b63e9c4514c0a775489c8a18bb22a33a561cf23e38f526f7ea744806",
+        "reference_url": "https://leetcode.com/problems/numbers-at-most-n-given-digit-set/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Count shorter lengths, then lexicographically smaller first differing digits while following equal prefixes.",
+        "complexity_target": "O(d*L) time, O(L) space for d digits and L decimal positions"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 906,
+      "title": "Super Palindromes",
+      "slug": "super-palindromes",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "left",
+          "right"
+        ],
+        "official": {
+          "name": "superpalindromesInRange",
+          "params": [
+            {
+              "name": "left",
+              "type": "string"
+            },
+            {
+              "name": "right",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Decimal strings without leading zero,1<=left<=right<=1e18-1, length<=18; count palindromic perfect squares with palindromic root.",
+        "official_response_sha256": "3edd39f1ee9bdfc4152f98edd1d3d880fc93ca816da25506216b4b2ba8082546",
+        "statement_html_sha256": "c97c79c61cad4b478716c8383284968484ad384e9a69e038db7b191af1634e74",
+        "reference_url": "https://leetcode.com/problems/super-palindromes/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Generate odd and even palindromic roots from nonempty half-prefixes, square exactly, then test square palindrome and interval.",
+        "complexity_target": "O(R^(1/4)*log R) time, O(log R) auxiliary space; JS squares use BigInt"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 920,
+      "title": "Number of Music Playlists",
+      "slug": "number-of-music-playlists",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "n",
+          "goal",
+          "k"
+        ],
+        "official": {
+          "name": "numMusicPlaylists",
+          "params": [
+            {
+              "name": "n",
+              "type": "integer"
+            },
+            {
+              "name": "goal",
+              "type": "integer"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "0<=k<n<=goal<=100; every song at least once, repeat after k other songs; count modulo1e9+7.",
+        "official_response_sha256": "d051e4da08f0c3488dc24f6651574cda0f4e2387ae6533f1cf58a7c3b4ff1ef8",
+        "statement_html_sha256": "27ea5efdcb5ef8399487cb0fa049a063572c8e08764b0f19e8be82b30fc6e5e4",
+        "reference_url": "https://leetcode.com/problems/number-of-music-playlists/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "DP on playlist length and distinct songs used, adding a new song or one outside the cooldown.",
+        "complexity_target": "O(n*goal) time, O(n) space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 927,
+      "title": "Three Equal Parts",
+      "slug": "three-equal-parts",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "arr"
+        ],
+        "official": {
+          "name": "threeEqualParts",
+          "params": [
+            {
+              "name": "arr",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Binary array length3..30000; any nonempty 3-way equal-binary-value split with leading zeros allowed, else[-1,-1].",
+        "official_response_sha256": "fdeafbad186b65b9de8e1349f31b2ce895541d6c65c29dbd95b877d4138ddb53",
+        "statement_html_sha256": "c8474235b3072943b581ad71a3908c3fa5929470dd98193a3e6b9fe8615465a0",
+        "reference_url": "https://leetcode.com/problems/three-equal-parts/description/"
+      },
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "comparison": {
+        "policy": "valid partition witness or exact impossibility"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Align the first ones of three equal-one-count groups and compare through the trailing suffix.",
+        "complexity_target": "O(n) time and space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 932,
+      "title": "Beautiful Array",
+      "slug": "beautiful-array",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "n"
+        ],
+        "official": {
+          "name": "beautifulArray",
+          "params": [
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "n1..1000; any permutation1..n without ordered triple i<k<j satisfying a[i]+a[j]=2*a[k].",
+        "official_response_sha256": "80d92645002cfd85a79c66503991b4dab0b3b656317e2b342e7be1a290f21a9c",
+        "statement_html_sha256": "335fd6865422c3d9f7a64a924ad4dd0d95d4bd9334305f9d77d2b8f894811d45",
+        "reference_url": "https://leetcode.com/problems/beautiful-array/description/"
+      },
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "comparison": {
+        "policy": "permutation and no arithmetic-progression triple"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Build parity-separated affine copies of a smaller beautiful ordering.",
+        "complexity_target": "O(n) time and space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 952,
+      "title": "Largest Component Size by Common Factor",
+      "slug": "largest-component-size-by-common-factor",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "nums"
+        ],
+        "official": {
+          "name": "largestComponentSize",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "Unique positive integers, n1..20000, values<=100000; largest component connected by common factors>1.",
+        "official_response_sha256": "38eee88e7371974b9bfb1913c0b97536b07d893cd1b3b4eec55b54121bc731ce",
+        "statement_html_sha256": "64d26786880ea7280d848341955c16b71e4c8d3578111f09818c03709436df7a",
+        "reference_url": "https://leetcode.com/problems/largest-component-size-by-common-factor/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Trial-divide each number into distinct prime factors and union indices sharing a factor.",
+        "complexity_target": "O(n*sqrt(V)+n*log n) time, O(n+distinct factors) space"
+      },
+      "qualification_status": "unknown"
+    },
+    {
+      "id": 960,
+      "title": "Delete Columns to Make Sorted III",
+      "slug": "delete-columns-to-make-sorted-iii",
+      "external_interface": {
+        "canonical": "solve",
+        "argument_order": [
+          "strs"
+        ],
+        "official": {
+          "name": "minDeletionSize",
+          "params": [
+            {
+              "name": "strs",
+              "type": "string[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "statement_constraints_snapshot": {
+        "own_words": "1..100 equal-length lowercase rows, width1..100; minimum common column deletions making every row nondecreasing.",
+        "official_response_sha256": "3d6ef2ead1588ce4a7bf4c3e626870dc2ec90af3dcdf411d30ebd3e478b279b1",
+        "statement_html_sha256": "db334c7c8fc693646cf4fb678c2d86a9d80f65a1f3b10744216f62788105bc2d",
+        "reference_url": "https://leetcode.com/problems/delete-columns-to-make-sorted-iii/description/"
+      },
+      "return_domain": {
+        "type": "integer"
+      },
+      "comparison": {
+        "policy": "exact typed result"
+      },
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "mutable_results": "fresh and disjoint; native class receiver state mutates per methods"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Longest column subsequence that is nondecreasing in every row.",
+        "complexity_target": "O(rows*columns^2) time, O(columns) space"
+      },
+      "qualification_status": "unknown"
+    }
+  ]
+}

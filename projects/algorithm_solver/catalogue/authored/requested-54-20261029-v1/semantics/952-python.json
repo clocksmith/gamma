@@ -1,0 +1,34 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 952,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "nums"
+  ],
+  "official_interface": {
+    "name": "largestComponentSize",
+    "params": [
+      {
+        "name": "nums",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(n*sqrt(V)+n*log n) time, O(n+distinct factors) space",
+  "candidate_design": "Trial-divide each number into distinct prime factors and union indices sharing a factor.",
+  "source_reasoning": {
+    "candidate_design": "Trial-divide each number into distinct prime factors and union indices sharing a factor.",
+    "complexity_target": "O(n*sqrt(V)+n*log n) time, O(n+distinct factors) space"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "89c04fe89ad1cf6ed511cbae4f8f06d1ff72cad7ccddf0b928e6256ed516e2f9"
+}

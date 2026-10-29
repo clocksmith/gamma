@@ -1,0 +1,64 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 900,
+  "language": "python",
+  "entrypoint": "RLEIterator",
+  "parameters": [
+    "encoding"
+  ],
+  "official_interface": {
+    "classname": "RLEIterator",
+    "maxbytesperline": 200000,
+    "constructor": {
+      "params": [
+        {
+          "type": "integer[]",
+          "name": "encoding"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "next",
+        "params": [
+          {
+            "type": "integer",
+            "name": "n"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "systemdesign": true,
+    "params": [
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      },
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "list<String>",
+      "dealloc": true
+    }
+  },
+  "comparison": "exact typed outputs for native methods",
+  "effects": "Constructor arguments and method arguments unchanged. Only native receiver state mutates under declared methods; no candidate I/O.",
+  "complexity_target": "O(r) construction and storage for r encoding entries; O(r+c) total over c next calls.",
+  "candidate_design": "Copy encoded runs, maintain run index and consumed count; consume whole exhausted runs and track partial run without expanding.",
+  "source_reasoning": {
+    "candidate_design": "Copy encoded runs, maintain run index and consumed count; consume whole exhausted runs and track partial run without expanding.",
+    "complexity_target": "O(r) construction and storage for r encoding entries; O(r+c) total over c next calls.",
+    "independent_reference": "Explicitly expand small encodings into a literal sequence, advance a cumulative consumed index for every call."
+  },
+  "source_sha256": "82a53c65a05815229803faff4296a581a40f897771dde59b1502500b0f33e05e",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Actual local development tests only; no isolated qualification/admission."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 847,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "graph"
+  ],
+  "official_interface": {
+    "name": "shortestPathLength",
+    "params": [
+      {
+        "name": "graph",
+        "type": "integer[][]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O((n+m)*2^n) time, O(n*2^n) space",
+  "candidate_design": "Multisource BFS over current vertex and visited bit mask.",
+  "source_reasoning": {
+    "candidate_design": "Multisource BFS over current vertex and visited bit mask.",
+    "complexity_target": "O((n+m)*2^n) time, O(n*2^n) space"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "7117df4070a6924c633e54aa3e35459a7de4700c8b91c253fd766a8197f13229"
+}

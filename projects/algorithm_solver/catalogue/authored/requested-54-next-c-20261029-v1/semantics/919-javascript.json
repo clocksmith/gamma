@@ -1,0 +1,63 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 919,
+  "language": "javascript",
+  "entrypoint": "CBTInserter",
+  "parameters": [
+    "root"
+  ],
+  "official_interface": {
+    "classname": "CBTInserter",
+    "maxbytesperline": 200000,
+    "constructor": {
+      "params": [
+        {
+          "name": "root",
+          "type": "TreeNode"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "insert",
+        "params": [
+          {
+            "name": "val",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      },
+      {
+        "name": "get_root",
+        "params": [],
+        "return": {
+          "type": "TreeNode"
+        }
+      }
+    ],
+    "systemdesign": true,
+    "params": [
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      },
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "list<String>",
+      "dealloc": true
+    }
+  },
+  "comparison": "exact typed result; snapshot each get_root observation",
+  "effects": "inputs unchanged; receiver state evolves by declared methods; get_root returns receiver-owned mutable root, intentionally stable across calls; constructor clones input tree",
+  "candidate_design": "Clone constructor tree, store cloned complete tree in breadth-first index order; insert at next array index.",
+  "complexity_target": "O(initial nodes) construction; O(1) amortized insert/get_root; O(total nodes) state",
+  "source_sha256": "b6693b8fd3455bcb93f3986c64d523e3929057eae05ebac71ae328dc49708456",
+  "qualification_status": "unknown"
+}

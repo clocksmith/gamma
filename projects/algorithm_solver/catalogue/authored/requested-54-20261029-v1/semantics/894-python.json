@@ -1,0 +1,34 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 894,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "n"
+  ],
+  "official_interface": {
+    "name": "allPossibleFBT",
+    "params": [
+      {
+        "name": "n",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "list<TreeNode>"
+    }
+  },
+  "comparison": "unordered unique full-tree shapes",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(n*C) time and space for C=Catalan((n-1)/2) returned trees",
+  "candidate_design": "Memoize immutable full-tree shapes by odd size, then allocate each result independently through the host TreeNode constructor.",
+  "source_reasoning": {
+    "candidate_design": "Memoize immutable full-tree shapes by odd size, then allocate each result independently through the host TreeNode constructor.",
+    "complexity_target": "O(n*C) time and space for C=Catalan((n-1)/2) returned trees"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "0cb100e2e3681c140602ffec27c94ce6b81e99aff79fed175b8d722d550bf032"
+}

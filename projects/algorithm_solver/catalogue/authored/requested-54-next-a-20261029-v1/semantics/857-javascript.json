@@ -1,0 +1,40 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 857,
+  "language": "javascript",
+  "entrypoint": "solve",
+  "parameters": [
+    "quality",
+    "wage",
+    "k"
+  ],
+  "official_interface": {
+    "name": "mincostToHireWorkers",
+    "params": [
+      {
+        "name": "quality",
+        "type": "integer[]"
+      },
+      {
+        "name": "wage",
+        "type": "integer[]"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "double"
+    }
+  },
+  "comparison": "absolute error<=1e-5",
+  "effects": "arguments unchanged; mutable results freshly allocated",
+  "complexity_target": "O(n log n+n log k) time and O(n+k) space",
+  "candidate_design": "Sort wage/quality ratios by cross multiplication; retain k smallest qualities in a max heap and evaluate current feasible ratio.",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks only; independent isolated qualification pending"
+  },
+  "source_sha256": "24d3b3de0ce858cd1b77a207fb3ba4473ac77c7090c3fbe43e2cdcbecbae5fcb"
+}

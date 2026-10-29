@@ -1,0 +1,63 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 895,
+  "language": "javascript",
+  "entrypoint": "FreqStack",
+  "parameters": [],
+  "official_interface": {
+    "classname": "FreqStack",
+    "maxbytesperline": 200000,
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "push",
+        "params": [
+          {
+            "type": "integer",
+            "name": "val"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "pop",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "systemdesign": true,
+    "params": [
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      },
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "list<String>",
+      "dealloc": true
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(1) amortized time per method and O(push calls) space",
+  "candidate_design": "Maintain value frequencies and a stack per frequency; pop from the current maximum frequency stack.",
+  "source_reasoning": {
+    "candidate_design": "Maintain value frequencies and a stack per frequency; pop from the current maximum frequency stack.",
+    "complexity_target": "O(1) amortized time per method and O(push calls) space"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "1ef5b35f8d0f17a6cf449fa43246547117d90ea1650bf7f43e3e049199589888"
+}

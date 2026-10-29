@@ -1,0 +1,45 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 879,
+  "language": "python",
+  "entrypoint": "solve",
+  "parameters": [
+    "n",
+    "minProfit",
+    "group",
+    "profit"
+  ],
+  "official_interface": {
+    "name": "profitableSchemes",
+    "params": [
+      {
+        "name": "n",
+        "type": "integer"
+      },
+      {
+        "name": "minProfit",
+        "type": "integer"
+      },
+      {
+        "name": "group",
+        "type": "integer[]"
+      },
+      {
+        "name": "profit",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "arguments unchanged; mutable results freshly allocated",
+  "complexity_target": "O(crimes*n*minProfit) time and O(n*minProfit) space, treating zero threshold as one column",
+  "candidate_design": "Descending-member 0/1 DP with profit saturated at the threshold; each crime updates only untouched lower-member rows.",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks only; independent isolated qualification pending"
+  },
+  "source_sha256": "519ca7cb62186524d6465b7d5e5d624e57e0d0f32a035e1eeba0a865af0f159d"
+}

@@ -1,0 +1,44 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 920,
+  "language": "javascript",
+  "entrypoint": "solve",
+  "parameters": [
+    "n",
+    "goal",
+    "k"
+  ],
+  "official_interface": {
+    "name": "numMusicPlaylists",
+    "params": [
+      {
+        "name": "n",
+        "type": "integer"
+      },
+      {
+        "name": "goal",
+        "type": "integer"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "comparison": "exact typed result",
+  "effects": "inputs unchanged; mutable outputs fresh, no aliases within/across returned trees; FreqStack receiver state mutates only by declared methods",
+  "complexity_target": "O(n*goal) time, O(n) space",
+  "candidate_design": "DP on playlist length and distinct songs used, adding a new song or one outside the cooldown.",
+  "source_reasoning": {
+    "candidate_design": "DP on playlist length and distinct songs used, adding a new song or one outside the cooldown.",
+    "complexity_target": "O(n*goal) time, O(n) space"
+  },
+  "qualification": {
+    "status": "unknown",
+    "reason": "Local development checks do not establish qualification"
+  },
+  "source_sha256": "5594dbe6035c8cdf7f037c997f417cd274cd56a79a6f14e93d7627395b05eb5d"
+}

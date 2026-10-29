@@ -1,0 +1,71 @@
+{
+  "schema": "gamma.authored-semantics.v1",
+  "problem_id": 855,
+  "language": "javascript",
+  "entrypoint": "ExamRoom",
+  "parameters": [
+    "n"
+  ],
+  "official_interface": {
+    "classname": "ExamRoom",
+    "maxbytesperline": 200000,
+    "constructor": {
+      "params": [
+        {
+          "type": "integer",
+          "name": "n"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "seat",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      },
+      {
+        "name": "leave",
+        "params": [
+          {
+            "type": "integer",
+            "name": "p"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      }
+    ],
+    "systemdesign": true,
+    "params": [
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      },
+      {
+        "name": "inputs",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "list<String>",
+      "dealloc": true
+    }
+  },
+  "comparison": "exact typed outputs for native methods",
+  "effects": "Constructor arguments and method arguments unchanged. Only native receiver state mutates under declared methods; no candidate I/O.",
+  "complexity_target": "O(s) time per seat or leave, O(s) space for s occupied seats; O(c^2) worst-case total over c calls.",
+  "candidate_design": "Keep a sorted occupied-seat list. Scan boundary and interior gaps in ascending order, updating only on strictly better distance; binary-position insertion.",
+  "source_reasoning": {
+    "candidate_design": "Keep a sorted occupied-seat list. Scan boundary and interior gaps in ascending order, updating only on strictly better distance; binary-position insertion.",
+    "complexity_target": "O(s) time per seat or leave, O(s) space for s occupied seats; O(c^2) worst-case total over c calls.",
+    "independent_reference": "Enumerate every free seat and measure its literal minimum absolute distance to all occupied seats."
+  },
+  "source_sha256": "b2e020ddc5986b6a19cd8a9084b1802f16a66b4c0ff5f32892148f05e987c54e",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Actual local development tests only; no isolated qualification/admission."
+  }
+}
