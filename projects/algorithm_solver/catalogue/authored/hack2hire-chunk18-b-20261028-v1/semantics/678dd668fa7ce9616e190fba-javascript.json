@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:678dd668fa7ce9616e190fba",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "grid"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxIslandSum",
+  "params": [
+   {
+    "name": "grid",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "union-find over all land cells, joining each land cell with its right and lower land neighbours, then summing per root",
+  "candidate_design": "iterative depth-first search with an explicit stack and a visited matrix, summing each island as it is flooded and keeping the maximum",
+  "complexity_target": "O(m * n) time/O(m * n) space"
+ },
+ "source_sha256": "108b8662df04afadc6bf360e5eec5644169767a95fda4516174d19f5684117d8",
+ "wrapper": "named export maxIslandSum"
+}

@@ -1,0 +1,475 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a2db6215117d1b543565e12:6a2db7bc5117d1b543565e24:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+   "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a2db6215117d1b543565e12.json",
+   "sha256": "f371a20d3080e93ae22669d98a156f91c28f4154747cb3fd2ed702eddf5ed2c4",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+   "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+   "selector": "/variants/hack2hire:6a2db7bc5117d1b543565e24"
+  }
+ ],
+ "problemId": "hack2hire:6a2db6215117d1b543565e12",
+ "variantId": "6a2db7bc5117d1b543565e24",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 1 of 2: canonical keys for positional and keyword arguments",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:6a2db7bc5117d1b543565e24/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "FunctionCallCache(capacity) starts empty with room for capacity entries. call(functionName, args, kwargs) looks up the call identified by functionName, the positional argument list args and the keyword object kwargs. Argument values are JSON values: null, booleans, integers, strings, lists and objects with string keys. Two values are the same when they have the same type and equal contents: true differs from 1, 1 differs from \"1\", lists compare in order, objects compare as key sets with equal values regardless of key order. Two calls are the same when their names are equal, their args lists are the same and their kwargs objects are the same. On a hit the entry becomes the most recently used and call returns true; on a miss the call is inserted as the most recently used entry, the least recently used entry is evicted first when the cache is full, and call returns false. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "FunctionCallCache(capacity) starts empty with room for capacity entries.",
+   "call(functionName, args, kwargs) looks up the call identified by functionName, the positional argument list args and the keyword object kwargs.",
+   "Argument values are JSON values: null, booleans, integers, strings, lists and objects with string keys.",
+   "Two values are the same when they have the same type and equal contents: true differs from 1, 1 differs from \"1\", lists compare in order, objects compare as key sets with equal values regardless of key order.",
+   "Two calls are the same when their names are equal, their args lists are the same and their kwargs objects are the same.",
+   "On a hit the entry becomes the most recently used and call returns true; on a miss the call is inserted as the most recently used entry, the least recently used entry is evicted first when the cache is full, and call returns false.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= capacity <= 1e4",
+   "at most 2e4 calls",
+   "function names: a lowercase letter or \"_\" followed by up to 15 of a-z, 0-9, \"_\"",
+   "values nest at most 3 levels; lists and objects have at most 6 items; object keys are 1 to 8 of a-z and \"_\"",
+   "integers within +-1e9; strings up to 12 printable ASCII characters"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:6a2db7bc5117d1b543565e24/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: a FunctionCallCache wraps functions and memoises their results in an LRU cache; lookup, insertion, hits, misses and eviction exist; the missing piece is create_cache_key, which must build a deterministic hashable key for each call (the requirements on that key are cut off); algorithmTags: DESIGN; codingQuestions: 2 variant ids, no per-variant text; preview response sha256 5ddeeee8b3a0c003f1ad1d244adea837d25fdb16754264811a1d13e6c6794531"
+   },
+   {
+    "statement": "Uncertainty: high: the LRU wrapper and the need for a deterministic key are in the preview; the key requirements (type-sensitive, order-insensitive keyword and object keys) are cut off and inferred, and the observable interface (call returns whether it was a hit) is a modelling choice since functions cannot be passed as data",
+    "basis": "the public group preview is partial (596 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 1 of 2: key from name, positional arguments and keyword arguments",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Should true and 1, or 1 and \"1\", give the same key?",
+   "Does the order of keyword arguments matter?",
+   "How are unhashable arguments such as lists and dicts handled?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:6a2db7bc5117d1b543565e24/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "FunctionCallCache"
+     ],
+     [
+      [
+       2
+      ]
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "FunctionCallCache",
+      "call",
+      "call",
+      "call",
+      "call",
+      "call",
+      "call"
+     ],
+     [
+      [
+       3
+      ],
+      [
+       "f",
+       [],
+       {}
+      ],
+      [
+       "g",
+       [
+        1
+       ],
+       {
+        "b": "a b"
+       }
+      ],
+      [
+       "g",
+       [],
+       {
+        "a": "1",
+        "b": "1"
+       }
+      ],
+      [
+       "f",
+       [
+        [
+         true
+        ],
+        [
+         1,
+         2
+        ]
+       ],
+       {
+        "b": {
+         "a": true
+        }
+       }
+      ],
+      [
+       "g",
+       [
+        false
+       ],
+       {
+        "b": [
+         2,
+         1
+        ],
+        "c_d": false
+       }
+      ],
+      [
+       "f",
+       [
+        true,
+        {
+         "a": true
+        }
+       ],
+       {
+        "c_d": false,
+        "b": [
+         true
+        ]
+       }
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:6a2db7bc5117d1b543565e24/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/oracles.py",
+    "sha256": "bcb9402fb9a425489d98abb859edefeeebaf6b53831e620b9984f7fed502811f",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class FunctionCallCache:\n    def __init__(self, capacity)\n    def call(self, functionName, args, kwargs) -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/6a2db7bc5117d1b543565e24-python.json",
+     "inferredInterface": {
+      "classname": "FunctionCallCache",
+      "constructor": {
+       "params": [
+        {
+         "name": "capacity",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "call",
+        "params": [
+         {
+          "name": "functionName",
+          "type": "string"
+         },
+         {
+          "name": "args",
+          "type": "any[]"
+         },
+         {
+          "name": "kwargs",
+          "type": "object"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/6a2db7bc5117d1b543565e24-python.json",
+      "sha256": "d6c05b8ee917471ef6ede41de8abbe30a975143f94c4bc1b1bf09fce1310a6ac",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class FunctionCallCache {\n  constructor(capacity)\n  call(functionName, args, kwargs) /* -> boolean */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/6a2db7bc5117d1b543565e24-javascript.json",
+     "inferredInterface": {
+      "classname": "FunctionCallCache",
+      "constructor": {
+       "params": [
+        {
+         "name": "capacity",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "call",
+        "params": [
+         {
+          "name": "functionName",
+          "type": "string"
+         },
+         {
+          "name": "args",
+          "type": "any[]"
+         },
+         {
+          "name": "kwargs",
+          "type": "object"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/6a2db7bc5117d1b543565e24-javascript.json",
+      "sha256": "c92fba6fed66fae669c1571a2fbcdae5e1a8c5e2e6106d77fcdab44770b15112",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

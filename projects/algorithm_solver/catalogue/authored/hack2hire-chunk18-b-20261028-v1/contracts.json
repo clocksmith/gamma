@@ -1,0 +1,1026 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:69a367fe6e73e4abccc9bfe1",
+   "variant_id": "69a367fe6e73e4abccc9bfe1",
+   "variant_ordinal": 1,
+   "title": "Next Consonant Transformation",
+   "source": {
+    "post_id": "69a367836e73e4abccc9bfe0",
+    "group_title": "Next Consonant Transformation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a367836e73e4abccc9bfe0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a367836e73e4abccc9bfe0/practice?questionId=69a367fe6e73e4abccc9bfe1",
+    "preview_response_sha256": "df407f2569acc315da8bc2485a0aa4c54e4183c3406ce6d814f1050951583854",
+    "preview_content_sha256": "0433aebb218cced3c52b6481f7207b21a9c15a96e966c562594326811a9511b5",
+    "preview_characters": 409,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a367836e73e4abccc9bfe0.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "STRING"
+    ],
+    "companies": [
+     "CAPITAL_ONE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a lowercase string s; vowels a, e, i, o, u stay as they are; every consonant becomes the next consonant in alphabetical order, cyclically, so z becomes b",
+    "algorithmTags: ARRAY, STRING"
+   ],
+   "inferred_spec": "s is a non-empty string of lowercase letters. Return the string in which every vowel (a, e, i, o, u) is kept and every other letter is replaced by the next letter after it in the alphabet that is not a vowel, wrapping from z around to b.",
+   "inference_uncertainty": "low: the whole rule is in the preview; the function name, the return of a new string and the bounds are inferred",
+   "inferred_interface": {
+    "name": "transformString",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "NCT"
+  },
+  {
+   "uid": "hack2hire:68f599dba269f53ea0eff890",
+   "variant_id": "68f599dba269f53ea0eff890",
+   "variant_ordinal": 1,
+   "title": "One-Hot Encoding of An Array",
+   "source": {
+    "post_id": "68f599cda269f53ea0eff88f",
+    "group_title": "One-Hot Encoding of An Array",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f599cda269f53ea0eff88f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f599cda269f53ea0eff88f/practice?questionId=68f599dba269f53ea0eff890",
+    "preview_response_sha256": "d1a32eedaaed505a126d635765e8f998d42d56d713332ac9886bf788039808f4",
+    "preview_content_sha256": "e51577718c6b40e686a01fe521d2848a71c653ddc4dcb7be68b9a568606c5cdb",
+    "preview_characters": 574,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f599cda269f53ea0eff88f.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "NETFLIX"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: integer array arr; one row per element; one column per distinct value in ascending order; a 1 in the column of the element and 0 elsewhere",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "arr is a non-empty list of integers. Let the columns be the distinct values of arr in ascending order. Return a matrix with one row per element of arr, in order, where row i holds 1 in the column of arr[i] and 0 in every other column.",
+   "inference_uncertainty": "low: the encoding is fully stated in the preview; the function name and the bounds (chosen so the matrix has at most 1e6 cells) are inferred",
+   "inferred_interface": {
+    "name": "oneHotEncode",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "OHE"
+  },
+  {
+   "uid": "hack2hire:67806bd26fee41e51af73dde",
+   "variant_id": "67806bd26fee41e51af73dde",
+   "variant_ordinal": 1,
+   "title": "Prefix to Postfix",
+   "source": {
+    "post_id": "678069276fee41e51af73ddd",
+    "group_title": "Prefix to Postfix",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678069276fee41e51af73ddd",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678069276fee41e51af73ddd/practice?questionId=67806bd26fee41e51af73dde",
+    "preview_response_sha256": "812e7bfba4685a596b91679432fec0880bb2ffa228b4a936d0678bb5f390c19d",
+    "preview_content_sha256": "5053245aea3d2b9eb2b59e4deb7ce819796991290d101c37ce493625b13b9549",
+    "preview_characters": 395,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/678069276fee41e51af73ddd.json",
+    "algorithm_tags": [
+     "STACK"
+    ],
+    "companies": [
+     "AFFIRM"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: convert a prefix expression (operator before its operands) to the equivalent postfix expression (operator after its operands); both examples use single-letter operands and binary operators",
+    "algorithmTags: STACK"
+   ],
+   "inferred_spec": "expression is a valid prefix expression without spaces in which every operand is one letter or digit and every operator is one of + - * / ^ and takes exactly two operands. Return the postfix expression with the same structure: each operator written after its two operands, operands in their original order.",
+   "inference_uncertainty": "medium: the conversion is stated in the preview; the operand alphabet (letters and digits, one character each), the operator set, guaranteed validity and the bounds are inferred",
+   "inferred_interface": {
+    "name": "prefixToPostfix",
+    "params": [
+     {
+      "name": "expression",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PTP"
+  },
+  {
+   "uid": "hack2hire:67a23c6bc5f86173882e3d8d",
+   "variant_id": "67a23c6bc5f86173882e3d8d",
+   "variant_ordinal": 1,
+   "title": "Regex Pattern Matching",
+   "source": {
+    "post_id": "67a23a54c5f86173882e3d8c",
+    "group_title": "Regex Pattern Matching",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a23a54c5f86173882e3d8c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a23a54c5f86173882e3d8c/practice?questionId=67a23c6bc5f86173882e3d8d",
+    "preview_response_sha256": "a97eac10a0fad05ee5dec7d9827e8bb9c8efaa1cc6990b9c3ff37e0890ebb77b",
+    "preview_content_sha256": "0cbcc0ac12d7b09fe0557ade47ca6638b52725f3e6954e739b60c92f108bf937",
+    "preview_characters": 585,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67a23a54c5f86173882e3d8c.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "BACKTRACKING"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a simplified regex over lowercase letters with \".\", \"*\", \"(\" and \")\"; \".\" matches one letter; a character followed by \"*\" matches zero or more copies of it; a parenthesised expression is one unit and a following \"*\" repeats the whole group; groups contain no \"*\" and are not nested (the question is cut off)",
+    "algorithmTags: DYNAMIC_PROGRAMMING, BACKTRACKING"
+   ],
+   "inferred_spec": "text is a string of lowercase letters and pattern a non-empty sequence of units. A unit is a letter, \".\", or a group \"(\" followed by one or more letters or \".\" and \")\", optionally followed by \"*\". A letter matches itself, \".\" matches any one letter, and a group matches its contents in order. A unit with \"*\" matches zero or more consecutive repetitions of what the unit matches. Return true when the whole text matches the whole pattern.",
+   "inference_uncertainty": "medium: the regex syntax is in the preview; the question itself (a whole-string true/false match), \".\" inside groups, \"*\" after \".\" and the bounds are inferred",
+   "inferred_interface": {
+    "name": "isMatch",
+    "params": [
+     {
+      "name": "text",
+      "type": "string"
+     },
+     {
+      "name": "pattern",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "RPM"
+  },
+  {
+   "uid": "hack2hire:678dd668fa7ce9616e190fba",
+   "variant_id": "678dd668fa7ce9616e190fba",
+   "variant_ordinal": 1,
+   "title": "Sum of Islands Max",
+   "source": {
+    "post_id": "678dd2dffa7ce9616e190fb9",
+    "group_title": "Sum of Islands Max",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678dd2dffa7ce9616e190fb9",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678dd2dffa7ce9616e190fb9/practice?questionId=678dd668fa7ce9616e190fba",
+    "preview_response_sha256": "fcb682680a567ae41445f77c26051e476a48a7192877b22fba115f6c1746651f",
+    "preview_content_sha256": "16dcb84c73c7c61ed1db44bbc438901a014d8ffc6d0b5ded7eb4a72dfcaa8c93",
+    "preview_characters": 392,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/678dd2dffa7ce9616e190fb9.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "AFFIRM"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 200; an m x n grid of non-negative integers where positive cells are land and 0 is water (the question is cut off)",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "grid is a non-empty rectangular matrix of non-negative integers. Positive cells are land; an island is a maximal group of land cells connected through up, down, left and right neighbours. The value of an island is the sum of its cells. Return the largest island value, or 0 when there is no land.",
+   "inference_uncertainty": "medium: the grid and the land rule are in the preview; the question (the maximum island sum, read from the title), 4-directional connectivity (as in LeetCode 200), 0 without land and the bounds are inferred",
+   "inferred_interface": {
+    "name": "maxIslandSum",
+    "params": [
+     {
+      "name": "grid",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "SIM"
+  },
+  {
+   "uid": "hack2hire:69fc0ee4574d87bc49005a3d",
+   "variant_id": "69fc0ee4574d87bc49005a3d",
+   "variant_ordinal": 1,
+   "title": "Data Labeling Task Scheduler",
+   "source": {
+    "post_id": "69fc0e7f574d87bc49005a3c",
+    "group_title": "Data Labeling Task Scheduler",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69fc0e7f574d87bc49005a3c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69fc0e7f574d87bc49005a3c/practice?questionId=69fc0ee4574d87bc49005a3d",
+    "preview_response_sha256": "f3cea8acbc97a6564b80d047823570ad7cb178e53a8a2735fcac79503b266a48",
+    "preview_content_sha256": "890aaf392ac9b4511795b671d9bf49d21533909e279da74827663938fe61f628",
+    "preview_characters": 735,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69fc0e7f574d87bc49005a3c.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: tasks t1..t{totalTask}, models m1..m{totalModel} and humans h1..h{totalHuman} with integer k; an assignment is [task, model, human]; a task may appear in several assignments; return any valid schedule as a list of assignments (the validity conditions are cut off)",
+    "algorithmTags: GREEDY",
+    "codingQuestions: 2 variant ids, no per-variant text"
+   ],
+   "inferred_spec": "totalTask, totalModel, totalHuman and k are positive integers. Every task must receive exactly k assignments whose humans are pairwise different and whose models are pairwise different. Build the schedule greedily: take tasks t1, t2, ... in order and give each task k assignments one after another; for each assignment choose, among humans not yet used on this task, the one with the fewest assignments so far (smaller index on ties), and independently, among models not yet used on this task, the one with the fewest assignments so far (smaller index on ties). Return the assignments as [task, model, human] string triples in the order they were made, or [] when k exceeds totalHuman or totalModel.",
+   "inference_uncertainty": "high: the labels, the triple layout and \"any valid schedule\" are in the preview, but the validity conditions are cut off; this contract infers k distinct humans and models per task and pins one canonical greedy (least loaded, smallest index) so the output can be compared exactly; the official problem probably accepts any valid schedule",
+   "inferred_interface": {
+    "name": "scheduleTasks",
+    "params": [
+     {
+      "name": "totalTask",
+      "type": "integer"
+     },
+     {
+      "name": "totalModel",
+      "type": "integer"
+     },
+     {
+      "name": "totalHuman",
+      "type": "integer"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 1 of 2: build a schedule (the second variant is inferred to check one)",
+   "oracle_constant": "DLS"
+  },
+  {
+   "uid": "hack2hire:69fc131a574d87bc49005a6c",
+   "variant_id": "69fc131a574d87bc49005a6c",
+   "variant_ordinal": 2,
+   "title": "Data Labeling Task Scheduler",
+   "source": {
+    "post_id": "69fc0e7f574d87bc49005a3c",
+    "group_title": "Data Labeling Task Scheduler",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69fc0e7f574d87bc49005a3c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69fc0e7f574d87bc49005a3c/practice?questionId=69fc131a574d87bc49005a6c",
+    "preview_response_sha256": "f3cea8acbc97a6564b80d047823570ad7cb178e53a8a2735fcac79503b266a48",
+    "preview_content_sha256": "890aaf392ac9b4511795b671d9bf49d21533909e279da74827663938fe61f628",
+    "preview_characters": 735,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69fc0e7f574d87bc49005a3c.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: tasks t1..t{totalTask}, models m1..m{totalModel} and humans h1..h{totalHuman} with integer k; an assignment is [task, model, human]; a task may appear in several assignments; return any valid schedule as a list of assignments (the validity conditions are cut off)",
+    "algorithmTags: GREEDY",
+    "codingQuestions: 2 variant ids, no per-variant text"
+   ],
+   "inferred_spec": "totalTask, totalModel, totalHuman and k are positive integers and schedule is a list of string triples [task, model, human]. The schedule is valid when every triple names a task \"t<i>\" with 1 <= i <= totalTask, a model \"m<j>\" with 1 <= j <= totalModel and a human \"h<l>\" with 1 <= l <= totalHuman (decimal without leading zeros), every task appears in exactly k triples, and no two triples of the same task share a human or share a model. Return whether schedule is valid.",
+   "inference_uncertainty": "high: the preview defines the labels and triples only; the second variant is inferred to validate a proposed schedule against the same inferred conditions as variant 1 (k triples per task, distinct humans and distinct models within a task), which are not visible in the preview",
+   "inferred_interface": {
+    "name": "isValidSchedule",
+    "params": [
+     {
+      "name": "totalTask",
+      "type": "integer"
+     },
+     {
+      "name": "totalModel",
+      "type": "integer"
+     },
+     {
+      "name": "totalHuman",
+      "type": "integer"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     },
+     {
+      "name": "schedule",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 2 of 2: validate a schedule (inferred; no per-variant text is public)",
+   "oracle_constant": "DLV"
+  },
+  {
+   "uid": "hack2hire:6a2db7bc5117d1b543565e24",
+   "variant_id": "6a2db7bc5117d1b543565e24",
+   "variant_ordinal": 1,
+   "title": "Design Durable Function Call Cache",
+   "source": {
+    "post_id": "6a2db6215117d1b543565e12",
+    "group_title": "Design Durable Function Call Cache",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a2db6215117d1b543565e12",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a2db6215117d1b543565e12/practice?questionId=6a2db7bc5117d1b543565e24",
+    "preview_response_sha256": "5ddeeee8b3a0c003f1ad1d244adea837d25fdb16754264811a1d13e6c6794531",
+    "preview_content_sha256": "409d571cfeb9d35a3ba52288f90094fcda9998b270a1841f9c8802c9348bea7c",
+    "preview_characters": 596,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a2db6215117d1b543565e12.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a FunctionCallCache wraps functions and memoises their results in an LRU cache; lookup, insertion, hits, misses and eviction exist; the missing piece is create_cache_key, which must build a deterministic hashable key for each call (the requirements on that key are cut off)",
+    "algorithmTags: DESIGN",
+    "codingQuestions: 2 variant ids, no per-variant text"
+   ],
+   "inferred_spec": "FunctionCallCache(capacity) starts empty with room for capacity entries. call(functionName, args, kwargs) looks up the call identified by functionName, the positional argument list args and the keyword object kwargs. Argument values are JSON values: null, booleans, integers, strings, lists and objects with string keys. Two values are the same when they have the same type and equal contents: true differs from 1, 1 differs from \"1\", lists compare in order, objects compare as key sets with equal values regardless of key order. Two calls are the same when their names are equal, their args lists are the same and their kwargs objects are the same. On a hit the entry becomes the most recently used and call returns true; on a miss the call is inserted as the most recently used entry, the least recently used entry is evicted first when the cache is full, and call returns false. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: the LRU wrapper and the need for a deterministic key are in the preview; the key requirements (type-sensitive, order-insensitive keyword and object keys) are cut off and inferred, and the observable interface (call returns whether it was a hit) is a modelling choice since functions cannot be passed as data",
+   "inferred_interface": {
+    "classname": "FunctionCallCache",
+    "constructor": {
+     "params": [
+      {
+       "name": "capacity",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "call",
+      "params": [
+       {
+        "name": "functionName",
+        "type": "string"
+       },
+       {
+        "name": "args",
+        "type": "any[]"
+       },
+       {
+        "name": "kwargs",
+        "type": "object"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 1 of 2: key from name, positional arguments and keyword arguments",
+   "oracle_constant": "FCC",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6a2db7be5117d1b543565e25",
+   "variant_id": "6a2db7be5117d1b543565e25",
+   "variant_ordinal": 2,
+   "title": "Design Durable Function Call Cache",
+   "source": {
+    "post_id": "6a2db6215117d1b543565e12",
+    "group_title": "Design Durable Function Call Cache",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a2db6215117d1b543565e12",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a2db6215117d1b543565e12/practice?questionId=6a2db7be5117d1b543565e25",
+    "preview_response_sha256": "5ddeeee8b3a0c003f1ad1d244adea837d25fdb16754264811a1d13e6c6794531",
+    "preview_content_sha256": "409d571cfeb9d35a3ba52288f90094fcda9998b270a1841f9c8802c9348bea7c",
+    "preview_characters": 596,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a2db6215117d1b543565e12.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a FunctionCallCache wraps functions and memoises their results in an LRU cache; lookup, insertion, hits, misses and eviction exist; the missing piece is create_cache_key, which must build a deterministic hashable key for each call (the requirements on that key are cut off)",
+    "algorithmTags: DESIGN",
+    "codingQuestions: 2 variant ids, no per-variant text"
+   ],
+   "inferred_spec": "FunctionCallCache(capacity, signatures) starts empty. signatures maps each function name to its parameter list; a parameter is [name] (required) or [name, default]; required parameters come first. call(functionName, args, kwargs) binds the positional args to the first parameters in order, the keyword arguments by name and every unbound parameter to its default; every call is valid for its signature. Two calls are the same when their names are equal and every parameter is bound to the same value, so f(1), f(a=1) and f(1, b=0) coincide when b defaults to 0. Argument values are JSON values: null, booleans, integers, strings, lists and objects with string keys. Two values are the same when they have the same type and equal contents: true differs from 1, 1 differs from \"1\", lists compare in order, objects compare as key sets with equal values regardless of key order. Hits, misses, recency and eviction behave as an LRU cache with capacity entries; call returns true on a hit and false on a miss. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: the preview names create_cache_key only; normalising positional, keyword and default arguments by the function signature is inferred as the second variant, and the signature format, the call validity guarantee and the hit/miss output are modelling choices",
+   "inferred_interface": {
+    "classname": "FunctionCallCache",
+    "constructor": {
+     "params": [
+      {
+       "name": "capacity",
+       "type": "integer"
+      },
+      {
+       "name": "signatures",
+       "type": "object"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "call",
+      "params": [
+       {
+        "name": "functionName",
+        "type": "string"
+       },
+       {
+        "name": "args",
+        "type": "any[]"
+       },
+       {
+        "name": "kwargs",
+        "type": "object"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 2 of 2: key normalised by the function signature (inferred; no per-variant text is public)",
+   "oracle_constant": "FCS",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69d414a179bf03c0074bcec1",
+   "variant_id": "69d414a179bf03c0074bcec1",
+   "variant_ordinal": 1,
+   "title": "Cellular Infection Spreading",
+   "source": {
+    "post_id": "69d4147079bf03c0074bcec0",
+    "group_title": "Cellular Infection Spreading",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0/practice?questionId=69d414a179bf03c0074bcec1",
+    "preview_response_sha256": "42f65105a8ec3494485b9ef507762a35e361347a9b35cc71c68db1784c8a7a68",
+    "preview_content_sha256": "5f3e9cd86546f04619c0d33d79e6d8e2bf6832d57e6c78271728fe92115c1988",
+    "preview_characters": 657,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d4147079bf03c0074bcec0.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 5
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 994; an m x n grid of plants, 0 healthy and 1 infected; each day all plants update at once; a healthy plant becomes infected when at least threshold of its 8 neighbours are infected; infection is permanent (the question is cut off)",
+    "algorithmTags: BREADTH_FIRST_SEARCH",
+    "codingQuestions: 5 variant ids, no per-variant text"
+   ],
+   "inferred_spec": "grid is a non-empty rectangular matrix of 0 (healthy) and 1 (infected) and threshold is an integer from 1 to 8. Each day, every healthy plant with at least threshold infected plants among its up to 8 neighbours (diagonals included) becomes infected, all at once, using the state at the start of the day; infected plants stay infected. Day d is the d-th such update; initially infected plants have infection day 0. Return the number of days on which at least one plant becomes infected (0 when nothing ever spreads).",
+   "inference_uncertainty": "high: the spreading rule is in the preview; the question for this variant (the number of days until the spread stops) is inferred because the question and every per-variant difference are cut off; the bounds are inferred",
+   "inferred_interface": {
+    "name": "spreadDays",
+    "params": [
+     {
+      "name": "grid",
+      "type": "integer[][]"
+     },
+     {
+      "name": "threshold",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 1 of 5: days until the spread stops (inferred)",
+   "oracle_constant": "CSD"
+  },
+  {
+   "uid": "hack2hire:69d414a379bf03c0074bcec2",
+   "variant_id": "69d414a379bf03c0074bcec2",
+   "variant_ordinal": 2,
+   "title": "Cellular Infection Spreading",
+   "source": {
+    "post_id": "69d4147079bf03c0074bcec0",
+    "group_title": "Cellular Infection Spreading",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0/practice?questionId=69d414a379bf03c0074bcec2",
+    "preview_response_sha256": "42f65105a8ec3494485b9ef507762a35e361347a9b35cc71c68db1784c8a7a68",
+    "preview_content_sha256": "5f3e9cd86546f04619c0d33d79e6d8e2bf6832d57e6c78271728fe92115c1988",
+    "preview_characters": 657,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d4147079bf03c0074bcec0.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 5
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 994; an m x n grid of plants, 0 healthy and 1 infected; each day all plants update at once; a healthy plant becomes infected when at least threshold of its 8 neighbours are infected; infection is permanent (the question is cut off)",
+    "algorithmTags: BREADTH_FIRST_SEARCH",
+    "codingQuestions: 5 variant ids, no per-variant text"
+   ],
+   "inferred_spec": "grid is a non-empty rectangular matrix of 0 (healthy) and 1 (infected) and threshold is an integer from 1 to 8. Each day, every healthy plant with at least threshold infected plants among its up to 8 neighbours (diagonals included) becomes infected, all at once, using the state at the start of the day; infected plants stay infected. Day d is the d-th such update; initially infected plants have infection day 0. Return the first day after which every plant is infected (0 when all plants start infected), or -1 when some plant is never infected.",
+   "inference_uncertainty": "high: the spreading rule is in the preview; the question for this variant (days until the whole grid is infected, -1 if never, as in LeetCode 994) is inferred; the bounds are inferred",
+   "inferred_interface": {
+    "name": "daysToInfectAll",
+    "params": [
+     {
+      "name": "grid",
+      "type": "integer[][]"
+     },
+     {
+      "name": "threshold",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 2 of 5: days until every plant is infected, or -1 (inferred)",
+   "oracle_constant": "CIA"
+  },
+  {
+   "uid": "hack2hire:69d414a479bf03c0074bcec5",
+   "variant_id": "69d414a479bf03c0074bcec5",
+   "variant_ordinal": 3,
+   "title": "Cellular Infection Spreading",
+   "source": {
+    "post_id": "69d4147079bf03c0074bcec0",
+    "group_title": "Cellular Infection Spreading",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0/practice?questionId=69d414a479bf03c0074bcec5",
+    "preview_response_sha256": "42f65105a8ec3494485b9ef507762a35e361347a9b35cc71c68db1784c8a7a68",
+    "preview_content_sha256": "5f3e9cd86546f04619c0d33d79e6d8e2bf6832d57e6c78271728fe92115c1988",
+    "preview_characters": 657,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d4147079bf03c0074bcec0.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 5
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 994; an m x n grid of plants, 0 healthy and 1 infected; each day all plants update at once; a healthy plant becomes infected when at least threshold of its 8 neighbours are infected; infection is permanent (the question is cut off)",
+    "algorithmTags: BREADTH_FIRST_SEARCH",
+    "codingQuestions: 5 variant ids, no per-variant text"
+   ],
+   "inferred_spec": "grid is a non-empty rectangular matrix of 0 (healthy) and 1 (infected) and threshold is an integer from 1 to 8. Each day, every healthy plant with at least threshold infected plants among its up to 8 neighbours (diagonals included) becomes infected, all at once, using the state at the start of the day; infected plants stay infected. Day d is the d-th such update; initially infected plants have infection day 0. Return the grid once spreading has stopped (a new matrix).",
+   "inference_uncertainty": "high: the spreading rule is in the preview; the question for this variant (the final state) is inferred; the bounds are inferred",
+   "inferred_interface": {
+    "name": "finalState",
+    "params": [
+     {
+      "name": "grid",
+      "type": "integer[][]"
+     },
+     {
+      "name": "threshold",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 3 of 5: final state after spreading stops (inferred)",
+   "oracle_constant": "CFG"
+  },
+  {
+   "uid": "hack2hire:6a4ff2eb665efda9311f57a7",
+   "variant_id": "6a4ff2eb665efda9311f57a7",
+   "variant_ordinal": 4,
+   "title": "Cellular Infection Spreading",
+   "source": {
+    "post_id": "69d4147079bf03c0074bcec0",
+    "group_title": "Cellular Infection Spreading",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0/practice?questionId=6a4ff2eb665efda9311f57a7",
+    "preview_response_sha256": "42f65105a8ec3494485b9ef507762a35e361347a9b35cc71c68db1784c8a7a68",
+    "preview_content_sha256": "5f3e9cd86546f04619c0d33d79e6d8e2bf6832d57e6c78271728fe92115c1988",
+    "preview_characters": 657,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d4147079bf03c0074bcec0.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 5
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 994; an m x n grid of plants, 0 healthy and 1 infected; each day all plants update at once; a healthy plant becomes infected when at least threshold of its 8 neighbours are infected; infection is permanent (the question is cut off)",
+    "algorithmTags: BREADTH_FIRST_SEARCH",
+    "codingQuestions: 5 variant ids, no per-variant text"
+   ],
+   "inferred_spec": "grid is a non-empty rectangular matrix of 0 (healthy) and 1 (infected) and threshold is an integer from 1 to 8. Each day, every healthy plant with at least threshold infected plants among its up to 8 neighbours (diagonals included) becomes infected, all at once, using the state at the start of the day; infected plants stay infected. Day d is the d-th such update; initially infected plants have infection day 0. days is a non-negative integer. Return the grid after exactly days days (a new matrix).",
+   "inference_uncertainty": "high: the spreading rule is in the preview; the question for this variant (the state after a given number of days, with days possibly far beyond the time the spread stops) is inferred; the bounds are inferred",
+   "inferred_interface": {
+    "name": "stateAfterDays",
+    "params": [
+     {
+      "name": "grid",
+      "type": "integer[][]"
+     },
+     {
+      "name": "threshold",
+      "type": "integer"
+     },
+     {
+      "name": "days",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 4 of 5: state after a given number of days (inferred)",
+   "oracle_constant": "CGD"
+  },
+  {
+   "uid": "hack2hire:6a4ff779665efda9311f57b5",
+   "variant_id": "6a4ff779665efda9311f57b5",
+   "variant_ordinal": 5,
+   "title": "Cellular Infection Spreading",
+   "source": {
+    "post_id": "69d4147079bf03c0074bcec0",
+    "group_title": "Cellular Infection Spreading",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d4147079bf03c0074bcec0/practice?questionId=6a4ff779665efda9311f57b5",
+    "preview_response_sha256": "42f65105a8ec3494485b9ef507762a35e361347a9b35cc71c68db1784c8a7a68",
+    "preview_content_sha256": "5f3e9cd86546f04619c0d33d79e6d8e2bf6832d57e6c78271728fe92115c1988",
+    "preview_characters": 657,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d4147079bf03c0074bcec0.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 5
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 994; an m x n grid of plants, 0 healthy and 1 infected; each day all plants update at once; a healthy plant becomes infected when at least threshold of its 8 neighbours are infected; infection is permanent (the question is cut off)",
+    "algorithmTags: BREADTH_FIRST_SEARCH",
+    "codingQuestions: 5 variant ids, no per-variant text"
+   ],
+   "inferred_spec": "grid is a non-empty rectangular matrix of 0 (healthy) and 1 (infected) and threshold is an integer from 1 to 8. Each day, every healthy plant with at least threshold infected plants among its up to 8 neighbours (diagonals included) becomes infected, all at once, using the state at the start of the day; infected plants stay infected. Day d is the d-th such update; initially infected plants have infection day 0. Return a matrix holding each plant's infection day, or -1 for a plant that is never infected.",
+   "inference_uncertainty": "high: the spreading rule is in the preview; the question for this variant (the infection day of every plant) is inferred; the bounds are inferred",
+   "inferred_interface": {
+    "name": "infectionDays",
+    "params": [
+     {
+      "name": "grid",
+      "type": "integer[][]"
+     },
+     {
+      "name": "threshold",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 5 of 5: infection day of every plant (inferred)",
+   "oracle_constant": "CID"
+  },
+  {
+   "uid": "hack2hire:69ebd458068f42e15508912a",
+   "variant_id": "69ebd458068f42e15508912a",
+   "variant_ordinal": 1,
+   "title": "Optimize Transition from Elevator to Stairs",
+   "source": {
+    "post_id": "69ebd453068f42e155089129",
+    "group_title": "Optimize Transition from Elevator to Stairs",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69ebd453068f42e155089129",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69ebd453068f42e155089129/practice?questionId=69ebd458068f42e15508912a",
+    "preview_response_sha256": "d42eae6e2e80382eeeace6fe9d4a465cd0ab2aac8a72471f1ac305b2c0816e87",
+    "preview_content_sha256": "2c48aa74d6694f24e751ca4f7c9a75ac74c9ef729848a472a974444f70f09d6e",
+    "preview_characters": 586,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69ebd453068f42e155089129.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: n floors from floor 0; the elevator covers the first k floors, adding k * e1 energy and k * t1 time; each later stair floor takes ceil(c / currEnergy) time and uses e2 energy, and the energy at the start of each stair floor must stay strictly positive (the question is cut off)",
+    "algorithmTags: BINARY_SEARCH"
+   ],
+   "inferred_spec": "n, e1, t1, e2 and c are positive integers. Choose k with 0 <= k <= n. Energy starts at 0; after the elevator it is k * e1 and the time is k * t1. Then each of the n - k stair floors, in turn, requires the current energy E to be positive, adds ceil(c / E) to the time and lowers E by e2. A choice of k is feasible when the energy is positive before every stair floor. Return the minimum total time over all feasible k.",
+   "inference_uncertainty": "high: the cost model is in the preview; the question (minimum total time over the switch floor k, rather than the best k or a time limit), the starting energy of 0 and the bounds are inferred",
+   "inferred_interface": {
+    "name": "minimumTotalTime",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "e1",
+      "type": "integer"
+     },
+     {
+      "name": "t1",
+      "type": "integer"
+     },
+     {
+      "name": "e2",
+      "type": "integer"
+     },
+     {
+      "name": "c",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "OTE"
+  },
+  {
+   "uid": "hack2hire:68dc36c49736cfa4e9062419",
+   "variant_id": "68dc36c49736cfa4e9062419",
+   "variant_ordinal": 1,
+   "title": "Partition Array by Equivalence Function",
+   "source": {
+    "post_id": "68dc08499736cfa4e90623e4",
+    "group_title": "Partition Array by Equivalence Function",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68dc08499736cfa4e90623e4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68dc08499736cfa4e90623e4/practice?questionId=68dc36c49736cfa4e9062419",
+    "preview_response_sha256": "e8acfe63e8ba2eeace7cf6eb6845780ce749a79f1454066a262f6166e81f8e1c",
+    "preview_content_sha256": "7bdcf86ac9382d47fec9e7a21eae67237bec8fbc433a042c51df741a301d4514",
+    "preview_characters": 498,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68dc08499736cfa4e90623e4.json",
+    "algorithm_tags": [
+     "UNION_FIND"
+    ],
+    "companies": [
+     "BLOOMBERG"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: an integer array nums and a function equiv(x, y) that is a valid equivalence relation; partition nums into groups by that relation (the conditions on the groups are cut off)",
+    "algorithmTags: UNION_FIND"
+   ],
+   "inferred_spec": "nums is a non-empty list of integers. The equivalence is given as data: equivalentPairs lists pairs [x, y] of integers declared equivalent, and the relation is the smallest equivalence containing them (values outside nums may link others). Return the groups: one list per equivalence class present in nums, holding that class's elements in their original order (duplicates kept), with groups ordered by the index of their first element.",
+   "inference_uncertainty": "high: the input array and the equivalence relation are in the preview; representing equiv by generating pairs (since a function cannot be passed as data), the group order and the element order are inferred; the preview words \"groups of subarrays\" might instead mean contiguous runs",
+   "inferred_interface": {
+    "name": "partitionByEquivalence",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "equivalentPairs",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PAE"
+  }
+ ]
+}

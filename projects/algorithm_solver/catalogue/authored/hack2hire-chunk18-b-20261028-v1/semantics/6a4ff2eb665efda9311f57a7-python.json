@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a4ff2eb665efda9311f57a7",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "grid",
+  "threshold",
+  "days"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "stateAfterDays",
+  "params": [
+   {
+    "name": "grid",
+    "type": "integer[][]"
+   },
+   {
+    "name": "threshold",
+    "type": "integer"
+   },
+   {
+    "name": "days",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate day by day on a copy of the grid, counting the 8 neighbours of every healthy plant each day, until a day infects nothing, stopping after days days",
+  "candidate_design": "multi-source breadth-first search by days: keep for every healthy plant the number of infected neighbours; when a plant is infected on day d, add one to each healthy neighbour and put a neighbour that reaches threshold into the day d + 1 frontier; a plant is infected after days days exactly when its infection day is at most days",
+  "complexity_target": "O(m * n) time/O(m * n) space, independent of days"
+ },
+ "source_sha256": "e5e66cad8098ee4348faea7c2aea0853318f79402994520f606afb3432d0c166",
+ "wrapper": "Solution.stateAfterDays"
+}

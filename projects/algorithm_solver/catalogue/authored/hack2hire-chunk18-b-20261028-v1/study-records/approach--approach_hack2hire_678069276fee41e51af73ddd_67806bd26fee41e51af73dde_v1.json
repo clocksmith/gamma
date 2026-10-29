@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+   "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+   "selector": "/problems/hack2hire:67806bd26fee41e51af73dde"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+   "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+   "selector": "/variants/hack2hire:67806bd26fee41e51af73dde"
+  }
+ ],
+ "problemId": "hack2hire:678069276fee41e51af73ddd",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/contract--contract_hack2hire_678069276fee41e51af73ddd_67806bd26fee41e51af73dde_authored-v1.json",
+  "sha256": "15652874ccdc2303cf3859e91129ce7d16892c885723bb3f96676a1fce41ec8d"
+ },
+ "title": {
+  "status": "present",
+  "value": "scan left to right with a stack of pending operators and a count of finished operands for each; emit operands immediately and emit an operator when its second operand finishes, cascading upward; output collected in a list and joined once",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+    "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+    "selector": "/problems/hack2hire:67806bd26fee41e51af73dde/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "scan left to right with a stack of pending operators and a count of finished operands for each; emit operands immediately and emit an operator when its second operand finishes, cascading upward; output collected in a list and joined once. Complexity target: O(n) time/O(n) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+    "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+    "selector": "/problems/hack2hire:67806bd26fee41e51af73dde"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Converting between expression notations in linear time"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:67806bd26fee41e51af73dde/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "The left-to-right stack avoids recursion and quadratic string building; the right-to-left string stack is shorter to write but concatenates long strings"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:67806bd26fee41e51af73dde/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "the stack holds the open operators in nesting order",
+   "each open operator has 0 or 1 finished operand"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:67806bd26fee41e51af73dde/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "In prefix form an operator is complete once both of its operands are complete.",
+   "Operands keep their order in postfix form; only operators move, to just after their second operand.",
+   "Keep a stack of open operators with a count of finished operands; on each finished operand, pop and emit every operator whose count reaches two."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:67806bd26fee41e51af73dde/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "scan left to right with a stack of pending operators and a count of finished operands for each; emit operands immediately and emit an operator when its second operand finishes, cascading upward; output collected in a list and joined once",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+      "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+      "selector": "/problems/hack2hire:67806bd26fee41e51af73dde/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) time/O(n) space; the independent reference (recursive descent: read an operator, convert its first and second operand recursively, then append the operator) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+      "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+      "selector": "/problems/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "In prefix form an operator is complete once both of its operands are complete.",
+     "Operands keep their order in postfix form; only operators move, to just after their second operand."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_678069276fee41e51af73ddd_67806bd26fee41e51af73dde_approach-native_v1.json",
+    "sha256": "d71190cc85fa2742f5ac24c2da7d78d062dd18ab2744011a2c9cbe8d4ca4ad48"
+   }
+  },
+  {
+   "id": "approach:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper prefixToPostfix, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+      "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+      "selector": "/problems/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Keep a stack of open operators with a count of finished operands; on each finished operand, pop and emit every operator whose count reaches two."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_678069276fee41e51af73ddd_67806bd26fee41e51af73dde_python_v1.json",
+     "sha256": "4348f2e62629680adb073ad1a55c24e3b68087218ad3df7a5fef177879e3643d"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_678069276fee41e51af73ddd_67806bd26fee41e51af73dde_javascript_v1.json",
+     "sha256": "6c94eb93297d1b66b5c60015031ebe65d729b5ceea6d3065ccaf433eccce2f22"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_678069276fee41e51af73ddd_67806bd26fee41e51af73dde_approach-native_v1.json",
+    "sha256": "d71190cc85fa2742f5ac24c2da7d78d062dd18ab2744011a2c9cbe8d4ca4ad48"
+   }
+  },
+  {
+   "id": "approach:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (recursive descent: read an operator, convert its first and second operand recursively, then append the operator) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+      "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+      "selector": "/problems/hack2hire:67806bd26fee41e51af73dde/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/2/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/test_oracles.py",
+      "sha256": "c5f90d068c0f9902684fb86e3dcc870cca7ebfa922d9a008f75a349d7b5a8b0f",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:67806bd26fee41e51af73dde"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_678069276fee41e51af73ddd_67806bd26fee41e51af73dde_approach-native_v1.json",
+    "sha256": "d71190cc85fa2742f5ac24c2da7d78d062dd18ab2744011a2c9cbe8d4ca4ad48"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:678069276fee41e51af73ddd:67806bd26fee41e51af73dde:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_678069276fee41e51af73ddd_67806bd26fee41e51af73dde_approach-native_v1.json",
+  "sha256": "d71190cc85fa2742f5ac24c2da7d78d062dd18ab2744011a2c9cbe8d4ca4ad48"
+ }
+}

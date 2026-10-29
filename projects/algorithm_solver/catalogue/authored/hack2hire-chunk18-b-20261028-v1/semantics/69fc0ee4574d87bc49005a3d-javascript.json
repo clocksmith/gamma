@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69fc0ee4574d87bc49005a3d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "totalTask",
+  "totalModel",
+  "totalHuman",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "scheduleTasks",
+  "params": [
+   {
+    "name": "totalTask",
+    "type": "integer"
+   },
+   {
+    "name": "totalModel",
+    "type": "integer"
+   },
+   {
+    "name": "totalHuman",
+    "type": "integer"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate the greedy literally: per assignment, scan every human and every model for the least loaded one not yet on the current task",
+  "candidate_design": "the greedy is round robin: assignment number q (counting from 0 over the whole schedule) gets human q mod totalHuman and model q mod totalModel, so each triple is written directly",
+  "complexity_target": "O(totalTask * k) time/O(totalTask * k) space for the output"
+ },
+ "source_sha256": "e7db6d78387c6ba7f788801d0f979b36261ee3da98738e6ad9a2465872326e09",
+ "wrapper": "named export scheduleTasks"
+}

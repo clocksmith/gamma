@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69fc131a574d87bc49005a6c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "totalTask",
+  "totalModel",
+  "totalHuman",
+  "k",
+  "schedule"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "isValidSchedule",
+  "params": [
+   {
+    "name": "totalTask",
+    "type": "integer"
+   },
+   {
+    "name": "totalModel",
+    "type": "integer"
+   },
+   {
+    "name": "totalHuman",
+    "type": "integer"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   },
+   {
+    "name": "schedule",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "parse every label with a regular expression, group triples by task and compare every pair of triples of a task",
+  "candidate_design": "one pass: parse each label by hand, count triples per task, and keep one hash set of (task, human) and one of (task, model); fail on the first duplicate or malformed label, then check every count equals k",
+  "complexity_target": "O(len(schedule) + totalTask) time/O(len(schedule)) space"
+ },
+ "source_sha256": "6b19390b33d5a2b05ac2fdaf3c75b7ebb13801eec17ae1ee7ff0cede7184322b",
+ "wrapper": "Solution.isValidSchedule"
+}

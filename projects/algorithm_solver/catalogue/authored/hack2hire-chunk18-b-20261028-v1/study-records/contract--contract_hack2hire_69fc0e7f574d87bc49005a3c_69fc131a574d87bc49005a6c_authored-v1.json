@@ -1,0 +1,413 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69fc0e7f574d87bc49005a3c:69fc131a574d87bc49005a6c:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+   "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69fc0e7f574d87bc49005a3c.json",
+   "sha256": "a03c7f298246994911afa6aae766f8941cc6423e716fec3fe1a0d56494ca8812",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+   "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+   "selector": "/variants/hack2hire:69fc131a574d87bc49005a6c"
+  }
+ ],
+ "problemId": "hack2hire:69fc0e7f574d87bc49005a3c",
+ "variantId": "69fc131a574d87bc49005a6c",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 2 of 2: validate a proposed schedule",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69fc131a574d87bc49005a6c/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "totalTask, totalModel, totalHuman and k are positive integers and schedule is a list of string triples [task, model, human]. The schedule is valid when every triple names a task \"t<i>\" with 1 <= i <= totalTask, a model \"m<j>\" with 1 <= j <= totalModel and a human \"h<l>\" with 1 <= l <= totalHuman (decimal without leading zeros), every task appears in exactly k triples, and no two triples of the same task share a human or share a model. Return whether schedule is valid.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "totalTask, totalModel, totalHuman and k are positive integers and schedule is a list of string triples [task, model, human].",
+   "The schedule is valid when every triple names a task \"t<i>\" with 1 <= i <= totalTask, a model \"m<j>\" with 1 <= j <= totalModel and a human \"h<l>\" with 1 <= l <= totalHuman (decimal without leading zeros), every task appears in exactly k triples, and no two triples of the same task share a human or share a model.",
+   "Return whether schedule is valid."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= totalTask <= 1e5",
+   "1 <= totalModel, totalHuman <= 1e4",
+   "1 <= k <= 50",
+   "0 <= schedule.length <= 1e5",
+   "every triple has three strings of 1 to 8 characters from a-z and 0-9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69fc131a574d87bc49005a6c/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: tasks t1..t{totalTask}, models m1..m{totalModel} and humans h1..h{totalHuman} with integer k; an assignment is [task, model, human]; a task may appear in several assignments; return any valid schedule as a list of assignments (the validity conditions are cut off); algorithmTags: GREEDY; codingQuestions: 2 variant ids, no per-variant text; preview response sha256 f3cea8acbc97a6564b80d047823570ad7cb178e53a8a2735fcac79503b266a48"
+   },
+   {
+    "statement": "Uncertainty: high: the preview defines the labels and triples only; the second variant is inferred to validate a proposed schedule against the same inferred conditions as variant 1 (k triples per task, distinct humans and distinct models within a task), which are not visible in the preview",
+    "basis": "the public group preview is partial (735 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 2 of 2: validate a schedule (inferred; no per-variant text is public)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/6/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/6/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/6/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are labels like \"t01\" accepted?",
+   "May a task appear more than k times?",
+   "Are triples in the wrong order (for example a human in the model slot) invalid?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69fc131a574d87bc49005a6c/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     1,
+     1,
+     1,
+     1,
+     []
+    ],
+    "output": false,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     3,
+     4,
+     5,
+     4,
+     [
+      [
+       "t3",
+       "m3",
+       "h2"
+      ],
+      [
+       "t1",
+       "m3",
+       "h3"
+      ],
+      [
+       "t3",
+       "m1",
+       "h5"
+      ],
+      [
+       "t2",
+       "m3",
+       "h5"
+      ],
+      [
+       "t2",
+       "m2",
+       "h3"
+      ],
+      [
+       "t2",
+       "m4",
+       "h2"
+      ],
+      [
+       "t3",
+       "m2",
+       "h1"
+      ],
+      [
+       "t1",
+       "m1",
+       "h5"
+      ],
+      [
+       "t1",
+       "m4",
+       "h4"
+      ],
+      [
+       "t3",
+       "m4",
+       "h4"
+      ],
+      [
+       "t2",
+       "m1",
+       "h1"
+      ],
+      [
+       "t1",
+       "m2",
+       "h1"
+      ]
+     ]
+    ],
+    "output": true,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69fc131a574d87bc49005a6c/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/oracles.py",
+    "sha256": "bcb9402fb9a425489d98abb859edefeeebaf6b53831e620b9984f7fed502811f",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def isValidSchedule(totalTask, totalModel, totalHuman, k, schedule) -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/69fc131a574d87bc49005a6c-python.json",
+     "inferredInterface": {
+      "name": "isValidSchedule",
+      "params": [
+       {
+        "name": "totalTask",
+        "type": "integer"
+       },
+       {
+        "name": "totalModel",
+        "type": "integer"
+       },
+       {
+        "name": "totalHuman",
+        "type": "integer"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       },
+       {
+        "name": "schedule",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/69fc131a574d87bc49005a6c-python.json",
+      "sha256": "9af01e8d06371e4b6d1e46ce51ad72b29cecc836c615a35903d6cb808f70d82c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function isValidSchedule(totalTask, totalModel, totalHuman, k, schedule) /* -> boolean */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/69fc131a574d87bc49005a6c-javascript.json",
+     "inferredInterface": {
+      "name": "isValidSchedule",
+      "params": [
+       {
+        "name": "totalTask",
+        "type": "integer"
+       },
+       {
+        "name": "totalModel",
+        "type": "integer"
+       },
+       {
+        "name": "totalHuman",
+        "type": "integer"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       },
+       {
+        "name": "schedule",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/69fc131a574d87bc49005a6c-javascript.json",
+      "sha256": "cbe667bf9a71643d83a5bcaab35176c34ea350fe72a1a82d785381b0269b30dd",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/6/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

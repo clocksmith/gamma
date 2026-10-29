@@ -1,0 +1,377 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68dc08499736cfa4e90623e4:68dc36c49736cfa4e9062419:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+   "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+   "selector": "/problems/15"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68dc08499736cfa4e90623e4.json",
+   "sha256": "b1d133ce28405a218d51fcf077f426623c4ac990992288c1a6e2b7da032c0f1f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+   "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+   "selector": "/variants/hack2hire:68dc36c49736cfa4e9062419"
+  }
+ ],
+ "problemId": "hack2hire:68dc08499736cfa4e90623e4",
+ "variantId": "68dc36c49736cfa4e9062419",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: group elements by a generated equivalence",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:68dc36c49736cfa4e9062419/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "nums is a non-empty list of integers. The equivalence is given as data: equivalentPairs lists pairs [x, y] of integers declared equivalent, and the relation is the smallest equivalence containing them (values outside nums may link others). Return the groups: one list per equivalence class present in nums, holding that class's elements in their original order (duplicates kept), with groups ordered by the index of their first element.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "nums is a non-empty list of integers.",
+   "The equivalence is given as data: equivalentPairs lists pairs [x, y] of integers declared equivalent, and the relation is the smallest equivalence containing them (values outside nums may link others).",
+   "Return the groups: one list per equivalence class present in nums, holding that class's elements in their original order (duplicates kept), with groups ordered by the index of their first element."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= nums.length <= 1e5",
+   "0 <= equivalentPairs.length <= 1e5",
+   "-1e9 <= values <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:68dc36c49736cfa4e9062419/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: an integer array nums and a function equiv(x, y) that is a valid equivalence relation; partition nums into groups by that relation (the conditions on the groups are cut off); algorithmTags: UNION_FIND; preview response sha256 e8acfe63e8ba2eeace7cf6eb6845780ce749a79f1454066a262f6166e81f8e1c"
+   },
+   {
+    "statement": "Uncertainty: high: the input array and the equivalence relation are in the preview; representing equiv by generating pairs (since a function cannot be passed as data), the group order and the element order are inferred; the preview words \"groups of subarrays\" might instead mean contiguous runs",
+    "basis": "the public group preview is partial (498 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/15/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/15/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/15/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is equiv given: as a callable, a key function or pairs?",
+   "Are the groups ordered by first appearance and the elements by index?",
+   "Are groups contiguous subarrays or arbitrary subsets?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:68dc36c49736cfa4e9062419/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      6
+     ],
+     []
+    ],
+    "output": [
+     [
+      6
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      3,
+      2,
+      1,
+      0,
+      2,
+      1,
+      4,
+      3,
+      1,
+      0
+     ],
+     [
+      [
+       1,
+       7
+      ],
+      [
+       2,
+       7
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       2,
+       6
+      ]
+     ]
+    ],
+    "output": [
+     [
+      3,
+      2,
+      1,
+      0,
+      2,
+      1,
+      3,
+      1,
+      0
+     ],
+     [
+      4
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:68dc36c49736cfa4e9062419/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/oracles.py",
+    "sha256": "bcb9402fb9a425489d98abb859edefeeebaf6b53831e620b9984f7fed502811f",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def partitionByEquivalence(nums, equivalentPairs) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/68dc36c49736cfa4e9062419-python.json",
+     "inferredInterface": {
+      "name": "partitionByEquivalence",
+      "params": [
+       {
+        "name": "nums",
+        "type": "integer[]"
+       },
+       {
+        "name": "equivalentPairs",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/68dc36c49736cfa4e9062419-python.json",
+      "sha256": "c71a9852b3be29a7e961f06f6ec6db7e58894fe5054e0b7053cf87a606eb7300",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function partitionByEquivalence(nums, equivalentPairs) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/68dc36c49736cfa4e9062419-javascript.json",
+     "inferredInterface": {
+      "name": "partitionByEquivalence",
+      "params": [
+       {
+        "name": "nums",
+        "type": "integer[]"
+       },
+       {
+        "name": "equivalentPairs",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/68dc36c49736cfa4e9062419-javascript.json",
+      "sha256": "862a70da4e322204a0353823469be1bdff2f41d2aefd648b149302c24d8cf2e8",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/15/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/15/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

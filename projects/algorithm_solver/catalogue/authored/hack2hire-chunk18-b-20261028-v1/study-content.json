@@ -1,0 +1,1797 @@
+{
+ "schema": "gamma.hack2hire-chunk18-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:69a367fe6e73e4abccc9bfe1": {
+   "constraints": [
+    "1 <= s.length <= 1e5",
+    "s has only a-z"
+   ],
+   "clarifyingQuestions": [
+    "Is y a consonant?",
+    "What follows z?",
+    "Can the input contain capitals or other characters?"
+   ],
+   "hints": [
+    "Vowels never change, so only the 21 consonants need a rule.",
+    "The next consonant only depends on the letter, so a table of 26 entries answers every character.",
+    "Build the table once (skip vowels when stepping, wrap z to b) and join the mapped characters instead of concatenating in a loop."
+   ],
+   "invariants": [
+    "the table maps each vowel to itself and each consonant to a consonant",
+    "the output has the same length as s"
+   ],
+   "chooseWhen": [
+    "Per-character substitution with a fixed alphabet rule"
+   ],
+   "tradeoffs": [
+    "A lookup table is O(1) per character; stepping through the alphabet each time is simpler but repeats work"
+   ],
+   "variantLabel": "Single variant: replace each consonant by the next consonant",
+   "examples": [
+    {
+     "input": [
+      "a"
+     ],
+     "output": "a",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "abcdefghijklmnopqrstuvwxyz"
+     ],
+     "output": "acdfeghjiklmnpoqrstvuwxyzb",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68f599dba269f53ea0eff890": {
+   "constraints": [
+    "1 <= arr.length <= 1000",
+    "-1e9 <= arr[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are the columns ordered by value or by first appearance?",
+    "Do repeated values share a column?",
+    "Can the array be empty?"
+   ],
+   "hints": [
+    "The number of columns is the number of distinct values.",
+    "Sort the distinct values and remember the index of each one in a map.",
+    "Each row is a fresh list of zeros of that width with a 1 at the mapped index; never reuse one row object for several rows."
+   ],
+   "invariants": [
+    "every row contains exactly one 1",
+    "column j corresponds to the j-th smallest distinct value"
+   ],
+   "chooseWhen": [
+    "Encoding categorical integers as indicator vectors"
+   ],
+   "tradeoffs": [
+    "A value-to-index map makes each row O(d) to build; comparing against every column is the same order but does d comparisons per row"
+   ],
+   "variantLabel": "Single variant: one-hot matrix with sorted distinct columns",
+   "examples": [
+    {
+     "input": [
+      [
+       3
+      ]
+     ],
+     "output": [
+      [
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       3,
+       -1,
+       2,
+       2,
+       -1,
+       -3,
+       -2,
+       -1,
+       -2,
+       -2
+      ]
+     ],
+     "output": [
+      [
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       1,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       1,
+       0
+      ],
+      [
+       0,
+       0,
+       1,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0,
+       0,
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67806bd26fee41e51af73dde": {
+   "constraints": [
+    "1 <= expression.length <= 1e5",
+    "operands are single characters from A-Z, a-z, 0-9",
+    "operators are + - * / ^, all binary",
+    "the expression is valid"
+   ],
+   "clarifyingQuestions": [
+    "Are operands always a single character?",
+    "Which operators can appear, and are any unary?",
+    "Should invalid input be reported?"
+   ],
+   "hints": [
+    "In prefix form an operator is complete once both of its operands are complete.",
+    "Operands keep their order in postfix form; only operators move, to just after their second operand.",
+    "Keep a stack of open operators with a count of finished operands; on each finished operand, pop and emit every operator whose count reaches two."
+   ],
+   "invariants": [
+    "the stack holds the open operators in nesting order",
+    "each open operator has 0 or 1 finished operand"
+   ],
+   "chooseWhen": [
+    "Converting between expression notations in linear time"
+   ],
+   "tradeoffs": [
+    "The left-to-right stack avoids recursion and quadratic string building; the right-to-left string stack is shorter to write but concatenates long strings"
+   ],
+   "variantLabel": "Single variant: prefix to postfix conversion",
+   "examples": [
+    {
+     "input": [
+      "A"
+     ],
+     "output": "A",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "*/+*Ay*9C+/CA*C1-*-zBy-/1C1"
+     ],
+     "output": "Ay*9C*+CA/C1*+/zB-y*1C/1--*",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a23c6bc5f86173882e3d8d": {
+   "constraints": [
+    "0 <= text.length <= 1000",
+    "1 <= pattern.length <= 200",
+    "groups contain one or more letters or \".\" and are not nested; no \"*\" inside a group; \"*\" never follows \"*\" or \"(\""
+   ],
+   "clarifyingQuestions": [
+    "Must the whole text match, or is a substring match enough?",
+    "Can a group contain \".\"?",
+    "Can \"*\" follow \".\"?"
+   ],
+   "hints": [
+    "Split the pattern into units first; each unit is fixed text (letters and dots) with an optional star.",
+    "Let dp[i][u] say whether the suffix of text from i matches the units from u onward.",
+    "An unstarred unit of length g needs its contents at i and dp[i + g][u + 1]; a starred one is dp[i][u + 1] or (contents at i and dp[i + g][u]); fill i from the end."
+   ],
+   "invariants": [
+    "dp[len(text)][u] is true exactly when every unit from u on is starred",
+    "a starred unit consumes whole copies of its contents only"
+   ],
+   "chooseWhen": [
+    "Pattern matching with Kleene star over fixed-length units"
+   ],
+   "tradeoffs": [
+    "The table is polynomial; backtracking is shorter but exponential on patterns like many starred units before a mismatch"
+   ],
+   "variantLabel": "Single variant: whole-string match with starred letters and groups",
+   "examples": [
+    {
+     "input": [
+      "",
+      "a"
+     ],
+     "output": false,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "aaabbbab",
+      "(.)b*.*(.a)*b*"
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678dd668fa7ce9616e190fba": {
+   "constraints": [
+    "1 <= m, n <= 200",
+    "0 <= grid[i][j] <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Are diagonal cells connected?",
+    "What is returned when there is no land?",
+    "Is the answer the sum, the size or the number of islands?"
+   ],
+   "hints": [
+    "Each island is a connected component of positive cells.",
+    "Flood each unvisited land cell and add the values you reach.",
+    "Use an explicit stack (not recursion) and mark cells when you push them, so a 200 x 200 snake does not overflow the call stack."
+   ],
+   "invariants": [
+    "every land cell is counted in exactly one island sum",
+    "a cell is marked visited before its neighbours are explored"
+   ],
+   "chooseWhen": [
+    "Connected components with weights on a grid"
+   ],
+   "tradeoffs": [
+    "An explicit stack avoids recursion limits; union-find handles streaming cells but needs more bookkeeping"
+   ],
+   "variantLabel": "Single variant: largest island sum",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0
+       ]
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        5,
+        5,
+        2,
+        0,
+        0
+       ],
+       [
+        0,
+        4,
+        7,
+        0,
+        3,
+        8
+       ],
+       [
+        0,
+        2,
+        2,
+        0,
+        6,
+        0
+       ],
+       [
+        2,
+        2,
+        3,
+        0,
+        9,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        4,
+        9
+       ],
+       [
+        6,
+        2,
+        1,
+        0,
+        2,
+        0
+       ]
+      ]
+     ],
+     "output": 41,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69fc0ee4574d87bc49005a3d": {
+   "constraints": [
+    "1 <= totalTask <= 1e5",
+    "1 <= totalModel, totalHuman <= 1e4",
+    "1 <= k <= 50",
+    "totalTask * k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "What exactly makes a schedule valid: distinct humans per task, distinct models per task, workload limits?",
+    "Is any valid schedule accepted, or a specific one?",
+    "What should be returned when no valid schedule exists?"
+   ],
+   "hints": [
+    "A task needs k different humans and k different models, so k must not exceed either count.",
+    "Choosing the least loaded human with the smallest index keeps loads within one of each other.",
+    "Prove that this choice is round robin: the q-th assignment overall goes to human q mod totalHuman and model q mod totalModel, and k consecutive values are distinct."
+   ],
+   "invariants": [
+    "after q assignments, human loads differ by at most one and the first q mod totalHuman humans carry the extra one",
+    "the k assignments of a task use k consecutive indices"
+   ],
+   "chooseWhen": [
+    "Balanced assignment of resources to repeated jobs"
+   ],
+   "tradeoffs": [
+    "The closed form is O(1) per assignment; the literal greedy is easier to trust but scans every human and model"
+   ],
+   "variantLabel": "Variant 1 of 2: canonical balanced schedule",
+   "examples": [
+    {
+     "input": [
+      2,
+      3,
+      3,
+      2
+     ],
+     "output": [
+      [
+       "t1",
+       "m1",
+       "h1"
+      ],
+      [
+       "t1",
+       "m2",
+       "h2"
+      ],
+      [
+       "t2",
+       "m3",
+       "h3"
+      ],
+      [
+       "t2",
+       "m1",
+       "h1"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      3,
+      2,
+      4,
+      2
+     ],
+     "output": [
+      [
+       "t1",
+       "m1",
+       "h1"
+      ],
+      [
+       "t1",
+       "m2",
+       "h2"
+      ],
+      [
+       "t2",
+       "m1",
+       "h3"
+      ],
+      [
+       "t2",
+       "m2",
+       "h4"
+      ],
+      [
+       "t3",
+       "m1",
+       "h1"
+      ],
+      [
+       "t3",
+       "m2",
+       "h2"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69fc131a574d87bc49005a6c": {
+   "constraints": [
+    "1 <= totalTask <= 1e5",
+    "1 <= totalModel, totalHuman <= 1e4",
+    "1 <= k <= 50",
+    "0 <= schedule.length <= 1e5",
+    "every triple has three strings of 1 to 8 characters from a-z and 0-9"
+   ],
+   "clarifyingQuestions": [
+    "Are labels like \"t01\" accepted?",
+    "May a task appear more than k times?",
+    "Are triples in the wrong order (for example a human in the model slot) invalid?"
+   ],
+   "hints": [
+    "Validity splits into label format, per-task counts and per-task distinctness.",
+    "Parse each label once: the right letter, then a positive decimal without leading zeros within range.",
+    "Count triples per task and keep sets of (task, human) and (task, model) pairs; a repeated pair or a count different from k makes the schedule invalid."
+   ],
+   "invariants": [
+    "each (task, human) and (task, model) pair is seen at most once in a valid schedule",
+    "a valid schedule has exactly totalTask * k triples"
+   ],
+   "chooseWhen": [
+    "Checking a proposed assignment against per-group distinctness rules"
+   ],
+   "tradeoffs": [
+    "Hash sets give a linear check; comparing all pairs inside each task is simpler but quadratic in k"
+   ],
+   "variantLabel": "Variant 2 of 2: validate a proposed schedule",
+   "examples": [
+    {
+     "input": [
+      1,
+      1,
+      1,
+      1,
+      []
+     ],
+     "output": false,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      3,
+      4,
+      5,
+      4,
+      [
+       [
+        "t3",
+        "m3",
+        "h2"
+       ],
+       [
+        "t1",
+        "m3",
+        "h3"
+       ],
+       [
+        "t3",
+        "m1",
+        "h5"
+       ],
+       [
+        "t2",
+        "m3",
+        "h5"
+       ],
+       [
+        "t2",
+        "m2",
+        "h3"
+       ],
+       [
+        "t2",
+        "m4",
+        "h2"
+       ],
+       [
+        "t3",
+        "m2",
+        "h1"
+       ],
+       [
+        "t1",
+        "m1",
+        "h5"
+       ],
+       [
+        "t1",
+        "m4",
+        "h4"
+       ],
+       [
+        "t3",
+        "m4",
+        "h4"
+       ],
+       [
+        "t2",
+        "m1",
+        "h1"
+       ],
+       [
+        "t1",
+        "m2",
+        "h1"
+       ]
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a2db7bc5117d1b543565e24": {
+   "constraints": [
+    "1 <= capacity <= 1e4",
+    "at most 2e4 calls",
+    "function names: a lowercase letter or \"_\" followed by up to 15 of a-z, 0-9, \"_\"",
+    "values nest at most 3 levels; lists and objects have at most 6 items; object keys are 1 to 8 of a-z and \"_\"",
+    "integers within +-1e9; strings up to 12 printable ASCII characters"
+   ],
+   "clarifyingQuestions": [
+    "Should true and 1, or 1 and \"1\", give the same key?",
+    "Does the order of keyword arguments matter?",
+    "How are unhashable arguments such as lists and dicts handled?"
+   ],
+   "hints": [
+    "The key must be equal exactly when the calls are equal, and stable across runs (no id() or randomised hashing).",
+    "Serialise every value with a type tag, so true, 1 and \"1\" differ, and write object keys in sorted order so keyword order does not matter.",
+    "Use the canonical string as the key of an insertion-ordered map: delete and re-insert on a hit, evict the first key when the map is over capacity."
+   ],
+   "invariants": [
+    "two calls have equal keys exactly when they are the same call",
+    "the map iteration order is least to most recently used"
+   ],
+   "chooseWhen": [
+    "Memoising calls whose arguments are unhashable or order-insensitive"
+   ],
+   "tradeoffs": [
+    "A canonical string is easy to persist and compare; nested tuples avoid string building but cannot distinguish True from 1 in Python"
+   ],
+   "variantLabel": "Variant 1 of 2: canonical keys for positional and keyword arguments",
+   "examples": [
+    {
+     "input": [
+      [
+       "FunctionCallCache"
+      ],
+      [
+       [
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "FunctionCallCache",
+       "call",
+       "call",
+       "call",
+       "call",
+       "call",
+       "call"
+      ],
+      [
+       [
+        3
+       ],
+       [
+        "f",
+        [],
+        {}
+       ],
+       [
+        "g",
+        [
+         1
+        ],
+        {
+         "b": "a b"
+        }
+       ],
+       [
+        "g",
+        [],
+        {
+         "a": "1",
+         "b": "1"
+        }
+       ],
+       [
+        "f",
+        [
+         [
+          true
+         ],
+         [
+          1,
+          2
+         ]
+        ],
+        {
+         "b": {
+          "a": true
+         }
+        }
+       ],
+       [
+        "g",
+        [
+         false
+        ],
+        {
+         "b": [
+          2,
+          1
+         ],
+         "c_d": false
+        }
+       ],
+       [
+        "f",
+        [
+         true,
+         {
+          "a": true
+         }
+        ],
+        {
+         "c_d": false,
+         "b": [
+          true
+         ]
+        }
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a2db7be5117d1b543565e25": {
+   "constraints": [
+    "1 <= capacity <= 1e4",
+    "at most 2e4 calls",
+    "at most 50 functions with at most 6 parameters each",
+    "every call binds each parameter at most once and binds every required parameter",
+    "values as in variant 1 (nesting at most 3, at most 6 items, integers within +-1e9)"
+   ],
+   "clarifyingQuestions": [
+    "Do f(1) and f(a=1) hit the same entry?",
+    "Is an omitted argument the same as passing its default explicitly?",
+    "Can a call be invalid for its signature?"
+   ],
+   "hints": [
+    "Two calls are the same exactly when every parameter ends up with the same value.",
+    "Bind positional arguments by position, keywords by name and fill the rest from the defaults.",
+    "Serialise the bound values in parameter order with type tags; the parameter order fixes the layout, so the names need not be in the key."
+   ],
+   "invariants": [
+    "the bound value list has one entry per parameter",
+    "two calls have equal keys exactly when their bound values are the same"
+   ],
+   "chooseWhen": [
+    "Memoising functions called with a mix of positional, keyword and default arguments"
+   ],
+   "tradeoffs": [
+    "Binding first makes equivalent spellings share one entry; keying on the raw args and kwargs is simpler but misses those hits"
+   ],
+   "variantLabel": "Variant 2 of 2: signature-normalised keys with defaults",
+   "examples": [
+    {
+     "input": [
+      [
+       "FunctionCallCache"
+      ],
+      [
+       [
+        4,
+        {
+         "f": [
+          [
+           "a"
+          ],
+          [
+           "b",
+           0
+          ]
+         ]
+        }
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "FunctionCallCache",
+       "call",
+       "call",
+       "call",
+       "call"
+      ],
+      [
+       [
+        1,
+        {
+         "k_2": [
+          [
+           "p"
+          ],
+          [
+           "q"
+          ],
+          [
+           "r",
+           {
+            "z": true
+           }
+          ]
+         ],
+         "g": [
+          [
+           "x",
+           null
+          ],
+          [
+           "y",
+           [
+            1
+           ]
+          ]
+         ],
+         "f": [
+          [
+           "a"
+          ],
+          [
+           "b",
+           0
+          ]
+         ],
+         "h": []
+        }
+       ],
+       [
+        "g",
+        [],
+        {
+         "x": false
+        }
+       ],
+       [
+        "g",
+        [
+         false
+        ],
+        {}
+       ],
+       [
+        "g",
+        [],
+        {
+         "y": [
+          1
+         ],
+         "x": false
+        }
+       ],
+       [
+        "k_2",
+        [
+         false,
+         true
+        ],
+        {
+         "r": {
+          "z": true
+         }
+        }
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      true,
+      true,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d414a179bf03c0074bcec1": {
+   "constraints": [
+    "1 <= m, n <= 200",
+    "grid[i][j] is 0 or 1",
+    "1 <= threshold <= 8"
+   ],
+   "clarifyingQuestions": [
+    "Does the count include a day on which nothing changes?",
+    "Are diagonal neighbours counted?",
+    "Is the update simultaneous or in reading order?"
+   ],
+   "hints": [
+    "A plant can only become infected on the day after one of its neighbours was infected.",
+    "Keep a counter of infected neighbours for every healthy plant and update it only when a neighbour changes.",
+    "Process infections day by day: the plants infected on day d raise their neighbours' counters, and those reaching threshold form day d + 1."
+   ],
+   "invariants": [
+    "a healthy plant's counter equals its infected neighbours at the end of the current day",
+    "each plant enters a frontier at most once"
+   ],
+   "chooseWhen": [
+    "Simultaneous threshold spreading on a grid"
+   ],
+   "tradeoffs": [
+    "Counters make the total work O(8 m n); repeated full-grid simulation is O(days * m * n)"
+   ],
+   "variantLabel": "Variant 1 of 5: number of spreading days",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        1
+       ]
+      ],
+      8
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+       ],
+       [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+       ],
+       [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+       ],
+       [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ],
+       [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      ],
+      2
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d414a379bf03c0074bcec2": {
+   "constraints": [
+    "1 <= m, n <= 200",
+    "grid[i][j] is 0 or 1",
+    "1 <= threshold <= 8"
+   ],
+   "clarifyingQuestions": [
+    "What is returned when some plant can never be infected?",
+    "What is returned when every plant starts infected?",
+    "Are diagonal neighbours counted?"
+   ],
+   "hints": [
+    "A plant can only become infected on the day after one of its neighbours was infected.",
+    "Keep a counter of infected neighbours for every healthy plant and update it only when a neighbour changes.",
+    "Process infections day by day: the plants infected on day d raise their neighbours' counters, and those reaching threshold form day d + 1."
+   ],
+   "invariants": [
+    "a healthy plant's counter equals its infected neighbours at the end of the current day",
+    "each plant enters a frontier at most once"
+   ],
+   "chooseWhen": [
+    "Simultaneous threshold spreading on a grid"
+   ],
+   "tradeoffs": [
+    "Counters make the total work O(8 m n); repeated full-grid simulation is O(days * m * n)"
+   ],
+   "variantLabel": "Variant 2 of 5: days to infect every plant",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        1
+       ]
+      ],
+      8
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+       ],
+       [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+       ],
+       [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+       ],
+       [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+       ],
+       [
+        1,
+        0,
+        1,
+        1,
+        1,
+        0
+       ],
+       [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ],
+       [
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+       ]
+      ],
+      2
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d414a479bf03c0074bcec5": {
+   "constraints": [
+    "1 <= m, n <= 200",
+    "grid[i][j] is 0 or 1",
+    "1 <= threshold <= 8"
+   ],
+   "clarifyingQuestions": [
+    "Should the input grid be changed in place or a new grid returned?",
+    "Is the final state reached in finitely many days?",
+    "Are diagonal neighbours counted?"
+   ],
+   "hints": [
+    "A plant can only become infected on the day after one of its neighbours was infected.",
+    "Keep a counter of infected neighbours for every healthy plant and update it only when a neighbour changes.",
+    "Process infections day by day: the plants infected on day d raise their neighbours' counters, and those reaching threshold form day d + 1."
+   ],
+   "invariants": [
+    "a healthy plant's counter equals its infected neighbours at the end of the current day",
+    "each plant enters a frontier at most once"
+   ],
+   "chooseWhen": [
+    "Simultaneous threshold spreading on a grid"
+   ],
+   "tradeoffs": [
+    "Counters make the total work O(8 m n); repeated full-grid simulation is O(days * m * n)"
+   ],
+   "variantLabel": "Variant 3 of 5: final infection state",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        1
+       ]
+      ],
+      8
+     ],
+     "output": [
+      [
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+       ],
+       [
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ],
+       [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+       ],
+       [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ],
+       [
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      ],
+      1
+     ],
+     "output": [
+      [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a4ff2eb665efda9311f57a7": {
+   "constraints": [
+    "1 <= m, n <= 200",
+    "grid[i][j] is 0 or 1",
+    "1 <= threshold <= 8",
+    "0 <= days <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Can days exceed the time at which the spread stops?",
+    "Is day 0 the initial grid?",
+    "Are diagonal neighbours counted?"
+   ],
+   "hints": [
+    "A plant can only become infected on the day after one of its neighbours was infected.",
+    "Keep a counter of infected neighbours for every healthy plant and update it only when a neighbour changes.",
+    "Compute every plant's infection day once; the state after days days is then a comparison per plant, however large days is."
+   ],
+   "invariants": [
+    "a healthy plant's counter equals its infected neighbours at the end of the current day",
+    "each plant enters a frontier at most once"
+   ],
+   "chooseWhen": [
+    "Simultaneous threshold spreading on a grid"
+   ],
+   "tradeoffs": [
+    "Counters make the total work O(8 m n); repeated full-grid simulation is O(days * m * n)"
+   ],
+   "variantLabel": "Variant 4 of 5: state after a number of days",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        1
+       ]
+      ],
+      8,
+      0
+     ],
+     "output": [
+      [
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+       ],
+       [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+       ],
+       [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ],
+       [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+       ],
+       [
+        1,
+        0,
+        1,
+        1,
+        0,
+        1,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      ],
+      2,
+      0
+     ],
+     "output": [
+      [
+       1,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       1
+      ],
+      [
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       1
+      ],
+      [
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       1,
+       0,
+       1,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a4ff779665efda9311f57b5": {
+   "constraints": [
+    "1 <= m, n <= 200",
+    "grid[i][j] is 0 or 1",
+    "1 <= threshold <= 8"
+   ],
+   "clarifyingQuestions": [
+    "What value marks a plant that is never infected?",
+    "Do initially infected plants have day 0?",
+    "Are diagonal neighbours counted?"
+   ],
+   "hints": [
+    "A plant can only become infected on the day after one of its neighbours was infected.",
+    "Keep a counter of infected neighbours for every healthy plant and update it only when a neighbour changes.",
+    "Process infections day by day: the plants infected on day d raise their neighbours' counters, and those reaching threshold form day d + 1."
+   ],
+   "invariants": [
+    "a healthy plant's counter equals its infected neighbours at the end of the current day",
+    "each plant enters a frontier at most once"
+   ],
+   "chooseWhen": [
+    "Simultaneous threshold spreading on a grid"
+   ],
+   "tradeoffs": [
+    "Counters make the total work O(8 m n); repeated full-grid simulation is O(days * m * n)"
+   ],
+   "variantLabel": "Variant 5 of 5: infection day per plant",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        1
+       ]
+      ],
+      8
+     ],
+     "output": [
+      [
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        0,
+        1,
+        0,
+        0,
+        1
+       ],
+       [
+        1,
+        0,
+        1,
+        1,
+        0,
+        0
+       ],
+       [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+       ],
+       [
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+       ],
+       [
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+       ]
+      ],
+      2
+     ],
+     "output": [
+      [
+       0,
+       1,
+       0,
+       1,
+       1,
+       0
+      ],
+      [
+       0,
+       1,
+       0,
+       0,
+       1,
+       1
+      ],
+      [
+       0,
+       0,
+       1,
+       1,
+       0,
+       2
+      ],
+      [
+       1,
+       1,
+       1,
+       1,
+       2,
+       3
+      ],
+      [
+       1,
+       1,
+       0,
+       1,
+       2,
+       3
+      ],
+      [
+       0,
+       0,
+       1,
+       0,
+       1,
+       2
+      ],
+      [
+       0,
+       1,
+       1,
+       0,
+       1,
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69ebd458068f42e15508912a": {
+   "constraints": [
+    "1 <= n <= 1000",
+    "1 <= e1, t1, e2 <= 1e6",
+    "1 <= c <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "What is the energy before the elevator?",
+    "Is the answer the time or the floor k?",
+    "Can k be 0 or n?"
+   ],
+   "hints": [
+    "The energy before stair floor i (counting from 0) is k * e1 - i * e2, so feasibility only needs the last floor: k * e1 - (n - k - 1) * e2 > 0.",
+    "That condition is monotone in k, so binary search the smallest feasible k; k = n is always feasible.",
+    "Scan k upward: k * t1 + (n - k) is a lower bound on the total for k, which only grows faster than the stair savings once it passes the best; stop there."
+   ],
+   "invariants": [
+    "every k at least the smallest feasible one is feasible",
+    "the best time never increases during the scan"
+   ],
+   "chooseWhen": [
+    "Choosing a switch point between two cost regimes"
+   ],
+   "tradeoffs": [
+    "Pruning keeps typical inputs fast; the plain double loop is the same in the worst case but never stops early"
+   ],
+   "variantLabel": "Single variant: best switch from elevator to stairs",
+   "examples": [
+    {
+     "input": [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      5,
+      1,
+      10,
+      3,
+      100
+     ],
+     "output": 50,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68dc36c49736cfa4e9062419": {
+   "constraints": [
+    "1 <= nums.length <= 1e5",
+    "0 <= equivalentPairs.length <= 1e5",
+    "-1e9 <= values <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "How is equiv given: as a callable, a key function or pairs?",
+    "Are the groups ordered by first appearance and the elements by index?",
+    "Are groups contiguous subarrays or arbitrary subsets?"
+   ],
+   "hints": [
+    "An equivalence given by pairs is the connected components of the graph on values.",
+    "Union-find merges the pairs in near-linear time.",
+    "Walk nums once: the first time a root is seen it opens a new group; append each element to its root's group."
+   ],
+   "invariants": [
+    "two values share a root exactly when they are connected by pairs",
+    "groups appear in the order of their first element"
+   ],
+   "chooseWhen": [
+    "Grouping items by an equivalence given through generating pairs"
+   ],
+   "tradeoffs": [
+    "Union-find is near linear; label propagation is simple but can take many rounds on long chains"
+   ],
+   "variantLabel": "Single variant: group elements by a generated equivalence",
+   "examples": [
+    {
+     "input": [
+      [
+       6
+      ],
+      []
+     ],
+     "output": [
+      [
+       6
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       3,
+       2,
+       1,
+       0,
+       2,
+       1,
+       4,
+       3,
+       1,
+       0
+      ],
+      [
+       [
+        1,
+        7
+       ],
+       [
+        2,
+        7
+       ],
+       [
+        1,
+        0
+       ],
+       [
+        1,
+        3
+       ],
+       [
+        7,
+        2
+       ],
+       [
+        2,
+        6
+       ]
+      ]
+     ],
+     "output": [
+      [
+       3,
+       2,
+       1,
+       0,
+       2,
+       1,
+       3,
+       1,
+       0
+      ],
+      [
+       4
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}
