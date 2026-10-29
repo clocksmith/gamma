@@ -1,0 +1,36 @@
+{
+  "candidate_design": "union accounts sharing emails, then collect and sort each connected component",
+  "comparison": "unordered account groups, exact sorted emails",
+  "complexity_target": "O(E*n+E log E) conservative time bound with path compression; O(E+n) space",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "accountsMerge",
+    "params": [
+      {
+        "name": "accounts",
+        "type": "list<list<string>>"
+      }
+    ],
+    "return": {
+      "type": "list<list<string>>"
+    }
+  },
+  "parameters": [
+    "accounts"
+  ],
+  "problem_id": 721,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "union accounts sharing emails, then collect and sort each connected component",
+    "complexity_target": "O(E*n+E log E) conservative time bound with path compression; O(E+n) space",
+    "reference": "repeated email-set connected-component closure"
+  },
+  "source_sha256": "d8ba340690cb725a30bee0cd7c7450bda595e37235c609e8511c86c130789a9c",
+  "transport": "JSON values in official parameter order"
+}

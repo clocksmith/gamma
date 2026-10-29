@@ -1,0 +1,41 @@
+{
+  "candidate_design": "clone then insert into the copied BST; fresh output satisfies read-only input policy",
+  "comparison": "strict BST and exact inorder contents",
+  "complexity_target": "O(n) time/O(n) space including output clone",
+  "effects": "arguments unchanged; fresh output nodes, disjoint from input and other output parts",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "insertIntoBST",
+    "params": [
+      {
+        "name": "root",
+        "type": "TreeNode"
+      },
+      {
+        "name": "val",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "TreeNode"
+    }
+  },
+  "parameters": [
+    "root",
+    "val"
+  ],
+  "problem_id": 701,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "clone then insert into the copied BST; fresh output satisfies read-only input policy",
+    "complexity_target": "O(n) time/O(n) space including output clone",
+    "reference": "sorted contents plus independent strict BST observer"
+  },
+  "source_sha256": "6d2554bb76742b3f8ce72c4fc7e6bc1601def492c3d605ffc07f8185d0006911",
+  "transport": "binary tree: queue-order nullable array; solve receives native .val/.left/.right nodes"
+}

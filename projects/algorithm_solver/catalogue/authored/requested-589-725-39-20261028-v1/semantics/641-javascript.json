@@ -1,0 +1,108 @@
+{
+  "candidate_design": "ring-buffer deque with explicit size so all k slots are usable",
+  "comparison": "exact typed result under documented object transport",
+  "complexity_target": "O(1) per method/O(k) storage",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "classname": "MyCircularDeque",
+    "constructor": {
+      "params": [
+        {
+          "name": "k",
+          "type": "integer"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "insertFront",
+        "params": [
+          {
+            "name": "value",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "insertLast",
+        "params": [
+          {
+            "name": "value",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "deleteFront",
+        "params": [],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "deleteLast",
+        "params": [],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "getFront",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      },
+      {
+        "name": "getRear",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      },
+      {
+        "name": "isEmpty",
+        "params": [],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "isFull",
+        "params": [],
+        "return": {
+          "type": "boolean"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 641,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "ring-buffer deque with explicit size so all k slots are usable",
+    "complexity_target": "O(1) per method/O(k) storage",
+    "reference": "literal list deque model"
+  },
+  "source_sha256": "834fb7888f8d0985d3ed95306bd03a5ca2601ce020a1a84a33261c8e0ec9e9f6",
+  "transport": "class operation trace preserving constructor/method parameter order"
+}

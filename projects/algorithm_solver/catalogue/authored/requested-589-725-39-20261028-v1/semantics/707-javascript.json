@@ -1,0 +1,101 @@
+{
+  "candidate_design": "owned singly linked nodes, sentinel head, tail and size; no built-in linked-list library",
+  "comparison": "exact typed result under documented object transport",
+  "complexity_target": "head/tail insertion O(1); indexed operations O(index), O(n) storage",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "classname": "MyLinkedList",
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "index",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      },
+      {
+        "name": "addAtHead",
+        "params": [
+          {
+            "name": "val",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "addAtTail",
+        "params": [
+          {
+            "name": "val",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "addAtIndex",
+        "params": [
+          {
+            "name": "index",
+            "type": "integer"
+          },
+          {
+            "name": "val",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "deleteAtIndex",
+        "params": [
+          {
+            "name": "index",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 707,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "owned singly linked nodes, sentinel head, tail and size; no built-in linked-list library",
+    "complexity_target": "head/tail insertion O(1); indexed operations O(index), O(n) storage",
+    "reference": "literal Python list operations"
+  },
+  "source_sha256": "c8aa9b8ad18e71946d43f3e00201f29efbadbf9600c0db16603fb233bcc30647",
+  "transport": "class operation trace preserving constructor/method parameter order"
+}

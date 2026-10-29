@@ -1,0 +1,76 @@
+{
+  "candidate_design": "bounded min-heap retains the k largest observed values",
+  "comparison": "exact typed result under documented object transport",
+  "complexity_target": "constructor O(n log n) upper bound; add O(log k), O(n) constructor transient/O(k) retained storage",
+  "effects": "arguments unchanged; fresh result containers or immutable scalar; internal class state may change",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "classname": "KthLargest",
+    "constructor": {
+      "params": [
+        {
+          "name": "k",
+          "type": "integer"
+        },
+        {
+          "name": "nums",
+          "type": "integer[]"
+        },
+        {
+          "lang": "c",
+          "name": "numsSize",
+          "type": "integer",
+          "value": "size_2"
+        }
+      ]
+    },
+    "manual": false,
+    "methods": [
+      {
+        "name": "add",
+        "params": [
+          {
+            "name": "val",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "params": [
+      {
+        "name": "starts",
+        "type": "integer[]"
+      },
+      {
+        "name": "ends",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "dealloc": true,
+      "type": "list<boolean>"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 703,
+  "qualification": {
+    "reason": "Finite local development checks only; no independent isolated qualification or adoption",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "bounded min-heap retains the k largest observed values",
+    "complexity_target": "constructor O(n log n) upper bound; add O(log k), O(n) constructor transient/O(k) retained storage",
+    "reference": "literal accumulated values sorted after each add"
+  },
+  "source_sha256": "d599d433d0f1ed61ecec9f283b2f2b23d417e62c4f89ea24dc40e2794faca802",
+  "transport": "class operation trace preserving constructor/method parameter order"
+}
