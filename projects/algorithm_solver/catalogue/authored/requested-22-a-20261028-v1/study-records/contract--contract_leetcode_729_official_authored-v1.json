@@ -1,0 +1,493 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/assumptions",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1",
+        "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ef54bc8d5c5242d2e57cc746535e13aecff3bec355cf3ccccb33b419dc4e26e4"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+        "basis": "contracts.json records the official response sha256 da87bffbd942b18f85c08a9eb9e3637a2e76a84c08fc1810db43886e2e3e0fb9 and statement content sha256 4be42f031baa9e2535f0c422a8d86ac99970f794fabfcc87c36dd9aa4a685d4c; the official text is not stored on this machine."
+      },
+      {
+        "assumption": "The class methods are the contract; the generic top-level params/return in the official metaData are not.",
+        "basis": "README interpretation notes: the 729/731/732 metaData carries generic params/return (list<boolean>) that do not match the class methods, and constraint lines name start/end instead of startTime/endTime."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/clarifyingQuestions",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ef54bc8d5c5242d2e57cc746535e13aecff3bec355cf3ccccb33b419dc4e26e4"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "No; intervals are half-open, so they only touch.",
+        "basis": "Half-open interval definition used by the cohort validator and reference.",
+        "question": "Does an event ending at time t conflict with one starting at t?"
+      },
+      {
+        "answer": "No; only accepted bookings are stored.",
+        "basis": "Reference keeps only accepted bookings.",
+        "question": "Does a rejected booking count toward later conflicts?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/729-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ac965f9ad2a9190ee39299b66f363d9666866c0bdd9a64eea17f5a84bf59663a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/729-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "60f075b85b43806018b168ebf70c92546e06f5cffc03942b41e754d3b8afb3e1"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON trace result; no bool/int coercion"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/constraints",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c66c7fdce559c6312b230b0997eb61c1d484b4aa3cb13cb739d841e06634ecb7"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "0 <= startTime < endTime <= 10^9.",
+      "At most 1000 calls to book per calendar.",
+      "A trace starts with exactly one MyCalendar constructor call with no arguments, followed only by book calls."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/729-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ac965f9ad2a9190ee39299b66f363d9666866c0bdd9a64eea17f5a84bf59663a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/729-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "60f075b85b43806018b168ebf70c92546e06f5cffc03942b41e754d3b8afb3e1"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "native_state": "changes only through book",
+      "returned_mutable_containers": "fresh trace list",
+      "trace_inputs": "unchanged including nested argument lists"
+    }
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/examples",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "argument_lists": [
+            [],
+            [
+              5,
+              10
+            ],
+            [
+              8,
+              12
+            ],
+            [
+              10,
+              15
+            ]
+          ],
+          "operation_names": [
+            "MyCalendar",
+            "book",
+            "book",
+            "book"
+          ]
+        },
+        "explanation": "[8,12) overlaps [5,10); [10,15) only touches [5,10) at 10, so it fits.",
+        "output": [
+          null,
+          true,
+          false,
+          true
+        ]
+      },
+      {
+        "arguments": {
+          "argument_lists": [
+            [],
+            [
+              20,
+              30
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              4,
+              21
+            ],
+            [
+              5,
+              20
+            ]
+          ],
+          "operation_names": [
+            "MyCalendar",
+            "book",
+            "book",
+            "book",
+            "book"
+          ]
+        },
+        "explanation": "[4,21) overlaps both earlier events; [5,20) fills the gap exactly between them.",
+        "output": [
+          null,
+          true,
+          true,
+          false,
+          true
+        ]
+      }
+    ]
+  },
+  "id": "contract:leetcode:729:official:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/interfaces/python/declaration",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          }
+        ],
+        "status": "present",
+        "value": "class MyCalendar: def __init__(self); def book(self, startTime: int, endTime: int) -> bool; trace adapter def solve(operation_names: list[str], argument_lists: list[list[int]]) -> list"
+      },
+      "kind": "class",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1/official_interface",
+            "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "MyCalendar",
+          "constructor": {
+            "params": []
+          },
+          "methods": [
+            {
+              "name": "book",
+              "params": [
+                {
+                  "name": "startTime",
+                  "type": "integer"
+                },
+                {
+                  "name": "endTime",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "boolean"
+              }
+            }
+          ],
+          "params": [
+            {
+              "name": "starts",
+              "type": "integer[]"
+            },
+            {
+              "name": "ends",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "dealloc": true,
+            "type": "list<boolean>"
+          },
+          "systemdesign": true
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/interfaces/javascript/declaration",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "class MyCalendar { constructor(); book(startTime, endTime) -> bool }; module.exports = solve(operationNames, argumentLists) -> Array; module.exports.MyCalendar = MyCalendar"
+      },
+      "kind": "class",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1/official_interface",
+            "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "MyCalendar",
+          "constructor": {
+            "params": []
+          },
+          "methods": [
+            {
+              "name": "book",
+              "params": [
+                {
+                  "name": "startTime",
+                  "type": "integer"
+                },
+                {
+                  "name": "endTime",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "boolean"
+              }
+            }
+          ],
+          "params": [
+            {
+              "name": "starts",
+              "type": "integer[]"
+            },
+            {
+              "name": "ends",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "dealloc": true,
+            "type": "list<boolean>"
+          },
+          "systemdesign": true
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/1",
+      "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+    }
+  ],
+  "problemId": "leetcode:729",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/requirements",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1",
+        "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/729-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ac965f9ad2a9190ee39299b66f363d9666866c0bdd9a64eea17f5a84bf59663a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/729-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "60f075b85b43806018b168ebf70c92546e06f5cffc03942b41e754d3b8afb3e1"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "Treat each booking as the half-open interval [startTime, endTime); [a, b) and [b, c) do not overlap."
+      },
+      {
+        "id": "R2",
+        "text": "Accept a booking and return true only when it overlaps no previously accepted booking."
+      },
+      {
+        "id": "R3",
+        "text": "A rejected booking returns false and does not change the calendar."
+      },
+      {
+        "id": "R4",
+        "text": "The trace adapter solve(operation_names, argument_lists) creates one MyCalendar, returns null for the constructor and each book result in call order."
+      },
+      {
+        "id": "R5",
+        "text": "Do not modify the trace input lists; return a fresh result list."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/statement",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1",
+        "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+      }
+    ],
+    "status": "present",
+    "value": "Build a calendar that accepts events one at a time. Each event is a half-open time interval [startTime, endTime). An event may be added only if it shares no moment with any event already accepted; touching end-to-start is fine. book(startTime, endTime) adds the event and returns true if it fits, and otherwise leaves the calendar unchanged and returns false."
+  },
+  "variantId": "official",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1",
+        "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+      }
+    ],
+    "status": "present",
+    "value": "My Calendar I"
+  },
+  "version": 1
+}

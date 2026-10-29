@@ -1,0 +1,1645 @@
+{
+  "schema": "gamma.authored-study-content.v1",
+  "cohort": "requested-22-a-20261028-v1",
+  "scope": "Authored teaching content (paraphrased or inferred statements, requirements, constraints, assumptions, clarifying questions, own examples, interface declarations, approaches and complexity claims) behind this cohort's study.record.v1 records. Example outputs were produced by running both cohort candidates. Not qualification evidence.",
+  "variants": {
+    "726": {
+      "statement": "You are given a chemical formula as a string. An element name is one uppercase letter optionally followed by lowercase letters. Any element may be followed by a count of two or more; a missing count means one. Formulas can be concatenated, and a parenthesised sub-formula may be followed by a count that multiplies everything inside it. Return a string listing every element in alphabetical order, each followed by its total count, with the count left out when it is exactly one.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Parse element names as an uppercase letter followed by zero or more lowercase letters."
+        },
+        {
+          "id": "R2",
+          "text": "A count after an element or a closing parenthesis applies to that element or that whole group; a missing count means 1."
+        },
+        {
+          "id": "R3",
+          "text": "Nested groups multiply: an atom's total contribution is its own count times the counts of every group that encloses it."
+        },
+        {
+          "id": "R4",
+          "text": "Output elements sorted by name (ordinary string order), each followed by its total only when the total exceeds 1."
+        },
+        {
+          "id": "R5",
+          "text": "Do not modify the input; return a new string."
+        }
+      ],
+      "constraints": [
+        "Formula length is between 1 and 1000 characters.",
+        "The formula uses only letters, digits and parentheses, and is well formed.",
+        "Every element and group count, when present, is an integer greater than 1 with no leading zero.",
+        "Every final count fits in a signed 32-bit integer."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 0b0d130bcefeb8c8c34301130d653dccf65a0bb3e8a64b5730cbef761e181d68 and statement content sha256 61f3cb0b3cbc35d6459b77a7da636540e5d01c7b8c4f481897a046ad82f7b8c1; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "An explicit count of 1 after a closing parenthesis is accepted by the cohort validator even though counts must otherwise exceed one.",
+          "basis": "README statement interpretation notes for 726: the statement does not say whether an explicit 1 may follow ')'."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Can a group count be an explicit 1?",
+          "answer": "Unclear in the official statement; the cohort validator accepts it and the result is the same as omitting it.",
+          "basis": "README interpretation note for 726."
+        },
+        {
+          "question": "Are names compared case-sensitively when sorting?",
+          "answer": "Yes. Every name starts with an uppercase letter, so plain string order is alphabetical order.",
+          "basis": "Element name grammar."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            "CO2"
+          ],
+          "output": "CO2",
+          "explanation": "One carbon and two oxygen; the count 1 for carbon is omitted."
+        },
+        {
+          "args": [
+            "(NaCl)3Na"
+          ],
+          "output": "Cl3Na4",
+          "explanation": "The group contributes three Na and three Cl; the trailing Na adds one more."
+        },
+        {
+          "args": [
+            "Fe((OH)2Cu)2"
+          ],
+          "output": "Cu2FeH4O4",
+          "explanation": "OH is doubled inside a group that is doubled again, so O and H each total 4; Cu is inside only the outer group and totals 2; Fe stays 1."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(formula: str) -> str; class Solution: def countOfAtoms(self, formula: str) -> str"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(formula) -> string; module.exports = solve; module.exports.countOfAtoms(formula) -> string"
+        }
+      },
+      "approach": {
+        "title": "Right-to-left scan with a stack of group multipliers",
+        "explanation": "Read the formula backwards. Scanning from the right means a count is seen before the element or group it applies to, so it can be held as a pending number. A closing parenthesis (seen first when going right to left) opens a group: push the current multiplier times the pending count. An opening parenthesis closes the group: pop. An element name adds pending times the top multiplier to that element's total. One pass computes every total without building a tree, and a final sort produces the output.",
+        "chooseWhen": [
+          "Counts follow the thing they multiply, so reading backwards lets you know each multiplier before you meet the atoms it scales.",
+          "You need only totals, not the structure of the formula.",
+          "Nesting depth can be large and you want to avoid recursion limits."
+        ],
+        "tradeoffs": [
+          "A forward recursive-descent parser is easier to relate to the grammar, but needs recursion or a stack of partial count maps that are merged on every ')'.",
+          "Backward scanning needs care when extracting multi-digit numbers and multi-letter names, because they are read from their last character.",
+          "Totals are accumulated once per atom occurrence, so merging work is avoided entirely."
+        ],
+        "invariants": [
+          "The top of the multiplier stack is the product of the counts of all groups that enclose the current position.",
+          "pending holds the count that applies to the next element or group to the left, and is reset to 1 after use.",
+          "counts[name] equals the total contribution of all occurrences of name to the right of the scan position."
+        ],
+        "hints": [
+          "Where does a count appear relative to the thing it multiplies?",
+          "If you read the string from the end, every count arrives before its element or group.",
+          "Keep a stack whose top is the product of the counts of every group you are currently inside.",
+          "On ')' push top*pending, on '(' pop, on an element add pending*top to its total, and reset pending to 1 after each use."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Work out what multiplies each atom",
+            "question": "For a single atom occurrence, which numbers determine how much it contributes to the final total?",
+            "explanation": "An atom contributes its own count times the count of every enclosing group. The difficulty is that those group counts appear after the group, to the right.",
+            "rationale": "Seeing the contribution as a product of enclosing counts turns the task into tracking one running product, rather than building and merging maps.",
+            "instructions": [
+              "Take Fe((OH)2Cu)2 and write down the multiplier for each atom by hand.",
+              "Notice the order in which you had to read the digits to do it."
+            ],
+            "observations": [
+              "Each multiplier depends only on counts to the right of the atom.",
+              "Groups nest like a stack: the innermost group closes first."
+            ],
+            "hints": [
+              "Try reading the formula from the end.",
+              "What changes when you cross a parenthesis going right to left?"
+            ],
+            "requirementIds": [
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Implement the backward scan",
+            "question": "How do you extract numbers and names while scanning backwards, and keep the multiplier stack correct?",
+            "explanation": "Use an index i starting at the last character. A digit run is found by walking left while the previous character is a digit; a name by walking left while the character is lowercase, then including the uppercase letter. ')' pushes multipliers[-1]*pending, '(' pops, and each name adds pending*multipliers[-1] to its total. Both candidates then sort the names and print counts above 1.",
+            "rationale": "Every character is consumed exactly once, and the stack mirrors the nesting, so the totals are correct after one pass.",
+            "instructions": [
+              "Initialise counts as an empty map, multipliers as [1] and pending as 1.",
+              "While i >= 0, branch on digit, ')', '(' or letter as described, moving i left past the consumed token.",
+              "After any use of pending (by ')' or an element), reset it to 1.",
+              "Sort the names and join name plus count, omitting a count of 1."
+            ],
+            "observations": [
+              "The base multiplier 1 is never popped, because parentheses are balanced.",
+              "JavaScript Number is exact here because every product is bounded by a final 32-bit count."
+            ],
+            "hints": [
+              "When a lowercase letter is found, keep moving left until you pass the uppercase letter that starts the name.",
+              "Reading a digit run backwards: find its left end first, then parse the slice."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4",
+              "R5"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Check the tricky cases",
+            "question": "Which inputs exercise the parts of the scan that are easy to get wrong?",
+            "explanation": "Test multi-letter names, multi-digit counts, nested groups, a group with no count, and repeated elements across groups. Compare against a hand expansion or a forward parser on small inputs.",
+            "rationale": "Errors usually come from off-by-one token boundaries in the backward scan or from forgetting to reset pending.",
+            "instructions": [
+              "Run the examples, then 'Mg(OH)2', 'K4(ON(SO3)2)2' and a formula with a 2-digit count such as 'H50'.",
+              "Check that an element appearing in several groups is summed once in the output.",
+              "Check that the output never contains a count of 1."
+            ],
+            "observations": [
+              "A missing reset of pending shows up as an inflated count for the element just left of a group."
+            ],
+            "hints": [
+              "Expand small formulas by hand into a flat atom list and count.",
+              "Include deep nesting to confirm the stack products."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3",
+              "R4"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(L + U log U)",
+            "where": "L is formula length, U the number of distinct elements (sorting the output)"
+          },
+          {
+            "resource": "space",
+            "bound": "O(L)",
+            "where": "multiplier stack depth and the count map"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(L + U log U)",
+            "where": "L is formula length, U the number of distinct elements"
+          },
+          {
+            "resource": "space",
+            "bound": "O(L)",
+            "where": "multiplier stack depth and the count map"
+          }
+        ]
+      }
+    },
+    "729": {
+      "statement": "Build a calendar that accepts events one at a time. Each event is a half-open time interval [startTime, endTime). An event may be added only if it shares no moment with any event already accepted; touching end-to-start is fine. book(startTime, endTime) adds the event and returns true if it fits, and otherwise leaves the calendar unchanged and returns false.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Treat each booking as the half-open interval [startTime, endTime); [a, b) and [b, c) do not overlap."
+        },
+        {
+          "id": "R2",
+          "text": "Accept a booking and return true only when it overlaps no previously accepted booking."
+        },
+        {
+          "id": "R3",
+          "text": "A rejected booking returns false and does not change the calendar."
+        },
+        {
+          "id": "R4",
+          "text": "The trace adapter solve(operation_names, argument_lists) creates one MyCalendar, returns null for the constructor and each book result in call order."
+        },
+        {
+          "id": "R5",
+          "text": "Do not modify the trace input lists; return a fresh result list."
+        }
+      ],
+      "constraints": [
+        "0 <= startTime < endTime <= 10^9.",
+        "At most 1000 calls to book per calendar.",
+        "A trace starts with exactly one MyCalendar constructor call with no arguments, followed only by book calls."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 da87bffbd942b18f85c08a9eb9e3637a2e76a84c08fc1810db43886e2e3e0fb9 and statement content sha256 4be42f031baa9e2535f0c422a8d86ac99970f794fabfcc87c36dd9aa4a685d4c; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "The class methods are the contract; the generic top-level params/return in the official metaData are not.",
+          "basis": "README interpretation notes: the 729/731/732 metaData carries generic params/return (list<boolean>) that do not match the class methods, and constraint lines name start/end instead of startTime/endTime."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Does an event ending at time t conflict with one starting at t?",
+          "answer": "No; intervals are half-open, so they only touch.",
+          "basis": "Half-open interval definition used by the cohort validator and reference."
+        },
+        {
+          "question": "Does a rejected booking count toward later conflicts?",
+          "answer": "No; only accepted bookings are stored.",
+          "basis": "Reference keeps only accepted bookings."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              "MyCalendar",
+              "book",
+              "book",
+              "book"
+            ],
+            [
+              [],
+              [
+                5,
+                10
+              ],
+              [
+                8,
+                12
+              ],
+              [
+                10,
+                15
+              ]
+            ]
+          ],
+          "output": [
+            null,
+            true,
+            false,
+            true
+          ],
+          "explanation": "[8,12) overlaps [5,10); [10,15) only touches [5,10) at 10, so it fits."
+        },
+        {
+          "args": [
+            [
+              "MyCalendar",
+              "book",
+              "book",
+              "book",
+              "book"
+            ],
+            [
+              [],
+              [
+                20,
+                30
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                4,
+                21
+              ],
+              [
+                5,
+                20
+              ]
+            ]
+          ],
+          "output": [
+            null,
+            true,
+            true,
+            false,
+            true
+          ],
+          "explanation": "[4,21) overlaps both earlier events; [5,20) fills the gap exactly between them."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "class",
+          "declaration": "class MyCalendar: def __init__(self); def book(self, startTime: int, endTime: int) -> bool; trace adapter def solve(operation_names: list[str], argument_lists: list[list[int]]) -> list"
+        },
+        "javascript": {
+          "kind": "class",
+          "declaration": "class MyCalendar { constructor(); book(startTime, endTime) -> bool }; module.exports = solve(operationNames, argumentLists) -> Array; module.exports.MyCalendar = MyCalendar"
+        }
+      },
+      "approach": {
+        "title": "Sorted disjoint bookings with binary search",
+        "explanation": "Accepted bookings never overlap, so sorting them by start also sorts them by end. A new interval can only collide with its immediate neighbours in that order: the first booking that starts after the new start, and the booking just before it. Binary search finds the insertion point; check that the successor starts at or after the new end and the predecessor ends at or before the new start. If both hold, insert at that point to keep the lists sorted.",
+        "chooseWhen": [
+          "Stored intervals are guaranteed pairwise disjoint, so their order by start is a total order with no nesting.",
+          "Queries are online and you need a fast overlap test per insertion.",
+          "The number of bookings is modest, so list insertion cost is acceptable (or a balanced tree is available)."
+        ],
+        "tradeoffs": [
+          "A plain scan over all bookings is simpler and O(q) per call; binary search reduces the search to O(log q) but list insertion remains O(q).",
+          "A balanced search tree (TreeMap in other languages) would make insertion O(log q); Python and JavaScript lack one in the standard library.",
+          "Keeping parallel starts and ends arrays avoids tuple comparisons but they must be inserted at the same index."
+        ],
+        "invariants": [
+          "starts is sorted ascending and ends[i] is the end of the booking that starts at starts[i].",
+          "Accepted bookings are pairwise disjoint, so ends are sorted too and ends[i] <= starts[i+1].",
+          "A rejected call leaves both arrays unchanged."
+        ],
+        "hints": [
+          "Because accepted events never overlap, what does their order look like?",
+          "If events are sorted, which existing events could possibly overlap a new one?",
+          "Only the nearest event on each side of the new start matters.",
+          "Binary search for the first start greater than startTime; reject if that start < endTime or if the previous end > startTime; otherwise insert at that index."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Characterise overlap of half-open intervals",
+            "question": "When do [a, b) and [c, d) share a moment, and which stored events must be checked?",
+            "explanation": "They overlap exactly when a < d and c < b. Since stored events are disjoint and sorted, an overlap with any of them implies an overlap with the nearest neighbour on one side of the new start.",
+            "rationale": "Reducing the check to two neighbours is what makes the sorted structure pay off.",
+            "instructions": [
+              "Write the overlap condition and test it on touching intervals.",
+              "Draw stored events on a line and place a new event; mark which ones it could hit."
+            ],
+            "observations": [
+              "Touching intervals satisfy a == d or c == b, which the strict inequalities exclude.",
+              "A new event that overlaps a far event must also overlap every event in between, including the neighbour."
+            ],
+            "hints": [
+              "Think about the gap between two consecutive stored events.",
+              "The new event fits iff it lies inside one gap."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Binary search and sorted insertion",
+            "question": "How do you locate the neighbours and keep the lists sorted?",
+            "explanation": "bisect_right(starts, startTime) in Python (a manual binary search in JavaScript) returns index i of the first start strictly greater than startTime. The successor is i, the predecessor i-1. Reject if starts[i] < endTime or ends[i-1] > startTime; otherwise insert into both arrays at i. The solve adapter replays the trace on one instance.",
+            "rationale": "Using the same index for both arrays keeps each start paired with its end.",
+            "instructions": [
+              "Store starts and ends in two arrays.",
+              "Compute i with a right-biased binary search on starts.",
+              "Check the successor and predecessor conditions, guarding the array bounds.",
+              "Insert at i on success and return true; return false otherwise.",
+              "In solve, verify the constructor entry, create one calendar, and append each book result after a leading null."
+            ],
+            "observations": [
+              "An existing booking with the same start as the new one is the predecessor, and its end exceeds startTime, so it is rejected correctly."
+            ],
+            "hints": [
+              "Equal starts must be rejected: check that the predecessor test catches them.",
+              "Bounds: index may equal the length, or be 0."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4",
+              "R5"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Probe boundaries",
+            "question": "Which traces exercise touching, equal and nested intervals?",
+            "explanation": "Test bookings that touch on either side, ones with the same start, ones that would contain or be contained in an existing event, and fill a gap exactly. Compare with a brute-force pairwise overlap check.",
+            "rationale": "The pairwise check is obviously correct and catches off-by-one errors in the neighbour logic.",
+            "instructions": [
+              "Run the examples.",
+              "Generate random traces with small coordinates and compare each result with the brute-force check.",
+              "Include a long trace near the 1000-call limit."
+            ],
+            "observations": [
+              "Nested intervals are rejected via the predecessor check (outer contains new) or the successor check (new contains a stored one)."
+            ],
+            "hints": [
+              "Small coordinate ranges like 0..20 produce many collisions and good coverage."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(log q + q) per book",
+            "where": "q is the number of accepted bookings: binary search plus list insertion"
+          },
+          {
+            "resource": "space",
+            "bound": "O(q)",
+            "where": "two arrays of accepted starts and ends"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(log q + q) per book",
+            "where": "q is the number of accepted bookings: binary search plus list insertion"
+          },
+          {
+            "resource": "space",
+            "bound": "O(q)",
+            "where": "two arrays of accepted starts and ends"
+          }
+        ]
+      }
+    },
+    "730": {
+      "statement": "Given a string s made only of the letters a, b, c and d, count the distinct non-empty palindromes that can be formed as subsequences of s (characters taken in order, not necessarily adjacent). Two subsequences that spell the same string count once. Return the count modulo 1,000,000,007.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Count distinct strings, not distinct index choices: equal palindromes from different positions count once."
+        },
+        {
+          "id": "R2",
+          "text": "Count only non-empty palindromic subsequences."
+        },
+        {
+          "id": "R3",
+          "text": "Return the count reduced modulo 1,000,000,007."
+        },
+        {
+          "id": "R4",
+          "text": "Do not modify the input string."
+        }
+      ],
+      "constraints": [
+        "1 <= length of s <= 1000.",
+        "Every character of s is one of 'a', 'b', 'c', 'd'."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 ec08188c5dd0a4f05f55dfea687c25eafdc99cae73b7f9788ad3bfb13b9cf0e6 and statement content sha256 dfc374e6e3ce4052b5aa0339ef6bd872790b9cd6417edf0ed704d19d17546ef4; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Is the empty string counted?",
+          "answer": "No, only non-empty palindromes.",
+          "basis": "Cohort reference counts the non-empty subsequence set."
+        },
+        {
+          "question": "Do two equal palindromes from different index sets count twice?",
+          "answer": "No, distinct strings are counted.",
+          "basis": "Cohort reference enumerates the set of subsequence strings."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            "bccb"
+          ],
+          "output": 6,
+          "explanation": "b, c, bb, cc, bcb and bccb."
+        },
+        {
+          "args": [
+            "aaa"
+          ],
+          "output": 3,
+          "explanation": "a, aa and aaa; repeated choices of positions do not add new strings."
+        },
+        {
+          "args": [
+            "abcd"
+          ],
+          "output": 4,
+          "explanation": "Only the four single letters are palindromes."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(s: str) -> int; class Solution: def countPalindromicSubsequences(self, s: str) -> int"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(s) -> int; module.exports = solve; module.exports.countPalindromicSubsequences(s) -> int"
+        }
+      },
+      "approach": {
+        "title": "Interval DP with duplicate correction at equal ends",
+        "explanation": "Let dp[i][j] be the number of distinct non-empty palindromic subsequences inside s[i..j]. If s[i] != s[j], no palindrome uses both ends, so dp[i][j] = dp[i+1][j] + dp[i][j-1] - dp[i+1][j-1] by inclusion-exclusion. If s[i] == s[j] = x, every palindrome of the inside either stays as it is or gets wrapped as x...x, giving 2*dp[i+1][j-1], plus the new strings x and xx unless they already exist inside. Let low be the first x strictly inside and high the last. No x inside: add 2 (x and xx). Exactly one x inside: add 1 (only xx is new). Two or more: x and xx already exist, and the palindromes strictly between low and high were wrapped twice, so subtract dp[low+1][high-1].",
+        "chooseWhen": [
+          "You must count distinct strings, so naive subsequence counting over-counts.",
+          "The alphabet is small and the answer for an interval depends on its outermost characters.",
+          "n is up to about 1000, so an O(n^2) table is affordable."
+        ],
+        "tradeoffs": [
+          "An alternative 4 x n x n DP indexed by the outer letter is easier to argue about but uses more memory.",
+          "Enumerating the set of subsequences is only feasible for very short strings; it is the cohort's reference for n <= 12.",
+          "Subtraction under a modulus needs a final normalisation; Python's % already returns a non-negative value and JavaScript needs an explicit fix (the candidate stays exact because values stay below 2^35)."
+        ],
+        "invariants": [
+          "dp[i][j] equals the number of distinct non-empty palindromic subsequences of s[i..j] modulo 1e9+7, for every computed i <= j.",
+          "dp[i][i] = 1 and empty ranges contribute 0.",
+          "following[i] and preceding[j] give the next and previous occurrence of the same letter, so low and high are found in O(1)."
+        ],
+        "hints": [
+          "Define the answer for a substring s[i..j] and relate it to shorter substrings.",
+          "If the end letters differ, palindromes cannot use both ends; use inclusion-exclusion.",
+          "If they match, wrapping every inner palindrome doubles the count, but some strings get counted twice.",
+          "Find the nearest same letter inside from each end: none gives +2, one gives +1, otherwise subtract the count strictly between those two occurrences."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Why plain counting over-counts",
+            "question": "How do distinct strings differ from distinct index choices, and how do equal end letters create duplicates?",
+            "explanation": "In 'aaa' there are several ways to pick 'aa' but it is one string. When both ends are x, wrapping inner palindromes with x...x may recreate strings that were already formed by an inner x pair; those come exactly from palindromes between the innermost x occurrences.",
+            "rationale": "The duplicate analysis determines the three cases of the recurrence.",
+            "instructions": [
+              "List all distinct palindromic subsequences of 'abca' and 'aba' and 'aaa' by hand.",
+              "For s[i] == s[j], group them by whether they use both ends."
+            ],
+            "observations": [
+              "Wrapping is a bijection from inner palindromes onto wrapped ones, so the doubling is exact apart from x and xx and the overlap.",
+              "Duplicates appear only when an x occurs inside the range."
+            ],
+            "hints": [
+              "Consider where the inner occurrences of the end letter sit."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Fill the table from short to long intervals",
+            "question": "In which order do you fill dp, and how do you get low and high quickly?",
+            "explanation": "Precompute following[i] (next index with the same letter) and preceding[j] (previous index with the same letter). Iterate i from n-1 down to 0 and j from i+1 up, using rows dp[i] and dp[i+1]. Apply the unequal-ends or equal-ends formula and reduce modulo 1e9+7. The answer is dp[0][n-1].",
+            "rationale": "Every value used (i+1 rows and j-1 columns) is computed before it is needed.",
+            "instructions": [
+              "Build following and preceding with one backward and one forward pass and a last-seen map.",
+              "Allocate an (n+1) x (n+1) table of zeros so dp[low+1][high-1] reads 0 for empty ranges.",
+              "Set dp[i][i] = 1 and apply the recurrence for j > i.",
+              "Reduce each value modulo 1e9+7, keeping it non-negative."
+            ],
+            "observations": [
+              "Cells with i > j stay 0, which handles adjacent equal letters (inner empty).",
+              "No products are needed, so intermediates stay small."
+            ],
+            "hints": [
+              "low = following[i], high = preceding[j]; compare them to choose the case.",
+              "Use the row below (i+1) as a separate reference for clarity."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Cross-check against brute force",
+            "question": "How do you gain confidence in the three equal-end cases?",
+            "explanation": "Enumerate the set of all palindromic subsequences for random strings of length up to about 12 and compare. Include strings with many repeats of one letter to hit the subtraction case, and a long string to check the modulus.",
+            "rationale": "Brute force is exact on small inputs and directly encodes the distinctness requirement.",
+            "instructions": [
+              "Run the examples.",
+              "Compare against brute force for random strings over 'abcd' and over 'ab'.",
+              "Run a length-1000 string to confirm time and the modulo reduction."
+            ],
+            "observations": [
+              "'aaaa' gives 4 and 'abab' gives 6 (a, b, aa, bb, aba, bab)."
+            ],
+            "hints": [
+              "Strings over two letters create more equal ends and more duplicates."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(n^2)",
+            "where": "n is the length of s"
+          },
+          {
+            "resource": "space",
+            "bound": "O(n^2)",
+            "where": "the (n+1) x (n+1) table"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(n^2)",
+            "where": "n is the length of s"
+          },
+          {
+            "resource": "space",
+            "bound": "O(n^2)",
+            "where": "the (n+1) x (n+1) table"
+          }
+        ]
+      }
+    },
+    "731": {
+      "statement": "Build a calendar that accepts events given as half-open intervals [startTime, endTime). An event may be added as long as no moment would end up covered by three events at once; double-booking is allowed, triple-booking is not. book(startTime, endTime) adds the event and returns true if this holds, otherwise returns false and leaves the calendar unchanged.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Treat each booking as a half-open interval; touching intervals do not overlap."
+        },
+        {
+          "id": "R2",
+          "text": "Accept a booking only if, after adding it, no point is covered by three or more accepted bookings."
+        },
+        {
+          "id": "R3",
+          "text": "A rejected booking returns false and leaves the state unchanged."
+        },
+        {
+          "id": "R4",
+          "text": "The trace adapter solve(operation_names, argument_lists) creates one MyCalendarTwo and returns null followed by each book result."
+        },
+        {
+          "id": "R5",
+          "text": "Do not modify the trace input lists; return a fresh result list."
+        }
+      ],
+      "constraints": [
+        "0 <= startTime < endTime <= 10^9.",
+        "At most 1000 calls to book per calendar.",
+        "A trace starts with exactly one MyCalendarTwo constructor call with no arguments, followed only by book calls."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 dcb7c564cb9d8b8c67fa2281a36fc480b2c613991a5e269188c15a87dbd2b2a0 and statement content sha256 f08cf4ac0d5f65eea532c714a4d6ad6c219f40f965c4f41a1abbe438eaad6cde; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "The class methods are the contract; the generic top-level params/return in the official metaData are not.",
+          "basis": "README interpretation notes on the 729/731/732 metaData and constraint naming."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Are events touching at an endpoint overlapping?",
+          "answer": "No; intervals are half-open.",
+          "basis": "Half-open interval convention used by the cohort validator."
+        },
+        {
+          "question": "Does a rejected booking still create double-booked regions?",
+          "answer": "No; rejected bookings change nothing.",
+          "basis": "Candidate records overlaps only after the triple check passes."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              "MyCalendarTwo",
+              "book",
+              "book",
+              "book",
+              "book"
+            ],
+            [
+              [],
+              [
+                10,
+                20
+              ],
+              [
+                15,
+                25
+              ],
+              [
+                18,
+                22
+              ],
+              [
+                20,
+                30
+              ]
+            ]
+          ],
+          "output": [
+            null,
+            true,
+            true,
+            false,
+            true
+          ],
+          "explanation": "[15,20) is double-booked; [18,22) would triple-book [18,20). [20,30) overlaps only [15,25) on [20,25), which is a double booking."
+        },
+        {
+          "args": [
+            [
+              "MyCalendarTwo",
+              "book",
+              "book",
+              "book"
+            ],
+            [
+              [],
+              [
+                0,
+                5
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                5,
+                10
+              ]
+            ]
+          ],
+          "output": [
+            null,
+            true,
+            true,
+            true
+          ],
+          "explanation": "The same interval may be booked twice; [5,10) only touches it."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "class",
+          "declaration": "class MyCalendarTwo: def __init__(self); def book(self, startTime: int, endTime: int) -> bool; trace adapter def solve(operation_names: list[str], argument_lists: list[list[int]]) -> list"
+        },
+        "javascript": {
+          "kind": "class",
+          "declaration": "class MyCalendarTwo { constructor(); book(startTime, endTime) -> bool }; module.exports = solve(operationNames, argumentLists) -> Array; module.exports.MyCalendarTwo = MyCalendarTwo"
+        }
+      },
+      "approach": {
+        "title": "Bookings plus a list of double-booked overlaps",
+        "explanation": "Keep every accepted booking and, separately, every region that is already covered twice. A new event causes a triple booking exactly when it overlaps some double-booked region, so check that list first and reject on any overlap. Otherwise the event is accepted, and its overlap with each existing booking becomes a new double-booked region. Those regions are pairwise disjoint, because if two of them overlapped the shared part would be triple-booked.",
+        "chooseWhen": [
+          "The limit is a small fixed coverage count (here two), so tracking the level just below the limit is enough.",
+          "The number of calls is modest (about 1000), so O(q) per call is fine.",
+          "You want a short, easily verified solution rather than a coordinate-compressed or tree structure."
+        ],
+        "tradeoffs": [
+          "A sweep over a sorted map of +1/-1 boundary deltas generalises to any k but costs O(q) per call plus sorting work.",
+          "A segment tree with range add and range max gives O(log C) per call but is much longer.",
+          "The overlap list can grow to O(q) entries, and each book is O(q)."
+        ],
+        "invariants": [
+          "bookings holds exactly the accepted intervals.",
+          "overlaps holds intervals that are covered by at least two accepted bookings, and their union is exactly the double-booked set.",
+          "No point is covered by three accepted bookings."
+        ],
+        "hints": [
+          "When does a new event cause a triple booking?",
+          "It must overlap a region that is already covered twice.",
+          "Store the double-covered regions explicitly and test against them first.",
+          "Reject if any stored overlap intersects the new interval; otherwise add max(start)..min(end) with every intersecting booking to the overlaps, then store the booking."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Reduce triple booking to a simpler test",
+            "question": "What information about the current calendar decides whether a new event would triple-book?",
+            "explanation": "A point becomes triple-booked iff it was double-booked and the new event covers it. So the double-booked set is all you need for the test; the bookings are needed to update that set after acceptance.",
+            "rationale": "This splits the problem into a check and an update, each a simple scan.",
+            "instructions": [
+              "Draw three events and mark coverage levels.",
+              "Express the triple-booked condition in terms of the double-booked set."
+            ],
+            "observations": [
+              "The intersection of two half-open intervals is [max(starts), min(ends)) when non-empty."
+            ],
+            "hints": [
+              "Track coverage level two, not every level."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Check overlaps, then record new ones",
+            "question": "In which order should the check and the update happen?",
+            "explanation": "First scan overlaps; if any intersects [startTime, endTime) return false, changing nothing. Then scan bookings and append each non-empty intersection to overlaps, append the new booking and return true. The trace adapter replays operations on one instance.",
+            "rationale": "Checking before updating guarantees that a rejected call leaves the state untouched.",
+            "instructions": [
+              "Keep two lists: bookings and overlaps.",
+              "Use start < endTime and startTime < end as the overlap test.",
+              "Append (max(start, startTime), min(end, endTime)) for each overlapping booking.",
+              "In solve, check the constructor, then collect results after a leading null."
+            ],
+            "observations": [
+              "The newly added overlaps are disjoint from each other because the old bookings they come from never overlap each other within the new interval (otherwise that spot was double-booked and the check failed)."
+            ],
+            "hints": [
+              "Do not mutate anything until the overlap check has passed."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3",
+              "R4",
+              "R5"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Compare with direct coverage counting",
+            "question": "How can you check results independently?",
+            "explanation": "For each call, count how many accepted bookings cover the new start and each accepted start inside the new interval; the maximum coverage over the new interval occurs at one of these points. Reject when that count reaches two. Compare with the candidate on random traces.",
+            "rationale": "This is the cohort's reference method and does not share the overlap-list idea.",
+            "instructions": [
+              "Run the examples.",
+              "Fuzz with small coordinates and repeated equal intervals.",
+              "Run a 1000-call trace to confirm time."
+            ],
+            "observations": [
+              "Booking the same interval three times returns true, true, false."
+            ],
+            "hints": [
+              "Coverage inside an interval only changes at booking starts and ends."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(q) per book",
+            "where": "q is the number of accepted bookings; the overlap list also has O(q) entries"
+          },
+          {
+            "resource": "space",
+            "bound": "O(q)",
+            "where": "bookings and overlaps lists"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(q) per book",
+            "where": "q is the number of accepted bookings; the overlap list also has O(q) entries"
+          },
+          {
+            "resource": "space",
+            "bound": "O(q)",
+            "where": "bookings and overlaps lists"
+          }
+        ]
+      }
+    },
+    "732": {
+      "statement": "Build a calendar that always accepts events, given as half-open intervals [startTime, endTime). After each booking, report the largest number of events that cover any single moment so far (the maximum k such that some moment is shared by k events).",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Every booking is accepted; intervals are half-open, so touching intervals do not overlap."
+        },
+        {
+          "id": "R2",
+          "text": "After each book call, return the maximum, over all moments, of the number of accepted bookings covering it."
+        },
+        {
+          "id": "R3",
+          "text": "The trace adapter solve(operation_names, argument_lists) creates one MyCalendarThree and returns null followed by each book result."
+        },
+        {
+          "id": "R4",
+          "text": "Do not modify the trace input lists; return a fresh result list."
+        }
+      ],
+      "constraints": [
+        "0 <= startTime < endTime <= 10^9.",
+        "At most 400 calls to book per calendar.",
+        "A trace starts with exactly one MyCalendarThree constructor call with no arguments, followed only by book calls."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 ca14fd7e581d50ce99840391d42303a62584e325b2c48bb8b6fa2c6890a5646e and statement content sha256 ea31a21ee20ea6908e727bc76be0e520b51ec69e3a57af1e8a8c02e22726d34e; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "book returns an integer, despite the generic list<boolean> return in the official metaData.",
+          "basis": "README interpretation notes: the metaData top-level return does not match the class methods; 732's book returns an integer."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Is the answer the maximum over all time or only within the new interval?",
+          "answer": "Over all time, so it never decreases between calls.",
+          "basis": "Cohort reference takes the maximum cover count over all accepted starts after each book."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              "MyCalendarThree",
+              "book",
+              "book",
+              "book",
+              "book"
+            ],
+            [
+              [],
+              [
+                10,
+                20
+              ],
+              [
+                50,
+                60
+              ],
+              [
+                10,
+                40
+              ],
+              [
+                5,
+                15
+              ]
+            ]
+          ],
+          "output": [
+            null,
+            1,
+            1,
+            2,
+            3
+          ],
+          "explanation": "After [5,15), the moment 10 is covered by [10,20), [10,40) and [5,15)."
+        },
+        {
+          "args": [
+            [
+              "MyCalendarThree",
+              "book",
+              "book",
+              "book"
+            ],
+            [
+              [],
+              [
+                0,
+                5
+              ],
+              [
+                5,
+                10
+              ],
+              [
+                4,
+                6
+              ]
+            ]
+          ],
+          "output": [
+            null,
+            1,
+            1,
+            2
+          ],
+          "explanation": "[0,5) and [5,10) only touch; [4,6) overlaps each of them but never both at the same moment."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "class",
+          "declaration": "class MyCalendarThree: def __init__(self); def book(self, startTime: int, endTime: int) -> int; trace adapter def solve(operation_names: list[str], argument_lists: list[list[int]]) -> list"
+        },
+        "javascript": {
+          "kind": "class",
+          "declaration": "class MyCalendarThree { constructor(); book(startTime, endTime) -> int }; module.exports = solve(operationNames, argumentLists) -> Array; module.exports.MyCalendarThree = MyCalendarThree"
+        }
+      },
+      "approach": {
+        "title": "Dynamic segment tree with range add and subtree maximum",
+        "explanation": "Model time as the range [0, 10^9). A booking adds 1 to every moment in [start, end), and the answer is the global maximum. A segment tree supports range add and range maximum in O(log C), but a full tree over 10^9 points is impossible, so nodes are created only when an update descends into them. Each node stores added (how much was added to its whole range) and best (the maximum inside its range, including added). Fully covered nodes take +1 in both; partially covered nodes recurse and recompute best = added + max(best of children). The root's best is the answer.",
+        "chooseWhen": [
+          "Coordinates are huge but the number of updates is small, so most of the tree is never touched.",
+          "You need range add and a running global maximum after every update.",
+          "You want guaranteed O(log C) per update rather than O(q) per call."
+        ],
+        "tradeoffs": [
+          "A sorted boundary map with +1/-1 deltas and a sweep is simpler but O(q) per call (fine for 400 calls).",
+          "Coordinate compression needs all coordinates in advance; the online setting does not provide them.",
+          "The dynamic tree uses O(q log C) nodes; storing nodes in parallel arrays (with node 0 as an absent child of best 0) avoids object overhead."
+        ],
+        "invariants": [
+          "For every node, best equals added plus the maximum best of its children (absent children count as 0).",
+          "added at a node is the number of bookings that cover that node's whole range and were stopped there.",
+          "The root's best is the maximum coverage over [0, 10^9)."
+        ],
+        "hints": [
+          "Think of each booking as adding 1 to a range of times.",
+          "You need range add plus global maximum: what structure supports that?",
+          "The range is too large to allocate; create nodes only as updates reach them.",
+          "Keep added and best per node; on full cover increment both, otherwise recurse into the halves you overlap and set best = added + max(children)."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Restate as range add with a maximum query",
+            "question": "What does the reported number mean in terms of a coverage function over time?",
+            "explanation": "Let cover(t) count bookings containing t. Each booking adds 1 to cover on [start, end) and the answer is max cover(t). That is a classic range-add, range-max problem on a very large domain.",
+            "rationale": "Naming the abstract operation points to segment trees or a difference sweep.",
+            "instructions": [
+              "Sketch cover(t) for the first example after each booking.",
+              "Note that the maximum only changes inside the new interval."
+            ],
+            "observations": [
+              "The maximum never decreases.",
+              "Only interval endpoints matter for where cover changes."
+            ],
+            "hints": [
+              "Compare a difference-array sweep with a tree-based approach."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Implement the lazily allocated tree",
+            "question": "How do you store nodes and keep best correct without pushing additions down?",
+            "explanation": "Use parallel arrays left, right, added and best, with node 0 as a permanent empty child and node 1 as the root over [0, 10^9). update(node, low, high, start, end): if [low, high) lies inside [start, end), increment added and best. Otherwise split at middle, create a child if needed for each side the interval reaches, recurse, and recompute best. book returns best[1].",
+            "rationale": "Additions stay at the highest fully covered node (no push-down needed) because best already includes them for every ancestor via recomputation.",
+            "instructions": [
+              "Initialise arrays with node 0 (absent) and node 1 (root).",
+              "Write a child allocator that appends a zeroed node and returns its index.",
+              "Recurse left only if start < middle and right only if end > middle.",
+              "Recompute best[node] = added[node] + max(best[left], best[right]).",
+              "Replay the trace in solve after verifying the constructor."
+            ],
+            "observations": [
+              "Recursion depth is about log2(10^9), roughly 30.",
+              "JavaScript can use the same layout with typed or plain arrays."
+            ],
+            "hints": [
+              "Absent children read as best 0 when node 0 is used as the null child.",
+              "Half-open ranges make the split test start < middle and end > middle."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Compare with direct coverage counting",
+            "question": "How do you check the tree against an independent method?",
+            "explanation": "After each book, compute the maximum, over all accepted starts, of the number of bookings covering that start; that is the true maximum because coverage peaks at some start. Compare on random traces, including nested, touching and identical intervals, and on intervals reaching 10^9.",
+            "rationale": "The direct count is simple and is the cohort's reference.",
+            "instructions": [
+              "Run the examples.",
+              "Fuzz with coordinates in a small range and in the full range.",
+              "Run 400 calls to check node count and time."
+            ],
+            "observations": [
+              "Identical bookings repeated k times return 1, 2, ..., k."
+            ],
+            "hints": [
+              "Include [0, 10^9) itself to test the full-cover path at the root."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(log C) per book",
+            "where": "C = 10^9 is the coordinate range"
+          },
+          {
+            "resource": "space",
+            "bound": "O(q log C)",
+            "where": "nodes created over q bookings"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(log C) per book",
+            "where": "C = 10^9 is the coordinate range"
+          },
+          {
+            "resource": "space",
+            "bound": "O(q log C)",
+            "where": "nodes created over q bookings"
+          }
+        ]
+      }
+    },
+    "736": {
+      "statement": "Evaluate an expression in a tiny Lisp-like language and return its integer value. An expression is an integer, a variable name, or a parenthesised form: (add e1 e2) and (mult e1 e2) return the sum and product of their two operands; (let v1 e1 v2 e2 ... vn en body) assigns each variable in order (each expression may use variables assigned before it) and then returns the value of body. Variables are looked up in the innermost enclosing scope that defines them; a let's assignments disappear when the let ends. Tokens are separated by single spaces.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Support integer literals (possibly negative), variable names, add, mult and let forms."
+        },
+        {
+          "id": "R2",
+          "text": "In let, assign variables left to right; later expressions in the same let see earlier assignments, and a name may be reassigned."
+        },
+        {
+          "id": "R3",
+          "text": "Use lexical scoping: a lookup finds the innermost active binding, and a let's bindings are removed when it finishes."
+        },
+        {
+          "id": "R4",
+          "text": "Return the integer value of the whole expression."
+        },
+        {
+          "id": "R5",
+          "text": "Do not modify the input string."
+        }
+      ],
+      "constraints": [
+        "Expression length is between 1 and 2000 characters.",
+        "The expression is well formed, with single spaces between tokens and no extra spaces.",
+        "Variable names start with a lowercase letter followed by lowercase letters or digits, and are never add, let or mult.",
+        "Every variable used is bound when it is evaluated.",
+        "Every intermediate value and the result fit in a signed 32-bit integer."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 b310cede19b4f07c6f6f8ebd6cfe6ae3d4e1bfe88a655089eae6c109c5bad48c and statement content sha256 40f1dcea70e3213ab3155039b10b44a8f68c06c9733f3f33a36e931328f17f4d; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "Integer tokens may carry leading zeros or be written -0; any token matching an optional minus and digits is accepted.",
+          "basis": "README interpretation note for 736: the statement does not specify leading zeros or -0, and the validator accepts any -?[0-9]+."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Can a let reassign the same variable twice?",
+          "answer": "Yes; the later assignment wins for the rest of that let.",
+          "basis": "Cohort reference copies the scope and assigns each pair in order."
+        },
+        {
+          "question": "Is the last item of a let always the body even if it looks like a variable?",
+          "answer": "Yes; a let has an odd number of items after the keyword and the final one is the body.",
+          "basis": "Reference let arity check and candidate name/body rule."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            "(add 1 2)"
+          ],
+          "output": 3,
+          "explanation": "A plain sum."
+        },
+        {
+          "args": [
+            "(let x 2 (mult x (let x 3 y 4 (add x y))))"
+          ],
+          "output": 14,
+          "explanation": "The inner let shadows x with 3 and returns 7; outside it x is 2 again, giving 2*7."
+        },
+        {
+          "args": [
+            "(let x 3 x 2 x)"
+          ],
+          "output": 2,
+          "explanation": "x is reassigned within the same let before the body reads it."
+        },
+        {
+          "args": [
+            "(let a -4 b (add a 10) (mult a b))"
+          ],
+          "output": -24,
+          "explanation": "b uses the earlier binding of a: b = 6, then -4 * 6."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(expression: str) -> int; class Solution: def evaluate(self, expression: str) -> int"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(expression) -> int; module.exports = solve; module.exports.evaluate(expression) -> int"
+        }
+      },
+      "approach": {
+        "title": "Iterative token scan with explicit frames and per-name value stacks",
+        "explanation": "Tokenise by padding parentheses with spaces. Walk the tokens once, keeping a stack of frames, one per open form, recording the operator, operand values, a pending variable name for let, the names it bound, and its body value. Each completed value (a literal, a variable lookup or a closed form) is delivered to the frame on top: add/mult collect it as an operand; let either binds it to the pending name or takes it as the body. Shadowing is handled by a map from name to a stack of values: binding pushes, and closing a let pops each name it bound. Lookup reads the top of that name's stack.",
+        "chooseWhen": [
+          "Nesting can be deep and you want to avoid recursion limits.",
+          "Scopes nest strictly, so undoing bindings at scope exit is cheaper than copying environments.",
+          "You want O(L) total work for an expression of length L."
+        ],
+        "tradeoffs": [
+          "A recursive evaluator with copied dictionaries mirrors the definition closely and is easy to verify, but copying scopes can cost O(L) per let.",
+          "The explicit frame machine is less readable; telling a let variable name apart from a body expression needs care.",
+          "Per-name value stacks share one table across scopes, so every binding must be popped exactly once on exit."
+        ],
+        "invariants": [
+          "For every name, the top of bindings[name] is the value visible at the current position.",
+          "Each let frame lists exactly the names it has pushed, and closing it pops each one once.",
+          "A let frame with a pending name expects the next completed value to be that name's assignment."
+        ],
+        "hints": [
+          "Think of evaluation as values flowing up into the enclosing form.",
+          "Inside a let, how do you know whether a word is a variable being assigned or the body?",
+          "A word is a variable to assign when the frame has no pending name and the next token is not ')'.",
+          "Use a stack of frames for open forms and, for each variable name, a stack of values pushed by lets and popped when each let closes."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Pin down scoping",
+            "question": "Which binding does a variable reference see, and when do bindings disappear?",
+            "explanation": "The innermost let that has already assigned the name wins, and leaving the let restores the outer value. This is a stack discipline per name.",
+            "rationale": "Recognising the stack discipline lets you avoid copying environments.",
+            "instructions": [
+              "Evaluate the second example by hand, writing the environment at each step.",
+              "Note the moments a binding is created and removed."
+            ],
+            "observations": [
+              "Bindings are removed in reverse order of creation.",
+              "Reassignment within one let pushes another value that is also popped at exit."
+            ],
+            "hints": [
+              "Model each variable's values as a stack."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Drive frames from tokens",
+            "question": "How does each token type update the frames?",
+            "explanation": "'(' pushes a frame with the next token as operator. A word in a let frame with no pending name and not followed by ')' becomes the pending name. Otherwise a word is looked up and a numeral is parsed; ')' pops a frame and produces add/mult results or the let body after popping its bindings. A produced value goes to the parent frame: an operand for add/mult, a binding if a name is pending, else the let body. With no parent it is the final result.",
+            "rationale": "Every token is handled in O(1) amortised, and the frame stack mirrors the expression tree without recursion.",
+            "instructions": [
+              "Tokenise with expression.replace('(', '( ').replace(')', ' )').split().",
+              "Represent a frame as op, values, name, bound list and body.",
+              "Implement value delivery to the parent frame as described.",
+              "On closing a let, pop bindings[name] for each name in bound."
+            ],
+            "observations": [
+              "A negative literal starts with '-', not a letter, so the alphabetic test separates names from numbers."
+            ],
+            "hints": [
+              "Look ahead one token to distinguish a let variable from a let body.",
+              "Keep the result in a separate variable for the outermost value."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4",
+              "R5"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Test scoping edge cases",
+            "question": "Which expressions would break an incorrect scoping or parsing rule?",
+            "explanation": "Test shadowing and restoration, reassignment in one let, a body that is a bare variable or number, negative numbers, deep nesting and a let whose assignment expression is itself a let. Compare with a recursive evaluator that copies scopes.",
+            "rationale": "The recursive evaluator is the cohort's reference and follows the definition directly.",
+            "instructions": [
+              "Run the examples.",
+              "Generate random well-formed expressions with bound variables and compare.",
+              "Try nesting depth near the length limit."
+            ],
+            "observations": [
+              "'(let x 1 (let x 2 x))' is 2, while '(let x 1 (add (let x 2 x) x))' is 3."
+            ],
+            "hints": [
+              "Bare-variable bodies like '(let x 3 x)' test the lookahead rule."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(L)",
+            "where": "L is the expression length"
+          },
+          {
+            "resource": "space",
+            "bound": "O(L)",
+            "where": "tokens, frame stack and binding stacks"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(L)",
+            "where": "L is the expression length"
+          },
+          {
+            "resource": "space",
+            "bound": "O(L)",
+            "where": "tokens, frame stack and binding stacks"
+          }
+        ]
+      }
+    },
+    "741": {
+      "statement": "You are given an n x n grid where each cell is empty (0), holds one cherry (1) or is blocked by a thorn (-1). Walk from the top-left to the bottom-right moving only right or down through non-thorn cells, then walk back to the top-left moving only left or up. Each cherry you pass is picked up once, and its cell becomes empty. Return the most cherries you can collect; if no valid path from corner to corner exists, return 0.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Both trips may use only non-thorn cells; the outbound trip moves right or down, the return trip left or up."
+        },
+        {
+          "id": "R2",
+          "text": "A cherry counts once even if both trips pass through its cell."
+        },
+        {
+          "id": "R3",
+          "text": "Return the maximum total over all valid round trips, or 0 when no corner-to-corner path exists."
+        },
+        {
+          "id": "R4",
+          "text": "Do not modify the input grid."
+        }
+      ],
+      "constraints": [
+        "1 <= n <= 50 and the grid is square.",
+        "Every cell is -1, 0 or 1.",
+        "The top-left and bottom-right cells are not thorns."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 6c4ea7053917b1f5badf8741379cd29120d72eb251532da550fe6accdfd6b6fc and statement content sha256 d6f9d6ff0a600b8a5d07e6e8b78b2c4e0ec6cf27b708677f7a110c403d0ff20d; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Must the return trip retrace the outbound path?",
+          "answer": "No; it is any valid up/left path, chosen jointly with the outbound one.",
+          "basis": "Cohort reference enumerates all pairs of thorn-free paths."
+        },
+        {
+          "question": "What if the bottom-right is unreachable?",
+          "answer": "Return 0.",
+          "basis": "Candidate returns max(0, best) and the reference agrees."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              [
+                0,
+                1,
+                -1
+              ],
+              [
+                1,
+                0,
+                -1
+              ],
+              [
+                1,
+                1,
+                1
+              ]
+            ]
+          ],
+          "output": 5,
+          "explanation": "Down the left column and along the bottom row picks four cherries; returning via the cell at row 0, column 1 picks the fifth."
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                1,
+                -1
+              ],
+              [
+                1,
+                -1,
+                1
+              ],
+              [
+                -1,
+                1,
+                1
+              ]
+            ]
+          ],
+          "output": 0,
+          "explanation": "Thorns cut every path to the bottom-right, so nothing can be collected."
+        },
+        {
+          "args": [
+            [
+              [
+                1
+              ]
+            ]
+          ],
+          "output": 1,
+          "explanation": "A single cell: the start is the end and its cherry is collected once."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(grid: list[list[int]]) -> int; class Solution: def cherryPickup(self, grid: list[list[int]]) -> int"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(grid) -> int; module.exports = solve; module.exports.cherryPickup(grid) -> int"
+        }
+      },
+      "approach": {
+        "title": "Two walkers moving together, DP over step and rows",
+        "explanation": "Reverse the return trip so it becomes a second top-left to bottom-right path. Move both walkers one step at a time; after step t each is on the anti-diagonal r + c = t, so the state is just (t, r1, r2). Both previous positions came from one of four combinations (each walker moved down or right). The value of a state is the best previous value plus the cherries on both cells, counted once if the walkers share a cell. Requiring r1 <= r2 halves the states without losing anything because the walkers are interchangeable. Thorn cells and unreachable states use a sentinel.",
+        "chooseWhen": [
+          "Two paths interact only through shared cells, and greedy single-path choices fail.",
+          "Moves are monotone, so both paths can be synchronised by step count.",
+          "n is up to 50, so O(n^3) states and work are cheap."
+        ],
+        "tradeoffs": [
+          "Running a best single path twice (greedy) is wrong: taking the best first path can block a better combined pair.",
+          "Enumerating all path pairs is only feasible for tiny grids (the cohort's reference for n <= 6).",
+          "Rolling one 2D table per step keeps memory O(n^2) but loses the ability to reconstruct paths."
+        ],
+        "invariants": [
+          "best[r1][r2] after step t is the maximum cherries collected by two partial paths ending at (r1, t-r1) and (r2, t-r2), or the sentinel if impossible.",
+          "Only states with r1 <= r2 are stored; the transitions keep that ordering.",
+          "A shared cell's cherry is added once."
+        ],
+        "hints": [
+          "A return trip moving up/left is the same as another trip moving down/right.",
+          "If both walkers move at the same time, how are their positions related?",
+          "After t steps each walker is on r + c = t, so (t, r1, r2) is a full state.",
+          "Take the max over the four (down/right x down/right) predecessors, add both cells (once if equal), skip thorns, keep r1 <= r2 and answer max(0, final state)."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Turn a round trip into two forward paths",
+            "question": "Why does picking the best outbound path and then the best return path fail, and what replaces it?",
+            "explanation": "The two paths compete for the same cherries, so optimising them separately can be suboptimal. Treat them as two simultaneous forward walkers; synchronising by step means shared cells are reached at the same time, which makes the once-only rule easy to apply.",
+            "rationale": "Synchronisation is what lets a polynomial DP handle the interaction.",
+            "instructions": [
+              "Find a grid where greedy first-then-second gives less than optimal.",
+              "Show that two walkers sharing a cell must reach it on the same step."
+            ],
+            "observations": [
+              "A cell (r, c) is reached exactly at step r + c by any monotone path."
+            ],
+            "hints": [
+              "Paths can only share a cell at the same step count."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Roll the step table",
+            "question": "How do you iterate the states and handle thorns and the sentinel?",
+            "explanation": "best starts with best[0][0] = grid[0][0]. For each step from 1 to 2n-2, build a fresh table: for row1 from first to last valid row and row2 from row1 to last, skip thorns, take the maximum of best[row1][row2], best[row1-1][row2], best[row1][row2-1] (if row2 > row1) and best[row1-1][row2-1], skip if unreachable, and add the two cells (once if row1 == row2). The answer is max(0, best[n-1][n-1]).",
+            "rationale": "Each step only depends on the previous step, so two n x n tables suffice.",
+            "instructions": [
+              "Use -1 as the unreachable sentinel; real values are never negative.",
+              "Compute the valid row range for the step: max(0, step-n+1) to min(n-1, step).",
+              "Keep row2 >= row1 and guard index -1 accesses.",
+              "Return max(0, best[n-1][n-1])."
+            ],
+            "observations": [
+              "The predecessor best[row1][row2-1] with row2-1 < row1 is never valid, hence the guard.",
+              "Totals are at most 2n - 1 cells times 2, well within integer ranges in both languages."
+            ],
+            "hints": [
+              "Column of each walker is step - row.",
+              "Allocate the new table per step instead of updating in place."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Check against exhaustive path pairs",
+            "question": "How do you make sure the once-only rule and thorn handling are right?",
+            "explanation": "For n <= 6, enumerate every thorn-free monotone path, try every pair and count cherries on their union. Compare with the DP on random grids, including all-thorn interiors, blocked corners' neighbours, and single-cell grids. Also test n = 50 for time.",
+            "rationale": "Union counting directly encodes the rule that a cherry is picked once.",
+            "instructions": [
+              "Run the examples.",
+              "Fuzz random 1..6 grids with thorn probability around 0.2.",
+              "Run a 50 x 50 grid of all cherries; the answer must be 4*50 - 4 = 196 and the run must stay fast."
+            ],
+            "observations": [
+              "An all-ones n x n grid allows two disjoint paths except at the shared corners, giving 4n - 4 cherries for n >= 2."
+            ],
+            "hints": [
+              "When a path pair exists only through a single corridor, both walkers share every cell."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(n^3)",
+            "where": "n is the grid side: 2n-1 steps times n^2 row pairs"
+          },
+          {
+            "resource": "space",
+            "bound": "O(n^2)",
+            "where": "two rolling n x n tables"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(n^3)",
+            "where": "n is the grid side: 2n-1 steps times n^2 row pairs"
+          },
+          {
+            "resource": "space",
+            "bound": "O(n^2)",
+            "where": "two rolling n x n tables"
+          }
+        ]
+      }
+    }
+  }
+}

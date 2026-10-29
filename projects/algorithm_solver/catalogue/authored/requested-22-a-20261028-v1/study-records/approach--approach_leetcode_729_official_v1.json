@@ -1,0 +1,1103 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/approach/chooseWhen",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/729",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Stored intervals are guaranteed pairwise disjoint, so their order by start is a total order with no nesting.",
+      "Queries are online and you need a fast overlap test per insertion.",
+      "The number of bookings is modest, so list insertion cost is acceptable (or a balanced tree is available)."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:729:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/contract--contract_leetcode_729_official_authored-v1.json",
+    "sha256": "5afe92f95d518fca782d0809f90f7f03a9da697dc7303a72fa2d1a2bab13a8e4",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/approach/explanation",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/729",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+      }
+    ],
+    "status": "present",
+    "value": "Accepted bookings never overlap, so sorting them by start also sorts them by end. A new interval can only collide with its immediate neighbours in that order: the first booking that starts after the new start, and the booking just before it. Binary search finds the insertion point; check that the successor starts at or after the new end and the predecessor ends at or before the new start. If both hold, insert at that point to keep the lists sorted."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/approach/hints",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/729",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Because accepted events never overlap, what does their order look like?",
+      "If events are sorted, which existing events could possibly overlap a new one?",
+      "Only the nearest event on each side of the new start matters.",
+      "Binary search for the first start greater than startTime; reject if that start < endTime or if the previous end > startTime; otherwise insert at that index."
+    ]
+  },
+  "id": "approach:leetcode:729:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/approach/invariants",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/729",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "starts is sorted ascending and ends[i] is the end of the booking that starts at starts[i].",
+      "Accepted bookings are pairwise disjoint, so ends are sorted too and ends[i] <= starts[i+1].",
+      "A rejected call leaves both arrays unchanged."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:729:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_729_official_approach-native_v1.json",
+    "sha256": "f6e68b6b97bde16d51d5532ac297a3fb5d24800bbcd01178cdb6bc3cd58e09f9",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/729",
+      "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+    }
+  ],
+  "problemId": "leetcode:729",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/0/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "They overlap exactly when a < d and c < b. Since stored events are disjoint and sorted, an overlap with any of them implies an overlap with the nearest neighbour on one side of the new start."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/0/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Think about the gap between two consecutive stored events.",
+          "The new event fits iff it lies inside one gap."
+        ]
+      },
+      "id": "approach:leetcode:729:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/0/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Write the overlap condition and test it on touching intervals.",
+          "Draw stored events on a line and place a new event; mark which ones it could hit."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:729:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_729_official_approach-native_v1.json",
+        "sha256": "f6e68b6b97bde16d51d5532ac297a3fb5d24800bbcd01178cdb6bc3cd58e09f9",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/0/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Touching intervals satisfy a == d or c == b, which the strict inequalities exclude.",
+          "A new event that overlaps a far event must also overlap every event in between, including the neighbour."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/0/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "When do [a, b) and [c, d) share a moment, and which stored events must be checked?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/0/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "Reducing the check to two neighbours is what makes the sorted structure pay off."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/0/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/0/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "Characterise overlap of half-open intervals"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:729:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_729_official_python_v1.json",
+          "sha256": "9a405eea4b22ff0cf970c790b553279cb4f40bb2fdaa137e2ff9113328e2ebb2",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:729:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_729_official_javascript_v1.json",
+          "sha256": "c9d8eaf612eded664abd65e7bc001e746a2ce262afa046c808b3e890301107b7",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/1/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "bisect_right(starts, startTime) in Python (a manual binary search in JavaScript) returns index i of the first start strictly greater than startTime. The successor is i, the predecessor i-1. Reject if starts[i] < endTime or ends[i-1] > startTime; otherwise insert into both arrays at i. The solve adapter replays the trace on one instance."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/1/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Equal starts must be rejected: check that the predecessor test catches them.",
+          "Bounds: index may equal the length, or be 0."
+        ]
+      },
+      "id": "approach:leetcode:729:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/1/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Store starts and ends in two arrays.",
+          "Compute i with a right-biased binary search on starts.",
+          "Check the successor and predecessor conditions, guarding the array bounds.",
+          "Insert at i on success and return true; return false otherwise.",
+          "In solve, verify the constructor entry, create one calendar, and append each book result after a leading null."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:729:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_729_official_approach-native_v1.json",
+        "sha256": "f6e68b6b97bde16d51d5532ac297a3fb5d24800bbcd01178cdb6bc3cd58e09f9",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/1/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "An existing booking with the same start as the new one is the predecessor, and its end exceeds startTime, so it is rejected correctly."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/1/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "How do you locate the neighbours and keep the lists sorted?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/1/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "Using the same index for both arrays keeps each start paired with its end."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/1/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/1/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "Binary search and sorted insertion"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/2/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "Test bookings that touch on either side, ones with the same start, ones that would contain or be contained in an existing event, and fill a gap exactly. Compare with a brute-force pairwise overlap check."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/2/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Small coordinate ranges like 0..20 produce many collisions and good coverage."
+        ]
+      },
+      "id": "approach:leetcode:729:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/2/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Generate random traces with small coordinates and compare each result with the brute-force check.",
+          "Include a long trace near the 1000-call limit."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:729:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_729_official_approach-native_v1.json",
+        "sha256": "f6e68b6b97bde16d51d5532ac297a3fb5d24800bbcd01178cdb6bc3cd58e09f9",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/2/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Nested intervals are rejected via the predecessor check (outer contains new) or the successor check (new contains a stored one)."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/2/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "Which traces exercise touching, equal and nested intervals?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/2/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "The pairwise check is obviously correct and catches off-by-one errors in the neighbour logic."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/2/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/729/approach/stages/2/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/729",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+          }
+        ],
+        "status": "present",
+        "value": "Probe boundaries"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/approach/title",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/729",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+      }
+    ],
+    "status": "present",
+    "value": "Sorted disjoint bookings with binary search"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/approach/tradeoffs",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/729",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/729.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0546b53e51935b4d5e01d18496645792a813505025e2312664fbbc08cd471416"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A plain scan over all bookings is simpler and O(q) per call; binary search reduces the search to O(log q) but list insertion remains O(q).",
+      "A balanced search tree (TreeMap in other languages) would make insertion O(log q); Python and JavaScript lack one in the standard library.",
+      "Keeping parallel starts and ends arrays avoids tuple comparisons but they must be inserted at the same index."
+    ]
+  },
+  "version": 1
+}

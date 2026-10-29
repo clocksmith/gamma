@@ -44,3 +44,13 @@ python3 test_oracles.py
 python3 test_native_observer.py
 node test_native_observer.cjs
 ```
+
+## Study records (appended 2026-10-28)
+
+`study-records/` holds `study.record.v1` contract, approach, implementation-artifact and approach-native records for
+the seven problems, following `../hack2hire-worklists-20261028-v1/STUDY-RECORDS.md`. Their authored text (paraphrased
+statements, own examples, approaches) is in `study-content.json`; `test_study_records.py` validates them. These files
+were appended to `manifest.json` and `SHA256SUMS` after the cohort was committed, and this note changed README.md, so
+both entries' hashes changed. `authoring-catalog.json` was left unchanged: its `manifest_sha256`
+(`c867ebad4aaa88f8ed2a3b17b375392924167c943c39fcd012bd43f2d07de1c8`) pins the pre-study-record manifest from commit
+`51a7f3bec`. No source, semantics, oracle or case file changed. The records carry no qualification.
