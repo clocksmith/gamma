@@ -1,0 +1,497 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:leetcode:156:requested-156-1940-31-20261028-v1:156:v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+      "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+      "selector": "/156"
+    }
+  ],
+  "problemId": "leetcode:156",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:leetcode:156:requested-156-1940-31-20261028-v1:156:authored-v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/contract--contract_leetcode_156_requested-156-1940-31-20261028-v1_156_authored-v1.json",
+    "sha256": "ace67ee75a49f9c2f8ee36b74bace58fe5ff546f15b6a4f77b4498659b0c2453"
+  },
+  "title": {
+    "status": "present",
+    "value": "Iterative pointer rotation down the left spine.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/0/numeric_complexity_contract/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Iterative pointer rotation down the left spine. At each spine step preserve the next left child and old right child before rewiring pointers. Overwriting a pointer before saving its old value loses a subtree; native node ownership differs from JSON fixtures.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/156/explanation"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Draw one rotation with three nodes before writing the pointer assignments.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/156/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "Overwriting a pointer before saving its old value loses a subtree; native node ownership differs from JSON fixtures.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/156/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "At each spine step preserve the next left child and old right child before rewiring pointers."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/156/invariant"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "Draw one rotation with three nodes before writing the pointer assignments.",
+      "At each spine step preserve the next left child and old right child before rewiring pointers.",
+      "Iterative pointer rotation down the left spine.",
+      "Overwriting a pointer before saving its old value loses a subtree; native node ownership differs from JSON fixtures."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/156/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Establish the invariant",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/0/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Draw one rotation with three nodes before writing the pointer assignments.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/0/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Rotate a constrained binary tree upside down along its left spine. At each spine step preserve the next left child and old right child before rewiring pointers.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/0/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Identify the information that must survive each step before choosing code.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/0/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/0/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Draw one rotation with three nodes before writing the pointer assignments."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/0/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:156:requested-156-1940-31-20261028-v1:156:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_156_requested-156-1940-31-20261028-v1_156_approach-native_v1.json",
+        "sha256": "1ffe5e79fc709b647d4346899e16700d2c91e9c95cd77dbf7308a33db2907929"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Implement the state transition",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/1/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which state changes make the next step preserve this invariant?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/1/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Iterative pointer rotation down the left spine. At each spine step preserve the next left child and old right child before rewiring pointers.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/1/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Overwriting a pointer before saving its old value loses a subtree; native node ownership differs from JSON fixtures.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/1/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Iterative pointer rotation down the left spine.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/1/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "At each spine step preserve the next left child and old right child before rewiring pointers.",
+          "Iterative pointer rotation down the left spine."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/1/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:156:requested-156-1940-31-20261028-v1:156:python:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_156_requested-156-1940-31-20261028-v1_156_python_v1.json",
+          "sha256": "a082fd54b8feb1e7bd99bc01304fe52cde848a84128743c0826a400c14d0c113"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:156:requested-156-1940-31-20261028-v1:156:javascript:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_156_requested-156-1940-31-20261028-v1_156_javascript_v1.json",
+          "sha256": "f29574d162286d84e234c919a29661f3828ae18be2c12d72444511e6abd7d9fb"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:156:requested-156-1940-31-20261028-v1:156:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_156_requested-156-1940-31-20261028-v1_156_approach-native_v1.json",
+        "sha256": "1ffe5e79fc709b647d4346899e16700d2c91e9c95cd77dbf7308a33db2907929"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Challenge the boundary",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/2/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "What boundary or counterexample would expose this mistake?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/2/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Overwriting a pointer before saving its old value loses a subtree; native node ownership differs from JSON fixtures. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/2/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/2/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/2/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Overwriting a pointer before saving its old value loses a subtree; native node ownership differs from JSON fixtures."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/stages/2/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/156/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:156:requested-156-1940-31-20261028-v1:156:development-suite:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_156_requested-156-1940-31-20261028-v1_156_development-suite_v1.json",
+          "sha256": "411585576cf8b349f0e03db03a8944c53940293772a0f36461c5da958a0a5b5a"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:156:requested-156-1940-31-20261028-v1:156:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_156_requested-156-1940-31-20261028-v1_156_approach-native_v1.json",
+        "sha256": "1ffe5e79fc709b647d4346899e16700d2c91e9c95cd77dbf7308a33db2907929"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:leetcode:156:requested-156-1940-31-20261028-v1:156:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_156_requested-156-1940-31-20261028-v1_156_approach-native_v1.json",
+    "sha256": "1ffe5e79fc709b647d4346899e16700d2c91e9c95cd77dbf7308a33db2907929"
+  }
+}

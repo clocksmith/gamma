@@ -1,0 +1,405 @@
+{
+  "schema": "study.record.v1",
+  "kind": "contract",
+  "id": "contract:leetcode:911:requested-156-1940-31-20261028-v1:911:authored-v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+      "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+      "selector": "/problems/15"
+    }
+  ],
+  "problemId": "leetcode:911",
+  "variantId": "requested-156-1940-31-20261028-v1:911",
+  "variantLabel": {
+    "status": "present",
+    "value": "Online Election",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+        "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+        "selector": "/problems/15/title"
+      }
+    ]
+  },
+  "statement": {
+    "status": "present",
+    "value": "Answer who led an election at past query times, with the most recent vote breaking ties.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/911/statement"
+      }
+    ]
+  },
+  "contentScope": "authored",
+  "requirements": {
+    "status": "present",
+    "value": [
+      {
+        "id": "r0",
+        "text": "Answer who led an election at past query times, with the most recent vote breaking ties."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/911/requirements"
+      }
+    ]
+  },
+  "constraints": {
+    "status": "unknown",
+    "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+  },
+  "assumptions": {
+    "status": "present",
+    "value": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/911/assumptions"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "status": "present",
+    "value": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/911/clarifyingQuestions"
+      }
+    ]
+  },
+  "examples": {
+    "status": "present",
+    "value": [
+      {
+        "arguments": [
+          [
+            "TopVotedCandidate",
+            "q",
+            "q",
+            "q",
+            "q",
+            "q",
+            "q"
+          ],
+          [
+            [
+              [
+                0,
+                1,
+                1,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                5,
+                10,
+                15,
+                20,
+                25,
+                30
+              ]
+            ],
+            [
+              3
+            ],
+            [
+              12
+            ],
+            [
+              25
+            ],
+            [
+              15
+            ],
+            [
+              24
+            ],
+            [
+              8
+            ]
+          ]
+        ],
+        "expected": [
+          null,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1
+        ],
+        "source": "cohort-authored development example; not asserted to be an official example"
+      },
+      {
+        "arguments": [
+          [
+            "TopVotedCandidate",
+            "q"
+          ],
+          [
+            [
+              [
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                1,
+                2
+              ]
+            ],
+            [
+              2
+            ]
+          ]
+        ],
+        "expected": [
+          null,
+          0
+        ],
+        "source": "cohort-authored development example; not asserted to be an official example"
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-examples.json",
+        "sha256": "43c127495173874d972b20f0ebf454306b9ad8e830e1868f1dd9f218c20bc62c",
+        "selector": "/911"
+      }
+    ]
+  },
+  "interfaces": [
+    {
+      "language": "python",
+      "kind": "class",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "classname": "TopVotedCandidate",
+          "constructor": {
+            "name": "TopVotedCandidate",
+            "params": [
+              {
+                "name": "persons",
+                "type": "integer[]"
+              },
+              {
+                "name": "times",
+                "type": "integer[]"
+              }
+            ],
+            "return": {
+              "type": "list"
+            }
+          },
+          "methods": [
+            {
+              "name": "q",
+              "params": [
+                {
+                  "name": "t",
+                  "type": "integer"
+                }
+              ],
+              "return": "integer"
+            }
+          ],
+          "scope": "cohort-declared class trace"
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/15/official_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "scope": "Existing source-declared ABI retained; native compatibility is not established by the JSON-wrapper runs.",
+          "originalDeclaration": {
+            "name": "TopVotedCandidate",
+            "params": [
+              {
+                "name": "persons",
+                "type": "integer[]"
+              },
+              {
+                "name": "times",
+                "type": "integer[]"
+              }
+            ],
+            "return": {
+              "type": "list"
+            }
+          }
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/15/official_interface"
+          }
+        ]
+      }
+    },
+    {
+      "language": "javascript",
+      "kind": "class",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "classname": "TopVotedCandidate",
+          "constructor": {
+            "name": "TopVotedCandidate",
+            "params": [
+              {
+                "name": "persons",
+                "type": "integer[]"
+              },
+              {
+                "name": "times",
+                "type": "integer[]"
+              }
+            ],
+            "return": {
+              "type": "list"
+            }
+          },
+          "methods": [
+            {
+              "name": "q",
+              "params": [
+                {
+                  "name": "t",
+                  "type": "integer"
+                }
+              ],
+              "return": "integer"
+            }
+          ],
+          "scope": "cohort-declared class trace"
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/15/official_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "scope": "Existing source-declared ABI retained; native compatibility is not established by the JSON-wrapper runs.",
+          "originalDeclaration": {
+            "name": "TopVotedCandidate",
+            "params": [
+              {
+                "name": "persons",
+                "type": "integer[]"
+              },
+              {
+                "name": "times",
+                "type": "integer[]"
+              }
+            ],
+            "return": {
+              "type": "list"
+            }
+          }
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/15/official_interface"
+          }
+        ]
+      }
+    }
+  ],
+  "effects": {
+    "status": "present",
+    "value": {
+      "scope": "JSON solve wrapper",
+      "inputMutation": "forbidden",
+      "outputAliasing": "forbidden",
+      "nativeObjectEffects": "not-established-by-wrapper-execution"
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/15/mutation_alias_contract"
+      }
+    ]
+  },
+  "comparison": {
+    "status": "present",
+    "value": {
+      "kind": "exact",
+      "scope": "Existing cohort deterministic JSON result; native nonunique/float acceptance policy requires separate confirmation."
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/15/return_domain"
+      }
+    ]
+  },
+  "sources": [],
+  "native": []
+}

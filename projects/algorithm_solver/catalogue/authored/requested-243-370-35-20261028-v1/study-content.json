@@ -1,0 +1,3117 @@
+{
+  "243": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Find the minimum index distance between occurrences of two distinct target words.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Find the minimum index distance between occurrences of two distinct target words."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Single pass tracking latest indices of word1 and word2. After each word, the latest index of each target is sufficient to improve the best cross-target distance. Repeated words must update their own latest index without losing the best earlier answer.",
+    "invariant": "After each word, the latest index of each target is sufficient to improve the best cross-target distance.",
+    "hints": [
+      "Ask whether an older occurrence can beat a newer occurrence for a future opposite target.",
+      "After each word, the latest index of each target is sufficient to improve the best cross-target distance.",
+      "Single pass tracking latest indices of word1 and word2.",
+      "Repeated words must update their own latest index without losing the best earlier answer."
+    ],
+    "chooseWhen": [
+      "Ask whether an older occurrence can beat a newer occurrence for a future opposite target.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Repeated words must update their own latest index without losing the best earlier answer.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Ask whether an older occurrence can beat a newer occurrence for a future opposite target.",
+        "explanation": "Find the minimum index distance between occurrences of two distinct target words. After each word, the latest index of each target is sufficient to improve the best cross-target distance.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Ask whether an older occurrence can beat a newer occurrence for a future opposite target."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Single pass tracking latest indices of word1 and word2. After each word, the latest index of each target is sufficient to improve the best cross-target distance.",
+        "rationale": "Repeated words must update their own latest index without losing the best earlier answer.",
+        "instructions": [
+          "Single pass tracking latest indices of word1 and word2.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "After each word, the latest index of each target is sufficient to improve the best cross-target distance.",
+          "Single pass tracking latest indices of word1 and word2."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Repeated words must update their own latest index without losing the best earlier answer. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Repeated words must update their own latest index without losing the best earlier answer."
+        ]
+      }
+    ]
+  },
+  "245": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Find the minimum occurrence distance between two target words, including when both targets are the same.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Find the minimum occurrence distance between two target words, including when both targets are the same."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Single pass handling both equal and distinct target words. Different targets use two latest positions; identical targets compare successive distinct occurrences. An occurrence cannot be paired with itself when both target words are equal.",
+    "invariant": "Different targets use two latest positions; identical targets compare successive distinct occurrences.",
+    "hints": [
+      "Separate the equal-target case before designing the scan.",
+      "Different targets use two latest positions; identical targets compare successive distinct occurrences.",
+      "Single pass handling both equal and distinct target words.",
+      "An occurrence cannot be paired with itself when both target words are equal."
+    ],
+    "chooseWhen": [
+      "Separate the equal-target case before designing the scan.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "An occurrence cannot be paired with itself when both target words are equal.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Separate the equal-target case before designing the scan.",
+        "explanation": "Find the minimum occurrence distance between two target words, including when both targets are the same. Different targets use two latest positions; identical targets compare successive distinct occurrences.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Separate the equal-target case before designing the scan."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Single pass handling both equal and distinct target words. Different targets use two latest positions; identical targets compare successive distinct occurrences.",
+        "rationale": "An occurrence cannot be paired with itself when both target words are equal.",
+        "instructions": [
+          "Single pass handling both equal and distinct target words.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Different targets use two latest positions; identical targets compare successive distinct occurrences.",
+          "Single pass handling both equal and distinct target words."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "An occurrence cannot be paired with itself when both target words are equal. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "An occurrence cannot be paired with itself when both target words are equal."
+        ]
+      }
+    ]
+  },
+  "246": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Decide whether rotating a decimal string by 180 degrees reproduces the same string.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Decide whether rotating a decimal string by 180 degrees reproduces the same string."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Two-pointer validation with 180-degree digit rotation map. Every mirrored pair must match the rotation map; the middle character must rotate to itself. A middle 6 or 9 is invalid even though those digits form a valid mirrored pair.",
+    "invariant": "Every mirrored pair must match the rotation map; the middle character must rotate to itself.",
+    "hints": [
+      "Write the valid rotated digit pairs before scanning.",
+      "Every mirrored pair must match the rotation map; the middle character must rotate to itself.",
+      "Two-pointer validation with 180-degree digit rotation map.",
+      "A middle 6 or 9 is invalid even though those digits form a valid mirrored pair."
+    ],
+    "chooseWhen": [
+      "Write the valid rotated digit pairs before scanning.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "A middle 6 or 9 is invalid even though those digits form a valid mirrored pair.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Write the valid rotated digit pairs before scanning.",
+        "explanation": "Decide whether rotating a decimal string by 180 degrees reproduces the same string. Every mirrored pair must match the rotation map; the middle character must rotate to itself.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Write the valid rotated digit pairs before scanning."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Two-pointer validation with 180-degree digit rotation map. Every mirrored pair must match the rotation map; the middle character must rotate to itself.",
+        "rationale": "A middle 6 or 9 is invalid even though those digits form a valid mirrored pair.",
+        "instructions": [
+          "Two-pointer validation with 180-degree digit rotation map.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Every mirrored pair must match the rotation map; the middle character must rotate to itself.",
+          "Two-pointer validation with 180-degree digit rotation map."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "A middle 6 or 9 is invalid even though those digits form a valid mirrored pair. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "A middle 6 or 9 is invalid even though those digits form a valid mirrored pair."
+        ]
+      }
+    ]
+  },
+  "247": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Generate length-n decimal strings that are unchanged by 180-degree rotation, excluding multi-digit leading zeros.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Generate length-n decimal strings that are unchanged by 180-degree rotation, excluding multi-digit leading zeros."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Recursive center-out expansion skipping leading zeros on outer layer. A valid interior stays valid when surrounded by a compatible rotated digit pair. Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result.",
+    "invariant": "A valid interior stays valid when surrounded by a compatible rotated digit pair.",
+    "hints": [
+      "Construct from the center instead of testing every length-n decimal string.",
+      "A valid interior stays valid when surrounded by a compatible rotated digit pair.",
+      "Recursive center-out expansion skipping leading zeros on outer layer.",
+      "Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result."
+    ],
+    "chooseWhen": [
+      "Construct from the center instead of testing every length-n decimal string.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Construct from the center instead of testing every length-n decimal string.",
+        "explanation": "Generate length-n decimal strings that are unchanged by 180-degree rotation, excluding multi-digit leading zeros. A valid interior stays valid when surrounded by a compatible rotated digit pair.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Construct from the center instead of testing every length-n decimal string."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Recursive center-out expansion skipping leading zeros on outer layer. A valid interior stays valid when surrounded by a compatible rotated digit pair.",
+        "rationale": "Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result.",
+        "instructions": [
+          "Recursive center-out expansion skipping leading zeros on outer layer.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "A valid interior stays valid when surrounded by a compatible rotated digit pair.",
+          "Recursive center-out expansion skipping leading zeros on outer layer."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result."
+        ]
+      }
+    ]
+  },
+  "248": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Count strobogrammatic decimal numbers within inclusive string bounds.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Count strobogrammatic decimal numbers within inclusive string bounds."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Generate strobogrammatic numbers by length and count those within [low, high]. Generation by length avoids numeric overflow; only equal-length candidates need lexical boundary comparisons. Count the single digit zero correctly without admitting padded multi-digit numbers.",
+    "invariant": "Generation by length avoids numeric overflow; only equal-length candidates need lexical boundary comparisons.",
+    "hints": [
+      "Reuse center-out generation and handle short and long endpoint lengths separately.",
+      "Generation by length avoids numeric overflow; only equal-length candidates need lexical boundary comparisons.",
+      "Generate strobogrammatic numbers by length and count those within [low, high].",
+      "Count the single digit zero correctly without admitting padded multi-digit numbers."
+    ],
+    "chooseWhen": [
+      "Reuse center-out generation and handle short and long endpoint lengths separately.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Count the single digit zero correctly without admitting padded multi-digit numbers.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Reuse center-out generation and handle short and long endpoint lengths separately.",
+        "explanation": "Count strobogrammatic decimal numbers within inclusive string bounds. Generation by length avoids numeric overflow; only equal-length candidates need lexical boundary comparisons.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Reuse center-out generation and handle short and long endpoint lengths separately."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Generate strobogrammatic numbers by length and count those within [low, high]. Generation by length avoids numeric overflow; only equal-length candidates need lexical boundary comparisons.",
+        "rationale": "Count the single digit zero correctly without admitting padded multi-digit numbers.",
+        "instructions": [
+          "Generate strobogrammatic numbers by length and count those within [low, high].",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Generation by length avoids numeric overflow; only equal-length candidates need lexical boundary comparisons.",
+          "Generate strobogrammatic numbers by length and count those within [low, high]."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Count the single digit zero correctly without admitting padded multi-digit numbers. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Count the single digit zero correctly without admitting padded multi-digit numbers."
+        ]
+      }
+    ]
+  },
+  "249": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Group strings that differ only by a uniform cyclic alphabet shift.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Group strings that differ only by a uniform cyclic alphabet shift."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Bucket strings by modulo-26 relative character difference tuple. Two strings belong together exactly when their relative modulo-26 character differences agree. Wraparound shifts such as az and ba must share a signature; singleton strings need a consistent empty signature.",
+    "invariant": "Two strings belong together exactly when their relative modulo-26 character differences agree.",
+    "hints": [
+      "Look for a signature unchanged by adding the same offset to every letter.",
+      "Two strings belong together exactly when their relative modulo-26 character differences agree.",
+      "Bucket strings by modulo-26 relative character difference tuple.",
+      "Wraparound shifts such as az and ba must share a signature; singleton strings need a consistent empty signature."
+    ],
+    "chooseWhen": [
+      "Look for a signature unchanged by adding the same offset to every letter.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Wraparound shifts such as az and ba must share a signature; singleton strings need a consistent empty signature.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Look for a signature unchanged by adding the same offset to every letter.",
+        "explanation": "Group strings that differ only by a uniform cyclic alphabet shift. Two strings belong together exactly when their relative modulo-26 character differences agree.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Look for a signature unchanged by adding the same offset to every letter."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Bucket strings by modulo-26 relative character difference tuple. Two strings belong together exactly when their relative modulo-26 character differences agree.",
+        "rationale": "Wraparound shifts such as az and ba must share a signature; singleton strings need a consistent empty signature.",
+        "instructions": [
+          "Bucket strings by modulo-26 relative character difference tuple.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Two strings belong together exactly when their relative modulo-26 character differences agree.",
+          "Bucket strings by modulo-26 relative character difference tuple."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Wraparound shifts such as az and ba must share a signature; singleton strings need a consistent empty signature. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Wraparound shifts such as az and ba must share a signature; singleton strings need a consistent empty signature."
+        ]
+      }
+    ]
+  },
+  "250": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Count binary-tree subtrees whose nodes all have the same value.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Count binary-tree subtrees whose nodes all have the same value."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Post-order DFS verifying uniform subtree values. A subtree is uniform only if both child subtrees are uniform and each child root agrees with its parent. Both child calls must run even if the first is nonuniform, because uniform descendants still contribute.",
+    "invariant": "A subtree is uniform only if both child subtrees are uniform and each child root agrees with its parent.",
+    "hints": [
+      "Have postorder traversal return a fact that its parent can combine.",
+      "A subtree is uniform only if both child subtrees are uniform and each child root agrees with its parent.",
+      "Post-order DFS verifying uniform subtree values.",
+      "Both child calls must run even if the first is nonuniform, because uniform descendants still contribute."
+    ],
+    "chooseWhen": [
+      "Have postorder traversal return a fact that its parent can combine.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Both child calls must run even if the first is nonuniform, because uniform descendants still contribute.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Have postorder traversal return a fact that its parent can combine.",
+        "explanation": "Count binary-tree subtrees whose nodes all have the same value. A subtree is uniform only if both child subtrees are uniform and each child root agrees with its parent.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Have postorder traversal return a fact that its parent can combine."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Post-order DFS verifying uniform subtree values. A subtree is uniform only if both child subtrees are uniform and each child root agrees with its parent.",
+        "rationale": "Both child calls must run even if the first is nonuniform, because uniform descendants still contribute.",
+        "instructions": [
+          "Post-order DFS verifying uniform subtree values.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "A subtree is uniform only if both child subtrees are uniform and each child root agrees with its parent.",
+          "Post-order DFS verifying uniform subtree values."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Both child calls must run even if the first is nonuniform, because uniform descendants still contribute. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Both child calls must run even if the first is nonuniform, because uniform descendants still contribute."
+        ]
+      }
+    ]
+  },
+  "254": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Enumerate nondecreasing factorizations of an integer using factors greater than one.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Enumerate nondecreasing factorizations of an integer using factors greater than one."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Backtracking non-decreasing divisor chains up to sqrt(rem). A minimum next factor prevents duplicate orderings while the remaining quotient preserves the required product. The trivial factorization containing only the original number is excluded; prime inputs yield no combinations.",
+    "invariant": "A minimum next factor prevents duplicate orderings while the remaining quotient preserves the required product.",
+    "hints": [
+      "Choose the next divisor and recurse only on the quotient.",
+      "A minimum next factor prevents duplicate orderings while the remaining quotient preserves the required product.",
+      "Backtracking non-decreasing divisor chains up to sqrt(rem).",
+      "The trivial factorization containing only the original number is excluded; prime inputs yield no combinations."
+    ],
+    "chooseWhen": [
+      "Choose the next divisor and recurse only on the quotient.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "The trivial factorization containing only the original number is excluded; prime inputs yield no combinations.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Choose the next divisor and recurse only on the quotient.",
+        "explanation": "Enumerate nondecreasing factorizations of an integer using factors greater than one. A minimum next factor prevents duplicate orderings while the remaining quotient preserves the required product.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Choose the next divisor and recurse only on the quotient."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Backtracking non-decreasing divisor chains up to sqrt(rem). A minimum next factor prevents duplicate orderings while the remaining quotient preserves the required product.",
+        "rationale": "The trivial factorization containing only the original number is excluded; prime inputs yield no combinations.",
+        "instructions": [
+          "Backtracking non-decreasing divisor chains up to sqrt(rem).",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "A minimum next factor prevents duplicate orderings while the remaining quotient preserves the required product.",
+          "Backtracking non-decreasing divisor chains up to sqrt(rem)."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "The trivial factorization containing only the original number is excluded; prime inputs yield no combinations. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "The trivial factorization containing only the original number is excluded; prime inputs yield no combinations."
+        ]
+      }
+    ]
+  },
+  "255": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Determine whether distinct values can be a binary search tree preorder traversal.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Determine whether distinct values can be a binary search tree preorder traversal."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Monotonic decreasing stack tracking lower bound of right subtrees. The stack holds unfinished ancestors; entering a right subtree raises a permanent lower bound. A later value below the established lower bound invalidates the traversal even when local neighbors look plausible.",
+    "invariant": "The stack holds unfinished ancestors; entering a right subtree raises a permanent lower bound.",
+    "hints": [
+      "Distinguish descending into a left child from climbing to an ancestor’s right child.",
+      "The stack holds unfinished ancestors; entering a right subtree raises a permanent lower bound.",
+      "Monotonic decreasing stack tracking lower bound of right subtrees.",
+      "A later value below the established lower bound invalidates the traversal even when local neighbors look plausible."
+    ],
+    "chooseWhen": [
+      "Distinguish descending into a left child from climbing to an ancestor’s right child.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "A later value below the established lower bound invalidates the traversal even when local neighbors look plausible.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Distinguish descending into a left child from climbing to an ancestor’s right child.",
+        "explanation": "Determine whether distinct values can be a binary search tree preorder traversal. The stack holds unfinished ancestors; entering a right subtree raises a permanent lower bound.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Distinguish descending into a left child from climbing to an ancestor’s right child."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Monotonic decreasing stack tracking lower bound of right subtrees. The stack holds unfinished ancestors; entering a right subtree raises a permanent lower bound.",
+        "rationale": "A later value below the established lower bound invalidates the traversal even when local neighbors look plausible.",
+        "instructions": [
+          "Monotonic decreasing stack tracking lower bound of right subtrees.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "The stack holds unfinished ancestors; entering a right subtree raises a permanent lower bound.",
+          "Monotonic decreasing stack tracking lower bound of right subtrees."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "A later value below the established lower bound invalidates the traversal even when local neighbors look plausible. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "A later value below the established lower bound invalidates the traversal even when local neighbors look plausible."
+        ]
+      }
+    ]
+  },
+  "256": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Minimize painting cost for a row of houses using three colors, with adjacent houses different.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Minimize painting cost for a row of houses using three colors, with adjacent houses different."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Rolling 3-state DP over consecutive houses. Each color state is the cheapest valid prefix ending in that color. Update a new row of states so one house’s newly computed costs never contaminate its other colors.",
+    "invariant": "Each color state is the cheapest valid prefix ending in that color.",
+    "hints": [
+      "The next state needs only the other two previous color costs.",
+      "Each color state is the cheapest valid prefix ending in that color.",
+      "Rolling 3-state DP over consecutive houses.",
+      "Update a new row of states so one house’s newly computed costs never contaminate its other colors."
+    ],
+    "chooseWhen": [
+      "The next state needs only the other two previous color costs.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Update a new row of states so one house’s newly computed costs never contaminate its other colors.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "The next state needs only the other two previous color costs.",
+        "explanation": "Minimize painting cost for a row of houses using three colors, with adjacent houses different. Each color state is the cheapest valid prefix ending in that color.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "The next state needs only the other two previous color costs."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Rolling 3-state DP over consecutive houses. Each color state is the cheapest valid prefix ending in that color.",
+        "rationale": "Update a new row of states so one house’s newly computed costs never contaminate its other colors.",
+        "instructions": [
+          "Rolling 3-state DP over consecutive houses.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Each color state is the cheapest valid prefix ending in that color.",
+          "Rolling 3-state DP over consecutive houses."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Update a new row of states so one house’s newly computed costs never contaminate its other colors. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Update a new row of states so one house’s newly computed costs never contaminate its other colors."
+        ]
+      }
+    ]
+  },
+  "259": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Count index triples whose values sum to less than a target.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Count index triples whose values sum to less than a target."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Sort array and use two pointers per first index. After sorting, a successful left/right pair makes every smaller right endpoint valid for the same first and left indices. Duplicate values still represent different indices, and sorting must operate on a copy for this wrapper.",
+    "invariant": "After sorting, a successful left/right pair makes every smaller right endpoint valid for the same first and left indices.",
+    "hints": [
+      "Use sorting to count a whole range of triples at once.",
+      "After sorting, a successful left/right pair makes every smaller right endpoint valid for the same first and left indices.",
+      "Sort array and use two pointers per first index.",
+      "Duplicate values still represent different indices, and sorting must operate on a copy for this wrapper."
+    ],
+    "chooseWhen": [
+      "Use sorting to count a whole range of triples at once.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Duplicate values still represent different indices, and sorting must operate on a copy for this wrapper.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Use sorting to count a whole range of triples at once.",
+        "explanation": "Count index triples whose values sum to less than a target. After sorting, a successful left/right pair makes every smaller right endpoint valid for the same first and left indices.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Use sorting to count a whole range of triples at once."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Sort array and use two pointers per first index. After sorting, a successful left/right pair makes every smaller right endpoint valid for the same first and left indices.",
+        "rationale": "Duplicate values still represent different indices, and sorting must operate on a copy for this wrapper.",
+        "instructions": [
+          "Sort array and use two pointers per first index.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "After sorting, a successful left/right pair makes every smaller right endpoint valid for the same first and left indices.",
+          "Sort array and use two pointers per first index."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Duplicate values still represent different indices, and sorting must operate on a copy for this wrapper. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Duplicate values still represent different indices, and sorting must operate on a copy for this wrapper."
+        ]
+      }
+    ]
+  },
+  "265": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Minimize adjacent-different painting cost with an arbitrary number of colors.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Minimize adjacent-different painting cost with an arbitrary number of colors."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Rolling DP tracking smallest and second-smallest previous row costs. The previous row’s smallest and second-smallest costs answer every exclusion query for the current color. Equal minimum costs need distinct color identities; excluding one minimum must not exclude another equal minimum.",
+    "invariant": "The previous row’s smallest and second-smallest costs answer every exclusion query for the current color.",
+    "hints": [
+      "Avoid rescanning all previous colors for every current color.",
+      "The previous row’s smallest and second-smallest costs answer every exclusion query for the current color.",
+      "Rolling DP tracking smallest and second-smallest previous row costs.",
+      "Equal minimum costs need distinct color identities; excluding one minimum must not exclude another equal minimum."
+    ],
+    "chooseWhen": [
+      "Avoid rescanning all previous colors for every current color.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Equal minimum costs need distinct color identities; excluding one minimum must not exclude another equal minimum.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Avoid rescanning all previous colors for every current color.",
+        "explanation": "Minimize adjacent-different painting cost with an arbitrary number of colors. The previous row’s smallest and second-smallest costs answer every exclusion query for the current color.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Avoid rescanning all previous colors for every current color."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Rolling DP tracking smallest and second-smallest previous row costs. The previous row’s smallest and second-smallest costs answer every exclusion query for the current color.",
+        "rationale": "Equal minimum costs need distinct color identities; excluding one minimum must not exclude another equal minimum.",
+        "instructions": [
+          "Rolling DP tracking smallest and second-smallest previous row costs.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "The previous row’s smallest and second-smallest costs answer every exclusion query for the current color.",
+          "Rolling DP tracking smallest and second-smallest previous row costs."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Equal minimum costs need distinct color identities; excluding one minimum must not exclude another equal minimum. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Equal minimum costs need distinct color identities; excluding one minimum must not exclude another equal minimum."
+        ]
+      }
+    ]
+  },
+  "267": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Generate all distinct palindromic permutations of a string.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Generate all distinct palindromic permutations of a string."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Backtrack unique permutations of half-multiset and mirror around odd center. At most one character count is odd; each unique half permutation determines exactly one mirrored palindrome. Repeated half characters must not produce duplicate permutations, and the odd center is not part of the half search.",
+    "invariant": "At most one character count is odd; each unique half permutation determines exactly one mirrored palindrome.",
+    "hints": [
+      "Count characters before permuting anything.",
+      "At most one character count is odd; each unique half permutation determines exactly one mirrored palindrome.",
+      "Backtrack unique permutations of half-multiset and mirror around odd center.",
+      "Repeated half characters must not produce duplicate permutations, and the odd center is not part of the half search."
+    ],
+    "chooseWhen": [
+      "Count characters before permuting anything.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Repeated half characters must not produce duplicate permutations, and the odd center is not part of the half search.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Count characters before permuting anything.",
+        "explanation": "Generate all distinct palindromic permutations of a string. At most one character count is odd; each unique half permutation determines exactly one mirrored palindrome.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Count characters before permuting anything."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Backtrack unique permutations of half-multiset and mirror around odd center. At most one character count is odd; each unique half permutation determines exactly one mirrored palindrome.",
+        "rationale": "Repeated half characters must not produce duplicate permutations, and the odd center is not part of the half search.",
+        "instructions": [
+          "Backtrack unique permutations of half-multiset and mirror around odd center.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "At most one character count is odd; each unique half permutation determines exactly one mirrored palindrome.",
+          "Backtrack unique permutations of half-multiset and mirror around odd center."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Repeated half characters must not produce duplicate permutations, and the odd center is not part of the half search. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Repeated half characters must not produce duplicate permutations, and the odd center is not part of the half search."
+        ]
+      }
+    ]
+  },
+  "269": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Infer a character ordering consistent with a dictionary sorted in an unknown alphabet.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Infer a character ordering consistent with a dictionary sorted in an unknown alphabet."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Extract adjacent word precedence constraints and run lexicographical Kahn topological sort. The first differing characters in adjacent words create precedence edges; a valid output is a topological ordering. A longer word immediately preceding its own prefix is invalid even if the character graph has no cycle.",
+    "invariant": "The first differing characters in adjacent words create precedence edges; a valid output is a topological ordering.",
+    "hints": [
+      "Only one position in an adjacent word pair can establish new ordering information.",
+      "The first differing characters in adjacent words create precedence edges; a valid output is a topological ordering.",
+      "Extract adjacent word precedence constraints and run lexicographical Kahn topological sort.",
+      "A longer word immediately preceding its own prefix is invalid even if the character graph has no cycle."
+    ],
+    "chooseWhen": [
+      "Only one position in an adjacent word pair can establish new ordering information.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "A longer word immediately preceding its own prefix is invalid even if the character graph has no cycle.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Only one position in an adjacent word pair can establish new ordering information.",
+        "explanation": "Infer a character ordering consistent with a dictionary sorted in an unknown alphabet. The first differing characters in adjacent words create precedence edges; a valid output is a topological ordering.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Only one position in an adjacent word pair can establish new ordering information."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Extract adjacent word precedence constraints and run lexicographical Kahn topological sort. The first differing characters in adjacent words create precedence edges; a valid output is a topological ordering.",
+        "rationale": "A longer word immediately preceding its own prefix is invalid even if the character graph has no cycle.",
+        "instructions": [
+          "Extract adjacent word precedence constraints and run lexicographical Kahn topological sort.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "The first differing characters in adjacent words create precedence edges; a valid output is a topological ordering.",
+          "Extract adjacent word precedence constraints and run lexicographical Kahn topological sort."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "A longer word immediately preceding its own prefix is invalid even if the character graph has no cycle. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "A longer word immediately preceding its own prefix is invalid even if the character graph has no cycle."
+        ]
+      }
+    ]
+  },
+  "270": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Find the binary search tree value closest to a numeric target.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Find the binary search tree value closest to a numeric target."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Walk BST root-to-leaf breaking distance ties by smaller node value. BST ordering lets the search discard the opposite branch while retaining the best value encountered. The cohort chooses the smaller value on equal distance; keep that tie rule explicit rather than relying on traversal order.",
+    "invariant": "BST ordering lets the search discard the opposite branch while retaining the best value encountered.",
+    "hints": [
+      "Compare the target with the current node to choose one next branch.",
+      "BST ordering lets the search discard the opposite branch while retaining the best value encountered.",
+      "Walk BST root-to-leaf breaking distance ties by smaller node value.",
+      "The cohort chooses the smaller value on equal distance; keep that tie rule explicit rather than relying on traversal order."
+    ],
+    "chooseWhen": [
+      "Compare the target with the current node to choose one next branch.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "The cohort chooses the smaller value on equal distance; keep that tie rule explicit rather than relying on traversal order.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Compare the target with the current node to choose one next branch.",
+        "explanation": "Find the binary search tree value closest to a numeric target. BST ordering lets the search discard the opposite branch while retaining the best value encountered.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Compare the target with the current node to choose one next branch."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Walk BST root-to-leaf breaking distance ties by smaller node value. BST ordering lets the search discard the opposite branch while retaining the best value encountered.",
+        "rationale": "The cohort chooses the smaller value on equal distance; keep that tie rule explicit rather than relying on traversal order.",
+        "instructions": [
+          "Walk BST root-to-leaf breaking distance ties by smaller node value.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "BST ordering lets the search discard the opposite branch while retaining the best value encountered.",
+          "Walk BST root-to-leaf breaking distance ties by smaller node value."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "The cohort chooses the smaller value on equal distance; keep that tie rule explicit rather than relying on traversal order. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "The cohort chooses the smaller value on equal distance; keep that tie rule explicit rather than relying on traversal order."
+        ]
+      }
+    ]
+  },
+  "272": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Select k binary search tree values closest to a numeric target.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Select k binary search tree values closest to a numeric target."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Inorder traversal with size-k sliding window. Inorder values are sorted, so a bounded moving window can discard a farther endpoint as new values arrive. Membership and output ordering are separate requirements; the cohort’s deterministic order is not a general uniqueness proof.",
+    "invariant": "Inorder values are sorted, so a bounded moving window can discard a farther endpoint as new values arrive.",
+    "hints": [
+      "Use sorted order to reason about which candidate can be removed safely.",
+      "Inorder values are sorted, so a bounded moving window can discard a farther endpoint as new values arrive.",
+      "Inorder traversal with size-k sliding window.",
+      "Membership and output ordering are separate requirements; the cohort’s deterministic order is not a general uniqueness proof."
+    ],
+    "chooseWhen": [
+      "Use sorted order to reason about which candidate can be removed safely.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Membership and output ordering are separate requirements; the cohort’s deterministic order is not a general uniqueness proof.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Use sorted order to reason about which candidate can be removed safely.",
+        "explanation": "Select k binary search tree values closest to a numeric target. Inorder values are sorted, so a bounded moving window can discard a farther endpoint as new values arrive.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Use sorted order to reason about which candidate can be removed safely."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Inorder traversal with size-k sliding window. Inorder values are sorted, so a bounded moving window can discard a farther endpoint as new values arrive.",
+        "rationale": "Membership and output ordering are separate requirements; the cohort’s deterministic order is not a general uniqueness proof.",
+        "instructions": [
+          "Inorder traversal with size-k sliding window.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Inorder values are sorted, so a bounded moving window can discard a farther endpoint as new values arrive.",
+          "Inorder traversal with size-k sliding window."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Membership and output ordering are separate requirements; the cohort’s deterministic order is not a general uniqueness proof. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Membership and output ordering are separate requirements; the cohort’s deterministic order is not a general uniqueness proof."
+        ]
+      }
+    ]
+  },
+  "276": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Count fence colorings where no three consecutive posts share a color.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Count fence colorings where no three consecutive posts share a color."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Iterative DP tracking same-last-two and diff-last-two colorings. Track prefixes whose final two colors match separately from prefixes whose final two colors differ. Small post counts and a single available color need deliberate base cases.",
+    "invariant": "Track prefixes whose final two colors match separately from prefixes whose final two colors differ.",
+    "hints": [
+      "Ask which previous state permits repeating the last color.",
+      "Track prefixes whose final two colors match separately from prefixes whose final two colors differ.",
+      "Iterative DP tracking same-last-two and diff-last-two colorings.",
+      "Small post counts and a single available color need deliberate base cases."
+    ],
+    "chooseWhen": [
+      "Ask which previous state permits repeating the last color.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Small post counts and a single available color need deliberate base cases.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Ask which previous state permits repeating the last color.",
+        "explanation": "Count fence colorings where no three consecutive posts share a color. Track prefixes whose final two colors match separately from prefixes whose final two colors differ.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Ask which previous state permits repeating the last color."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Iterative DP tracking same-last-two and diff-last-two colorings. Track prefixes whose final two colors match separately from prefixes whose final two colors differ.",
+        "rationale": "Small post counts and a single available color need deliberate base cases.",
+        "instructions": [
+          "Iterative DP tracking same-last-two and diff-last-two colorings.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Track prefixes whose final two colors match separately from prefixes whose final two colors differ.",
+          "Iterative DP tracking same-last-two and diff-last-two colorings."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Small post counts and a single available color need deliberate base cases. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Small post counts and a single available color need deliberate base cases."
+        ]
+      }
+    ]
+  },
+  "296": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Choose a meeting location minimizing total Manhattan distance from occupied grid cells.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Choose a meeting location minimizing total Manhattan distance from occupied grid cells."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Collect sorted row and column indices and sum 1D median distances. Manhattan distance separates into two independent one-dimensional median problems. Many people may share a row or column; their multiplicity must influence the median and total distance.",
+    "invariant": "Manhattan distance separates into two independent one-dimensional median problems.",
+    "hints": [
+      "Solve row distance and column distance independently.",
+      "Manhattan distance separates into two independent one-dimensional median problems.",
+      "Collect sorted row and column indices and sum 1D median distances.",
+      "Many people may share a row or column; their multiplicity must influence the median and total distance."
+    ],
+    "chooseWhen": [
+      "Solve row distance and column distance independently.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Many people may share a row or column; their multiplicity must influence the median and total distance.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Solve row distance and column distance independently.",
+        "explanation": "Choose a meeting location minimizing total Manhattan distance from occupied grid cells. Manhattan distance separates into two independent one-dimensional median problems.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Solve row distance and column distance independently."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Collect sorted row and column indices and sum 1D median distances. Manhattan distance separates into two independent one-dimensional median problems.",
+        "rationale": "Many people may share a row or column; their multiplicity must influence the median and total distance.",
+        "instructions": [
+          "Collect sorted row and column indices and sum 1D median distances.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Manhattan distance separates into two independent one-dimensional median problems.",
+          "Collect sorted row and column indices and sum 1D median distances."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Many people may share a row or column; their multiplicity must influence the median and total distance. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Many people may share a row or column; their multiplicity must influence the median and total distance."
+        ]
+      }
+    ]
+  },
+  "298": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Find the longest downward parent-to-child path whose values increase by exactly one.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Find the longest downward parent-to-child path whose values increase by exactly one."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Top-down DFS tracking consecutive +1 chain length. The running chain extends only when the child is exactly its parent plus one; otherwise it restarts. A valid chain may begin below the root, and equal or decreasing values break it.",
+    "invariant": "The running chain extends only when the child is exactly its parent plus one; otherwise it restarts.",
+    "hints": [
+      "A consecutive sequence is a path property, not a sorted set of values.",
+      "The running chain extends only when the child is exactly its parent plus one; otherwise it restarts.",
+      "Top-down DFS tracking consecutive +1 chain length.",
+      "A valid chain may begin below the root, and equal or decreasing values break it."
+    ],
+    "chooseWhen": [
+      "A consecutive sequence is a path property, not a sorted set of values.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "A valid chain may begin below the root, and equal or decreasing values break it.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "A consecutive sequence is a path property, not a sorted set of values.",
+        "explanation": "Find the longest downward parent-to-child path whose values increase by exactly one. The running chain extends only when the child is exactly its parent plus one; otherwise it restarts.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "A consecutive sequence is a path property, not a sorted set of values."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Top-down DFS tracking consecutive +1 chain length. The running chain extends only when the child is exactly its parent plus one; otherwise it restarts.",
+        "rationale": "A valid chain may begin below the root, and equal or decreasing values break it.",
+        "instructions": [
+          "Top-down DFS tracking consecutive +1 chain length.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "The running chain extends only when the child is exactly its parent plus one; otherwise it restarts.",
+          "Top-down DFS tracking consecutive +1 chain length."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "A valid chain may begin below the root, and equal or decreasing values break it. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "A valid chain may begin below the root, and equal or decreasing values break it."
+        ]
+      }
+    ]
+  },
+  "302": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Find the area of the smallest axis-aligned rectangle containing the black pixels.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Find the area of the smallest axis-aligned rectangle containing the black pixels."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Bounding box scan over black pixels. The extrema of black row and column indices determine the enclosing rectangle. Coordinate differences need inclusive widths and heights; a single pixel has area one.",
+    "invariant": "The extrema of black row and column indices determine the enclosing rectangle.",
+    "hints": [
+      "Track four boundaries instead of storing every black coordinate.",
+      "The extrema of black row and column indices determine the enclosing rectangle.",
+      "Bounding box scan over black pixels.",
+      "Coordinate differences need inclusive widths and heights; a single pixel has area one."
+    ],
+    "chooseWhen": [
+      "Track four boundaries instead of storing every black coordinate.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Coordinate differences need inclusive widths and heights; a single pixel has area one.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Track four boundaries instead of storing every black coordinate.",
+        "explanation": "Find the area of the smallest axis-aligned rectangle containing the black pixels. The extrema of black row and column indices determine the enclosing rectangle.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Track four boundaries instead of storing every black coordinate."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Bounding box scan over black pixels. The extrema of black row and column indices determine the enclosing rectangle.",
+        "rationale": "Coordinate differences need inclusive widths and heights; a single pixel has area one.",
+        "instructions": [
+          "Bounding box scan over black pixels.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "The extrema of black row and column indices determine the enclosing rectangle.",
+          "Bounding box scan over black pixels."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Coordinate differences need inclusive widths and heights; a single pixel has area one. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Coordinate differences need inclusive widths and heights; a single pixel has area one."
+        ]
+      }
+    ]
+  },
+  "311": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Multiply two compatible integer matrices while exploiting zero entries.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Multiply two compatible integer matrices while exploiting zero entries."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Skip zero entries during row-by-column accumulation. Each nonzero A entry contributes its value times the corresponding B row to one result row. Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter.",
+    "invariant": "Each nonzero A entry contributes its value times the corresponding B row to one result row.",
+    "hints": [
+      "Reorder multiplication loops so zero entries skip useful amounts of work.",
+      "Each nonzero A entry contributes its value times the corresponding B row to one result row.",
+      "Skip zero entries during row-by-column accumulation.",
+      "Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter."
+    ],
+    "chooseWhen": [
+      "Reorder multiplication loops so zero entries skip useful amounts of work.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Reorder multiplication loops so zero entries skip useful amounts of work.",
+        "explanation": "Multiply two compatible integer matrices while exploiting zero entries. Each nonzero A entry contributes its value times the corresponding B row to one result row.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Reorder multiplication loops so zero entries skip useful amounts of work."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Skip zero entries during row-by-column accumulation. Each nonzero A entry contributes its value times the corresponding B row to one result row.",
+        "rationale": "Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter.",
+        "instructions": [
+          "Skip zero entries during row-by-column accumulation.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Each nonzero A entry contributes its value times the corresponding B row to one result row.",
+          "Skip zero entries during row-by-column accumulation."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter."
+        ]
+      }
+    ]
+  },
+  "314": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "List binary-tree nodes by vertical column, preserving top-to-bottom order and appropriate same-level traversal order.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "List binary-tree nodes by vertical column, preserving top-to-bottom order and appropriate same-level traversal order."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "BFS tracking column offset from root. Breadth-first traversal visits shallower nodes first while column offsets identify their output bucket. Depth-first collection can incorrectly order nodes that share a column but have different depths.",
+    "invariant": "Breadth-first traversal visits shallower nodes first while column offsets identify their output bucket.",
+    "hints": [
+      "Carry both a node and its column in the queue.",
+      "Breadth-first traversal visits shallower nodes first while column offsets identify their output bucket.",
+      "BFS tracking column offset from root.",
+      "Depth-first collection can incorrectly order nodes that share a column but have different depths."
+    ],
+    "chooseWhen": [
+      "Carry both a node and its column in the queue.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Depth-first collection can incorrectly order nodes that share a column but have different depths.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Carry both a node and its column in the queue.",
+        "explanation": "List binary-tree nodes by vertical column, preserving top-to-bottom order and appropriate same-level traversal order. Breadth-first traversal visits shallower nodes first while column offsets identify their output bucket.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Carry both a node and its column in the queue."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "BFS tracking column offset from root. Breadth-first traversal visits shallower nodes first while column offsets identify their output bucket.",
+        "rationale": "Depth-first collection can incorrectly order nodes that share a column but have different depths.",
+        "instructions": [
+          "BFS tracking column offset from root.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Breadth-first traversal visits shallower nodes first while column offsets identify their output bucket.",
+          "BFS tracking column offset from root."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Depth-first collection can incorrectly order nodes that share a column but have different depths. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Depth-first collection can incorrectly order nodes that share a column but have different depths."
+        ]
+      }
+    ]
+  },
+  "317": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Find an empty grid cell with minimum total traversable distance to every building.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Find an empty grid cell with minimum total traversable distance to every building."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Multi-source BFS from each building accumulating distances and reach counts. Each empty cell accumulates distance and a count of buildings that reached it. A low-distance cell is unusable if even one building cannot reach it.",
+    "invariant": "Each empty cell accumulates distance and a count of buildings that reached it.",
+    "hints": [
+      "Run a traversal from each building and combine results only after all traversals.",
+      "Each empty cell accumulates distance and a count of buildings that reached it.",
+      "Multi-source BFS from each building accumulating distances and reach counts.",
+      "A low-distance cell is unusable if even one building cannot reach it."
+    ],
+    "chooseWhen": [
+      "Run a traversal from each building and combine results only after all traversals.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "A low-distance cell is unusable if even one building cannot reach it.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Run a traversal from each building and combine results only after all traversals.",
+        "explanation": "Find an empty grid cell with minimum total traversable distance to every building. Each empty cell accumulates distance and a count of buildings that reached it.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Run a traversal from each building and combine results only after all traversals."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Multi-source BFS from each building accumulating distances and reach counts. Each empty cell accumulates distance and a count of buildings that reached it.",
+        "rationale": "A low-distance cell is unusable if even one building cannot reach it.",
+        "instructions": [
+          "Multi-source BFS from each building accumulating distances and reach counts.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Each empty cell accumulates distance and a count of buildings that reached it.",
+          "Multi-source BFS from each building accumulating distances and reach counts."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "A low-distance cell is unusable if even one building cannot reach it. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "A low-distance cell is unusable if even one building cannot reach it."
+        ]
+      }
+    ]
+  },
+  "320": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Generate all generalized abbreviations by replacing consecutive omitted characters with their run length.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Generate all generalized abbreviations by replacing consecutive omitted characters with their run length."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Enumerate bitmasks 0..2^n-1 compressing consecutive 1-bits into run lengths. An omission run is emitted once when it ends, rather than as several adjacent numeric fragments. Flush a trailing omission count and ensure consecutive omitted characters become one number.",
+    "invariant": "An omission run is emitted once when it ends, rather than as several adjacent numeric fragments.",
+    "hints": [
+      "Treat each character as kept or omitted, and defer counting output until a run closes.",
+      "An omission run is emitted once when it ends, rather than as several adjacent numeric fragments.",
+      "Enumerate bitmasks 0..2^n-1 compressing consecutive 1-bits into run lengths.",
+      "Flush a trailing omission count and ensure consecutive omitted characters become one number."
+    ],
+    "chooseWhen": [
+      "Treat each character as kept or omitted, and defer counting output until a run closes.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Flush a trailing omission count and ensure consecutive omitted characters become one number.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Treat each character as kept or omitted, and defer counting output until a run closes.",
+        "explanation": "Generate all generalized abbreviations by replacing consecutive omitted characters with their run length. An omission run is emitted once when it ends, rather than as several adjacent numeric fragments.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Treat each character as kept or omitted, and defer counting output until a run closes."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Enumerate bitmasks 0..2^n-1 compressing consecutive 1-bits into run lengths. An omission run is emitted once when it ends, rather than as several adjacent numeric fragments.",
+        "rationale": "Flush a trailing omission count and ensure consecutive omitted characters become one number.",
+        "instructions": [
+          "Enumerate bitmasks 0..2^n-1 compressing consecutive 1-bits into run lengths.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "An omission run is emitted once when it ends, rather than as several adjacent numeric fragments.",
+          "Enumerate bitmasks 0..2^n-1 compressing consecutive 1-bits into run lengths."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Flush a trailing omission count and ensure consecutive omitted characters become one number. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Flush a trailing omission count and ensure consecutive omitted characters become one number."
+        ]
+      }
+    ]
+  },
+  "325": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Find the longest contiguous subarray whose sum is k, allowing negative values.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Find the longest contiguous subarray whose sum is k, allowing negative values."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Hash map of earliest prefix sum indices. For a prefix sum s, the earliest occurrence of s-k gives the longest valid subarray ending here. The zero prefix before the array is needed to detect valid subarrays beginning at index zero.",
+    "invariant": "For a prefix sum s, the earliest occurrence of s-k gives the longest valid subarray ending here.",
+    "hints": [
+      "Store the first position for each prefix sum rather than the latest.",
+      "For a prefix sum s, the earliest occurrence of s-k gives the longest valid subarray ending here.",
+      "Hash map of earliest prefix sum indices.",
+      "The zero prefix before the array is needed to detect valid subarrays beginning at index zero."
+    ],
+    "chooseWhen": [
+      "Store the first position for each prefix sum rather than the latest.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "The zero prefix before the array is needed to detect valid subarrays beginning at index zero.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Store the first position for each prefix sum rather than the latest.",
+        "explanation": "Find the longest contiguous subarray whose sum is k, allowing negative values. For a prefix sum s, the earliest occurrence of s-k gives the longest valid subarray ending here.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Store the first position for each prefix sum rather than the latest."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Hash map of earliest prefix sum indices. For a prefix sum s, the earliest occurrence of s-k gives the longest valid subarray ending here.",
+        "rationale": "The zero prefix before the array is needed to detect valid subarrays beginning at index zero.",
+        "instructions": [
+          "Hash map of earliest prefix sum indices.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "For a prefix sum s, the earliest occurrence of s-k gives the longest valid subarray ending here.",
+          "Hash map of earliest prefix sum indices."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "The zero prefix before the array is needed to detect valid subarrays beginning at index zero. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "The zero prefix before the array is needed to detect valid subarrays beginning at index zero."
+        ]
+      }
+    ]
+  },
+  "333": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Find the largest subtree that is itself a binary search tree.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Find the largest subtree that is itself a binary search tree."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Bottom-up DFS returning (is_bst, min_val, max_val, best_size). A parent needs validity, minimum, maximum and size from each child to validate the combined subtree. A valid descendant subtree still counts when its ancestor violates BST ordering.",
+    "invariant": "A parent needs validity, minimum, maximum and size from each child to validate the combined subtree.",
+    "hints": [
+      "Return a compact postorder summary instead of checking every subtree independently.",
+      "A parent needs validity, minimum, maximum and size from each child to validate the combined subtree.",
+      "Bottom-up DFS returning (is_bst, min_val, max_val, best_size).",
+      "A valid descendant subtree still counts when its ancestor violates BST ordering."
+    ],
+    "chooseWhen": [
+      "Return a compact postorder summary instead of checking every subtree independently.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "A valid descendant subtree still counts when its ancestor violates BST ordering.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Return a compact postorder summary instead of checking every subtree independently.",
+        "explanation": "Find the largest subtree that is itself a binary search tree. A parent needs validity, minimum, maximum and size from each child to validate the combined subtree.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Return a compact postorder summary instead of checking every subtree independently."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Bottom-up DFS returning (is_bst, min_val, max_val, best_size). A parent needs validity, minimum, maximum and size from each child to validate the combined subtree.",
+        "rationale": "A valid descendant subtree still counts when its ancestor violates BST ordering.",
+        "instructions": [
+          "Bottom-up DFS returning (is_bst, min_val, max_val, best_size).",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "A parent needs validity, minimum, maximum and size from each child to validate the combined subtree.",
+          "Bottom-up DFS returning (is_bst, min_val, max_val, best_size)."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "A valid descendant subtree still counts when its ancestor violates BST ordering. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "A valid descendant subtree still counts when its ancestor violates BST ordering."
+        ]
+      }
+    ]
+  },
+  "340": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Find the longest substring containing at most k distinct characters.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Find the longest substring containing at most k distinct characters."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Two-pointer sliding window maintaining character frequency map. The maintained window is valid exactly when its frequency map has at most k positive-count keys. Delete zero-count keys and handle k equal to zero without leaving a stale nonempty window.",
+    "invariant": "The maintained window is valid exactly when its frequency map has at most k positive-count keys.",
+    "hints": [
+      "Expand right, then shrink left until the distinct-count rule is restored.",
+      "The maintained window is valid exactly when its frequency map has at most k positive-count keys.",
+      "Two-pointer sliding window maintaining character frequency map.",
+      "Delete zero-count keys and handle k equal to zero without leaving a stale nonempty window."
+    ],
+    "chooseWhen": [
+      "Expand right, then shrink left until the distinct-count rule is restored.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Delete zero-count keys and handle k equal to zero without leaving a stale nonempty window.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Expand right, then shrink left until the distinct-count rule is restored.",
+        "explanation": "Find the longest substring containing at most k distinct characters. The maintained window is valid exactly when its frequency map has at most k positive-count keys.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Expand right, then shrink left until the distinct-count rule is restored."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Two-pointer sliding window maintaining character frequency map. The maintained window is valid exactly when its frequency map has at most k positive-count keys.",
+        "rationale": "Delete zero-count keys and handle k equal to zero without leaving a stale nonempty window.",
+        "instructions": [
+          "Two-pointer sliding window maintaining character frequency map.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "The maintained window is valid exactly when its frequency map has at most k positive-count keys.",
+          "Two-pointer sliding window maintaining character frequency map."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Delete zero-count keys and handle k equal to zero without leaving a stale nonempty window. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Delete zero-count keys and handle k equal to zero without leaving a stale nonempty window."
+        ]
+      }
+    ]
+  },
+  "351": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Count Android unlock patterns within a given length range, respecting intermediate-key visitation rules.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Count Android unlock patterns within a given length range, respecting intermediate-key visitation rules."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Symmetry-reduced backtracking with intermediate-key skip table. A move is legal when its target is unused and any key directly crossed has already been visited. A previously visited intermediate key permits a jump that would otherwise be illegal.",
+    "invariant": "A move is legal when its target is unused and any key directly crossed has already been visited.",
+    "hints": [
+      "Represent the special crossed-key moves explicitly before backtracking.",
+      "A move is legal when its target is unused and any key directly crossed has already been visited.",
+      "Symmetry-reduced backtracking with intermediate-key skip table.",
+      "A previously visited intermediate key permits a jump that would otherwise be illegal."
+    ],
+    "chooseWhen": [
+      "Represent the special crossed-key moves explicitly before backtracking.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "A previously visited intermediate key permits a jump that would otherwise be illegal.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Represent the special crossed-key moves explicitly before backtracking.",
+        "explanation": "Count Android unlock patterns within a given length range, respecting intermediate-key visitation rules. A move is legal when its target is unused and any key directly crossed has already been visited.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Represent the special crossed-key moves explicitly before backtracking."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Symmetry-reduced backtracking with intermediate-key skip table. A move is legal when its target is unused and any key directly crossed has already been visited.",
+        "rationale": "A previously visited intermediate key permits a jump that would otherwise be illegal.",
+        "instructions": [
+          "Symmetry-reduced backtracking with intermediate-key skip table.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "A move is legal when its target is unused and any key directly crossed has already been visited.",
+          "Symmetry-reduced backtracking with intermediate-key skip table."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "A previously visited intermediate key permits a jump that would otherwise be illegal. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "A previously visited intermediate key permits a jump that would otherwise be illegal."
+        ]
+      }
+    ]
+  },
+  "356": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Determine whether a point set is symmetric about some vertical line.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Determine whether a point set is symmetric about some vertical line."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Hash set lookup verifying (min_x + max_x - x, y) for every point. The reflection candidate has doubled x-coordinate minX+maxX, so each point requires its mirrored partner. Points lying on the reflection line map to themselves; preserve the cohort’s treatment of duplicate points.",
+    "invariant": "The reflection candidate has doubled x-coordinate minX+maxX, so each point requires its mirrored partner.",
+    "hints": [
+      "Avoid floating-point line coordinates by working with twice the reflection position.",
+      "The reflection candidate has doubled x-coordinate minX+maxX, so each point requires its mirrored partner.",
+      "Hash set lookup verifying (min_x + max_x - x, y) for every point.",
+      "Points lying on the reflection line map to themselves; preserve the cohort’s treatment of duplicate points."
+    ],
+    "chooseWhen": [
+      "Avoid floating-point line coordinates by working with twice the reflection position.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Points lying on the reflection line map to themselves; preserve the cohort’s treatment of duplicate points.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Avoid floating-point line coordinates by working with twice the reflection position.",
+        "explanation": "Determine whether a point set is symmetric about some vertical line. The reflection candidate has doubled x-coordinate minX+maxX, so each point requires its mirrored partner.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Avoid floating-point line coordinates by working with twice the reflection position."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Hash set lookup verifying (min_x + max_x - x, y) for every point. The reflection candidate has doubled x-coordinate minX+maxX, so each point requires its mirrored partner.",
+        "rationale": "Points lying on the reflection line map to themselves; preserve the cohort’s treatment of duplicate points.",
+        "instructions": [
+          "Hash set lookup verifying (min_x + max_x - x, y) for every point.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "The reflection candidate has doubled x-coordinate minX+maxX, so each point requires its mirrored partner.",
+          "Hash set lookup verifying (min_x + max_x - x, y) for every point."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Points lying on the reflection line map to themselves; preserve the cohort’s treatment of duplicate points. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Points lying on the reflection line map to themselves; preserve the cohort’s treatment of duplicate points."
+        ]
+      }
+    ]
+  },
+  "358": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Rearrange a string so equal characters are at least k positions apart, or report impossibility.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Rearrange a string so equal characters are at least k positions apart, or report impossibility."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Max-frequency priority queue with distance-k cooldown queue. Only characters whose cooldown has expired may enter the next-position priority queue. Remaining characters plus an empty available heap means failure; cooldown eligibility depends on output position.",
+    "invariant": "Only characters whose cooldown has expired may enter the next-position priority queue.",
+    "hints": [
+      "Separate the best available character from characters temporarily unavailable due to recent use.",
+      "Only characters whose cooldown has expired may enter the next-position priority queue.",
+      "Max-frequency priority queue with distance-k cooldown queue.",
+      "Remaining characters plus an empty available heap means failure; cooldown eligibility depends on output position."
+    ],
+    "chooseWhen": [
+      "Separate the best available character from characters temporarily unavailable due to recent use.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Remaining characters plus an empty available heap means failure; cooldown eligibility depends on output position.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Separate the best available character from characters temporarily unavailable due to recent use.",
+        "explanation": "Rearrange a string so equal characters are at least k positions apart, or report impossibility. Only characters whose cooldown has expired may enter the next-position priority queue.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Separate the best available character from characters temporarily unavailable due to recent use."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Max-frequency priority queue with distance-k cooldown queue. Only characters whose cooldown has expired may enter the next-position priority queue.",
+        "rationale": "Remaining characters plus an empty available heap means failure; cooldown eligibility depends on output position.",
+        "instructions": [
+          "Max-frequency priority queue with distance-k cooldown queue.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Only characters whose cooldown has expired may enter the next-position priority queue.",
+          "Max-frequency priority queue with distance-k cooldown queue."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Remaining characters plus an empty available heap means failure; cooldown eligibility depends on output position. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Remaining characters plus an empty available heap means failure; cooldown eligibility depends on output position."
+        ]
+      }
+    ]
+  },
+  "360": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Apply a quadratic function to a sorted array and return the transformed values in sorted order.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Apply a quadratic function to a sorted array and return the transformed values in sorted order."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Two-pointer merge from array ends exploiting parabola convexity. A convex quadratic places the largest remaining result at an endpoint; concavity reverses the output direction. The sign of the quadratic coefficient changes which end of the result should be filled first.",
+    "invariant": "A convex quadratic places the largest remaining result at an endpoint; concavity reverses the output direction.",
+    "hints": [
+      "Compare transformed endpoints rather than sorting all transformed values.",
+      "A convex quadratic places the largest remaining result at an endpoint; concavity reverses the output direction.",
+      "Two-pointer merge from array ends exploiting parabola convexity.",
+      "The sign of the quadratic coefficient changes which end of the result should be filled first."
+    ],
+    "chooseWhen": [
+      "Compare transformed endpoints rather than sorting all transformed values.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "The sign of the quadratic coefficient changes which end of the result should be filled first.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Compare transformed endpoints rather than sorting all transformed values.",
+        "explanation": "Apply a quadratic function to a sorted array and return the transformed values in sorted order. A convex quadratic places the largest remaining result at an endpoint; concavity reverses the output direction.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Compare transformed endpoints rather than sorting all transformed values."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Two-pointer merge from array ends exploiting parabola convexity. A convex quadratic places the largest remaining result at an endpoint; concavity reverses the output direction.",
+        "rationale": "The sign of the quadratic coefficient changes which end of the result should be filled first.",
+        "instructions": [
+          "Two-pointer merge from array ends exploiting parabola convexity.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "A convex quadratic places the largest remaining result at an endpoint; concavity reverses the output direction.",
+          "Two-pointer merge from array ends exploiting parabola convexity."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "The sign of the quadratic coefficient changes which end of the result should be filled first. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "The sign of the quadratic coefficient changes which end of the result should be filled first."
+        ]
+      }
+    ]
+  },
+  "361": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Place one bomb in an empty cell to maximize enemies hit along rows and columns until walls stop the blast.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Place one bomb in an empty cell to maximize enemies hit along rows and columns until walls stop the blast."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Cache row-segment and column-segment enemy counts between walls. Every wall-separated row or column segment shares one reusable enemy count. Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell.",
+    "invariant": "Every wall-separated row or column segment shares one reusable enemy count.",
+    "hints": [
+      "Compute a segment count only when entering it after a wall or grid boundary.",
+      "Every wall-separated row or column segment shares one reusable enemy count.",
+      "Cache row-segment and column-segment enemy counts between walls.",
+      "Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell."
+    ],
+    "chooseWhen": [
+      "Compute a segment count only when entering it after a wall or grid boundary.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Compute a segment count only when entering it after a wall or grid boundary.",
+        "explanation": "Place one bomb in an empty cell to maximize enemies hit along rows and columns until walls stop the blast. Every wall-separated row or column segment shares one reusable enemy count.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Compute a segment count only when entering it after a wall or grid boundary."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Cache row-segment and column-segment enemy counts between walls. Every wall-separated row or column segment shares one reusable enemy count.",
+        "rationale": "Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell.",
+        "instructions": [
+          "Cache row-segment and column-segment enemy counts between walls.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "Every wall-separated row or column segment shares one reusable enemy count.",
+          "Cache row-segment and column-segment enemy counts between walls."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell."
+        ]
+      }
+    ]
+  },
+  "366": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Group tree nodes by the round in which repeated leaf removal would remove them.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Group tree nodes by the round in which repeated leaf removal would remove them."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Post-order DFS bucketing nodes by height from leaves. A node’s removal round is one plus the maximum removal round of its children. Removal rounds can be computed without repeatedly mutating or rescanning the whole tree.",
+    "invariant": "A node’s removal round is one plus the maximum removal round of its children.",
+    "hints": [
+      "Compute height from leaves using postorder traversal.",
+      "A node’s removal round is one plus the maximum removal round of its children.",
+      "Post-order DFS bucketing nodes by height from leaves.",
+      "Removal rounds can be computed without repeatedly mutating or rescanning the whole tree."
+    ],
+    "chooseWhen": [
+      "Compute height from leaves using postorder traversal.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Removal rounds can be computed without repeatedly mutating or rescanning the whole tree.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Compute height from leaves using postorder traversal.",
+        "explanation": "Group tree nodes by the round in which repeated leaf removal would remove them. A node’s removal round is one plus the maximum removal round of its children.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Compute height from leaves using postorder traversal."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Post-order DFS bucketing nodes by height from leaves. A node’s removal round is one plus the maximum removal round of its children.",
+        "rationale": "Removal rounds can be computed without repeatedly mutating or rescanning the whole tree.",
+        "instructions": [
+          "Post-order DFS bucketing nodes by height from leaves.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "A node’s removal round is one plus the maximum removal round of its children.",
+          "Post-order DFS bucketing nodes by height from leaves."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Removal rounds can be computed without repeatedly mutating or rescanning the whole tree. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Removal rounds can be computed without repeatedly mutating or rescanning the whole tree."
+        ]
+      }
+    ]
+  },
+  "369": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Add one to the decimal number stored by a linked list of digits.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Add one to the decimal number stored by a linked list of digits."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Locate rightmost non-9 digit, increment it, and zero trailing 9s. The rightmost digit below nine absorbs the carry, and every later digit becomes zero. Native linked-node mutation and the nonmutating digit-array wrapper have different ownership behavior.",
+    "invariant": "The rightmost digit below nine absorbs the carry, and every later digit becomes zero.",
+    "hints": [
+      "A sentinel handles the case where every input digit is nine.",
+      "The rightmost digit below nine absorbs the carry, and every later digit becomes zero.",
+      "Locate rightmost non-9 digit, increment it, and zero trailing 9s.",
+      "Native linked-node mutation and the nonmutating digit-array wrapper have different ownership behavior."
+    ],
+    "chooseWhen": [
+      "A sentinel handles the case where every input digit is nine.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Native linked-node mutation and the nonmutating digit-array wrapper have different ownership behavior.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "A sentinel handles the case where every input digit is nine.",
+        "explanation": "Add one to the decimal number stored by a linked list of digits. The rightmost digit below nine absorbs the carry, and every later digit becomes zero.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "A sentinel handles the case where every input digit is nine."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Locate rightmost non-9 digit, increment it, and zero trailing 9s. The rightmost digit below nine absorbs the carry, and every later digit becomes zero.",
+        "rationale": "Native linked-node mutation and the nonmutating digit-array wrapper have different ownership behavior.",
+        "instructions": [
+          "Locate rightmost non-9 digit, increment it, and zero trailing 9s.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "The rightmost digit below nine absorbs the carry, and every later digit becomes zero.",
+          "Locate rightmost non-9 digit, increment it, and zero trailing 9s."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Native linked-node mutation and the nonmutating digit-array wrapper have different ownership behavior. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Native linked-node mutation and the nonmutating digit-array wrapper have different ownership behavior."
+        ]
+      }
+    ]
+  },
+  "370": {
+    "author": "Codex",
+    "authoredAt": "2026-10-29",
+    "scope": "Authored study paraphrase from the existing source-declared interface, candidate design and cohort cases; original private statement not re-read or reverified.",
+    "statement": "Apply inclusive range increments to an initially zero array.",
+    "requirements": [
+      {
+        "id": "r0",
+        "text": "Apply inclusive range increments to an initially zero array."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "constraints": {
+      "status": "unknown",
+      "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+    },
+    "assumptions": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "clarifyingQuestions": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "explanation": "Difference array boundary updates followed by prefix sum. An update adds its delta at the left boundary and cancels it immediately after the right boundary. Do not write a cancellation beyond the array; overlapping and negative updates must combine correctly.",
+    "invariant": "An update adds its delta at the left boundary and cancels it immediately after the right boundary.",
+    "hints": [
+      "Record how values change at boundaries, then reconstruct by prefix sums.",
+      "An update adds its delta at the left boundary and cancels it immediately after the right boundary.",
+      "Difference array boundary updates followed by prefix sum.",
+      "Do not write a cancellation beyond the array; overlapping and negative updates must combine correctly."
+    ],
+    "chooseWhen": [
+      "Record how values change at boundaries, then reconstruct by prefix sums.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "tradeoffs": [
+      "Do not write a cancellation beyond the array; overlapping and negative updates must combine correctly.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "stages": [
+      {
+        "id": "reasoning",
+        "title": "Establish the invariant",
+        "question": "Record how values change at boundaries, then reconstruct by prefix sums.",
+        "explanation": "Apply inclusive range increments to an initially zero array. An update adds its delta at the left boundary and cancels it immediately after the right boundary.",
+        "rationale": "Identify the information that must survive each step before choosing code.",
+        "instructions": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "hints": [
+          "Record how values change at boundaries, then reconstruct by prefix sums."
+        ]
+      },
+      {
+        "id": "coding",
+        "title": "Implement the state transition",
+        "question": "Which state changes make the next step preserve this invariant?",
+        "explanation": "Difference array boundary updates followed by prefix sum. An update adds its delta at the left boundary and cancels it immediately after the right boundary.",
+        "rationale": "Do not write a cancellation beyond the array; overlapping and negative updates must combine correctly.",
+        "instructions": [
+          "Difference array boundary updates followed by prefix sum.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "hints": [
+          "An update adds its delta at the left boundary and cancels it immediately after the right boundary.",
+          "Difference array boundary updates followed by prefix sum."
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Challenge the boundary",
+        "question": "What boundary or counterexample would expose this mistake?",
+        "explanation": "Do not write a cancellation beyond the array; overlapping and negative updates must combine correctly. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "rationale": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "instructions": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "hints": [
+          "Do not write a cancellation beyond the array; overlapping and negative updates must combine correctly."
+        ]
+      }
+    ]
+  }
+}

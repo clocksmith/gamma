@@ -1,0 +1,356 @@
+{
+  "schema": "study.record.v1",
+  "kind": "contract",
+  "id": "contract:leetcode:737:requested-156-1940-31-20261028-v1:737:authored-v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+      "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+      "selector": "/problems/7"
+    }
+  ],
+  "problemId": "leetcode:737",
+  "variantId": "requested-156-1940-31-20261028-v1:737",
+  "variantLabel": {
+    "status": "present",
+    "value": "Sentence Similarity II",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+        "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+        "selector": "/problems/7/title"
+      }
+    ]
+  },
+  "statement": {
+    "status": "present",
+    "value": "Check word-by-word sentence similarity when supplied similar-word pairs are symmetric and transitive.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/737/statement"
+      }
+    ]
+  },
+  "contentScope": "authored",
+  "requirements": {
+    "status": "present",
+    "value": [
+      {
+        "id": "r0",
+        "text": "Check word-by-word sentence similarity when supplied similar-word pairs are symmetric and transitive."
+      },
+      {
+        "id": "r1",
+        "text": "The declared JSON solve wrapper preserves its input arguments and returns the cohort result representation."
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/737/requirements"
+      }
+    ]
+  },
+  "constraints": {
+    "status": "unknown",
+    "reason": "The complete original statement bounds have not been normalized or independently checked; retain the existing validate_domain and its source claims separately."
+  },
+  "assumptions": {
+    "status": "present",
+    "value": [
+      "This record preserves a specific authored cohort contract, not a newly verified official specification.",
+      "The JSON wrapper and the source-declared native interface may have different serialization and ownership rules."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/737/assumptions"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "status": "present",
+    "value": [
+      "Which exact output order, tie, numeric and mutation rules does the target interface require?",
+      "Does the full intended input domain match the cohort domain validator?"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/737/clarifyingQuestions"
+      }
+    ]
+  },
+  "examples": {
+    "status": "present",
+    "value": [
+      {
+        "arguments": [
+          [
+            "great",
+            "acting",
+            "skills"
+          ],
+          [
+            "fine",
+            "drama",
+            "talent"
+          ],
+          [
+            [
+              "great",
+              "good"
+            ],
+            [
+              "fine",
+              "good"
+            ],
+            [
+              "drama",
+              "acting"
+            ],
+            [
+              "skills",
+              "talent"
+            ]
+          ]
+        ],
+        "expected": true,
+        "source": "cohort-authored development example; not asserted to be an official example"
+      },
+      {
+        "arguments": [
+          [
+            "I",
+            "love",
+            "leetcode"
+          ],
+          [
+            "I",
+            "love",
+            "onepiece"
+          ],
+          [
+            [
+              "manga",
+              "onepiece"
+            ],
+            [
+              "platform",
+              "anime"
+            ]
+          ]
+        ],
+        "expected": false,
+        "source": "cohort-authored development example; not asserted to be an official example"
+      }
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-examples.json",
+        "sha256": "43c127495173874d972b20f0ebf454306b9ad8e830e1868f1dd9f218c20bc62c",
+        "selector": "/737"
+      }
+    ]
+  },
+  "interfaces": [
+    {
+      "language": "python",
+      "kind": "function",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "name": "areSentencesSimilarTwo",
+          "params": [
+            {
+              "name": "sentence1",
+              "type": "string[]"
+            },
+            {
+              "name": "sentence2",
+              "type": "string[]"
+            },
+            {
+              "name": "similarPairs",
+              "type": "string[][]"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/7/official_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "scope": "Existing source-declared ABI retained; native compatibility is not established by the JSON-wrapper runs.",
+          "originalDeclaration": {
+            "name": "areSentencesSimilarTwo",
+            "params": [
+              {
+                "name": "sentence1",
+                "type": "string[]"
+              },
+              {
+                "name": "sentence2",
+                "type": "string[]"
+              },
+              {
+                "name": "similarPairs",
+                "type": "string[][]"
+              }
+            ],
+            "return": {
+              "type": "boolean"
+            }
+          }
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/7/official_interface"
+          }
+        ]
+      }
+    },
+    {
+      "language": "javascript",
+      "kind": "function",
+      "declaration": {
+        "status": "present",
+        "value": {
+          "name": "areSentencesSimilarTwo",
+          "params": [
+            {
+              "name": "sentence1",
+              "type": "string[]"
+            },
+            {
+              "name": "sentence2",
+              "type": "string[]"
+            },
+            {
+              "name": "similarPairs",
+              "type": "string[][]"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/7/official_interface"
+          }
+        ]
+      },
+      "nativeMetadata": {
+        "status": "present",
+        "value": {
+          "scope": "Existing source-declared ABI retained; native compatibility is not established by the JSON-wrapper runs.",
+          "originalDeclaration": {
+            "name": "areSentencesSimilarTwo",
+            "params": [
+              {
+                "name": "sentence1",
+                "type": "string[]"
+              },
+              {
+                "name": "sentence2",
+                "type": "string[]"
+              },
+              {
+                "name": "similarPairs",
+                "type": "string[][]"
+              }
+            ],
+            "return": {
+              "type": "boolean"
+            }
+          }
+        },
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/contracts.json",
+            "sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+            "selector": "/problems/7/official_interface"
+          }
+        ]
+      }
+    }
+  ],
+  "effects": {
+    "status": "present",
+    "value": {
+      "scope": "JSON solve wrapper",
+      "inputMutation": "forbidden",
+      "outputAliasing": "forbidden",
+      "nativeObjectEffects": "not-established-by-wrapper-execution"
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/7/mutation_alias_contract"
+      }
+    ]
+  },
+  "comparison": {
+    "status": "present",
+    "value": {
+      "kind": "exact",
+      "scope": "Existing cohort deterministic JSON result; native nonunique/float acceptance policy requires separate confirmation."
+    },
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/7/return_domain"
+      }
+    ]
+  },
+  "sources": [],
+  "native": []
+}
