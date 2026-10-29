@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:679dc578996c3c60bd38b5bc",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "masses",
+  "speeds"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "asteroidCollision",
+  "params": [
+   {
+    "name": "masses",
+    "type": "integer[]"
+   },
+   {
+    "name": "speeds",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "list<[integer,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "repeatedly scan the row for the first adjacent right-then-left pair and resolve it, until none is left",
+  "candidate_design": "stack of survivors: a left-mover fights the right-movers on top of the stack until it dies or no right-mover remains",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "d19c09819bdcd37c1ac52508817ca906cc0e76e097fe5f3e8ad226965e68dca8",
+ "wrapper": "named export asteroidCollision"
+}

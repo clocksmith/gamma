@@ -1,0 +1,340 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68ad89cfcdaebe9459ce9a7e:68ad8c5bcdaebe9459ce9a7f:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+   "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68ad89cfcdaebe9459ce9a7e.json",
+   "sha256": "0cbd5e2d37f1d7dfaeb532642cf870994b401e00fa5558c928c0dcbf270f9e4e",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+   "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+   "selector": "/variants/hack2hire:68ad8c5bcdaebe9459ce9a7f"
+  }
+ ],
+ "problemId": "hack2hire:68ad89cfcdaebe9459ce9a7e",
+ "variantId": "68ad8c5bcdaebe9459ce9a7f",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: shuffle-cycle consistency with an unknown starting offset",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:68ad8c5bcdaebe9459ce9a7f/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "The playlist has numSongs songs numbered 1..numSongs. Shuffle Mode plays the songs in cycles: each cycle plays every song exactly once in some order, then a new cycle begins. sequence is a window of observed plays that may start and end in the middle of a cycle. Return true when there is an offset o (0 <= o < numSongs) such that cutting sequence before positions o, o + numSongs, o + 2 * numSongs, ... gives pieces in which no song repeats (a full piece of numSongs distinct songs is a whole cycle; the first and last pieces are partial cycles). Otherwise return false. An empty sequence returns true.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "The playlist has numSongs songs numbered 1..numSongs.",
+   "Shuffle Mode plays the songs in cycles: each cycle plays every song exactly once in some order, then a new cycle begins.",
+   "sequence is a window of observed plays that may start and end in the middle of a cycle.",
+   "Return true when there is an offset o (0 <= o < numSongs) such that cutting sequence before positions o, o + numSongs, o + 2 * numSongs, ..",
+   "gives pieces in which no song repeats (a full piece of numSongs distinct songs is a whole cycle; the first and last pieces are partial cycles).",
+   "Otherwise return false.",
+   "An empty sequence returns true."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= numSongs <= 1e5",
+   "0 <= sequence.length <= 1e5",
+   "1 <= sequence[i] <= numSongs"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:68ad8c5bcdaebe9459ce9a7f/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: decide whether a played sequence could come from Shuffle Mode rather than Random Mode (the mode definitions themselves are cut off); algorithmTags: HASH_TABLE; preview response sha256 d22c8a7a71eb9731b09ab3759a0ccffba437d1fdc7e9f347bdb5f33c1c15109b"
+   },
+   {
+    "statement": "Uncertainty: very high: the preview stops before defining the modes; numbered songs, a known playlist size, cycles of every song exactly once and an observation window that may start mid-cycle are all inferred",
+    "basis": "the public group preview is partial (284 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How do Shuffle Mode and Random Mode differ exactly?",
+   "Is the playlist size known, and are songs numbered?",
+   "May the observation start in the middle of a shuffle cycle?",
+   "Does a new cycle reshuffle independently of the previous one?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:68ad8c5bcdaebe9459ce9a7f/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     1,
+     []
+    ],
+    "output": true,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     5,
+     [
+      5,
+      4,
+      3,
+      1,
+      4,
+      3,
+      1,
+      5,
+      2,
+      4,
+      2,
+      5,
+      3,
+      1
+     ]
+    ],
+    "output": true,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:68ad8c5bcdaebe9459ce9a7f/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/oracles.py",
+    "sha256": "5758fb17f0e309e79dd7f38ef9a01012c9b5391ffd06e413820e67a589173da3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def isShuffleSequence(numSongs, sequence) -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/68ad8c5bcdaebe9459ce9a7f-python.json",
+     "inferredInterface": {
+      "name": "isShuffleSequence",
+      "params": [
+       {
+        "name": "numSongs",
+        "type": "integer"
+       },
+       {
+        "name": "sequence",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/68ad8c5bcdaebe9459ce9a7f-python.json",
+      "sha256": "c4ec05331dfa3cde7c91c378ace6754a084827049a7feea883b8de368c39ec2c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function isShuffleSequence(numSongs, sequence) /* -> boolean */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/68ad8c5bcdaebe9459ce9a7f-javascript.json",
+     "inferredInterface": {
+      "name": "isShuffleSequence",
+      "params": [
+       {
+        "name": "numSongs",
+        "type": "integer"
+       },
+       {
+        "name": "sequence",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/68ad8c5bcdaebe9459ce9a7f-javascript.json",
+      "sha256": "0b0757bba45dd31c671e260e9b1121d790ccf9dffebc4f3c66f13e8ed1c5fe62",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

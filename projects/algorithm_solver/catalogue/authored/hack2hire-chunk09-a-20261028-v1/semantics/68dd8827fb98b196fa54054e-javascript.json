@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68dd8827fb98b196fa54054e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "smallestConcatenation",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every permutation of the elements and keep the smallest valid string",
+  "candidate_design": "sort the strings with the comparator a + b < b + a; for each distinct non-zero value x, form x followed by the sorted rest with one x removed, and keep the smallest such string",
+  "complexity_target": "O(n log n * d + distinct * total digits) time/O(total digits) space"
+ },
+ "source_sha256": "0a394e5b9f0dc6dcd79f23caf381742618db76e36b8c917ce071c55a8b45be21",
+ "wrapper": "named export smallestConcatenation"
+}

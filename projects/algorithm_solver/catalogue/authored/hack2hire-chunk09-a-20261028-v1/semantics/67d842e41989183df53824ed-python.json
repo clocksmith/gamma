@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67d842e41989183df53824ed",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "longestSpike",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sort a copy and try every value as the peak, building the two sides greedily from distinct smaller values",
+  "candidate_design": "count values in a hash map; the maximum is the peak, every other value contributes min(count, 2)",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "80cd0263fe70dcb04671323a23f5e3b6ff3170c64439551d9c36f38ff2d27de8",
+ "wrapper": "Solution.longestSpike"
+}

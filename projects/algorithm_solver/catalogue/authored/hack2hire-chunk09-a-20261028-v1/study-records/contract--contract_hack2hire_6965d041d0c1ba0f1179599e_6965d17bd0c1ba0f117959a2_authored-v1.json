@@ -1,0 +1,383 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6965d041d0c1ba0f1179599e:6965d17bd0c1ba0f117959a2:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+   "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6965d041d0c1ba0f1179599e.json",
+   "sha256": "b292c13213df58fcc92a987f1f4ef47a3770941dc523cc36e60831d886df42ea",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+   "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+   "selector": "/variants/hack2hire:6965d17bd0c1ba0f117959a2"
+  }
+ ],
+ "problemId": "hack2hire:6965d041d0c1ba0f1179599e",
+ "variantId": "6965d17bd0c1ba0f117959a2",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: most-available date per country with attendees",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6965d17bd0c1ba0f117959a2/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "participants is a list of [name, country, availableDates] rows, where availableDates lists \"YYYY-MM-DD\" strings (a date repeated in one participant's list counts once). For each country choose the date on which the most of its participants are available, ties to the earliest date. Return [country, date, attendees] for every country with at least one available date, sorted by country in code-point order, where attendees are the names of that country's participants available on the chosen date, in input order. Countries whose participants list no dates get no meeting and are omitted.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "participants is a list of [name, country, availableDates] rows, where availableDates lists \"YYYY-MM-DD\" strings (a date repeated in one participant's list counts once).",
+   "For each country choose the date on which the most of its participants are available, ties to the earliest date.",
+   "Return [country, date, attendees] for every country with at least one available date, sorted by country in code-point order, where attendees are the names of that country's participants available on the chosen date, in input order.",
+   "Countries whose participants list no dates get no meeting and are omitted."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= participants.length <= 1e4",
+   "total date entries <= 1e5",
+   "names match [A-Za-z]{1,20}; countries match [A-Za-z ]{1,30}",
+   "dates match YYYY-MM-DD with month 01-12 and day 01-31"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6965d17bd0c1ba0f117959a2/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: participants with name, country and availableDates (\"YYYY-MM-DD\"); one meeting per country at most, on the date with the most available participants, ties to the earliest date (output shape cut off); algorithmTags: HASH_TABLE; preview response sha256 57b34cc3235a6cb85ea7bf500009334577309cca4cad296f775777921de4c849"
+   },
+   {
+    "statement": "Uncertainty: high: per-country scheduling, the most-available rule and the earliest-date tie break are in the preview; the row shape, the attendee list in the output, ordering and omitting countries with no dates are inferred",
+    "basis": "the public group preview is partial (675 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What should be returned for each country: the date only, or also the attendees?",
+   "What happens to a country with no available dates?",
+   "Can a participant list the same date twice?",
+   "How should countries be ordered?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6965d17bd0c1ba0f117959a2/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "Bob",
+       "New Zealand",
+       [
+        "2026-01-10",
+        "2026-01-02"
+       ]
+      ],
+      [
+       "Ann",
+       "New Zealand",
+       [
+        "2026-02-01"
+       ]
+      ],
+      [
+       "Bob",
+       "US",
+       []
+      ],
+      [
+       "Ann",
+       "Peru",
+       []
+      ],
+      [
+       "Ann",
+       "US",
+       [
+        "2026-01-10"
+       ]
+      ],
+      [
+       "Bob",
+       "New Zealand",
+       []
+      ],
+      [
+       "Di",
+       "New Zealand",
+       [
+        "2026-02-01",
+        "2025-12-31",
+        "2026-01-02"
+       ]
+      ],
+      [
+       "Bob",
+       "US",
+       [
+        "2026-02-01"
+       ]
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "New Zealand",
+      "2026-01-02",
+      [
+       "Bob",
+       "Di"
+      ]
+     ],
+     [
+      "US",
+      "2026-01-10",
+      [
+       "Ann"
+      ]
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6965d17bd0c1ba0f117959a2/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/oracles.py",
+    "sha256": "5758fb17f0e309e79dd7f38ef9a01012c9b5391ffd06e413820e67a589173da3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def scheduleMeetings(participants) -> list<[string,string,string[]]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6965d17bd0c1ba0f117959a2-python.json",
+     "inferredInterface": {
+      "name": "scheduleMeetings",
+      "params": [
+       {
+        "name": "participants",
+        "type": "list<[string,string,string[]]>"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,string[]]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6965d17bd0c1ba0f117959a2-python.json",
+      "sha256": "5e92cd597c3274637f1751af3a0bd5ed93abc5c62344bc69863b16e28ee3f39d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function scheduleMeetings(participants) /* -> list<[string,string,string[]]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6965d17bd0c1ba0f117959a2-javascript.json",
+     "inferredInterface": {
+      "name": "scheduleMeetings",
+      "params": [
+       {
+        "name": "participants",
+        "type": "list<[string,string,string[]]>"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,string[]]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6965d17bd0c1ba0f117959a2-javascript.json",
+      "sha256": "de7297cf259d77d3bf46258b05759e534c38140a142ea45f9b4d28badc395d41",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

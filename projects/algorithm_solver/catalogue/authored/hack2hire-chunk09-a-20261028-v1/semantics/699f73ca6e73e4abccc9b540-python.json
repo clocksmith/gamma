@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:699f73ca6e73e4abccc9b540",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "message",
+  "shift"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "rotateMessage",
+  "params": [
+   {
+    "name": "message",
+    "type": "string"
+   },
+   {
+    "name": "shift",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rotate each letter by shift single steps modulo 26 using alphabet index lookups",
+  "candidate_design": "reduce shift modulo 26 once, build a 128-entry translation table, map every character through it",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "e8ca08a6473b5e0e192762b51afbd4e90c4ffc47acc172cc844e4045f9d1ac15",
+ "wrapper": "Solution.rotateMessage"
+}

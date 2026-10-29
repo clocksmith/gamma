@@ -1,0 +1,391 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67870efee20f8f324213c294:6787150fe20f8f324213c295:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+   "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+   "selector": "/problems/18"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67870efee20f8f324213c294.json",
+   "sha256": "43903fa22830e2d9cfddb2546841110d5fd91705749da9b1ef6aff214400f44b",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+   "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+   "selector": "/variants/hack2hire:6787150fe20f8f324213c295"
+  }
+ ],
+ "problemId": "hack2hire:67870efee20f8f324213c294",
+ "variantId": "6787150fe20f8f324213c295",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: exclusive CPU time per task",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6787150fe20f8f324213c295/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "logs is a list of [taskName, action, timestamp] string rows on a single CPU, with action \"enter\" or \"exit\" and canonical decimal timestamps in non-decreasing order. Tasks nest like a call stack: an \"enter\" pauses the running task, the matching \"exit\" closes the innermost open task (same name) and resumes the one below. Every entered task is exited by the end. Time is half-open: between consecutive events at times a <= b, the task on top of the stack (if any) runs for b - a units. Return [taskName, exclusiveTime] for every task name that appears, summed over all its runs, sorted by name in code-point order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/18/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "logs is a list of [taskName, action, timestamp] string rows on a single CPU, with action \"enter\" or \"exit\" and canonical decimal timestamps in non-decreasing order.",
+   "Tasks nest like a call stack: an \"enter\" pauses the running task, the matching \"exit\" closes the innermost open task (same name) and resumes the one below.",
+   "Every entered task is exited by the end.",
+   "Time is half-open: between consecutive events at times a <= b, the task on top of the stack (if any) runs for b - a units.",
+   "Return [taskName, exclusiveTime] for every task name that appears, summed over all its runs, sorted by name in code-point order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/18/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= logs.length <= 1e5",
+   "task names match [A-Za-z0-9_]{1,20}",
+   "0 <= timestamp <= 1e9, non-decreasing",
+   "logs are well nested and every task is closed"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6787150fe20f8f324213c295/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: logs as a 2D string array of [task_name, \"enter\" or \"exit\", timestamp] events (what to compute is cut off); algorithmTags: STACK; preview response sha256 70abd7c17420780885dc6e3667ff67182898ba01d86609fe9165528803731cd2"
+   },
+   {
+    "statement": "Uncertainty: high: only the log format and the enter/exit meaning are visible; the nesting model, half-open intervals (unlike the inclusive ends of LeetCode 636), summing per name and the sorted output are inferred",
+    "basis": "the public group preview is partial (272 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/18/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/18/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/18/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What should be computed: exclusive time, inclusive time, or the busiest task?",
+   "Is an exit timestamp inclusive or exclusive?",
+   "Can the same task name be entered again, even nested?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6787150fe20f8f324213c295/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "b",
+       "enter",
+       "5"
+      ],
+      [
+       "Main",
+       "enter",
+       "10"
+      ],
+      [
+       "a",
+       "enter",
+       "15"
+      ],
+      [
+       "gc_1",
+       "enter",
+       "20"
+      ],
+      [
+       "gc_1",
+       "enter",
+       "22"
+      ],
+      [
+       "Main",
+       "enter",
+       "23"
+      ],
+      [
+       "Main",
+       "exit",
+       "24"
+      ],
+      [
+       "gc_1",
+       "exit",
+       "24"
+      ],
+      [
+       "gc_1",
+       "exit",
+       "27"
+      ],
+      [
+       "a",
+       "exit",
+       "28"
+      ],
+      [
+       "Main",
+       "exit",
+       "29"
+      ],
+      [
+       "b",
+       "exit",
+       "29"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "Main",
+      7
+     ],
+     [
+      "a",
+      6
+     ],
+     [
+      "b",
+      5
+     ],
+     [
+      "gc_1",
+      6
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6787150fe20f8f324213c295/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/oracles.py",
+    "sha256": "5758fb17f0e309e79dd7f38ef9a01012c9b5391ffd06e413820e67a589173da3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def exclusiveTimes(logs) -> list<[string,integer]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/18/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6787150fe20f8f324213c295-python.json",
+     "inferredInterface": {
+      "name": "exclusiveTimes",
+      "params": [
+       {
+        "name": "logs",
+        "type": "list<[string,string,string]>"
+       }
+      ],
+      "return": {
+       "type": "list<[string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6787150fe20f8f324213c295-python.json",
+      "sha256": "dce1936f31a768577cd358f829b69fdf1e6532ed5f4e81d66b864996f055e7b8",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function exclusiveTimes(logs) /* -> list<[string,integer]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/18/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6787150fe20f8f324213c295-javascript.json",
+     "inferredInterface": {
+      "name": "exclusiveTimes",
+      "params": [
+       {
+        "name": "logs",
+        "type": "list<[string,string,string]>"
+       }
+      ],
+      "return": {
+       "type": "list<[string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6787150fe20f8f324213c295-javascript.json",
+      "sha256": "4b91298738f896ee0163efa79e021a0f90ef498ae96c78111dde969198bc3c8d",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/18/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/18/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

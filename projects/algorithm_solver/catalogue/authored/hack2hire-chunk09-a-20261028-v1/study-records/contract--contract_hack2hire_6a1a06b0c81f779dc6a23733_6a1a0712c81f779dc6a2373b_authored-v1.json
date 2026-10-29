@@ -1,0 +1,358 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a1a06b0c81f779dc6a23733:6a1a0712c81f779dc6a2373b:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+   "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a1a06b0c81f779dc6a23733.json",
+   "sha256": "f824f3a533eddefbfce2f5ac2a6887d27c3cd8655e26bb5b884e2b75b8083998",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+   "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+   "selector": "/variants/hack2hire:6a1a0712c81f779dc6a2373b"
+  }
+ ],
+ "problemId": "hack2hire:6a1a06b0c81f779dc6a23733",
+ "variantId": "6a1a0712c81f779dc6a2373b",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 3: monthly usage cap per plan",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6a1a0712c81f779dc6a2373b/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "sessions is a list of strings \"<user_id>,<input_tokens>,<output_tokens>,<plan>\" with canonical decimal token counts. pricing is a list of comma-separated plan rows; every plan used by a session has exactly one row. Prices are non-negative integers in an abstract smallest currency unit per token, so every amount is an exact integer. Return [user_id, total] for every user that has at least one session, sorted by user_id in code-point order. Level 3: a pricing row is \"<plan>,<input_price>,<output_price>,<monthly_fee>,<included_tokens>,<usage_cap>\". Usage charges for a (user, plan) pair are computed as in level 2 (free tokens consumed in session order, input before output), then capped: the pair pays monthly_fee + min(usage_cap, usage charges). A user's total is the sum over their plans.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "sessions is a list of strings \"<user_id>,<input_tokens>,<output_tokens>,<plan>\" with canonical decimal token counts.",
+   "pricing is a list of comma-separated plan rows; every plan used by a session has exactly one row.",
+   "Prices are non-negative integers in an abstract smallest currency unit per token, so every amount is an exact integer.",
+   "Return [user_id, total] for every user that has at least one session, sorted by user_id in code-point order.",
+   "Level 3: a pricing row is \"<plan>,<input_price>,<output_price>,<monthly_fee>,<included_tokens>,<usage_cap>\".",
+   "Usage charges for a (user, plan) pair are computed as in level 2 (free tokens consumed in session order, input before output), then capped: the pair pays monthly_fee + min(usage_cap, usage charges).",
+   "A user's total is the sum over their plans."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= sessions.length <= 1e5",
+   "0 <= tokens <= 1e6",
+   "1 <= pricing.length <= 100",
+   "0 <= prices <= 1000, 0 <= monthly_fee <= 1e6, 0 <= included_tokens <= 1e9, 0 <= usage_cap <= 1e12"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6a1a0712c81f779dc6a2373b/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: per-session records \"<user_id>,<input_tokens>,<output_tokens>,<plan>\" for one month, total monthly spend per user (prices and plan rules not visible); algorithmTags: SIMULATION; codingQuestions (variant count/order); preview response sha256 cbbae10d9c4b954a03758345f856b2bd3c53fbf97eba93688a2c4e5c31e8536f"
+   },
+   {
+    "statement": "Uncertainty: very high: the third level is unseen; the usage cap per (user, plan) on top of the level-2 rules is an author choice",
+    "basis": "the public group preview is partial (560 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as three levels: 1 = per-token prices per plan, 2 = adds a monthly fee and included free tokens per (user, plan), 3 = adds a monthly usage cap per plan",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does the cap include the monthly fee?",
+   "Is the cap per plan or per user across plans?",
+   "Do free tokens still apply under a cap?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6a1a0712c81f779dc6a2373b/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [
+      "basic,0,0,0,1,100"
+     ]
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "b,1000000,0,Pro",
+      "u_1,1000000,7,Pro",
+      "b,1000000,250,Pro",
+      "zz9,100,0,T_1",
+      "a,100,250,T_1",
+      "u_1,40,7,T_1",
+      "u_1,40,60,basic",
+      "zz9,1,7,basic",
+      "a,1,250,Pro"
+     ],
+     [
+      "T_1,5,1,1000000,1,1000000000000",
+      "Pro,5,1000,0,300,0",
+      "basic,0,1000,1000000,0,1000000000000"
+     ]
+    ],
+    "output": [
+     [
+      "a",
+      1000745
+     ],
+     [
+      "b",
+      0
+     ],
+     [
+      "u_1",
+      2060202
+     ],
+     [
+      "zz9",
+      2007495
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6a1a0712c81f779dc6a2373b/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/oracles.py",
+    "sha256": "5758fb17f0e309e79dd7f38ef9a01012c9b5391ffd06e413820e67a589173da3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def calculateMonthlySpend(sessions, pricing) -> list<[string,integer]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6a1a0712c81f779dc6a2373b-python.json",
+     "inferredInterface": {
+      "name": "calculateMonthlySpend",
+      "params": [
+       {
+        "name": "sessions",
+        "type": "string[]"
+       },
+       {
+        "name": "pricing",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "list<[string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6a1a0712c81f779dc6a2373b-python.json",
+      "sha256": "54bb0d5db30a65a94d45938a212b07d78fc6a151fd5bd23954bd0467edf6dba6",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function calculateMonthlySpend(sessions, pricing) /* -> list<[string,integer]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6a1a0712c81f779dc6a2373b-javascript.json",
+     "inferredInterface": {
+      "name": "calculateMonthlySpend",
+      "params": [
+       {
+        "name": "sessions",
+        "type": "string[]"
+       },
+       {
+        "name": "pricing",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "list<[string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6a1a0712c81f779dc6a2373b-javascript.json",
+      "sha256": "d7b5a3aea733b8b3ed078f2778eccfb3f1e2715937aafe6d0c8702b09781ae6b",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

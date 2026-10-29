@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a7fc7a7d713d873ca7ade7b",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "bubbles"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "explodeBubbles",
+  "params": [
+   {
+    "name": "bubbles",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "copy the grid and, each round, mark cells by testing every bubble's four neighbours, then rebuild every column as a list of survivors padded with zeros",
+  "candidate_design": "same rounds on a flat row-major array: mark pass, then a two-pointer gravity pass per column writing from the bottom; stop when nothing is marked",
+  "complexity_target": "O(rounds * m * n) time/O(m * n) space"
+ },
+ "source_sha256": "e322de93cc1c93bc43a1705e927bfbf3d064b5f0c7b43f7340a11901cea89a87",
+ "wrapper": "Solution.explodeBubbles"
+}

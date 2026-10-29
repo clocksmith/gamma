@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69fe5a7f574d87bc4900687d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "names",
+  "emails",
+  "phones"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findDuplicateAccounts",
+  "params": [
+   {
+    "name": "names",
+    "type": "string[]"
+   },
+   {
+    "name": "emails",
+    "type": "string[]"
+   },
+   {
+    "name": "phones",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each account, scan every earlier registered account for a matching email or phone",
+  "candidate_design": "two hash sets of claimed emails and claimed phones, one pass in index order",
+  "complexity_target": "O(total characters) time/O(n) space"
+ },
+ "source_sha256": "71e406ce856eb6eafcc153264fb60d4702baefd5a4a82978dbc512af892c33bb",
+ "wrapper": "named export findDuplicateAccounts"
+}
