@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69c2f1d121f6ab422696534f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "lines",
+  "target",
+  "linesAround"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "grepWithContext",
+  "params": [
+   {
+    "name": "lines",
+    "type": "string[]"
+   },
+   {
+    "name": "target",
+    "type": "string"
+   },
+   {
+    "name": "linesAround",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every line test every line within linesAround positions for a match",
+  "candidate_design": "one scan records match positions; a second scan keeps a \"covered up to\" index so each match extends the covered range to j + linesAround and starts it no earlier than j - linesAround, emitting each covered line once",
+  "complexity_target": "O(total characters + n) time/O(n) space"
+ },
+ "source_sha256": "185596ef17780ee782e6c665439d2a8bbba273e0919bbce4bb1be4e93a91ca40",
+ "wrapper": "Solution.grepWithContext"
+}

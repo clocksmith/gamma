@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69bdad5c1cbff60a929beab2",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "executionTime",
+  "profit",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxProfitQuery",
+  "params": [
+   {
+    "name": "executionTime",
+    "type": "integer[]"
+   },
+   {
+    "name": "profit",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "count runs by repeated subtraction of the time from k for every type, then pick the best (total, -index)",
+  "candidate_design": "one pass computing floor(k / time) * profit with a strict improvement test",
+  "complexity_target": "O(n) time/O(1) space"
+ },
+ "source_sha256": "93e962a6e4f674b709fec452cc9c4504a96ac7e79d8259b693034233e907596e",
+ "wrapper": "Solution.maxProfitQuery"
+}

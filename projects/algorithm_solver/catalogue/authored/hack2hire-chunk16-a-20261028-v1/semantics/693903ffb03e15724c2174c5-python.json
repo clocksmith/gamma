@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:693903ffb03e15724c2174c5",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "tasks",
+  "dependencies"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "scheduleByLevels",
+  "params": [
+   {
+    "name": "tasks",
+    "type": "string[]"
+   },
+   {
+    "name": "dependencies",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "repeatedly rescan every remaining task and every dependency to find the tasks whose prerequisites are done",
+  "candidate_design": "Kahn's algorithm processed level by level: in-degree counts, the current frontier sorted, successors whose in-degree drops to 0 form the next frontier",
+  "complexity_target": "O((n + m) + n log n) time/O(n + m) space"
+ },
+ "source_sha256": "477012cf7f00d08748a5fb69fe25321a7226bbeaa1a193f4f26cf6833fd4d003",
+ "wrapper": "Solution.scheduleByLevels"
+}

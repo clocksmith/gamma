@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67d8a1d71989183df538251a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "hostThroughput"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maximizeThroughput",
+  "params": [
+   {
+    "name": "hostThroughput",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every way to choose floor(N / 3) disjoint triples",
+  "candidate_design": "sort descending; with c = floor(N / 3) groups the medians are the values at positions 1, 3, ..., 2c - 1 (each group takes two large values and one of the c smallest)",
+  "complexity_target": "O(N log N) time/O(N) space"
+ },
+ "source_sha256": "b13da3e48ebc5dd43f8c7ff1121f149c98aa53bd2ee23f9cee70e7069ffdfd58",
+ "wrapper": "named export maximizeThroughput"
+}

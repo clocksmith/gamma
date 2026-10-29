@@ -1,0 +1,414 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a038bff2608e589a944ac92:6a038c052608e589a944ac93:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+   "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+   "selector": "/problems/3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a038bff2608e589a944ac92.json",
+   "sha256": "4ec691d78e38e2c7ad44fbbdddd9cc2b46c6b9b56e899f6a7bb3aa0acc6c4582",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+   "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+   "selector": "/variants/hack2hire:6a038c052608e589a944ac93"
+  }
+ ],
+ "problemId": "hack2hire:6a038bff2608e589a944ac92",
+ "variantId": "6a038c052608e589a944ac93",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: running arg-max over cumulative earnings",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:6a038c052608e589a944ac93/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "operations, experiences and deltas have equal length. Process them in order. For \"U\", add deltas[i] (possibly negative) to the total of experiences[i] (an experience starts at 0 and exists once it has been updated). For \"Q\", experiences[i] and deltas[i] are ignored and the answer is the name of the existing experience with the highest total, the lexicographically smallest name on ties, or \"\" when no experience exists yet. Return the answers of all queries in order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "operations, experiences and deltas have equal length.",
+   "Process them in order.",
+   "For \"U\", add deltas[i] (possibly negative) to the total of experiences[i] (an experience starts at 0 and exists once it has been updated).",
+   "For \"Q\", experiences[i] and deltas[i] are ignored and the answer is the name of the existing experience with the highest total, the lexicographically smallest name on ties, or \"\" when no experience exists yet.",
+   "Return the answers of all queries in order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n <= 1e5",
+   "operations[i] is \"U\" or \"Q\"",
+   "experience names are 1 to 10 lowercase letters or digits for updates",
+   "-1e9 <= deltas[i] <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:6a038c052608e589a944ac93/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: three equal-length arrays operations, experiences and deltas; \"U\" adds a delta to one experience's cumulative earnings; \"Q\" asks for the name of the experience with the highest total at that moment (tie rule, output form and empty case are cut off); algorithmTags: HEAP; preview response sha256 13f0024f6b05f7f0a9ff34656b1479338e90e1de3a7a0e68621e6b06821ce0f1"
+   },
+   {
+    "statement": "Uncertainty: high: the three arrays, the U/Q operations and the question are in the preview; the tie rule (smallest name), negative deltas, the \"\" answer before any update and returning a list of answers are inferred",
+    "basis": "the public group preview is partial (521 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/3/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/3/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/3/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How are ties between equal totals broken?",
+   "What is returned when a query comes before any update?",
+   "Can a delta be negative?",
+   "Do query rows carry meaningful experience or delta values?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:6a038c052608e589a944ac93/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "Q"
+     ],
+     [
+      ""
+     ],
+     [
+      0
+     ]
+    ],
+    "output": [
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "U",
+      "U",
+      "U",
+      "U",
+      "Q",
+      "U",
+      "Q",
+      "U",
+      "Q",
+      "U",
+      "U",
+      "U",
+      "U",
+      "U",
+      "Q",
+      "U",
+      "U",
+      "Q",
+      "U",
+      "U",
+      "U"
+     ],
+     [
+      "b",
+      "c1",
+      "b",
+      "a",
+      "q9",
+      "a",
+      "",
+      "z",
+      "",
+      "ab",
+      "z",
+      "c1",
+      "b",
+      "a",
+      "",
+      "b",
+      "ab",
+      "q9",
+      "a",
+      "c1",
+      "b"
+     ],
+     [
+      6,
+      -3,
+      1,
+      4,
+      0,
+      -4,
+      -3,
+      3,
+      5,
+      -5,
+      -3,
+      -1,
+      -6,
+      6,
+      0,
+      2,
+      -4,
+      0,
+      -5,
+      2,
+      1
+     ]
+    ],
+    "output": [
+     "b",
+     "b",
+     "b",
+     "a",
+     "a"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/study-content.json",
+    "sha256": "6b82595d33fcc445b45afa7cdde6501d8163d22fbd75dae1b3b2b6c95a65ce40",
+    "selector": "/variants/hack2hire:6a038c052608e589a944ac93/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/oracles.py",
+    "sha256": "2e10d7c10635ae81a2f7123862cd2b1c65005ed3bc5386ef37030de0c084bb5b",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def highestEarningExperiences(operations, experiences, deltas) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/6a038c052608e589a944ac93-python.json",
+     "inferredInterface": {
+      "name": "highestEarningExperiences",
+      "params": [
+       {
+        "name": "operations",
+        "type": "string[]"
+       },
+       {
+        "name": "experiences",
+        "type": "string[]"
+       },
+       {
+        "name": "deltas",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/6a038c052608e589a944ac93-python.json",
+      "sha256": "ac5dca02129113a7af53616e88a2c459262fee46f0d4b2dabefb900b4704525b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function highestEarningExperiences(operations, experiences, deltas) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+      "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/6a038c052608e589a944ac93-javascript.json",
+     "inferredInterface": {
+      "name": "highestEarningExperiences",
+      "params": [
+       {
+        "name": "operations",
+        "type": "string[]"
+       },
+       {
+        "name": "experiences",
+        "type": "string[]"
+       },
+       {
+        "name": "deltas",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/semantics/6a038c052608e589a944ac93-javascript.json",
+      "sha256": "474e5852436003f50d0b9273366fa7b58ea061bb289d65f94c1cf1c252881e66",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/3/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-a-20261028-v1/contracts.json",
+    "sha256": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+    "selector": "/problems/3/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,1584 @@
+{
+ "schema": "gamma.hack2hire-chunk16-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:69c2f1d121f6ab422696534f": {
+   "constraints": [
+    "0 <= lines.length <= 1e5",
+    "each line is printable ASCII, at most 200 characters; total characters <= 1e6",
+    "target is 1 to 50 printable ASCII characters",
+    "0 <= linesAround <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Is the output the line text or the line numbers?",
+    "Are overlapping context windows merged so a line is printed once?",
+    "Is matching case-sensitive and substring-based?",
+    "Can linesAround exceed the number of lines?"
+   ],
+   "hints": [
+    "Find all matching positions first; the context only depends on those positions.",
+    "Line i is in the output exactly when its distance to the nearest match is at most linesAround.",
+    "Walk the matches in order and keep the last emitted index, so overlapping windows are emitted once without a set."
+   ],
+   "invariants": [
+    "emitted indices strictly increase",
+    "every emitted index is within linesAround of a match"
+   ],
+   "chooseWhen": [
+    "Context extraction around hits in logs or text files"
+   ],
+   "tradeoffs": [
+    "Two passes over positions keep it linear; a distance-to-nearest-match array is equivalent but uses more memory"
+   ],
+   "variantLabel": "Inferred variant 1: grep with symmetric context lines",
+   "examples": [
+    {
+     "input": [
+      [],
+      "x",
+      3
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "err",
+       "xerrx ",
+       "",
+       "warn ",
+       "",
+       "xerrx ok",
+       "xerrx ",
+       " error",
+       "warn",
+       "",
+       "err error",
+       "Err err",
+       "error ok",
+       "ok",
+       "",
+       "err",
+       "e r r",
+       "e r r Err",
+       " warn",
+       "xerrx xerrx",
+       "err e r r",
+       "xerrx xerrx",
+       "xerrx",
+       ""
+      ],
+      "err",
+      0
+     ],
+     "output": [
+      "err",
+      "xerrx ",
+      "xerrx ok",
+      "xerrx ",
+      " error",
+      "err error",
+      "Err err",
+      "error ok",
+      "err",
+      "xerrx xerrx",
+      "err e r r",
+      "xerrx xerrx",
+      "xerrx"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69c2f5a621f6ab4226965367": {
+   "constraints": [
+    "0 <= lines.length <= 1e5",
+    "each line is printable ASCII, at most 200 characters; total characters <= 1e6",
+    "target is 1 to 50 printable ASCII characters",
+    "0 <= before, after <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Are adjacent (touching) context ranges joined into one block?",
+    "Is the output grouped or flat?",
+    "Is before applied above each match and after below?"
+   ],
+   "hints": [
+    "The included set is the union of the ranges [j - before, j + after] over matches j.",
+    "Process the ranges in increasing j; their starts are increasing too.",
+    "Start a new block when a range begins more than one position after the last emitted line, otherwise extend the current block."
+   ],
+   "invariants": [
+    "blocks are non-empty and separated by at least one excluded line",
+    "lines inside a block are at consecutive positions"
+   ],
+   "chooseWhen": [
+    "Grep-style grouped output of context ranges"
+   ],
+   "tradeoffs": [
+    "Grouping costs nothing extra in the linear scan; a flat output loses the block boundaries"
+   ],
+   "variantLabel": "Inferred variant 2: grep with separate before/after context, grouped into blocks",
+   "examples": [
+    {
+     "input": [
+      [],
+      "x",
+      1,
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "e r r",
+       "Err",
+       "warn",
+       " error",
+       "error Err",
+       "e r r err",
+       "xerrx",
+       "xerrx Err",
+       "Err error",
+       "xerrx",
+       "",
+       "ok warn",
+       "error Err",
+       "",
+       "e r r error",
+       "ok Err",
+       "e r r error",
+       "",
+       " warn",
+       "Err warn",
+       "",
+       "xerrx ok",
+       "ok"
+      ],
+      "r",
+      3,
+      2
+     ],
+     "output": [
+      [
+       "e r r",
+       "Err",
+       "warn",
+       " error",
+       "error Err",
+       "e r r err",
+       "xerrx",
+       "xerrx Err",
+       "Err error",
+       "xerrx",
+       "",
+       "ok warn",
+       "error Err",
+       "",
+       "e r r error",
+       "ok Err",
+       "e r r error",
+       "",
+       " warn",
+       "Err warn",
+       "",
+       "xerrx ok",
+       "ok"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67896bfb11318cc872dd83ea": {
+   "constraints": [
+    "0 <= elements.length <= 1e5",
+    "ids are distinct integers in [0, 1e9]",
+    "properties are 1 to 10 characters from lowercase letters and digits"
+   ],
+   "clarifyingQuestions": [
+    "Do properties match across positions or only in the same position?",
+    "Is the relation transitive (a~b and b~c puts a and c together)?",
+    "Do unrelated elements appear as groups of one?",
+    "How are groups and ids ordered?"
+   ],
+   "hints": [
+    "Treat elements as nodes and shared property values as edges; groups are connected components.",
+    "You never need all pairs: link each element to the first element seen with the same value in the same position.",
+    "Union-find merges these links in near-linear time; sort ids within groups and groups by their first id at the end."
+   ],
+   "invariants": [
+    "two elements with the same value in the same position always share a root",
+    "every id appears in exactly one group"
+   ],
+   "chooseWhen": [
+    "Deduplicating records linked by any shared key (accounts, contacts)"
+   ],
+   "tradeoffs": [
+    "Union-find avoids building an explicit graph; a BFS over value buckets is equivalent but needs adjacency lists"
+   ],
+   "variantLabel": "Inferred single variant: connected groups of elements sharing any same-position property",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        49,
+        "a0",
+        "e1",
+        "a2"
+       ],
+       [
+        42,
+        "a0",
+        "b1",
+        "e2"
+       ],
+       [
+        22,
+        "c0",
+        "b1",
+        "d2"
+       ],
+       [
+        5,
+        "g0",
+        "c1",
+        "e2"
+       ],
+       [
+        10,
+        "g0",
+        "b1",
+        "d2"
+       ],
+       [
+        21,
+        "f0",
+        "b1",
+        "c2"
+       ],
+       [
+        14,
+        "b0",
+        "a1",
+        "a2"
+       ],
+       [
+        51,
+        "b0",
+        "b1",
+        "e2"
+       ],
+       [
+        20,
+        "h0",
+        "b1",
+        "g2"
+       ],
+       [
+        54,
+        "a0",
+        "a1",
+        "c2"
+       ],
+       [
+        25,
+        "a0",
+        "a1",
+        "a2"
+       ],
+       [
+        40,
+        "f0",
+        "d1",
+        "b2"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       5,
+       10,
+       14,
+       20,
+       21,
+       22,
+       25,
+       40,
+       42,
+       49,
+       51,
+       54
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a038c052608e589a944ac93": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "operations[i] is \"U\" or \"Q\"",
+    "experience names are 1 to 10 lowercase letters or digits for updates",
+    "-1e9 <= deltas[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "How are ties between equal totals broken?",
+    "What is returned when a query comes before any update?",
+    "Can a delta be negative?",
+    "Do query rows carry meaningful experience or delta values?"
+   ],
+   "hints": [
+    "Totals change one at a time, so the maximum can be maintained incrementally.",
+    "A heap cannot update keys in place: push a new (total, name) entry on every update.",
+    "On a query, discard heap tops whose total differs from the current total of that name; order the heap by (-total, name) to get the tie rule for free."
+   ],
+   "invariants": [
+    "the current total of every existing name is in the heap",
+    "a heap entry is valid exactly when its total equals the current total"
+   ],
+   "chooseWhen": [
+    "Leaderboards with interleaved updates and top-1 queries"
+   ],
+   "tradeoffs": [
+    "Lazy deletion keeps the code short but the heap grows with every update; an indexed heap or ordered set bounds it by the number of names"
+   ],
+   "variantLabel": "Inferred single variant: running arg-max over cumulative earnings",
+   "examples": [
+    {
+     "input": [
+      [
+       "Q"
+      ],
+      [
+       ""
+      ],
+      [
+       0
+      ]
+     ],
+     "output": [
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "U",
+       "U",
+       "U",
+       "U",
+       "Q",
+       "U",
+       "Q",
+       "U",
+       "Q",
+       "U",
+       "U",
+       "U",
+       "U",
+       "U",
+       "Q",
+       "U",
+       "U",
+       "Q",
+       "U",
+       "U",
+       "U"
+      ],
+      [
+       "b",
+       "c1",
+       "b",
+       "a",
+       "q9",
+       "a",
+       "",
+       "z",
+       "",
+       "ab",
+       "z",
+       "c1",
+       "b",
+       "a",
+       "",
+       "b",
+       "ab",
+       "q9",
+       "a",
+       "c1",
+       "b"
+      ],
+      [
+       6,
+       -3,
+       1,
+       4,
+       0,
+       -4,
+       -3,
+       3,
+       5,
+       -5,
+       -3,
+       -1,
+       -6,
+       6,
+       0,
+       2,
+       -4,
+       0,
+       -5,
+       2,
+       1
+      ]
+     ],
+     "output": [
+      "b",
+      "b",
+      "b",
+      "a",
+      "a"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67fd5bf3d2adf72ba62b0ecc": {
+   "constraints": [
+    "0 <= s1.length, s2.length <= 1e5",
+    "words are non-empty runs of printable non-space ASCII separated by exactly one space, no leading or trailing space"
+   ],
+   "clarifyingQuestions": [
+    "How are exact halves rounded (0.125)?",
+    "Is the result a number or a formatted string?",
+    "What if only one of the strings is empty?"
+   ],
+   "hints": [
+    "Split each name into words and deduplicate with a set.",
+    "Intersection over union; the union size is |A| + |B| - |A intersect B|.",
+    "Round with integers: hundredths = floor((200 c + u) / (2 u)); divide by 100 only at the end so both languages return the same double."
+   ],
+   "invariants": [
+    "0 <= c <= u",
+    "the result lies in [0, 1]"
+   ],
+   "chooseWhen": [
+    "Name or document similarity on word sets"
+   ],
+   "tradeoffs": [
+    "Integer rounding avoids floating-point tie errors; using the language round function can round 0.125 down"
+   ],
+   "variantLabel": "Inferred single variant: rounded Jaccard similarity of word sets",
+   "examples": [
+    {
+     "input": [
+      "",
+      ""
+     ],
+     "output": 1.0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "joe Joe Pizza joe pizza",
+      "pizza Joe Joe joe Joe joe"
+     ],
+     "output": 0.75,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:693903ffb03e15724c2174c5": {
+   "constraints": [
+    "0 <= tasks.length <= 1e5",
+    "task names are 1 to 10 lowercase letters, distinct",
+    "0 <= dependencies.length <= 1e5, endpoints are listed tasks, no self-dependency, no duplicate pair"
+   ],
+   "clarifyingQuestions": [
+    "Should tasks within one level be ordered?",
+    "What is returned when a cycle exists?",
+    "Are tasks without dependencies given separately?"
+   ],
+   "hints": [
+    "A task belongs to level k exactly when its longest prerequisite chain has k edges.",
+    "Kahn's algorithm already discovers tasks level by level if you process one frontier at a time.",
+    "Sort each frontier before emitting it; if fewer than n tasks were emitted, there is a cycle."
+   ],
+   "invariants": [
+    "each frontier contains exactly the tasks whose remaining in-degree became 0 in the previous round",
+    "emitted task count equals n unless there is a cycle"
+   ],
+   "chooseWhen": [
+    "Parallel build or job scheduling in waves"
+   ],
+   "tradeoffs": [
+    "Sorting per level costs n log n overall; returning a flat order would hide the parallelism"
+   ],
+   "variantLabel": "Inferred single variant: topological order grouped into levels",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "k",
+       "e",
+       "f",
+       "ab",
+       "b",
+       "d",
+       "l",
+       "h",
+       "a",
+       "g",
+       "ba"
+      ],
+      [
+       [
+        "k",
+        "d"
+       ],
+       [
+        "l",
+        "k"
+       ],
+       [
+        "b",
+        "ba"
+       ],
+       [
+        "a",
+        "ab"
+       ],
+       [
+        "e",
+        "f"
+       ],
+       [
+        "b",
+        "f"
+       ],
+       [
+        "e",
+        "d"
+       ],
+       [
+        "b",
+        "d"
+       ],
+       [
+        "g",
+        "f"
+       ],
+       [
+        "b",
+        "k"
+       ],
+       [
+        "h",
+        "g"
+       ],
+       [
+        "f",
+        "k"
+       ],
+       [
+        "l",
+        "f"
+       ],
+       [
+        "ab",
+        "d"
+       ],
+       [
+        "ab",
+        "k"
+       ],
+       [
+        "ab",
+        "l"
+       ],
+       [
+        "e",
+        "k"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "a",
+       "b",
+       "e",
+       "h"
+      ],
+      [
+       "ab",
+       "ba",
+       "g"
+      ],
+      [
+       "l"
+      ],
+      [
+       "f"
+      ],
+      [
+       "k"
+      ],
+      [
+       "d"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a922ffea201244f8fae261": {
+   "constraints": [
+    "1 <= s.length <= 1e5",
+    "s consists of lowercase English letters"
+   ],
+   "clarifyingQuestions": [
+    "May the prefix and suffix overlap?",
+    "Is the whole string excluded?",
+    "What is returned when no border exists?"
+   ],
+   "hints": [
+    "A prefix equal to a suffix is called a border.",
+    "The KMP failure function stores, for each prefix, its longest proper border.",
+    "Compute it in one pass, falling back through shorter borders on mismatch; the last entry is the answer."
+   ],
+   "invariants": [
+    "pi[i] < i + 1",
+    "the fallback chain visits borders in decreasing length"
+   ],
+   "chooseWhen": [
+    "String periodicity and pattern-matching preprocessing"
+   ],
+   "tradeoffs": [
+    "KMP is linear; hashing is also linear but needs collision care for exactness"
+   ],
+   "variantLabel": "Inferred single variant: longest proper border of a string",
+   "examples": [
+    {
+     "input": [
+      "a"
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "bbbcacabcbbaacbbaacacbacacab"
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67ccb2bb3363b83a81fc996a": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "0 <= edges.length <= 1e5",
+    "nodes are 0-based; no self-loops or repeated edges"
+   ],
+   "clarifyingQuestions": [
+    "Are nodes 0-based or 1-based?",
+    "Can there be repeated edges or self-loops?",
+    "Do isolated nodes still take a label?"
+   ],
+   "hints": [
+    "Count how often each node's label is added: exactly its degree.",
+    "The total is sum(label(v) * degree(v)).",
+    "Pair the largest labels with the largest degrees (rearrangement inequality): sort degrees and multiply."
+   ],
+   "invariants": [
+    "sum of degrees is 2 m",
+    "the answer does not depend on which of several equal-degree nodes gets which label"
+   ],
+   "chooseWhen": [
+    "Assignments that maximise a weighted sum"
+   ],
+   "tradeoffs": [
+    "Counting sort on degrees is linear; a general sort is simpler"
+   ],
+   "variantLabel": "Inferred single variant: degree-weighted labeling",
+   "examples": [
+    {
+     "input": [
+      1,
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      6,
+      [
+       [
+        4,
+        1
+       ],
+       [
+        5,
+        2
+       ],
+       [
+        5,
+        0
+       ],
+       [
+        4,
+        5
+       ],
+       [
+        1,
+        5
+       ],
+       [
+        0,
+        4
+       ],
+       [
+        3,
+        1
+       ],
+       [
+        4,
+        3
+       ],
+       [
+        2,
+        3
+       ],
+       [
+        2,
+        1
+       ],
+       [
+        3,
+        0
+       ],
+       [
+        1,
+        0
+       ],
+       [
+        0,
+        2
+       ],
+       [
+        4,
+        2
+       ],
+       [
+        5,
+        3
+       ]
+      ]
+     ],
+     "output": 105,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6854bafdc201117d348a25d2": {
+   "constraints": [
+    "1 <= s.length <= 1e5",
+    "s has no leading zero",
+    "0 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Must exactly k operations be used, or at most k?",
+    "Can the answer have leading zeros?",
+    "Is the output a string or a number?"
+   ],
+   "hints": [
+    "Replacing a digit above 5 makes the number smaller, so never do it.",
+    "Among digits below 5, a more significant one matters more than all later ones combined.",
+    "Scan from the left and change each digit below 5 until k runs out."
+   ],
+   "invariants": [
+    "digits above or equal to 5 are never changed",
+    "the number of changed digits is min(k, count of digits below 5)"
+   ],
+   "chooseWhen": [
+    "Greedy choices on positional number systems"
+   ],
+   "tradeoffs": [
+    "The greedy is linear and exact; working with strings avoids big-integer arithmetic"
+   ],
+   "variantLabel": "Inferred single variant: greedy digit replacement with a budget",
+   "examples": [
+    {
+     "input": [
+      "1",
+      0
+     ],
+     "output": "1",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "2525581195",
+      3
+     ],
+     "output": "5555585195",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67d8a1d71989183df538251a": {
+   "constraints": [
+    "0 <= N <= 1e5",
+    "1 <= hostThroughput[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Must the number of clusters be the maximum floor(N / 3)?",
+    "What is returned when N < 3?",
+    "Can values repeat?"
+   ],
+   "hints": [
+    "A median is beaten by the larger element of its group, so the largest value can never be a median.",
+    "Use the c smallest values as the \"small\" member of each group; they never count.",
+    "Sort the rest descending and pair them: the second of each pair is a median, so take every other value starting at the second largest."
+   ],
+   "invariants": [
+    "exactly c medians are summed",
+    "each summed value has a distinct larger partner before it"
+   ],
+   "chooseWhen": [
+    "Greedy pairing after sorting"
+   ],
+   "tradeoffs": [
+    "Sorting dominates; a selection algorithm could avoid sorting the c smallest values"
+   ],
+   "variantLabel": "Inferred single variant: maximum sum of medians of triples",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       10,
+       1,
+       9,
+       3,
+       7,
+       7,
+       3,
+       6,
+       10
+      ]
+     ],
+     "output": 23,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69bdad5c1cbff60a929beab2": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "1 <= executionTime[i] <= 1e9",
+    "1 <= profit[i] <= 1e4",
+    "0 <= k <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are the times and profits given as two lists or as pairs?",
+    "What exactly does \"nothing fits\" return?",
+    "Can a profit be zero?"
+   ],
+   "hints": [
+    "The number of runs of type i is floor(k / time_i).",
+    "Its total is that count times the profit; nothing interacts between types.",
+    "Keep the first index reaching the best total by updating only on a strict improvement."
+   ],
+   "invariants": [
+    "best total is non-decreasing over the scan",
+    "the stored index is the smallest index achieving the stored total"
+   ],
+   "chooseWhen": [
+    "Single-choice knapsack with unlimited copies"
+   ],
+   "tradeoffs": [
+    "A single pass is optimal; integer division keeps totals exact"
+   ],
+   "variantLabel": "Inferred single variant: best single repeated job within a time budget",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ],
+      [
+       3
+      ],
+      4
+     ],
+     "output": [
+      0,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       12,
+       4,
+       12,
+       14,
+       12,
+       13,
+       11,
+       3,
+       2
+      ],
+      [
+       9,
+       10,
+       18,
+       7,
+       17,
+       13,
+       10,
+       7,
+       2
+      ],
+      13
+     ],
+     "output": [
+      30,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c301d01f64f4312b0a3e0a": {
+   "constraints": [
+    "0 <= routes.length <= 1e5",
+    "names are 1 to 10 lowercase letters or digits",
+    "0 <= cost, reward <= 1e6",
+    "the routes form a DAG",
+    "checkpoint names are distinct in checkpoints"
+   ],
+   "clarifyingQuestions": [
+    "How are the lodge and the finish lines identified?",
+    "Is the score the rewards minus the costs?",
+    "Does the lodge's own reward count?",
+    "Can there be several routes between the same pair?"
+   ],
+   "hints": [
+    "On a DAG, best-path problems become dynamic programming over a topological order.",
+    "Let best(v) be the best score from v to a finish; a sink has best 0.",
+    "best(v) = max over routes (v, c, w) of reward(w) - c + best(w); evaluate in reverse topological order from the lodge."
+   ],
+   "invariants": [
+    "best of a sink is 0",
+    "each route is relaxed exactly once"
+   ],
+   "chooseWhen": [
+    "Longest or most valuable path in a DAG"
+   ],
+   "tradeoffs": [
+    "DP over a topological order is linear; plain DFS enumeration is exponential"
+   ],
+   "variantLabel": "Inferred single variant: best reward-minus-cost path in a DAG",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "c3",
+        1,
+        "c7"
+       ],
+       [
+        "c4",
+        7,
+        "c7"
+       ],
+       [
+        "c2",
+        2,
+        "c6"
+       ],
+       [
+        "c2",
+        7,
+        "c3"
+       ],
+       [
+        "c3",
+        6,
+        "c6"
+       ],
+       [
+        "c4",
+        0,
+        "c5"
+       ],
+       [
+        "c6",
+        4,
+        "c7"
+       ],
+       [
+        "c3",
+        2,
+        "c6"
+       ],
+       [
+        "lodge",
+        5,
+        "c7"
+       ],
+       [
+        "c1",
+        5,
+        "c6"
+       ],
+       [
+        "c6",
+        7,
+        "c7"
+       ],
+       [
+        "c1",
+        3,
+        "c6"
+       ],
+       [
+        "c6",
+        4,
+        "c7"
+       ]
+      ],
+      [
+       [
+        "c7",
+        7
+       ],
+       [
+        "c1",
+        0
+       ],
+       [
+        "c4",
+        0
+       ],
+       [
+        "c2",
+        8
+       ],
+       [
+        "c5",
+        6
+       ],
+       [
+        "lodge",
+        9
+       ]
+      ]
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:676f7445366afdc1233e4ff1": {
+   "constraints": [
+    "1 <= days.length <= 1e5",
+    "1 <= days[i] <= 1e5",
+    "1 <= k <= sum(days)"
+   ],
+   "clarifyingQuestions": [
+    "What is chosen: k consecutive days, or something else?",
+    "May the window wrap around the cycle?",
+    "Can k exceed the total number of days?"
+   ],
+   "hints": [
+    "Day j of a sprint is worth j, so later days in a sprint are worth more.",
+    "Moving a window that ends mid-sprint to the end of that sprint never loses points (the added days are worth more than the ones dropped, or else moving left is better), so check only windows ending at a sprint end.",
+    "Double the sprint list for wrapping; for each sprint end, take whole sprints from the left with prefix sums and a partial sprint's top days."
+   ],
+   "invariants": [
+    "the left pointer only moves forward",
+    "whole sprints inside the window contribute d (d + 1) / 2"
+   ],
+   "chooseWhen": [
+    "Sliding windows over run-length encoded sequences"
+   ],
+   "tradeoffs": [
+    "Run-length prefix sums are linear in the number of sprints; expanding days is linear in the total days"
+   ],
+   "variantLabel": "Inferred single variant: best k-day window over a cyclic schedule",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5,
+       3,
+       4,
+       7,
+       3,
+       7,
+       3
+      ],
+      23
+     ],
+     "output": 80,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6800861ac48db1937ce88f5d": {
+   "constraints": [
+    "1 <= str1.length, str2.length <= 1e5",
+    "lowercase English letters only"
+   ],
+   "clarifyingQuestions": [
+    "Can the overlap be the whole of the shorter string?",
+    "Is the overlap required to be non-empty?",
+    "Is case relevant?"
+   ],
+   "hints": [
+    "The overlap is a suffix of str1 that is also a prefix of str2.",
+    "Join str2, a separator that occurs in neither string, and the tail of str1; a border of this string is exactly an overlap.",
+    "The KMP prefix function value at the end is the longest overlap; append the rest of str2."
+   ],
+   "invariants": [
+    "the separator stops borders from crossing between the two parts",
+    "L <= min(len(str1), len(str2))"
+   ],
+   "chooseWhen": [
+    "Assembling overlapping fragments"
+   ],
+   "tradeoffs": [
+    "KMP is linear; checking every length directly is quadratic in the worst case"
+   ],
+   "variantLabel": "Inferred single variant: overlap merge of two strings",
+   "examples": [
+    {
+     "input": [
+      "a",
+      "a"
+     ],
+     "output": "a",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "aababbabbaabababababb",
+      "baababbabbaababa"
+     ],
+     "output": "aababbabbaabababababbaababbabbaababa",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:695572104a0202df9569e960": {
+   "constraints": [
+    "1 <= number of servers <= 1000",
+    "total events <= 1e5",
+    "serverIds and targets are 1 to 10 characters, a lowercase letter followed by lowercase letters or digits",
+    "0 <= time <= 1e9, non-decreasing within one server",
+    "type is 1 to 10 lowercase letters"
+   ],
+   "clarifyingQuestions": [
+    "What is the output: a merged list, or something derived such as matched send/receive pairs?",
+    "How are events with equal times ordered?",
+    "Is each server's list already sorted?",
+    "How is the source server recorded in the output?"
+   ],
+   "hints": [
+    "Each server's list is already sorted, so this is a k-way merge.",
+    "Keep one heap entry per server: (time, serverId, position).",
+    "Pop the smallest, emit a fresh copy of its event with serverId added, and push that server's next event."
+   ],
+   "invariants": [
+    "the heap holds at most one entry per server",
+    "emitted times are non-decreasing"
+   ],
+   "chooseWhen": [
+    "Merging sorted streams from many sources"
+   ],
+   "tradeoffs": [
+    "A heap merge is O(N log S); sorting everything is O(N log N) but simpler"
+   ],
+   "variantLabel": "Inferred single variant: k-way merge of per-server event logs",
+   "examples": [
+    {
+     "input": [
+      {
+       "a": []
+      }
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "s2": [],
+       "b": [
+        {
+         "time": 3,
+         "type": "send"
+        },
+        {
+         "time": 3,
+         "type": "send",
+         "target": "q"
+        },
+        {
+         "time": 3,
+         "type": "idle"
+        },
+        {
+         "time": 5,
+         "type": "idle"
+        },
+        {
+         "time": 7,
+         "type": "idle"
+        }
+       ],
+       "srv1": [
+        {
+         "time": 3,
+         "type": "receive"
+        },
+        {
+         "time": 3,
+         "type": "receive",
+         "target": "q"
+        },
+        {
+         "time": 3,
+         "type": "send"
+        }
+       ]
+      }
+     ],
+     "output": [
+      {
+       "serverId": "b",
+       "time": 3,
+       "type": "send"
+      },
+      {
+       "serverId": "b",
+       "time": 3,
+       "type": "send",
+       "target": "q"
+      },
+      {
+       "serverId": "b",
+       "time": 3,
+       "type": "idle"
+      },
+      {
+       "serverId": "srv1",
+       "time": 3,
+       "type": "receive"
+      },
+      {
+       "serverId": "srv1",
+       "time": 3,
+       "type": "receive",
+       "target": "q"
+      },
+      {
+       "serverId": "srv1",
+       "time": 3,
+       "type": "send"
+      },
+      {
+       "serverId": "b",
+       "time": 5,
+       "type": "idle"
+      },
+      {
+       "serverId": "b",
+       "time": 7,
+       "type": "idle"
+      }
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67df6ae706b62d81733ab893": {
+   "constraints": [
+    "0 <= list1.length, list2.length <= 1e5",
+    "-1e9 <= start <= end <= 1e9",
+    "each list sorted, intervals within one list do not overlap or touch"
+   ],
+   "clarifyingQuestions": [
+    "Are touching intervals ([1, 3] and [3, 5]) merged?",
+    "Can a list be empty?",
+    "Are the intervals closed?"
+   ],
+   "hints": [
+    "Both lists are sorted, so a merge step always knows the next interval by start.",
+    "Keep a current merged interval; the next interval either overlaps it (start <= current end) or starts a new one.",
+    "Extend with max of ends, because a later interval can be fully inside the current one."
+   ],
+   "invariants": [
+    "output intervals are sorted and strictly separated",
+    "the current end never decreases"
+   ],
+   "chooseWhen": [
+    "Union of sorted range lists (calendars, coverage)"
+   ],
+   "tradeoffs": [
+    "The two-pointer merge is linear; concatenating and sorting is simpler but O(N log N)"
+   ],
+   "variantLabel": "Inferred single variant: union of two sorted interval lists",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        -15,
+        -15
+       ],
+       [
+        -13,
+        -12
+       ],
+       [
+        -10,
+        -8
+       ],
+       [
+        -5,
+        -4
+       ],
+       [
+        -3,
+        -3
+       ],
+       [
+        0,
+        1
+       ]
+      ],
+      [
+       [
+        3,
+        7
+       ],
+       [
+        9,
+        11
+       ],
+       [
+        13,
+        17
+       ],
+       [
+        19,
+        22
+       ],
+       [
+        26,
+        26
+       ],
+       [
+        28,
+        32
+       ]
+      ]
+     ],
+     "output": [
+      [
+       -15,
+       -15
+      ],
+      [
+       -13,
+       -12
+      ],
+      [
+       -10,
+       -8
+      ],
+      [
+       -5,
+       -4
+      ],
+      [
+       -3,
+       -3
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       3,
+       7
+      ],
+      [
+       9,
+       11
+      ],
+      [
+       13,
+       17
+      ],
+      [
+       19,
+       22
+      ],
+      [
+       26,
+       26
+      ],
+      [
+       28,
+       32
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a48164d3588ba8acc693047": {
+   "constraints": [
+    "0 <= nums1.length, nums2.length <= 1e5",
+    "-1e9 <= nums1[i], nums2[i] <= 1e9",
+    "both sorted non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "Should the result be a new array or written into nums1?",
+    "Can either array be empty?",
+    "Do duplicates inside one array count once?"
+   ],
+   "hints": [
+    "A standard sorted merge produces all values in order.",
+    "Duplicates are adjacent in the merged stream.",
+    "Append a value only when the output is empty or its last value is smaller."
+   ],
+   "invariants": [
+    "the output is strictly increasing",
+    "each pointer only moves forward"
+   ],
+   "chooseWhen": [
+    "Merging sorted sets"
+   ],
+   "tradeoffs": [
+    "The merge is linear and keeps order; a hash set loses order and needs a sort"
+   ],
+   "variantLabel": "Inferred single variant: sorted union without duplicates",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -8,
+       -8,
+       -7,
+       -5,
+       -4,
+       -3,
+       0,
+       4,
+       6,
+       7,
+       8
+      ],
+      [
+       -7,
+       -5,
+       -5,
+       -4,
+       -4,
+       -2,
+       0,
+       4,
+       5,
+       6
+      ]
+     ],
+     "output": [
+      -8,
+      -7,
+      -5,
+      -4,
+      -3,
+      -2,
+      0,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

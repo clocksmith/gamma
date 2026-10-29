@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67fd5bf3d2adf72ba62b0ecc",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "s1",
+  "s2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "jaccardSimilarity",
+  "params": [
+   {
+    "name": "s1",
+    "type": "string"
+   },
+   {
+    "name": "s2",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "float"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact JSON number; JavaScript cannot tag an integral float, so the JavaScript result is compared by numeric value (Python must return float)",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exact rational arithmetic: build both word sets, form the fraction, add one half hundredth and floor",
+  "candidate_design": "hash sets of words; the rounded hundredths are (200 c + u) div (2 u) in integer arithmetic, then divided by 100 once",
+  "complexity_target": "O(|s1| + |s2|) time/O(|s1| + |s2|) space"
+ },
+ "source_sha256": "dee68103995cea4b030d8d07fa9d4f1f18f2b2ca9f643196566804d8e53bf886",
+ "wrapper": "named export jaccardSimilarity"
+}

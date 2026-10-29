@@ -1,0 +1,89 @@
+{
+ "problems": {
+  "hack2hire:69c2f1d121f6ab422696534f": {
+   "reference": "for every line test every line within linesAround positions for a match",
+   "candidate_design": "one scan records match positions; a second scan keeps a \"covered up to\" index so each match extends the covered range to j + linesAround and starts it no earlier than j - linesAround, emitting each covered line once",
+   "complexity_target": "O(total characters + n) time/O(n) space"
+  },
+  "hack2hire:69c2f5a621f6ab4226965367": {
+   "reference": "for every line test every line in the window [i - after, i + before] for a match, then cut the included positions into runs",
+   "candidate_design": "one scan of match positions with a \"covered up to\" index; a new block starts whenever the next covered range begins after the last emitted index + 1",
+   "complexity_target": "O(total characters + n) time/O(n) space"
+  },
+  "hack2hire:67896bfb11318cc872dd83ea": {
+   "reference": "build all pairwise relations and run a breadth-first search from every unvisited element",
+   "candidate_design": "union-find with path halving; a map per property position keeps the first element seen with each value and unions later elements into it; groups are collected by root, sorted and ordered by smallest id",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:6a038c052608e589a944ac93": {
+   "reference": "keep a dictionary of totals and scan all of it on every query",
+   "candidate_design": "max-heap of (total, name) snapshots with lazy deletion: every update pushes the new snapshot; a query pops snapshots whose total is no longer current",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:67fd5bf3d2adf72ba62b0ecc": {
+   "reference": "exact rational arithmetic: build both word sets, form the fraction, add one half hundredth and floor",
+   "candidate_design": "hash sets of words; the rounded hundredths are (200 c + u) div (2 u) in integer arithmetic, then divided by 100 once",
+   "complexity_target": "O(|s1| + |s2|) time/O(|s1| + |s2|) space"
+  },
+  "hack2hire:693903ffb03e15724c2174c5": {
+   "reference": "repeatedly rescan every remaining task and every dependency to find the tasks whose prerequisites are done",
+   "candidate_design": "Kahn's algorithm processed level by level: in-degree counts, the current frontier sorted, successors whose in-degree drops to 0 form the next frontier",
+   "complexity_target": "O((n + m) + n log n) time/O(n + m) space"
+  },
+  "hack2hire:67a922ffea201244f8fae261": {
+   "reference": "try L from len(s) - 1 down to 0 and compare the prefix and suffix directly",
+   "candidate_design": "KMP prefix function; the answer is its last value",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:67ccb2bb3363b83a81fc996a": {
+   "reference": "try every permutation of labels",
+   "candidate_design": "the value equals sum(label(v) * degree(v)); sort degrees ascending and give label i to the i-th smallest degree (rearrangement inequality)",
+   "complexity_target": "O(n log n + m) time/O(n) space"
+  },
+  "hack2hire:6854bafdc201117d348a25d2": {
+   "reference": "try every set of at most k positions to change and keep the largest result",
+   "candidate_design": "greedy: scan left to right and replace digits below 5 while operations remain",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:67d8a1d71989183df538251a": {
+   "reference": "enumerate every way to choose floor(N / 3) disjoint triples",
+   "candidate_design": "sort descending; with c = floor(N / 3) groups the medians are the values at positions 1, 3, ..., 2c - 1 (each group takes two large values and one of the c smallest)",
+   "complexity_target": "O(N log N) time/O(N) space"
+  },
+  "hack2hire:69bdad5c1cbff60a929beab2": {
+   "reference": "count runs by repeated subtraction of the time from k for every type, then pick the best (total, -index)",
+   "candidate_design": "one pass computing floor(k / time) * profit with a strict improvement test",
+   "complexity_target": "O(n) time/O(1) space"
+  },
+  "hack2hire:68c301d01f64f4312b0a3e0a": {
+   "reference": "enumerate every path from the lodge by depth-first search and keep the best score at a sink",
+   "candidate_design": "topological order of the part reachable from the lodge (Kahn); DP of the best score to finish from each node, computed in reverse topological order",
+   "complexity_target": "O(V + E) time/O(V + E) space"
+  },
+  "hack2hire:676f7445366afdc1233e4ff1": {
+   "reference": "expand the cyclic schedule day by day and sum every window of k days",
+   "candidate_design": "some optimal window ends on the last day of a sprint; over the doubled sprint list, prefix sums of days and of triangular sums plus a moving left pointer give each such window in O(1)",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6800861ac48db1937ce88f5d": {
+   "reference": "try L from min(len) down to 0 and compare the suffix and prefix directly",
+   "candidate_design": "KMP prefix function of str2 + separator + the last min(len) characters of str1; the final value is L",
+   "complexity_target": "O(|str1| + |str2|) time/O(|str1| + |str2|) space"
+  },
+  "hack2hire:695572104a0202df9569e960": {
+   "reference": "collect (time, serverId, position, event) for every event and sort the whole list",
+   "candidate_design": "k-way merge with a min-heap keyed by (time, serverId, position), one head per server",
+   "complexity_target": "O(N log S) time/O(N) space"
+  },
+  "hack2hire:67df6ae706b62d81733ab893": {
+   "reference": "mark half-unit cells covered by any interval on a doubled coordinate grid and read off the covered runs",
+   "candidate_design": "two pointers take the interval with the smaller start next and extend or close the current merged interval",
+   "complexity_target": "O(n + m) time/O(n + m) space"
+  },
+  "hack2hire:6a48164d3588ba8acc693047": {
+   "reference": "sort the set of all values",
+   "candidate_design": "two pointers over both arrays, appending a value only when it differs from the last appended one",
+   "complexity_target": "O(n + m) time/O(n + m) space"
+  }
+ }
+}

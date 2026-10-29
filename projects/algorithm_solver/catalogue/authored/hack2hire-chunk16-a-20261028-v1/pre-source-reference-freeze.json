@@ -1,0 +1,33 @@
+{
+ "schema": "gamma.hack2hire-chunk16-a-pre-source-freeze.v1",
+ "at": "2026-10-29T12:43:42.690272+00:00",
+ "files": {
+  "oracles.py": "2e10d7c10635ae81a2f7123862cd2b1c65005ed3bc5386ef37030de0c084bb5b",
+  "test_oracles.py": "f6d001d2c03a476395abab2e93ed2dec1574142fc52736a7a56d1214f9d09861",
+  "cases.py": "26cf44902d76cf66ea5fa09780be8706d686d6338a405a14d2ff89746ace930e",
+  "contracts.json": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+  "design.json": "bf28c3aa830614bb0df0ecea4c7357721f8c1faabb85e0f9c5e567ed67b6cde5"
+ },
+ "candidate_sources_exist": false,
+ "candidate_executions": 0,
+ "source_free_tests_passed": 19,
+ "note": "References, inferred contracts, case generator and designs frozen before any candidate source was written.",
+ "spec_basis": "inferred (claude-opus-5-5 subagent, 2026-10-29)",
+ "amendments": [
+  {
+   "file": "cases.py",
+   "from_sha256": "26cf44902d76cf66ea5fa09780be8706d686d6338a405a14d2ff89746ace930e",
+   "to_sha256": "c3022da594d4541d7a8adaa6c5cb72e72125a3d8a308c7a66e5cc3fd53420dfc",
+   "after_candidate_runs": true,
+   "change": "Jaccard Business Similarity analytic-maximum row: the words were 3-letter codes for indices up to 37500, but 3-letter codes repeat after 26**3 = 17576, so both strings held the same 17576 distinct words and the true answer is 1.0, not the expected 0.33. The row now uses 4-letter codes for 20000 and 20000 words overlapping in 10000 (1/3, rounded 0.33)",
+   "reason": "author arithmetic error in a hand-derived expectation; both candidates returned 1.0 on the old row; references, validators, contracts and the inferred spec are unchanged"
+  }
+ ],
+ "current_sha256": {
+  "oracles.py": "2e10d7c10635ae81a2f7123862cd2b1c65005ed3bc5386ef37030de0c084bb5b",
+  "test_oracles.py": "f6d001d2c03a476395abab2e93ed2dec1574142fc52736a7a56d1214f9d09861",
+  "cases.py": "c3022da594d4541d7a8adaa6c5cb72e72125a3d8a308c7a66e5cc3fd53420dfc",
+  "contracts.json": "59f21f783e26a7506570c2e3714feddd3b420bb19e6adcc74008c826f361bd68",
+  "design.json": "bf28c3aa830614bb0df0ecea4c7357721f8c1faabb85e0f9c5e567ed67b6cde5"
+ }
+}
