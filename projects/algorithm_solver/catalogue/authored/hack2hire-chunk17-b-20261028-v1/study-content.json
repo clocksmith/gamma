@@ -1,0 +1,1338 @@
+{
+ "schema": "gamma.hack2hire-chunk17-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:68fa7c5e0fa32e4d82f4fc1f": {
+   "constraints": [
+    "at most 1e4 calls",
+    "a path or pattern has at most 8 segments",
+    "literal segments are 1 to 10 characters from a-z and 0-9; a pattern segment may also be \"*\"",
+    "handler names are 1 to 20 characters: a letter followed by letters, digits or \"_\""
+   ],
+   "clarifyingQuestions": [
+    "How are ties between patterns with the same number of wildcards broken?",
+    "Does registering the same pattern again replace the handler?",
+    "Does \"*\" match exactly one segment, or also zero or several?"
+   ],
+   "hints": [
+    "A matching pattern has the same number of segments as the path, so think of patterns as words over segments.",
+    "Store patterns in a trie keyed by segment, with \"*\" as one more child; a query only follows the literal child equal to its segment and the \"*\" child.",
+    "Visit the literal child first and track the wildcard count; the first match found with the smallest count is the left-to-right most specific one, and any branch whose count already exceeds the best can be skipped."
+   ],
+   "invariants": [
+    "every trie node at depth d corresponds to one pattern prefix of d segments",
+    "a candidate match visited earlier in literal-first order wins ties on wildcard count"
+   ],
+   "chooseWhen": [
+    "Routing and pattern dispatch with single-segment wildcards"
+   ],
+   "tradeoffs": [
+    "A trie shares prefixes and avoids scanning every route; a full scan is simpler and fine for few routes"
+   ],
+   "variantLabel": "Single variant: most specific wildcard route per path",
+   "examples": [
+    {
+     "input": [
+      [
+       "Router"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Router",
+       "callRoute",
+       "addRoute",
+       "callRoute",
+       "addRoute",
+       "addRoute",
+       "callRoute",
+       "callRoute",
+       "addRoute",
+       "callRoute",
+       "callRoute",
+       "addRoute"
+      ],
+      [
+       [],
+       [
+        "/a/a/a"
+       ],
+       [
+        "/*/c1",
+        "h7"
+       ],
+       [
+        "/c1/c1"
+       ],
+       [
+        "/*/b",
+        "h6"
+       ],
+       [
+        "/*",
+        "h3"
+       ],
+       [
+        "/"
+       ],
+       [
+        "/a/b/c1"
+       ],
+       [
+        "/b/*",
+        "h7"
+       ],
+       [
+        "/"
+       ],
+       [
+        "/a/b"
+       ],
+       [
+        "/",
+        "h6"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "",
+      null,
+      "h7",
+      null,
+      null,
+      "",
+      "",
+      null,
+      "",
+      "h6",
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:686b0a7af56e0403f35f23ee": {
+   "constraints": [
+    "1 <= elements.length <= 5000",
+    "1 <= elements[i] <= 1e9",
+    "0 <= k <= min(elements.length, 50)"
+   ],
+   "clarifyingQuestions": [
+    "Is k counted over adjacent pairs of the chosen subsequence only?",
+    "Can the subsequence be empty?",
+    "How large can k be compared with the length?"
+   ],
+   "hints": [
+    "Taking an element never hurts except through the change budget; the question is only where the last chosen element came from.",
+    "For each value v and budget j, remember the longest subsequence that ends with v and uses j changes.",
+    "An element x either continues its own value at the same budget or follows the best subsequence of any value at budget j - 1; keep a running best per budget and update budgets downwards."
+   ],
+   "invariants": [
+    "best[v][j] never decreases as more elements are read",
+    "top[j] equals the maximum of best[v][j] over all values seen so far"
+   ],
+   "chooseWhen": [
+    "Subsequence problems with a budget on value changes"
+   ],
+   "tradeoffs": [
+    "Keying the state by value avoids the quadratic scan over predecessors; the index-pair programme is simpler but O(n^2 k)"
+   ],
+   "variantLabel": "Single variant: longest subsequence with at most k value changes",
+   "examples": [
+    {
+     "input": [
+      [
+       7
+      ],
+      0
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       1,
+       1,
+       2,
+       3,
+       3,
+       3,
+       2,
+       2,
+       2,
+       3,
+       2
+      ],
+      4
+     ],
+     "output": 11,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67799006dcf91f8e3c1c310d": {
+   "constraints": [
+    "0 <= s.length, p.length <= 2000",
+    "s has only a-z",
+    "p has only a-z and \"*\""
+   ],
+   "clarifyingQuestions": [
+    "Is there a \"?\" wildcard as well?",
+    "Must the whole of s be matched?",
+    "Can consecutive \"*\" appear?"
+   ],
+   "hints": [
+    "Consecutive stars behave like one star.",
+    "Between two stars sits a literal piece that must appear somewhere in order.",
+    "Placing each middle piece at its leftmost possible position never hurts; only the first piece is anchored at the start and the last at the end."
+   ],
+   "invariants": [
+    "pieces are placed in order without overlap",
+    "the prefix and suffix anchors do not overlap"
+   ],
+   "chooseWhen": [
+    "Glob matching with only \"*\""
+   ],
+   "tradeoffs": [
+    "Piece-by-piece search uses fast substring search; the DP table is simpler to prove but quadratic in time and space"
+   ],
+   "variantLabel": "Single variant: \"*\" only wildcard match",
+   "examples": [
+    {
+     "input": [
+      "",
+      ""
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "bbbbbaabab",
+      "bbbbba*abab"
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67e45b2850b60b77022f382e": {
+   "constraints": [
+    "1 <= pattern.length <= 1000",
+    "0 <= words.length <= 1e4",
+    "0 <= words[i].length <= 1000",
+    "total characters in words at most 2e5",
+    "only a-z"
+   ],
+   "clarifyingQuestions": [
+    "Is the mapping per character or per word?",
+    "Does a word of a different length simply fail?",
+    "Should the output be booleans or the matching words?"
+   ],
+   "hints": [
+    "A length mismatch fails immediately.",
+    "Two maps catch both directions of a conflict: one pattern character to two letters, or two pattern characters to one letter.",
+    "Equivalently, compare the first-occurrence index of every character in the pattern and in the word."
+   ],
+   "invariants": [
+    "each map stays injective while scanning",
+    "positions scanned so far are consistent with one bijection"
+   ],
+   "chooseWhen": [
+    "Isomorphism checks over many strings"
+   ],
+   "tradeoffs": [
+    "Two maps per word are linear; precomputing the pattern's first-occurrence signature lets each word be checked with one map"
+   ],
+   "variantLabel": "Single variant: character-level pattern bijection for many words",
+   "examples": [
+    {
+     "input": [
+      "c",
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "ccaacb",
+      [
+       "yxzyyz",
+       "zyyxy",
+       "xxzzxy",
+       "xyzyzx",
+       "zyzxzx",
+       "zyxzyy",
+       "xyyzyx",
+       "yxxxz"
+      ]
+     ],
+     "output": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67730b5ddd9437f8aa275b04": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "1 <= maximumCycles <= 1e9",
+    "at most 1e5 calls"
+   ],
+   "clarifyingQuestions": [
+    "Are blocks with zero remaining cycles skipped?",
+    "What does a write return, and what happens when all blocks are worn out?",
+    "Are there other operations, such as erase or reads?"
+   ],
+   "hints": [
+    "Keep the writable blocks ordered by (remaining writes, id).",
+    "A heap gives the minimum in logarithmic time and handles ties through the id in the key.",
+    "After a write only the chosen block changes: decrement it, and remove it when it reaches zero."
+   ],
+   "invariants": [
+    "the heap holds exactly the blocks with at least one remaining write",
+    "every key is (remaining writes, id)"
+   ],
+   "chooseWhen": [
+    "Allocation by a priority over mutable counters"
+   ],
+   "tradeoffs": [
+    "A heap is general and logarithmic; for writes alone the order of blocks never changes, so a pointer would also work"
+   ],
+   "variantLabel": "Single variant: least-remaining-cycles block allocation",
+   "examples": [
+    {
+     "input": [
+      [
+       "DiskBlockManager"
+      ],
+      [
+       [
+        5,
+        4
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "DiskBlockManager",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write",
+       "write"
+      ],
+      [
+       [
+        5,
+        1
+       ],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      0,
+      1,
+      2,
+      3,
+      4,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:679da470996c3c60bd38b5ba": {
+   "constraints": [
+    "1 <= n <= 1e9",
+    "-1e9 <= x <= 1e9",
+    "at most 1e5 calls"
+   ],
+   "clarifyingQuestions": [
+    "Are coordinates integers?",
+    "Can an attack land partly or wholly outside [0, n]?",
+    "Does attacking the same spot twice matter?"
+   ],
+   "hints": [
+    "With integer coordinates the base is n unit segments.",
+    "Only attacks with 0 <= x < n destroy a segment of the base.",
+    "Count distinct destroyed segments in a set; the base is gone when the count reaches n, which works even for huge n."
+   ],
+   "invariants": [
+    "the counter equals the number of distinct in-range attacked segments",
+    "isDestroyed never turns false again once true"
+   ],
+   "chooseWhen": [
+    "Coverage tracking with distinct counting"
+   ],
+   "tradeoffs": [
+    "A hash set handles huge n; a bit array is faster for small n but needs n memory"
+   ],
+   "variantLabel": "Single variant: is the whole base covered by unit attacks",
+   "examples": [
+    {
+     "input": [
+      [
+       "AlienBaseAttack"
+      ],
+      [
+       [
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "AlienBaseAttack",
+       "attack",
+       "isDestroyed",
+       "attack",
+       "attack",
+       "isDestroyed",
+       "attack",
+       "isDestroyed",
+       "attack",
+       "isDestroyed",
+       "isDestroyed",
+       "attack",
+       "attack",
+       "attack",
+       "attack",
+       "attack",
+       "isDestroyed"
+      ],
+      [
+       [
+        3
+       ],
+       [
+        3
+       ],
+       [],
+       [
+        1
+       ],
+       [
+        3
+       ],
+       [],
+       [
+        4
+       ],
+       [],
+       [
+        2
+       ],
+       [],
+       [],
+       [
+        4
+       ],
+       [
+        0
+       ],
+       [
+        0
+       ],
+       [
+        4
+       ],
+       [
+        -2
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      false,
+      null,
+      null,
+      false,
+      null,
+      false,
+      null,
+      false,
+      false,
+      null,
+      null,
+      null,
+      null,
+      null,
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678876fe402dc47b67a14944": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "1 <= arr[i] <= 1e9",
+    "state has only \"0\" and \"1\" and at least one \"1\"",
+    "1 <= m <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "How many operations are performed, and is m an input?",
+    "Can an element be appended more than once?",
+    "Do blocked elements unblock to the right, to the left, or both?"
+   ],
+   "hints": [
+    "Choosing an element never changes which elements become available later.",
+    "So S[t] is simply the largest value available at step t.",
+    "Availability spreads one index to the right per step from every \"1\"; compute each index's distance to its nearest \"1\" on the left and take running maxima."
+   ],
+   "invariants": [
+    "the available set only grows",
+    "S is non-decreasing"
+   ],
+   "chooseWhen": [
+    "Greedy choices that do not influence future options"
+   ],
+   "tradeoffs": [
+    "Distance buckets are linear; a step-by-step simulation is O(n * m)"
+   ],
+   "variantLabel": "Single variant: lexicographically largest generated array",
+   "examples": [
+    {
+     "input": [
+      [
+       4
+      ],
+      "1",
+      1
+     ],
+     "output": [
+      4
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       2,
+       15,
+       11,
+       15,
+       18,
+       12,
+       12,
+       9
+      ],
+      "00000010",
+      3
+     ],
+     "output": [
+      12,
+      12,
+      12
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a56d81b571d6ff0a4bd238": {
+   "constraints": [
+    "1 <= n <= 5e4",
+    "1 <= request[i] <= 100",
+    "1 <= health[i] <= 1e4",
+    "1 <= k <= 1e4"
+   ],
+   "clarifyingQuestions": [
+    "How much health does one attack remove, and how many servers can be attacked per round?",
+    "Do the requests of the round in which a server falls still count?",
+    "Is the answer the requests handled, or the number of attacks?"
+   ],
+   "hints": [
+    "Splitting hits between servers only delays everything; finish one server before starting another.",
+    "Each server is a job with length ceil(health / k) and weight request; the total is the weighted sum of finish times.",
+    "Swap two adjacent jobs: i before j is better when t_i * request[j] < t_j * request[i], so sort by that rule (Smith's rule)."
+   ],
+   "invariants": [
+    "the total equals sum request[i] * (finish round of i)",
+    "equal ratios give equal totals in any order"
+   ],
+   "chooseWhen": [
+    "Weighted completion-time scheduling"
+   ],
+   "tradeoffs": [
+    "Cross-multiplied comparison is exact; sorting by a floating ratio could misorder close values"
+   ],
+   "variantLabel": "Single variant: order attacks to minimise handled requests",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      [
+       5
+      ],
+      2
+     ],
+     "output": 3,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5,
+       6,
+       3,
+       6,
+       7,
+       1,
+       7,
+       1
+      ],
+      [
+       20,
+       19,
+       4,
+       11,
+       16,
+       16,
+       12,
+       12
+      ],
+      4
+     ],
+     "output": 403,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67840e27d0faf7ec64cc3adb": {
+   "constraints": [
+    "0 <= nums.length <= 1e5",
+    "-1e9 <= nums[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are equal values allowed in a triple?",
+    "Must the indices be strictly increasing?",
+    "How large can the count get?"
+   ],
+   "hints": [
+    "Fix the middle element of the triple.",
+    "The number of triples through j is (larger values left of j) times (smaller values right of j).",
+    "Count both with a Fenwick tree over value ranks, one sweep left to right and one right to left."
+   ],
+   "invariants": [
+    "equal values are never counted as larger or smaller",
+    "each triple is counted once, at its middle index"
+   ],
+   "chooseWhen": [
+    "Counting monotone patterns of length three"
+   ],
+   "tradeoffs": [
+    "Fenwick trees are short and exact; merge-sort counting is equivalent but longer"
+   ],
+   "variantLabel": "Single variant: count strictly decreasing triples",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -1,
+       -2,
+       3,
+       1,
+       1,
+       -2,
+       3,
+       -3,
+       1,
+       -2,
+       0,
+       -3
+      ]
+     ],
+     "output": 37,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6897c08aa543d38b79706ca6": {
+   "constraints": [
+    "0 <= logsDay1.length, logsDay2.length <= 1e5",
+    "date is yyyy-mm-dd",
+    "userId is 1 to 12 characters from a-z, 0-9 and \"_\"",
+    "orderType is 1 to 12 characters from a-z",
+    "amount is a decimal number string",
+    "at most 100 calls"
+   ],
+   "clarifyingQuestions": [
+    "What do the trust-score methods compute?",
+    "Do the two distinct order types have to come from different days?",
+    "Is the sort plain string order?"
+   ],
+   "hints": [
+    "Each query depends only on the logs, so precompute.",
+    "Per user keep two day flags and a set of order types.",
+    "Select users with both flags and at least two types, sort once, and return a copy each time."
+   ],
+   "invariants": [
+    "a user's type set is the union over both days",
+    "returned lists are fresh and sorted"
+   ],
+   "chooseWhen": [
+    "Per-entity aggregation across two data sets"
+   ],
+   "tradeoffs": [
+    "Precomputing makes repeated calls cheap; rescanning is simpler but O(R) per call"
+   ],
+   "variantLabel": "Single variant: users active on both days with two or more order types",
+   "examples": [
+    {
+     "input": [
+      [
+       "PurchaseAnalyzer"
+      ],
+      [
+       [
+        [],
+        [
+         [
+          "2024-01-02",
+          "u4",
+          "buy",
+          "312"
+         ]
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "PurchaseAnalyzer",
+       "crossDayDiverseUsers",
+       "crossDayDiverseUsers"
+      ],
+      [
+       [
+        [
+         [
+          "2024-01-01",
+          "u4",
+          "gift",
+          "475"
+         ],
+         [
+          "2024-01-01",
+          "u4",
+          "sell",
+          "261"
+         ]
+        ],
+        [
+         [
+          "2024-01-02",
+          "u_3",
+          "sell",
+          "387"
+         ],
+         [
+          "2024-01-02",
+          "u4",
+          "buy",
+          "341"
+         ],
+         [
+          "2024-01-02",
+          "u1",
+          "gift",
+          "191"
+         ]
+        ]
+       ],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      [
+       "u4"
+      ],
+      [
+       "u4"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678d3e738c349080cddc5f5e": {
+   "constraints": [
+    "1 <= expression.length <= 1e5",
+    "nesting depth at most 5e4",
+    "|literal| <= 1e9",
+    "every intermediate value is at most 2**53 - 1 in absolute value"
+   ],
+   "clarifyingQuestions": [
+    "Is the syntax prefix \"(add 1 2)\", function-call \"add(1, 2)\" or infix?",
+    "How many arguments can add and mul take?",
+    "Can literals be negative?"
+   ],
+   "hints": [
+    "Split the input into \"(\", \")\", operation names and literals.",
+    "A call needs its operation and a running accumulator; nested calls need a stack of these.",
+    "On \")\" pop the frame and fold its value into the frame below with that frame's operation; an explicit stack avoids recursion limits on deep nesting."
+   ],
+   "invariants": [
+    "the stack holds one frame per open call",
+    "each frame's accumulator equals the fold of the arguments closed so far"
+   ],
+   "chooseWhen": [
+    "Evaluating nested prefix expressions"
+   ],
+   "tradeoffs": [
+    "An explicit stack handles any depth; recursive descent is shorter but limited by the call stack"
+   ],
+   "variantLabel": "Single variant: prefix add/mul expressions",
+   "examples": [
+    {
+     "input": [
+      "7"
+     ],
+     "output": 7,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "( mul ( add ( add 4 2) ( add  0  7  -2 )) (add  ( mul 4 7 -5 )  (add 5 -6)  ( add -1 4)) (add  (add  -1  1  2)  ( add -3 0 -3 )  6 ) )"
+     ],
+     "output": -3036,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:687e65b7eab243475a7dfbf7": {
+   "constraints": [
+    "0 <= logs.length <= 1e5",
+    "userId is 1 to 10 characters from a-z and 0-9",
+    "eventType is 1 to 10 characters from a-z and \"_\"",
+    "0 <= timestamp <= 1e9",
+    "1 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "What exactly is \"frequent\": a count threshold, the most frequent type, or per user?",
+    "Is the 24-hour window inclusive at the end?",
+    "What order should the result use?"
+   ],
+   "hints": [
+    "Events of different users or types never combine, so group by (user, event).",
+    "Within a group sort the timestamps; any window of k consecutive sorted timestamps is the tightest.",
+    "A group qualifies when some ts[i + k - 1] - ts[i] < 86400; collect qualifying types in a set and sort it."
+   ],
+   "invariants": [
+    "each window covers consecutive sorted timestamps of one group",
+    "a type is reported once even if several users qualify"
+   ],
+   "chooseWhen": [
+    "Burst detection in event logs"
+   ],
+   "tradeoffs": [
+    "Sorting per group is simple and exact; a global time-ordered sweep with per-group deques also works for streams"
+   ],
+   "variantLabel": "Single variant: event types some user repeats k times within 24 hours",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "u2",
+        40370,
+        "b"
+       ],
+       [
+        "u1",
+        148522,
+        "a"
+       ],
+       [
+        "u1",
+        54821,
+        "b"
+       ],
+       [
+        "u1",
+        7722,
+        "a"
+       ],
+       [
+        "u1",
+        57271,
+        "b"
+       ],
+       [
+        "u2",
+        196445,
+        "c_d"
+       ],
+       [
+        "u2",
+        169209,
+        "b"
+       ],
+       [
+        "u2",
+        155952,
+        "b"
+       ],
+       [
+        "u2",
+        122389,
+        "a"
+       ],
+       [
+        "u1",
+        175314,
+        "a"
+       ],
+       [
+        "u0",
+        10192,
+        "b"
+       ],
+       [
+        "u1",
+        138401,
+        "c_d"
+       ],
+       [
+        "u2",
+        126769,
+        "b"
+       ]
+      ],
+      1
+     ],
+     "output": [
+      "a",
+      "b",
+      "c_d"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6775decc2c61a9f93e698ba0": {
+   "constraints": [
+    "0 <= edges.length <= 1e4",
+    "node names are 1 to 5 characters from A-Z",
+    "the graph is acyclic with no repeated edges"
+   ],
+   "clarifyingQuestions": [
+    "Which path is returned when several are longest?",
+    "What is returned for an empty edge list?",
+    "Is length counted in nodes or edges?"
+   ],
+   "hints": [
+    "Longest paths in a DAG are a dynamic programme over a topological order.",
+    "Compute, for every node, the longest path starting there and its next node.",
+    "Breaking ties by the smallest next name gives the lexicographically smallest list, because all candidates start with the same node."
+   ],
+   "invariants": [
+    "len[v] = 1 + max len[successor], or 0 for a sink",
+    "the chosen continuation of v is lexicographically smallest among longest ones"
+   ],
+   "chooseWhen": [
+    "Longest or critical path in a dependency graph"
+   ],
+   "tradeoffs": [
+    "Kahn order avoids deep recursion on long chains; memoised DFS is shorter but recursive"
+   ],
+   "variantLabel": "Single variant: longest path with a lexicographic tie rule",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "C",
+        "E"
+       ],
+       [
+        "C",
+        "B"
+       ],
+       [
+        "BA",
+        "AB"
+       ],
+       [
+        "A",
+        "B"
+       ],
+       [
+        "E",
+        "AB"
+       ],
+       [
+        "A",
+        "BA"
+       ],
+       [
+        "A",
+        "AB"
+       ],
+       [
+        "C",
+        "BA"
+       ]
+      ]
+     ],
+     "output": [
+      "A",
+      "BA",
+      "AB"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69279ce99c0536c47b291a80": {
+   "constraints": [
+    "1 <= intervals.length <= 1e5",
+    "0 <= entry < exit <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is the answer the time, the count, or both?",
+    "Which time is returned when the peak is reached several times?",
+    "Does a guest leaving at t count at t?"
+   ],
+   "hints": [
+    "The attendance only rises at entry times, so the peak starts at some entry time.",
+    "Sort entries and exits; at equal times process exits first since [entry, exit) is half-open.",
+    "Record the time when the running count first beats the best seen."
+   ],
+   "invariants": [
+    "the running count equals the guests present just after processing time t",
+    "the recorded time only changes on a strict improvement"
+   ],
+   "chooseWhen": [
+    "Peak concurrency over intervals"
+   ],
+   "tradeoffs": [
+    "Two sorted arrays are simple; a single sorted event list with tie ordering is equivalent"
+   ],
+   "variantLabel": "Single variant: earliest moment of peak attendance",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        6,
+        8
+       ]
+      ]
+     ],
+     "output": 6,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        8,
+        12
+       ],
+       [
+        19,
+        24
+       ],
+       [
+        10,
+        12
+       ],
+       [
+        15,
+        19
+       ],
+       [
+        7,
+        12
+       ],
+       [
+        4,
+        12
+       ],
+       [
+        12,
+        18
+       ],
+       [
+        14,
+        16
+       ],
+       [
+        6,
+        9
+       ],
+       [
+        8,
+        14
+       ]
+      ]
+     ],
+     "output": 8,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677041e0366afdc1233e4ff4": {
+   "constraints": [
+    "1 <= word.length <= 1e5",
+    "word has only a-z",
+    "-1e5 <= a, b <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Are substrings counted by position or as distinct strings?",
+    "Is y a vowel?",
+    "Can a and b be zero or negative?"
+   ],
+   "hints": [
+    "Write the length as V + C and move everything to one side.",
+    "The condition becomes (1 - a) V + (1 - b) C = 0, which is additive over prefixes.",
+    "Two prefixes with the same key bound a redundant substring; count pairs of equal keys with a hash map."
+   ],
+   "invariants": [
+    "the key of a substring is the difference of two prefix keys",
+    "every pair of equal prefix keys is counted once"
+   ],
+   "chooseWhen": [
+    "Counting substrings by a linear condition on letter classes"
+   ],
+   "tradeoffs": [
+    "The prefix-key map is linear; the direct check is quadratic but needs no algebra"
+   ],
+   "variantLabel": "Single variant: count substrings with length a * V + b * C",
+   "examples": [
+    {
+     "input": [
+      "ab",
+      2,
+      0
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "eabbbaeabazbeeb",
+      3,
+      -3
+     ],
+     "output": 9,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b78e4e8a0eeb9897a8d2a5": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "0 <= tickets.length <= 1e5",
+    "0 <= entry <= exit <= n - 1"
+   ],
+   "clarifyingQuestions": [
+    "Is a car counted at its exit timestamp?",
+    "Can exit be before entry or beyond n - 1?",
+    "Is the output one count per timestamp?"
+   ],
+   "hints": [
+    "Each ticket adds 1 to a contiguous range of timestamps.",
+    "Record the start and end of each range instead of filling it.",
+    "Put +1 at entry and -1 at exit + 1 in a difference array; its prefix sums are the counts."
+   ],
+   "invariants": [
+    "the prefix sum at t counts tickets with entry <= t <= exit",
+    "the difference array sums to zero over 0..n"
+   ],
+   "chooseWhen": [
+    "Range increments with point reads at the end"
+   ],
+   "tradeoffs": [
+    "A difference array is linear; per-ticket filling is O(n * tickets) in the worst case"
+   ],
+   "variantLabel": "Single variant: occupancy count at every timestamp",
+   "examples": [
+    {
+     "input": [
+      3,
+      []
+     ],
+     "output": [
+      0,
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      11,
+      [
+       [
+        7,
+        10
+       ],
+       [
+        10,
+        10
+       ],
+       [
+        2,
+        7
+       ],
+       [
+        9,
+        10
+       ],
+       [
+        4,
+        4
+       ],
+       [
+        6,
+        7
+       ],
+       [
+        6,
+        9
+       ],
+       [
+        7,
+        7
+       ]
+      ]
+     ],
+     "output": [
+      0,
+      0,
+      1,
+      1,
+      2,
+      1,
+      3,
+      5,
+      2,
+      3,
+      3
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

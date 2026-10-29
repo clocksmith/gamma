@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:677041e0366afdc1233e4ff4",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "word",
+  "a",
+  "b"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countRedundantSubstrings",
+  "params": [
+   {
+    "name": "word",
+    "type": "string"
+   },
+   {
+    "name": "a",
+    "type": "integer"
+   },
+   {
+    "name": "b",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "check every substring with running vowel and consonant counts",
+  "candidate_design": "length = V + C, so the rule is (1 - a) V + (1 - b) C = 0; count equal prefix keys (1 - a) Vp + (1 - b) Cp with a hash map",
+  "complexity_target": "O(n) expected time/O(n) space"
+ },
+ "source_sha256": "75a1524229432b35c9f5be0ac6d0996e1755d8109b271d45ebe86dff8275013f",
+ "wrapper": "Solution.countRedundantSubstrings"
+}

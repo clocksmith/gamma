@@ -1,0 +1,72 @@
+{
+ "kind": "artifact",
+ "id": "artifact:hack2hire:68fa76eb0fa32e4d82f4fc1a:68fa7c5e0fa32e4d82f4fc1f:approach-native:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+   "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+   "selector": "/problems/hack2hire:68fa7c5e0fa32e4d82f4fc1f"
+  }
+ ],
+ "type": "source-native",
+ "title": "URL Router Design variant 1 design entry",
+ "problemId": "hack2hire:68fa76eb0fa32e4d82f4fc1a",
+ "approachId": "approach:hack2hire:68fa76eb0fa32e4d82f4fc1a:68fa7c5e0fa32e4d82f4fc1f:v1",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:68fa76eb0fa32e4d82f4fc1a:68fa7c5e0fa32e4d82f4fc1f:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-records/contract--contract_hack2hire_68fa76eb0fa32e4d82f4fc1a_68fa7c5e0fa32e4d82f4fc1f_authored-v1.json",
+  "sha256": "0fed3a7eb4bda8cabfb1783523c30a2e7b6d00dcddc77b3bd6c572e60e9a1806"
+ },
+ "file": {
+  "status": "present",
+  "value": {
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+   "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+   "bytes": 6844,
+   "mediaType": "application/json"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+    "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+    "selector": "/problems/hack2hire:68fa7c5e0fa32e4d82f4fc1f"
+   }
+  ]
+ },
+ "externalLocator": {
+  "status": "not-applicable",
+  "reason": "Native design entry is in the referenced cohort file"
+ },
+ "language": null,
+ "documentSchema": null,
+ "executionKind": "reference-only",
+ "complexityClaims": {
+  "status": "not-applicable",
+  "reason": "Complexity claims live on the implementation artifacts"
+ },
+ "nativeMetadata": {
+  "status": "present",
+  "value": {
+   "reference": "keep a dictionary of pattern to handler and, per query, test every pattern of the right length and keep the best (wildcard count, wildcard positions) key",
+   "candidate_design": "segment trie whose children are literal segments plus one \"*\" child; a query walks the trie depth first, literal child before \"*\", carrying the wildcard count, pruning branches whose count already exceeds the best complete match, and keeps the first best match found in that order",
+   "complexity_target": "O(min(T, 2^L)) per call worst case, T = trie nodes, L = path segments; O(L) per addRoute/O(total pattern segments) space"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/design.json",
+    "sha256": "db6a80e6ffdff2b5206fbc02ed6554b72644d002318580658e0d18e6eaf486aa",
+    "selector": "/problems/hack2hire:68fa7c5e0fa32e4d82f4fc1f"
+   }
+  ]
+ }
+}

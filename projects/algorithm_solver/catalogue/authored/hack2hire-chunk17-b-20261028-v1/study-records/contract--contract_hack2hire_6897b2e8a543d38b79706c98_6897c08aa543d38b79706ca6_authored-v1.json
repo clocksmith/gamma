@@ -1,0 +1,426 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6897b2e8a543d38b79706c98:6897c08aa543d38b79706ca6:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+   "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+   "selector": "/problems/9"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6897b2e8a543d38b79706c98.json",
+   "sha256": "065f4d758c973b3cd7f483b6a186517bc35de1269f76058bf98fad0679b1733f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+   "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+   "selector": "/variants/hack2hire:6897c08aa543d38b79706ca6"
+  }
+ ],
+ "problemId": "hack2hire:6897b2e8a543d38b79706c98",
+ "variantId": "6897c08aa543d38b79706ca6",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: users active on both days with two or more order types",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:6897c08aa543d38b79706ca6/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "PurchaseAnalyzer(logsDay1, logsDay2) receives two lists of rows [date, userId, orderType, amount], all strings. crossDayDiverseUsers() returns, sorted ascending, the userIds that occur in at least one row of each day and whose rows on both days together contain at least two distinct orderType values. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "PurchaseAnalyzer(logsDay1, logsDay2) receives two lists of rows [date, userId, orderType, amount], all strings.",
+   "crossDayDiverseUsers() returns, sorted ascending, the userIds that occur in at least one row of each day and whose rows on both days together contain at least two distinct orderType values.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= logsDay1.length, logsDay2.length <= 1e5",
+   "date is yyyy-mm-dd",
+   "userId is 1 to 12 characters from a-z, 0-9 and \"_\"",
+   "orderType is 1 to 12 characters from a-z",
+   "amount is a decimal number string",
+   "at most 100 calls"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:6897c08aa543d38b79706ca6/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: class PurchaseAnalyzer built from two days of logs, rows [date, userId, orderType, amount] with amount a string; crossDayDiverseUsers() returns the sorted userIds that appear on both days and have at least two distinct order types over both days combined (the trust-score methods are cut off); algorithmTags: STRING, MATH; preview response sha256 a6469ad545b8e603e6c27ca8ab91b18f18f1a0caf78e797546706c1600f4b420"
+   },
+   {
+    "statement": "Uncertainty: high: the constructor and crossDayDiverseUsers are in the preview with their rules; the title promises trust scores for new purchases, but those methods are cut off and are not specified or implemented here, so this contract covers only crossDayDiverseUsers; field formats and bounds are inferred",
+    "basis": "the public group preview is partial (537 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant (covers only the previewed method)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/9/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/9/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/9/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What do the trust-score methods compute?",
+   "Do the two distinct order types have to come from different days?",
+   "Is the sort plain string order?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:6897c08aa543d38b79706ca6/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "PurchaseAnalyzer"
+     ],
+     [
+      [
+       [],
+       [
+        [
+         "2024-01-02",
+         "u4",
+         "buy",
+         "312"
+        ]
+       ]
+      ]
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "PurchaseAnalyzer",
+      "crossDayDiverseUsers",
+      "crossDayDiverseUsers"
+     ],
+     [
+      [
+       [
+        [
+         "2024-01-01",
+         "u4",
+         "gift",
+         "475"
+        ],
+        [
+         "2024-01-01",
+         "u4",
+         "sell",
+         "261"
+        ]
+       ],
+       [
+        [
+         "2024-01-02",
+         "u_3",
+         "sell",
+         "387"
+        ],
+        [
+         "2024-01-02",
+         "u4",
+         "buy",
+         "341"
+        ],
+        [
+         "2024-01-02",
+         "u1",
+         "gift",
+         "191"
+        ]
+       ]
+      ],
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     [
+      "u4"
+     ],
+     [
+      "u4"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/study-content.json",
+    "sha256": "db17c93c0a02fa1ad951d9344785ebf34f22b68304db1e095aba48823b81362d",
+    "selector": "/variants/hack2hire:6897c08aa543d38b79706ca6/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/oracles.py",
+    "sha256": "46291096cb8f7f5ce660e0fd59eb4a1e4b0d94358503f0da447cb7aa9324d3e3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class PurchaseAnalyzer:\n    def __init__(self, logsDay1, logsDay2)\n    def crossDayDiverseUsers(self) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/6897c08aa543d38b79706ca6-python.json",
+     "inferredInterface": {
+      "classname": "PurchaseAnalyzer",
+      "constructor": {
+       "params": [
+        {
+         "name": "logsDay1",
+         "type": "string[][]"
+        },
+        {
+         "name": "logsDay2",
+         "type": "string[][]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "crossDayDiverseUsers",
+        "params": [],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/6897c08aa543d38b79706ca6-python.json",
+      "sha256": "0a4a1dba25eb78d5ed7e6446254ec6abd535bbe400704bb2bef7e49e038027a6",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class PurchaseAnalyzer {\n  constructor(logsDay1, logsDay2)\n  crossDayDiverseUsers() /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+      "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/6897c08aa543d38b79706ca6-javascript.json",
+     "inferredInterface": {
+      "classname": "PurchaseAnalyzer",
+      "constructor": {
+       "params": [
+        {
+         "name": "logsDay1",
+         "type": "string[][]"
+        },
+        {
+         "name": "logsDay2",
+         "type": "string[][]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "crossDayDiverseUsers",
+        "params": [],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/semantics/6897c08aa543d38b79706ca6-javascript.json",
+      "sha256": "c32085c39798fc38b67493fe4d4b98285f506efc33c4f916ca21580d9442cf77",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/9/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-b-20261028-v1/contracts.json",
+    "sha256": "de4553f0639ff80de0bc3eb93506d68f9453d03e3fdb38bfc48530c13dbc58cf",
+    "selector": "/problems/9/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

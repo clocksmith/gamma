@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:686b0a7af56e0403f35f23ee",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "elements",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maximumLength",
+  "params": [
+   {
+    "name": "elements",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "quadratic dynamic programme over the last chosen index and the number of changes used so far, trying every earlier index as the predecessor",
+  "candidate_design": "dynamic programme keyed by value: best[v][j] is the longest subsequence ending in value v with j changes, and top[j] the best over all values; each element extends best[v][j] by one or starts a new run after top[j - 1], updating j from k down to 0",
+  "complexity_target": "O(n * k) time/O(d * k) space, d = distinct values"
+ },
+ "source_sha256": "dd3f0b8bf370bf16fd5601fc208fab52f2aa155714b00d63d43821c9171315db",
+ "wrapper": "named export maximumLength"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67799006dcf91f8e3c1c310d",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "s",
+  "p"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "isMatch",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   },
+   {
+    "name": "p",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "bottom-up dynamic programming table over prefixes of s and p",
+  "candidate_design": "split p at \"*\" into literal pieces; the first piece must be a prefix of s and the last a suffix (when p has a \"*\"), and each middle piece is placed at its leftmost occurrence after the previous one, which is optimal because \"*\" absorbs any gap",
+  "complexity_target": "O(|s| * |p|) worst case with a linear substring search, usually near linear/O(|p|) space"
+ },
+ "source_sha256": "e97d4338a67d24ab3ad6f4fc67d825a0c3f08cd82457dce4fc10ec1672225719",
+ "wrapper": "Solution.isMatch"
+}

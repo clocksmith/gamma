@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:687e65b7eab243475a7dfbf7",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "logs",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findFrequentEvents",
+  "params": [
+   {
+    "name": "logs",
+    "type": "[string, integer, string][]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every (user, event) group and every row of it, count the group rows with timestamps in [t, t + 86400)",
+  "candidate_design": "group timestamps by (user, event), sort each group and slide a window whose span stays below 86400 seconds",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "8686b3bda236284d6961c2025879a0786dbe217f404751cfb7e9c7184efe1e9a",
+ "wrapper": "named export findFrequentEvents"
+}

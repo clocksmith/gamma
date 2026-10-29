@@ -1,0 +1,84 @@
+{
+ "problems": {
+  "hack2hire:68fa7c5e0fa32e4d82f4fc1f": {
+   "reference": "keep a dictionary of pattern to handler and, per query, test every pattern of the right length and keep the best (wildcard count, wildcard positions) key",
+   "candidate_design": "segment trie whose children are literal segments plus one \"*\" child; a query walks the trie depth first, literal child before \"*\", carrying the wildcard count, pruning branches whose count already exceeds the best complete match, and keeps the first best match found in that order",
+   "complexity_target": "O(min(T, 2^L)) per call worst case, T = trie nodes, L = path segments; O(L) per addRoute/O(total pattern segments) space"
+  },
+  "hack2hire:686b0a7af56e0403f35f23ee": {
+   "reference": "quadratic dynamic programme over the last chosen index and the number of changes used so far, trying every earlier index as the predecessor",
+   "candidate_design": "dynamic programme keyed by value: best[v][j] is the longest subsequence ending in value v with j changes, and top[j] the best over all values; each element extends best[v][j] by one or starts a new run after top[j - 1], updating j from k down to 0",
+   "complexity_target": "O(n * k) time/O(d * k) space, d = distinct values"
+  },
+  "hack2hire:67799006dcf91f8e3c1c310d": {
+   "reference": "bottom-up dynamic programming table over prefixes of s and p",
+   "candidate_design": "split p at \"*\" into literal pieces; the first piece must be a prefix of s and the last a suffix (when p has a \"*\"), and each middle piece is placed at its leftmost occurrence after the previous one, which is optimal because \"*\" absorbs any gap",
+   "complexity_target": "O(|s| * |p|) worst case with a linear substring search, usually near linear/O(|p|) space"
+  },
+  "hack2hire:67e45b2850b60b77022f382e": {
+   "reference": "for every pair of positions i < j check pattern[i] == pattern[j] exactly when word[i] == word[j]",
+   "candidate_design": "per word, one pass with two maps (pattern character to word character and back), failing at the first conflict",
+   "complexity_target": "O(total characters) time/O(alphabet) space per word"
+  },
+  "hack2hire:67730b5ddd9437f8aa275b04": {
+   "reference": "scan every block on every write",
+   "candidate_design": "min-heap of (remaining writes, id) over writable blocks; a write decrements the top and pops it when it reaches zero",
+   "complexity_target": "O(n) to build plus O(log n) per write/O(n) space"
+  },
+  "hack2hire:679da470996c3c60bd38b5ba": {
+   "reference": "remember every attack and, per query, test each unit segment of the base",
+   "candidate_design": "set of destroyed in-range segment starts plus a counter; the base is destroyed when the counter equals n",
+   "complexity_target": "O(1) expected per call/O(min(n, attacks)) space"
+  },
+  "hack2hire:678876fe402dc47b67a14944": {
+   "reference": "simulate every operation: pick the largest available value, then rewrite the state string by the unblocking rule",
+   "candidate_design": "index i becomes available before operation d(i) + 1, where d(i) is its distance to the nearest \"1\" at or to its left; bucket values by d, then S[t] is the running maximum over buckets 0..t",
+   "complexity_target": "O(n + m) time/O(n + m) space"
+  },
+  "hack2hire:67a56d81b571d6ff0a4bd238": {
+   "reference": "dynamic programme over subsets of servers already brought down (the elapsed rounds are the sum of their hit counts)",
+   "candidate_design": "server i needs t_i = ceil(health[i] / k) consecutive hits and costs request[i] per round until it falls; ordering servers by t_i / request[i] ascending (exchange argument, compared by integer cross-multiplication) minimises sum request[i] * finish round",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:67840e27d0faf7ec64cc3adb": {
+   "reference": "three nested loops over all index triples",
+   "candidate_design": "compress values to ranks; for each middle index multiply the number of larger values to its left by the number of smaller values to its right, both counted with Fenwick trees",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:6897c08aa543d38b79706ca6": {
+   "reference": "per call, collect the users of each day and test every candidate by rescanning both logs for its order types",
+   "candidate_design": "build once in the constructor: per user, presence flags for each day and the set of order types; the answer list is computed once and a fresh copy returned per call",
+   "complexity_target": "O(R + U log U) construction and O(U) per call/O(R) space, R = rows, U = users"
+  },
+  "hack2hire:678d3e738c349080cddc5f5e": {
+   "reference": "recursive descent over a regular-expression token list",
+   "candidate_design": "one left-to-right scan with an explicit stack of (operation, accumulator) frames; a literal or a closed call folds its value into the frame below",
+   "complexity_target": "O(length) time/O(nesting depth) space"
+  },
+  "hack2hire:687e65b7eab243475a7dfbf7": {
+   "reference": "for every (user, event) group and every row of it, count the group rows with timestamps in [t, t + 86400)",
+   "candidate_design": "group timestamps by (user, event), sort each group and slide a window whose span stays below 86400 seconds",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:6775decc2c61a9f93e698ba0": {
+   "reference": "enumerate every path by depth-first search from every node and keep the longest, then the lexicographically smallest",
+   "candidate_design": "topological order (Kahn), then in reverse order compute for each node the longest path length and its best next node (smallest name among successors of maximum length); start from the smallest-named node of maximum length",
+   "complexity_target": "O(V log V + E) time/O(V + E) space"
+  },
+  "hack2hire:69279ce99c0536c47b291a80": {
+   "reference": "for every entry time count the guests present then (the maximum is attained at some entry time) and keep the earliest best",
+   "candidate_design": "sort entry times and exit times separately and sweep in time order, processing exits before entries at equal times, recording the first time the count exceeds the best",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:677041e0366afdc1233e4ff4": {
+   "reference": "check every substring with running vowel and consonant counts",
+   "candidate_design": "length = V + C, so the rule is (1 - a) V + (1 - b) C = 0; count equal prefix keys (1 - a) Vp + (1 - b) Cp with a hash map",
+   "complexity_target": "O(n) expected time/O(n) space"
+  },
+  "hack2hire:69b78e4e8a0eeb9897a8d2a5": {
+   "reference": "add one to every timestamp of every ticket",
+   "candidate_design": "difference array: +1 at entry and -1 at exit + 1, then a prefix sum",
+   "complexity_target": "O(n + tickets) time/O(n) space"
+  }
+ }
+}
