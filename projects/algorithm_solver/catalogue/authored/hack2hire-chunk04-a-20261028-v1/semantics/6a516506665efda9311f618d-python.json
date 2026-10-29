@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a516506665efda9311f618d",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "accounts",
+  "transactions"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "mineTransactions",
+  "params": [
+   {
+    "name": "accounts",
+    "type": "string[][]"
+   },
+   {
+    "name": "transactions",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "linear account search per transfer",
+  "candidate_design": "hash map from account number to balance; one sort at the end",
+  "complexity_target": "O(a log a + t) time"
+ },
+ "source_sha256": "05bf7080686168430e341b4bf06b5b0eb93b8ad6a01efcffeb9b23ba8fb208e4",
+ "wrapper": "Solution.mineTransactions"
+}

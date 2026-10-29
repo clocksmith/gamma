@@ -1,0 +1,129 @@
+{
+ "problems": {
+  "hack2hire:6aa32d070ca9cc4e1c790398": {
+   "reference": "literal lists of own credit and referrer; total recomputed by scanning all accounts",
+   "candidate_design": "array of running totals; referral adds to the referrer slot",
+   "complexity_target": "O(1) per call; O(n) space"
+  },
+  "hack2hire:6aa32de80ca9cc4e1c7903a3": {
+   "reference": "literal totals by scanning; full sort for each top-k query",
+   "candidate_design": "running totals plus a lazy max-heap of (total, id) entries; stale entries discarded on pop; popped valid entries pushed back",
+   "complexity_target": "O(log n) amortized per update; O(k log n) per top-k query"
+  },
+  "hack2hire:6ace8e7e2e3a0349b3a8e1d0": {
+   "reference": "literal list of datacenter records; min over a freshly filtered list per ROUTE",
+   "candidate_design": "name->index map plus parallel arrays; linear scan with an incremental best (distance, load, name)",
+   "complexity_target": "O(1) REGISTER; O(D) ROUTE"
+  },
+  "hack2hire:6ace8eea2e3a0349b3a8e1d4": {
+   "reference": "literal list of datacenter records; min over a freshly filtered list per ROUTE",
+   "candidate_design": "name->index map plus parallel arrays including a health flag; linear scan",
+   "complexity_target": "O(1) REGISTER/UP/DOWN; O(D) ROUTE"
+  },
+  "hack2hire:6ace8f102e3a0349b3a8e1d5": {
+   "reference": "literal list of datacenter records; min over a freshly filtered list per ROUTE",
+   "candidate_design": "name->index map plus parallel arrays (health, load); linear scan",
+   "complexity_target": "O(1) REGISTER/UP/DOWN/RELEASE; O(D) ROUTE"
+  },
+  "hack2hire:69b191c3a4e93c007df4004d": {
+   "reference": "full frozen copy of the edge set per snapshot",
+   "candidate_design": "per-edge history of (snapshot counter, state) with the last entry overwritten within one snapshot period; binary search per query",
+   "complexity_target": "O(1) follow/unfollow; O(log h) isFollowing"
+  },
+  "hack2hire:69b192f6a4e93c007df40052": {
+   "reference": "full frozen copy of the edge set per snapshot; filter and sort",
+   "candidate_design": "per-edge histories plus per-user list of every followee ever touched; filter by history lookup then sort",
+   "complexity_target": "O(T log h + r log r) per getFollowees with T touched edges"
+  },
+  "hack2hire:69b1936ca4e93c007df40055": {
+   "reference": "full frozen copy of the edge set per snapshot; score by scanning all edges",
+   "candidate_design": "followees via touched sets and histories; count second-hop followees in a hash map; sort candidates",
+   "complexity_target": "O(sum of touched degrees of followees * log h + c log c) per recommend"
+  },
+  "hack2hire:68baf390b5314dcd938cba02": {
+   "reference": "exhaustive (i, j, k) triple check with set membership per day",
+   "candidate_design": "per listing, greedy longest covered prefix from start and longest covered suffix to end; pair test by comparing prefix end and suffix start",
+   "complexity_target": "O(total days + n^2) time"
+  },
+  "hack2hire:677bf4df5cbaff553b53b068": {
+   "reference": "precomputed sequence using a list membership scan",
+   "candidate_design": "hash set of b values; two cursors advanced lazily, skipping a-values found in the set",
+   "complexity_target": "O(|b|) construction; amortized O(1) per call"
+  },
+  "hack2hire:6961f1ef8742114304441d28": {
+   "reference": "closed-form reflection-principle count per length with exact binomials",
+   "candidate_design": "DP over (steps, holdings) with holdings capped by what can still return to target",
+   "complexity_target": "O(m * (initial + m)) time, O(initial + m) space"
+  },
+  "hack2hire:67f9969355e478de52401ddd": {
+   "reference": "set of pairs, per-receiver count by scanning all pairs, full sort",
+   "candidate_design": "hash set of pairs, hash counts, heap selection of k by (-count, name)",
+   "complexity_target": "O(n + r log k) time"
+  },
+  "hack2hire:6acd8f922e3a0349b3a8d6fc": {
+   "reference": "per evaluation point, rescan all records of the merchant inside the window",
+   "candidate_design": "sort by time, per-merchant deque sliding window with per-code counts; check codes seen at t",
+   "complexity_target": "O(n log n) time"
+  },
+  "hack2hire:6acd8fb12e3a0349b3a8d701": {
+   "reference": "per evaluation point, rescan all records of the merchant inside the window",
+   "candidate_design": "per-merchant deque window with per-code sums and a total; check every code in the window",
+   "complexity_target": "O(n log n + evaluations * codes in window)"
+  },
+  "hack2hire:6acd8fd52e3a0349b3a8d706": {
+   "reference": "per evaluation point, rescan all records of the merchant inside the window, with an active set",
+   "candidate_design": "per-merchant deque window with per-code sums, total and an active set; evaluate codes in window plus active codes",
+   "complexity_target": "O(n log n + evaluations * codes)"
+  },
+  "hack2hire:6aa882a68c97c56cdbdc954f": {
+   "reference": "naive O(K^2) Pruefer decoding per step; bijection checked by full enumeration on small inputs",
+   "candidate_design": "big-integer mixed-radix digit extraction, then heap-based Pruefer decoding",
+   "complexity_target": "O(K * L) big-integer work for an L-digit rank plus O(K log K) decoding"
+  },
+  "hack2hire:6796ba03b10bc587828f27b0": {
+   "reference": "enumerate all 1440 times and compare digit multisets",
+   "candidate_design": "permutations of the four digits deduplicated in a set, checking hour < 24 and minute < 60",
+   "complexity_target": "O(4!) time"
+  },
+  "hack2hire:67fc7863216af53465a7221c": {
+   "reference": "product over all fillings, filter by sum, sort",
+   "candidate_design": "backtracking in position order with digit order 0..dayHours and remaining-capacity pruning (output is generated already sorted)",
+   "complexity_target": "O(output * 7) with pruning"
+  },
+  "hack2hire:69bf17cc21f6ab4226963dc2": {
+   "reference": "literal queue simulation",
+   "candidate_design": "sort indices by (ceil(amount/k), index): a person needing r turns finishes in round r, and within a round in queue order",
+   "complexity_target": "O(n log n) time"
+  },
+  "hack2hire:69810d3cf8f2604d5eecfff4": {
+   "reference": "literal replay into a dictionary, then sort",
+   "candidate_design": "one pass into a hash map of balances; sort keys",
+   "complexity_target": "O(n + a log a) time"
+  },
+  "hack2hire:69811c44f8f2604d5eed0020": {
+   "reference": "quadratic earlier-id scan, then replay",
+   "candidate_design": "hash set of seen ids during one pass",
+   "complexity_target": "O(n + a log a) time"
+  },
+  "hack2hire:6981207ff8f2604d5eed002c": {
+   "reference": "quadratic dedupe, stable sort, literal replay",
+   "candidate_design": "hash-set dedupe, stable sort by timestamp, hash-map replay with overdraft check",
+   "complexity_target": "O(n log n) time"
+  },
+  "hack2hire:6862ed30eb0810914237aaf3": {
+   "reference": "join and int()",
+   "candidate_design": "manual digit-by-digit parse with sign handling",
+   "complexity_target": "O(length) time"
+  },
+  "hack2hire:6a629dc8190ed618c6e6b223": {
+   "reference": "Fraction-based totals in a dictionary",
+   "candidate_design": "integer cents parsed from the decimal string; hash map per merchant",
+   "complexity_target": "O(n + m log m) time"
+  },
+  "hack2hire:6a516506665efda9311f618d": {
+   "reference": "linear account search per transfer",
+   "candidate_design": "hash map from account number to balance; one sort at the end",
+   "complexity_target": "O(a log a + t) time"
+  }
+ }
+}

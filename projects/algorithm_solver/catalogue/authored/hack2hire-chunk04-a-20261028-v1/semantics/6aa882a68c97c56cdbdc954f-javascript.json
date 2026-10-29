@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6aa882a68c97c56cdbdc954f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "groups",
+  "rank"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "uniformSpanningTree",
+  "params": [
+   {
+    "name": "groups",
+    "type": "integer[][]"
+   },
+   {
+    "name": "rank",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "naive O(K^2) Pruefer decoding per step; bijection checked by full enumeration on small inputs",
+  "candidate_design": "big-integer mixed-radix digit extraction, then heap-based Pruefer decoding",
+  "complexity_target": "O(K * L) big-integer work for an L-digit rank plus O(K log K) decoding"
+ },
+ "source_sha256": "2532481cee8d61d08c299f9af92a38b43414122f0117cb7236e010ca9a2d1d04",
+ "wrapper": "named export uniformSpanningTree"
+}

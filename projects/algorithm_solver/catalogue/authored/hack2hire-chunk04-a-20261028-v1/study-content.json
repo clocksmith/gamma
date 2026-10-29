@@ -1,0 +1,1506 @@
+{
+ "schema": "gamma.hack2hire-chunk04-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-28",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:6aa32d070ca9cc4e1c790398": {
+   "constraints": [
+    "up to 20000 calls",
+    "credit 0..10^6 (integer narrowing of double)",
+    "ids passed to methods always exist"
+   ],
+   "clarifyingQuestions": [
+    "Does referral credit propagate beyond the direct referrer?",
+    "What happens with an unknown referrer id?",
+    "Are credits fractional?"
+   ],
+   "hints": [
+    "An account total only changes when it is created or when it refers someone.",
+    "Keep one running total per id.",
+    "On a referral, add the new credit to both the new slot and the referrer slot."
+   ],
+   "invariants": [
+    "totals[i] = own credit of i + credits of accounts directly referred by i",
+    "next id = number of accounts"
+   ],
+   "chooseWhen": [
+    "Totals are queried often and accounts are only added"
+   ],
+   "tradeoffs": [
+    "O(1) updates; storing referral edges is unnecessary for level 1"
+   ],
+   "variantLabel": "Inferred level 1: account totals with direct referral credit",
+   "examples": [
+    {
+     "input": [
+      [
+       "AccountCreditTracker"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "AccountCreditTracker",
+       "addAccount"
+      ],
+      [
+       [],
+       [
+        5
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6aa32de80ca9cc4e1c7903a3": {
+   "constraints": [
+    "up to 20000 calls",
+    "credit 0..10^6 (integer narrowing of double)",
+    "ids passed to methods always exist",
+    "1 <= k <= 20"
+   ],
+   "clarifyingQuestions": [
+    "Does referral credit propagate beyond the direct referrer?",
+    "What happens with an unknown referrer id?",
+    "Are credits fractional?",
+    "How are ties in the ranking broken?"
+   ],
+   "hints": [
+    "Totals only grow, but several accounts can change between queries.",
+    "A heap keyed by (-total, id) gives the ranking; old entries go stale when a total changes.",
+    "Skip entries whose stored total differs from the current total, and push the k winners back after the query."
+   ],
+   "invariants": [
+    "every account has at least one heap entry holding its current total",
+    "stale entries are never returned"
+   ],
+   "chooseWhen": [
+    "Many updates interleaved with small-k ranking queries"
+   ],
+   "tradeoffs": [
+    "Lazy deletion grows the heap by one entry per update; a balanced tree would avoid stale entries"
+   ],
+   "variantLabel": "Inferred level 2: top accounts by total credit",
+   "examples": [
+    {
+     "input": [
+      [
+       "AccountCreditTracker"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "AccountCreditTracker",
+       "addAccount"
+      ],
+      [
+       [],
+       [
+        5
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ace8e7e2e3a0349b3a8e1d0": {
+   "constraints": [
+    "up to 3000 commands of at most 100 printable ASCII characters",
+    "up to 3000 datacenters",
+    "capacity up to 10^9"
+   ],
+   "clarifyingQuestions": [
+    "Which distance metric is used for routing?",
+    "How are ties between equally near datacenters broken?",
+    "What does ROUTE return when no datacenter qualifies?"
+   ],
+   "hints": [
+    "Validate the whole command before changing any state.",
+    "Squared distance stays an exact integer, so no square root is needed.",
+    "Scan eligible datacenters once, keeping the best (distance, load, name) triple."
+   ],
+   "invariants": [
+    "a failed command leaves the router unchanged",
+    "load never exceeds capacity"
+   ],
+   "chooseWhen": [
+    "Few datacenters and a text command protocol"
+   ],
+   "tradeoffs": [
+    "A linear scan per ROUTE is simple; a spatial index would pay off only for many datacenters"
+   ],
+   "variantLabel": "Inferred level 1: register and route",
+   "examples": [
+    {
+     "input": [
+      [
+       "RequestRouter",
+       "processCommand"
+      ],
+      [
+       [],
+       [
+        "REGISTER dc2 0 180 2"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "OK"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RequestRouter",
+       "processCommand",
+       "processCommand"
+      ],
+      [
+       [],
+       [
+        "route 05 -3"
+       ],
+       [
+        "RELEASE dc2"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "ERROR",
+      "ERROR"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ace8eea2e3a0349b3a8e1d4": {
+   "constraints": [
+    "up to 3000 commands of at most 100 printable ASCII characters",
+    "up to 3000 datacenters",
+    "capacity up to 10^9"
+   ],
+   "clarifyingQuestions": [
+    "Which distance metric is used for routing?",
+    "How are ties between equally near datacenters broken?",
+    "What does ROUTE return when no datacenter qualifies?",
+    "What are the health command words?"
+   ],
+   "hints": [
+    "Health is one flag per datacenter.",
+    "ROUTE filters on the flag before comparing distances.",
+    "Unknown names return ERROR and change nothing."
+   ],
+   "invariants": [
+    "unhealthy datacenters never receive routes"
+   ],
+   "chooseWhen": [
+    "Health flips are frequent and cheap"
+   ],
+   "tradeoffs": [
+    "Same O(D) routing; toggles are O(1)"
+   ],
+   "variantLabel": "Inferred level 2: health toggling",
+   "examples": [
+    {
+     "input": [
+      [
+       "RequestRouter",
+       "processCommand"
+      ],
+      [
+       [],
+       [
+        "RELEASE dc2"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "ERROR"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RequestRouter",
+       "processCommand"
+      ],
+      [
+       [],
+       [
+        "REGISTER dc10 3 181 1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "ERROR"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ace8f102e3a0349b3a8e1d5": {
+   "constraints": [
+    "up to 3000 commands of at most 100 printable ASCII characters",
+    "up to 3000 datacenters",
+    "capacity up to 10^9"
+   ],
+   "clarifyingQuestions": [
+    "Which distance metric is used for routing?",
+    "How are ties between equally near datacenters broken?",
+    "What does ROUTE return when no datacenter qualifies?",
+    "Can an unhealthy datacenter release load?"
+   ],
+   "hints": [
+    "Load is a counter per datacenter.",
+    "RELEASE must fail when the counter is already zero.",
+    "A release can make a full datacenter eligible again."
+   ],
+   "invariants": [
+    "0 <= load <= capacity at all times"
+   ],
+   "chooseWhen": [
+    "Requests finish and free capacity"
+   ],
+   "tradeoffs": [
+    "Same O(D) routing; release is O(1)"
+   ],
+   "variantLabel": "Inferred level 3: releasing load",
+   "examples": [
+    {
+     "input": [
+      [
+       "RequestRouter",
+       "processCommand"
+      ],
+      [
+       [],
+       [
+        "RELEASE B"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "ERROR"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RequestRouter",
+       "processCommand",
+       "processCommand"
+      ],
+      [
+       [],
+       [
+        "DOWN"
+       ],
+       [
+        "UP B"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "ERROR",
+      "ERROR"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b191c3a4e93c007df4004d": {
+   "constraints": [
+    "up to 20000 calls",
+    "user ids 0..10^9, follower != followee",
+    "snapshot ids in queries refer to taken snapshots"
+   ],
+   "clarifyingQuestions": [
+    "What does snapshot() return?",
+    "Is unfollowing a missing edge an error?",
+    "Can a query name a snapshot that has not been taken?"
+   ],
+   "hints": [
+    "Copying the whole graph at every snapshot is too expensive.",
+    "Record each edge change against the current snapshot counter (Snapshot Array idea).",
+    "Answer a query by binary-searching that edge history for the last change at or before the snapshot."
+   ],
+   "invariants": [
+    "per-edge history snapshot ids are strictly increasing",
+    "the last entry for the current counter reflects the working state"
+   ],
+   "chooseWhen": [
+    "Many snapshots with few changes between them"
+   ],
+   "tradeoffs": [
+    "History per edge costs O(changes); queries pay O(log h)"
+   ],
+   "variantLabel": "Inferred level 1: follow history at snapshots",
+   "examples": [
+    {
+     "input": [
+      [
+       "SocialNetwork",
+       "follow"
+      ],
+      [
+       [],
+       [
+        42,
+        1000000000
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SocialNetwork",
+       "snapshot",
+       "isFollowing"
+      ],
+      [
+       [],
+       [],
+       [
+        1,
+        2,
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b192f6a4e93c007df40052": {
+   "constraints": [
+    "up to 20000 calls",
+    "user ids 0..10^9, follower != followee",
+    "snapshot ids in queries refer to taken snapshots"
+   ],
+   "clarifyingQuestions": [
+    "What does snapshot() return?",
+    "Is unfollowing a missing edge an error?",
+    "Can a query name a snapshot that has not been taken?",
+    "In what order are followees returned?"
+   ],
+   "hints": [
+    "A user's followees at a snapshot are a subset of every followee they ever touched.",
+    "Keep that touched set per user.",
+    "Check each touched edge in its history, then sort."
+   ],
+   "invariants": [
+    "touched sets only grow",
+    "returned lists are fresh and sorted"
+   ],
+   "chooseWhen": [
+    "Occasional list queries on long histories"
+   ],
+   "tradeoffs": [
+    "Touched sets may hold edges long since removed"
+   ],
+   "variantLabel": "Inferred level 2: followee lists at a snapshot",
+   "examples": [
+    {
+     "input": [
+      [
+       "SocialNetwork",
+       "follow"
+      ],
+      [
+       [],
+       [
+        7,
+        5
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SocialNetwork",
+       "snapshot",
+       "isFollowing"
+      ],
+      [
+       [],
+       [],
+       [
+        1,
+        2,
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b1936ca4e93c007df40055": {
+   "constraints": [
+    "up to 20000 calls",
+    "user ids 0..10^9, follower != followee",
+    "snapshot ids in queries refer to taken snapshots",
+    "1 <= k <= 100"
+   ],
+   "clarifyingQuestions": [
+    "What does snapshot() return?",
+    "Is unfollowing a missing edge an error?",
+    "Can a query name a snapshot that has not been taken?",
+    "How are recommendations scored and ordered?"
+   ],
+   "hints": [
+    "Recommendations come from two hops in the snapshot graph.",
+    "Count, for each second-hop user, how many direct followees lead to it.",
+    "Exclude the user and anyone already followed, then sort by (-score, id)."
+   ],
+   "invariants": [
+    "scores count distinct followees",
+    "excluded users never appear"
+   ],
+   "chooseWhen": [
+    "Small fan-out graphs queried at past snapshots"
+   ],
+   "tradeoffs": [
+    "Two-hop expansion is O(d^2) per query"
+   ],
+   "variantLabel": "Inferred level 3: friend-of-friend recommendation at a snapshot",
+   "examples": [
+    {
+     "input": [
+      [
+       "SocialNetwork",
+       "follow"
+      ],
+      [
+       [],
+       [
+        2,
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SocialNetwork",
+       "snapshot",
+       "follow"
+      ],
+      [
+       [],
+       [],
+       [
+        3,
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68baf390b5314dcd938cba02": {
+   "constraints": [
+    "up to 300 listings, at most 60000 listed days in total",
+    "days 0..10^6",
+    "start <= end"
+   ],
+   "clarifyingQuestions": [
+    "Can a split use more than two listings?",
+    "Is [i, j] different from [j, i]?",
+    "Should pairs be listed when one listing alone suffices?"
+   ],
+   "hints": [
+    "Each listing only matters through how far it extends from start and how far back it reaches from end.",
+    "Walk forward from start while the day is available; walk back from end likewise.",
+    "A pair (i, j) works iff j's suffix starts no later than one day after i's prefix ends, with both parts non-empty."
+   ],
+   "invariants": [
+    "prefixEnd[i] >= start iff i covers start",
+    "suffixStart[j] <= end iff j covers end"
+   ],
+   "chooseWhen": [
+    "Many listings with long availability"
+   ],
+   "tradeoffs": [
+    "Output can be quadratic in the number of listings"
+   ],
+   "variantLabel": "Inferred: single and two-listing split stays",
+   "examples": [
+    {
+     "input": [
+      [],
+      0,
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0
+       ]
+      ],
+      0,
+      0
+     ],
+     "output": [
+      [
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677bf4df5cbaff553b53b068": {
+   "constraints": [
+    "|a|, |b| <= 10^5",
+    "values -10^9..10^9",
+    "up to 200000 calls"
+   ],
+   "clarifyingQuestions": [
+    "Are duplicates in a removed or kept?",
+    "What should next() do when exhausted?",
+    "Can the iterator copy the arrays?"
+   ],
+   "hints": [
+    "Membership in b is the only question asked about each a-element.",
+    "Put b's values in a hash set once.",
+    "Keep a cursor into b and one into a; hasNext advances the a-cursor past excluded values."
+   ],
+   "invariants": [
+    "the a-cursor never rests on a value present in b after hasNext()",
+    "no input array is modified"
+   ],
+   "chooseWhen": [
+    "Lazy iteration over large inputs"
+   ],
+   "tradeoffs": [
+    "O(|b|) extra memory for the set"
+   ],
+   "variantLabel": "Inferred: b-first iterator",
+   "examples": [
+    {
+     "input": [
+      [
+       "SubarrayFirstIterator"
+      ],
+      [
+       [
+        [],
+        []
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SubarrayFirstIterator",
+       "hasNext"
+      ],
+      [
+       [
+        [],
+        []
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6961f1ef8742114304441d28": {
+   "constraints": [
+    "0 <= initial, target, m <= 500"
+   ],
+   "clarifyingQuestions": [
+    "Is the answer a count, a minimum, or a yes/no?",
+    "Does the empty sequence count when initial == target?",
+    "Is a modulus required?"
+   ],
+   "hints": [
+    "Track how many sequences reach each holding after each step.",
+    "Sum the ways at target over every length 0..m.",
+    "Holdings above target + remaining steps can never come back, so cap the array."
+   ],
+   "invariants": [
+    "ways[h] counts sequences of the current length ending at h without going negative"
+   ],
+   "chooseWhen": [
+    "Small m with exact modular counting"
+   ],
+   "tradeoffs": [
+    "O(m^2) DP; the closed form needs big binomials"
+   ],
+   "variantLabel": "Inferred: count bounded buy/sell sequences",
+   "examples": [
+    {
+     "input": [
+      0,
+      0,
+      0
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      3,
+      5,
+      2
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67f9969355e478de52401ddd": {
+   "constraints": [
+    "up to 10^5 messages",
+    "names 1..12 of [a-z0-9_]",
+    "1 <= k <= 10^5"
+   ],
+   "clarifyingQuestions": [
+    "Does message text matter?",
+    "Do self-messages count?",
+    "How are equal counts ordered?"
+   ],
+   "hints": [
+    "Deduplicate (sender, receiver) pairs first.",
+    "Count distinct senders per receiver with a hash map.",
+    "Select the top k by (-count, name), as in Top K Frequent Words."
+   ],
+   "invariants": [
+    "each pair contributes at most one to its receiver"
+   ],
+   "chooseWhen": [
+    "Large message logs with small k"
+   ],
+   "tradeoffs": [
+    "A heap avoids sorting all receivers"
+   ],
+   "variantLabel": "Inferred: top-k receivers by distinct senders",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "b",
+        "a_",
+        ""
+       ]
+      ],
+      3
+     ],
+     "output": [
+      "a_"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6acd8f922e3a0349b3a8d6fc": {
+   "constraints": [
+    "up to 50000 logs",
+    "timestamps 0..10^9, counts 0..10^6",
+    "windowSize 1..10^9",
+    "threshold 1..10^12"
+   ],
+   "clarifyingQuestions": [
+    "When is the alert condition evaluated?",
+    "Is the window inclusive of both ends?",
+    "Can the same merchant and code alert more than once?"
+   ],
+   "hints": [
+    "Sort records by time and group by merchant.",
+    "Slide a window per merchant, keeping per-code sums.",
+    "A count only rises when that code has records at t, so check those codes there."
+   ],
+   "invariants": [
+    "window sums equal the records inside [t-W+1, t]",
+    "each (merchant, code) alerts at most once"
+   ],
+   "chooseWhen": [
+    "Streams of aggregated per-second counts"
+   ],
+   "tradeoffs": [
+    "Sorting dominates; per-code sums are O(codes) memory"
+   ],
+   "variantLabel": "Inferred level 1: count threshold spike",
+   "examples": [
+    {
+     "input": [
+      [],
+      1,
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "2,m2,503,3"
+      ],
+      1,
+      2
+     ],
+     "output": [
+      "2,m2,503"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6acd8fb12e3a0349b3a8d701": {
+   "constraints": [
+    "up to 50000 logs",
+    "timestamps 0..10^9, counts 0..10^6",
+    "windowSize 1..10^9",
+    "minCount 1..10^12",
+    "percent 0..100"
+   ],
+   "clarifyingQuestions": [
+    "When is the alert condition evaluated?",
+    "Is the window inclusive of both ends?",
+    "Can the same merchant and code alert more than once?",
+    "Is the rate relative to all transactions?"
+   ],
+   "hints": [
+    "The rate needs a running total next to per-code sums.",
+    "Compare errorCount*100 with percent*total to stay in integers.",
+    "The rate can cross the threshold when 200s leave the window, so check every code present."
+   ],
+   "invariants": [
+    "total equals the sum of all per-code sums in the window"
+   ],
+   "chooseWhen": [
+    "Merchants with very different traffic volumes"
+   ],
+   "tradeoffs": [
+    "Checking all codes per evaluation is O(codes)"
+   ],
+   "variantLabel": "Inferred level 2: error-rate spike",
+   "examples": [
+    {
+     "input": [
+      [],
+      1,
+      1,
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "5,m2,503,1",
+       "4,m2,503,3"
+      ],
+      3,
+      3,
+      75
+     ],
+     "output": [
+      "4,m2,503"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6acd8fd52e3a0349b3a8d706": {
+   "constraints": [
+    "up to 50000 logs",
+    "timestamps 0..10^9, counts 0..10^6",
+    "windowSize 1..10^9",
+    "minCount 1..10^12",
+    "percent 0..100"
+   ],
+   "clarifyingQuestions": [
+    "When is the alert condition evaluated?",
+    "Is the window inclusive of both ends?",
+    "Can the same merchant and code alert more than once?",
+    "When does an active alert resolve?"
+   ],
+   "hints": [
+    "Keep a set of active (merchant, code) alerts.",
+    "At each evaluation, an active code whose condition fails becomes inactive.",
+    "Include active codes that left the window: their count is zero, so they resolve."
+   ],
+   "invariants": [
+    "an alert is emitted only on an inactive-to-active transition"
+   ],
+   "chooseWhen": [
+    "Long-running monitors that must re-alert"
+   ],
+   "tradeoffs": [
+    "State per active alert; evaluation cost grows with active codes"
+   ],
+   "variantLabel": "Inferred level 3: alert lifecycle with re-firing",
+   "examples": [
+    {
+     "input": [
+      [],
+      1,
+      1,
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "11,m1,503,3"
+      ],
+      3,
+      2,
+      75
+     ],
+     "output": [
+      "11,m1,503"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6aa882a68c97c56cdbdc954f": {
+   "constraints": [
+    "1 <= K <= 500 groups, at most 2000 distinct nodes",
+    "rank has at most 5000 digits"
+   ],
+   "clarifyingQuestions": [
+    "Must every valid answer be equally likely?",
+    "Is any valid answer accepted?",
+    "How is randomness supplied?"
+   ],
+   "hints": [
+    "Contract each group to a vertex; a tree on K vertices has a Pruefer sequence of length K-2.",
+    "Choosing a node (not a group) at each Pruefer position weights each group by its size; one extra node per group fixes the leaf-side endpoints.",
+    "Decode digits with big integers, then decode the Pruefer sequence with a min-heap of leaves."
+   ],
+   "invariants": [
+    "every emitted edge joins two different groups",
+    "the decoded edges form a tree on the contracted groups"
+   ],
+   "chooseWhen": [
+    "Uniform random structures needing exact counting"
+   ],
+   "tradeoffs": [
+    "Big-integer ranks; a random generator would sample without them"
+   ],
+   "variantLabel": "Inferred: rank-indexed uniform spanning edge set",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        5
+       ]
+      ],
+      "0"
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1
+       ],
+       [
+        2
+       ]
+      ],
+      "0"
+     ],
+     "output": [
+      [
+       1,
+       2
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6796ba03b10bc587828f27b0": {
+   "constraints": [
+    "each digit 0..9"
+   ],
+   "clarifyingQuestions": [
+    "Are identical times from repeated digits counted once?",
+    "Is 24:00 valid?"
+   ],
+   "hints": [
+    "There are only 24 orderings of four digits.",
+    "Form HH and MM from each ordering and check the ranges.",
+    "Use a set so duplicate digits do not double count."
+   ],
+   "invariants": [
+    "every counted time uses exactly the given digits"
+   ],
+   "chooseWhen": [
+    "Tiny fixed input sizes"
+   ],
+   "tradeoffs": [
+    "Brute force over permutations is simplest"
+   ],
+   "variantLabel": "Inferred: count distinct valid clock times",
+   "examples": [
+    {
+     "input": [
+      0,
+      0,
+      0,
+      1
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      0,
+      0,
+      0,
+      8
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67fc7863216af53465a7221c": {
+   "constraints": [
+    "pattern length 7",
+    "0 <= workHours <= 56, 0 <= dayHours <= 8",
+    "inferred bound: at most 20000 schedules"
+   ],
+   "clarifyingQuestions": [
+    "Should the schedules be returned or only counted?",
+    "In what order?",
+    "Can a fixed digit exceed dayHours?"
+   ],
+   "hints": [
+    "Subtract the fixed digits from workHours first.",
+    "Fill the ? positions left to right with increasing digits; the output is then sorted.",
+    "Prune when the remaining hours exceed what the remaining ? slots can hold."
+   ],
+   "invariants": [
+    "partial sums never exceed workHours"
+   ],
+   "chooseWhen": [
+    "Outputs are small enough to list"
+   ],
+   "tradeoffs": [
+    "Pruning keeps work near the output size"
+   ],
+   "variantLabel": "Inferred: enumerate valid weekly schedules",
+   "examples": [
+    {
+     "input": [
+      "0000000",
+      0,
+      0
+     ],
+     "output": [
+      "0000000"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "8?????0",
+      8,
+      8
+     ],
+     "output": [
+      "8000000"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69bf17cc21f6ab4226963dc2": {
+   "constraints": [
+    "1 <= n <= 10^5",
+    "1 <= amounts[i], k <= 10^9"
+   ],
+   "clarifyingQuestions": [
+    "What should be returned: the finish order or the last person?",
+    "Are indices 1-based?"
+   ],
+   "hints": [
+    "Simulation can take sum(amounts)/k turns, which is too many.",
+    "Person i finishes in round ceil(amounts[i]/k).",
+    "Within one round, people keep their original relative order."
+   ],
+   "invariants": [
+    "queue order inside each round equals original order"
+   ],
+   "chooseWhen": [
+    "Large amounts with small k"
+   ],
+   "tradeoffs": [
+    "Sorting avoids a potentially huge simulation"
+   ],
+   "variantLabel": "Inferred: ATM completion order",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5
+      ],
+      2
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69810d3cf8f2604d5eecfff4": {
+   "constraints": [
+    "up to 10^5 logs",
+    "ids [A-Za-z0-9_]{1,20}",
+    "|amount| < 10^9, timestamp 0..10^9"
+   ],
+   "clarifyingQuestions": [
+    "What is the fourth log field?",
+    "How are duplicate transaction ids treated?",
+    "May a balance go negative?"
+   ],
+   "hints": [
+    "Split each log on commas.",
+    "Accumulate signed amounts per account in a hash map.",
+    "Sort accounts once at the end."
+   ],
+   "invariants": [
+    "balance = sum of applied amounts"
+   ],
+   "chooseWhen": [
+    "Simple statement generation"
+   ],
+   "tradeoffs": [
+    "Hash map is O(a) memory"
+   ],
+   "variantLabel": "Inferred level 1: consolidate balances",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "T1,b,0,2"
+      ]
+     ],
+     "output": [
+      [
+       "b",
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69811c44f8f2604d5eed0020": {
+   "constraints": [
+    "up to 10^5 logs",
+    "ids [A-Za-z0-9_]{1,20}",
+    "|amount| < 10^9, timestamp 0..10^9"
+   ],
+   "clarifyingQuestions": [
+    "What is the fourth log field?",
+    "How are duplicate transaction ids treated?",
+    "May a balance go negative?"
+   ],
+   "hints": [
+    "Duplicates are a common real-world log problem.",
+    "Remember seen ids in a set.",
+    "Skip a log whose id is already in the set, even if its account differs."
+   ],
+   "invariants": [
+    "each transaction id is applied at most once"
+   ],
+   "chooseWhen": [
+    "Retried deliveries in payment logs"
+   ],
+   "tradeoffs": [
+    "O(n) memory for the id set"
+   ],
+   "variantLabel": "Inferred level 2: idempotent processing",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "t3,b,5,4"
+      ]
+     ],
+     "output": [
+      [
+       "b",
+       5
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6981207ff8f2604d5eed002c": {
+   "constraints": [
+    "up to 10^5 logs",
+    "ids [A-Za-z0-9_]{1,20}",
+    "|amount| < 10^9, timestamp 0..10^9"
+   ],
+   "clarifyingQuestions": [
+    "What is the fourth log field?",
+    "How are duplicate transaction ids treated?",
+    "May a balance go negative?",
+    "What is returned for rejected transactions?"
+   ],
+   "hints": [
+    "Dedupe before sorting so the first input occurrence wins.",
+    "Sort stably by timestamp.",
+    "Reject a log when balance + amount < 0, recording its id."
+   ],
+   "invariants": [
+    "no balance is ever negative",
+    "rejected logs change nothing"
+   ],
+   "chooseWhen": [
+    "Ledgers that must stay non-negative"
+   ],
+   "tradeoffs": [
+    "Sorting costs O(n log n)"
+   ],
+   "variantLabel": "Inferred level 3: ordered processing with overdraft rejection",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [
+      [],
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "t9,b,-5,4"
+      ]
+     ],
+     "output": [
+      [
+       [
+        "b",
+        0
+       ]
+      ],
+      [
+       "t9"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6862ed30eb0810914237aaf3": {
+   "constraints": [
+    "array length 1..4",
+    "values within [-100, 100]"
+   ],
+   "clarifyingQuestions": [
+    "Can arrays have leading zeros?",
+    "Is \"-0\" possible?"
+   ],
+   "hints": [
+    "Handle the sign character first.",
+    "Accumulate value = value*10 + digit.",
+    "Apply the sign, then add."
+   ],
+   "invariants": [
+    "partial values stay within the constraint range"
+   ],
+   "chooseWhen": [
+    "Parsing without library conversion"
+   ],
+   "tradeoffs": [
+    "Trivial size; clarity over speed"
+   ],
+   "variantLabel": "Inferred: add two character-array integers",
+   "examples": [
+    {
+     "input": [
+      [
+       "-",
+       "9",
+       "7"
+      ],
+      [
+       "4"
+      ]
+     ],
+     "output": -93,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "-",
+       "9",
+       "1"
+      ],
+      [
+       "6"
+      ]
+     ],
+     "output": -85,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a629dc8190ed618c6e6b223": {
+   "constraints": [
+    "up to 10^5 transactions",
+    "amounts < 10^9 with at most 2 decimals",
+    "times are integer seconds as strings"
+   ],
+   "clarifyingQuestions": [
+    "How many hours count as recent?",
+    "Is the summary grouped by merchant or by user?",
+    "How should totals be formatted?"
+   ],
+   "hints": [
+    "Never use floating point for money: parse to integer cents.",
+    "Filter by status and the whole-hour difference.",
+    "Format cents back as units.two-digit-cents."
+   ],
+   "invariants": [
+    "totals are exact integer cents"
+   ],
+   "chooseWhen": [
+    "Money summaries"
+   ],
+   "tradeoffs": [
+    "String formatting is required on output"
+   ],
+   "variantLabel": "Inferred: per-merchant recent completed summary",
+   "examples": [
+    {
+     "input": [
+      [],
+      "0"
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "0",
+        "shop",
+        "COMPLETED",
+        "u1",
+        "1000000000"
+       ]
+      ],
+      "1000000000"
+     ],
+     "output": [
+      [
+       "shop",
+       "0.00",
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a516506665efda9311f618d": {
+   "constraints": [
+    "up to 10^4 accounts and 10^5 transactions",
+    "balances and amounts 0..10^9 as canonical decimal strings"
+   ],
+   "clarifyingQuestions": [
+    "What makes a transaction invalid?",
+    "What is the mined result?",
+    "How are ties in the ranking broken?"
+   ],
+   "hints": [
+    "Index accounts by number in a hash map.",
+    "Check existence, distinctness and funds before moving money.",
+    "Sort by (-balance, account number) at the end."
+   ],
+   "invariants": [
+    "total money is conserved",
+    "no balance goes negative"
+   ],
+   "chooseWhen": [
+    "Batch ledger analysis"
+   ],
+   "tradeoffs": [
+    "Hash map memory O(a)"
+   ],
+   "variantLabel": "Inferred: apply valid transfers and rank balances",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "10",
+        "15"
+       ],
+       [
+        "3",
+        "1"
+       ]
+      ],
+      []
+     ],
+     "output": [
+      [
+       "10",
+       "15"
+      ],
+      [
+       "3",
+       "1"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

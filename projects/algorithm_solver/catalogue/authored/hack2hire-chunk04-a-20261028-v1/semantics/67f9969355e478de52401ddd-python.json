@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67f9969355e478de52401ddd",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "messages",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "topReceivers",
+  "params": [
+   {
+    "name": "messages",
+    "type": "string[][]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "set of pairs, per-receiver count by scanning all pairs, full sort",
+  "candidate_design": "hash set of pairs, hash counts, heap selection of k by (-count, name)",
+  "complexity_target": "O(n + r log k) time"
+ },
+ "source_sha256": "546f8404d86ae34c10ddf1290595a93d81b5e56363610df1c87e24d2152ad777",
+ "wrapper": "Solution.topReceivers"
+}

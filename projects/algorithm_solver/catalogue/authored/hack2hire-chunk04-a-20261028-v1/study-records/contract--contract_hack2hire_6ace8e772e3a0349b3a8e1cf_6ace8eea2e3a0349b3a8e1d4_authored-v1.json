@@ -1,0 +1,376 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6ace8e772e3a0349b3a8e1cf:6ace8eea2e3a0349b3a8e1d4:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+   "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+   "selector": "/problems/3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6ace8e772e3a0349b3a8e1cf.json",
+   "sha256": "e99cac6690e676c4920eba49c62c49ba90f3b33e2066a4bd184b3383e8132caa",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+   "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+   "selector": "/variants/hack2hire:6ace8eea2e3a0349b3a8e1d4"
+  }
+ ],
+ "problemId": "hack2hire:6ace8e772e3a0349b3a8e1cf",
+ "variantId": "6ace8eea2e3a0349b3a8e1d4",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: health toggling",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6ace8eea2e3a0349b3a8e1d4/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "processCommand takes single-space-separated tokens and returns a string. Integer fields must match -?(0|[1-9][0-9]{0,8}) (otherwise ERROR). REGISTER <name> <lat> <lon> <capacity> stores a healthy datacenter with load 0 and returns OK when the name is new, -90<=lat<=90, -180<=lon<=180 and capacity>=1, else ERROR. ROUTE <lat> <lon> (same ranges) picks, among healthy datacenters with load < capacity, the one with the smallest squared Euclidean distance, then smaller load, then smaller name (code point order); it increments that load and returns its name, or ERROR if none qualifies (sentinel inferred). Any other keyword or token count returns ERROR without changing state. Level 2 adds DOWN <name> and UP <name>: set the health of a registered datacenter and return OK (even if unchanged), ERROR for an unknown name. Unhealthy datacenters are skipped by ROUTE.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "processCommand takes single-space-separated tokens and returns a string.",
+   "Integer fields must match -?(0|[1-9][0-9]{0,8}) (otherwise ERROR).",
+   "REGISTER <name> <lat> <lon> <capacity> stores a healthy datacenter with load 0 and returns OK when the name is new, -90<=lat<=90, -180<=lon<=180 and capacity>=1, else ERROR.",
+   "ROUTE <lat> <lon> (same ranges) picks, among healthy datacenters with load < capacity, the one with the smallest squared Euclidean distance, then smaller load, then smaller name (code point order).",
+   "it increments that load and returns its name, or ERROR if none qualifies (sentinel inferred).",
+   "Any other keyword or token count returns ERROR without changing state.",
+   "Level 2 adds DOWN <name> and UP <name>: set the health of a registered datacenter and return OK (even if unchanged), ERROR for an unknown name.",
+   "Unhealthy datacenters are skipped by ROUTE."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 3000 commands of at most 100 printable ASCII characters",
+   "up to 3000 datacenters",
+   "capacity up to 10^9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6ace8eea2e3a0349b3a8e1d4/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview (class header and first methods); algorithmTags; codingQuestions (variant count/order); preview response sha256 11b366bc38db698127fe25e0274e230748368fbae580775d681149a7a0a5c928"
+   },
+   {
+    "statement": "Uncertainty: very high: the health status is named in the preview but the command words UP/DOWN are inferred",
+    "basis": "the public group preview is partial (812 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as cumulative command sets (REGISTER/ROUTE; +UP/DOWN; +RELEASE)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/3/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/3/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/3/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which distance metric is used for routing?",
+   "How are ties between equally near datacenters broken?",
+   "What does ROUTE return when no datacenter qualifies?",
+   "What are the health command words?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6ace8eea2e3a0349b3a8e1d4/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "RequestRouter",
+      "processCommand"
+     ],
+     [
+      [],
+      [
+       "RELEASE dc2"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     "ERROR"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "RequestRouter",
+      "processCommand"
+     ],
+     [
+      [],
+      [
+       "REGISTER dc10 3 181 1"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     "ERROR"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6ace8eea2e3a0349b3a8e1d4/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/oracles.py",
+    "sha256": "2231f1855da9445d8eb5ceda7e1fb4dd3a24c72c62a2dee00808a47585c00dc6",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class RequestRouter:\n    def __init__(self)\n    def processCommand(self, command) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6ace8eea2e3a0349b3a8e1d4-python.json",
+     "inferredInterface": {
+      "classname": "RequestRouter",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "processCommand",
+        "params": [
+         {
+          "name": "command",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6ace8eea2e3a0349b3a8e1d4-python.json",
+      "sha256": "f5f0838235fb89643b74a96bc868102903ea60cff8ef073ca28acf56eef40dc6",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class RequestRouter {\n  constructor()\n  processCommand(command) /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6ace8eea2e3a0349b3a8e1d4-javascript.json",
+     "inferredInterface": {
+      "classname": "RequestRouter",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "processCommand",
+        "params": [
+         {
+          "name": "command",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6ace8eea2e3a0349b3a8e1d4-javascript.json",
+      "sha256": "cb3d78580ff1a6aedf558d35463d3cb50cf2f246360f749d32c1b21353f57181",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/3/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/3/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

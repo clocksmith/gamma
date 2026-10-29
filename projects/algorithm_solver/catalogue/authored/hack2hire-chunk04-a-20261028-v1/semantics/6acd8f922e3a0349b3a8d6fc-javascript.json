@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6acd8f922e3a0349b3a8d6fc",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "logs",
+  "windowSize",
+  "threshold"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "detectIncidents",
+  "params": [
+   {
+    "name": "logs",
+    "type": "string[]"
+   },
+   {
+    "name": "windowSize",
+    "type": "integer"
+   },
+   {
+    "name": "threshold",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per evaluation point, rescan all records of the merchant inside the window",
+  "candidate_design": "sort by time, per-merchant deque sliding window with per-code counts; check codes seen at t",
+  "complexity_target": "O(n log n) time"
+ },
+ "source_sha256": "74fdde9c69ff8d5d19e5b4542836ce813a5c273e2a7961c70bfda5b016f1622a",
+ "wrapper": "named export detectIncidents"
+}

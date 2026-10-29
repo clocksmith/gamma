@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6796ba03b10bc587828f27b0",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "A",
+  "B",
+  "C",
+  "D"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "countValidTimes",
+  "params": [
+   {
+    "name": "A",
+    "type": "integer"
+   },
+   {
+    "name": "B",
+    "type": "integer"
+   },
+   {
+    "name": "C",
+    "type": "integer"
+   },
+   {
+    "name": "D",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate all 1440 times and compare digit multisets",
+  "candidate_design": "permutations of the four digits deduplicated in a set, checking hour < 24 and minute < 60",
+  "complexity_target": "O(4!) time"
+ },
+ "source_sha256": "40fe387c066a23ed7091eb88c4c9038cd5b08d3fd91caf3cd1861a6a0cc6e6ca",
+ "wrapper": "named export countValidTimes"
+}

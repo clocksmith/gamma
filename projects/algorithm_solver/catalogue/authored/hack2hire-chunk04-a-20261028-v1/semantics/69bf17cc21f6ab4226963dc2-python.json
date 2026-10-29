@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69bf17cc21f6ab4226963dc2",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "amounts",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "atmOrder",
+  "params": [
+   {
+    "name": "amounts",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal queue simulation",
+  "candidate_design": "sort indices by (ceil(amount/k), index): a person needing r turns finishes in round r, and within a round in queue order",
+  "complexity_target": "O(n log n) time"
+ },
+ "source_sha256": "c599c114089f037f76819a2b75585efda8dfce1eb6c08b5e7ee7524a58ace5b0",
+ "wrapper": "Solution.atmOrder"
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68baf390b5314dcd938cba02",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "availability",
+  "start",
+  "end"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findSplitStays",
+  "params": [
+   {
+    "name": "availability",
+    "type": "integer[][]"
+   },
+   {
+    "name": "start",
+    "type": "integer"
+   },
+   {
+    "name": "end",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exhaustive (i, j, k) triple check with set membership per day",
+  "candidate_design": "per listing, greedy longest covered prefix from start and longest covered suffix to end; pair test by comparing prefix end and suffix start",
+  "complexity_target": "O(total days + n^2) time"
+ },
+ "source_sha256": "d02de94a3fdc8af14e00f2d274c1b4598aed034ea0f334d8129f764d20e178ad",
+ "wrapper": "Solution.findSplitStays"
+}

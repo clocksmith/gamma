@@ -1,0 +1,101 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69b191c3a4e93c007df4004d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "SocialNetwork",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "follow",
+    "params": [
+     {
+      "name": "followerId",
+      "type": "integer"
+     },
+     {
+      "name": "followeeId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "unfollow",
+    "params": [
+     {
+      "name": "followerId",
+      "type": "integer"
+     },
+     {
+      "name": "followeeId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "snapshot",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "isFollowing",
+    "params": [
+     {
+      "name": "followerId",
+      "type": "integer"
+     },
+     {
+      "name": "followeeId",
+      "type": "integer"
+     },
+     {
+      "name": "snapshotId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "full frozen copy of the edge set per snapshot",
+  "candidate_design": "per-edge history of (snapshot counter, state) with the last entry overwritten within one snapshot period; binary search per query",
+  "complexity_target": "O(1) follow/unfollow; O(log h) isFollowing"
+ },
+ "source_sha256": "5defabdeafec75a2f6ea58e1283bd1125f12e050942ad8673798c7f1a9febd56",
+ "native_class": "SocialNetwork",
+ "native_symbol": "property SocialNetwork of the CommonJS solve export",
+ "void_methods": [
+  "follow",
+  "unfollow"
+ ]
+}
