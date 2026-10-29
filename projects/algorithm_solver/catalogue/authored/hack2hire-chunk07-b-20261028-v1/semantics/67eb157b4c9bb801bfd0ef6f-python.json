@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67eb157b4c9bb801bfd0ef6f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "offsets"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "commitOffsets",
+  "params": [
+   {
+    "name": "offsets",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "after every step recompute the committed prefix by scanning 0, 1, 2, ... in a set",
+  "candidate_design": "hash set of completed offsets and a pointer to the next uncommitted offset that only moves forward",
+  "complexity_target": "O(len(offsets)) amortised time"
+ },
+ "source_sha256": "18127e3a0921dd716b9895b5aead52a6bb295134a475ae9cec5a5a9a81fb21d8",
+ "wrapper": "Solution.commitOffsets"
+}

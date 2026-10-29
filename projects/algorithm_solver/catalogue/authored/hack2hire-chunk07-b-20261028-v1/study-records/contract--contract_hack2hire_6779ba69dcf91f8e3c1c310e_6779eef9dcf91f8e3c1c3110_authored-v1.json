@@ -1,0 +1,335 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6779ba69dcf91f8e3c1c310e:6779eef9dcf91f8e3c1c3110:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+   "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6779ba69dcf91f8e3c1c310e.json",
+   "sha256": "32258645c31809eaad5cc6e110d91623f275f95d000d9fb8b505446978fc3b24",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+   "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+   "selector": "/variants/hack2hire:6779eef9dcf91f8e3c1c3110"
+  }
+ ],
+ "problemId": "hack2hire:6779ba69dcf91f8e3c1c310e",
+ "variantId": "6779eef9dcf91f8e3c1c3110",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: cheapest covering team",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:6779eef9dcf91f8e3c1c3110/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "monsters is a list of rows [label, cost, defeats]. A label is the monster name, followed by \"*\" when the monster is hostile. The rows describe a tree rooted at root: every child name has its own row and appears in exactly one defeat list, and every row is reachable from root. Defeat is transitive: a monster can defeat exactly its strict descendants. Choose a set of non-hostile monsters such that every hostile monster is a strict descendant of at least one chosen monster. Return the minimum total cost (0 when there is no hostile monster), or -1 when some hostile monster has no non-hostile strict ancestor.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "monsters is a list of rows [label, cost, defeats].",
+   "A label is the monster name, followed by \"*\" when the monster is hostile.",
+   "The rows describe a tree rooted at root: every child name has its own row and appears in exactly one defeat list, and every row is reachable from root.",
+   "Defeat is transitive: a monster can defeat exactly its strict descendants.",
+   "Choose a set of non-hostile monsters such that every hostile monster is a strict descendant of at least one chosen monster.",
+   "Return the minimum total cost (0 when there is no hostile monster), or -1 when some hostile monster has no non-hostile strict ancestor."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 to 100000 monsters",
+   "cost 1..10**6 (hostile costs are ignored)",
+   "hierarchy depth up to 100000"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:6779eef9dcf91f8e3c1c3110/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: n-ary hierarchy of monsters; each has a unique name, a list of monsters it can defeat and a hostile status marked by \"*\"; return non-hostile monsters that can defeat all hostile monsters; algorithmTags: DEPTH_FIRST_SEARCH, DYNAMIC_PROGRAMMING; codingQuestions (two variants, order); preview response sha256 c000397b74b2d5b8db15f4ad360985416f06b2450fd1468f233e97c132d84772"
+   },
+   {
+    "statement": "Uncertainty: high: the cost field and the covering objective are inferred from the DYNAMIC_PROGRAMMING tag and the second variant",
+    "basis": "the public group preview is partial (403 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: two variants inferred: 1 = list the single monsters that defeat every hostile, 2 = cheapest team that together defeats every hostile",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does every monster have a cost?",
+   "Can one chosen monster defeat many hostiles?",
+   "What if a hostile monster cannot be reached by any non-hostile ancestor?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:6779eef9dcf91f8e3c1c3110/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "a",
+       1,
+       []
+      ]
+     ],
+     "a"
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "a*",
+       1,
+       []
+      ]
+     ],
+     "a"
+    ],
+    "output": -1,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:6779eef9dcf91f8e3c1c3110/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/oracles.py",
+    "sha256": "66e8124e8ac7ce2b54b097e65ff5329754b547e1f3bcde44e31c0de4b86bb227",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def minTeamCost(monsters, root) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/6779eef9dcf91f8e3c1c3110-python.json",
+     "inferredInterface": {
+      "name": "minTeamCost",
+      "params": [
+       {
+        "name": "monsters",
+        "type": "[string,integer,string[]][]"
+       },
+       {
+        "name": "root",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/6779eef9dcf91f8e3c1c3110-python.json",
+      "sha256": "921e8c93b52ab442bb067c76fea24d0f6c62d7defcc801f515d1e35495b1c1d3",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function minTeamCost(monsters, root) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/6779eef9dcf91f8e3c1c3110-javascript.json",
+     "inferredInterface": {
+      "name": "minTeamCost",
+      "params": [
+       {
+        "name": "monsters",
+        "type": "[string,integer,string[]][]"
+       },
+       {
+        "name": "root",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/6779eef9dcf91f8e3c1c3110-javascript.json",
+      "sha256": "5df8490c3a268a3b30eee5fee7183076a34c532c844c21b946b5571511f5563f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

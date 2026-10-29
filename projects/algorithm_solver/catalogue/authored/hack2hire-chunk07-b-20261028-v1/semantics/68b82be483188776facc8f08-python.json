@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68b82be483188776facc8f08",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "menu",
+  "userWants"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minOrderCost",
+  "params": [
+   {
+    "name": "menu",
+    "type": "[string,integer,string][]"
+   },
+   {
+    "name": "userWants",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every subset of the entries that contain at least one wanted item",
+  "candidate_design": "bitmask DP over covered wanted items: dp[mask | entryMask] = min(dp[mask] + price), masks in increasing order",
+  "complexity_target": "O(2**w * entries) time, O(2**w) space"
+ },
+ "source_sha256": "44c06775ae1e5cb05331cb1ecc8015b839e220207bb554785572ed7b02d2a6d3",
+ "wrapper": "Solution.minOrderCost"
+}

@@ -1,0 +1,463 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+   "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+   "selector": "/problems/hack2hire:68e9a2a2149617c9114ece06"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+   "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+   "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+  }
+ ],
+ "problemId": "hack2hire:68e9a28b149617c9114ece05",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/contract--contract_hack2hire_68e9a28b149617c9114ece05_68e9a2a2149617c9114ece06_authored-v1.json",
+  "sha256": "7389459b16c155cd3b99cee3ac4086181b636e282c23285071e724b247214231"
+ },
+ "title": {
+  "status": "present",
+  "value": "binary search for the first grid index j with F(x_j) <= F(x_{j+1}) (convexity makes the grid sequence unimodal), O(lines) per evaluation",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+    "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+    "selector": "/problems/hack2hire:68e9a2a2149617c9114ece06/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "binary search for the first grid index j with F(x_j) <= F(x_{j+1}) (convexity makes the grid sequence unimodal), O(lines) per evaluation. Complexity target: O(lines * log((b - a) / eps)) time, O(1) extra space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+    "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+    "selector": "/problems/hack2hire:68e9a2a2149617c9114ece06"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "The function is unimodal (convex) and each evaluation is expensive"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Binary search on neighbour differences needs two evaluations per step but no derivative"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "every index left of the answer has F(x_j) > F(x_{j+1})",
+   "every index from the answer on has F(x_j) <= F(x_{j+1})"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "A convex function restricted to evenly spaced points is still convex: it decreases, then stays flat, then increases.",
+   "Compare F at two neighbouring grid points: the sign tells you which side of the minimum you are on.",
+   "Binary search for the first index j with F(x_j) <= F(x_{j+1}); if none exists the last grid point is the answer.",
+   "Evaluate F as the maximum of slope * x + intercept over all lines; keep everything in exact integers."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "binary search for the first grid index j with F(x_j) <= F(x_{j+1}) (convexity makes the grid sequence unimodal), O(lines) per evaluation",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:68e9a2a2149617c9114ece06/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(lines * log((b - a) / eps)) time, O(1) extra space; the independent reference (evaluate F at every grid point and keep the first minimum) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "A convex function restricted to evenly spaced points is still convex: it decreases, then stays flat, then increases.",
+     "Compare F at two neighbouring grid points: the sign tells you which side of the minimum you are on."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_68e9a28b149617c9114ece05_68e9a2a2149617c9114ece06_approach-native_v1.json",
+    "sha256": "d880ca91ab79b5d83f7f5b856cdb4a4159c4bed7072bf767aeae7ec0cfbba923"
+   }
+  },
+  {
+   "id": "approach:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper minimizeConvex, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer (or BigInt) arithmetic for every count and amount."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Binary search for the first index j with F(x_j) <= F(x_{j+1}); if none exists the last grid point is the answer.",
+     "Evaluate F as the maximum of slope * x + intercept over all lines; keep everything in exact integers."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_68e9a28b149617c9114ece05_68e9a2a2149617c9114ece06_python_v1.json",
+     "sha256": "866a13ac5e84a0ccb08af347cf1aff2c967dda7d937487f377fe4451221bf460"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_68e9a28b149617c9114ece05_68e9a2a2149617c9114ece06_javascript_v1.json",
+     "sha256": "59f2db61573a6ac3528389a1834667e0f97f6005de6761c5b88727b6d8719b3d"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_68e9a28b149617c9114ece05_68e9a2a2149617c9114ece06_approach-native_v1.json",
+    "sha256": "d880ca91ab79b5d83f7f5b856cdb4a4159c4bed7072bf767aeae7ec0cfbba923"
+   }
+  },
+  {
+   "id": "approach:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (evaluate F at every grid point and keep the first minimum) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:68e9a2a2149617c9114ece06/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/0/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare outputs exactly, including JSON types and list order.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/test_oracles.py",
+      "sha256": "d6960bbfb57a7631e67dc64e7fb20eec0a7f803b4b57ff00edb85ccb0c5d98a4",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_68e9a28b149617c9114ece05_68e9a2a2149617c9114ece06_approach-native_v1.json",
+    "sha256": "d880ca91ab79b5d83f7f5b856cdb4a4159c4bed7072bf767aeae7ec0cfbba923"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_68e9a28b149617c9114ece05_68e9a2a2149617c9114ece06_approach-native_v1.json",
+  "sha256": "d880ca91ab79b5d83f7f5b856cdb4a4159c4bed7072bf767aeae7ec0cfbba923"
+ }
+}

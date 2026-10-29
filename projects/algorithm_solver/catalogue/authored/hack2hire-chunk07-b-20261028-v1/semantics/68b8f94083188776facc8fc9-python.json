@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68b8f94083188776facc8fc9",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "menu",
+  "userWants"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "cheapestExactOrders",
+  "params": [
+   {
+    "name": "menu",
+    "type": "[string,integer,string][]"
+   },
+   {
+    "name": "userWants",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every subset of usable entries, keep exact covers, then keep those with the minimum price",
+  "candidate_design": "memoised DFS on the remaining-item mask that always covers the lowest remaining item; best[mask] gives the minimum, then a second DFS enumerates only branches that stay on the optimum",
+  "complexity_target": "O(2**w * entries) time plus output size"
+ },
+ "source_sha256": "38af7ed932df96a30e8cac8008fddefb0d75fa52ce2ca1b19cf3088f9764f8ee",
+ "wrapper": "Solution.cheapestExactOrders"
+}

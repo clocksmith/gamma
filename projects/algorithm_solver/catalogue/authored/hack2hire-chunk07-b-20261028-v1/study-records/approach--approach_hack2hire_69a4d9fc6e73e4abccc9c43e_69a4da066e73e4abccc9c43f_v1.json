@@ -1,0 +1,463 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+   "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+   "selector": "/problems/hack2hire:69a4da066e73e4abccc9c43f"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+   "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+   "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f"
+  }
+ ],
+ "problemId": "hack2hire:69a4d9fc6e73e4abccc9c43e",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/contract--contract_hack2hire_69a4d9fc6e73e4abccc9c43e_69a4da066e73e4abccc9c43f_authored-v1.json",
+  "sha256": "e34b13e8428fffa411c13843bf44c3a1dac5f7982dace21b5dc28c1690bec15b"
+ },
+ "title": {
+  "status": "present",
+  "value": "prefix sums of usage; in steady state battery i is idle for (total usage - usage[i]) minutes, so feasibility after the first pass is one check per battery; full passes are counted arithmetically and the last partial pass by binary search on the prefix sums",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+    "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+    "selector": "/problems/hack2hire:69a4da066e73e4abccc9c43f/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "prefix sums of usage; in steady state battery i is idle for (total usage - usage[i]) minutes, so feasibility after the first pass is one check per battery; full passes are counted arithmetically and the last partial pass by binary search on the prefix sums. Complexity target: O(n log n) time, O(n) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+    "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+    "selector": "/problems/hack2hire:69a4da066e73e4abccc9c43f"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "A periodic process can be characterised by one period plus a warm-up"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "The closed form avoids a simulation whose length grows with duration, at the cost of a careful case split"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "powered time after j insertions equals the prefix sum of usage along the circular order",
+   "the idle window of battery i is the same in every pass after the first"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Simulate the first full pass: every battery is charged, so only the running total matters.",
+   "From the second pass on, battery i waits exactly (total usage - usage[i]) minutes between being drained and being needed again.",
+   "If any battery cannot recharge in that window, the call can only reach as far as the first such battery in pass two.",
+   "Otherwise passes repeat: count whole passes arithmetically and finish with a binary search on the prefix sums."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "prefix sums of usage; in steady state battery i is idle for (total usage - usage[i]) minutes, so feasibility after the first pass is one check per battery; full passes are counted arithmetically and the last partial pass by binary search on the prefix sums",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:69a4da066e73e4abccc9c43f/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n log n) time, O(n) space; the independent reference (event simulation of every insertion with explicit ready times) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Simulate the first full pass: every battery is charged, so only the running total matters.",
+     "From the second pass on, battery i waits exactly (total usage - usage[i]) minutes between being drained and being needed again."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4d9fc6e73e4abccc9c43e_69a4da066e73e4abccc9c43f_approach-native_v1.json",
+    "sha256": "889cf372b324aede61bde6a2a0b93970ff207589978600b01b4ad80db9f9382f"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper minBatteries, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer (or BigInt) arithmetic for every count and amount."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "If any battery cannot recharge in that window, the call can only reach as far as the first such battery in pass two.",
+     "Otherwise passes repeat: count whole passes arithmetically and finish with a binary search on the prefix sums."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4d9fc6e73e4abccc9c43e_69a4da066e73e4abccc9c43f_python_v1.json",
+     "sha256": "545973cae41c1629538eb4787b66d23f5c649c681f69af7d3cd24b45e3ce21e2"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4d9fc6e73e4abccc9c43e_69a4da066e73e4abccc9c43f_javascript_v1.json",
+     "sha256": "4eb5ed33a48353b8386d386be32de4462c42317e36d6006056a25b7bec0b1117"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4d9fc6e73e4abccc9c43e_69a4da066e73e4abccc9c43f_approach-native_v1.json",
+    "sha256": "889cf372b324aede61bde6a2a0b93970ff207589978600b01b4ad80db9f9382f"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (event simulation of every insertion with explicit ready times) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:69a4da066e73e4abccc9c43f/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/1/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare outputs exactly, including JSON types and list order.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/test_oracles.py",
+      "sha256": "d6960bbfb57a7631e67dc64e7fb20eec0a7f803b4b57ff00edb85ccb0c5d98a4",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:69a4da066e73e4abccc9c43f"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4d9fc6e73e4abccc9c43e_69a4da066e73e4abccc9c43f_approach-native_v1.json",
+    "sha256": "889cf372b324aede61bde6a2a0b93970ff207589978600b01b4ad80db9f9382f"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:69a4d9fc6e73e4abccc9c43e:69a4da066e73e4abccc9c43f:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_69a4d9fc6e73e4abccc9c43e_69a4da066e73e4abccc9c43f_approach-native_v1.json",
+  "sha256": "889cf372b324aede61bde6a2a0b93970ff207589978600b01b4ad80db9f9382f"
+ }
+}

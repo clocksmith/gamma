@@ -1,0 +1,359 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69a3a99d6e73e4abccc9c106:69a3adea6e73e4abccc9c115:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+   "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69a3a99d6e73e4abccc9c106.json",
+   "sha256": "7ebefb5ee395d7681dbfa72136e1f348cbce30fb6b98225a53d1ff231fd8aa52",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+   "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+   "selector": "/variants/hack2hire:69a3adea6e73e4abccc9c115"
+  }
+ ],
+ "problemId": "hack2hire:69a3a99d6e73e4abccc9c106",
+ "variantId": "69a3adea6e73e4abccc9c115",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: defense",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:69a3adea6e73e4abccc9c115/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Level 1 rules, but a monster also has \"defense\" and damage = max(1, attack of the attacker - defense of the defender). Each attack appends \"<attacker> attacks <defender> for <damage> damage, <defender> has <h> health left\" where h is the remaining health clamped at 0; a defender whose health drops to 0 or below appends \"<defender> is defeated\" and the next monster of its team comes forward. When a team has no monster left, append \"Team A wins\" or \"Team B wins\" and stop.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Level 1 rules, but a monster also has \"defense\" and damage = max(1, attack of the attacker - defense of the defender).",
+   "Each attack appends \"<attacker> attacks <defender> for <damage> damage, <defender> has <h> health left\" where h is the remaining health clamped at 0; a defender whose health drops to 0 or below appends \"<defender> is defeated\" and the next monster of its team comes forward.",
+   "When a team has no monster left, append \"Team A wins\" or \"Team B wins\" and stop."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "each team holds 1 to 100 monsters",
+   "names unique across both teams, [A-Za-z0-9_]{1,12}",
+   "1 <= health <= 1000, 1 <= attack <= 1000",
+   "0 <= defense <= 1000"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:69a3adea6e73e4abccc9c115/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: deterministic turn-based battle between two ordered teams; chronological battle log; Monster has name (unique), health, attack and further fields; algorithmTags: SIMULATION; codingQuestions (three variants, order); preview response sha256 609c80a2aac057203580dc026f5ab2a199219c06a8079af408ee659010933f92"
+   },
+   {
+    "statement": "Uncertainty: high: the defense field and the max(1, attack - defense) rule are inferred from the \"...\" in the Monster definition",
+    "basis": "the public group preview is partial (476 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: three variants inferred as cumulative levels: 1 = alternating attacks, 2 = defense reduces damage, 3 = speed decides who strikes first each round",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What exactly does one log line say?",
+   "Which team acts first?",
+   "Is the remaining health clamped at zero?",
+   "Can damage be zero?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:69a3adea6e73e4abccc9c115/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      {
+       "name": "m6",
+       "health": 2,
+       "attack": 4,
+       "defense": 1
+      }
+     ],
+     [
+      {
+       "name": "m5",
+       "health": 5,
+       "attack": 4,
+       "defense": 0
+      }
+     ]
+    ],
+    "output": [
+     "m6 attacks m5 for 4 damage, m5 has 1 health left",
+     "m5 attacks m6 for 3 damage, m6 has 0 health left",
+     "m6 is defeated",
+     "Team B wins"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      {
+       "name": "m0",
+       "health": 5,
+       "attack": 3,
+       "defense": 1
+      }
+     ],
+     [
+      {
+       "name": "m24",
+       "health": 3,
+       "attack": 1,
+       "defense": 0
+      }
+     ]
+    ],
+    "output": [
+     "m0 attacks m24 for 3 damage, m24 has 0 health left",
+     "m24 is defeated",
+     "Team A wins"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:69a3adea6e73e4abccc9c115/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/oracles.py",
+    "sha256": "66e8124e8ac7ce2b54b097e65ff5329754b547e1f3bcde44e31c0de4b86bb227",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def battleLog(teamA, teamB) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/69a3adea6e73e4abccc9c115-python.json",
+     "inferredInterface": {
+      "name": "battleLog",
+      "params": [
+       {
+        "name": "teamA",
+        "type": "Monster[]"
+       },
+       {
+        "name": "teamB",
+        "type": "Monster[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/69a3adea6e73e4abccc9c115-python.json",
+      "sha256": "d5f292b1d1d4500e5ea04343b7133dd40a507b2b3d633eecda372df4910bc5b5",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function battleLog(teamA, teamB) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/69a3adea6e73e4abccc9c115-javascript.json",
+     "inferredInterface": {
+      "name": "battleLog",
+      "params": [
+       {
+        "name": "teamA",
+        "type": "Monster[]"
+       },
+       {
+        "name": "teamB",
+        "type": "Monster[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/69a3adea6e73e4abccc9c115-javascript.json",
+      "sha256": "89ecb3b4b0d9559755edc8e0f6108e7e5aeb08a564253231128045a4a6ee8334",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

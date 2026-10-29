@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a3adea6e73e4abccc9c115",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "teamA",
+  "teamB"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "battleLog",
+  "params": [
+   {
+    "name": "teamA",
+    "type": "Monster[]"
+   },
+   {
+    "name": "teamB",
+    "type": "Monster[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "re-simulation over copied lists that pop defeated monsters from the front",
+  "candidate_design": "index pointers per team, copied health arrays, damage from attack and defense",
+  "complexity_target": "O(number of log lines) time"
+ },
+ "source_sha256": "018a0e3154c1eaf7cc8542971f466a11b7a3c027bd8ea120c1ab0c2990de93eb",
+ "wrapper": "named export battleLog"
+}

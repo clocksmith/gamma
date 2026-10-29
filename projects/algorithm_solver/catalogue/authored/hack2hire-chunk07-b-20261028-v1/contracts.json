@@ -1,0 +1,1300 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:68e9a2a2149617c9114ece06",
+   "variant_id": "68e9a2a2149617c9114ece06",
+   "variant_ordinal": 1,
+   "title": "Minimize a Convex Function",
+   "source": {
+    "post_id": "68e9a28b149617c9114ece05",
+    "group_title": "Minimize a Convex Function",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68e9a28b149617c9114ece05",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68e9a28b149617c9114ece05/practice?questionId=68e9a2a2149617c9114ece06",
+    "preview_response_sha256": "ce90bf5b7a0fc14fe2f8ab7c5ba85e491009f1ed79f82fe53a4d58f70a3a160c",
+    "preview_content_sha256": "3c0d9ebc06eb2e0561702725e635c2051fc747404fdbf02bf5bf2d09548a6a30",
+    "preview_characters": 507,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68e9a28b149617c9114ece05.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH",
+     "MATH"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: convex black-box F on a closed interval [a, b], evaluated only through evaluate(x); answer within eps of the minimiser",
+    "algorithmTags: BINARY_SEARCH, MATH"
+   ],
+   "inferred_spec": "The black-box convex function is modelled as F(x) = max over lines [slope, intercept] of slope * x + intercept (always convex). The candidate points are the grid x_j = a + j * eps for j = 0, 1, ... with x_j <= b. Return the smallest grid point at which F is minimal over the grid; such a point lies within eps of a true minimiser of F on [a, b]. All quantities are integers.",
+   "inference_uncertainty": "high: the preview passes F as an opaque callable and accepts any point within eps; the max-of-lines encoding, integer grid and leftmost tie rule are inferred so that the output is deterministic and comparable exactly",
+   "inferred_interface": {
+    "name": "minimizeConvex",
+    "params": [
+     {
+      "name": "lines",
+      "type": "integer[][]"
+     },
+     {
+      "name": "a",
+      "type": "integer"
+     },
+     {
+      "name": "b",
+      "type": "integer"
+     },
+     {
+      "name": "eps",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CONVEX"
+  },
+  {
+   "uid": "hack2hire:69a4da066e73e4abccc9c43f",
+   "variant_id": "69a4da066e73e4abccc9c43f",
+   "variant_ordinal": 1,
+   "title": "Minimum Batteries for Call Duration",
+   "source": {
+    "post_id": "69a4d9fc6e73e4abccc9c43e",
+    "group_title": "Minimum Batteries for Call Duration",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a4d9fc6e73e4abccc9c43e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a4d9fc6e73e4abccc9c43e/practice?questionId=69a4da066e73e4abccc9c43f",
+    "preview_response_sha256": "f5a82a26d5ba54146903db142bb587dc82c25f661a169d9a01171f6a84d8c108",
+    "preview_content_sha256": "2fe73b6b0991708f88218959321b24bbdb918f1ff0b988daa56aea803e3ff49c",
+    "preview_characters": 329,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a4d9fc6e73e4abccc9c43e.json",
+    "algorithm_tags": [
+     "PREFIX_SUM"
+    ],
+    "companies": [
+     "CAPITAL_ONE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: phone starts at 0 battery; circular battery sequence; usageDuration[i] and chargeTime[i] arrays; required call duration",
+    "algorithmTags: PREFIX_SUM"
+   ],
+   "inferred_spec": "Batteries are inserted in circular order 0, 1, ..., n-1, 0, 1, ... starting at time 0 with every battery fully charged. Battery i, once inserted, powers the call for usageDuration[i] minutes and is then drained; it is fully recharged chargeTime[i] minutes after it was drained. When the phone battery runs out the next battery in order is inserted at once and must already be fully recharged; otherwise the call ends. Return the minimum number of insertions after which the total powered time is at least duration, or -1 if the call ends first.",
+   "inference_uncertainty": "medium-high: the arrays and circular order are in the preview; the insertion-count output, the -1 rule, the instant swap and the ready-at-equal-time rule are inferred",
+   "inferred_interface": {
+    "name": "minBatteries",
+    "params": [
+     {
+      "name": "usageDuration",
+      "type": "integer[]"
+     },
+     {
+      "name": "chargeTime",
+      "type": "integer[]"
+     },
+     {
+      "name": "duration",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "BATT"
+  },
+  {
+   "uid": "hack2hire:696eb8a4920c39311a3992be",
+   "variant_id": "696eb8a4920c39311a3992be",
+   "variant_ordinal": 1,
+   "title": "Minimum Distance in N-ary Tree",
+   "source": {
+    "post_id": "696eb85f920c39311a3992bd",
+    "group_title": "Minimum Distance in N-ary Tree",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696eb85f920c39311a3992bd",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696eb85f920c39311a3992bd/practice?questionId=696eb8a4920c39311a3992be",
+    "preview_response_sha256": "8f41005f151942173c70d2b14e1224b0bd72170673b3cfa2f29b89264f82eb53",
+    "preview_content_sha256": "5c61eb61c9e7981eefa70a242dc2fc862d3c96dcb98d6e5a379dbdabcb37d871",
+    "preview_characters": 612,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/696eb85f920c39311a3992bd.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "GOOGLE",
+     "SCALEAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 236 (lowest common ancestor); N-ary tree of nodes with unique integer val and a children list, given by its root",
+    "algorithmTags: DEPTH_FIRST_SEARCH",
+    "codingQuestions (two variants, order)"
+   ],
+   "inferred_spec": "A node is an object {\"val\": v, \"children\": [...]}; vals are unique. p and q are vals of nodes in the tree (possibly equal). Return the number of edges on the path between the two nodes.",
+   "inference_uncertainty": "medium: the LCA relationship and node shape are in the preview; the exact query (edge distance between two vals) is inferred",
+   "inferred_interface": {
+    "name": "treeDistance",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     },
+     {
+      "name": "p",
+      "type": "integer"
+     },
+     {
+      "name": "q",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants inferred: 1 = distance between two nodes, 2 = minimum distance between two node sets",
+   "oracle_constant": "NARY1"
+  },
+  {
+   "uid": "hack2hire:6976fe265ed12b33b05f1134",
+   "variant_id": "6976fe265ed12b33b05f1134",
+   "variant_ordinal": 2,
+   "title": "Minimum Distance in N-ary Tree",
+   "source": {
+    "post_id": "696eb85f920c39311a3992bd",
+    "group_title": "Minimum Distance in N-ary Tree",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696eb85f920c39311a3992bd",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696eb85f920c39311a3992bd/practice?questionId=6976fe265ed12b33b05f1134",
+    "preview_response_sha256": "8f41005f151942173c70d2b14e1224b0bd72170673b3cfa2f29b89264f82eb53",
+    "preview_content_sha256": "5c61eb61c9e7981eefa70a242dc2fc862d3c96dcb98d6e5a379dbdabcb37d871",
+    "preview_characters": 612,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/696eb85f920c39311a3992bd.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "GOOGLE",
+     "SCALEAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 236 (lowest common ancestor); N-ary tree of nodes with unique integer val and a children list, given by its root",
+    "algorithmTags: DEPTH_FIRST_SEARCH",
+    "codingQuestions (two variants, order)"
+   ],
+   "inferred_spec": "Same tree shape. groupA and groupB are non-empty lists of vals present in the tree (they may overlap). Return the minimum, over a in groupA and b in groupB, of the number of edges between a and b (0 when the groups share a node).",
+   "inference_uncertainty": "high: level 2 is only inferred from the title (\"minimum distance\") and the presence of a second variant",
+   "inferred_interface": {
+    "name": "minSetDistance",
+    "params": [
+     {
+      "name": "root",
+      "type": "TreeNode"
+     },
+     {
+      "name": "groupA",
+      "type": "integer[]"
+     },
+     {
+      "name": "groupB",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants inferred: 1 = distance between two nodes, 2 = minimum distance between two node sets",
+   "oracle_constant": "NARY2"
+  },
+  {
+   "uid": "hack2hire:696aacf2cc483345efb1b29f",
+   "variant_id": "696aacf2cc483345efb1b29f",
+   "variant_ordinal": 1,
+   "title": "Minimum Expected Asset Cost",
+   "source": {
+    "post_id": "696aaceccc483345efb1b29e",
+    "group_title": "Minimum Expected Asset Cost",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696aaceccc483345efb1b29e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696aaceccc483345efb1b29e/practice?questionId=696aacf2cc483345efb1b29f",
+    "preview_response_sha256": "cac866a5e821ac2ed0d6c03925568bd76f157b0b49226e4178f69c7cbce0bc9e",
+    "preview_content_sha256": "17efc6ef2bacb73ca99f104c14f4f2265735699edac738c863bb057e4c9c5239",
+    "preview_characters": 580,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/696aaceccc483345efb1b29e.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "OPTIVER"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n sequential purchases, price X uniform on [a, b], choice between market price x and fixed price p, at most k fixed-price uses",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "n units are bought one after another. For each unit a market price x is drawn uniformly at random from the integers a, a+1, ..., b (discrete model, inferred), independently per unit. After seeing x the buyer pays either x or the fixed price p; the fixed price may be used at most k times in total. Return the minimum expected total cost under an optimal policy, rounded half up to exactly six decimal places, as a decimal string.",
+   "inference_uncertainty": "high: the preview states a uniform distribution on [a, b] (likely continuous); this cohort models integer prices so that the expectation is an exact rational, and the six-decimal half-up string output is inferred",
+   "inferred_interface": {
+    "name": "minExpectedCost",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     },
+     {
+      "name": "a",
+      "type": "integer"
+     },
+     {
+      "name": "b",
+      "type": "integer"
+     },
+     {
+      "name": "p",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "ASSET"
+  },
+  {
+   "uid": "hack2hire:68b82be483188776facc8f08",
+   "variant_id": "68b82be483188776facc8f08",
+   "variant_ordinal": 1,
+   "title": "Minimum Menu Order Cost I",
+   "source": {
+    "post_id": "68b82ae383188776facc8f07",
+    "group_title": "Minimum Menu Order Cost I",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68b82ae383188776facc8f07",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68b82ae383188776facc8f07/practice?questionId=68b82be483188776facc8f08",
+    "preview_response_sha256": "8f0b086f1a9ec6939b33629295223bf4e4b8b557e72b9b4e2354ec21c45dc7a9",
+    "preview_content_sha256": "d2b9156c29c4d7cc46e0c79718ba4ade32ca98c4a3b6c852975724f2374d8cce",
+    "preview_characters": 456,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68b82ae383188776facc8f07.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "BIT_MANIPULATION"
+    ],
+    "companies": [
+     "AIRBNB",
+     "CONFLUENT"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: menu entries with unique id, price and comma-separated item list (single item or combo); userWants list of unique items",
+    "algorithmTags: DYNAMIC_PROGRAMMING, BIT_MANIPULATION",
+    "codingQuestions (two variants, order)"
+   ],
+   "inferred_spec": "Choose any set of menu entries (extra unwanted items are allowed). The union of their items must contain every wanted item. Return the minimum total price of such a set, or -1 if no set covers userWants.",
+   "inference_uncertainty": "medium: entry shape and wanted items are in the preview; allowing extra items, integer prices and the -1 result are inferred",
+   "inferred_interface": {
+    "name": "minOrderCost",
+    "params": [
+     {
+      "name": "menu",
+      "type": "[string,integer,string][]"
+     },
+     {
+      "name": "userWants",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants inferred: 1 = minimum cost, 2 = minimum cost and then fewest entries",
+   "oracle_constant": "MENU1"
+  },
+  {
+   "uid": "hack2hire:68b830b783188776facc8f09",
+   "variant_id": "68b830b783188776facc8f09",
+   "variant_ordinal": 2,
+   "title": "Minimum Menu Order Cost I",
+   "source": {
+    "post_id": "68b82ae383188776facc8f07",
+    "group_title": "Minimum Menu Order Cost I",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68b82ae383188776facc8f07",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68b82ae383188776facc8f07/practice?questionId=68b830b783188776facc8f09",
+    "preview_response_sha256": "8f0b086f1a9ec6939b33629295223bf4e4b8b557e72b9b4e2354ec21c45dc7a9",
+    "preview_content_sha256": "d2b9156c29c4d7cc46e0c79718ba4ade32ca98c4a3b6c852975724f2374d8cce",
+    "preview_characters": 456,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68b82ae383188776facc8f07.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "BIT_MANIPULATION"
+    ],
+    "companies": [
+     "AIRBNB",
+     "CONFLUENT"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: menu entries with unique id, price and comma-separated item list (single item or combo); userWants list of unique items",
+    "algorithmTags: DYNAMIC_PROGRAMMING, BIT_MANIPULATION",
+    "codingQuestions (two variants, order)"
+   ],
+   "inferred_spec": "Same covering rule as level 1. Return [minimum total price, minimum number of entries among the sets with that price], or [-1, -1] if no set covers userWants.",
+   "inference_uncertainty": "high: what the second variant adds is unknown; the (price, count) tie-break output is inferred",
+   "inferred_interface": {
+    "name": "minOrderCostAndCount",
+    "params": [
+     {
+      "name": "menu",
+      "type": "[string,integer,string][]"
+     },
+     {
+      "name": "userWants",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants inferred: 1 = minimum cost, 2 = minimum cost and then fewest entries",
+   "oracle_constant": "MENU2"
+  },
+  {
+   "uid": "hack2hire:68b8f94083188776facc8fc9",
+   "variant_id": "68b8f94083188776facc8fc9",
+   "variant_ordinal": 1,
+   "title": "Minimum Menu Order Cost II",
+   "source": {
+    "post_id": "68b8f88983188776facc8fc8",
+    "group_title": "Minimum Menu Order Cost II",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68b8f88983188776facc8fc8",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68b8f88983188776facc8fc8/practice?questionId=68b8f94083188776facc8fc9",
+    "preview_response_sha256": "ebdd516b910fcfcbc7ff0621d69a4d7867eb8232d4a775b8f15bf7941f41e93c",
+    "preview_content_sha256": "4f51e35becda9eff9848c514bbb4f830d017cf9173e818b443752cda3c70c4e9",
+    "preview_characters": 552,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68b8f88983188776facc8fc8.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH",
+     "MEMOIZATION"
+    ],
+    "companies": [
+     "AIRBNB"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: same menu entry shape and userWants; asks for all unique combinations of entry ids satisfying conditions that the preview cuts off",
+    "algorithmTags: DEPTH_FIRST_SEARCH, MEMOIZATION"
+   ],
+   "inferred_spec": "An entry is usable only if every one of its items is wanted. Find every set of distinct usable entries whose item lists together contain each wanted item exactly once (an exact cover) and whose total price is the minimum over all exact covers. Return those sets, each as its ids sorted in code-point order, the list sorted lexicographically; return [] if there is no exact cover.",
+   "inference_uncertainty": "high: the preview is cut off before the conditions; exact cover, the minimum-price filter and the output ordering are inferred",
+   "inferred_interface": {
+    "name": "cheapestExactOrders",
+    "params": [
+     {
+      "name": "menu",
+      "type": "[string,integer,string][]"
+     },
+     {
+      "name": "userWants",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MENU3"
+  },
+  {
+   "uid": "hack2hire:67fc0d33216af53465a721dd",
+   "variant_id": "67fc0d33216af53465a721dd",
+   "variant_ordinal": 1,
+   "title": "Minimum Swaps for Ball Grouping  ",
+   "source": {
+    "post_id": "67fc0b06216af53465a721d9",
+    "group_title": "Minimum Swaps for Ball Grouping  ",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67fc0b06216af53465a721d9",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67fc0b06216af53465a721d9/practice?questionId=67fc0d33216af53465a721dd",
+    "preview_response_sha256": "a7aaa92a6d6a4abf577c2198ecbf677cb5cf9efec5f233d70aef693357a5f3af",
+    "preview_content_sha256": "8213ea3020ea83e0f72fad82d7db0d8aaa7fbe49ff27c1b19092d46301b350c9",
+    "preview_characters": 303,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67fc0b06216af53465a721d9.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: R/W string, adjacent swaps, group all red balls contiguously, 0 when no swap is needed",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "balls is a string over \"R\" and \"W\". One move swaps two adjacent balls. Return the minimum number of moves that makes all red balls one contiguous block (0 when they already are, or when there is at most one red ball).",
+   "inference_uncertainty": "low: the task is stated in the preview; no cap on the answer is applied (a commonly reported similar assessment returns -1 above 10**9; not adopted because the preview does not show it)",
+   "inferred_interface": {
+    "name": "minSwaps",
+    "params": [
+     {
+      "name": "balls",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "SWAPS"
+  },
+  {
+   "uid": "hack2hire:69a3aa7d6e73e4abccc9c109",
+   "variant_id": "69a3aa7d6e73e4abccc9c109",
+   "variant_ordinal": 1,
+   "title": "Monster Team Battle",
+   "source": {
+    "post_id": "69a3a99d6e73e4abccc9c106",
+    "group_title": "Monster Team Battle",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a3a99d6e73e4abccc9c106",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a3a99d6e73e4abccc9c106/practice?questionId=69a3aa7d6e73e4abccc9c109",
+    "preview_response_sha256": "609c80a2aac057203580dc026f5ab2a199219c06a8079af408ee659010933f92",
+    "preview_content_sha256": "fae12fe2949b509d862d57f973647af5a1eef8b39483858d8306fc9b51a04522",
+    "preview_characters": 476,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a3a99d6e73e4abccc9c106.json",
+    "algorithm_tags": [
+     "SIMULATION"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: deterministic turn-based battle between two ordered teams; chronological battle log; Monster has name (unique), health, attack and further fields",
+    "algorithmTags: SIMULATION",
+    "codingQuestions (three variants, order)"
+   ],
+   "inferred_spec": "A monster is {\"name\", \"health\", \"attack\"}. Turns alternate, team A first: the first surviving monster of the acting team attacks the first surviving monster of the other team for damage = attack. Each attack appends \"<attacker> attacks <defender> for <damage> damage, <defender> has <h> health left\" where h is the remaining health clamped at 0; a defender whose health drops to 0 or below appends \"<defender> is defeated\" and the next monster of its team comes forward. When a team has no monster left, append \"Team A wins\" or \"Team B wins\" and stop.",
+   "inference_uncertainty": "high: event order, log wording and the alternating rule are inferred; the preview shows only the Monster fields and the log requirement",
+   "inferred_interface": {
+    "name": "battleLog",
+    "params": [
+     {
+      "name": "teamA",
+      "type": "Monster[]"
+     },
+     {
+      "name": "teamB",
+      "type": "Monster[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants inferred as cumulative levels: 1 = alternating attacks, 2 = defense reduces damage, 3 = speed decides who strikes first each round",
+   "oracle_constant": "MTB1"
+  },
+  {
+   "uid": "hack2hire:69a3adea6e73e4abccc9c115",
+   "variant_id": "69a3adea6e73e4abccc9c115",
+   "variant_ordinal": 2,
+   "title": "Monster Team Battle",
+   "source": {
+    "post_id": "69a3a99d6e73e4abccc9c106",
+    "group_title": "Monster Team Battle",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a3a99d6e73e4abccc9c106",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a3a99d6e73e4abccc9c106/practice?questionId=69a3adea6e73e4abccc9c115",
+    "preview_response_sha256": "609c80a2aac057203580dc026f5ab2a199219c06a8079af408ee659010933f92",
+    "preview_content_sha256": "fae12fe2949b509d862d57f973647af5a1eef8b39483858d8306fc9b51a04522",
+    "preview_characters": 476,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a3a99d6e73e4abccc9c106.json",
+    "algorithm_tags": [
+     "SIMULATION"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: deterministic turn-based battle between two ordered teams; chronological battle log; Monster has name (unique), health, attack and further fields",
+    "algorithmTags: SIMULATION",
+    "codingQuestions (three variants, order)"
+   ],
+   "inferred_spec": "Level 1 rules, but a monster also has \"defense\" and damage = max(1, attack of the attacker - defense of the defender). Each attack appends \"<attacker> attacks <defender> for <damage> damage, <defender> has <h> health left\" where h is the remaining health clamped at 0; a defender whose health drops to 0 or below appends \"<defender> is defeated\" and the next monster of its team comes forward. When a team has no monster left, append \"Team A wins\" or \"Team B wins\" and stop.",
+   "inference_uncertainty": "high: the defense field and the max(1, attack - defense) rule are inferred from the \"...\" in the Monster definition",
+   "inferred_interface": {
+    "name": "battleLog",
+    "params": [
+     {
+      "name": "teamA",
+      "type": "Monster[]"
+     },
+     {
+      "name": "teamB",
+      "type": "Monster[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants inferred as cumulative levels: 1 = alternating attacks, 2 = defense reduces damage, 3 = speed decides who strikes first each round",
+   "oracle_constant": "MTB2"
+  },
+  {
+   "uid": "hack2hire:6a56e302665efda9311f8dcb",
+   "variant_id": "6a56e302665efda9311f8dcb",
+   "variant_ordinal": 3,
+   "title": "Monster Team Battle",
+   "source": {
+    "post_id": "69a3a99d6e73e4abccc9c106",
+    "group_title": "Monster Team Battle",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a3a99d6e73e4abccc9c106",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a3a99d6e73e4abccc9c106/practice?questionId=6a56e302665efda9311f8dcb",
+    "preview_response_sha256": "609c80a2aac057203580dc026f5ab2a199219c06a8079af408ee659010933f92",
+    "preview_content_sha256": "fae12fe2949b509d862d57f973647af5a1eef8b39483858d8306fc9b51a04522",
+    "preview_characters": 476,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a3a99d6e73e4abccc9c106.json",
+    "algorithm_tags": [
+     "SIMULATION"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: deterministic turn-based battle between two ordered teams; chronological battle log; Monster has name (unique), health, attack and further fields",
+    "algorithmTags: SIMULATION",
+    "codingQuestions (three variants, order)"
+   ],
+   "inferred_spec": "Level 2 damage rule, plus \"speed\". The battle runs in rounds between the two current front monsters: the one with the higher speed (team A on ties) attacks first, then the other attacks back if it is still alive; the next round uses the current fronts. Each attack appends \"<attacker> attacks <defender> for <damage> damage, <defender> has <h> health left\" where h is the remaining health clamped at 0; a defender whose health drops to 0 or below appends \"<defender> is defeated\" and the next monster of its team comes forward. When a team has no monster left, append \"Team A wins\" or \"Team B wins\" and stop.",
+   "inference_uncertainty": "high: the speed field and the round structure are inferred",
+   "inferred_interface": {
+    "name": "battleLog",
+    "params": [
+     {
+      "name": "teamA",
+      "type": "Monster[]"
+     },
+     {
+      "name": "teamB",
+      "type": "Monster[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants inferred as cumulative levels: 1 = alternating attacks, 2 = defense reduces damage, 3 = speed decides who strikes first each round",
+   "oracle_constant": "MTB3"
+  },
+  {
+   "uid": "hack2hire:6779c17edcf91f8e3c1c310f",
+   "variant_id": "6779c17edcf91f8e3c1c310f",
+   "variant_ordinal": 1,
+   "title": "Monsters Battle",
+   "source": {
+    "post_id": "6779ba69dcf91f8e3c1c310e",
+    "group_title": "Monsters Battle",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6779ba69dcf91f8e3c1c310e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6779ba69dcf91f8e3c1c310e/practice?questionId=6779c17edcf91f8e3c1c310f",
+    "preview_response_sha256": "c000397b74b2d5b8db15f4ad360985416f06b2450fd1468f233e97c132d84772",
+    "preview_content_sha256": "f598faac999cd233bd199a029605f00896bcafeb523d810e65a1a346d8618445",
+    "preview_characters": 403,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6779ba69dcf91f8e3c1c310e.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH",
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "CONFLUENT"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n-ary hierarchy of monsters; each has a unique name, a list of monsters it can defeat and a hostile status marked by \"*\"; return non-hostile monsters that can defeat all hostile monsters",
+    "algorithmTags: DEPTH_FIRST_SEARCH, DYNAMIC_PROGRAMMING",
+    "codingQuestions (two variants, order)"
+   ],
+   "inferred_spec": "monsters is a list of rows [label, defeats]. A label is the monster name, followed by \"*\" when the monster is hostile. The rows describe a tree rooted at root: every child name has its own row and appears in exactly one defeat list, and every row is reachable from root. Defeat is transitive: a monster can defeat exactly its strict descendants. Return, sorted in code-point order, the names of the non-hostile monsters whose strict descendants include every hostile monster (with no hostile monster at all, every non-hostile monster qualifies).",
+   "inference_uncertainty": "medium-high: the question is stated; transitive defeat, the row encoding, the sorted output and the no-hostile case are inferred",
+   "inferred_interface": {
+    "name": "canDefeatAll",
+    "params": [
+     {
+      "name": "monsters",
+      "type": "[string,string[]][]"
+     },
+     {
+      "name": "root",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants inferred: 1 = list the single monsters that defeat every hostile, 2 = cheapest team that together defeats every hostile",
+   "oracle_constant": "MB1"
+  },
+  {
+   "uid": "hack2hire:6779eef9dcf91f8e3c1c3110",
+   "variant_id": "6779eef9dcf91f8e3c1c3110",
+   "variant_ordinal": 2,
+   "title": "Monsters Battle",
+   "source": {
+    "post_id": "6779ba69dcf91f8e3c1c310e",
+    "group_title": "Monsters Battle",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6779ba69dcf91f8e3c1c310e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6779ba69dcf91f8e3c1c310e/practice?questionId=6779eef9dcf91f8e3c1c3110",
+    "preview_response_sha256": "c000397b74b2d5b8db15f4ad360985416f06b2450fd1468f233e97c132d84772",
+    "preview_content_sha256": "f598faac999cd233bd199a029605f00896bcafeb523d810e65a1a346d8618445",
+    "preview_characters": 403,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6779ba69dcf91f8e3c1c310e.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH",
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "CONFLUENT"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n-ary hierarchy of monsters; each has a unique name, a list of monsters it can defeat and a hostile status marked by \"*\"; return non-hostile monsters that can defeat all hostile monsters",
+    "algorithmTags: DEPTH_FIRST_SEARCH, DYNAMIC_PROGRAMMING",
+    "codingQuestions (two variants, order)"
+   ],
+   "inferred_spec": "monsters is a list of rows [label, cost, defeats]. A label is the monster name, followed by \"*\" when the monster is hostile. The rows describe a tree rooted at root: every child name has its own row and appears in exactly one defeat list, and every row is reachable from root. Defeat is transitive: a monster can defeat exactly its strict descendants. Choose a set of non-hostile monsters such that every hostile monster is a strict descendant of at least one chosen monster. Return the minimum total cost (0 when there is no hostile monster), or -1 when some hostile monster has no non-hostile strict ancestor.",
+   "inference_uncertainty": "high: the cost field and the covering objective are inferred from the DYNAMIC_PROGRAMMING tag and the second variant",
+   "inferred_interface": {
+    "name": "minTeamCost",
+    "params": [
+     {
+      "name": "monsters",
+      "type": "[string,integer,string[]][]"
+     },
+     {
+      "name": "root",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants inferred: 1 = list the single monsters that defeat every hostile, 2 = cheapest team that together defeats every hostile",
+   "oracle_constant": "MB2"
+  },
+  {
+   "uid": "hack2hire:695c711d68e2c0dd046c4955",
+   "variant_id": "695c711d68e2c0dd046c4955",
+   "variant_ordinal": 1,
+   "title": "Most Frequent Substring",
+   "source": {
+    "post_id": "695c6f1968e2c0dd046c4951",
+    "group_title": "Most Frequent Substring",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/695c6f1968e2c0dd046c4951",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/695c6f1968e2c0dd046c4951/practice?questionId=695c711d68e2c0dd046c4955",
+    "preview_response_sha256": "8a69d726609a82bbd3a32486dbdef005b804d8debb53e8566d83c3e98e2431b4",
+    "preview_content_sha256": "fd828f69ea521f7bed2529b7cdcc858704bb18cb4ab6aee2965f2e6e93e2fb9b",
+    "preview_characters": 416,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/695c6f1968e2c0dd046c4951.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "HUBSPOT",
+     "ORACLE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: lowercase string, length n, most frequent substring, lexicographically smallest on ties, empty string when none",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "str is a lowercase string and n a positive integer. Among all substrings of length n (overlapping occurrences count), return the one that occurs most often; break ties by the lexicographically smallest. Return \"\" when str is shorter than n.",
+   "inference_uncertainty": "low: the rule is stated; overlap counting and the bounds are inferred",
+   "inferred_interface": {
+    "name": "mostFrequentSubstring",
+    "params": [
+     {
+      "name": "str",
+      "type": "string"
+     },
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MFS"
+  },
+  {
+   "uid": "hack2hire:695ecf112e3ae59d53a81ea7",
+   "variant_id": "695ecf112e3ae59d53a81ea7",
+   "variant_ordinal": 1,
+   "title": "Multithreaded Array Sort",
+   "source": {
+    "post_id": "695ece632e3ae59d53a81ea6",
+    "group_title": "Multithreaded Array Sort",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/695ece632e3ae59d53a81ea6",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/695ece632e3ae59d53a81ea6/practice?questionId=695ecf112e3ae59d53a81ea7",
+    "preview_response_sha256": "6e45f74fa923eb919e68ad7e1e498d046d1a49513e1806d82bedf88d4338666f",
+    "preview_content_sha256": "502fd2abf9a7e2423c7e0854114f1b242d1182c65d8888068e47ff6a9a57ae6c",
+    "preview_characters": 590,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/695ece632e3ae59d53a81ea6.json",
+    "algorithm_tags": [
+     "CONCURRENCY"
+    ],
+    "companies": [
+     "XAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: integer array nums and k worker threads; k near-equal segments; each thread touches only its own segment; ascending result",
+    "algorithmTags: CONCURRENCY"
+   ],
+   "inferred_spec": "Return a new list with the elements of nums in ascending order. The intended process splits nums into k contiguous segments whose sizes differ by at most one, sorts each segment independently (\"one thread per segment\") and merges the sorted segments; only the sorted result is observable and compared. No threads are created here.",
+   "inference_uncertainty": "medium: the result is stated (ascending array); the concurrency itself is not observable through a pure function and is modelled sequentially",
+   "inferred_interface": {
+    "name": "sortWithThreads",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MTS"
+  },
+  {
+   "uid": "hack2hire:680984a8cbb5948f87732b46",
+   "variant_id": "680984a8cbb5948f87732b46",
+   "variant_ordinal": 1,
+   "title": "Nested Set Equality",
+   "source": {
+    "post_id": "680982d9cbb5948f87732b45",
+    "group_title": "Nested Set Equality",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680982d9cbb5948f87732b45",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680982d9cbb5948f87732b45/practice?questionId=680984a8cbb5948f87732b46",
+    "preview_response_sha256": "e273642d92d3b4bf513f77e9d3366d7931d4d167a420b737fdde7df7590b260c",
+    "preview_content_sha256": "28c8c05f002b3e0be38d78e3263a2cd247b1f33d32bd9322b7fc8816cc7c5030",
+    "preview_characters": 242,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/680982d9cbb5948f87732b45.json",
+    "algorithm_tags": [
+     "RECURSION",
+     "SORTING"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two nested sets as lists; equal regardless of element order at any level; elements are atomic strings or nested lists",
+    "algorithmTags: RECURSION, SORTING"
+   ],
+   "inferred_spec": "a and b are lists whose elements are strings (atoms) or lists of the same form. Read every list as a set: element order and repeated elements do not matter, at every level. An atom never equals a list. Return true when a and b denote the same nested set.",
+   "inference_uncertainty": "medium: order-insensitivity is stated; ignoring repeated elements (set rather than multiset) is inferred from the word \"set\"",
+   "inferred_interface": {
+    "name": "nestedSetEqual",
+    "params": [
+     {
+      "name": "a",
+      "type": "NestedList"
+     },
+     {
+      "name": "b",
+      "type": "NestedList"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "NSE"
+  },
+  {
+   "uid": "hack2hire:699939266e73e4abccc9a3b1",
+   "variant_id": "699939266e73e4abccc9a3b1",
+   "variant_ordinal": 1,
+   "title": "Newspaper Text Alignment",
+   "source": {
+    "post_id": "6999391a6e73e4abccc9a3b0",
+    "group_title": "Newspaper Text Alignment",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6999391a6e73e4abccc9a3b0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6999391a6e73e4abccc9a3b0/practice?questionId=699939266e73e4abccc9a3b1",
+    "preview_response_sha256": "c9598be702fe3f00c57e5efb4d43be951dfc06fa39f50ec36cfb0dbd97a43c34",
+    "preview_content_sha256": "5da8f4316a16b16c5d3381af67e3d85db47b81e51b6613dafa6299f13f9c1132",
+    "preview_characters": 609,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6999391a6e73e4abccc9a3b0.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "ARRAY"
+    ],
+    "companies": [
+     "CAPITAL_ONE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: paragraphs (2D array of words), aligns (LEFT or RIGHT) and width; greedy packing with single spaces; trailing or leading padding",
+    "algorithmTags: GREEDY, ARRAY"
+   ],
+   "inferred_spec": "Each paragraph is packed greedily: as many words as fit on a line of at most width characters with single spaces, then a new line. A line is padded to exactly width characters, with trailing spaces for \"LEFT\" and leading spaces for \"RIGHT\". The page is the lines of all paragraphs in order, each wrapped as \"*\" + line + \"*\", with a top and a bottom border of width + 2 \"*\" characters.",
+   "inference_uncertainty": "medium: packing and padding are stated; the \"*\" border is inferred from a commonly reported similar assessment and is not visible in the preview",
+   "inferred_interface": {
+    "name": "formatPage",
+    "params": [
+     {
+      "name": "paragraphs",
+      "type": "string[][]"
+     },
+     {
+      "name": "aligns",
+      "type": "string[]"
+     },
+     {
+      "name": "width",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "NEWS"
+  },
+  {
+   "uid": "hack2hire:67eb157b4c9bb801bfd0ef6f",
+   "variant_id": "67eb157b4c9bb801bfd0ef6f",
+   "variant_ordinal": 1,
+   "title": "Offset Commit",
+   "source": {
+    "post_id": "67eb15404c9bb801bfd0ef6e",
+    "group_title": "Offset Commit",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67eb15404c9bb801bfd0ef6e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67eb15404c9bb801bfd0ef6e/practice?questionId=67eb157b4c9bb801bfd0ef6f",
+    "preview_response_sha256": "f705aa9e1b7f15bfd4487a01bbb059e6c2e3e59c11e34527a108ae0182b5511b",
+    "preview_content_sha256": "f9a6660922aed53e7410083e1f87e3f25876e1318d1502851982d20107791f3e",
+    "preview_characters": 394,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67eb15404c9bb801bfd0ef6e.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: ordered message stream with unique non-negative offsets from 0; processing out of order; commit requires all lower offsets processed",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "offsets lists distinct non-negative message offsets in the order their processing completes. After each one, let c be the largest offset such that every offset 0..c has completed. Output c if c increased at this step (a new commit happens), otherwise -1. Return the list of outputs, one per processed offset.",
+   "inference_uncertainty": "medium-high: the commit rule is stated; the per-step output list and -1 for \"no new commit\" are inferred (the preview's rule list is cut off)",
+   "inferred_interface": {
+    "name": "commitOffsets",
+    "params": [
+     {
+      "name": "offsets",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "OFFSET"
+  },
+  {
+   "uid": "hack2hire:69e92eb7fbaf3da641828669",
+   "variant_id": "69e92eb7fbaf3da641828669",
+   "variant_ordinal": 1,
+   "title": "Palindromic Storage Paths",
+   "source": {
+    "post_id": "69e92ea9fbaf3da641828668",
+    "group_title": "Palindromic Storage Paths",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e92ea9fbaf3da641828668",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e92ea9fbaf3da641828668/practice?questionId=69e92eb7fbaf3da641828669",
+    "preview_response_sha256": "4808a5aef5a401b6b0448721b9dab920cf83455ae39c9f375ebceb3d7c7388e7",
+    "preview_content_sha256": "a68fe7c7dd5b089929b5a1d7ae401b3707c63de289341837680b2c0930e661af",
+    "preview_characters": 603,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69e92ea9fbaf3da641828668.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: arr, treeFrom, treeTo describe a rooted undirected tree at node 0; per query, count ancestors v (including the node) whose path letters form a palindrome after rearrangement",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "Nodes 0..n-1 form a tree rooted at 0; arr[i] is the lowercase letter at node i, and edge k joins treeFrom[k] and treeTo[k]. For each query node q, count the nodes v on the path from q up to the root (q included) such that the letters on the path from q to v can be rearranged into a palindrome. Return the counts in query order.",
+   "inference_uncertainty": "low: the rule is stated; arr as a list of one-letter strings and the bounds are inferred",
+   "inferred_interface": {
+    "name": "palindromicPaths",
+    "params": [
+     {
+      "name": "arr",
+      "type": "string[]"
+     },
+     {
+      "name": "treeFrom",
+      "type": "integer[]"
+     },
+     {
+      "name": "treeTo",
+      "type": "integer[]"
+     },
+     {
+      "name": "queries",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PAL"
+  },
+  {
+   "uid": "hack2hire:67ccdb573363b83a81fc9983",
+   "variant_id": "67ccdb573363b83a81fc9983",
+   "variant_ordinal": 1,
+   "title": "Pascal Triangle Encryption",
+   "source": {
+    "post_id": "67ccd7733363b83a81fc9980",
+    "group_title": "Pascal Triangle Encryption",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ccd7733363b83a81fc9980",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ccd7733363b83a81fc9980/practice?questionId=67ccdb573363b83a81fc9983",
+    "preview_response_sha256": "2b2d3e3e925c7884bdad048502dc0b2f63214746f25e2058ac9c26a54df93cb5",
+    "preview_content_sha256": "0d8d0bf766fabbc8f6d9825b0be3374e90f528de30399e211eb580b1899268ae",
+    "preview_characters": 130,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67ccd7733363b83a81fc9980.json",
+    "algorithm_tags": [
+     "QUEUE"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: only a framing sentence about multiple encryption methods protecting user data",
+    "algorithmTags: QUEUE"
+   ],
+   "inferred_spec": "digits is a string of decimal digits. Repeatedly replace it by the string of (d[i] + d[i+1]) mod 10 for each adjacent pair, until exactly two digits remain, and return those two digits.",
+   "inference_uncertainty": "high: the preview holds only a framing sentence; the Pascal-triangle digit reduction is inferred from the title and the QUEUE tag",
+   "inferred_interface": {
+    "name": "encrypt",
+    "params": [
+     {
+      "name": "digits",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PASCAL"
+  }
+ ]
+}

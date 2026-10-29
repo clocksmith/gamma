@@ -1,0 +1,463 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+   "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+   "selector": "/problems/hack2hire:6976fe265ed12b33b05f1134"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+   "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+   "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134"
+  }
+ ],
+ "problemId": "hack2hire:696eb85f920c39311a3992bd",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/contract--contract_hack2hire_696eb85f920c39311a3992bd_6976fe265ed12b33b05f1134_authored-v1.json",
+  "sha256": "d619394e1049d053cea5dbbd6991e2b6eadead59098c7bce432b5efc7bad51c0"
+ },
+ "title": {
+  "status": "present",
+  "value": "multi-source BFS over the undirected tree started from all of groupA at once, stopping at the first node of groupB",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+    "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+    "selector": "/problems/hack2hire:6976fe265ed12b33b05f1134/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "multi-source BFS over the undirected tree started from all of groupA at once, stopping at the first node of groupB. Complexity target: O(nodes) time and space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+    "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+    "selector": "/problems/hack2hire:6976fe265ed12b33b05f1134"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Distances from a set of sources to a set of targets"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "A multi-source BFS needs an explicit parent map because the input only stores children"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "nodes leave the queue in non-decreasing distance from groupA",
+   "every node is enqueued at most once"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Running a BFS per source is too slow when the groups are large.",
+   "Start one BFS from every node of groupA at distance 0.",
+   "Treat the tree as undirected: neighbours are the children and the parent.",
+   "The first dequeued node that belongs to groupB gives the answer."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "multi-source BFS over the undirected tree started from all of groupA at once, stopping at the first node of groupB",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:6976fe265ed12b33b05f1134/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(nodes) time and space; the independent reference (BFS from every node of groupA, taking the minimum distance to any node of groupB) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Running a BFS per source is too slow when the groups are large.",
+     "Start one BFS from every node of groupA at distance 0."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_696eb85f920c39311a3992bd_6976fe265ed12b33b05f1134_approach-native_v1.json",
+    "sha256": "b3c3a75a4a9a7c5061f1c3dd746d86d5c9d0313ae8348013f73e92c659fc8622"
+   }
+  },
+  {
+   "id": "approach:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper minSetDistance, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer (or BigInt) arithmetic for every count and amount."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Treat the tree as undirected: neighbours are the children and the parent.",
+     "The first dequeued node that belongs to groupB gives the answer."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_696eb85f920c39311a3992bd_6976fe265ed12b33b05f1134_python_v1.json",
+     "sha256": "eaecd373d00e739facabce7ce3822835ddb3ac51cfe7633e6c9c00603de41ec3"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_696eb85f920c39311a3992bd_6976fe265ed12b33b05f1134_javascript_v1.json",
+     "sha256": "aadccfe4f3a77815cbe128ab19483c6730bda73ef5ea35f02a75ff7e3249dd4f"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_696eb85f920c39311a3992bd_6976fe265ed12b33b05f1134_approach-native_v1.json",
+    "sha256": "b3c3a75a4a9a7c5061f1c3dd746d86d5c9d0313ae8348013f73e92c659fc8622"
+   }
+  },
+  {
+   "id": "approach:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (BFS from every node of groupA, taking the minimum distance to any node of groupB) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/design.json",
+      "sha256": "1a1b99846b474dedf5b869b4d141d9fd175c7a6fad3cb5e68d5fb7369eaf6a60",
+      "selector": "/problems/hack2hire:6976fe265ed12b33b05f1134/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/3/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare outputs exactly, including JSON types and list order.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/test_oracles.py",
+      "sha256": "d6960bbfb57a7631e67dc64e7fb20eec0a7f803b4b57ff00edb85ccb0c5d98a4",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+      "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+      "selector": "/variants/hack2hire:6976fe265ed12b33b05f1134"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_696eb85f920c39311a3992bd_6976fe265ed12b33b05f1134_approach-native_v1.json",
+    "sha256": "b3c3a75a4a9a7c5061f1c3dd746d86d5c9d0313ae8348013f73e92c659fc8622"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:696eb85f920c39311a3992bd:6976fe265ed12b33b05f1134:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-records/artifact--artifact_hack2hire_696eb85f920c39311a3992bd_6976fe265ed12b33b05f1134_approach-native_v1.json",
+  "sha256": "b3c3a75a4a9a7c5061f1c3dd746d86d5c9d0313ae8348013f73e92c659fc8622"
+ }
+}

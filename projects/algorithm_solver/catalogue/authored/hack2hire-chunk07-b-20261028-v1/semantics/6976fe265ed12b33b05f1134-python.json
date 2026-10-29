@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6976fe265ed12b33b05f1134",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "root",
+  "groupA",
+  "groupB"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minSetDistance",
+  "params": [
+   {
+    "name": "root",
+    "type": "TreeNode"
+   },
+   {
+    "name": "groupA",
+    "type": "integer[]"
+   },
+   {
+    "name": "groupB",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "BFS from every node of groupA, taking the minimum distance to any node of groupB",
+  "candidate_design": "multi-source BFS over the undirected tree started from all of groupA at once, stopping at the first node of groupB",
+  "complexity_target": "O(nodes) time and space"
+ },
+ "source_sha256": "48dad15e4951d7e3ab6a4c80c86fe105287ee1334613b4a779fef6c086bb1b4e",
+ "wrapper": "Solution.minSetDistance"
+}

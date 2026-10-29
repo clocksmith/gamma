@@ -1,0 +1,354 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68e9a28b149617c9114ece05:68e9a2a2149617c9114ece06:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+   "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68e9a28b149617c9114ece05.json",
+   "sha256": "c1f332f9efee9dd68971e283e90fb288efeb539ee5ae9d9de6f0821efccd4a78",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+   "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+   "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06"
+  }
+ ],
+ "problemId": "hack2hire:68e9a28b149617c9114ece05",
+ "variantId": "68e9a2a2149617c9114ece06",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: max-of-lines function, leftmost grid minimiser",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "The black-box convex function is modelled as F(x) = max over lines [slope, intercept] of slope * x + intercept (always convex). The candidate points are the grid x_j = a + j * eps for j = 0, 1, ... with x_j <= b. Return the smallest grid point at which F is minimal over the grid; such a point lies within eps of a true minimiser of F on [a, b]. All quantities are integers.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "The black-box convex function is modelled as F(x) = max over lines [slope, intercept] of slope * x + intercept (always convex).",
+   "The candidate points are the grid x_j = a + j * eps for j = 0, 1, ..",
+   "with x_j <= b.",
+   "Return the smallest grid point at which F is minimal over the grid; such a point lies within eps of a true minimiser of F on [a, b].",
+   "All quantities are integers."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 to 2000 lines",
+   "|slope| <= 10**6, |intercept| <= 10**12",
+   "-10**9 <= a <= b <= 10**9",
+   "1 <= eps <= 2 * 10**9",
+   "every F value stays below 2**53"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: convex black-box F on a closed interval [a, b], evaluated only through evaluate(x); answer within eps of the minimiser; algorithmTags: BINARY_SEARCH, MATH; preview response sha256 ce90bf5b7a0fc14fe2f8ab7c5ba85e491009f1ed79f82fe53a4d58f70a3a160c"
+   },
+   {
+    "statement": "Uncertainty: high: the preview passes F as an opaque callable and accepts any point within eps; the max-of-lines encoding, integer grid and leftmost tie rule are inferred so that the output is deterministic and comparable exactly",
+    "basis": "the public group preview is partial (507 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is the black-box function passed in a test (a callable, or a description of F)?",
+   "Must the answer be a specific point, or is any point within eps accepted?",
+   "Which point is returned when F is flat over several grid points?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       0,
+       0
+      ]
+     ],
+     0,
+     0,
+     1
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       1,
+       0
+      ]
+     ],
+     -5,
+     5,
+     1
+    ],
+    "output": -5,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/study-content.json",
+    "sha256": "f59e061c1a0b8c57cd8921ab0df4cfea7e2f99b266d6ff65f20300be97bc5b5a",
+    "selector": "/variants/hack2hire:68e9a2a2149617c9114ece06/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/oracles.py",
+    "sha256": "66e8124e8ac7ce2b54b097e65ff5329754b547e1f3bcde44e31c0de4b86bb227",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def minimizeConvex(lines, a, b, eps) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/68e9a2a2149617c9114ece06-python.json",
+     "inferredInterface": {
+      "name": "minimizeConvex",
+      "params": [
+       {
+        "name": "lines",
+        "type": "integer[][]"
+       },
+       {
+        "name": "a",
+        "type": "integer"
+       },
+       {
+        "name": "b",
+        "type": "integer"
+       },
+       {
+        "name": "eps",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/68e9a2a2149617c9114ece06-python.json",
+      "sha256": "bdc81eee64d90789e1827ac419649be58506b1026fb9417d9cbdfb173343f326",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function minimizeConvex(lines, a, b, eps) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+      "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/68e9a2a2149617c9114ece06-javascript.json",
+     "inferredInterface": {
+      "name": "minimizeConvex",
+      "params": [
+       {
+        "name": "lines",
+        "type": "integer[][]"
+       },
+       {
+        "name": "a",
+        "type": "integer"
+       },
+       {
+        "name": "b",
+        "type": "integer"
+       },
+       {
+        "name": "eps",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/semantics/68e9a2a2149617c9114ece06-javascript.json",
+      "sha256": "df16b60713ae0f522272ef61c594bd4d2f92b729fa181adf8d650566de0a5db7",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-b-20261028-v1/contracts.json",
+    "sha256": "9cda312a3f03d67294561b9a725d3caf64170868b0e884a8643dced45533c7ec",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

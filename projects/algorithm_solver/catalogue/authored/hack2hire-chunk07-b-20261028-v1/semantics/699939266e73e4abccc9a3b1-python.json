@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:699939266e73e4abccc9a3b1",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "paragraphs",
+  "aligns",
+  "width"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "formatPage",
+  "params": [
+   {
+    "name": "paragraphs",
+    "type": "string[][]"
+   },
+   {
+    "name": "aligns",
+    "type": "string[]"
+   },
+   {
+    "name": "width",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each line, try adding words one by one and test the joined string length",
+  "candidate_design": "running line length with one pass over the words; pad with repeat",
+  "complexity_target": "O(total output characters)"
+ },
+ "source_sha256": "862ff1742da66c5f460ebca6a9741b7dc112bc3c2367fba966574158b2c6ce89",
+ "wrapper": "Solution.formatPage"
+}

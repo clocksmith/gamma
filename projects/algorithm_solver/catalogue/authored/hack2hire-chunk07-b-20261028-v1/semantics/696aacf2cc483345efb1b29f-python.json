@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:696aacf2cc483345efb1b29f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "k",
+  "a",
+  "b",
+  "p"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minExpectedCost",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   },
+   {
+    "name": "a",
+    "type": "integer"
+   },
+   {
+    "name": "b",
+    "type": "integer"
+   },
+   {
+    "name": "p",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exact Fraction DP that sums min(x + E[i-1][j], p + E[i-1][j-1]) over every price x",
+  "candidate_design": "integer DP over numerators with common denominator m**i (m = b - a + 1); each state sums the min over all prices with one threshold split and arithmetic series, exact big integers",
+  "complexity_target": "O(n * min(n, k)) big-integer operations"
+ },
+ "source_sha256": "d06e3562b316ad2a8cb9029603f8921ca80f442f74f21f7669bc8818d0dfe284",
+ "wrapper": "Solution.minExpectedCost"
+}

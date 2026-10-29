@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:680984a8cbb5948f87732b46",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "a",
+  "b"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "nestedSetEqual",
+  "params": [
+   {
+    "name": "a",
+    "type": "NestedList"
+   },
+   {
+    "name": "b",
+    "type": "NestedList"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive conversion to frozensets of atoms and frozensets",
+  "candidate_design": "iterative post-order hash-consing: every atom and every list gets an integer id; a list's key is its sorted distinct child ids",
+  "complexity_target": "O(N log N) time over all elements"
+ },
+ "source_sha256": "c9372e4b0aa85f527e929e29366980d683c2be30987adc82b67a6b653978806d",
+ "wrapper": "Solution.nestedSetEqual"
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:696eb8a4920c39311a3992be",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "root",
+  "p",
+  "q"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "treeDistance",
+  "params": [
+   {
+    "name": "root",
+    "type": "TreeNode"
+   },
+   {
+    "name": "p",
+    "type": "integer"
+   },
+   {
+    "name": "q",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "undirected adjacency lists, then breadth-first search from p",
+  "candidate_design": "iterative DFS recording parent and depth of every node, then lift the deeper node and walk both up to their lowest common ancestor",
+  "complexity_target": "O(nodes) time and space"
+ },
+ "source_sha256": "fd4fbea406a11a9eec9f1f71bb16571f07b9193e34f0596563a8e7f4b299caeb",
+ "wrapper": "Solution.treeDistance"
+}

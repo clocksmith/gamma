@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a4da066e73e4abccc9c43f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "usageDuration",
+  "chargeTime",
+  "duration"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minBatteries",
+  "params": [
+   {
+    "name": "usageDuration",
+    "type": "integer[]"
+   },
+   {
+    "name": "chargeTime",
+    "type": "integer[]"
+   },
+   {
+    "name": "duration",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "event simulation of every insertion with explicit ready times",
+  "candidate_design": "prefix sums of usage; in steady state battery i is idle for (total usage - usage[i]) minutes, so feasibility after the first pass is one check per battery; full passes are counted arithmetically and the last partial pass by binary search on the prefix sums",
+  "complexity_target": "O(n log n) time, O(n) space"
+ },
+ "source_sha256": "f023f093a47756ff36bc64f3b8d20a48bdc075d088055e0eb3a4de4b8b10e805",
+ "wrapper": "named export minBatteries"
+}
