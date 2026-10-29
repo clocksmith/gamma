@@ -55,6 +55,7 @@ python gamma.py [command] [options]
 | Benchmarking | `python gamma.py benchmark` | Measure throughput, latency, output quality, or code generation. |
 | Mind Meld | `python gamma.py mind-meld` | Coordinate and route across active model engines. |
 | SAME-R | [`projects/samer/`](projects/samer/) | Run matched capability-transfer trials. |
+| Interview inventory | [`question bank`](projects/question_bank/README.md) | Browse categorized Hack2Hire entries and review LeetCode overlap. |
 | Domain research | [`projects/`](projects/) | Inspect translation, embedding, WGSL, and compression experiments. |
 | Integrations | [`integration guide`](docs/integration-guide.md) | Connect APIs, MCP, and external backends. |
 

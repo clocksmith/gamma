@@ -1,0 +1,80 @@
+{
+  "reviewed_at": "2026-10-28",
+  "groups": [
+    {
+      "post_id": "6aa327ff0ca9cc4e1c79035f",
+      "summary": "Two distinct referral propagation contracts: direct referrer versus all ancestors.",
+      "review_basis": "publicly visible source description; original synopsis, not a copied statement or validated oracle",
+      "variants": [
+        {
+          "id": "6aa32d070ca9cc4e1c790398",
+          "content_status": "public_spec_synopsis",
+          "synopsis": "Assign sequential account IDs. Adding a referred account credits only its direct referrer. Query up to k accounts meeting a minimum total, ordered by total credit then ID. Credits are nonnegative; the referrer already exists.",
+          "issues": []
+        },
+        {
+          "id": "6aa32de80ca9cc4e1c7903a3",
+          "content_status": "public_spec_synopsis",
+          "synopsis": "Referral credit propagates through every ancestor. The minimum-credit query and total-credit/ID ordering follow the base variant.",
+          "issues": []
+        }
+      ]
+    },
+    {
+      "post_id": "68521e291af0034b322764c7",
+      "summary": "Single-mode and mode-switching grid routes must remain separate. Source example inconsistencies need clarification.",
+      "review_basis": "publicly visible source description; original synopsis, not a copied statement or validated oracle",
+      "variants": [
+        {
+          "id": "68523a801af0034b322764d9",
+          "content_status": "public_spec_synopsis",
+          "synopsis": "Travel orthogonally from S to D avoiding X, using one transport mode. Minimize total time, then cost. Leaving a mode cell incurs its charge; leaving S is free. Return the selected mode, or an empty string if unreachable.",
+          "issues": [
+            "The first example counts five charged bike blocks; the written departure-cell convention appears to charge four. Do not adopt that example as an oracle."
+          ]
+        },
+        {
+          "id": "6944670d867a3f9f539ff548",
+          "content_status": "public_spec_synopsis",
+          "synopsis": "Allow transport-mode changes and minimize the ordered pair of travel time and cost. Return that pair, or [-1,-1] when unreachable.",
+          "issues": [
+            "The example route appears to repeat/count the destination inconsistently. Clarify before deriving tests."
+          ]
+        }
+      ]
+    },
+    {
+      "post_id": "684baaa84023c4f502877df2",
+      "summary": "Explicit source relationship to LC 751, but a different input/output contract.",
+      "review_basis": "publicly visible source description; original synopsis, not a copied statement or validated oracle",
+      "variants": [
+        {
+          "id": "684bada44023c4f502877df5",
+          "content_status": "public_spec_synopsis",
+          "synopsis": "Evaluate an IPv4 address against ordered ALLOW/DENY host or CIDR rules. The first matching rule determines the Boolean result; inputs are valid and a match is guaranteed.",
+          "issues": []
+        }
+      ],
+      "leetcode_relationship": {
+        "status": "related_variant_not_equivalent",
+        "id": "751",
+        "url": "https://leetcode.com/problems/ip-to-cidr/",
+        "evidence": "Hack2Hire explicitly describes a variation of LC 751. Firewall rule evaluation differs from decomposing an address range into CIDR blocks.",
+        "merge_allowed": false
+      }
+    },
+    {
+      "post_id": "684b54b44023c4f502877db8",
+      "summary": "Dependency scheduling with unlimited parallelism; singleton execution frontiers.",
+      "review_basis": "publicly visible source description; original synopsis, not a copied statement or validated oracle",
+      "variants": [
+        {
+          "id": "684ba2bf4023c4f502877de9",
+          "content_status": "public_spec_synopsis",
+          "synopsis": "For a prerequisite DAG, every ready unit-duration task starts immediately with unlimited workers. Return tasks that are alone in their execution time frontier, in any order; n is at most 100,000.",
+          "issues": []
+        }
+      ]
+    }
+  ]
+}
