@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1cd98b8b879849ebc0fdaf",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "word",
+  "skeletons"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findMatchingSkeletons",
+  "params": [
+   {
+    "name": "word",
+    "type": "string"
+   },
+   {
+    "name": "skeletons",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each skeleton and each letter a..z, test whether filling every dash with that letter reproduces word",
+  "candidate_design": "one pass per skeleton: compare non-dash positions and remember the first letter seen under a dash, rejecting on any mismatch",
+  "complexity_target": "O(total skeleton length) time/O(1) extra space"
+ },
+ "source_sha256": "213b6a80e7183e21c643191b466d923931c51d4714d7ba4e3136a487c049b9ce",
+ "wrapper": "Solution.findMatchingSkeletons"
+}

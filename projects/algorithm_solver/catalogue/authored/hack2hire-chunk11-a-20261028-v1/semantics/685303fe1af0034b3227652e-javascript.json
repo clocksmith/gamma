@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:685303fe1af0034b3227652e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "startValue",
+  "destValue"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findPath",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "startValue",
+    "type": "integer"
+   },
+   {
+    "name": "destValue",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "materialise the whole tree with explicit parent links and breadth-first search from start to dest",
+  "candidate_design": "subtree sizes S(n) = F(n + 2) - 1 let each label descend from the root in O(n) without building the tree; drop the common prefix of the two root paths and emit U per remaining start step",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "8b9851c21e91aed4af9b9ad853365327a9af58d29796a240118a458249e680bf",
+ "wrapper": "named export findPath"
+}

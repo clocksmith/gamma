@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6795a8a1010c9ed2f849b1fd",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "word"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findWordPath",
+  "params": [
+   {
+    "name": "word",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "step-by-step walk: at each step take the first legal move toward the target in the order up, left, down, right",
+  "candidate_design": "compute each letter's row and column arithmetically and emit the four run-length segments per letter in a list joined once",
+  "complexity_target": "O(output) time/O(output) space"
+ },
+ "source_sha256": "d4e78d49fa2834b17ff06a03cb3c99b44d403aad7b30344f8c1389a2a4f9b1b7",
+ "wrapper": "Solution.findWordPath"
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68a5e98e3a368733bb10422e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "edges",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findMinimalBottleneck",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "edges",
+    "type": "integer[][]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "hop-layered relaxation: k rounds of updating each node's best bottleneck through every edge",
+  "candidate_design": "binary search over the sorted distinct weights; each probe runs a breadth-first search from node 1 over edges not heavier than the probe and checks that node n is within k hops",
+  "complexity_target": "O((n + m) log m) time/O(n + m) space"
+ },
+ "source_sha256": "7e04773531c2aed4021354bd50967bbc063cdba87192082dbaf88053228cd087",
+ "wrapper": "named export findMinimalBottleneck"
+}

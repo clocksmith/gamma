@@ -1,0 +1,939 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk11-a (16 Hack2Hire groups, 18 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:6789754f11318cc872dd83ec",
+   "title": "Find Greatest Triple",
+   "variant_ordinal": 1,
+   "group_post_id": "6789743211318cc872dd83eb",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findGreatestTriple",
+     "params": [
+      {
+       "name": "digits",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every ordered choice of one, two or three positions and keep the largest value",
+    "candidate_design": "greedy: for each of the three output places take the largest digit in the window that still leaves enough digits for the remaining places, at its leftmost occurrence",
+    "complexity_target": "O(N) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "cff7671082b542c208ea21e3691657185bba16844dcc970f5441f1d25fc15304",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67cb459e9db31a8671abf92c",
+   "title": "Find Lowest Common Manager",
+   "variant_ordinal": 1,
+   "group_post_id": "67cb45939db31a8671abf92b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findLowestCommonManager",
+     "params": [
+      {
+       "name": "hierarchy",
+       "type": "list<[string,string[]]>"
+      },
+      {
+       "name": "employee1",
+       "type": "string"
+      },
+      {
+       "name": "employee2",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "collect the ancestor chain of employee1 by repeatedly scanning all rows for its manager, then walk employee2 upward until it reaches a member of that chain",
+    "candidate_design": "build a manager map and depths with an iterative breadth-first pass from the root, lift the deeper employee to the same depth, then lift both together until they meet",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "f571a3f8e1666723516f779340b88024936f1ddc53cd095b3a6e51fa70d720fe",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1cd98b8b879849ebc0fdaf",
+   "title": "Find Matching Skeletons",
+   "variant_ordinal": 1,
+   "group_post_id": "6a1cd97b8b879849ebc0fdae",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findMatchingSkeletons",
+     "params": [
+      {
+       "name": "word",
+       "type": "string"
+      },
+      {
+       "name": "skeletons",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each skeleton and each letter a..z, test whether filling every dash with that letter reproduces word",
+    "candidate_design": "one pass per skeleton: compare non-dash positions and remember the first letter seen under a dash, rejecting on any mismatch",
+    "complexity_target": "O(total skeleton length) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "73ae2e690b82d3401bbbe04d76305e5891a8a75f0567ae1aa1092c7a869c6177",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68c2d9291f64f4312b0a3df2",
+   "title": "Find Median In Large Array",
+   "variant_ordinal": 1,
+   "group_post_id": "68c2d9081f64f4312b0a3df1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findMedian",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "number"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "sort a copy and read the middle one or two values",
+    "candidate_design": "quickselect on a copy with three-way partitioning and pivots drawn from a fixed Park-Miller generator; an even length takes a second selection inside the upper part",
+    "complexity_target": "amortised O(N) time/O(N) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "943843cc670b6413d2f7199a88aeadeb25b0f539c1ca9e338fb0f6926cb7a130",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67a25626c5f86173882e3d8f",
+   "title": "Find Minimum Operations",
+   "variant_ordinal": 1,
+   "group_post_id": "67a25279c5f86173882e3d8e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findMinimumOperations",
+     "params": [
+      {
+       "name": "image",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "breadth-first search over strings reachable by single move-to-end operations",
+    "candidate_design": "two pointers: scan image once while advancing a pointer through the reverse whenever characters match; the answer is the length minus the matched count",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5abcb394b5ac4f3cd06d2114b4a55ef3dd167895f4f09595ecb613cd227f5452",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68ae7b5ec8631a6568126dbe",
+   "title": "Find Minimum Score Threshold",
+   "variant_ordinal": 1,
+   "group_post_id": "68ae72afc8631a6568126db2",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findMinimumScoreThreshold",
+     "params": [
+      {
+       "name": "games",
+       "type": "list<[string,string]>"
+      },
+      {
+       "name": "threshold",
+       "type": "number"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every distinct score rescan all games to count losses and totals at or above it",
+    "candidate_design": "count losses and totals per distinct score in a hash map, sort the distinct scores descending and accumulate suffix totals, keeping the smallest valid score",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6aeb5b3c99729ef3ecc38aaf1001e3f441039f93ed882e304befd5517a94d9f7",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:678e72f4fa7ce9616e190fbc",
+   "title": "Find Optimal Moves",
+   "variant_ordinal": 1,
+   "group_post_id": "678e7198fa7ce9616e190fbb",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findOptimalMoves",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "divide and conquer: add the minimum of the range, subtract it, and recurse into the positive runs",
+    "candidate_design": "one pass summing every positive rise arr[i] - arr[i-1] (with arr[-1] = 0)",
+    "complexity_target": "O(n) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "084302669e9031cda12c6b9b82ca6ac1c3ee6351841eb01ddbbe7b86b597daae",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:685303fe1af0034b3227652e",
+   "title": "Find Path in Fibonacci Tree",
+   "variant_ordinal": 1,
+   "group_post_id": "685303ac1af0034b3227652d",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findPath",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "startValue",
+       "type": "integer"
+      },
+      {
+       "name": "destValue",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "materialise the whole tree with explicit parent links and breadth-first search from start to dest",
+    "candidate_design": "subtree sizes S(n) = F(n + 2) - 1 let each label descend from the root in O(n) without building the tree; drop the common prefix of the two root paths and emit U per remaining start step",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "991264a980dea53ae254034dc1f759e852d6db3645eda6f6be49182889dd6c95",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68a5e98e3a368733bb10422e",
+   "title": "Find Path with Minimal Bottleneck",
+   "variant_ordinal": 1,
+   "group_post_id": "68a5e9833a368733bb10422d",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findMinimalBottleneck",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "edges",
+       "type": "integer[][]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "hop-layered relaxation: k rounds of updating each node's best bottleneck through every edge",
+    "candidate_design": "binary search over the sorted distinct weights; each probe runs a breadth-first search from node 1 over edges not heavier than the probe and checks that node n is within k hops",
+    "complexity_target": "O((n + m) log m) time/O(n + m) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b9a0a0b6bdfdd011f5eb76e3333174dd1ae469f7409beff4a055dddb6a38a757",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1f3ca28b879849ebc10ffb",
+   "title": "Find Pattern Matching Words",
+   "variant_ordinal": 1,
+   "group_post_id": "6a1f3c9a8b879849ebc10ffa",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findPatternMatchingWords",
+     "params": [
+      {
+       "name": "wordDict",
+       "type": "string[]"
+      },
+      {
+       "name": "pattern",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "translate the pattern into a regular expression (\"?\" to \".\", \".\" to \".+\") and full-match every word",
+    "candidate_design": "per word, a rolling boolean dynamic programme over pattern positions: a \".\" cell is true when the previous character row was true at the same or the previous pattern position",
+    "complexity_target": "O(sum |w| * |p|) time/O(|p|) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "baa33f810a8a215231ebbbfb9dcd6d695be50724877eaf9e098892b610c74480",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69e51800ad1522fdaff14d5f",
+   "title": "Find Size of Largest Subset",
+   "variant_ordinal": 1,
+   "group_post_id": "69e517faad1522fdaff14d5e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findLargestSubsetSize",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every subset and compute its AND",
+    "candidate_design": "the AND is positive exactly when some bit is set in every chosen element, so count, per bit, how many elements have it and return the largest count",
+    "complexity_target": "O(n * 30) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0336923e278a0057b8406a498fb0a19c1f41360aa0d94a0c59bd7d70e22d1ad9",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6795a8a1010c9ed2f849b1fd",
+   "title": "Find Word Path",
+   "variant_ordinal": 1,
+   "group_post_id": "6795a7db010c9ed2f849b1fc",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findWordPath",
+     "params": [
+      {
+       "name": "word",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "step-by-step walk: at each step take the first legal move toward the target in the order up, left, down, right",
+    "candidate_design": "compute each letter's row and column arithmetically and emit the four run-length segments per letter in a list joined once",
+    "complexity_target": "O(output) time/O(output) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c9046751ed4e05c4f8239421e1e74ffa17a8b354933e09f147a197c1656386ae",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68dd9212fb98b196fa540558",
+   "title": "Flatten 2D Array With Remove",
+   "variant_ordinal": 1,
+   "group_post_id": "68dd920dfb98b196fa540557",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "Vector2D",
+     "constructor": {
+      "params": [
+       {
+        "name": "vec",
+        "type": "integer[][]"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "next",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "hasNext",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "remove",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getVector",
+       "params": [],
+       "return": {
+        "type": "integer[][]"
+       }
+      }
+     ]
+    },
+    "native_class": "Vector2D"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep a flat list of (row, value, alive) entries; getVector regroups every alive entry by row",
+    "candidate_design": "copy the rows, keep a row and column cursor that skips empty rows, a per-row list of removed flags and the position of the last returned element; getVector rebuilds rows from the flags",
+    "complexity_target": "O(1) amortised per next/hasNext/remove, O(total) per getVector/O(total) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ecd5c4d7efad3d4627b14ef83097a6cd07c3757207930945035a0cbc1b3cd288",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68799c22ef2889afac734164",
+   "title": "Food Delivery System",
+   "variant_ordinal": 1,
+   "group_post_id": "68799a05ef2889afac734161",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "FoodDeliverySystem",
+     "constructor": {
+      "params": [
+       {
+        "name": "restaurants",
+        "type": "list<[string,integer,integer]>"
+       },
+       {
+        "name": "menu",
+        "type": "list<[string,string,integer]>"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "getBestOption",
+       "params": [
+        {
+         "name": "item",
+         "type": "string"
+        },
+        {
+         "name": "userX",
+         "type": "integer"
+        },
+        {
+         "name": "userY",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer[]"
+       }
+      }
+     ]
+    },
+    "native_class": "FoodDeliverySystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rescan the whole menu for every query and look each offering restaurant up in the restaurant rows",
+    "candidate_design": "index item -> (lowest price, coordinate list of offering restaurants) once in the constructor; a query reads the price and scans only the offering restaurants",
+    "complexity_target": "O(1) + O(offers of item) per query/O(menu) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "32c16ef31c6128d32b06d3e7fcf96722af27fd89ccc0652c055b75c131494975",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6879a663ef2889afac734167",
+   "title": "Food Delivery System",
+   "variant_ordinal": 2,
+   "group_post_id": "68799a05ef2889afac734161",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "FoodDeliverySystem",
+     "constructor": {
+      "params": [
+       {
+        "name": "restaurants",
+        "type": "list<[string,integer,integer]>"
+       },
+       {
+        "name": "menu",
+        "type": "list<[string,string,integer]>"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "getBestOption",
+       "params": [
+        {
+         "name": "item",
+         "type": "string"
+        },
+        {
+         "name": "userX",
+         "type": "integer"
+        },
+        {
+         "name": "userY",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer[]"
+       }
+      },
+      {
+       "name": "getBestOrder",
+       "params": [
+        {
+         "name": "items",
+         "type": "string[]"
+        },
+        {
+         "name": "userX",
+         "type": "integer"
+        },
+        {
+         "name": "userY",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer[]"
+       }
+      }
+     ]
+    },
+    "native_class": "FoodDeliverySystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rescan the whole menu for every query: for each restaurant collect the prices of the requested items and keep it when all are present",
+    "candidate_design": "per-item index of restaurant -> price; an order starts from the item with the fewest offers and probes the other items' maps for each of its restaurants",
+    "complexity_target": "O(offers of the rarest item * items) per order/O(menu) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "32c16ef31c6128d32b06d3e7fcf96722af27fd89ccc0652c055b75c131494975",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69fe591f574d87bc4900686f",
+   "title": "Format Articles Within Width",
+   "variant_ordinal": 1,
+   "group_post_id": "69fe590e574d87bc4900686e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "formatArticles",
+     "params": [
+      {
+       "name": "articles",
+       "type": "string[]"
+      },
+      {
+       "name": "maxWidth",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "character-by-character layout that tracks the current column and breaks before a word that would overflow",
+    "candidate_design": "split each article into words and pack them greedily, joining each line's word slice once",
+    "complexity_target": "O(total characters) time/O(total characters) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "326aaf4c35bc09a4981bf0c4b54485b04bd941cb1916f06b7cf0c346f652ef91",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68e2c59adab409e303d92947",
+   "title": "Friends by Last-K Movie Overlap",
+   "variant_ordinal": 1,
+   "group_post_id": "68e2c587dab409e303d92946",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findFriendGroups",
+     "params": [
+      {
+       "name": "customerIds",
+       "type": "string[]"
+      },
+      {
+       "name": "movies",
+       "type": "string[][]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "compare every pair of customers' last-k sets and merge equal ones",
+    "candidate_design": "canonical key = sorted distinct last-k movies joined by a separator; one hash map from key to member list in input order",
+    "complexity_target": "O(sum k log k) time/O(n k) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "491d41579e8ced4e101871d20c421827accfbe3731115f0c0247d136ea34b57c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68e2d042dab409e303d92952",
+   "title": "Friends by Last-K Movie Overlap",
+   "variant_ordinal": 2,
+   "group_post_id": "68e2c587dab409e303d92946",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "MovieFriends",
+     "constructor": {
+      "params": [
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "watch",
+       "params": [
+        {
+         "name": "customerId",
+         "type": "string"
+        },
+        {
+         "name": "movieId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getFriends",
+       "params": [
+        {
+         "name": "customerId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "MovieFriends"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "store complete histories; every query recomputes every customer's last-k set from scratch",
+    "candidate_design": "per customer a queue of the last k movies, counts per movie and a sorted list of distinct movies maintained by binary insertion and removal; a map from key string to a sorted member list updated only when the set changes",
+    "complexity_target": "O(k) per watch, O(group size) per query/O(customers * k) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "491d41579e8ced4e101871d20c421827accfbe3731115f0c0247d136ea34b57c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

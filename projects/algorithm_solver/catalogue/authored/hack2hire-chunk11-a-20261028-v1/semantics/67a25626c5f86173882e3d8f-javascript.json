@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67a25626c5f86173882e3d8f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "image"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findMinimumOperations",
+  "params": [
+   {
+    "name": "image",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "breadth-first search over strings reachable by single move-to-end operations",
+  "candidate_design": "two pointers: scan image once while advancing a pointer through the reverse whenever characters match; the answer is the length minus the matched count",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "1cca565536e1b7fe465a56ab9da1b142221139ef8fbe94c916abf9f48fdaa967",
+ "wrapper": "named export findMinimumOperations"
+}
