@@ -1,0 +1,1359 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "spec_basis": "inferred",
+ "problems": [
+  {
+   "uid": "hack2hire:695aed975242f618a4d2fa2f",
+   "variant_id": "695aed975242f618a4d2fa2f",
+   "group_uid": "hack2hire:post:695aed835242f618a4d2fa2e",
+   "source_post_id": "695aed835242f618a4d2fa2e",
+   "title": "Design a Buffered File Writer",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/695aed835242f618a4d2fa2e/practice?questionId=695aed975242f618a4d2fa2f",
+   "companies": [
+    "DATADOG"
+   ],
+   "source_algorithm_tags": [
+    "DESIGN"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "f72bc031abffb8d774b07d3fdb05c6098180a76176b3b6a786bcb1cc52fd1156",
+    "content_sha256": "5d79111ca6d13e3049dbe0912e88bacee9854f92c6c2d80946e9f897169789c6",
+    "local_source_cache": "data/question_bank/hack2hire/details/695aed835242f618a4d2fa2e.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "An in-memory buffer of fixed capacity sits in front of a byte sink. write appends bytes in order; every time the buffer becomes exactly full it is emptied to the sink in order (so one write may cause several flushes). flush empties whatever is buffered. The provided File/FileSystem sink is modelled as an injected observer: each method returns, as a fresh list, the bytes handed to the sink during that call (empty list if none). The native class also accepts an optional sink object with a write(byte) method.",
+   "inferred_domain": "capacity 1..10^4; up to 10^4 method calls; each write 0..10^4 bytes, each byte -128..127; total written bytes <= 2*10^5",
+   "inference_uncertainty": "Whether a full buffer flushes eagerly (assumed) or only when the next byte would overflow; byte range; whether close() exists; real API returns void and side-effects the File.",
+   "inferred_interface": {
+    "classname": "BufferedFile",
+    "constructor": {
+     "params": [
+      {
+       "name": "capacity",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "write",
+      "params": [
+       {
+        "name": "data",
+        "type": "integer[] (bytes -128..127)"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     {
+      "name": "flush",
+      "params": [],
+      "return": {
+       "type": "integer[]"
+      }
+     }
+    ],
+    "transcript_interface": {
+     "name": "solve",
+     "argument_order": [
+      "operation_names",
+      "argument_lists"
+     ],
+     "note": "class trace adapter: solve(operation_names, argument_lists) returns null for the constructor then each method result"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:6aa303f10ca9cc4e1c7901af",
+   "variant_id": "6aa303f10ca9cc4e1c7901af",
+   "group_uid": "hack2hire:post:6aa303e40ca9cc4e1c7901ad",
+   "source_post_id": "6aa303e40ca9cc4e1c7901ad",
+   "title": "Directory Encryption Optimization",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6aa303e40ca9cc4e1c7901ad/practice?questionId=6aa303f10ca9cc4e1c7901af",
+   "companies": [
+    "DATABRICKS"
+   ],
+   "source_algorithm_tags": [
+    "DYNAMIC_PROGRAMMING",
+    "TRIE"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "a9ee5a1c47a7df78a58c699d41442c70375e85bac19dd14f0ede624f886eb099",
+    "content_sha256": "8ca8ea2c6fb5460dc7e720be09b0f8f4a84b4ceef09e402abb17c5b8b392410d",
+    "local_source_cache": "data/question_bank/hack2hire/details/6aa303e40ca9cc4e1c7901ad.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "The directory tree is given as nested objects (name, directories, files; each file has a name and an isEncrypted flag that is read as the required final state). One operation encrypts a single file or an entire directory subtree. Encryption may never touch a file whose flag is false. Return the minimum number of operations after which exactly the flagged files are encrypted.",
+   "inferred_domain": "<= 10^5 nodes (directories plus files); depth <= 200 (JSON-transport nesting bound); names [A-Za-z0-9._-]{1,30}, unique among siblings",
+   "inference_uncertainty": "Highest. The preview stops after the node types; the objective (count vs list of paths), whether isEncrypted is current or desired state, and the treatment of empty directories are all inferred.",
+   "inferred_interface": {
+    "name": "minEncryptOperations",
+    "params": [
+     {
+      "name": "root",
+      "type": "DirectoryNode {name, directories, files:[{name,isEncrypted}]}"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:6aa304120ca9cc4e1c7901b3",
+   "variant_id": "6aa304120ca9cc4e1c7901b3",
+   "group_uid": "hack2hire:post:6aa303e40ca9cc4e1c7901ad",
+   "source_post_id": "6aa303e40ca9cc4e1c7901ad",
+   "title": "Directory Encryption Optimization",
+   "variant_ordinal": 2,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6aa303e40ca9cc4e1c7901ad/practice?questionId=6aa304120ca9cc4e1c7901b3",
+   "companies": [
+    "DATABRICKS"
+   ],
+   "source_algorithm_tags": [
+    "DYNAMIC_PROGRAMMING",
+    "TRIE"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "a9ee5a1c47a7df78a58c699d41442c70375e85bac19dd14f0ede624f886eb099",
+    "content_sha256": "8ca8ea2c6fb5460dc7e720be09b0f8f4a84b4ceef09e402abb17c5b8b392410d",
+    "local_source_cache": "data/question_bank/hack2hire/details/6aa303e40ca9cc4e1c7901ad.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Same tree as variant 1, but each operation sets a file or a whole directory subtree to encrypted or to decrypted, and a deeper operation overrides an enclosing one. Everything starts decrypted. Return the minimum number of operations so that every file ends in its flagged state.",
+   "inferred_domain": "as variant 1",
+   "inference_uncertainty": "Highest; this follow-up (override/toggle operations) is a guess consistent with the DYNAMIC_PROGRAMMING tag, not with any visible text.",
+   "inferred_interface": {
+    "name": "minStateOperations",
+    "params": [
+     {
+      "name": "root",
+      "type": "DirectoryNode {name, directories, files:[{name,isEncrypted}]}"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:69c0a3ed21f6ab42269647c2",
+   "variant_id": "69c0a3ed21f6ab42269647c2",
+   "group_uid": "hack2hire:post:69c0a13221f6ab42269647a5",
+   "source_post_id": "69c0a13221f6ab42269647a5",
+   "title": "Fancy Number",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69c0a13221f6ab42269647a5/practice?questionId=69c0a3ed21f6ab42269647c2",
+   "companies": [
+    "HRT"
+   ],
+   "source_algorithm_tags": [
+    "MATH",
+    "BIT_MANIPULATION"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "3b4125b4d34dda3f6de87867604b33c76450004748afac5d88e8a89875cc0b76",
+    "content_sha256": "72b30f751a84b0dd71941f22e382c40b0b524a8f23fabeb6a73a5cecda1f49ab",
+    "local_source_cache": "data/question_bank/hack2hire/details/69c0a13221f6ab42269647a5.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Count positive integers below n whose base-4 digits are all 0 or 1.",
+   "inferred_domain": "1 <= n <= 10^9 (stated in the preview)",
+   "inference_uncertainty": "Low; the preview states the full task and constraint.",
+   "inferred_interface": {
+    "name": "countFancyNumbers",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:6a21945a8b879849ebc11fd4",
+   "variant_id": "6a21945a8b879849ebc11fd4",
+   "group_uid": "hack2hire:post:6a2194398b879849ebc11fd3",
+   "source_post_id": "6a2194398b879849ebc11fd3",
+   "title": "Filter Unsafe Messages",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a2194398b879849ebc11fd3/practice?questionId=6a21945a8b879849ebc11fd4",
+   "companies": [
+    "WHATNOT"
+   ],
+   "source_algorithm_tags": [
+    "STRING",
+    "TRIE"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "c5920fc0d8d5f11983ef0f84790b81950baaaece0e53ded5af6bec4802087d63",
+    "content_sha256": "0158113e2c56d517fd1bf93e4445a43dc8e7b88734ed9bad749d1db50a3073cd",
+    "local_source_cache": "data/question_bank/hack2hire/details/6a2194398b879849ebc11fd3.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Keep, in order, the messages whose text has no space-separated token equal to any unsafe word (case-sensitive). Returned pairs are fresh copies.",
+   "inferred_domain": "<= 10^4 messages; username [a-z0-9_]{1,20}; text [a-z ]{0,1000}, total text <= 2*10^5; <= 10^3 unsafe words [a-z]{1,20}",
+   "inference_uncertainty": "Whether variant 1 is whole-word (assumed) or substring matching; case handling; punctuation.",
+   "inferred_interface": {
+    "name": "filterUnsafeMessages",
+    "params": [
+     {
+      "name": "messages",
+      "type": "string[][] ([username, text])"
+     },
+     {
+      "name": "unsafeWords",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:6a2194828b879849ebc11fd5",
+   "variant_id": "6a2194828b879849ebc11fd5",
+   "group_uid": "hack2hire:post:6a2194398b879849ebc11fd3",
+   "source_post_id": "6a2194398b879849ebc11fd3",
+   "title": "Filter Unsafe Messages",
+   "variant_ordinal": 2,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a2194398b879849ebc11fd3/practice?questionId=6a2194828b879849ebc11fd5",
+   "companies": [
+    "WHATNOT"
+   ],
+   "source_algorithm_tags": [
+    "STRING",
+    "TRIE"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "c5920fc0d8d5f11983ef0f84790b81950baaaece0e53ded5af6bec4802087d63",
+    "content_sha256": "0158113e2c56d517fd1bf93e4445a43dc8e7b88734ed9bad749d1db50a3073cd",
+    "local_source_cache": "data/question_bank/hack2hire/details/6a2194398b879849ebc11fd3.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Same as variant 1, except a message is unsafe if any unsafe word occurs anywhere in the text as a contiguous substring (including inside a longer word or across a space-free run).",
+   "inferred_domain": "as variant 1",
+   "inference_uncertainty": "The follow-up content is inferred from the TRIE tag; it could instead be wildcard words or case-insensitive matching.",
+   "inferred_interface": {
+    "name": "filterUnsafeMessages",
+    "params": [
+     {
+      "name": "messages",
+      "type": "string[][] ([username, text])"
+     },
+     {
+      "name": "unsafeWords",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:6a0b5e8dc84b6e8a3be18bbb",
+   "variant_id": "6a0b5e8dc84b6e8a3be18bbb",
+   "group_uid": "hack2hire:post:6a0b5e85c84b6e8a3be18bba",
+   "source_post_id": "6a0b5e85c84b6e8a3be18bba",
+   "title": "Find Camera Admin User",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a0b5e85c84b6e8a3be18bba/practice?questionId=6a0b5e8dc84b6e8a3be18bbb",
+   "companies": [
+    "VERKADA"
+   ],
+   "source_algorithm_tags": [
+    "GRAPH",
+    "BREADTH_FIRST_SEARCH"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "688c8888a3a99ea738f17b4a65fb1b87c0f89f6dbeb0ea014b6f7e246ed6f287",
+    "content_sha256": "a1c9986b96815043a05b556e0c9c08d5bec5e1d0fb3e171ce91daf2ca92863f9",
+    "local_source_cache": "data/question_bank/hack2hire/details/6a0b5e85c84b6e8a3be18bba.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Triples use four relationships: user cameraOwner camera, user groupMember group, group subgroupMember parentGroup (members of the child group inherit the parent group), and group groupCameraOwner camera. A user administers a camera if they own it directly or belong, through any chain of group memberships, to a group that owns it. Return the administering users sorted by code-unit order; group cycles are allowed.",
+   "inferred_domain": "<= 10^5 triples; ids [A-Za-z0-9_]{1,20}; users, groups and cameras are disjoint id sets; cameraId may be absent (answer empty)",
+   "inference_uncertainty": "High: the preview names only the first two relationships; the other two names/semantics and the output (all admins vs boolean for one user) are inferred.",
+   "inferred_interface": {
+    "name": "findCameraAdmins",
+    "params": [
+     {
+      "name": "permissions",
+      "type": "string[][] ([entity, relationship, object])"
+     },
+     {
+      "name": "cameraId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:689bcb111126a03aace65e51",
+   "variant_id": "689bcb111126a03aace65e51",
+   "group_uid": "hack2hire:post:689bcafe1126a03aace65e50",
+   "source_post_id": "689bcafe1126a03aace65e50",
+   "title": "Find Closest Dashmart",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689bcafe1126a03aace65e50/practice?questionId=689bcb111126a03aace65e51",
+   "companies": [
+    "DOORDASH"
+   ],
+   "source_algorithm_tags": [
+    "BREADTH_FIRST_SEARCH"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "ce3667f42ad1758022dcb0b6c95ee7c720c8d4c3b74fae37db0448defce8cfb1",
+    "content_sha256": "111da0d0f0eef65fa4f88867b3a5b17399caee932fe8ce0c29ede7fb844ef0fb",
+    "local_source_cache": "data/question_bank/hack2hire/details/689bcafe1126a03aace65e50.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "For each queried cell, return the fewest 4-directional steps through non-'X' cells to any 'D' cell; 0 on a 'D'; -1 if the cell is 'X' or no 'D' is reachable.",
+   "inferred_domain": "rows equal length; area <= 10^5; <= 10^5 in-bounds locations",
+   "inference_uncertainty": "Input shape (string rows vs char matrix) and whether queries are given as a list or the whole grid is returned.",
+   "inferred_interface": {
+    "name": "closestDashmartDistances",
+    "params": [
+     {
+      "name": "city",
+      "type": "string[] (D, space, X)"
+     },
+     {
+      "name": "locations",
+      "type": "integer[][] ([row, col])"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:6935ba921553144e303f676a",
+   "variant_id": "6935ba921553144e303f676a",
+   "group_uid": "hack2hire:post:6935ba711553144e303f6769",
+   "source_post_id": "6935ba711553144e303f6769",
+   "title": "Find Cluster Mode and Median",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6935ba711553144e303f6769/practice?questionId=6935ba921553144e303f676a",
+   "companies": [
+    "ANTHROPIC"
+   ],
+   "source_algorithm_tags": [
+    "DESIGN"
+   ],
+   "source_difficulty": 3,
+   "preview": {
+    "response_sha256": "8ecde079e4bd7974ed43b2f29d82eda47286c938955c8f6d98bd96bc75cda23f",
+    "content_sha256": "01f1de0b878d39716274ccc1f86fa959f40c43b3c789d872138c7d009b3e9dc9",
+    "local_source_cache": "data/question_bank/hack2hire/details/6935ba711553144e303f6769.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Each worker holds one slice; return the most frequent integer across all slices, smallest on ties. The distributed protocol is modelled deterministically: workers count locally, partial counts are hash-partitioned to reducer workers, each reducer reports its best (value, count) and the coordinator takes the best report.",
+   "inferred_domain": "1..100 slices whose lengths differ by at most 1; total 1..2*10^5 values in [-10^9, 10^9]",
+   "inference_uncertainty": "Medium: network/protocol aspects are not testable and are modelled; interface shape (list of slices) is inferred.",
+   "inferred_interface": {
+    "name": "findClusterMode",
+    "params": [
+     {
+      "name": "slices",
+      "type": "integer[][] (one per worker)"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:69361ab01553144e303f6805",
+   "variant_id": "69361ab01553144e303f6805",
+   "group_uid": "hack2hire:post:6935ba711553144e303f6769",
+   "source_post_id": "6935ba711553144e303f6769",
+   "title": "Find Cluster Mode and Median",
+   "variant_ordinal": 2,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6935ba711553144e303f6769/practice?questionId=69361ab01553144e303f6805",
+   "companies": [
+    "ANTHROPIC"
+   ],
+   "source_algorithm_tags": [
+    "DESIGN"
+   ],
+   "source_difficulty": 3,
+   "preview": {
+    "response_sha256": "8ecde079e4bd7974ed43b2f29d82eda47286c938955c8f6d98bd96bc75cda23f",
+    "content_sha256": "01f1de0b878d39716274ccc1f86fa959f40c43b3c789d872138c7d009b3e9dc9",
+    "local_source_cache": "data/question_bank/hack2hire/details/6935ba711553144e303f6769.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Same distributed setting; return the median of all values. For an even count return the mean of the two middle values (an integer when exact, otherwise a half-integer number). Modelled as a coordinator that binary-searches the value range and asks every worker how many of its locally sorted values are <= a probe.",
+   "inferred_domain": "as the mode variant",
+   "inference_uncertainty": "High: the preview only describes the mode; the even-count convention (mean vs lower median) is a guess.",
+   "inferred_interface": {
+    "name": "findClusterMedian",
+    "params": [
+     {
+      "name": "slices",
+      "type": "integer[][] (one per worker)"
+     }
+    ],
+    "return": {
+     "type": "number"
+    }
+   },
+   "comparison": "exact typed JSON result; JavaScript compares number values (no int/float distinction)",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:67fab475ba41b3368f4e5861",
+   "variant_id": "67fab475ba41b3368f4e5861",
+   "group_uid": "hack2hire:post:67fab1d5ba41b3368f4e585f",
+   "source_post_id": "67fab1d5ba41b3368f4e585f",
+   "title": "Find Destination Node",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67fab1d5ba41b3368f4e585f/practice?questionId=67fab475ba41b3368f4e5861",
+   "companies": [
+    "YELP"
+   ],
+   "source_algorithm_tags": [
+    "BREADTH_FIRST_SEARCH"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "cb41a1b678572e1c293330c74e1854882513d6e540d464e46edc8305441ccf5d",
+    "content_sha256": "0cf183c92daa23bb2c4a2cc1262775573cca5ba4372cc757507ca72e2600e398",
+    "local_source_cache": "data/question_bank/hack2hire/details/67fab1d5ba41b3368f4e585f.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Every node has at most one outgoing edge. Follow edges from start until a node with no outgoing edge and return it (start itself if it has none). If the walk revisits a node (cycle) return -1.",
+   "inferred_domain": "<= 10^5 edges; node labels 0..10^9; out-degree <= 1; start 0..10^9",
+   "inference_uncertainty": "Whether cycles can occur (handled as -1) and whether out-degree is guaranteed <= 1.",
+   "inferred_interface": {
+    "name": "findDestinationNode",
+    "params": [
+     {
+      "name": "edges",
+      "type": "integer[][] ([u, v])"
+     },
+     {
+      "name": "start",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:67fac1b6ba41b3368f4e5865",
+   "variant_id": "67fac1b6ba41b3368f4e5865",
+   "group_uid": "hack2hire:post:67fab1d5ba41b3368f4e585f",
+   "source_post_id": "67fab1d5ba41b3368f4e585f",
+   "title": "Find Destination Node",
+   "variant_ordinal": 2,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67fab1d5ba41b3368f4e585f/practice?questionId=67fac1b6ba41b3368f4e5865",
+   "companies": [
+    "YELP"
+   ],
+   "source_algorithm_tags": [
+    "BREADTH_FIRST_SEARCH"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "cb41a1b678572e1c293330c74e1854882513d6e540d464e46edc8305441ccf5d",
+    "content_sha256": "0cf183c92daa23bb2c4a2cc1262775573cca5ba4372cc757507ca72e2600e398",
+    "local_source_cache": "data/question_bank/hack2hire/details/67fab1d5ba41b3368f4e585f.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Nodes may have several outgoing edges (duplicates and self loops allowed). Return, ascending, every node reachable from start (start included) that has no outgoing edge.",
+   "inferred_domain": "<= 10^5 edges; node labels 0..10^9; start 0..10^9",
+   "inference_uncertainty": "High: the second variant is not described; multi-destination BFS is inferred from the BREADTH_FIRST_SEARCH tag.",
+   "inferred_interface": {
+    "name": "findDestinationNodes",
+    "params": [
+     {
+      "name": "edges",
+      "type": "integer[][] ([u, v])"
+     },
+     {
+      "name": "start",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:6934db665f306485cc5f08ba",
+   "variant_id": "6934db665f306485cc5f08ba",
+   "group_uid": "hack2hire:post:6934db5e5f306485cc5f08b9",
+   "source_post_id": "6934db5e5f306485cc5f08b9",
+   "title": "Find Duplicate Files",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6934db5e5f306485cc5f08b9/practice?questionId=6934db665f306485cc5f08ba",
+   "companies": [
+    "ANTHROPIC"
+   ],
+   "source_algorithm_tags": [
+    "RECURSION"
+   ],
+   "source_difficulty": 3,
+   "preview": {
+    "response_sha256": "15207bf5441708b334fb6e4c22f6985a06fbc804d6383eea3e10a636abad2516",
+    "content_sha256": "55813a31667238b91319ba6e64ce388f89b9e5bf8d0e6d12fac6b5dacbd43eb3",
+    "local_source_cache": "data/question_bank/hack2hire/details/6934db5e5f306485cc5f08b9.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "The simulated file system is a nested directory object; the root is '/' (its own name ignored) and a file path is '/' plus the directory names and file name joined by '/'. File content is a byte list. Return every group of two or more files with byte-identical content (empty files included): paths inside a group sorted, groups sorted by their first path.",
+   "inferred_domain": "<= 10^4 nodes; depth <= 200; total bytes <= 2*10^5; bytes 0..255",
+   "inference_uncertainty": "Input representation of the stream API, output ordering, whether empty files count, and root path spelling.",
+   "inferred_interface": {
+    "name": "findDuplicateFiles",
+    "params": [
+     {
+      "name": "root",
+      "type": "DirectoryNode {name, directories, files:[{name, content:int[]}]}"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:6934e59f5f306485cc5f08be",
+   "variant_id": "6934e59f5f306485cc5f08be",
+   "group_uid": "hack2hire:post:6934db5e5f306485cc5f08b9",
+   "source_post_id": "6934db5e5f306485cc5f08b9",
+   "title": "Find Duplicate Files",
+   "variant_ordinal": 2,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6934db5e5f306485cc5f08b9/practice?questionId=6934e59f5f306485cc5f08be",
+   "companies": [
+    "ANTHROPIC"
+   ],
+   "source_algorithm_tags": [
+    "RECURSION"
+   ],
+   "source_difficulty": 3,
+   "preview": {
+    "response_sha256": "15207bf5441708b334fb6e4c22f6985a06fbc804d6383eea3e10a636abad2516",
+    "content_sha256": "55813a31667238b91319ba6e64ce388f89b9e5bf8d0e6d12fac6b5dacbd43eb3",
+    "local_source_cache": "data/question_bank/hack2hire/details/6934db5e5f306485cc5f08b9.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Same as variant 1, but each file arrives as a stream of chunks of arbitrary sizes; duplicates are decided on the concatenated bytes, never on chunk boundaries.",
+   "inferred_domain": "as variant 1; chunk lists may contain empty chunks",
+   "inference_uncertainty": "High: this streaming follow-up is inferred from the preview wording about binary streams and efficiency.",
+   "inferred_interface": {
+    "name": "findDuplicateFiles",
+    "params": [
+     {
+      "name": "root",
+      "type": "DirectoryNode {name, directories, files:[{name, chunks:int[][]}]}"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:67e8af3a7131f7c901ffd7a1",
+   "variant_id": "67e8af3a7131f7c901ffd7a1",
+   "group_uid": "hack2hire:post:67e4c55150b60b77022f3867",
+   "source_post_id": "67e4c55150b60b77022f3867",
+   "title": "Find Maximum Trade Shares",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4c55150b60b77022f3867/practice?questionId=67e8af3a7131f7c901ffd7a1",
+   "companies": [
+    "ROBINHOOD"
+   ],
+   "source_algorithm_tags": [
+    "HEAP"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "af5140ca29a8f0f64aa31ec6944c1ea8067b4bbe2655ddc0dc8329c0505f281d",
+    "content_sha256": "5165406d39e02e6fa2a5a088a4a09b8ac0da320e88e33d12af3cb9f26c9e68d8",
+    "local_source_cache": "data/question_bank/hack2hire/details/67e4c55150b60b77022f3867.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Process orders in order as limit orders against a book. A buy trades against the cheapest resting sells priced at or below its limit, a sell against the highest resting buys priced at or above its limit, with partial fills; any remainder rests. Return the total shares traded.",
+   "inferred_domain": "<= 10^5 orders; price and quantity integers 1..10^9",
+   "inference_uncertainty": "The matching rules are truncated in the preview; price-priority matching and integer prices are inferred.",
+   "inferred_interface": {
+    "name": "maxTradedShares",
+    "params": [
+     {
+      "name": "orders",
+      "type": "[price, quantity, \"buy\"|\"sell\"][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:688102fcf96758aa78e1d67a",
+   "variant_id": "688102fcf96758aa78e1d67a",
+   "group_uid": "hack2hire:post:688102f5f96758aa78e1d679",
+   "source_post_id": "688102f5f96758aa78e1d679",
+   "title": "Find Minimal Shoppers",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688102f5f96758aa78e1d679/practice?questionId=688102fcf96758aa78e1d67a",
+   "companies": [
+    "INSTACART"
+   ],
+   "source_algorithm_tags": [
+    "BINARY_SEARCH",
+    "HEAP"
+   ],
+   "source_difficulty": 3,
+   "preview": {
+    "response_sha256": "4962fc04c0ef28e5db9375bae5b1ee026e71410bae3b45919f9240ecf8640332",
+    "content_sha256": "b6256862317ff29754042819a3687ee943ae246466159b3346c9c7eb6e21ee7e",
+    "local_source_cache": "data/question_bank/hack2hire/details/688102f5f96758aa78e1d679.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Orders are served first-come-first-served (by arrival, ties by input index); each goes to whichever shopper becomes free earliest and starts at max(arrival, free time). An order waits from arrival to completion. Return the fewest shoppers whose average wait is at most maxAverageWait, or -1 if even one shopper per order is not enough.",
+   "inferred_domain": "1..10^4 orders; duration 1..10^4; arrival 0..10^9; maxAverageWait 0..10^9",
+   "inference_uncertainty": "Wait definition (completion minus arrival, as in the referenced classic) and tie order are inferred; the threshold might be a float.",
+   "inferred_interface": {
+    "name": "minShoppers",
+    "params": [
+     {
+      "name": "orders",
+      "type": "integer[][] ([duration, arrivalTime])"
+     },
+     {
+      "name": "maxAverageWait",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:6a7921edd713d873ca7aa5eb",
+   "variant_id": "6a7921edd713d873ca7aa5eb",
+   "group_uid": "hack2hire:post:6a7921e3d713d873ca7aa5e9",
+   "source_post_id": "6a7921e3d713d873ca7aa5e9",
+   "title": "Find Missing Subsequence Words",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a7921e3d713d873ca7aa5e9/practice?questionId=6a7921edd713d873ca7aa5eb",
+   "companies": [
+    "IBM"
+   ],
+   "source_algorithm_tags": [
+    "STRING",
+    "TWO_POINTER"
+   ],
+   "source_difficulty": 1,
+   "preview": {
+    "response_sha256": "7e6f32ab0532dd9253c0276dc674c6f3f70b407c91ec39053c2b9c24faa09f7e",
+    "content_sha256": "df273ff488b273349a428b256b292a142bdda2ded137b93e53a264856f3ec74c",
+    "local_source_cache": "data/question_bank/hack2hire/details/6a7921e3d713d873ca7aa5e9.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Both strings are single-space-separated words and the words of t are a subsequence of the words of s. Match t greedily to the leftmost possible words of s and return the unmatched words of s in order.",
+   "inferred_domain": "s 1..10^5 chars of [A-Za-z] words; t 0..10^5 chars (may be empty)",
+   "inference_uncertainty": "Output type (list vs joined string) and the greedy-leftmost convention when words repeat.",
+   "inferred_interface": {
+    "name": "findMissingWords",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     },
+     {
+      "name": "t",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:68523a801af0034b322764d9",
+   "variant_id": "68523a801af0034b322764d9",
+   "group_uid": "hack2hire:post:68521e291af0034b322764c7",
+   "source_post_id": "68521e291af0034b322764c7",
+   "title": "Find Optimal Commute",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68521e291af0034b322764c7/practice?questionId=68523a801af0034b322764d9",
+   "companies": [
+    "DATABRICKS"
+   ],
+   "source_algorithm_tags": [
+    "GREEDY",
+    "BREADTH_FIRST_SEARCH"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "4ccff4854688141c0a4b7e0d24e9e6a9eb6affbfc52923d10563d2cfd0ea3e5e",
+    "content_sha256": "09f39009979a6878e9da9eaee1135abbaa41a815424395c7bd98e3df768afcf0",
+    "local_source_cache": "data/question_bank/hack2hire/details/68521e291af0034b322764c7.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title",
+     "reviews.json synopsis"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Digit d marks cells of modes[d-1]. Using one mode only, move orthogonally from S to D through cells of that digit. Every step out of a mode cell charges that mode's time and cost; leaving S is free. Pick the mode with the least total time, then least cost, then lowest index; return its name or '' if no single mode reaches D.",
+   "inferred_domain": "grid 1..100 x 1..100 with one S and one D; 1..9 distinct mode names [A-Za-z]{1,10}; times 1..10^4; costs 0..10^4",
+   "inference_uncertainty": "Index tie-break; the reviewed source example disagrees with the departure-charge convention (reviews.json), which is followed here.",
+   "inferred_interface": {
+    "name": "optimalCommuteMode",
+    "params": [
+     {
+      "name": "grid",
+      "type": "string[]"
+     },
+     {
+      "name": "modes",
+      "type": "string[]"
+     },
+     {
+      "name": "times",
+      "type": "integer[]"
+     },
+     {
+      "name": "costs",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown",
+   "source_review_synopsis_ref": "projects/question_bank/hack2hire/reviews.json#68521e291af0034b322764c7"
+  },
+  {
+   "uid": "hack2hire:6944670d867a3f9f539ff548",
+   "variant_id": "6944670d867a3f9f539ff548",
+   "group_uid": "hack2hire:post:68521e291af0034b322764c7",
+   "source_post_id": "68521e291af0034b322764c7",
+   "title": "Find Optimal Commute",
+   "variant_ordinal": 2,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68521e291af0034b322764c7/practice?questionId=6944670d867a3f9f539ff548",
+   "companies": [
+    "DATABRICKS"
+   ],
+   "source_algorithm_tags": [
+    "GREEDY",
+    "BREADTH_FIRST_SEARCH"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "4ccff4854688141c0a4b7e0d24e9e6a9eb6affbfc52923d10563d2cfd0ea3e5e",
+    "content_sha256": "09f39009979a6878e9da9eaee1135abbaa41a815424395c7bd98e3df768afcf0",
+    "local_source_cache": "data/question_bank/hack2hire/details/68521e291af0034b322764c7.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title",
+     "reviews.json synopsis"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Same grid and charges, but any mode cells may be mixed along the route with no switching penalty. Return [total time, total cost] of the lexicographically smallest pair, or [-1, -1] if D is unreachable.",
+   "inferred_domain": "as variant 1",
+   "inference_uncertainty": "Whether switching modes carries a penalty (assumed none); source example inconsistency noted in reviews.json.",
+   "inferred_interface": {
+    "name": "optimalCommuteCost",
+    "params": [
+     {
+      "name": "grid",
+      "type": "string[]"
+     },
+     {
+      "name": "modes",
+      "type": "string[]"
+     },
+     {
+      "name": "times",
+      "type": "integer[]"
+     },
+     {
+      "name": "costs",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown",
+   "source_review_synopsis_ref": "projects/question_bank/hack2hire/reviews.json#68521e291af0034b322764c7"
+  },
+  {
+   "uid": "hack2hire:6789faf811318cc872dd83f3",
+   "variant_id": "6789faf811318cc872dd83f3",
+   "group_uid": "hack2hire:post:6789faf011318cc872dd83f2",
+   "source_post_id": "6789faf011318cc872dd83f2",
+   "title": "Find Robots Position",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6789faf011318cc872dd83f2/practice?questionId=6789faf811318cc872dd83f3",
+   "companies": [
+    "UBER"
+   ],
+   "source_algorithm_tags": [
+    "ARRAY",
+    "MATRIX"
+   ],
+   "source_difficulty": 3,
+   "preview": {
+    "response_sha256": "079cea0f372190bdf7d766a63211540bd68f4bc3c81f35f308d4b07e4fbfed15",
+    "content_sha256": "c3e5f6d4ff9355037036bb0f32352aae131b620c45561b7e49c4a5cec467363d",
+    "local_source_cache": "data/question_bank/hack2hire/details/6789faf011318cc872dd83f2.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "For every robot cell, measure the steps to the nearest 'X' to the left, up, down and right, where the board edge counts as a blocker just outside the grid; robots do not block. Return, in row-major order, the [row, col] of robots whose four distances equal the query.",
+   "inferred_domain": "area <= 10^5; distances 1..100001",
+   "inference_uncertainty": "Query order [left, top, bottom, right] and distance-to-edge convention are inferred.",
+   "inferred_interface": {
+    "name": "findRobotPositions",
+    "params": [
+     {
+      "name": "board",
+      "type": "string[][] (O, E, X)"
+     },
+     {
+      "name": "distances",
+      "type": "integer[4] ([left, top, bottom, right])"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:69dfe86895e80ae213e5c79a",
+   "variant_id": "69dfe86895e80ae213e5c79a",
+   "group_uid": "hack2hire:post:69dfe74795e80ae213e5c78f",
+   "source_post_id": "69dfe74795e80ae213e5c78f",
+   "title": "Find Text Before Stop Words",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69dfe74795e80ae213e5c78f/practice?questionId=69dfe86895e80ae213e5c79a",
+   "companies": [
+    "PERPLEXITY"
+   ],
+   "source_algorithm_tags": [
+    "STRING"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "7c4bfc7bd18db2e690c85ea529ce2e5ada3835eb3e4186860262f568182f4f74",
+    "content_sha256": "f822b60548efb970a50f089e14b9c9d204c9ec2a23098b8bc8daa45c05f6b314",
+    "local_source_cache": "data/question_bank/hack2hire/details/69dfe74795e80ae213e5c78f.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Return the prefix of text before the earliest index at which any stop word occurs (case-sensitive exact substring); the whole text if none occurs.",
+   "inferred_domain": "text printable ASCII, 0..10^5 chars; 0..100 stop words of 1..50 printable chars",
+   "inference_uncertainty": "Low for variant 1 (the preview states the rule); bounds are inferred.",
+   "inferred_interface": {
+    "name": "textBeforeStopWords",
+    "params": [
+     {
+      "name": "text",
+      "type": "string"
+     },
+     {
+      "name": "stopWords",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:69dfee0f95e80ae213e5c7bc",
+   "variant_id": "69dfee0f95e80ae213e5c7bc",
+   "group_uid": "hack2hire:post:69dfe74795e80ae213e5c78f",
+   "source_post_id": "69dfe74795e80ae213e5c78f",
+   "title": "Find Text Before Stop Words",
+   "variant_ordinal": 2,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69dfe74795e80ae213e5c78f/practice?questionId=69dfee0f95e80ae213e5c7bc",
+   "companies": [
+    "PERPLEXITY"
+   ],
+   "source_algorithm_tags": [
+    "STRING"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "7c4bfc7bd18db2e690c85ea529ce2e5ada3835eb3e4186860262f568182f4f74",
+    "content_sha256": "f822b60548efb970a50f089e14b9c9d204c9ec2a23098b8bc8daa45c05f6b314",
+    "local_source_cache": "data/question_bank/hack2hire/details/69dfe74795e80ae213e5c78f.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Text arrives as chunks. After each chunk, emit the longest newly safe text: stop as soon as a stop word is certain (no earlier position could still start one) and emit only text before it; otherwise hold back the shortest-start suffix that is a proper prefix of some stop word. Return len(chunks)+1 strings: one emission per chunk and a final end-of-stream flush (empty after a stop). The emissions concatenate to the variant-1 answer on the joined text.",
+   "inferred_domain": "0..10^4 chunks of 0..100 printable chars, total <= 10^5; stop words as variant 1",
+   "inference_uncertainty": "High: streaming is inferred from the setting (moderation pipeline) and variant count; exact emission granularity is a guess.",
+   "inferred_interface": {
+    "name": "streamBeforeStopWords",
+    "params": [
+     {
+      "name": "chunks",
+      "type": "string[]"
+     },
+     {
+      "name": "stopWords",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:68dee4164b499ddb216af5ec",
+   "variant_id": "68dee4164b499ddb216af5ec",
+   "group_uid": "hack2hire:post:68dee3e64b499ddb216af5eb",
+   "source_post_id": "68dee3e64b499ddb216af5eb",
+   "title": "Find Valid Sock Pairs",
+   "variant_ordinal": 1,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68dee3e64b499ddb216af5eb/practice?questionId=68dee4164b499ddb216af5ec",
+   "companies": [
+    "SQUARE"
+   ],
+   "source_algorithm_tags": [
+    "HASH_TABLE",
+    "SORTING"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "0da473ee643f41ea24bb3cbfd2d36e72e6048126f25a4086c729a2df5f010ecb",
+    "content_sha256": "b535eb2cc8298244db8d633cc8ea2a87ec474d4f09d6d9b9108c252493f19822",
+    "local_source_cache": "data/question_bank/hack2hire/details/68dee3e64b499ddb216af5eb.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "A valid pair is one left and one right sock of the same color, each sock used once. Return the maximum number of pairs.",
+   "inferred_domain": "0..10^5 socks; distinct ids in [-10^9, 10^9]; colors [a-z]{1,10}",
+   "inference_uncertainty": "Whether variant 1 counts pairs (assumed) or lists them.",
+   "inferred_interface": {
+    "name": "countSockPairs",
+    "params": [
+     {
+      "name": "ids",
+      "type": "integer[]"
+     },
+     {
+      "name": "colors",
+      "type": "string[]"
+     },
+     {
+      "name": "feet",
+      "type": "string[] (\"left\"|\"right\")"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  },
+  {
+   "uid": "hack2hire:68e1734e0fdcf62632c38cdc",
+   "variant_id": "68e1734e0fdcf62632c38cdc",
+   "group_uid": "hack2hire:post:68dee3e64b499ddb216af5eb",
+   "source_post_id": "68dee3e64b499ddb216af5eb",
+   "title": "Find Valid Sock Pairs",
+   "variant_ordinal": 2,
+   "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68dee3e64b499ddb216af5eb/practice?questionId=68e1734e0fdcf62632c38cdc",
+   "companies": [
+    "SQUARE"
+   ],
+   "source_algorithm_tags": [
+    "HASH_TABLE",
+    "SORTING"
+   ],
+   "source_difficulty": 2,
+   "preview": {
+    "response_sha256": "0da473ee643f41ea24bb3cbfd2d36e72e6048126f25a4086c729a2df5f010ecb",
+    "content_sha256": "b535eb2cc8298244db8d633cc8ea2a87ec474d4f09d6d9b9108c252493f19822",
+    "local_source_cache": "data/question_bank/hack2hire/details/68dee3e64b499ddb216af5eb.json",
+    "scope": "group-level partial preview; no variant-specific text"
+   },
+   "spec_basis": "inferred",
+   "inference": {
+    "inferred_by": "claude-opus-5-5 subagent",
+    "inferred_at": "2026-10-28",
+    "basis_fields": [
+     "contentPreview",
+     "algorithmTags",
+     "title"
+    ],
+    "class": "inference, not the owner/official specification"
+   },
+   "inferred_spec": "Within each color, pair the k-th smallest left id with the k-th smallest right id; return all pairs [leftId, rightId] sorted by left id.",
+   "inferred_domain": "as variant 1",
+   "inference_uncertainty": "High: pairing rule and output order are inferred from the HASH_TABLE/SORTING tags.",
+   "inferred_interface": {
+    "name": "findSockPairs",
+    "params": [
+     {
+      "name": "ids",
+      "type": "integer[]"
+     },
+     {
+      "name": "colors",
+      "type": "string[]"
+     },
+     {
+      "name": "feet",
+      "type": "string[] (\"left\"|\"right\")"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "comparison": "exact typed JSON result",
+   "effects": "arguments unchanged; fresh returned containers",
+   "qualification_status": "unknown"
+  }
+ ]
+}

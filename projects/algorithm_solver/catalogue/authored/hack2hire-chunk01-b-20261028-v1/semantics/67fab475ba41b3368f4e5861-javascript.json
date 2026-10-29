@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "findDestinationNode",
+  "params": [
+   {
+    "name": "edges",
+    "type": "integer[][] ([u, v])"
+   },
+   {
+    "name": "start",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "language": "javascript",
+ "named_wrapper": "module.exports.findDestinationNode",
+ "parameters": [
+  "edges",
+  "start"
+ ],
+ "problem_uid": "hack2hire:67fab475ba41b3368f4e5861",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "hash map successor walk with visited set",
+  "complexity_target": "O(E) time/O(E) space",
+  "reference": "walk at most |edges|+1 steps without a visited set"
+ },
+ "source_sha256": "1df4af269edcbc0ba9ac94d081c9f02b3b9842096651406a75764cf32f6485b0",
+ "spec_basis": "inferred"
+}

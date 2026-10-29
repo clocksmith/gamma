@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "textBeforeStopWords",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "stopWords",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "language": "python",
+ "named_wrapper": "Solution.textBeforeStopWords",
+ "parameters": [
+  "text",
+  "stopWords"
+ ],
+ "problem_uid": "hack2hire:69dfe86895e80ae213e5c79a",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "native indexOf per stop word, keep the minimum",
+  "complexity_target": "O(W * |text|) worst time via native search/O(1) extra space",
+  "reference": "check every position with startswith for every word"
+ },
+ "source_sha256": "aac327d6f1504842fcf9514b7fe45b3f64990d3d2dcd7d4926ea6b97d92a7ac6",
+ "spec_basis": "inferred"
+}

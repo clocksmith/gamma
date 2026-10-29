@@ -1,0 +1,80 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": {
+  "native_state": "changes only through write/flush",
+  "returned_mutable_containers": "fresh trace list and fresh per-call byte lists",
+  "trace_inputs": "unchanged including nested argument lists"
+ },
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "classname": "BufferedFile",
+  "constructor": {
+   "params": [
+    {
+     "name": "capacity",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "write",
+    "params": [
+     {
+      "name": "data",
+      "type": "integer[] (bytes -128..127)"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   {
+    "name": "flush",
+    "params": [],
+    "return": {
+     "type": "integer[]"
+    }
+   }
+  ],
+  "transcript_interface": {
+   "argument_order": [
+    "operation_names",
+    "argument_lists"
+   ],
+   "name": "solve",
+   "note": "class trace adapter: solve(operation_names, argument_lists) returns null for the constructor then each method result"
+  }
+ },
+ "language": "python",
+ "named_wrapper": "BufferedFile",
+ "native_class": "BufferedFile",
+ "native_symbol": "module global BufferedFile",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "problem_uid": "hack2hire:695aed975242f618a4d2fa2f",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "array buffer with fill index; copy min(space, remaining) slices, flush on full",
+  "complexity_target": "O(len(data)) per write, O(capacity) space",
+  "reference": "stream-offset model: disk length after write = previous + largest multiple of capacity not exceeding pending; after flush = whole stream"
+ },
+ "source_sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce",
+ "spec_basis": "inferred"
+}

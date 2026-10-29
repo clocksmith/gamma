@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "minStateOperations",
+  "params": [
+   {
+    "name": "root",
+    "type": "DirectoryNode {name, directories, files:[{name,isEncrypted}]}"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "language": "python",
+ "named_wrapper": "Solution.minStateOperations",
+ "parameters": [
+  "root"
+ ],
+ "problem_uid": "hack2hire:6aa304120ca9cc4e1c7901b3",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "tree DP over inherited state s: cost(node,s)=min(sum children at s, 1 + sum children at not s); files cost 0 or 1",
+  "complexity_target": "O(nodes) time/space",
+  "reference": "enumerate none/encrypt/decrypt for every node (<=9 nodes) and resolve the nearest operation top-down"
+ },
+ "source_sha256": "a4639510a2f457309aa8fdfd7105101eb6a7a848a4b48858b1ed608bd8cb3c6b",
+ "spec_basis": "inferred"
+}

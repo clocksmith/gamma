@@ -1,0 +1,124 @@
+{
+  "problems": {
+    "hack2hire:695aed975242f618a4d2fa2f": {
+      "reference": "stream-offset model: disk length after write = previous + largest multiple of capacity not exceeding pending; after flush = whole stream",
+      "candidate_design": "array buffer with fill index; copy min(space, remaining) slices, flush on full",
+      "complexity_target": "O(len(data)) per write, O(capacity) space"
+    },
+    "hack2hire:6aa303f10ca9cc4e1c7901af": {
+      "reference": "enumerate every subset of nodes to operate on (<=14 nodes) and check the resulting encrypted set",
+      "candidate_design": "iterative post-order: a directory whose subtree has >=1 file and only flagged files costs 1, otherwise sum of children plus flagged direct files",
+      "complexity_target": "O(nodes) time/space"
+    },
+    "hack2hire:6aa304120ca9cc4e1c7901b3": {
+      "reference": "enumerate none/encrypt/decrypt for every node (<=9 nodes) and resolve the nearest operation top-down",
+      "candidate_design": "tree DP over inherited state s: cost(node,s)=min(sum children at s, 1 + sum children at not s); files cost 0 or 1",
+      "complexity_target": "O(nodes) time/space"
+    },
+    "hack2hire:69c0a3ed21f6ab42269647c2": {
+      "reference": "enumerate every binary mask below 2^16 read as base 4, sort, bisect",
+      "candidate_design": "scan base-4 digits of n from the top; digit 1 adds 2^rest, digit >=2 adds 2^(rest+1) and stops; subtract zero",
+      "complexity_target": "O(log n) time/O(log n) space"
+    },
+    "hack2hire:6a21945a8b879849ebc11fd4": {
+      "reference": "Python list membership of each word in text.split()",
+      "candidate_design": "hash set of unsafe words; split text on spaces skipping empty tokens",
+      "complexity_target": "O(total text) expected time/O(words) space"
+    },
+    "hack2hire:6a2194828b879849ebc11fd5": {
+      "reference": "Python substring operator for every word",
+      "candidate_design": "trie of unsafe words; walk the trie from each text position for at most 20 characters",
+      "complexity_target": "O(total text * 20) time/O(sum word lengths) space"
+    },
+    "hack2hire:6a0b5e8dc84b6e8a3be18bbb": {
+      "reference": "per-user forward fixpoint closure over all triples (<=80 triples)",
+      "candidate_design": "reverse adjacency; BFS from the camera over owners, member groups and member users",
+      "complexity_target": "O(T + U log U) time/O(T) space"
+    },
+    "hack2hire:689bcb111126a03aace65e51": {
+      "reference": "independent per-query level-set BFS until a D is in the frontier (area <= 400)",
+      "candidate_design": "single multi-source BFS from every D, then lookup",
+      "complexity_target": "O(area + queries) time/O(area) space"
+    },
+    "hack2hire:6935ba921553144e303f676a": {
+      "reference": "sort the flattened data and take the longest run (first on ties)",
+      "candidate_design": "per-worker hash counts, partition by value mod k, per-partition max, coordinator min-key max-count",
+      "complexity_target": "O(N) expected time/O(N) space"
+    },
+    "hack2hire:69361ab01553144e303f6805": {
+      "reference": "sort the flattened data, exact Fraction mean of the middle pair",
+      "candidate_design": "local sort per worker; value-range binary search for the k-th smallest with per-worker bisect counts",
+      "complexity_target": "O(N log N + log(range) * k * log m) time/O(N) space"
+    },
+    "hack2hire:67fab475ba41b3368f4e5861": {
+      "reference": "walk at most |edges|+1 steps without a visited set",
+      "candidate_design": "hash map successor walk with visited set",
+      "complexity_target": "O(E) time/O(E) space"
+    },
+    "hack2hire:67fac1b6ba41b3368f4e5865": {
+      "reference": "edge-relaxation fixpoint for reachability (<=300 edges)",
+      "candidate_design": "adjacency map + BFS, collect sinks, numeric sort",
+      "complexity_target": "O(E + V log V) time/O(E) space"
+    },
+    "hack2hire:6934db665f306485cc5f08ba": {
+      "reference": "pairwise byte-list comparison with union-find (<=300 files)",
+      "candidate_design": "iterative traversal; bucket by size, then by exact content key inside each size bucket",
+      "complexity_target": "O(total bytes + F log F) time/O(total bytes) space"
+    },
+    "hack2hire:6934e59f5f306485cc5f08be": {
+      "reference": "pairwise comparison of flattened chunk lists (<=300 files)",
+      "candidate_design": "bucket by total size, then refine candidate groups block by block (64-byte re-chunked blocks) until groups are singletons or streams end",
+      "complexity_target": "O(total bytes + F log F) time/O(F + block) space beyond input"
+    },
+    "hack2hire:67e8af3a7131f7c901ffd7a1": {
+      "reference": "list book with linear best-price search (<=400 orders)",
+      "candidate_design": "min-heap of sells, max-heap of buys",
+      "complexity_target": "O(n log n) time/O(n) space"
+    },
+    "hack2hire:688102fcf96758aa78e1d67a": {
+      "reference": "increasing shopper counts with linear-scan simulation and exact Fraction comparison (<=60 orders)",
+      "candidate_design": "binary search on shopper count (wait is monotone) with min-heap simulation and integer comparison total <= target*n",
+      "complexity_target": "O(n log^2 n) time/O(n) space"
+    },
+    "hack2hire:6a7921edd713d873ca7aa5eb": {
+      "reference": "lexicographically first index combination that spells t (<=16 words)",
+      "candidate_design": "two pointers over the word arrays",
+      "complexity_target": "O(|s|) time/O(|s|) space"
+    },
+    "hack2hire:68523a801af0034b322764d9": {
+      "reference": "Bellman-Ford over (time, cost) pairs per mode (<=150 cells)",
+      "candidate_design": "per-mode BFS for the fewest charged cells; totals scale linearly",
+      "complexity_target": "O(k * area) time/O(area) space"
+    },
+    "hack2hire:6944670d867a3f9f539ff548": {
+      "reference": "Bellman-Ford over (time, cost) pairs (<=150 cells)",
+      "candidate_design": "Dijkstra on lexicographic (time, cost) with node-departure weights",
+      "complexity_target": "O(area log area) time/O(area) space"
+    },
+    "hack2hire:6789faf811318cc872dd83f3": {
+      "reference": "walk outward from every robot in four directions",
+      "candidate_design": "four directional sweeps keeping the last blocker index",
+      "complexity_target": "O(area) time/O(area) space"
+    },
+    "hack2hire:69dfe86895e80ae213e5c79a": {
+      "reference": "check every position with startswith for every word",
+      "candidate_design": "native indexOf per stop word, keep the minimum",
+      "complexity_target": "O(W * |text|) worst time via native search/O(1) extra space"
+    },
+    "hack2hire:69dfee0f95e80ae213e5c7bc": {
+      "reference": "recompute safety by brute-force position scan over the whole received text at each step (<=3000 chars)",
+      "candidate_design": "pending buffer = held suffix + chunk; native search for stop words in pending; proper-prefix set for the hold",
+      "complexity_target": "O(sum(chunk + 50) * W) time/O(sum stop lengths) space"
+    },
+    "hack2hire:68dee4164b499ddb216af5ec": {
+      "reference": "repeated smallest-left / smallest-right selection (<=200 socks)",
+      "candidate_design": "hash counts per color, sum of min(left, right)",
+      "complexity_target": "O(n) time/O(colors) space"
+    },
+    "hack2hire:68e1734e0fdcf62632c38cdc": {
+      "reference": "repeated global smallest left with smallest same-color right (<=200 socks)",
+      "candidate_design": "group by color, sort each side, zip, numeric sort by left id",
+      "complexity_target": "O(n log n) time/O(n) space"
+    }
+  }
+}

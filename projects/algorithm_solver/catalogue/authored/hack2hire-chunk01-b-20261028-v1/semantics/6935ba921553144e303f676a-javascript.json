@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "findClusterMode",
+  "params": [
+   {
+    "name": "slices",
+    "type": "integer[][] (one per worker)"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "language": "javascript",
+ "named_wrapper": "module.exports.findClusterMode",
+ "parameters": [
+  "slices"
+ ],
+ "problem_uid": "hack2hire:6935ba921553144e303f676a",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "per-worker hash counts, partition by value mod k, per-partition max, coordinator min-key max-count",
+  "complexity_target": "O(N) expected time/O(N) space",
+  "reference": "sort the flattened data and take the longest run (first on ties)"
+ },
+ "source_sha256": "3c2bfd5cd996d3eceb6720da2a736363bcdbf367c9b2d0a2754ea469032c03c0",
+ "spec_basis": "inferred"
+}

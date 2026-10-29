@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "closestDashmartDistances",
+  "params": [
+   {
+    "name": "city",
+    "type": "string[] (D, space, X)"
+   },
+   {
+    "name": "locations",
+    "type": "integer[][] ([row, col])"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "language": "python",
+ "named_wrapper": "Solution.closestDashmartDistances",
+ "parameters": [
+  "city",
+  "locations"
+ ],
+ "problem_uid": "hack2hire:689bcb111126a03aace65e51",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "single multi-source BFS from every D, then lookup",
+  "complexity_target": "O(area + queries) time/O(area) space",
+  "reference": "independent per-query level-set BFS until a D is in the frontier (area <= 400)"
+ },
+ "source_sha256": "9082ec66edb217e8e5b3d1544197bf46b48f3ca40ca3a9e8200bdd53ae6edbc5",
+ "spec_basis": "inferred"
+}

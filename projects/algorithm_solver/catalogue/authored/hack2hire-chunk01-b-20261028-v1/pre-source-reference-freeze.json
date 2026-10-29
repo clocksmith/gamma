@@ -1,0 +1,31 @@
+{
+  "schema": "gamma.hack2hire-chunk01-b-pre-source-freeze.v1",
+  "at": "2026-10-29T01:28:03.991597+00:00",
+  "files": {
+    "oracles.py": "f9ac80a2160e60265afe6908867a15fa163c64da2b9b0cdddf7a24066ee15e18",
+    "test_oracles.py": "85baf3556c07908dd80e6720416a2aa526230a1e2f272971f684ed4f1a22b74a",
+    "cases.py": "f9577a2f497c08d267cebd05a7ff8ca7ad5ae9468428e8cad19e15947853eaca",
+    "contracts.json": "977025206714385b74b47580b4852c8562cd11bd45e4597714bb0e6657afc21a",
+    "design.json": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+  },
+  "candidate_sources_exist": false,
+  "candidate_executions": 0,
+  "source_free_tests_passed": 18,
+  "candidate_test_status": "Candidates.test_candidates skipped: candidates absent",
+  "spec_basis": "inferred (claude-opus-5-5 subagent, 2026-10-28); references implement the inferred specs, not official ones",
+  "amendments": [
+    {
+      "at": "2026-10-29T01:35:35.989936+00:00",
+      "after_candidates_existed": true,
+      "change": "Directory Encryption (both variants) inferred depth bound 500 -> 200; maximum chain case 500 -> 200 levels, expected 499 -> 199 (variant 1), 2 unchanged (variant 2). Contract domain text updated accordingly.",
+      "reason": "A 500-level tree nests ~1000 JSON levels, exceeding the default Python recursion limit used by deepcopy and json in any transport; candidates were unchanged by this amendment",
+      "files_after": {
+        "oracles.py": "2234246083fef67b55d3fa4e8032b87441773bc5593292e5e6e241d220b0df0d",
+        "test_oracles.py": "85baf3556c07908dd80e6720416a2aa526230a1e2f272971f684ed4f1a22b74a",
+        "cases.py": "cf79e92b4633980f8610fe4e78e8f3d71fa8e770e83386acec5486b31657c0a0",
+        "contracts.json": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0",
+        "design.json": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      }
+    }
+  ]
+}

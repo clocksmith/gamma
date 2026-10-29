@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged; fresh returned containers",
+ "entrypoint": "solve",
+ "inference": {
+  "basis_fields": [
+   "contentPreview",
+   "algorithmTags",
+   "title"
+  ],
+  "class": "inference, not the owner/official specification",
+  "inferred_at": "2026-10-28",
+  "inferred_by": "claude-opus-5-5 subagent"
+ },
+ "inferred_interface": {
+  "name": "findRobotPositions",
+  "params": [
+   {
+    "name": "board",
+    "type": "string[][] (O, E, X)"
+   },
+   {
+    "name": "distances",
+    "type": "integer[4] ([left, top, bottom, right])"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "language": "javascript",
+ "named_wrapper": "module.exports.findRobotPositions",
+ "parameters": [
+  "board",
+  "distances"
+ ],
+ "problem_uid": "hack2hire:6789faf811318cc872dd83f3",
+ "qualification": {
+  "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+  "status": "unknown"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "candidate_design": "four directional sweeps keeping the last blocker index",
+  "complexity_target": "O(area) time/O(area) space",
+  "reference": "walk outward from every robot in four directions"
+ },
+ "source_sha256": "bcac30781b127aae56277e112975d5fdebbd84ef23c8dcfdbf9baed2a52a76b4",
+ "spec_basis": "inferred"
+}
