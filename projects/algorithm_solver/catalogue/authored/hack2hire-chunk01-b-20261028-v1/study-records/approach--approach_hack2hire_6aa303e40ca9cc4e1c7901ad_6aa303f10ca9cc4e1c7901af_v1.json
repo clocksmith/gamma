@@ -1,0 +1,1105 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/chooseWhen",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "An operation applies to a whole subtree and is only allowed when every leaf below satisfies a condition.",
+      "Each subtree's best answer depends only on its children's answers.",
+      "Trees may be deep and you want to avoid recursion."
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/contract--contract_hack2hire_6aa303e40ca9cc4e1c7901ad_6aa303f10ca9cc4e1c7901af_authored-v1.json",
+    "sha256": "1bcd5d9121c5cd57838fa2ec7b1b26eecabc989fa6b07503a4cb255555663d9f",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/explanation",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+      }
+    ],
+    "status": "present",
+    "value": "Process directories bottom-up. For each directory compute three facts about its subtree: the minimum cost, how many files it contains, and whether all of them are flagged (clean). Start from the direct files (each flagged file costs 1 on its own; any unflagged file makes the subtree unclean), add the children's costs and file counts, and combine their clean flags. If the subtree has at least one file and is clean, one directory operation replaces everything, so the cost becomes 1. Otherwise a directory operation is forbidden and the cost is the sum. The root's cost is the answer. The traversal is done iteratively (an explicit stack produces a pre-order list that is processed in reverse) so depth 200 trees do not risk recursion limits."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/hints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "When is it allowed to operate on a directory at all?",
+      "If a subtree is allowed, is there ever a reason to use more than one operation inside it?",
+      "Compute, for each subtree, its cost, its file count and whether every file is flagged, from the children upward.",
+      "cost = 1 if the subtree has files and all are flagged, else (flagged direct files) + sum of children's costs; build a reverse pre-order with a stack to process children first."
+    ]
+  },
+  "id": "approach:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/invariants",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "When a directory is processed, all of its subdirectories have already been processed.",
+      "cost(dir) is the minimum number of allowed operations that encrypt exactly the flagged files in that subtree.",
+      "clean(dir) is true exactly when no unflagged file exists in the subtree."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6aa303e40ca9cc4e1c7901ad_6aa303f10ca9cc4e1c7901af_approach-native_v1.json",
+    "sha256": "a31f94bd3a732554ab425cfed2dbb1b3a63aa6f503d53e2b4790ca6cb1fbae8b",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+      "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+    }
+  ],
+  "problemId": "hack2hire:6aa303e40ca9cc4e1c7901ad",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/0/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "A directory operation encrypts every file below it, so it is legal only if every one of those files is flagged. When it is legal and the subtree contains at least one file, it covers everything with one operation, which can never be beaten. When it is illegal, the directory's flagged files and subtrees must be handled separately, and those parts are independent."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/0/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Consider a directory whose files are all flagged.",
+          "What happens to the parent if any child is not clean?"
+        ]
+      },
+      "id": "approach:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/0/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Take the first example and decide for each directory whether a directory operation is legal.",
+          "Count the operations needed if you only operate on files, and see how directories reduce it."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6aa303e40ca9cc4e1c7901ad_6aa303f10ca9cc4e1c7901af_approach-native_v1.json",
+        "sha256": "a31f94bd3a732554ab425cfed2dbb1b3a63aa6f503d53e2b4790ca6cb1fbae8b",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/0/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Independent subtrees never share operations.",
+          "Empty directories contribute nothing either way."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/0/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "When does a directory operation help, and when is it forbidden?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/0/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "This turns a global minimisation into a local rule per directory, which is exactly what a post-order traversal can evaluate."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/0/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/0/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "Find the rule for a single directory"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6aa303e40ca9cc4e1c7901ad_6aa303f10ca9cc4e1c7901af_python_v1.json",
+          "sha256": "73682314edd58fdd6c2f7cf3fb3b9385e799a44262eec277bd732733b8534923",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6aa303e40ca9cc4e1c7901ad_6aa303f10ca9cc4e1c7901af_javascript_v1.json",
+          "sha256": "52da0c4397ce42e7f38f6b1b96becf3f254cbfe4a7e02b63662b3bb42f5faddd",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/1/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "Push the root on a stack, pop nodes into an order list and push their subdirectories; reversing that list visits every child before its parent. For each node, count flagged direct files as cost, count files, and mark clean false on any unflagged file; then add each child's (cost, files, clean) from a map keyed by node identity. If files > 0 and clean, set cost to 1. Store the triple and return the root's cost."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/1/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The node order list must include every directory exactly once.",
+          "Remember that a directory with zero files must not cost 1."
+        ]
+      },
+      "id": "approach:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/1/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Build the pre-order list with an explicit stack.",
+          "Iterate it in reverse, combining direct files and children.",
+          "Apply the 'all flagged and non-empty' rule.",
+          "Return the root's cost."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6aa303e40ca9cc4e1c7901ad_6aa303f10ca9cc4e1c7901af_approach-native_v1.json",
+        "sha256": "a31f94bd3a732554ab425cfed2dbb1b3a63aa6f503d53e2b4790ca6cb1fbae8b",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/1/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Python uses id(node) as key; JavaScript can use the node object itself in a Map.",
+          "Popping child entries keeps the map small."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/1/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "How do you compute child results before the parent without recursion?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/1/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "The reverse pre-order guarantees children are ready, and identity keys leave the input untouched."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/1/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/1/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "Implement the iterative post-order"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/2/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "Check trees with empty directories, a fully flagged tree, a single unflagged file deep inside a mostly flagged tree, and a long chain of nested directories. For small trees compare against enumerating every subset of nodes to operate on."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/2/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Brute force over node subsets is feasible for about 14 nodes."
+        ]
+      },
+      "id": "approach:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/2/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Build a 200-level chain with one flagged file at the bottom; expect 1.",
+          "Add one unflagged file at the top of that chain; expect 1 still (operate on the child chain)."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6aa303e40ca9cc4e1c7901ad_6aa303f10ca9cc4e1c7901af_approach-native_v1.json",
+        "sha256": "a31f94bd3a732554ab425cfed2dbb1b3a63aa6f503d53e2b4790ca6cb1fbae8b",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/2/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "An unflagged file only blocks its ancestors, not its siblings' subtrees."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/2/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "Which trees could fool the rule?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/2/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "These shapes test the empty-subtree rule, propagation of the clean flag and deep nesting."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/2/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/stages/2/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "Test edge shapes"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/title",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+      }
+    ],
+    "status": "present",
+    "value": "Post-order aggregation: a fully flagged subtree costs one operation"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/approach/tradeoffs",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6aa303f10ca9cc4e1c7901af",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Recursive post-order is shorter to write, but deep trees can hit recursion limits in Python.",
+      "Brute-force subset enumeration (the cohort's reference) is exact but exponential; the greedy subtree rule is linear.",
+      "Using node identity as a map key avoids mutating the input tree to store results."
+    ]
+  },
+  "version": 1
+}

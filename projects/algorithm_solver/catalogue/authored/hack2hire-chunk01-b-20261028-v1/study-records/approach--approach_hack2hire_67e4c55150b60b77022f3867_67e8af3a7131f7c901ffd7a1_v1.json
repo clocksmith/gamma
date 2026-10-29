@@ -1,0 +1,1103 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/chooseWhen",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "You repeatedly need the best price on each side while inserting new orders.",
+      "Order count is large enough that a linear search for the best price is too slow.",
+      "Only aggregate quantities matter, not per-trade records."
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/contract--contract_hack2hire_67e4c55150b60b77022f3867_67e8af3a7131f7c901ffd7a1_authored-v1.json",
+    "sha256": "c9a48bf395d93eec76ad9a56e394e86641d3de3c9c939ae8dee93882310292c8",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/explanation",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+      }
+    ],
+    "status": "present",
+    "value": "Keep resting sells in a min-heap by price and resting buys in a max-heap (a min-heap on negated price). For each incoming order, look at the best price on the opposite side; while it crosses the incoming limit and the incoming order still has quantity, trade the smaller of the two remaining quantities, add it to the total, and pop the resting order once it is empty. Push any remainder onto the order's own side. Remaining quantities live in a separate array indexed from the heap entries so partial fills can be updated in place."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/hints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "What does an incoming buy need to know about the sells?",
+      "Only the cheapest sell matters at each step, so keep sells ordered by price.",
+      "Use a min-heap for sells and a max-heap for buys; keep matching while the top crosses.",
+      "Trade min(incoming, resting), pop resting orders that reach zero, and push the incoming remainder to its own heap."
+    ]
+  },
+  "id": "approach:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/invariants",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "After each order is processed the book never crosses: the best buy price is below the best sell price.",
+      "Every heap entry refers to a resting order with positive remaining quantity.",
+      "traded equals the sum of all trade quantities so far."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_67e4c55150b60b77022f3867_67e8af3a7131f7c901ffd7a1_approach-native_v1.json",
+    "sha256": "2b2b066891b0e56d09de1e8a820f9d9e5b0b61fad9fc712c7bea79db06c45fae",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+      "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+    }
+  ],
+  "problemId": "hack2hire:67e4c55150b60b77022f3867",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/0/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "The book holds unfilled remainders. Each new order needs the best opposite price repeatedly until it stops crossing, so the book should support fast minimum (for sells) and maximum (for buys)."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/0/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Which resting order would a buyer choose first?",
+          "Do you ever need anything except the best price?"
+        ]
+      },
+      "id": "approach:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/0/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Simulate the first example by hand, writing the book after each order.",
+          "Note which operations you performed on the book."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_67e4c55150b60b77022f3867_67e8af3a7131f7c901ffd7a1_approach-native_v1.json",
+        "sha256": "2b2b066891b0e56d09de1e8a820f9d9e5b0b61fad9fc712c7bea79db06c45fae",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/0/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "After processing, the best buy is always below the best sell; otherwise they would have traded.",
+          "Only quantities need to be summed."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/0/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "What state must persist between orders, and what query is needed for each new order?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/0/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "Recognising the repeated best-price query points straight to priority queues."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/0/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/0/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "Model the order book"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_67e4c55150b60b77022f3867_67e8af3a7131f7c901ffd7a1_python_v1.json",
+          "sha256": "cee271c8b4f491f59ad4f08cd3d3c81bd1bd74c2b6602c94f3a969d0728d7c31",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_67e4c55150b60b77022f3867_67e8af3a7131f7c901ffd7a1_javascript_v1.json",
+          "sha256": "3928dd512cfefe7ee5fb69d421c76f2fa0009461686346c0b74ca9b10282fe42",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/1/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "Store (key, index) in each heap, where key is the price for sells and the negated price for buys, and keep remaining[index] in a list. In the matching loop take = min(quantity, remaining[index]); subtract from both, add to traded, and pop the heap top when its remaining reaches zero. After the loop push a remainder with a new index."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/1/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Do not push the incoming order before it has finished matching.",
+          "For buys the crossing test is sellPrice <= price; for sells it is -key >= price."
+        ]
+      },
+      "id": "approach:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/1/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Pick the opposite heap and crossing test based on side.",
+          "Loop while quantity > 0, the heap is non-empty and the top crosses.",
+          "Update traded, quantity and remaining[index]; pop when empty.",
+          "Push (key, newIndex) for any remainder."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_67e4c55150b60b77022f3867_67e8af3a7131f7c901ffd7a1_approach-native_v1.json",
+        "sha256": "2b2b066891b0e56d09de1e8a820f9d9e5b0b61fad9fc712c7bea79db06c45fae",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/1/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Python uses heapq; the JavaScript candidate implements a small binary heap with a comparator.",
+          "Negating buy prices turns a min-heap into a max-heap."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/1/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "How do you handle partial fills without re-inserting heap entries?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/1/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "Separating quantity from heap order keeps the heap entries immutable, which heaps require."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/1/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3",
+          "R4",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/1/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "Implement matching with two heaps"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/2/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "Test non-crossing orders, an order that sweeps several price levels, partial fills on both sides, equal prices (which do cross), and long sequences compared against a linear-scan book."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/2/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Use small prices so crossings are frequent in random tests."
+        ]
+      },
+      "id": "approach:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/2/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Try buy 5x1 then sell 5x1 and expect 1.",
+          "Compare totals with a brute-force book on random small inputs."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:67e4c55150b60b77022f3867:67e8af3a7131f7c901ffd7a1:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_67e4c55150b60b77022f3867_67e8af3a7131f7c901ffd7a1_approach-native_v1.json",
+        "sha256": "2b2b066891b0e56d09de1e8a820f9d9e5b0b61fad9fc712c7bea79db06c45fae",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/2/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Totals above 2^31 occur at maximum size; make sure no 32-bit arithmetic is used."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/2/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "Which order sequences stress the matching loop?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/2/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "Equal-price crossing and multi-level sweeps are where boundary mistakes show up."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/2/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/stages/2/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+          }
+        ],
+        "status": "present",
+        "value": "Check crossing and partial-fill cases"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/title",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+      }
+    ],
+    "status": "present",
+    "value": "Two heaps as an order book"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67e8af3a7131f7c901ffd7a1/approach/tradeoffs",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:67e8af3a7131f7c901ffd7a1",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67e8af3a7131f7c901ffd7a1.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4c355e6349c2f00eed3c7a628dd91a217764a53a7cfe0d488a7728d735e3440b"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67e8af3a7131f7c901ffd7a1.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e2017f2a0cbfaa19c1c5690e10c89032fcc9f21bb9273bebc56554b4e56a9bc1"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Heaps give O(log n) best-price access but cannot cancel arbitrary orders cheaply; a sorted map would support that at similar cost.",
+      "Storing quantities outside the heap avoids re-pushing partially filled orders.",
+      "A linear-scan book is simpler and correct but O(n^2) in the worst case."
+    ]
+  },
+  "version": 1
+}

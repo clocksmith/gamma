@@ -1,0 +1,146 @@
+{
+  "approachId": "approach:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:v1",
+  "complexityClaims": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/complexity/python",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69361ab01553144e303f6805/complexity_target",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/69361ab01553144e303f6805-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c86c6c50773aa385d9d670eda3218c5317b5d16b33b85f46f343619e6fe116da"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "bound": "O(N log N + 31 * k * log m)",
+        "resource": "time",
+        "where": "N total values, k workers, m largest slice; 31 is the number of value-range halvings"
+      },
+      {
+        "bound": "O(N)",
+        "resource": "space",
+        "where": "sorted copies of the slices"
+      }
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/contract--contract_hack2hire_6935ba711553144e303f6769_69361ab01553144e303f6805_authored-v1.json",
+    "sha256": "e1a30fa1003a97f8ee84bcf3796c8733dbcd04edfa5b2cf4950f59ad04f1c9c0",
+    "version": 1
+  },
+  "documentSchema": null,
+  "executionKind": "code",
+  "externalLocator": {
+    "reason": "The source file is in this repository; no external locator.",
+    "status": "not-applicable"
+  },
+  "file": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "bytes": 926,
+      "mediaType": "text/x-python",
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+      "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+    }
+  },
+  "id": "artifact:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:python:v1",
+  "kind": "artifact",
+  "language": "python",
+  "nativeMetadata": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/69361ab01553144e303f6805-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c86c6c50773aa385d9d670eda3218c5317b5d16b33b85f46f343619e6fe116da"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "comparison": "exact typed JSON result; JavaScript compares number values (no int/float distinction)",
+      "effects": "arguments unchanged; fresh returned containers",
+      "entrypoint": "solve",
+      "inference": {
+        "basis_fields": [
+          "contentPreview",
+          "algorithmTags",
+          "title"
+        ],
+        "class": "inference, not the owner/official specification",
+        "inferred_at": "2026-10-28",
+        "inferred_by": "claude-opus-5-5 subagent"
+      },
+      "inferred_interface": {
+        "name": "findClusterMedian",
+        "params": [
+          {
+            "name": "slices",
+            "type": "integer[][] (one per worker)"
+          }
+        ],
+        "return": {
+          "type": "number"
+        }
+      },
+      "language": "python",
+      "named_wrapper": "Solution.findClusterMedian",
+      "parameters": [
+        "slices"
+      ],
+      "problem_uid": "hack2hire:69361ab01553144e303f6805",
+      "qualification": {
+        "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+        "status": "unknown"
+      },
+      "schema": "gamma.authored-scalar-semantics.v1",
+      "source_reasoning": {
+        "candidate_design": "local sort per worker; value-range binary search for the k-th smallest with per-worker bisect counts",
+        "complexity_target": "O(N log N + log(range) * k * log m) time/O(N) space",
+        "reference": "sort the flattened data, exact Fraction mean of the middle pair"
+      },
+      "source_sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5",
+      "spec_basis": "inferred"
+    }
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+      "repository": "gamma",
+      "revision": null,
+      "selector": null,
+      "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+    }
+  ],
+  "problemId": "hack2hire:6935ba711553144e303f6769",
+  "schema": "study.record.v1",
+  "title": "Find Cluster Mode and Median (variant 2) · python candidate (qualification unknown)",
+  "type": "implementation",
+  "version": 1
+}

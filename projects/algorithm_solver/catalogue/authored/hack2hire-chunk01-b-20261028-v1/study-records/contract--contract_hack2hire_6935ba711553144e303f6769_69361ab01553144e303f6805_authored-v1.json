@@ -1,0 +1,422 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/assumptions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/9",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The whole specification is an inference, not the official Hack2Hire statement (inference, not the owner/official specification; inferred by claude-opus-5-5 subagent on 2026-10-28).",
+        "basis": "Only a group-level partial preview was available (fields used: contentPreview, algorithmTags, title; preview response sha256 8ecde079e4bd7974ed43b2f29d82eda47286c938955c8f6d98bd96bc75cda23f, content sha256 01f1de0b878d39716274ccc1f86fa959f40c43b3c789d872138c7d009b3e9dc9). No variant-specific statement, example or constraint list exists locally."
+      },
+      {
+        "assumption": "Open inference points recorded by the cohort: High: the preview only describes the mode; the even-count convention (mean vs lower median) is a guess.",
+        "basis": "contracts.json inference_uncertainty for this variant."
+      },
+      {
+        "assumption": "The even-count median is the mean of the two middle values, not the lower middle.",
+        "basis": "contracts.json inference_uncertainty."
+      },
+      {
+        "assumption": "This median variant is itself an inference; the preview only describes the mode.",
+        "basis": "contracts.json inference_uncertainty."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/clarifyingQuestions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "No; it is exact, which is either an integer or a value ending in .5.",
+        "basis": "contracts.json inferred_spec.",
+        "question": "Is the even-count result rounded?"
+      },
+      {
+        "answer": "As a Number; comparison does not distinguish 2 from 2.0.",
+        "basis": "contracts.json comparison field.",
+        "question": "How does JavaScript represent the result?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/69361ab01553144e303f6805-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c86c6c50773aa385d9d670eda3218c5317b5d16b33b85f46f343619e6fe116da"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/69361ab01553144e303f6805-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "3d796238e16c3b7cad5162f1382b33b08f35be19387e906863be0a8255bccb8c"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result; JavaScript compares number values (no int/float distinction)"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/constraints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/9/inferred_domain",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2234246083fef67b55d3fa4e8032b87441773bc5593292e5e6e241d220b0df0d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "1 to 100 slices, one per worker; slice lengths differ by at most 1.",
+      "1 to 2*10^5 values in total, each in [-10^9, 10^9]."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/69361ab01553144e303f6805-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c86c6c50773aa385d9d670eda3218c5317b5d16b33b85f46f343619e6fe116da"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/69361ab01553144e303f6805-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "3d796238e16c3b7cad5162f1382b33b08f35be19387e906863be0a8255bccb8c"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh returned containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/examples",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "slices": [
+            [
+              5,
+              1
+            ],
+            [
+              3
+            ]
+          ]
+        },
+        "explanation": "Sorted values 1, 3, 5; the middle one is 3.",
+        "output": 3
+      },
+      {
+        "arguments": {
+          "slices": [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ]
+        },
+        "explanation": "Sorted 1, 2, 3, 4; the mean of 2 and 3 is 2.5.",
+        "output": 2.5
+      },
+      {
+        "arguments": {
+          "slices": [
+            [
+              -4,
+              10
+            ],
+            [
+              2,
+              6
+            ]
+          ]
+        },
+        "explanation": "Sorted -4, 2, 6, 10; the mean of 2 and 6 is exactly 4.",
+        "output": 4
+      }
+    ]
+  },
+  "id": "contract:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/interfaces/python/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(slices: list[list[int]]) -> int | float; class Solution: def findClusterMedian(self, slices) -> int | float"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/9/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findClusterMedian",
+          "params": [
+            {
+              "name": "slices",
+              "type": "integer[][] (one per worker)"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/interfaces/javascript/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(slices) -> number; module.exports = solve; module.exports.findClusterMedian(slices) -> number"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/9/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findClusterMedian",
+          "params": [
+            {
+              "name": "slices",
+              "type": "integer[][] (one per worker)"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/9",
+      "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+    }
+  ],
+  "problemId": "hack2hire:6935ba711553144e303f6769",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/requirements",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/9",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/69361ab01553144e303f6805-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c86c6c50773aa385d9d670eda3218c5317b5d16b33b85f46f343619e6fe116da"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/69361ab01553144e303f6805-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "3d796238e16c3b7cad5162f1382b33b08f35be19387e906863be0a8255bccb8c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "For an odd total, return the middle value of the sorted combined data."
+      },
+      {
+        "id": "R2",
+        "text": "For an even total, return the mean of the two middle values: an integer when exact, otherwise a half-integer number."
+      },
+      {
+        "id": "R3",
+        "text": "The result must not depend on how values are distributed among workers."
+      },
+      {
+        "id": "R4",
+        "text": "The input slices are not modified."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/statement",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/9",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "With the same per-worker slices, return the median of all values. If the total count is odd it is the middle value; if even it is the average of the two middle values, which is an integer when that average is exact and otherwise ends in .5. The candidate simulates a coordinator that binary-searches over the value range and asks each worker how many of its values are at most the probe."
+  },
+  "variantId": "69361ab01553144e303f6805",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/9",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Find Cluster Mode and Median (variant 2)"
+  },
+  "version": 1
+}

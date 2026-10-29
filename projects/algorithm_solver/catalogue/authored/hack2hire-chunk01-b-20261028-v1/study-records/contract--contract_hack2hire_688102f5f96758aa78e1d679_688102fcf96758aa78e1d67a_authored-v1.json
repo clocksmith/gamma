@@ -1,0 +1,453 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/688102fcf96758aa78e1d67a/assumptions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/15",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The whole specification is an inference, not the official Hack2Hire statement (inference, not the owner/official specification; inferred by claude-opus-5-5 subagent on 2026-10-28).",
+        "basis": "Only a group-level partial preview was available (fields used: contentPreview, algorithmTags, title; preview response sha256 4962fc04c0ef28e5db9375bae5b1ee026e71410bae3b45919f9240ecf8640332, content sha256 b6256862317ff29754042819a3687ee943ae246466159b3346c9c7eb6e21ee7e). No variant-specific statement, example or constraint list exists locally."
+      },
+      {
+        "assumption": "Open inference points recorded by the cohort: Wait definition (completion minus arrival, as in the referenced classic) and tie order are inferred; the threshold might be a float.",
+        "basis": "contracts.json inference_uncertainty for this variant."
+      },
+      {
+        "assumption": "The average comparison is done exactly as total <= maxAverageWait * n to avoid division.",
+        "basis": "Both candidates compare integer totals; design.json names the integer comparison."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/688102fcf96758aa78e1d67a/clarifyingQuestions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "Yes; it is completion minus arrival.",
+        "basis": "contracts.json inference_uncertainty names this convention.",
+        "question": "Does wait include the order's own duration?"
+      },
+      {
+        "answer": "With one shopper per order every wait equals its duration, the minimum possible; if that average is still too high nothing helps.",
+        "basis": "Candidate checks total_wait(n) first.",
+        "question": "Why can the answer be -1?"
+      },
+      {
+        "answer": "Assumed so here; the original might allow fractions.",
+        "basis": "inference_uncertainty.",
+        "question": "Is maxAverageWait an integer?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/688102fcf96758aa78e1d67a-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "531a5d8c29ea1cde4b443f022e463dd20f9c479a7bfec7edb99c5f05d85ebae1"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/688102fcf96758aa78e1d67a-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "8ba6114163d0155ff9b120773fdd430cf53e033b3db58fdac6793c92c40b031a"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/688102fcf96758aa78e1d67a/constraints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/15/inferred_domain",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2234246083fef67b55d3fa4e8032b87441773bc5593292e5e6e241d220b0df0d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "1 to 10^4 orders.",
+      "Duration 1..10^4.",
+      "Arrival time 0..10^9.",
+      "maxAverageWait 0..10^9 (integer)."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/688102fcf96758aa78e1d67a-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "531a5d8c29ea1cde4b443f022e463dd20f9c479a7bfec7edb99c5f05d85ebae1"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/688102fcf96758aa78e1d67a-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "8ba6114163d0155ff9b120773fdd430cf53e033b3db58fdac6793c92c40b031a"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh returned containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/688102fcf96758aa78e1d67a/examples",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/688102fcf96758aa78e1d67a.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a7121285b8e37703dfceec8908eb12451b5f41346a46dab9fd300e1c771a8384"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/688102fcf96758aa78e1d67a.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "8ce518845da043ceabd98c229d463871f05025b27f0439f53dacaddff180ca1f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "maxAverageWait": 5,
+          "orders": [
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ]
+        },
+        "explanation": "Three shoppers let every order wait exactly 5. With two, the third order waits 10, total 20 > 15.",
+        "output": 3
+      },
+      {
+        "arguments": {
+          "maxAverageWait": 4,
+          "orders": [
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ]
+        },
+        "explanation": "Even with three shoppers the average is 5 > 4.",
+        "output": -1
+      },
+      {
+        "arguments": {
+          "maxAverageWait": 3,
+          "orders": [
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              10
+            ]
+          ]
+        },
+        "explanation": "One shopper: waits 2, 3 and 2, total 7 <= 9.",
+        "output": 1
+      }
+    ]
+  },
+  "id": "contract:hack2hire:688102f5f96758aa78e1d679:688102fcf96758aa78e1d67a:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/688102fcf96758aa78e1d67a/interfaces/python/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/688102fcf96758aa78e1d67a.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a7121285b8e37703dfceec8908eb12451b5f41346a46dab9fd300e1c771a8384"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(orders: list[list[int]], maxAverageWait: int) -> int; class Solution: def minShoppers(self, orders, maxAverageWait) -> int"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/15/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "minShoppers",
+          "params": [
+            {
+              "name": "orders",
+              "type": "integer[][] ([duration, arrivalTime])"
+            },
+            {
+              "name": "maxAverageWait",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/688102fcf96758aa78e1d67a/interfaces/javascript/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/688102fcf96758aa78e1d67a.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "8ce518845da043ceabd98c229d463871f05025b27f0439f53dacaddff180ca1f"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(orders, maxAverageWait) -> number; module.exports = solve; module.exports.minShoppers(orders, maxAverageWait) -> number"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/15/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "minShoppers",
+          "params": [
+            {
+              "name": "orders",
+              "type": "integer[][] ([duration, arrivalTime])"
+            },
+            {
+              "name": "maxAverageWait",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/15",
+      "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+    }
+  ],
+  "problemId": "hack2hire:688102f5f96758aa78e1d679",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/688102fcf96758aa78e1d67a/requirements",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/15",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/688102fcf96758aa78e1d67a-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "531a5d8c29ea1cde4b443f022e463dd20f9c479a7bfec7edb99c5f05d85ebae1"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/688102fcf96758aa78e1d67a-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "8ba6114163d0155ff9b120773fdd430cf53e033b3db58fdac6793c92c40b031a"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "Serve orders in order of arrival, ties by input index."
+      },
+      {
+        "id": "R2",
+        "text": "Assign each order to the earliest-free shopper; it starts at max(arrival, freeTime) and completes after its duration."
+      },
+      {
+        "id": "R3",
+        "text": "Wait is completion time minus arrival time; the average is the total wait divided by the number of orders."
+      },
+      {
+        "id": "R4",
+        "text": "Return the minimum shopper count with average wait <= maxAverageWait, or -1 if n shoppers are not enough."
+      },
+      {
+        "id": "R5",
+        "text": "Do not modify the input."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/688102fcf96758aa78e1d67a/statement",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/15",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Each order has a duration and an arrival time. Orders are handled first come, first served (by arrival time, ties broken by their position in the input). With a given number of shoppers, each order is assigned to the shopper who becomes free earliest and starts at the later of its arrival time and that shopper's free time. An order's wait is its completion time minus its arrival time. Find the smallest number of shoppers for which the average wait over all orders is at most maxAverageWait, or return -1 if even one shopper per order cannot meet it."
+  },
+  "variantId": "688102fcf96758aa78e1d67a",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/15",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Find Minimal Shoppers (variant 1)"
+  },
+  "version": 1
+}
