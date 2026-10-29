@@ -1,0 +1,2438 @@
+{
+ "schema": "gamma.hack2hire-chunk15-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:67cf33498f73eb6319edd230": {
+   "constraints": [
+    "1 <= words.length <= 1e5",
+    "1 <= L <= 10, every word has length L",
+    "words contain lowercase letters only"
+   ],
+   "clarifyingQuestions": [
+    "Do all strings have the same length?",
+    "May the chosen strings be reordered freely?",
+    "Is the empty selection allowed (answer 0)?"
+   ],
+   "hints": [
+    "With equal lengths, the word in block i must be the reverse of the word in block m - 1 - i.",
+    "Count words; a word w and its reverse r != w form min(count[w], count[r]) pairs.",
+    "A palindromic word pairs with itself count // 2 times; one leftover palindromic word may sit in the middle."
+   ],
+   "invariants": [
+    "each word entry is used at most once",
+    "the chosen blocks read the same in both directions"
+   ],
+   "chooseWhen": [
+    "Pairing items with mirror partners under multiplicities"
+   ],
+   "tradeoffs": [
+    "Counting is linear; exhaustive search is only usable for a handful of words"
+   ],
+   "variantLabel": "Inferred single variant: equal-length words paired with their reverses",
+   "examples": [
+    {
+     "input": [
+      [
+       "a"
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "caa",
+       "aab",
+       "cca",
+       "cca",
+       "bcb",
+       "caa"
+      ]
+     ],
+     "output": 3,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:685c61e88515b8a3b59d19f9": {
+   "constraints": [
+    "0 <= orders.length <= 1e5",
+    "1 <= quantity <= 1000",
+    "0 <= timestamp <= 1e13",
+    "1 <= unitPrice <= 1e4",
+    "0 <= tiers.length <= 20",
+    "2 <= minQuantity <= 1e8",
+    "0 <= discountPercent <= 100"
+   ],
+   "clarifyingQuestions": [
+    "Is \"within 10 minutes\" measured between consecutive orders (chaining) or from the first order of a group?",
+    "Where do unit prices and tier thresholds come from?",
+    "How is a fractional discounted price rounded?",
+    "Is the answer a total, a per-group list or a per-fruit breakdown?"
+   ],
+   "hints": [
+    "Group orders by fruit with a hash map, then sort each fruit's orders by timestamp.",
+    "Start a new group whenever the gap to the previous order exceeds 600000.",
+    "For a group of two or more orders, find the last tier with minQuantity <= Q by binary search and apply floor(Q * price * (100 - percent) / 100)."
+   ],
+   "invariants": [
+    "every order belongs to exactly one group",
+    "a single-order group pays full price"
+   ],
+   "chooseWhen": [
+    "Session-style grouping of timestamped events per key"
+   ],
+   "tradeoffs": [
+    "Sorting per key costs n log n; the pairwise component reference is quadratic"
+   ],
+   "variantLabel": "Inferred single variant: chained 10-minute purchase groups with tiered discounts",
+   "examples": [
+    {
+     "input": [
+      [],
+      [
+       [
+        "apple",
+        23
+       ]
+      ],
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "apple",
+        "15",
+        "1800005"
+       ],
+       [
+        "apple",
+        "26",
+        "1200002"
+       ],
+       [
+        "apple",
+        "19",
+        "600001"
+       ],
+       [
+        "apple",
+        "9",
+        "1800002"
+       ],
+       [
+        "apple",
+        "25",
+        "900001"
+       ],
+       [
+        "apple",
+        "15",
+        "2"
+       ],
+       [
+        "apple",
+        "28",
+        "2"
+       ],
+       [
+        "apple",
+        "19",
+        "900002"
+       ],
+       [
+        "apple",
+        "1",
+        "600000"
+       ],
+       [
+        "apple",
+        "21",
+        "1"
+       ]
+      ],
+      [
+       [
+        "apple",
+        5
+       ]
+      ],
+      [
+       [
+        3,
+        46
+       ],
+       [
+        15,
+        10
+       ]
+      ]
+     ],
+     "output": 801,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c86e64df5a6365aa774b11": {
+   "constraints": [
+    "1 <= roads.length <= 1e5",
+    "1 <= duration <= 1e4",
+    "0 <= friends.length <= 1e5",
+    "location and friend names are 1 to 10 letters or digits"
+   ],
+   "clarifyingQuestions": [
+    "What is asked: who picks up whom, the arrival time, or the meeting point of the two routes?",
+    "If both drivers pass a home, who picks the friend up?",
+    "How are ties broken?",
+    "Can a friend live at a starting location?"
+   ],
+   "hints": [
+    "Each location has one outgoing road, so a hash map from location to road gives the next step in O(1).",
+    "Walk each route from its start and record the arrival time at every location.",
+    "For each friend compare the two arrival times (missing = never), then sort each driver's friends by arrival time with input order as tie break."
+   ],
+   "invariants": [
+    "arrival times strictly increase along a route",
+    "every friend is listed exactly once"
+   ],
+   "chooseWhen": [
+    "Functional-graph walks with per-node timestamps"
+   ],
+   "tradeoffs": [
+    "Hash-map walks are linear; repeated road scans are quadratic but trivially correct"
+   ],
+   "variantLabel": "Inferred single variant: assign each friend to the first driver to pass their home",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "P",
+        "Campground",
+        1
+       ],
+       [
+        "Q",
+        "P",
+        1
+       ]
+      ],
+      [
+       [
+        "f",
+        "P"
+       ]
+      ],
+      "P",
+      "Q"
+     ],
+     "output": [
+      [
+       "f"
+      ],
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "L5",
+        "Campground",
+        1
+       ],
+       [
+        "L0",
+        "L1",
+        3
+       ],
+       [
+        "L6",
+        "Campground",
+        1
+       ],
+       [
+        "L7",
+        "Campground",
+        2
+       ],
+       [
+        "L1",
+        "L7",
+        3
+       ],
+       [
+        "L3",
+        "Campground",
+        2
+       ],
+       [
+        "L4",
+        "Campground",
+        2
+       ],
+       [
+        "L2",
+        "Campground",
+        3
+       ]
+      ],
+      [
+       [
+        "F0",
+        "L7"
+       ],
+       [
+        "F1",
+        "L4"
+       ],
+       [
+        "F2",
+        "L4"
+       ],
+       [
+        "F3",
+        "L7"
+       ],
+       [
+        "F4",
+        "L4"
+       ],
+       [
+        "F5",
+        "L7"
+       ],
+       [
+        "F6",
+        "L4"
+       ]
+      ],
+      "L7",
+      "L4"
+     ],
+     "output": [
+      [
+       "F0",
+       "F3",
+       "F5"
+      ],
+      [
+       "F1",
+       "F2",
+       "F4",
+       "F6"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b7856c8a0eeb9897a8d239": {
+   "constraints": [
+    "0 <= leases.length <= 1e5",
+    "0 <= start < end <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are car ids 0-based or 1-based?",
+    "Which free car is chosen: the smallest id or the one free longest?",
+    "In what order are reservations processed when starts tie?",
+    "Is the fleet size limited?"
+   ],
+   "hints": [
+    "Sort reservations by start time, keeping the input index for ties and for the output.",
+    "Before each reservation, release every busy car whose end <= start into a free-id min-heap.",
+    "Take the smallest free id, or open a new car; push (end, id) onto the busy heap."
+   ],
+   "invariants": [
+    "no two overlapping reservations share a car",
+    "the number of cars equals the maximum overlap"
+   ],
+   "chooseWhen": [
+    "Resource assignment with reuse of the lowest identifier"
+   ],
+   "tradeoffs": [
+    "Two heaps give n log n; a linear scan over cars is O(n * cars)"
+   ],
+   "variantLabel": "Inferred level 1: smallest free car id, unbounded fleet",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        19,
+        25
+       ],
+       [
+        18,
+        23
+       ],
+       [
+        10,
+        15
+       ],
+       [
+        6,
+        10
+       ],
+       [
+        9,
+        14
+       ],
+       [
+        1,
+        2
+       ],
+       [
+        17,
+        18
+       ],
+       [
+        13,
+        15
+       ],
+       [
+        8,
+        11
+       ],
+       [
+        8,
+        10
+       ],
+       [
+        7,
+        12
+       ],
+       [
+        15,
+        22
+       ],
+       [
+        13,
+        19
+       ],
+       [
+        18,
+        20
+       ]
+      ]
+     ],
+     "output": [
+      3,
+      2,
+      1,
+      1,
+      5,
+      1,
+      2,
+      2,
+      3,
+      4,
+      2,
+      1,
+      3,
+      4
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69b785888a0eeb9897a8d23b": {
+   "constraints": [
+    "0 <= leases.length <= 1e5",
+    "0 <= start < end <= 1e9",
+    "1 <= cars <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Are car ids 0-based or 1-based?",
+    "Which free car is chosen: the smallest id or the one free longest?",
+    "In what order are reservations processed when starts tie?",
+    "Is the fleet size limited?"
+   ],
+   "hints": [
+    "Seed a free-id min-heap with 1..cars and process reservations by (start, index).",
+    "Release busy cars whose end <= start before each reservation.",
+    "When the free heap is empty, record -1 and do not occupy anything."
+   ],
+   "invariants": [
+    "at most cars reservations are active at once",
+    "a rejected reservation never blocks later ones"
+   ],
+   "chooseWhen": [
+    "Admission control with a fixed resource pool"
+   ],
+   "tradeoffs": [
+    "A heap of free ids avoids scanning all cars per reservation"
+   ],
+   "variantLabel": "Inferred level 2: fixed fleet size, rejected reservations get -1",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        9,
+        12
+       ],
+       [
+        1,
+        5
+       ],
+       [
+        13,
+        14
+       ],
+       [
+        9,
+        15
+       ],
+       [
+        15,
+        20
+       ],
+       [
+        19,
+        22
+       ],
+       [
+        8,
+        14
+       ],
+       [
+        15,
+        16
+       ],
+       [
+        16,
+        19
+       ],
+       [
+        17,
+        19
+       ],
+       [
+        13,
+        18
+       ],
+       [
+        13,
+        14
+       ],
+       [
+        8,
+        12
+       ],
+       [
+        5,
+        10
+       ]
+      ],
+      1
+     ],
+     "output": [
+      -1,
+      1,
+      1,
+      -1,
+      1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69efd6f096981f58ae1f6dcf": {
+   "constraints": [
+    "1 <= n <= 2e5",
+    "p is a permutation of 1..n"
+   ],
+   "clarifyingQuestions": [
+    "Is the output a boolean list or a binary string?",
+    "Is p guaranteed to be a permutation?"
+   ],
+   "hints": [
+    "Values 1..k must occupy a window of exactly k positions.",
+    "Keep the leftmost and rightmost positions among values 1..k as k grows.",
+    "The answer for k is true exactly when right - left + 1 == k."
+   ],
+   "invariants": [
+    "left and right bound every position of 1..k",
+    "the span never shrinks as k grows"
+   ],
+   "chooseWhen": [
+    "Checking contiguity of a growing value set"
+   ],
+   "tradeoffs": [
+    "The span test is linear; window sorting is cubic"
+   ],
+   "variantLabel": "Inferred single variant: span of the positions of 1..k",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ]
+     ],
+     "output": [
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12
+      ]
+     ],
+     "output": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:690425df4845d25b8e994896": {
+   "constraints": [
+    "2 <= points.length <= 5e4",
+    "-1e7 <= x, y <= 1e7",
+    "points are pairwise different"
+   ],
+   "clarifyingQuestions": [
+    "Can two entries be the same point?",
+    "Is the answer a float, the squared distance or a rounded value?",
+    "Are coordinates integers?"
+   ],
+   "hints": [
+    "Sort by x, split at the median and solve both halves.",
+    "Points closer than the best distance d across the split lie in a strip of width 2d around the median x.",
+    "Sorted by y, each strip point only needs comparing with the next few strip points whose y differs by less than d; use squared integer distances and take one square root at the end."
+   ],
+   "invariants": [
+    "best is the minimum squared distance among pairs examined so far",
+    "each recursion returns its points sorted by y"
+   ],
+   "chooseWhen": [
+    "Geometric nearest-pair queries on large point sets"
+   ],
+   "tradeoffs": [
+    "n log n divide and conquer versus n^2 brute force; a grid hash is simpler but needs care with distribution"
+   ],
+   "variantLabel": "Inferred single variant: classic closest pair by divide and conquer",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0,
+        0
+       ],
+       [
+        3,
+        4
+       ]
+      ]
+     ],
+     "output": 5.0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        -2042898,
+        -4152517
+       ],
+       [
+        5183251,
+        2486864
+       ],
+       [
+        -9612791,
+        -4678367
+       ],
+       [
+        8831948,
+        -7658040
+       ],
+       [
+        4556242,
+        612733
+       ],
+       [
+        2275704,
+        2029633
+       ],
+       [
+        -9583331,
+        -4113590
+       ],
+       [
+        -5367121,
+        -9855395
+       ],
+       [
+        7411674,
+        -3053824
+       ],
+       [
+        -4579551,
+        -7596522
+       ],
+       [
+        -8120357,
+        -8818805
+       ],
+       [
+        7734269,
+        2684319
+       ],
+       [
+        -3662123,
+        4987517
+       ],
+       [
+        786642,
+        -6717076
+       ]
+      ]
+     ],
+     "output": 565544.8269845636,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69c42c3e21f6ab4226965a1f": {
+   "constraints": [
+    "1 <= trees.length <= 10",
+    "each tree has at most 1e4 nodes",
+    "-1e4 <= node value <= 1e4",
+    "level-order lists use null for absent children and have no trailing null"
+   ],
+   "clarifyingQuestions": [
+    "How are trees encoded?",
+    "Do later source trees see sums already added from earlier ones?",
+    "Is the result returned in level order with trailing nulls removed?"
+   ],
+   "hints": [
+    "Decode level-order lists into left/right child index arrays.",
+    "Walk a source tree and the result tree together breadth-first, starting at the roots.",
+    "At each source node add value + children values to the result node, creating result nodes (value 0) where missing; serialise in level order and trim trailing nulls."
+   ],
+   "invariants": [
+    "source trees are read only",
+    "every source position exists in the result after its pass"
+   ],
+   "chooseWhen": [
+    "Overlaying positional data across tree structures"
+   ],
+   "tradeoffs": [
+    "A paired breadth-first walk is linear; path-string maps are simple but cost O(depth) per node"
+   ],
+   "variantLabel": "Inferred single variant: positional merge of neighbor sums into the last tree",
+   "examples": [
+    {
+     "input": [
+      [
+       []
+      ]
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        -18,
+        12,
+        null,
+        null,
+        -3,
+        -3,
+        3,
+        -7,
+        null,
+        -20,
+        null,
+        null,
+        null,
+        -13
+       ],
+       [
+        2,
+        7,
+        4,
+        -8,
+        null,
+        null,
+        null,
+        -16,
+        null,
+        null,
+        -10,
+        null,
+        -16
+       ],
+       [
+        6,
+        -5,
+        -9,
+        16
+       ],
+       [
+        17,
+        -1,
+        -12,
+        -20,
+        null,
+        -4,
+        -14,
+        9,
+        null,
+        null,
+        null,
+        null,
+        null,
+        -14
+       ]
+      ]
+     ],
+     "output": [
+      16,
+      18,
+      -17,
+      -28,
+      -3,
+      -4,
+      -14,
+      -17,
+      null,
+      -10,
+      -17,
+      null,
+      null,
+      null,
+      null,
+      -14,
+      -26,
+      -7,
+      null,
+      -33,
+      null,
+      null,
+      null,
+      null,
+      -16,
+      null,
+      null,
+      -13
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6775b4fd0d31dc201f712039": {
+   "constraints": [
+    "1 <= intervals.length <= 1e5",
+    "1 <= intervals[i] <= 1e5",
+    "1 <= goal <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is a task first done on day 1 or on day intervals[i]?",
+    "Do several completions of different tasks on one day all count?"
+   ],
+   "hints": [
+    "By day d, task i has run floor((d - 1) / intervals[i]) + 1 times.",
+    "That total is non-decreasing in d, so binary search the smallest d reaching goal.",
+    "Upper bound: the fastest task alone reaches goal by day 1 + (goal - 1) * min(intervals); stop summing as soon as the running total reaches goal."
+   ],
+   "invariants": [
+    "the count function is monotone in d",
+    "the answer lies between 1 and the single-task bound"
+   ],
+   "chooseWhen": [
+    "Smallest time to reach a production target with periodic producers"
+   ],
+   "tradeoffs": [
+    "Binary search is logarithmic in the answer; a heap simulation is linear in goal"
+   ],
+   "variantLabel": "Inferred single variant: binary search on the day count",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5,
+       8,
+       7,
+       2,
+       1
+      ],
+      53
+     ],
+     "output": 26,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:692fc0f4cd79766b0b3101a0": {
+   "constraints": [
+    "0 <= intervals.length <= 1e5",
+    "-1e9 <= l <= r <= 1e9",
+    "-1e9 <= x <= 1e9",
+    "at most 1e5 count calls"
+   ],
+   "clarifyingQuestions": [
+    "What are the method names and signatures?",
+    "Can intervals be added after construction?",
+    "Are endpoints inclusive?"
+   ],
+   "hints": [
+    "An interval covers x when it has started (l <= x) and not yet ended (r >= x).",
+    "Sort the starts and the ends separately once.",
+    "Answer = (number of starts <= x) - (number of ends < x), each found by binary search."
+   ],
+   "invariants": [
+    "every interval with l <= x is counted once by the first term",
+    "intervals with r < x also have l <= x, so subtracting them is exact"
+   ],
+   "chooseWhen": [
+    "Static stabbing queries over many intervals"
+   ],
+   "tradeoffs": [
+    "Two sorted arrays answer in O(log n); a segment tree would also support updates"
+   ],
+   "variantLabel": "Inferred single variant: static stabbing counts",
+   "examples": [
+    {
+     "input": [
+      [
+       "IntervalCounter",
+       "count"
+      ],
+      [
+       [
+        []
+       ],
+       [
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "IntervalCounter",
+       "count",
+       "count",
+       "count",
+       "count",
+       "count",
+       "count",
+       "count",
+       "count",
+       "count",
+       "count"
+      ],
+      [
+       [
+        [
+         [
+          -10,
+          -8
+         ],
+         [
+          -10,
+          -4
+         ],
+         [
+          -6,
+          -1
+         ],
+         [
+          7,
+          8
+         ],
+         [
+          -8,
+          -1
+         ],
+         [
+          -10,
+          -7
+         ],
+         [
+          -7,
+          -7
+         ],
+         [
+          3,
+          8
+         ],
+         [
+          2,
+          7
+         ],
+         [
+          7,
+          11
+         ],
+         [
+          2,
+          2
+         ]
+        ]
+       ],
+       [
+        2
+       ],
+       [
+        18
+       ],
+       [
+        0
+       ],
+       [
+        2
+       ],
+       [
+        13
+       ],
+       [
+        7
+       ],
+       [
+        19
+       ],
+       [
+        9
+       ],
+       [
+        5
+       ],
+       [
+        -12
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      2,
+      0,
+      0,
+      2,
+      0,
+      4,
+      0,
+      1,
+      2,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67844afb0e1dbb6a0938577f": {
+   "constraints": [
+    "1 <= pattern.length <= 50",
+    "0 <= arr.length <= 25",
+    "1 <= arr[i] <= 50"
+   ],
+   "clarifyingQuestions": [
+    "Must the runs appear in the order of arr?",
+    "Are runs maximal (separated by at least one \"0\")?",
+    "Can the count exceed 64-bit range?"
+   ],
+   "hints": [
+    "Let f(i, j) count completions of pattern[i:] using segments arr[j:].",
+    "Either pattern[i] becomes \"0\" (it must not be \"1\"), or the run arr[j] starts at i: the next arr[j] characters contain no \"0\" and the character after them is not \"1\".",
+    "Precompute prefix counts of \"0\" so each run check is O(1); f(L, m) = 1."
+   ],
+   "invariants": [
+    "f(i, j) depends only on later positions",
+    "each counted string has exactly the runs in arr"
+   ],
+   "chooseWhen": [
+    "Counting constrained fillings of a pattern"
+   ],
+   "tradeoffs": [
+    "Memoised DP is polynomial; enumeration doubles with every question mark"
+   ],
+   "variantLabel": "Inferred single variant: nonogram line counting",
+   "examples": [
+    {
+     "input": [
+      [],
+      "1"
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       3,
+       2,
+       1
+      ],
+      "?111????????"
+     ],
+     "output": 10,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678ec4943d1b82777aa24f9a": {
+   "constraints": [
+    "0 <= buyPrices.length, sellPrices.length, orders.length <= 1e5",
+    "1 <= price <= 1e9",
+    "side is \"buy\" or \"sell\""
+   ],
+   "clarifyingQuestions": [
+    "Does \"below\" include an equal price?",
+    "How is a sell order matched?",
+    "Are new orders streamed in or are only the initial lists matched?",
+    "What is returned: matches, totals or the final book?"
+   ],
+   "hints": [
+    "Keep resting sells in a min-heap and resting buys in a max-heap.",
+    "An incoming buy checks the cheapest sell: if it is <= the buy price, pop and report it.",
+    "Otherwise push the incoming order onto its own side and report -1; sells mirror this with the highest buy."
+   ],
+   "invariants": [
+    "the heaps hold exactly the unmatched orders",
+    "a match never violates either price limit"
+   ],
+   "chooseWhen": [
+    "Limit order books with price priority"
+   ],
+   "tradeoffs": [
+    "Heaps give log time per order; sorted lists give linear insertion"
+   ],
+   "variantLabel": "Inferred single variant: incoming orders against a resting book",
+   "examples": [
+    {
+     "input": [
+      [],
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       10,
+       11,
+       3,
+       11
+      ],
+      [
+       6,
+       4,
+       2,
+       6,
+       7
+      ],
+      [
+       [
+        "sell",
+        11
+       ],
+       [
+        "buy",
+        4
+       ],
+       [
+        "buy",
+        7
+       ],
+       [
+        "sell",
+        11
+       ],
+       [
+        "sell",
+        1
+       ],
+       [
+        "sell",
+        5
+       ],
+       [
+        "sell",
+        10
+       ],
+       [
+        "buy",
+        5
+       ],
+       [
+        "buy",
+        4
+       ],
+       [
+        "buy",
+        8
+       ],
+       [
+        "sell",
+        4
+       ],
+       [
+        "buy",
+        8
+       ],
+       [
+        "buy",
+        10
+       ],
+       [
+        "buy",
+        8
+       ]
+      ]
+     ],
+     "output": [
+      11,
+      2,
+      4,
+      11,
+      10,
+      -1,
+      -1,
+      5,
+      -1,
+      6,
+      4,
+      6,
+      7,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696c54fe6b040fa4d120bca7": {
+   "constraints": [
+    "0 <= datapoints.length <= 1e5",
+    "at most 5 tags per datapoint, each 1 to 8 lowercase letters",
+    "0 <= timestamp <= 1e9, strictly increasing",
+    "-1e9 <= value <= 1e9",
+    "1 <= k <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is k a time width or a number of datapoints?",
+    "Is the window inclusive at both ends?",
+    "Are datapoints sorted by timestamp?",
+    "Is one sum returned per datapoint or one overall value?"
+   ],
+   "hints": [
+    "Filter the datapoints that carry the tag; timestamps stay increasing.",
+    "Keep a window [left, right] and a running sum; add each new datapoint.",
+    "Advance left while its timestamp is below t - k + 1, subtracting its value, then record the sum."
+   ],
+   "invariants": [
+    "the running sum equals the sum of the window",
+    "left never moves backwards"
+   ],
+   "chooseWhen": [
+    "Rolling metrics over time-stamped telemetry"
+   ],
+   "tradeoffs": [
+    "Two pointers are linear; prefix sums with binary search also work in n log n"
+   ],
+   "variantLabel": "Inferred level 1: time window of width k",
+   "examples": [
+    {
+     "input": [
+      [],
+      "db",
+      7
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       {
+        "tags": [
+         "web",
+         "db",
+         "prod"
+        ],
+        "timestamp": 1,
+        "value": -4
+       },
+       {
+        "tags": [],
+        "timestamp": 2,
+        "value": 7
+       },
+       {
+        "tags": [],
+        "timestamp": 5,
+        "value": 0
+       },
+       {
+        "tags": [
+         "db",
+         "prod",
+         "web"
+        ],
+        "timestamp": 8,
+        "value": -5
+       },
+       {
+        "tags": [],
+        "timestamp": 10,
+        "value": 6
+       }
+      ],
+      "prod",
+      6
+     ],
+     "output": [
+      -4,
+      -5
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696c5f906b040fa4d120bcbe": {
+   "constraints": [
+    "0 <= datapoints.length <= 1e5",
+    "at most 5 tags per datapoint, each 1 to 8 lowercase letters",
+    "0 <= timestamp <= 1e9, strictly increasing",
+    "-1e9 <= value <= 1e9",
+    "1 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Is k a time width or a number of datapoints?",
+    "Is the window inclusive at both ends?",
+    "Are datapoints sorted by timestamp?",
+    "Is one sum returned per datapoint or one overall value?"
+   ],
+   "hints": [
+    "Filter the tagged values in order.",
+    "Keep a running sum of the last k values.",
+    "When the filtered index i reaches k, subtract the value at i - k before recording."
+   ],
+   "invariants": [
+    "the running sum covers exactly min(k, i + 1) values",
+    "sums are exact integers below 2**53"
+   ],
+   "chooseWhen": [
+    "Moving sums over the last k events of a category"
+   ],
+   "tradeoffs": [
+    "A running sum is O(1) per step; recomputing is O(k)"
+   ],
+   "variantLabel": "Inferred level 2: window of the last k tagged datapoints",
+   "examples": [
+    {
+     "input": [
+      [],
+      "web",
+      3
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       {
+        "tags": [],
+        "timestamp": 2,
+        "value": -8
+       },
+       {
+        "tags": [],
+        "timestamp": 5,
+        "value": 9
+       },
+       {
+        "tags": [
+         "web"
+        ],
+        "timestamp": 6,
+        "value": 3
+       },
+       {
+        "tags": [
+         "db",
+         "prod"
+        ],
+        "timestamp": 9,
+        "value": 8
+       },
+       {
+        "tags": [],
+        "timestamp": 11,
+        "value": 1
+       }
+      ],
+      "db",
+      7
+     ],
+     "output": [
+      8
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68672293a2d59460201f2cae": {
+   "constraints": [
+    "1 <= k <= n <= 1e5",
+    "-1e9 <= nums[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is an empty remainder balanced?",
+    "Is the smallest index wanted when several work?"
+   ],
+   "hints": [
+    "Elements before the removed block keep their indices.",
+    "Elements after it move left by k, so their parity flips exactly when k is odd.",
+    "With prefix sums E and O of even- and odd-index values, compare E_before + (shifted suffix even part) with O_before + (shifted suffix odd part) for each i."
+   ],
+   "invariants": [
+    "prefix sums are exact integers below 2**53",
+    "i is tried in increasing order"
+   ],
+   "chooseWhen": [
+    "Removing a block and re-indexing with parity bookkeeping"
+   ],
+   "tradeoffs": [
+    "Prefix sums give O(n); rebuilding arrays is O(n^2)"
+   ],
+   "variantLabel": "Inferred single variant: prefix sums with parity shift",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ],
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       2,
+       -3,
+       -1,
+       -3,
+       -1,
+       0,
+       -2,
+       -3,
+       2,
+       0,
+       3
+      ],
+      1
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6913fb43fa8a311e42671e69": {
+   "constraints": [
+    "0 <= versions.length <= 1e5",
+    "each component 0 to 1e6 without leading zeros",
+    "supported is monotone (false then true)"
+   ],
+   "clarifyingQuestions": [
+    "What does the VersionChecker method look like and is the number of calls limited?",
+    "What is returned when no version has the feature?",
+    "Are versions compared numerically per component?",
+    "Are the versions always given sorted?"
+   ],
+   "hints": [
+    "The answers are false...false true...true, so the first true is a boundary.",
+    "Binary search with lo = 0, hi = n: test the middle and keep the half that contains the boundary.",
+    "If lo reaches n, no version supports the feature and the answer is null."
+   ],
+   "invariants": [
+    "all indices below lo answer false",
+    "all indices at or above hi answer true"
+   ],
+   "chooseWhen": [
+    "First-bad-version style boundary searches"
+   ],
+   "tradeoffs": [
+    "Binary search uses O(log n) API calls; a scan uses O(n)"
+   ],
+   "variantLabel": "Inferred level 1: binary search over sorted versions",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": null,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "0.0.2",
+       "1.0.0",
+       "6.2.1",
+       "7.0.2",
+       "7.2.0",
+       "7.2.1",
+       "8.0.2",
+       "9.0.1",
+       "10.0.0"
+      ],
+      [
+       false,
+       false,
+       false,
+       false,
+       false,
+       true,
+       true,
+       true,
+       true
+      ]
+     ],
+     "output": "7.2.1",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69141530fa8a311e42671e8f": {
+   "constraints": [
+    "0 <= versions.length <= 1e5",
+    "each component 0 to 1e6 without leading zeros",
+    "versions are distinct",
+    "supported is monotone in numeric version order"
+   ],
+   "clarifyingQuestions": [
+    "What does the VersionChecker method look like and is the number of calls limited?",
+    "What is returned when no version has the feature?",
+    "Are versions compared numerically per component?",
+    "Are the versions always given sorted?"
+   ],
+   "hints": [
+    "String order is wrong for versions (\"10.0.0\" < \"9.0.0\" as strings); compare integer components.",
+    "Sort indices by the parsed (major, minor, patch) triple.",
+    "Binary search the sorted order for the first index whose answer is true."
+   ],
+   "invariants": [
+    "the sorted order is strictly increasing numerically",
+    "answers along the sorted order are monotone"
+   ],
+   "chooseWhen": [
+    "Searching semantic versions"
+   ],
+   "tradeoffs": [
+    "Sorting costs n log n; the numeric minimum over true answers is linear but uses every answer"
+   ],
+   "variantLabel": "Inferred level 2: numeric version sort, then binary search",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": null,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "6.2.0",
+       "1.0.2",
+       "7.2.2",
+       "7.0.0",
+       "9.1.0",
+       "6.2.1",
+       "9.2.1"
+      ],
+      [
+       false,
+       false,
+       false,
+       false,
+       true,
+       false,
+       true
+      ]
+     ],
+     "output": "9.1.0",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69334452e8ebbb1c53caf2c4": {
+   "constraints": [
+    "at most 1e4 articles",
+    "at most 1e5 calls",
+    "1 <= userId <= 1e5",
+    "1 <= k <= 100",
+    "articleName is 1 to 10 lowercase letters"
+   ],
+   "clarifyingQuestions": [
+    "What are the names and signatures of the query methods?",
+    "Do queries return ids or names?",
+    "How are score ties ranked?",
+    "Does a first vote count as a flip?"
+   ],
+   "hints": [
+    "Store each (user, article) vote as +1, -1 or absent; the score change is new vote minus old vote.",
+    "A flip happens only when the old vote is the opposite non-zero vote; move that article to the front of the user's recent-flip order.",
+    "Keep article ids sorted by (-score, id): on a score change remove the id by binary search with the old key and insert it with the new key; the top k is a prefix."
+   ],
+   "invariants": [
+    "the sorted array always matches current scores",
+    "each user's flip order lists distinct articles"
+   ],
+   "chooseWhen": [
+    "Voting systems with ranking and per-user activity queries"
+   ],
+   "tradeoffs": [
+    "A sorted array has cheap queries and O(A) updates; a balanced tree would make updates logarithmic"
+   ],
+   "variantLabel": "Inferred single variant: votes, flips and ranking",
+   "examples": [
+    {
+     "input": [
+      [
+       "ArticleSystem"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ArticleSystem",
+       "addArticle",
+       "getTopArticles",
+       "downvoteArticle",
+       "downvoteArticle",
+       "addArticle",
+       "upvoteArticle",
+       "addArticle",
+       "downvoteArticle",
+       "downvoteArticle"
+      ],
+      [
+       [],
+       [
+        "news"
+       ],
+       [
+        3
+       ],
+       [
+        1,
+        1
+       ],
+       [
+        1,
+        3
+       ],
+       [
+        "tech"
+       ],
+       [
+        2,
+        1
+       ],
+       [
+        "sport"
+       ],
+       [
+        1,
+        3
+       ],
+       [
+        1,
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      1,
+      [
+       "news"
+      ],
+      null,
+      null,
+      2,
+      null,
+      3,
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69bdbad91cbff60a929beb23": {
+   "constraints": [
+    "1 <= rows, cols <= 50",
+    "0 <= col < cols",
+    "color is one uppercase letter",
+    "total returned cells over a trace <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Is row 0 the top or the bottom of the board?",
+    "Is the board returned as characters or strings?",
+    "What happens after a player has already won?",
+    "How is a winner reported when nobody has won?"
+   ],
+   "hints": [
+    "Track how many pieces each column holds.",
+    "The next piece in column c goes to row rows - 1 - height[c] when height[c] < rows.",
+    "Return a fresh copy (new row lists) so later drops cannot change an earlier result."
+   ],
+   "invariants": [
+    "height[c] equals the number of non-\"0\" cells in column c",
+    "earlier returned boards are never modified"
+   ],
+   "chooseWhen": [
+    "Grid games with gravity"
+   ],
+   "tradeoffs": [
+    "Copying the whole board per call costs rows * cols; returning only the changed cell would be cheaper but is not what is asked"
+   ],
+   "variantLabel": "Inferred level 1: gravity drops returning board copies",
+   "examples": [
+    {
+     "input": [
+      [
+       "ConnectFourBoard"
+      ],
+      [
+       [
+        1,
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ConnectFourBoard",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop"
+      ],
+      [
+       [
+        3,
+        5
+       ],
+       [
+        "Y",
+        2
+       ],
+       [
+        "Y",
+        3
+       ],
+       [
+        "R",
+        4
+       ],
+       [
+        "R",
+        3
+       ],
+       [
+        "R",
+        3
+       ],
+       [
+        "Y",
+        1
+       ],
+       [
+        "Y",
+        4
+       ],
+       [
+        "Y",
+        0
+       ],
+       [
+        "R",
+        1
+       ],
+       [
+        "Y",
+        2
+       ],
+       [
+        "R",
+        4
+       ],
+       [
+        "R",
+        4
+       ],
+       [
+        "R",
+        0
+       ],
+       [
+        "Y",
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "Y",
+        "0",
+        "0"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "Y",
+        "Y",
+        "0"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "0"
+       ],
+       [
+        "0",
+        "Y",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "Y"
+       ],
+       [
+        "0",
+        "Y",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "0"
+       ],
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "Y"
+       ],
+       [
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "0"
+       ],
+       [
+        "0",
+        "R",
+        "0",
+        "R",
+        "Y"
+       ],
+       [
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "0"
+       ],
+       [
+        "0",
+        "R",
+        "Y",
+        "R",
+        "Y"
+       ],
+       [
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "R"
+       ],
+       [
+        "0",
+        "R",
+        "Y",
+        "R",
+        "Y"
+       ],
+       [
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "R"
+       ],
+       [
+        "0",
+        "R",
+        "Y",
+        "R",
+        "Y"
+       ],
+       [
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "0",
+        "0",
+        "0",
+        "R",
+        "R"
+       ],
+       [
+        "R",
+        "R",
+        "Y",
+        "R",
+        "Y"
+       ],
+       [
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ],
+      [
+       [
+        "Y",
+        "0",
+        "0",
+        "R",
+        "R"
+       ],
+       [
+        "R",
+        "R",
+        "Y",
+        "R",
+        "Y"
+       ],
+       [
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        "R"
+       ]
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69dd348b95e80ae213e5b702": {
+   "constraints": [
+    "1 <= rows, cols <= 50",
+    "0 <= col < cols",
+    "color is one uppercase letter",
+    "total returned cells over a trace <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Is row 0 the top or the bottom of the board?",
+    "Is the board returned as characters or strings?",
+    "What happens after a player has already won?",
+    "How is a winner reported when nobody has won?"
+   ],
+   "hints": [
+    "A new line of four must pass through the piece just dropped.",
+    "For each of the four directions count equal cells on both sides of the new piece.",
+    "If any direction reaches 4 and there is no winner yet, record this color; getWinner returns it or \"0\"."
+   ],
+   "invariants": [
+    "the recorded winner is the color of the earliest completed line",
+    "drops into a full column change nothing"
+   ],
+   "chooseWhen": [
+    "Incremental win detection on boards"
+   ],
+   "tradeoffs": [
+    "Checking only through the new piece is O(1); full rescans are O(rows * cols) per move"
+   ],
+   "variantLabel": "Inferred level 2: drops plus first-winner detection",
+   "examples": [
+    {
+     "input": [
+      [
+       "ConnectFourBoard",
+       "drop"
+      ],
+      [
+       [
+        3,
+        1
+       ],
+       [
+        "Y",
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       [
+        "0"
+       ],
+       [
+        "0"
+       ],
+       [
+        "Y"
+       ]
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ConnectFourBoard",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "drop",
+       "getWinner",
+       "drop",
+       "getWinner",
+       "drop",
+       "drop",
+       "getWinner",
+       "drop"
+      ],
+      [
+       [
+        1,
+        2
+       ],
+       [
+        "Y",
+        1
+       ],
+       [
+        "Y",
+        0
+       ],
+       [
+        "B",
+        0
+       ],
+       [
+        "R",
+        0
+       ],
+       [
+        "Y",
+        0
+       ],
+       [
+        "Y",
+        1
+       ],
+       [
+        "Y",
+        0
+       ],
+       [
+        "Y",
+        0
+       ],
+       [],
+       [
+        "Y",
+        1
+       ],
+       [],
+       [
+        "R",
+        0
+       ],
+       [
+        "R",
+        1
+       ],
+       [],
+       [
+        "B",
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       [
+        "0",
+        "Y"
+       ]
+      ],
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ],
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ],
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ],
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ],
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ],
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ],
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ],
+      "0",
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ],
+      "0",
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ],
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ],
+      "0",
+      [
+       [
+        "Y",
+        "Y"
+       ]
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

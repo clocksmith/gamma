@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68c86e64df5a6365aa774b11",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "roads",
+  "friends",
+  "start1",
+  "start2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "assignFriends",
+  "params": [
+   {
+    "name": "roads",
+    "type": "(string|integer)[][]"
+   },
+   {
+    "name": "friends",
+    "type": "string[][]"
+   },
+   {
+    "name": "start1",
+    "type": "string"
+   },
+   {
+    "name": "start2",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "walk each route by scanning the whole road list for the next road at every step, then compare arrival times per friend",
+  "candidate_design": "hash map location -> outgoing road; walk each route once recording arrival times; assign each friend and sort by arrival",
+  "complexity_target": "O(r + f log f) time/O(r + f) space"
+ },
+ "source_sha256": "bb4202c2175af3b1301b303dbe2a966d728aee66f64c749b61ebf53a8ba39de3",
+ "wrapper": "Solution.assignFriends"
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:678ec4943d1b82777aa24f9a",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "buyPrices",
+  "sellPrices",
+  "orders"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "matchOrders",
+  "params": [
+   {
+    "name": "buyPrices",
+    "type": "integer[]"
+   },
+   {
+    "name": "sellPrices",
+    "type": "integer[]"
+   },
+   {
+    "name": "orders",
+    "type": "(string|integer)[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sorted Python lists searched and edited linearly per order",
+  "candidate_design": "max-heap of resting buys and min-heap of resting sells; peek, compare and pop or push",
+  "complexity_target": "O((b + s + q) log(b + s + q)) time/O(b + s + q) space"
+ },
+ "source_sha256": "91b4af1c103835012cbbe101ee0d813e2926771b665534e5ecbd21e4414c7986",
+ "wrapper": "Solution.matchOrders"
+}

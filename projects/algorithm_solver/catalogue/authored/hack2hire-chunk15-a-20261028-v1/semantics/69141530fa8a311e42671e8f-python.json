@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69141530fa8a311e42671e8f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "versions",
+  "supported"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "firstSupportedUnsorted",
+  "params": [
+   {
+    "name": "versions",
+    "type": "string[]"
+   },
+   {
+    "name": "supported",
+    "type": "boolean[]"
+   }
+  ],
+  "return": {
+   "type": "string|null"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "take the numerically smallest version among those answering true",
+  "candidate_design": "parse components, sort indices by (major, minor, patch), then binary search the sorted order for the first true answer",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "32d15ceb5d9c72efcd30530a89ec49c1decafc50bb502159f03151288a04dd4b",
+ "wrapper": "Solution.firstSupportedUnsorted"
+}

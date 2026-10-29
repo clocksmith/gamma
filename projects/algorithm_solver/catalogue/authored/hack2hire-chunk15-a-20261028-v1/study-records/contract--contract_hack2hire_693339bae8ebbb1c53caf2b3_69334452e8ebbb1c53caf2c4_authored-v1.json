@@ -1,0 +1,540 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:693339bae8ebbb1c53caf2b3:69334452e8ebbb1c53caf2c4:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+   "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+   "selector": "/problems/17"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/693339bae8ebbb1c53caf2b3.json",
+   "sha256": "6246e84c0953d7df9539c05685e6c2ebbacd99272cab8938485c0c9223833e9f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+   "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+   "selector": "/variants/hack2hire:69334452e8ebbb1c53caf2c4"
+  }
+ ],
+ "problemId": "hack2hire:693339bae8ebbb1c53caf2b3",
+ "variantId": "69334452e8ebbb1c53caf2c4",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: votes, flips and ranking",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69334452e8ebbb1c53caf2c4/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "ArticleSystem() starts empty. addArticle(articleName) gives the next id (1, 2, ...) to a new article with score 0 and returns it. upvoteArticle(articleId, userId): no effect when the user already upvoted the article; otherwise the user's vote becomes an upvote, the score rises by 1 (by 2 when it replaces a downvote) and replacing a downvote records a flip. downvoteArticle(articleId, userId) mirrors this. getRecentFlips(userId, k) returns the names of up to k distinct articles the user has flipped, most recent flip first (an article flipped again moves to the front). getTopArticles(k) returns the names of up to k articles by score descending, ties by smaller id. Ids passed to votes always exist. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "ArticleSystem() starts empty.",
+   "addArticle(articleName) gives the next id (1, 2, ...) to a new article with score 0 and returns it.",
+   "upvoteArticle(articleId, userId): no effect when the user already upvoted the article; otherwise the user's vote becomes an upvote, the score rises by 1 (by 2 when it replaces a downvote) and replacing a downvote records a flip.",
+   "downvoteArticle(articleId, userId) mirrors this.",
+   "getRecentFlips(userId, k) returns the names of up to k distinct articles the user has flipped, most recent flip first (an article flipped again moves to the front).",
+   "getTopArticles(k) returns the names of up to k articles by score descending, ties by smaller id.",
+   "Ids passed to votes always exist.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "at most 1e4 articles",
+   "at most 1e5 calls",
+   "1 <= userId <= 1e5",
+   "1 <= k <= 100",
+   "articleName is 1 to 10 lowercase letters"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69334452e8ebbb1c53caf2c4/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: class ArticleSystem with ArticleSystem(), int addArticle(articleName) assigning ids 1, 2, ..., and void upvoteArticle(articleId, userId) (no effect when already upvoted, otherwise the vote becomes an upvote and the score is updated; switching direction records a flip); the system also tracks the most recently flipped articles per user and the highest-ranked articles by score (those methods are cut off); algorithmTags: DESIGN, HASH_TABLE; preview response sha256 6c80ce0da2e7eef225dca8a0361d80bc25174afbc061525514b78d92bca3a265"
+   },
+   {
+    "statement": "Uncertainty: high: the class, addArticle, upvoteArticle and the flip definition are in the preview; downvoteArticle, both query methods, their names, parameters, name-valued output, the tie rule and the first-vote scoring are inferred",
+    "basis": "the public group preview is partial (1155 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/17/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/17/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/17/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What are the names and signatures of the query methods?",
+   "Do queries return ids or names?",
+   "How are score ties ranked?",
+   "Does a first vote count as a flip?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69334452e8ebbb1c53caf2c4/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ArticleSystem"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ArticleSystem",
+      "addArticle",
+      "getTopArticles",
+      "downvoteArticle",
+      "downvoteArticle",
+      "addArticle",
+      "upvoteArticle",
+      "addArticle",
+      "downvoteArticle",
+      "downvoteArticle"
+     ],
+     [
+      [],
+      [
+       "news"
+      ],
+      [
+       3
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       "tech"
+      ],
+      [
+       2,
+       1
+      ],
+      [
+       "sport"
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       3
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     1,
+     [
+      "news"
+     ],
+     null,
+     null,
+     2,
+     null,
+     3,
+     null,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69334452e8ebbb1c53caf2c4/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/oracles.py",
+    "sha256": "922bba2ff930131a3cb3a4b05eef99bb9ba04797f911b9637018c186d7a750ee",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ArticleSystem:\n    def __init__(self)\n    def addArticle(self, articleName) -> integer\n    def upvoteArticle(self, articleId, userId) -> void\n    def downvoteArticle(self, articleId, userId) -> void\n    def getRecentFlips(self, userId, k) -> string[]\n    def getTopArticles(self, k) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69334452e8ebbb1c53caf2c4-python.json",
+     "inferredInterface": {
+      "classname": "ArticleSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addArticle",
+        "params": [
+         {
+          "name": "articleName",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "upvoteArticle",
+        "params": [
+         {
+          "name": "articleId",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "downvoteArticle",
+        "params": [
+         {
+          "name": "articleId",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getRecentFlips",
+        "params": [
+         {
+          "name": "userId",
+          "type": "integer"
+         },
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "getTopArticles",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69334452e8ebbb1c53caf2c4-python.json",
+      "sha256": "cf0c1fc394f798035e237dcbf84d9ab57708d459db239963734fcdc3f80b62e0",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ArticleSystem {\n  constructor()\n  addArticle(articleName) /* -> integer */\n  upvoteArticle(articleId, userId) /* -> void */\n  downvoteArticle(articleId, userId) /* -> void */\n  getRecentFlips(userId, k) /* -> string[] */\n  getTopArticles(k) /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69334452e8ebbb1c53caf2c4-javascript.json",
+     "inferredInterface": {
+      "classname": "ArticleSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addArticle",
+        "params": [
+         {
+          "name": "articleName",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "upvoteArticle",
+        "params": [
+         {
+          "name": "articleId",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "downvoteArticle",
+        "params": [
+         {
+          "name": "articleId",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getRecentFlips",
+        "params": [
+         {
+          "name": "userId",
+          "type": "integer"
+         },
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "getTopArticles",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69334452e8ebbb1c53caf2c4-javascript.json",
+      "sha256": "b535553dcd229c98c9214c8a079cc48da3ea5b0dee7fe19cb250309ac506f0e3",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/17/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/17/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
