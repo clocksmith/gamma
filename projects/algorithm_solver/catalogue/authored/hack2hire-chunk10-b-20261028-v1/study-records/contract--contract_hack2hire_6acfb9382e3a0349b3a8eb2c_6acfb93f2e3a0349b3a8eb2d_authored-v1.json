@@ -1,0 +1,341 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6acfb9382e3a0349b3a8eb2c:6acfb93f2e3a0349b3a8eb2d:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/17"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6acfb9382e3a0349b3a8eb2c.json",
+   "sha256": "88fc39ecfa681e1bcf084498831e07b08c783e08601ed4249e5406e71111972f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:6acfb93f2e3a0349b3a8eb2d"
+  }
+ ],
+ "problemId": "hack2hire:6acfb9382e3a0349b3a8eb2c",
+ "variantId": "6acfb93f2e3a0349b3a8eb2d",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1 of 4: delayed settlement",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:6acfb93f2e3a0349b3a8eb2d/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "commands is a list of space-separated strings; amounts are integer minor units. \"INIT <account> <balance>\" commands come first and create accounts. Timestamped commands follow in non-decreasing day order and are processed in input order. \"FUND <day> <account> <amount> <delay>\" is accepted when the account exists and settles on day + delay. \"BALANCE <day> <account>\" reports the settled balance at that point: the starting balance plus accepted funding settled by that day plus all earlier accepted balance changes, or -1 for an unknown account. Return the reported values in order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "commands is a list of space-separated strings; amounts are integer minor units.",
+   "\"INIT <account> <balance>\" commands come first and create accounts.",
+   "Timestamped commands follow in non-decreasing day order and are processed in input order.",
+   "\"FUND <day> <account> <amount> <delay>\" is accepted when the account exists and settles on day + delay.",
+   "\"BALANCE <day> <account>\" reports the settled balance at that point: the starting balance plus accepted funding settled by that day plus all earlier accepted balance changes, or -1 for an unknown account.",
+   "Return the reported values in order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 commands",
+   "accounts match [a-z0-9_]{1,20}",
+   "0 <= starting balance <= 1e9",
+   "1 <= amount <= 1e9",
+   "0 <= day, delay <= 1e9, days non-decreasing"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:6acfb93f2e3a0349b3a8eb2d/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: space-separated commands, integer minor units, INIT commands precede timestamped commands in chronological day order with input order inside a day, funding counts only after it settles, BALANCE reports the settled balance at its point (later FUND cannot change it); FUND/BALANCE argument layouts not visible; algorithmTags: HASH_TABLE, SIMULATION; variant order from codingQuestions (1 of 4); preview response sha256 6b94a58ab847b03735006342a55da92df4a264e4027d2eb0c1219847a3f10009"
+   },
+   {
+    "statement": "Uncertainty: medium: ordering and the settled-balance rule are in the preview; the argument layout of INIT/FUND/BALANCE, the settlement delay field, acceptance conditions and the -1 sentinel are inferred",
+    "basis": "the public group preview is partial (721 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 1 of 4: cumulative level 1 (INIT/FUND/BALANCE)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/17/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/17/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/17/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What are the exact argument layouts of FUND and BALANCE?",
+   "Is a FUND for an unknown account rejected?",
+   "What does BALANCE report for an unknown account?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:6acfb93f2e3a0349b3a8eb2d/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "INIT a 5",
+      "INIT b 0",
+      "BALANCE 2 a",
+      "BALANCE 3 a",
+      "BALANCE 3 b",
+      "BALANCE 3 a",
+      "BALANCE 4 a",
+      "FUND 6 zz 50 5",
+      "FUND 7 a 1000000000 5",
+      "BALANCE 7 zz",
+      "FUND 12 a 1 0",
+      "FUND 12 b 1 1000000000",
+      "FUND 17 zz 7 1000000000",
+      "BALANCE 18 a",
+      "FUND 20 a 7 2",
+      "FUND 25 a 1 0",
+      "FUND 30 zz 50 0"
+     ]
+    ],
+    "output": [
+     5,
+     5,
+     0,
+     5,
+     5,
+     -1,
+     1000000006
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:6acfb93f2e3a0349b3a8eb2d/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def processLedger(commands) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/6acfb93f2e3a0349b3a8eb2d-python.json",
+     "inferredInterface": {
+      "name": "processLedger",
+      "params": [
+       {
+        "name": "commands",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/6acfb93f2e3a0349b3a8eb2d-python.json",
+      "sha256": "3a46fbc4459b21631c94003628c1eb3ef901dd4a97468b68de8d5e0febc15126",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function processLedger(commands) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/6acfb93f2e3a0349b3a8eb2d-javascript.json",
+     "inferredInterface": {
+      "name": "processLedger",
+      "params": [
+       {
+        "name": "commands",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/6acfb93f2e3a0349b3a8eb2d-javascript.json",
+      "sha256": "0fde12b3e2cca42b1410196646723e2c1d32c0bea6f786d31bcc89adcd205f07",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/17/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/17/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

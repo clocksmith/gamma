@@ -1,0 +1,103 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68a4bbf8c11d63d6052ea308",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "WorkerManagementSystem",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addWorker",
+    "params": [
+     {
+      "name": "workerId",
+      "type": "string"
+     },
+     {
+      "name": "position",
+      "type": "string"
+     },
+     {
+      "name": "compensation",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "registerWorker",
+    "params": [
+     {
+      "name": "workerId",
+      "type": "string"
+     },
+     {
+      "name": "timestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "get",
+    "params": [
+     {
+      "name": "workerId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "topNWorkers",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "position",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rescan every worker and every session for each topNWorkers call, then sort",
+  "candidate_design": "level-1 state plus a per-worker running total for the current position stint; topNWorkers filters the workers in that position and sorts (time descending, id ascending)",
+  "complexity_target": "O(1) per register, O(w log w) per topNWorkers/O(workers) space"
+ },
+ "source_sha256": "12fc0c29889bb57f0ca0c856acd3685f1f0e6adead4fca7c9212570a3a9daa97",
+ "native_class": "WorkerManagementSystem",
+ "native_symbol": "module global WorkerManagementSystem",
+ "void_methods": []
+}

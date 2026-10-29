@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:690416e84845d25b8e994885",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "tickets"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findItinerary",
+  "params": [
+   {
+    "name": "tickets",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "backtracking over sorted tickets from every possible start in ascending order; the first complete path wins",
+  "candidate_design": "choose the start from out-in degree, then iterative Hierholzer with each adjacency list sorted descending and popped from the end; reverse the finished stack",
+  "complexity_target": "O(E log E) time/O(E) space"
+ },
+ "source_sha256": "df75e68e731e7ade929e289d37b51dfbd721ef444bcbb200f99f34612a471374",
+ "wrapper": "Solution.findItinerary"
+}

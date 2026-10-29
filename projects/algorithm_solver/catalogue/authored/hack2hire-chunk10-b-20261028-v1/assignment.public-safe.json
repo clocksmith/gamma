@@ -1,0 +1,2150 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk10-b (16 Hack2Hire groups, 28 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:695d85f19c1c1f40daea73a0",
+   "title": "Design Token Limiter",
+   "variant_ordinal": 1,
+   "group_post_id": "695d85ec9c1c1f40daea739f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "TokenLimiter",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "setPolicy",
+       "params": [
+        {
+         "name": "userId",
+         "type": "string"
+        },
+        {
+         "name": "maxTokens",
+         "type": "integer"
+        },
+        {
+         "name": "refillAmount",
+         "type": "integer"
+        },
+        {
+         "name": "refillInterval",
+         "type": "integer"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "consume",
+       "params": [
+        {
+         "name": "userId",
+         "type": "string"
+        },
+        {
+         "name": "tokens",
+         "type": "integer"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getTokens",
+       "params": [
+        {
+         "name": "userId",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "TokenLimiter"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "apply refill epochs one at a time until the next epoch lies after the call time",
+    "candidate_design": "hash map from user to (maxTokens, refillAmount, interval, tokens, last refill time); on each call add floor((t - last) / interval) refills in one step, cap at maxTokens and advance last by whole intervals",
+    "complexity_target": "O(1) per call/O(users) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3b94cae41ff0c8c95f635bb5ea5d9a8dae69d339580c9108532216092e22423b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68a4bbecc11d63d6052ea307",
+   "title": "Design Worker Management System",
+   "variant_ordinal": 1,
+   "group_post_id": "68a4bbdfc11d63d6052ea306",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "WorkerManagementSystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addWorker",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "position",
+         "type": "string"
+        },
+        {
+         "name": "compensation",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "registerWorker",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "get",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "WorkerManagementSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "replay every finished session of the worker on each get",
+    "candidate_design": "hash map from workerId to (position, compensation, open entry, running finished total); registerWorker toggles the open entry and adds the session length on exit",
+    "complexity_target": "O(1) per call/O(workers) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "be35a9f6d5990bc2c2261091fc5154d3f3e62f1f9e61435943ed6ec2830cd3b4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68a4bbf8c11d63d6052ea308",
+   "title": "Design Worker Management System",
+   "variant_ordinal": 2,
+   "group_post_id": "68a4bbdfc11d63d6052ea306",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "WorkerManagementSystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addWorker",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "position",
+         "type": "string"
+        },
+        {
+         "name": "compensation",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "registerWorker",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "get",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "topNWorkers",
+       "params": [
+        {
+         "name": "n",
+         "type": "integer"
+        },
+        {
+         "name": "position",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "WorkerManagementSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rescan every worker and every session for each topNWorkers call, then sort",
+    "candidate_design": "level-1 state plus a per-worker running total for the current position stint; topNWorkers filters the workers in that position and sorts (time descending, id ascending)",
+    "complexity_target": "O(1) per register, O(w log w) per topNWorkers/O(workers) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "be35a9f6d5990bc2c2261091fc5154d3f3e62f1f9e61435943ed6ec2830cd3b4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68a4bbfac11d63d6052ea309",
+   "title": "Design Worker Management System",
+   "variant_ordinal": 3,
+   "group_post_id": "68a4bbdfc11d63d6052ea306",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "WorkerManagementSystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addWorker",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "position",
+         "type": "string"
+        },
+        {
+         "name": "compensation",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "registerWorker",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "get",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "topNWorkers",
+       "params": [
+        {
+         "name": "n",
+         "type": "integer"
+        },
+        {
+         "name": "position",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "promote",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "newPosition",
+         "type": "string"
+        },
+        {
+         "name": "newCompensation",
+         "type": "integer"
+        },
+        {
+         "name": "startTimestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "calcSalary",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "startTimestamp",
+         "type": "integer"
+        },
+        {
+         "name": "endTimestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "WorkerManagementSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan every finished session and mark every overlapped time unit one by one for calcSalary",
+    "candidate_design": "per-worker list of finished sessions (entry, exit, compensation) in time order; calcSalary binary-searches the first session ending after the start and sums overlaps until a session starts at or after the end; promotions are applied at entry",
+    "complexity_target": "O(log s + overlapping sessions) per calcSalary/O(total sessions) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "be35a9f6d5990bc2c2261091fc5154d3f3e62f1f9e61435943ed6ec2830cd3b4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68a4bbfbc11d63d6052ea30a",
+   "title": "Design Worker Management System",
+   "variant_ordinal": 4,
+   "group_post_id": "68a4bbdfc11d63d6052ea306",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "WorkerManagementSystem",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addWorker",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "position",
+         "type": "string"
+        },
+        {
+         "name": "compensation",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "registerWorker",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "get",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "topNWorkers",
+       "params": [
+        {
+         "name": "n",
+         "type": "integer"
+        },
+        {
+         "name": "position",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "promote",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "newPosition",
+         "type": "string"
+        },
+        {
+         "name": "newCompensation",
+         "type": "integer"
+        },
+        {
+         "name": "startTimestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "calcSalary",
+       "params": [
+        {
+         "name": "workerId",
+         "type": "string"
+        },
+        {
+         "name": "startTimestamp",
+         "type": "integer"
+        },
+        {
+         "name": "endTimestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "setDoublePaid",
+       "params": [
+        {
+         "name": "startTimestamp",
+         "type": "integer"
+        },
+        {
+         "name": "endTimestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      }
+     ]
+    },
+    "native_class": "WorkerManagementSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan every finished session, mark every overlapped time unit and test it against every double-pay period",
+    "candidate_design": "level-3 state plus a merged, sorted list of double-pay periods with prefix lengths, rebuilt lazily after setDoublePaid; each overlapped session adds compensation times (overlap + doubled part of the overlap) via binary search",
+    "complexity_target": "O(log p + overlapping sessions * log p) per calcSalary, O(p log p) per rebuild/O(sessions + p) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "be35a9f6d5990bc2c2261091fc5154d3f3e62f1f9e61435943ed6ec2830cd3b4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69efc8ea96981f58ae1f6d74",
+   "title": "Design a Task Assignment System",
+   "variant_ordinal": 1,
+   "group_post_id": "69efc8e696981f58ae1f6d73",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "TaskManager",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "name",
+         "type": "string"
+        },
+        {
+         "name": "priority",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "updateTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        },
+        {
+         "name": "name",
+         "type": "string"
+        },
+        {
+         "name": "priority",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "TaskManager"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "linear scan over every created id for each lookup",
+    "candidate_design": "hash map from task id to [name, priority] plus a counter for new ids",
+    "complexity_target": "O(1) per call/O(tasks) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69efc92d96981f58ae1f6d75",
+   "title": "Design a Task Assignment System",
+   "variant_ordinal": 2,
+   "group_post_id": "69efc8e696981f58ae1f6d73",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "TaskManager",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "name",
+         "type": "string"
+        },
+        {
+         "name": "priority",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "updateTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        },
+        {
+         "name": "name",
+         "type": "string"
+        },
+        {
+         "name": "priority",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "searchTasks",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "nameFilter",
+         "type": "string"
+        },
+        {
+         "name": "maxResults",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "listTasksSorted",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "limit",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "TaskManager"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rescan all tasks with a fresh sort for each query",
+    "candidate_design": "level-1 map kept in creation order; each query filters by substring and sorts by (-priority, creation number) once, then cuts to the limit",
+    "complexity_target": "O(t log t) per query/O(tasks) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69efc94196981f58ae1f6d76",
+   "title": "Design a Task Assignment System",
+   "variant_ordinal": 3,
+   "group_post_id": "69efc8e696981f58ae1f6d73",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "TaskManager",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "name",
+         "type": "string"
+        },
+        {
+         "name": "priority",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "updateTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        },
+        {
+         "name": "name",
+         "type": "string"
+        },
+        {
+         "name": "priority",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "searchTasks",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "nameFilter",
+         "type": "string"
+        },
+        {
+         "name": "maxResults",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "listTasksSorted",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "limit",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "addUser",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        },
+        {
+         "name": "quota",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "assignTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        },
+        {
+         "name": "finishTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getUserTasks",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "TaskManager"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rescan the full assignment history for every assign and query",
+    "candidate_design": "per-user map of active assignments plus a min-heap of (finishTime, sequence) that expires assignments lazily on each access to that user",
+    "complexity_target": "O(log a) amortised per assign, O(k log k) per getUserTasks/O(assignments) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69efc96396981f58ae1f6d77",
+   "title": "Design a Task Assignment System",
+   "variant_ordinal": 4,
+   "group_post_id": "69efc8e696981f58ae1f6d73",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "TaskManager",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "name",
+         "type": "string"
+        },
+        {
+         "name": "priority",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "updateTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        },
+        {
+         "name": "name",
+         "type": "string"
+        },
+        {
+         "name": "priority",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "searchTasks",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "nameFilter",
+         "type": "string"
+        },
+        {
+         "name": "maxResults",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "listTasksSorted",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "limit",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "addUser",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        },
+        {
+         "name": "quota",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "assignTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        },
+        {
+         "name": "finishTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getUserTasks",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "completeTask",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "taskId",
+         "type": "string"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "getOverdueAssignments",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "TaskManager"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rescan the full assignment history and test completion and expiry for each query",
+    "candidate_design": "level-3 per-user state; completion deletes the active entry, expiry moves never-completed entries to an overdue list sorted by sequence at query time",
+    "complexity_target": "O(log a) amortised per call, O(o log o) per overdue query/O(assignments) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69026c73d18315042523a913",
+   "title": "Design an Interactive Paginator",
+   "variant_ordinal": 1,
+   "group_post_id": "69026c68d18315042523a912",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "Paginator",
+     "constructor": {
+      "params": [
+       {
+        "name": "totalPages",
+        "type": "integer"
+       },
+       {
+        "name": "visibleCount",
+        "type": "integer"
+       },
+       {
+        "name": "currentPage",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "next",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "prev",
+       "params": [],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "goTo",
+       "params": [
+        {
+         "name": "page",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "Paginator"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every window of v pages that contains the current page and keep the one whose start is nearest to the centred start",
+    "candidate_design": "clamp the current page, compute the window start with one clamp, then emit the tokens directly",
+    "complexity_target": "O(visibleCount) per call/O(visibleCount) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a7dc5e5732ac71681876b16d97bd055bbee5535bd8eca707528dff8197fa75c9",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:685637ce4d16ce2ead6e1769",
+   "title": "Encode And Decode",
+   "variant_ordinal": 1,
+   "group_post_id": "68560fd24d16ce2ead6e1758",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "Codec",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "encode",
+       "params": [
+        {
+         "name": "nums",
+         "type": "integer[]"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "decode",
+       "params": [
+        {
+         "name": "runs",
+         "type": "string[]"
+        }
+       ],
+       "return": {
+        "type": "integer[]"
+       }
+      }
+     ]
+    },
+    "native_class": "Codec"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "group equal values with itertools.groupby, buffer short runs and flush them in chunks of 8; decode with regular expressions",
+    "candidate_design": "single index scan measuring each run; short runs append to a pending buffer flushed in 8-value chunks; decode slices the bracket body and splits on \", \"",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "036ca5e336918dd5dd7cb9768b6197b4790cb3ede2e7f353605e79b4dd3cf82f",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68d9756679db2fbcd7d7db74",
+   "title": "Equal Frequency After One Deletion",
+   "variant_ordinal": 1,
+   "group_post_id": "68d9755f79db2fbcd7d7db73",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "equalFrequency",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try no deletion and every single-position deletion, counting letters from scratch each time",
+    "candidate_design": "count letters, then count how many letters share each frequency; accept one distinct frequency, or two frequencies where one letter can drop to the other value (or to zero from 1)",
+    "complexity_target": "O(n) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "91339c70ab0924a68635007625ef86854f141470b9f081b831425d8fdcc27c2f",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68102bc42590daeb41a329e6",
+   "title": "Equalize Server Latency",
+   "variant_ordinal": 1,
+   "group_post_id": "6810271f2590daeb41a329e5",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minIncrements",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "latency",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recompute every subtree's maximum path sum naively and add, per node, the gap between its parent's best child path and its own",
+    "candidate_design": "bottom-up pass over internal nodes from n/2 - 1 down to 0 on a copy of the costs: add |left - right| to the answer and add the larger child cost to the parent",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "41568789a279f0918c126a3e01e3610c26c042bd34a5b40842fc45adc9a19f57",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:694f5ef093309f91cc14412f",
+   "title": "Evaluate JSON Expression Tree",
+   "variant_ordinal": 1,
+   "group_post_id": "694f5cb393309f91cc14412c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "evaluate",
+     "params": [
+      {
+       "name": "expression",
+       "type": "object"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "convert the tree to postfix with an explicit stack and evaluate it with exact fractions",
+    "candidate_design": "recursive post-order evaluation; division uses magnitudes and a sign so it truncates toward zero exactly in both languages",
+    "complexity_target": "O(nodes) time/O(depth) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "e60f023b838f3dcd121ccbd78e280f82fb10c56612b75fa0e96c27bca7a40baa",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68c32db81f64f4312b0a3e26",
+   "title": "F1 Last Lap Improvement",
+   "variant_ordinal": 1,
+   "group_post_id": "68c32daf1f64f4312b0a3e25",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "bestLastLapImprovement",
+     "params": [
+      {
+       "name": "drivers",
+       "type": "string[]"
+      },
+      {
+       "name": "lapTimes",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "compute each improvement as an exact fraction and sort by (-improvement, name)",
+    "candidate_design": "compare integer keys sum(first L - 1) - last * (L - 1), which order drivers like the improvements because L - 1 > 0; one pass keeps the best",
+    "complexity_target": "O(n * L) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "cc0429a30df24d5b40837c1fe7efe27d9c4362cd02aa08f353ba16afdaa29404",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68c32f681f64f4312b0a3e27",
+   "title": "F1 Last Lap Improvement",
+   "variant_ordinal": 2,
+   "group_post_id": "68c32daf1f64f4312b0a3e25",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "rankLastLapImprovement",
+     "params": [
+      {
+       "name": "drivers",
+       "type": "string[]"
+      },
+      {
+       "name": "lapTimes",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "compute each improvement as an exact fraction and sort by (-improvement, name)",
+    "candidate_design": "integer keys sum(first L - 1) - last * (L - 1) and a sort by (-key, name)",
+    "complexity_target": "O(n * L + n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "cc0429a30df24d5b40837c1fe7efe27d9c4362cd02aa08f353ba16afdaa29404",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a0226e62608e589a944a229",
+   "title": "Fill Layover With Experiences",
+   "variant_ordinal": 1,
+   "group_post_id": "6a0226da2608e589a944a228",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minBookings",
+     "params": [
+      {
+       "name": "durations",
+       "type": "integer[]"
+      },
+      {
+       "name": "totalHours",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "breadth-first search over reachable sums, one booking per level",
+    "candidate_design": "bottom-up DP array best[0..totalHours] over distinct durations",
+    "complexity_target": "O(totalHours * distinct durations) time/O(totalHours) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "14d91728897f703d43a22e65d33a3ca239c66946a757fef912b82f055694399e",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6acfb93f2e3a0349b3a8eb2d",
+   "title": "Financial Account Ledger",
+   "variant_ordinal": 1,
+   "group_post_id": "6acfb9382e3a0349b3a8eb2c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processLedger",
+     "params": [
+      {
+       "name": "commands",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recompute the balance from the full funding history at every BALANCE",
+    "candidate_design": "per-account settled balance plus a min-heap of (settle day, amount) pending funding; settle everything due before each command touches the account",
+    "complexity_target": "O(log f) amortised per command/O(accounts + funding) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6b94a58ab847b03735006342a55da92df4a264e4027d2eb0c1219847a3f10009",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6acfbd2f2e3a0349b3a8eb4e",
+   "title": "Financial Account Ledger",
+   "variant_ordinal": 2,
+   "group_post_id": "6acfb9382e3a0349b3a8eb2c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processLedger",
+     "params": [
+      {
+       "name": "commands",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recompute the balance from the full funding and withdrawal history at every check",
+    "candidate_design": "level-1 heap settlement; withdrawals compare against the freshly settled balance and subtract immediately",
+    "complexity_target": "O(log f) amortised per command/O(accounts + funding) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6b94a58ab847b03735006342a55da92df4a264e4027d2eb0c1219847a3f10009",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6acfd33d2e3a0349b3a8ec32",
+   "title": "Financial Account Ledger",
+   "variant_ordinal": 3,
+   "group_post_id": "6acfb9382e3a0349b3a8eb2c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processLedger",
+     "params": [
+      {
+       "name": "commands",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recompute both balances from the full history at every check",
+    "candidate_design": "level-2 state; a transfer settles the sender, checks and moves the amount between settled balances",
+    "complexity_target": "O(log f) amortised per command/O(accounts + funding) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6b94a58ab847b03735006342a55da92df4a264e4027d2eb0c1219847a3f10009",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6acfd3602e3a0349b3a8ec34",
+   "title": "Financial Account Ledger",
+   "variant_ordinal": 4,
+   "group_post_id": "6acfb9382e3a0349b3a8eb2c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processLedger",
+     "params": [
+      {
+       "name": "commands",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rescan all funding records for PENDING and scan backwards for CANCEL",
+    "candidate_design": "level-3 state plus a running pending sum and a per-account stack of funding records; CANCEL pops records that are settled or cancelled (they never qualify again because days do not decrease) and cancels the top one",
+    "complexity_target": "O(log f) amortised per command/O(accounts + funding) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6b94a58ab847b03735006342a55da92df4a264e4027d2eb0c1219847a3f10009",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:695d3f8768e2c0dd046c4aa3",
+   "title": "Find Bad GPU Nodes",
+   "variant_ordinal": 1,
+   "group_post_id": "695d3da168e2c0dd046c4aa1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findBadNodes",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "badNodes",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "[integer[], integer]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every segment of the halving tree with prefix sums: calls = 1 + 2 * (multi-node segments holding a bad node)",
+    "candidate_design": "simulate the searcher with an explicit stack of ranges and a TestServer closure that scans the tested range against a bad-node flag array",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "d3dd25ce92ccfd3deb091d6836687a31d063bbb72307ceb3ed5bcfd093391e5d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69e9376dfbaf3da6418286a5",
+   "title": "Find Balanced Prefix in Permutation",
+   "variant_ordinal": 1,
+   "group_post_id": "69e9375efbaf3da6418286a4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "balancedNumbers",
+     "params": [
+      {
+       "name": "p",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every k, test every subarray of length k by sorting it",
+    "candidate_design": "record the position of each value; for k = 1..n keep the minimum and maximum position of 1..k; k is balanced exactly when max - min + 1 == k",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4394cf164fb91cebd9d704adf74a8eee751b6b2e2b4ad666c58c4e538b67fa22",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:680fc0442590daeb41a329b8",
+   "title": "Find Common Free Days",
+   "variant_ordinal": 1,
+   "group_post_id": "680fba682590daeb41a329b4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "commonFreeDays",
+     "params": [
+      {
+       "name": "blocks",
+       "type": "integer[][]"
+      },
+      {
+       "name": "totalDays",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each day scan every block",
+    "candidate_design": "difference array over 1..totalDays + 1 with clipped block ends; a prefix sum of 0 marks a free day",
+    "complexity_target": "O(totalDays + blocks) time/O(totalDays) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a0edf7404f82d6b6d5dcce3003d13ad734c5d2dc91c8c5e318c532638d437707",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:680fc04e2590daeb41a329b9",
+   "title": "Find Common Free Days",
+   "variant_ordinal": 2,
+   "group_post_id": "680fba682590daeb41a329b4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "commonFreeIntervals",
+     "params": [
+      {
+       "name": "blocks",
+       "type": "integer[][]"
+      },
+      {
+       "name": "totalDays",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "mark every day of the horizon and group consecutive free days",
+    "candidate_design": "sort blocks by start, merge them, and emit the gaps between merged intervals inside [1, totalDays]",
+    "complexity_target": "O(b log b) time/O(b) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a0edf7404f82d6b6d5dcce3003d13ad734c5d2dc91c8c5e318c532638d437707",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:680fc04f2590daeb41a329ba",
+   "title": "Find Common Free Days",
+   "variant_ordinal": 3,
+   "group_post_id": "680fba682590daeb41a329b4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "freeIntervalsForAtLeast",
+     "params": [
+      {
+       "name": "blocks",
+       "type": "integer[][]"
+      },
+      {
+       "name": "totalDays",
+       "type": "integer"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each day, collect the set of busy people by scanning every block",
+    "candidate_design": "merge blocks per person, sweep +1/-1 events of the merged intervals in day order, and emit the clipped segments where people - busy >= k",
+    "complexity_target": "O(b log b) time/O(b) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a0edf7404f82d6b6d5dcce3003d13ad734c5d2dc91c8c5e318c532638d437707",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:690416e84845d25b8e994885",
+   "title": "Find Complete Flight Path",
+   "variant_ordinal": 1,
+   "group_post_id": "68fe46fd7e1bd8f9501bf144",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findItinerary",
+     "params": [
+      {
+       "name": "tickets",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "backtracking over sorted tickets from every possible start in ascending order; the first complete path wins",
+    "candidate_design": "choose the start from out-in degree, then iterative Hierholzer with each adjacency list sorted descending and popped from the end; reverse the finished stack",
+    "complexity_target": "O(E log E) time/O(E) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ebb181de2e1fdaea733e65916ceac34a72c63e70634701ad2da36e42c76de225",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67843d1e0e1dbb6a0938577d",
+   "title": "Find Eligible Order Sequence",
+   "variant_ordinal": 1,
+   "group_post_id": "678439bb0e1dbb6a0938577c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "eligibleOrderSequence",
+     "params": [
+      {
+       "name": "orderIds",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal simulation: rescan the whole current array for eligible orders and remove the smallest",
+    "candidate_design": "doubly linked list over indices plus a min-heap of eligible orders; after a removal only the two new neighbours can become eligible",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5b00a40851d46f9c0662133751ecfc9047be6fa6a96075d7fd9f8a40fd829a77",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

@@ -1,0 +1,472 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69026c68d18315042523a912:69026c73d18315042523a913:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/9"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69026c68d18315042523a912.json",
+   "sha256": "e34d6120d6017a5f363eebbf02db176563fe130ce618306c4d490df18009a618",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:69026c73d18315042523a913"
+  }
+ ],
+ "problemId": "hack2hire:69026c68d18315042523a912",
+ "variantId": "69026c73d18315042523a913",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: clamped navigation with a centred page window",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69026c73d18315042523a913/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Paginator(totalPages, visibleCount, currentPage) stores the state. next() and prev() move the current page by one, and goTo(page) jumps to page; every move clamps the page into [1, totalPages] and returns the rendered string for the new state. The static render(totalPages, visibleCount, currentPage) shows a window of v = min(visibleCount, totalPages) consecutive pages: its start is currentPage - floor((visibleCount - 1) / 2), clamped into [1, totalPages - v + 1]. Tokens, separated by single spaces: \"<\" when currentPage > 1, \"...\" when the window starts after page 1, each page number with the current one written as \"[p]\", \"...\" when the window ends before totalPages, and \">\" when currentPage < totalPages.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Paginator(totalPages, visibleCount, currentPage) stores the state.",
+   "next() and prev() move the current page by one, and goTo(page) jumps to page; every move clamps the page into [1, totalPages] and returns the rendered string for the new state.",
+   "The static render(totalPages, visibleCount, currentPage) shows a window of v = min(visibleCount, totalPages) consecutive pages: its start is currentPage - floor((visibleCount - 1) / 2), clamped into [1, totalPages - v + 1].",
+   "Tokens, separated by single spaces: \"<\" when currentPage > 1, \"...\" when the window starts after page 1, each page number with the current one written as \"[p]\", \"...\" when the window ends before totalPages, and \">\" when currentPage < totalPages."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= totalPages <= 1e9",
+   "1 <= visibleCount <= 100",
+   "1 <= currentPage <= totalPages",
+   "up to 1e4 calls",
+   "-1e9 <= page <= 1e9 for goTo"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69026c73d18315042523a913/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: stateful Paginator(totalPages, visibleCount, currentPage), 1-indexed pages, separate stateless static render method producing a UI string (methods and format not visible); algorithmTags: SIMULATION; preview response sha256 a7dc5e5732ac71681876b16d97bd055bbee5535bd8eca707528dff8197fa75c9"
+   },
+   {
+    "statement": "Uncertainty: very high: only the constructor and the existence of a static render are in the preview; the method names next/prev/goTo, clamping, the window rule and the whole string format are inferred",
+    "basis": "the public group preview is partial (594 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/9/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/9/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/9/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What are the navigation method names and do they return the rendered string?",
+   "What exact string format does render produce?",
+   "Is an out-of-range page clamped or rejected?",
+   "How is the window centred for even visibleCount?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69026c73d18315042523a913/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "Paginator",
+      "next"
+     ],
+     [
+      [
+       1,
+       1,
+       1
+      ],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     "[1]"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "Paginator",
+      "goTo",
+      "goTo",
+      "next",
+      "goTo",
+      "goTo",
+      "next",
+      "prev",
+      "next",
+      "goTo",
+      "prev",
+      "prev"
+     ],
+     [
+      [
+       30,
+       4,
+       11
+      ],
+      [
+       31
+      ],
+      [
+       2
+      ],
+      [],
+      [
+       1
+      ],
+      [
+       1
+      ],
+      [],
+      [],
+      [],
+      [
+       0
+      ],
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     "< ... 27 28 29 [30]",
+     "< 1 [2] 3 4 ... >",
+     "< ... 2 [3] 4 5 ... >",
+     "[1] 2 3 4 ... >",
+     "[1] 2 3 4 ... >",
+     "< 1 [2] 3 4 ... >",
+     "[1] 2 3 4 ... >",
+     "< 1 [2] 3 4 ... >",
+     "[1] 2 3 4 ... >",
+     "[1] 2 3 4 ... >",
+     "[1] 2 3 4 ... >"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69026c73d18315042523a913/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Paginator:\n    def __init__(self, totalPages, visibleCount, currentPage)\n    def next(self) -> string\n    def prev(self) -> string\n    def goTo(self, page) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69026c73d18315042523a913-python.json",
+     "inferredInterface": {
+      "classname": "Paginator",
+      "constructor": {
+       "params": [
+        {
+         "name": "totalPages",
+         "type": "integer"
+        },
+        {
+         "name": "visibleCount",
+         "type": "integer"
+        },
+        {
+         "name": "currentPage",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "next",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "prev",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "goTo",
+        "params": [
+         {
+          "name": "page",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69026c73d18315042523a913-python.json",
+      "sha256": "1e4a6d94be508ac4e0ded8067d65fc5c2c23ef01d3f15c6beee706b9885e297e",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Paginator {\n  constructor(totalPages, visibleCount, currentPage)\n  next() /* -> string */\n  prev() /* -> string */\n  goTo(page) /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69026c73d18315042523a913-javascript.json",
+     "inferredInterface": {
+      "classname": "Paginator",
+      "constructor": {
+       "params": [
+        {
+         "name": "totalPages",
+         "type": "integer"
+        },
+        {
+         "name": "visibleCount",
+         "type": "integer"
+        },
+        {
+         "name": "currentPage",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "next",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "prev",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "goTo",
+        "params": [
+         {
+          "name": "page",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69026c73d18315042523a913-javascript.json",
+      "sha256": "dbf0694a41cb0904e94fe60a3dc8006e1a6a5de4ad7d611f4adf3444f0de2db9",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/9/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/9/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

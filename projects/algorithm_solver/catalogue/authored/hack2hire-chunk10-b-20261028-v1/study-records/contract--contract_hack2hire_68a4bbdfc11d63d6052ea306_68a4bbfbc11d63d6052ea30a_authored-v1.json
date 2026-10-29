@@ -1,0 +1,667 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfbc11d63d6052ea30a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68a4bbdfc11d63d6052ea306.json",
+   "sha256": "aff593d066a83d1dff78de3514d731eb56c624238ae50c8a02461dd94fe200ad",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:68a4bbfbc11d63d6052ea30a"
+  }
+ ],
+ "problemId": "hack2hire:68a4bbdfc11d63d6052ea306",
+ "variantId": "68a4bbfbc11d63d6052ea30a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 4 of 4: double-pay periods",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbfbc11d63d6052ea30a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "WorkerManagementSystem() starts empty. addWorker(workerId, position, compensation) adds a worker and returns true, or returns false and changes nothing when the id exists. registerWorker(workerId, timestamp) returns \"invalid_request\" for an unknown worker; otherwise it records an entry when the worker is outside the office and an exit when inside, and returns \"registered\". registerWorker timestamps strictly increase. get(workerId) returns the total length (exit - entry) of the worker's finished sessions, or -1 for an unknown worker; an open session does not count. topNWorkers(n, position) ranks the workers whose current position equals position by their finished time in that position, longest first and then by workerId ascending (code-point order), and returns the first n as \"id(time)\" items joined by \", \" (an empty string when none). promote(workerId, newPosition, newCompensation, startTimestamp) returns \"invalid_request\" for an unknown worker or one that already has a pending promotion; otherwise it stores the promotion and returns \"success\". A pending promotion takes effect at the worker's first entry with timestamp >= startTimestamp: position and compensation change before that session starts. topNWorkers then counts only sessions started since the promotion took effect. calcSalary(workerId, startTimestamp, endTimestamp) returns, for an unknown worker -1, otherwise the sum over finished sessions [entry, exit) of the length of their overlap with [startTimestamp, endTimestamp) times the compensation in force when the session started. setDoublePaid(startTimestamp, endTimestamp) marks [startTimestamp, endTimestamp) as double-pay time (overlapping periods do not stack). In calcSalary every overlapped time unit that is also double-pay time is paid twice.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "WorkerManagementSystem() starts empty.",
+   "addWorker(workerId, position, compensation) adds a worker and returns true, or returns false and changes nothing when the id exists.",
+   "registerWorker(workerId, timestamp) returns \"invalid_request\" for an unknown worker; otherwise it records an entry when the worker is outside the office and an exit when inside, and returns \"registered\".",
+   "registerWorker timestamps strictly increase.",
+   "get(workerId) returns the total length (exit - entry) of the worker's finished sessions, or -1 for an unknown worker; an open session does not count.",
+   "topNWorkers(n, position) ranks the workers whose current position equals position by their finished time in that position, longest first and then by workerId ascending (code-point order), and returns the first n as \"id(time)\" items joined by \", \" (an empty string when none).",
+   "promote(workerId, newPosition, newCompensation, startTimestamp) returns \"invalid_request\" for an unknown worker or one that already has a pending promotion; otherwise it stores the promotion and returns \"success\".",
+   "A pending promotion takes effect at the worker's first entry with timestamp >= startTimestamp: position and compensation change before that session starts.",
+   "topNWorkers then counts only sessions started since the promotion took effect.",
+   "calcSalary(workerId, startTimestamp, endTimestamp) returns, for an unknown worker -1, otherwise the sum over finished sessions [entry, exit) of the length of their overlap with [startTimestamp, endTimestamp) times the compensation in force when the session started.",
+   "setDoublePaid(startTimestamp, endTimestamp) marks [startTimestamp, endTimestamp) as double-pay time (overlapping periods do not stack).",
+   "In calcSalary every overlapped time unit that is also double-pay time is paid twice."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "workerId and position match [A-Za-z ]{1,20}",
+   "1 <= compensation <= 1e6",
+   "0 <= timestamps <= 1e9, registerWorker timestamps strictly increasing",
+   "1 <= n <= 1e5",
+   "sum over topNWorkers calls of the number of workers <= 2e6",
+   "sum over calcSalary calls of the worker's register calls <= 2e6",
+   "startTimestamp <= endTimestamp",
+   "at most 1000 setDoublePaid calls, start < end"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbfbc11d63d6052ea30a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: addWorker / registerWorker / get signatures and return values, letters-and-spaces ids, increasing registerWorker timestamps, finished sessions only, -1 for unknown worker (level 1 text only); algorithmTags: DESIGN; variant order from codingQuestions (4 of 4); preview response sha256 be35a9f6d5990bc2c2261091fc5154d3f3e62f1f9e61435943ed6ec2830cd3b4"
+   },
+   {
+    "statement": "Uncertainty: high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; the method names, ranking order, output format, promotion timing, stint-based ranking, per-session compensation, and non-stacking double-pay periods are inferred",
+    "basis": "the public group preview is partial (1785 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 4 of 4: cumulative level 4 (+ setDoublePaid)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/4/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/4/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/4/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Do overlapping double-pay periods stack?",
+   "Is a double-pay period half-open?",
+   "Does double pay apply retroactively to sessions already finished?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbfbc11d63d6052ea30a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "WorkerManagementSystem",
+      "get"
+     ],
+     [
+      [],
+      [
+       "Ann"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "WorkerManagementSystem",
+      "addWorker",
+      "addWorker",
+      "addWorker",
+      "promote",
+      "get",
+      "get",
+      "registerWorker",
+      "registerWorker",
+      "get",
+      "calcSalary"
+     ],
+     [
+      [],
+      [
+       "Ann",
+       "Dev",
+       5
+      ],
+      [
+       "Cy",
+       "Dev",
+       3
+      ],
+      [
+       "Ann",
+       "Dev",
+       2
+      ],
+      [
+       "Cy",
+       "QA",
+       1,
+       5
+      ],
+      [
+       "Cy"
+      ],
+      [
+       "Ann"
+      ],
+      [
+       "Ann",
+       1
+      ],
+      [
+       "ann",
+       2
+      ],
+      [
+       "Bo Li"
+      ],
+      [
+       "ann",
+       0,
+       0
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     true,
+     true,
+     false,
+     "success",
+     0,
+     0,
+     "registered",
+     "invalid_request",
+     -1,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbfbc11d63d6052ea30a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class WorkerManagementSystem:\n    def __init__(self)\n    def addWorker(self, workerId, position, compensation) -> boolean\n    def registerWorker(self, workerId, timestamp) -> string\n    def get(self, workerId) -> integer\n    def topNWorkers(self, n, position) -> string\n    def promote(self, workerId, newPosition, newCompensation, startTimestamp) -> string\n    def calcSalary(self, workerId, startTimestamp, endTimestamp) -> integer\n    def setDoublePaid(self, startTimestamp, endTimestamp) -> void",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68a4bbfbc11d63d6052ea30a-python.json",
+     "inferredInterface": {
+      "classname": "WorkerManagementSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addWorker",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "position",
+          "type": "string"
+         },
+         {
+          "name": "compensation",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "registerWorker",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "topNWorkers",
+        "params": [
+         {
+          "name": "n",
+          "type": "integer"
+         },
+         {
+          "name": "position",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "promote",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "newPosition",
+          "type": "string"
+         },
+         {
+          "name": "newCompensation",
+          "type": "integer"
+         },
+         {
+          "name": "startTimestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "calcSalary",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "startTimestamp",
+          "type": "integer"
+         },
+         {
+          "name": "endTimestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "setDoublePaid",
+        "params": [
+         {
+          "name": "startTimestamp",
+          "type": "integer"
+         },
+         {
+          "name": "endTimestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68a4bbfbc11d63d6052ea30a-python.json",
+      "sha256": "1c12dd9d11f1436e46f363da336f079b68bdf6b31db93215ec39fdcb7c57c48d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class WorkerManagementSystem {\n  constructor()\n  addWorker(workerId, position, compensation) /* -> boolean */\n  registerWorker(workerId, timestamp) /* -> string */\n  get(workerId) /* -> integer */\n  topNWorkers(n, position) /* -> string */\n  promote(workerId, newPosition, newCompensation, startTimestamp) /* -> string */\n  calcSalary(workerId, startTimestamp, endTimestamp) /* -> integer */\n  setDoublePaid(startTimestamp, endTimestamp) /* -> void */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68a4bbfbc11d63d6052ea30a-javascript.json",
+     "inferredInterface": {
+      "classname": "WorkerManagementSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addWorker",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "position",
+          "type": "string"
+         },
+         {
+          "name": "compensation",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "registerWorker",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "topNWorkers",
+        "params": [
+         {
+          "name": "n",
+          "type": "integer"
+         },
+         {
+          "name": "position",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "promote",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "newPosition",
+          "type": "string"
+         },
+         {
+          "name": "newCompensation",
+          "type": "integer"
+         },
+         {
+          "name": "startTimestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "calcSalary",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "startTimestamp",
+          "type": "integer"
+         },
+         {
+          "name": "endTimestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "setDoublePaid",
+        "params": [
+         {
+          "name": "startTimestamp",
+          "type": "integer"
+         },
+         {
+          "name": "endTimestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68a4bbfbc11d63d6052ea30a-javascript.json",
+      "sha256": "d0806f12d0df85e028b401bf872417bc51fb17970845f6d5d7ff8f6e105eb7b0",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/4/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/4/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

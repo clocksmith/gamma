@@ -1,0 +1,462 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/design.json",
+   "sha256": "7d98104ee19456669f11be1aad0e786e520a89ddeca507cefb78418cee9e229b",
+   "selector": "/problems/hack2hire:68a4bbfac11d63d6052ea309"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309"
+  }
+ ],
+ "problemId": "hack2hire:68a4bbdfc11d63d6052ea306",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-records/contract--contract_hack2hire_68a4bbdfc11d63d6052ea306_68a4bbfac11d63d6052ea309_authored-v1.json",
+  "sha256": "33b2c6ca44d480a24e67c878249a283b6c9b3a3374dff8e6d8226ebafcf19349"
+ },
+ "title": {
+  "status": "present",
+  "value": "per-worker list of finished sessions (entry, exit, compensation) in time order; calcSalary binary-searches the first session ending after the start and sums overlaps until a session starts at or after the end; promotions are applied at entry",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/design.json",
+    "sha256": "7d98104ee19456669f11be1aad0e786e520a89ddeca507cefb78418cee9e229b",
+    "selector": "/problems/hack2hire:68a4bbfac11d63d6052ea309/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "per-worker list of finished sessions (entry, exit, compensation) in time order; calcSalary binary-searches the first session ending after the start and sums overlaps until a session starts at or after the end; promotions are applied at entry. Complexity target: O(log s + overlapping sessions) per calcSalary/O(total sessions) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/design.json",
+    "sha256": "7d98104ee19456669f11be1aad0e786e520a89ddeca507cefb78418cee9e229b",
+    "selector": "/problems/hack2hire:68a4bbfac11d63d6052ea309"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Event-driven state machines with per-entity records and occasional reports"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Sorting on each ranking call is simple but O(w log w); a balanced tree per position would make it O(n log w) at the cost of updates on every exit"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "each worker alternates entry and exit, so at most one session is open",
+   "finished totals only grow",
+   "the stint total counts only sessions started under the current position"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Keep each finished session with the compensation in force when it started.",
+   "Apply a pending promotion at the first entry whose timestamp reaches its start; reset the stint total there.",
+   "Sessions are disjoint and sorted, so binary search finds the first one overlapping the query window."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "per-worker list of finished sessions (entry, exit, compensation) in time order; calcSalary binary-searches the first session ending after the start and sums overlaps until a session starts at or after the end; promotions are applied at entry",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/design.json",
+      "sha256": "7d98104ee19456669f11be1aad0e786e520a89ddeca507cefb78418cee9e229b",
+      "selector": "/problems/hack2hire:68a4bbfac11d63d6052ea309/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(log s + overlapping sessions) per calcSalary/O(total sessions) space; the independent reference (scan every finished session and mark every overlapped time unit one by one for calcSalary) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/design.json",
+      "sha256": "7d98104ee19456669f11be1aad0e786e520a89ddeca507cefb78418cee9e229b",
+      "selector": "/problems/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Keep each finished session with the compensation in force when it started.",
+     "Apply a pending promotion at the first entry whose timestamp reaches its start; reset the stint total there."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-records/artifact--artifact_hack2hire_68a4bbdfc11d63d6052ea306_68a4bbfac11d63d6052ea309_approach-native_v1.json",
+    "sha256": "d313ddd75ed2e889b52beb2226113b3c1901b869dc6eac68fbf18112eeebcc8a"
+   }
+  },
+  {
+   "id": "approach:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred native class WorkerManagementSystem, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/design.json",
+      "sha256": "7d98104ee19456669f11be1aad0e786e520a89ddeca507cefb78418cee9e229b",
+      "selector": "/problems/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Sessions are disjoint and sorted, so binary search finds the first one overlapping the query window."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-records/artifact--artifact_hack2hire_68a4bbdfc11d63d6052ea306_68a4bbfac11d63d6052ea309_python_v1.json",
+     "sha256": "6ed3a8d042787be2031352a0ef803ccd56a88740ac70df7f5e652e01e9900a4c"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-records/artifact--artifact_hack2hire_68a4bbdfc11d63d6052ea306_68a4bbfac11d63d6052ea309_javascript_v1.json",
+     "sha256": "5a0ded9cef99f669e8a9e5a0828ca5e5fe04ec385ce1b9b127ce55599ebe3593"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-records/artifact--artifact_hack2hire_68a4bbdfc11d63d6052ea306_68a4bbfac11d63d6052ea309_approach-native_v1.json",
+    "sha256": "d313ddd75ed2e889b52beb2226113b3c1901b869dc6eac68fbf18112eeebcc8a"
+   }
+  },
+  {
+   "id": "approach:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (scan every finished session and mark every overlapped time unit one by one for calcSalary) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/design.json",
+      "sha256": "7d98104ee19456669f11be1aad0e786e520a89ddeca507cefb78418cee9e229b",
+      "selector": "/problems/hack2hire:68a4bbfac11d63d6052ea309/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/3/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/test_oracles.py",
+      "sha256": "97ce09cc23659a877af5643545e2258ef546993df0ff82c7fa6a213983df1d15",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+      "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+      "selector": "/variants/hack2hire:68a4bbfac11d63d6052ea309"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-records/artifact--artifact_hack2hire_68a4bbdfc11d63d6052ea306_68a4bbfac11d63d6052ea309_approach-native_v1.json",
+    "sha256": "d313ddd75ed2e889b52beb2226113b3c1901b869dc6eac68fbf18112eeebcc8a"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbfac11d63d6052ea309:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-records/artifact--artifact_hack2hire_68a4bbdfc11d63d6052ea306_68a4bbfac11d63d6052ea309_approach-native_v1.json",
+  "sha256": "d313ddd75ed2e889b52beb2226113b3c1901b869dc6eac68fbf18112eeebcc8a"
+ }
+}

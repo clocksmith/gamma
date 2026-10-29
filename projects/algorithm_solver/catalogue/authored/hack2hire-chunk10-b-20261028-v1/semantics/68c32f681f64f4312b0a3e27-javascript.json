@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68c32f681f64f4312b0a3e27",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "drivers",
+  "lapTimes"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "rankLastLapImprovement",
+  "params": [
+   {
+    "name": "drivers",
+    "type": "string[]"
+   },
+   {
+    "name": "lapTimes",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "compute each improvement as an exact fraction and sort by (-improvement, name)",
+  "candidate_design": "integer keys sum(first L - 1) - last * (L - 1) and a sort by (-key, name)",
+  "complexity_target": "O(n * L + n log n) time/O(n) space"
+ },
+ "source_sha256": "00e9fbe6832ed9480356621c8336854d3c65f31aeaa20911f05d9432ec117383",
+ "wrapper": "named export rankLastLapImprovement"
+}

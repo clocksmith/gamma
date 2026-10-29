@@ -1,0 +1,195 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69efc94196981f58ae1f6d76",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "TaskManager",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addTask",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "priority",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "updateTask",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "taskId",
+      "type": "string"
+     },
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "priority",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getTask",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "taskId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "searchTasks",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "nameFilter",
+      "type": "string"
+     },
+     {
+      "name": "maxResults",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "listTasksSorted",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "limit",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "addUser",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "userId",
+      "type": "string"
+     },
+     {
+      "name": "quota",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "assignTask",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "taskId",
+      "type": "string"
+     },
+     {
+      "name": "userId",
+      "type": "string"
+     },
+     {
+      "name": "finishTime",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getUserTasks",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "userId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rescan the full assignment history for every assign and query",
+  "candidate_design": "per-user map of active assignments plus a min-heap of (finishTime, sequence) that expires assignments lazily on each access to that user",
+  "complexity_target": "O(log a) amortised per assign, O(k log k) per getUserTasks/O(assignments) space"
+ },
+ "source_sha256": "88bad5c60a3f446d9e40d730a03ea8aa90e1a7bd8e7b7e2be45a6ceb6382bc74",
+ "native_class": "TaskManager",
+ "native_symbol": "module global TaskManager",
+ "void_methods": []
+}

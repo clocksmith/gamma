@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a0226e62608e589a944a229",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "durations",
+  "totalHours"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minBookings",
+  "params": [
+   {
+    "name": "durations",
+    "type": "integer[]"
+   },
+   {
+    "name": "totalHours",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "breadth-first search over reachable sums, one booking per level",
+  "candidate_design": "bottom-up DP array best[0..totalHours] over distinct durations",
+  "complexity_target": "O(totalHours * distinct durations) time/O(totalHours) space"
+ },
+ "source_sha256": "021f0f4aa849d02b87c892d502a196453b377561181632f0553e663313135714",
+ "wrapper": "named export minBookings"
+}

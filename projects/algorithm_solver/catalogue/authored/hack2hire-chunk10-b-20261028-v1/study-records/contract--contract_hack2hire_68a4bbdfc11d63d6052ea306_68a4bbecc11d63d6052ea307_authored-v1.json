@@ -1,0 +1,504 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68a4bbdfc11d63d6052ea306:68a4bbecc11d63d6052ea307:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68a4bbdfc11d63d6052ea306.json",
+   "sha256": "aff593d066a83d1dff78de3514d731eb56c624238ae50c8a02461dd94fe200ad",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:68a4bbecc11d63d6052ea307"
+  }
+ ],
+ "problemId": "hack2hire:68a4bbdfc11d63d6052ea306",
+ "variantId": "68a4bbecc11d63d6052ea307",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1 of 4: worker sessions and totals",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbecc11d63d6052ea307/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "WorkerManagementSystem() starts empty. addWorker(workerId, position, compensation) adds a worker and returns true, or returns false and changes nothing when the id exists. registerWorker(workerId, timestamp) returns \"invalid_request\" for an unknown worker; otherwise it records an entry when the worker is outside the office and an exit when inside, and returns \"registered\". registerWorker timestamps strictly increase. get(workerId) returns the total length (exit - entry) of the worker's finished sessions, or -1 for an unknown worker; an open session does not count.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "WorkerManagementSystem() starts empty.",
+   "addWorker(workerId, position, compensation) adds a worker and returns true, or returns false and changes nothing when the id exists.",
+   "registerWorker(workerId, timestamp) returns \"invalid_request\" for an unknown worker; otherwise it records an entry when the worker is outside the office and an exit when inside, and returns \"registered\".",
+   "registerWorker timestamps strictly increase.",
+   "get(workerId) returns the total length (exit - entry) of the worker's finished sessions, or -1 for an unknown worker; an open session does not count."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "workerId and position match [A-Za-z ]{1,20}",
+   "1 <= compensation <= 1e6",
+   "0 <= timestamps <= 1e9, registerWorker timestamps strictly increasing"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbecc11d63d6052ea307/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: addWorker / registerWorker / get signatures and return values, letters-and-spaces ids, increasing registerWorker timestamps, finished sessions only, -1 for unknown worker (level 1 text only); algorithmTags: DESIGN; variant order from codingQuestions (1 of 4); preview response sha256 be35a9f6d5990bc2c2261091fc5154d3f3e62f1f9e61435943ed6ec2830cd3b4"
+   },
+   {
+    "statement": "Uncertainty: low-medium: level 1 operations, return values and the finished-session rule are in the preview; the class name, boolean (not string) returns of addWorker, and half-open session lengths are inferred",
+    "basis": "the public group preview is partial (1785 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 1 of 4: cumulative level 1 (add/register/get)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Do addWorker results come back as booleans or as the strings \"true\"/\"false\"?",
+   "Is a session [entry, exit) and its length exit - entry?",
+   "Does get include an open session?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbecc11d63d6052ea307/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "WorkerManagementSystem",
+      "get"
+     ],
+     [
+      [],
+      [
+       "Ann"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "WorkerManagementSystem",
+      "addWorker",
+      "addWorker",
+      "get",
+      "addWorker",
+      "get",
+      "get",
+      "get",
+      "addWorker",
+      "get",
+      "registerWorker",
+      "get"
+     ],
+     [
+      [],
+      [
+       "Ann",
+       "Dev",
+       5
+      ],
+      [
+       "Cy",
+       "Dev Ops",
+       3
+      ],
+      [
+       "Bo Li"
+      ],
+      [
+       "Bo Li",
+       "Dev Ops",
+       5
+      ],
+      [
+       "Ann"
+      ],
+      [
+       "Bo Li"
+      ],
+      [
+       "ann"
+      ],
+      [
+       "Ann",
+       "QA",
+       1
+      ],
+      [
+       "Ann"
+      ],
+      [
+       "Cy",
+       1
+      ],
+      [
+       "Ann"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     true,
+     true,
+     -1,
+     true,
+     0,
+     0,
+     -1,
+     false,
+     0,
+     "registered",
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68a4bbecc11d63d6052ea307/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class WorkerManagementSystem:\n    def __init__(self)\n    def addWorker(self, workerId, position, compensation) -> boolean\n    def registerWorker(self, workerId, timestamp) -> string\n    def get(self, workerId) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68a4bbecc11d63d6052ea307-python.json",
+     "inferredInterface": {
+      "classname": "WorkerManagementSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addWorker",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "position",
+          "type": "string"
+         },
+         {
+          "name": "compensation",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "registerWorker",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68a4bbecc11d63d6052ea307-python.json",
+      "sha256": "980d3620d7cfd9559c3d627b89870037fbe75797c5358fe25d12362e275f37a8",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class WorkerManagementSystem {\n  constructor()\n  addWorker(workerId, position, compensation) /* -> boolean */\n  registerWorker(workerId, timestamp) /* -> string */\n  get(workerId) /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68a4bbecc11d63d6052ea307-javascript.json",
+     "inferredInterface": {
+      "classname": "WorkerManagementSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addWorker",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "position",
+          "type": "string"
+         },
+         {
+          "name": "compensation",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "registerWorker",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "workerId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68a4bbecc11d63d6052ea307-javascript.json",
+      "sha256": "63f136fc028ac80aadd7f94f4b6193883f28994b273e8357a1eb85e03a16820d",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

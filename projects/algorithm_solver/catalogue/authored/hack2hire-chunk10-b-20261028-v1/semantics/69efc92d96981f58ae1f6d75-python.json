@@ -1,0 +1,135 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69efc92d96981f58ae1f6d75",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "TaskManager",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addTask",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "priority",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "updateTask",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "taskId",
+      "type": "string"
+     },
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "priority",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getTask",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "taskId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "searchTasks",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "nameFilter",
+      "type": "string"
+     },
+     {
+      "name": "maxResults",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "listTasksSorted",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "limit",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rescan all tasks with a fresh sort for each query",
+  "candidate_design": "level-1 map kept in creation order; each query filters by substring and sorts by (-priority, creation number) once, then cuts to the limit",
+  "complexity_target": "O(t log t) per query/O(tasks) space"
+ },
+ "source_sha256": "a7eef482e6c9de6873759c06c396d0d1b7bee20b875d1ba1359d9091c0ed54a7",
+ "native_class": "TaskManager",
+ "native_symbol": "module global TaskManager",
+ "void_methods": []
+}

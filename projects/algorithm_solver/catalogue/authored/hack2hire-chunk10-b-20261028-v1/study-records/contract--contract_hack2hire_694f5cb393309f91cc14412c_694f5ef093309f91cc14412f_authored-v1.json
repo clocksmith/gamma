@@ -1,0 +1,344 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:694f5cb393309f91cc14412c:694f5ef093309f91cc14412f:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/694f5cb393309f91cc14412c.json",
+   "sha256": "b1404e3675b9bf39167940fca31c9f1bad03695e1b4074a5b1c6b41e82c433ec",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:694f5ef093309f91cc14412f"
+  }
+ ],
+ "problemId": "hack2hire:694f5cb393309f91cc14412c",
+ "variantId": "694f5ef093309f91cc14412f",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: evaluate with truncating integer division",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:694f5ef093309f91cc14412f/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "expression is a JSON object: {\"operation\": \"CONSTANT_NUMBER\", \"value\": v} with integer v, or {\"operation\": op, \"inputs\": [left, right]} with op one of ADD, SUBTRACT, MULTIPLY, DIVIDE. Return the integer value of the tree, where DIVIDE is integer division truncated toward zero. Inputs never divide by zero.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "expression is a JSON object: {\"operation\": \"CONSTANT_NUMBER\", \"value\": v} with integer v, or {\"operation\": op, \"inputs\": [left, right]} with op one of ADD, SUBTRACT, MULTIPLY, DIVIDE.",
+   "Return the integer value of the tree, where DIVIDE is integer division truncated toward zero.",
+   "Inputs never divide by zero."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 40000 nodes, tree depth <= 99 (JSON nesting <= 199)",
+   "|value| <= 1e9",
+   "every intermediate |result| <= 1e15",
+   "no division by zero"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:694f5ef093309f91cc14412f/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: binary expression tree as a JSON object, CONSTANT_NUMBER nodes with integer value, ADD/SUBTRACT/MULTIPLY/DIVIDE nodes with exactly two inputs; algorithmTags: RECURSION; preview response sha256 e60f023b838f3dcd121ccbd78e280f82fb10c56612b75fa0e96c27bca7a40baa"
+   },
+   {
+    "statement": "Uncertainty: medium: the node shapes are in the preview; integer division truncating toward zero and the integer result type are inferred",
+    "basis": "the public group preview is partial (448 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is DIVIDE integer or real division, and how does it round?",
+   "Can a divisor be zero?",
+   "Can values overflow a 64-bit or double range?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:694f5ef093309f91cc14412f/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     {
+      "operation": "CONSTANT_NUMBER",
+      "value": 7
+     }
+    ],
+    "output": 7,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     {
+      "operation": "SUBTRACT",
+      "inputs": [
+       {
+        "operation": "SUBTRACT",
+        "inputs": [
+         {
+          "operation": "CONSTANT_NUMBER",
+          "value": -1
+         },
+         {
+          "operation": "CONSTANT_NUMBER",
+          "value": 2
+         }
+        ]
+       },
+       {
+        "operation": "ADD",
+        "inputs": [
+         {
+          "operation": "CONSTANT_NUMBER",
+          "value": -1
+         },
+         {
+          "operation": "CONSTANT_NUMBER",
+          "value": 2
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "output": -4,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:694f5ef093309f91cc14412f/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def evaluate(expression) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/694f5ef093309f91cc14412f-python.json",
+     "inferredInterface": {
+      "name": "evaluate",
+      "params": [
+       {
+        "name": "expression",
+        "type": "object"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/694f5ef093309f91cc14412f-python.json",
+      "sha256": "4e4c53d638807f3eb93b9cf4ade6ce4fe3e9795e0cedb05358130b8a2cbcc878",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function evaluate(expression) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/694f5ef093309f91cc14412f-javascript.json",
+     "inferredInterface": {
+      "name": "evaluate",
+      "params": [
+       {
+        "name": "expression",
+        "type": "object"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/694f5ef093309f91cc14412f-javascript.json",
+      "sha256": "07966ee65070cf128ba34ceece7288a9dcc9363f70232dd0d6cefae6b5880d18",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

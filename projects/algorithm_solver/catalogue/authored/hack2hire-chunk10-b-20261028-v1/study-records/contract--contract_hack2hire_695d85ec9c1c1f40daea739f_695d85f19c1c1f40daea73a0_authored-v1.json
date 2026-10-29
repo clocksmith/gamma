@@ -1,0 +1,546 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:695d85ec9c1c1f40daea739f:695d85f19c1c1f40daea73a0:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/695d85ec9c1c1f40daea739f.json",
+   "sha256": "e30918f0eb1d905ca6236ea787d498947909b11d4f0afb529e599bfc64ff958b",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:695d85f19c1c1f40daea73a0"
+  }
+ ],
+ "problemId": "hack2hire:695d85ec9c1c1f40daea739f",
+ "variantId": "695d85f19c1c1f40daea73a0",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: per-user token bucket with discrete refills",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:695d85f19c1c1f40daea73a0/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "TokenLimiter() starts with no users. setPolicy(userId, maxTokens, refillAmount, refillInterval, timestamp) creates or replaces the user's bucket: it is full (maxTokens) at timestamp, and refills happen at timestamp + k * refillInterval for k = 1, 2, .... Each refill adds refillAmount tokens, capped at maxTokens. consume(userId, tokens, timestamp) first applies every refill due at or before timestamp, then removes tokens and returns true when the bucket holds at least that many; otherwise it removes nothing and returns false. An unknown user cannot consume (false). getTokens(userId, timestamp) applies due refills and returns the bucket level, or -1 for an unknown user. Timestamps never decrease across calls.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "TokenLimiter() starts with no users.",
+   "setPolicy(userId, maxTokens, refillAmount, refillInterval, timestamp) creates or replaces the user's bucket: it is full (maxTokens) at timestamp, and refills happen at timestamp + k * refillInterval for k = 1, 2, ...",
+   "Each refill adds refillAmount tokens, capped at maxTokens.",
+   "consume(userId, tokens, timestamp) first applies every refill due at or before timestamp, then removes tokens and returns true when the bucket holds at least that many; otherwise it removes nothing and returns false.",
+   "An unknown user cannot consume (false).",
+   "getTokens(userId, timestamp) applies due refills and returns the bucket level, or -1 for an unknown user.",
+   "Timestamps never decrease across calls."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "1 <= maxTokens, tokens <= 1e9",
+   "1 <= refillAmount <= 1e6",
+   "1 <= refillInterval <= 1e9",
+   "0 <= timestamp <= 1e9, non-decreasing",
+   "userId matches [a-z0-9_]{1,20}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:695d85f19c1c1f40daea73a0/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: per-user token bucket for an AI API, custom policy per user (maximum tokens, tokens added per refill, refill interval in seconds), uneven request times, class TokenLimiter (methods not visible); algorithmTags: HASH_TABLE, DESIGN; preview response sha256 3b94cae41ff0c8c95f635bb5ea5d9a8dae69d339580c9108532216092e22423b"
+   },
+   {
+    "statement": "Uncertainty: high: the class name, the three policy fields and per-user buckets are in the preview; the method names, the timestamp arguments, the full initial bucket, discrete refills anchored at the policy time, policy replacement and the -1 sentinel are inferred",
+    "basis": "the public group preview is partial (452 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does a new bucket start full or empty?",
+   "Are refills continuous or discrete, and anchored to what time?",
+   "What do consume and getTokens return for an unknown user?",
+   "Can a policy be replaced, and does that reset the bucket?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:695d85f19c1c1f40daea73a0/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "TokenLimiter",
+      "getTokens"
+     ],
+     [
+      [],
+      [
+       "b",
+       0
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "TokenLimiter",
+      "consume",
+      "consume",
+      "consume",
+      "consume",
+      "getTokens",
+      "consume",
+      "consume",
+      "getTokens",
+      "consume",
+      "consume"
+     ],
+     [
+      [],
+      [
+       "b",
+       1,
+       3
+      ],
+      [
+       "u_1",
+       3,
+       5
+      ],
+      [
+       "a",
+       1,
+       8
+      ],
+      [
+       "u_1",
+       1,
+       8
+      ],
+      [
+       "u_1",
+       28
+      ],
+      [
+       "u_1",
+       2,
+       31
+      ],
+      [
+       "b",
+       6,
+       33
+      ],
+      [
+       "a",
+       53
+      ],
+      [
+       "b",
+       6,
+       73
+      ],
+      [
+       "u_1",
+       3,
+       76
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false,
+     false,
+     false,
+     false,
+     -1,
+     false,
+     false,
+     -1,
+     false,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:695d85f19c1c1f40daea73a0/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TokenLimiter:\n    def __init__(self)\n    def setPolicy(self, userId, maxTokens, refillAmount, refillInterval, timestamp) -> void\n    def consume(self, userId, tokens, timestamp) -> boolean\n    def getTokens(self, userId, timestamp) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/695d85f19c1c1f40daea73a0-python.json",
+     "inferredInterface": {
+      "classname": "TokenLimiter",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "setPolicy",
+        "params": [
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "maxTokens",
+          "type": "integer"
+         },
+         {
+          "name": "refillAmount",
+          "type": "integer"
+         },
+         {
+          "name": "refillInterval",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "consume",
+        "params": [
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "tokens",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getTokens",
+        "params": [
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/695d85f19c1c1f40daea73a0-python.json",
+      "sha256": "685ab4ca330b015c572c81e2e0cf5233e586a5998e936b5ffb083d5a218ba420",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TokenLimiter {\n  constructor()\n  setPolicy(userId, maxTokens, refillAmount, refillInterval, timestamp) /* -> void */\n  consume(userId, tokens, timestamp) /* -> boolean */\n  getTokens(userId, timestamp) /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/695d85f19c1c1f40daea73a0-javascript.json",
+     "inferredInterface": {
+      "classname": "TokenLimiter",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "setPolicy",
+        "params": [
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "maxTokens",
+          "type": "integer"
+         },
+         {
+          "name": "refillAmount",
+          "type": "integer"
+         },
+         {
+          "name": "refillInterval",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "consume",
+        "params": [
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "tokens",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getTokens",
+        "params": [
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/695d85f19c1c1f40daea73a0-javascript.json",
+      "sha256": "cd7796dc45bb7b0013a50683fbfefe3cb59103ed97f7533065c73c06bfb5edce",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,2750 @@
+{
+ "schema": "gamma.hack2hire-chunk10-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:695d85f19c1c1f40daea73a0": {
+   "constraints": [
+    "up to 1e5 calls",
+    "1 <= maxTokens, tokens <= 1e9",
+    "1 <= refillAmount <= 1e6",
+    "1 <= refillInterval <= 1e9",
+    "0 <= timestamp <= 1e9, non-decreasing",
+    "userId matches [a-z0-9_]{1,20}"
+   ],
+   "clarifyingQuestions": [
+    "Does a new bucket start full or empty?",
+    "Are refills continuous or discrete, and anchored to what time?",
+    "What do consume and getTokens return for an unknown user?",
+    "Can a policy be replaced, and does that reset the bucket?"
+   ],
+   "hints": [
+    "Store per user only the current level and the time of the last applied refill.",
+    "The number of refills due at time t is floor((t - last) / interval); apply them together and cap at the maximum.",
+    "Advance last by whole intervals only, so the refill phase stays anchored to the policy time."
+   ],
+   "invariants": [
+    "0 <= tokens <= maxTokens after every call",
+    "last refill time = policy time + k * interval for some k >= 0"
+   ],
+   "chooseWhen": [
+    "Requests arrive at irregular times and per-user state must stay O(1)"
+   ],
+   "tradeoffs": [
+    "Lazy refill computes only on access; a background timer would need a scheduler and does more work for idle users"
+   ],
+   "variantLabel": "Inferred single variant: per-user token bucket with discrete refills",
+   "examples": [
+    {
+     "input": [
+      [
+       "TokenLimiter",
+       "getTokens"
+      ],
+      [
+       [],
+       [
+        "b",
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TokenLimiter",
+       "consume",
+       "consume",
+       "consume",
+       "consume",
+       "getTokens",
+       "consume",
+       "consume",
+       "getTokens",
+       "consume",
+       "consume"
+      ],
+      [
+       [],
+       [
+        "b",
+        1,
+        3
+       ],
+       [
+        "u_1",
+        3,
+        5
+       ],
+       [
+        "a",
+        1,
+        8
+       ],
+       [
+        "u_1",
+        1,
+        8
+       ],
+       [
+        "u_1",
+        28
+       ],
+       [
+        "u_1",
+        2,
+        31
+       ],
+       [
+        "b",
+        6,
+        33
+       ],
+       [
+        "a",
+        53
+       ],
+       [
+        "b",
+        6,
+        73
+       ],
+       [
+        "u_1",
+        3,
+        76
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      false,
+      false,
+      false,
+      -1,
+      false,
+      false,
+      -1,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68a4bbecc11d63d6052ea307": {
+   "constraints": [
+    "up to 1e5 calls",
+    "workerId and position match [A-Za-z ]{1,20}",
+    "1 <= compensation <= 1e6",
+    "0 <= timestamps <= 1e9, registerWorker timestamps strictly increasing"
+   ],
+   "clarifyingQuestions": [
+    "Do addWorker results come back as booleans or as the strings \"true\"/\"false\"?",
+    "Is a session [entry, exit) and its length exit - entry?",
+    "Does get include an open session?"
+   ],
+   "hints": [
+    "Keep one record per worker: details, the open entry time (if any) and a running total.",
+    "Each register call toggles between entering and leaving.",
+    "Add a session to the total only when it closes; return -1 or \"invalid_request\" for unknown ids."
+   ],
+   "invariants": [
+    "each worker alternates entry and exit, so at most one session is open",
+    "finished totals only grow"
+   ],
+   "chooseWhen": [
+    "Event-driven state machines with per-entity records and occasional reports"
+   ],
+   "tradeoffs": [
+    "Sorting on each ranking call is simple but O(w log w); a balanced tree per position would make it O(n log w) at the cost of updates on every exit"
+   ],
+   "variantLabel": "Inferred level 1 of 4: worker sessions and totals",
+   "examples": [
+    {
+     "input": [
+      [
+       "WorkerManagementSystem",
+       "get"
+      ],
+      [
+       [],
+       [
+        "Ann"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "WorkerManagementSystem",
+       "addWorker",
+       "addWorker",
+       "get",
+       "addWorker",
+       "get",
+       "get",
+       "get",
+       "addWorker",
+       "get",
+       "registerWorker",
+       "get"
+      ],
+      [
+       [],
+       [
+        "Ann",
+        "Dev",
+        5
+       ],
+       [
+        "Cy",
+        "Dev Ops",
+        3
+       ],
+       [
+        "Bo Li"
+       ],
+       [
+        "Bo Li",
+        "Dev Ops",
+        5
+       ],
+       [
+        "Ann"
+       ],
+       [
+        "Bo Li"
+       ],
+       [
+        "ann"
+       ],
+       [
+        "Ann",
+        "QA",
+        1
+       ],
+       [
+        "Ann"
+       ],
+       [
+        "Cy",
+        1
+       ],
+       [
+        "Ann"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      true,
+      -1,
+      true,
+      0,
+      0,
+      -1,
+      false,
+      0,
+      "registered",
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68a4bbf8c11d63d6052ea308": {
+   "constraints": [
+    "up to 1e5 calls",
+    "workerId and position match [A-Za-z ]{1,20}",
+    "1 <= compensation <= 1e6",
+    "0 <= timestamps <= 1e9, registerWorker timestamps strictly increasing",
+    "1 <= n <= 1e5",
+    "sum over topNWorkers calls of the number of workers <= 2e6"
+   ],
+   "clarifyingQuestions": [
+    "Is ranking by total time or time in the current position?",
+    "How are ties broken?",
+    "What is returned when no worker holds the position?"
+   ],
+   "hints": [
+    "Track time per worker for the current position separately from the overall total.",
+    "Ranking is a sort by (-time, workerId); only workers currently in the position compete.",
+    "Format each entry as id(time) and join with \", \"; an empty ranking gives an empty string."
+   ],
+   "invariants": [
+    "each worker alternates entry and exit, so at most one session is open",
+    "finished totals only grow"
+   ],
+   "chooseWhen": [
+    "Event-driven state machines with per-entity records and occasional reports"
+   ],
+   "tradeoffs": [
+    "Sorting on each ranking call is simple but O(w log w); a balanced tree per position would make it O(n log w) at the cost of updates on every exit"
+   ],
+   "variantLabel": "Inferred level 2 of 4: ranking by time in position",
+   "examples": [
+    {
+     "input": [
+      [
+       "WorkerManagementSystem",
+       "get"
+      ],
+      [
+       [],
+       [
+        "Ann"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "WorkerManagementSystem",
+       "addWorker",
+       "addWorker",
+       "get",
+       "topNWorkers",
+       "addWorker",
+       "topNWorkers",
+       "get",
+       "get",
+       "get",
+       "addWorker"
+      ],
+      [
+       [],
+       [
+        "Ann",
+        "Dev",
+        5
+       ],
+       [
+        "Cy",
+        "QA",
+        3
+       ],
+       [
+        "Bo Li"
+       ],
+       [
+        1,
+        "Dev Ops"
+       ],
+       [
+        "Cy",
+        "Dev",
+        1
+       ],
+       [
+        2,
+        "Dev Ops"
+       ],
+       [
+        "ann"
+       ],
+       [
+        "Cy"
+       ],
+       [
+        "ann"
+       ],
+       [
+        "Cy",
+        "Dev",
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      true,
+      -1,
+      "",
+      false,
+      "",
+      -1,
+      0,
+      -1,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68a4bbfac11d63d6052ea309": {
+   "constraints": [
+    "up to 1e5 calls",
+    "workerId and position match [A-Za-z ]{1,20}",
+    "1 <= compensation <= 1e6",
+    "0 <= timestamps <= 1e9, registerWorker timestamps strictly increasing",
+    "1 <= n <= 1e5",
+    "sum over topNWorkers calls of the number of workers <= 2e6",
+    "sum over calcSalary calls of the worker's register calls <= 2e6",
+    "startTimestamp <= endTimestamp"
+   ],
+   "clarifyingQuestions": [
+    "When exactly does a promotion take effect if the worker is inside the office?",
+    "Which compensation applies to a session that spans a promotion start?",
+    "What does calcSalary return for an unknown worker?"
+   ],
+   "hints": [
+    "Keep each finished session with the compensation in force when it started.",
+    "Apply a pending promotion at the first entry whose timestamp reaches its start; reset the stint total there.",
+    "Sessions are disjoint and sorted, so binary search finds the first one overlapping the query window."
+   ],
+   "invariants": [
+    "each worker alternates entry and exit, so at most one session is open",
+    "finished totals only grow",
+    "the stint total counts only sessions started under the current position"
+   ],
+   "chooseWhen": [
+    "Event-driven state machines with per-entity records and occasional reports"
+   ],
+   "tradeoffs": [
+    "Sorting on each ranking call is simple but O(w log w); a balanced tree per position would make it O(n log w) at the cost of updates on every exit"
+   ],
+   "variantLabel": "Inferred level 3 of 4: promotions and salary over a window",
+   "examples": [
+    {
+     "input": [
+      [
+       "WorkerManagementSystem",
+       "get"
+      ],
+      [
+       [],
+       [
+        "Ann"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "WorkerManagementSystem",
+       "addWorker",
+       "registerWorker",
+       "get",
+       "registerWorker",
+       "topNWorkers",
+       "topNWorkers",
+       "promote",
+       "addWorker",
+       "calcSalary"
+      ],
+      [
+       [],
+       [
+        "Ann",
+        "Dev",
+        5
+       ],
+       [
+        "Cy",
+        3
+       ],
+       [
+        "Bo Li"
+       ],
+       [
+        "Cy",
+        6
+       ],
+       [
+        1,
+        "Dev"
+       ],
+       [
+        1,
+        "Dev Ops"
+       ],
+       [
+        "Bo Li",
+        "Dev",
+        1,
+        6
+       ],
+       [
+        "Bo Li",
+        "QA",
+        100
+       ],
+       [
+        "ann",
+        3,
+        4
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      "invalid_request",
+      -1,
+      "invalid_request",
+      "Ann(0)",
+      "",
+      "invalid_request",
+      true,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68a4bbfbc11d63d6052ea30a": {
+   "constraints": [
+    "up to 1e5 calls",
+    "workerId and position match [A-Za-z ]{1,20}",
+    "1 <= compensation <= 1e6",
+    "0 <= timestamps <= 1e9, registerWorker timestamps strictly increasing",
+    "1 <= n <= 1e5",
+    "sum over topNWorkers calls of the number of workers <= 2e6",
+    "sum over calcSalary calls of the worker's register calls <= 2e6",
+    "startTimestamp <= endTimestamp",
+    "at most 1000 setDoublePaid calls, start < end"
+   ],
+   "clarifyingQuestions": [
+    "Do overlapping double-pay periods stack?",
+    "Is a double-pay period half-open?",
+    "Does double pay apply retroactively to sessions already finished?"
+   ],
+   "hints": [
+    "Merge double-pay periods into disjoint sorted intervals, so overlapping periods count once.",
+    "Prefix sums of merged lengths give the doubled length inside any range with two binary searches.",
+    "Pay = compensation * (overlap + doubled part of the overlap) summed over overlapping sessions."
+   ],
+   "invariants": [
+    "each worker alternates entry and exit, so at most one session is open",
+    "finished totals only grow",
+    "the stint total counts only sessions started under the current position",
+    "merged double-pay intervals are disjoint and sorted"
+   ],
+   "chooseWhen": [
+    "Event-driven state machines with per-entity records and occasional reports"
+   ],
+   "tradeoffs": [
+    "Sorting on each ranking call is simple but O(w log w); a balanced tree per position would make it O(n log w) at the cost of updates on every exit"
+   ],
+   "variantLabel": "Inferred level 4 of 4: double-pay periods",
+   "examples": [
+    {
+     "input": [
+      [
+       "WorkerManagementSystem",
+       "get"
+      ],
+      [
+       [],
+       [
+        "Ann"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "WorkerManagementSystem",
+       "addWorker",
+       "addWorker",
+       "addWorker",
+       "promote",
+       "get",
+       "get",
+       "registerWorker",
+       "registerWorker",
+       "get",
+       "calcSalary"
+      ],
+      [
+       [],
+       [
+        "Ann",
+        "Dev",
+        5
+       ],
+       [
+        "Cy",
+        "Dev",
+        3
+       ],
+       [
+        "Ann",
+        "Dev",
+        2
+       ],
+       [
+        "Cy",
+        "QA",
+        1,
+        5
+       ],
+       [
+        "Cy"
+       ],
+       [
+        "Ann"
+       ],
+       [
+        "Ann",
+        1
+       ],
+       [
+        "ann",
+        2
+       ],
+       [
+        "Bo Li"
+       ],
+       [
+        "ann",
+        0,
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      true,
+      false,
+      "success",
+      0,
+      0,
+      "registered",
+      "invalid_request",
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69efc8ea96981f58ae1f6d74": {
+   "constraints": [
+    "up to 1e5 calls",
+    "timestamps strictly increasing, 0..1e9",
+    "names match [A-Za-z0-9 ]{1,20}",
+    "-1e9 <= priority <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "What does getTask return, and in what format?",
+    "What happens for an unknown task id?",
+    "Do ids restart or skip after updates?"
+   ],
+   "hints": [
+    "A counter gives the next id; a hash map from id to task gives O(1) lookups.",
+    "Unknown ids fail without changing anything.",
+    "Format details as name(priority)."
+   ],
+   "invariants": [
+    "task ids are dense: taskId1..taskId<count>"
+   ],
+   "chooseWhen": [
+    "Multi-level object design where each level adds state on top of the previous one"
+   ],
+   "tradeoffs": [
+    "Sorting on query is simple; maintaining a sorted index would speed queries but complicate updates"
+   ],
+   "variantLabel": "Inferred level 1 of 4: task store",
+   "examples": [
+    {
+     "input": [
+      [
+       "TaskManager",
+       "getTask"
+      ],
+      [
+       [],
+       [
+        1,
+        "taskId1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TaskManager",
+       "updateTask",
+       "updateTask",
+       "getTask",
+       "getTask",
+       "getTask",
+       "getTask",
+       "addTask",
+       "addTask",
+       "getTask"
+      ],
+      [
+       [],
+       [
+        1,
+        "taskId0",
+        "bug",
+        3
+       ],
+       [
+        2,
+        "taskId0",
+        "docs",
+        2
+       ],
+       [
+        3,
+        "taskid1"
+       ],
+       [
+        6,
+        "taskId1"
+       ],
+       [
+        8,
+        "taskId0"
+       ],
+       [
+        9,
+        "taskId0"
+       ],
+       [
+        12,
+        "a",
+        0
+       ],
+       [
+        13,
+        "a",
+        1
+       ],
+       [
+        14,
+        "taskid1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      false,
+      "",
+      "",
+      "",
+      "",
+      "taskId1",
+      "taskId2",
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69efc92d96981f58ae1f6d75": {
+   "constraints": [
+    "up to 1e5 calls",
+    "timestamps strictly increasing, 0..1e9",
+    "names match [A-Za-z0-9 ]{1,20}",
+    "-1e9 <= priority <= 1e9",
+    "sum over search/list calls of the task count <= 2e6"
+   ],
+   "clarifyingQuestions": [
+    "Is the name filter a substring or prefix match, case-sensitive?",
+    "How are equal priorities ordered?",
+    "What if maxResults exceeds the matches?"
+   ],
+   "hints": [
+    "Search and listing share one ordering: priority descending, then creation order.",
+    "Recover the creation number from the id or store it.",
+    "Filter first, sort once, then cut to the limit."
+   ],
+   "invariants": [
+    "task ids are dense: taskId1..taskId<count>"
+   ],
+   "chooseWhen": [
+    "Multi-level object design where each level adds state on top of the previous one"
+   ],
+   "tradeoffs": [
+    "Sorting on query is simple; maintaining a sorted index would speed queries but complicate updates"
+   ],
+   "variantLabel": "Inferred level 2 of 4: search and sorted listing",
+   "examples": [
+    {
+     "input": [
+      [
+       "TaskManager",
+       "getTask"
+      ],
+      [
+       [],
+       [
+        1,
+        "taskId1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TaskManager",
+       "getTask",
+       "searchTasks",
+       "searchTasks",
+       "getTask",
+       "getTask",
+       "searchTasks",
+       "searchTasks",
+       "searchTasks",
+       "updateTask"
+      ],
+      [
+       [],
+       [
+        2,
+        "taskId1"
+       ],
+       [
+        5,
+        "Bug",
+        2
+       ],
+       [
+        6,
+        "o",
+        1
+       ],
+       [
+        7,
+        "taskId1"
+       ],
+       [
+        8,
+        "taskId1"
+       ],
+       [
+        9,
+        "z",
+        2
+       ],
+       [
+        10,
+        "z",
+        2
+       ],
+       [
+        11,
+        " ",
+        5
+       ],
+       [
+        12,
+        "taskId1",
+        "docs",
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "",
+      [],
+      [],
+      "",
+      "",
+      [],
+      [],
+      [],
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69efc94196981f58ae1f6d76": {
+   "constraints": [
+    "up to 1e5 calls",
+    "timestamps strictly increasing, 0..1e9",
+    "names match [A-Za-z0-9 ]{1,20}",
+    "-1e9 <= priority <= 1e9",
+    "sum over search/list calls of the task count <= 2e6",
+    "userId matches [a-z0-9_]{1,20}",
+    "1 <= quota <= 1e5",
+    "timestamp < finishTime <= 2e9"
+   ],
+   "clarifyingQuestions": [
+    "When does an assignment stop counting toward the quota?",
+    "May the same task be assigned twice to one user?",
+    "How are a user's tasks ordered?"
+   ],
+   "hints": [
+    "An assignment is active while finishTime > now; expire lazily when a user is touched.",
+    "A min-heap on finishTime finds expired assignments in order.",
+    "Check unknown task or user, duplicate active task and quota before recording."
+   ],
+   "invariants": [
+    "task ids are dense: taskId1..taskId<count>",
+    "active assignments per user never exceed the quota"
+   ],
+   "chooseWhen": [
+    "Multi-level object design where each level adds state on top of the previous one"
+   ],
+   "tradeoffs": [
+    "Sorting on query is simple; maintaining a sorted index would speed queries but complicate updates"
+   ],
+   "variantLabel": "Inferred level 3 of 4: user assignments with quota and expiry",
+   "examples": [
+    {
+     "input": [
+      [
+       "TaskManager",
+       "getUserTasks"
+      ],
+      [
+       [],
+       [
+        1,
+        "u"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TaskManager",
+       "addTask",
+       "addTask",
+       "addTask",
+       "listTasksSorted",
+       "getTask",
+       "assignTask",
+       "addTask",
+       "addTask",
+       "addTask"
+      ],
+      [
+       [],
+       [
+        2,
+        "bugfix",
+        1
+       ],
+       [
+        4,
+        "fix bug",
+        3
+       ],
+       [
+        5,
+        "Bug",
+        -5
+       ],
+       [
+        6,
+        1
+       ],
+       [
+        9,
+        "taskId2"
+       ],
+       [
+        10,
+        "taskId3",
+        "u",
+        12
+       ],
+       [
+        12,
+        "bugfix",
+        1
+       ],
+       [
+        14,
+        "fix bug",
+        3
+       ],
+       [
+        16,
+        "write docs",
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "taskId1",
+      "taskId2",
+      "taskId3",
+      [
+       "taskId2"
+      ],
+      "fix bug(3)",
+      false,
+      "taskId4",
+      "taskId5",
+      "taskId6"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69efc96396981f58ae1f6d77": {
+   "constraints": [
+    "up to 1e5 calls",
+    "timestamps strictly increasing, 0..1e9",
+    "names match [A-Za-z0-9 ]{1,20}",
+    "-1e9 <= priority <= 1e9",
+    "sum over search/list calls of the task count <= 2e6",
+    "userId matches [a-z0-9_]{1,20}",
+    "1 <= quota <= 1e5",
+    "timestamp < finishTime <= 2e9"
+   ],
+   "clarifyingQuestions": [
+    "Does completing a task free quota immediately?",
+    "Is an assignment completed after expiry still overdue?",
+    "In what order are overdue ids reported?"
+   ],
+   "hints": [
+    "Completion removes an active assignment so it frees quota and never becomes overdue.",
+    "An assignment becomes overdue when it expires without completion.",
+    "Keep a sequence number so overdue ids come back in assignment order."
+   ],
+   "invariants": [
+    "task ids are dense: taskId1..taskId<count>",
+    "active assignments per user never exceed the quota",
+    "an assignment is exactly one of active, completed or overdue"
+   ],
+   "chooseWhen": [
+    "Multi-level object design where each level adds state on top of the previous one"
+   ],
+   "tradeoffs": [
+    "Sorting on query is simple; maintaining a sorted index would speed queries but complicate updates"
+   ],
+   "variantLabel": "Inferred level 4 of 4: completion and overdue assignments",
+   "examples": [
+    {
+     "input": [
+      [
+       "TaskManager",
+       "addUser"
+      ],
+      [
+       [],
+       [
+        3,
+        "u",
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TaskManager",
+       "getUserTasks",
+       "completeTask",
+       "searchTasks",
+       "searchTasks",
+       "addTask",
+       "getOverdueAssignments",
+       "addUser",
+       "searchTasks",
+       "getTask"
+      ],
+      [
+       [],
+       [
+        1,
+        "z"
+       ],
+       [
+        2,
+        "taskId0",
+        "v"
+       ],
+       [
+        3,
+        " ",
+        1
+       ],
+       [
+        4,
+        "Bug",
+        5
+       ],
+       [
+        7,
+        "write docs",
+        3
+       ],
+       [
+        8,
+        "v"
+       ],
+       [
+        11,
+        "u",
+        1
+       ],
+       [
+        12,
+        " ",
+        5
+       ],
+       [
+        14,
+        "taskId0"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      false,
+      [],
+      [],
+      "taskId1",
+      [],
+      true,
+      [
+       "taskId1"
+      ],
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69026c73d18315042523a913": {
+   "constraints": [
+    "1 <= totalPages <= 1e9",
+    "1 <= visibleCount <= 100",
+    "1 <= currentPage <= totalPages",
+    "up to 1e4 calls",
+    "-1e9 <= page <= 1e9 for goTo"
+   ],
+   "clarifyingQuestions": [
+    "What are the navigation method names and do they return the rendered string?",
+    "What exact string format does render produce?",
+    "Is an out-of-range page clamped or rejected?",
+    "How is the window centred for even visibleCount?"
+   ],
+   "hints": [
+    "Clamp the page after every move.",
+    "Centre the window by starting it floor((visibleCount - 1) / 2) pages before the current page.",
+    "Then clamp the start so the window fits inside [1, totalPages] and emit markers only when pages are hidden."
+   ],
+   "invariants": [
+    "1 <= current <= totalPages",
+    "the window always contains the current page and has min(visibleCount, totalPages) pages"
+   ],
+   "chooseWhen": [
+    "UI state machines whose rendering is a pure function of a few integers"
+   ],
+   "tradeoffs": [
+    "A static renderer is easy to test in isolation; storing the rendered string would duplicate state"
+   ],
+   "variantLabel": "Inferred single variant: clamped navigation with a centred page window",
+   "examples": [
+    {
+     "input": [
+      [
+       "Paginator",
+       "next"
+      ],
+      [
+       [
+        1,
+        1,
+        1
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      "[1]"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Paginator",
+       "goTo",
+       "goTo",
+       "next",
+       "goTo",
+       "goTo",
+       "next",
+       "prev",
+       "next",
+       "goTo",
+       "prev",
+       "prev"
+      ],
+      [
+       [
+        30,
+        4,
+        11
+       ],
+       [
+        31
+       ],
+       [
+        2
+       ],
+       [],
+       [
+        1
+       ],
+       [
+        1
+       ],
+       [],
+       [],
+       [],
+       [
+        0
+       ],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      "< ... 27 28 29 [30]",
+      "< 1 [2] 3 4 ... >",
+      "< ... 2 [3] 4 5 ... >",
+      "[1] 2 3 4 ... >",
+      "[1] 2 3 4 ... >",
+      "< 1 [2] 3 4 ... >",
+      "[1] 2 3 4 ... >",
+      "< 1 [2] 3 4 ... >",
+      "[1] 2 3 4 ... >",
+      "[1] 2 3 4 ... >",
+      "[1] 2 3 4 ... >"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:685637ce4d16ce2ead6e1769": {
+   "constraints": [
+    "0 <= nums.length <= 1e5",
+    "0 <= nums[i] <= 1e9",
+    "decode input is well formed: count <= 1e5, 1..8 BP values each below 2**width, width <= 30",
+    "up to 1000 calls, 2e5 values in total"
+   ],
+   "clarifyingQuestions": [
+    "What is the BP descriptor format, and does it carry a bit width?",
+    "When is RLE preferred over BP (threshold)?",
+    "How many values may one BP run hold?",
+    "What does decode do with malformed input?"
+   ],
+   "hints": [
+    "Measure each maximal run of equal values while scanning.",
+    "Runs of 3 or more become RLE; shorter runs join a pending list that is flushed before every RLE and at the end.",
+    "Flush the pending list in chunks of 8, computing each chunk's width as its largest bit length (0 counts as width 1)."
+   ],
+   "invariants": [
+    "decode(encode(nums)) == nums",
+    "every BP chunk holds 1..8 values and no 3 equal neighbours span a chunk boundary inside one run"
+   ],
+   "chooseWhen": [
+    "Columnar compression where long runs and small-integer stretches alternate"
+   ],
+   "tradeoffs": [
+    "Fixed thresholds keep the encoder deterministic; a cost-based choice could compress better but needs a precise size model"
+   ],
+   "variantLabel": "Inferred single variant: RLE for runs of 3+, 8-value bit-packed chunks otherwise",
+   "examples": [
+    {
+     "input": [
+      [
+       "Codec",
+       "encode"
+      ],
+      [
+       [],
+       [
+        []
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Codec",
+       "encode",
+       "encode",
+       "encode",
+       "decode"
+      ],
+      [
+       [],
+       [
+        [
+         0,
+         256,
+         0
+        ]
+       ],
+       [
+        [
+         7,
+         7,
+         7,
+         2,
+         2,
+         2,
+         2
+        ]
+       ],
+       [
+        [
+         255,
+         255,
+         255,
+         255,
+         255,
+         255,
+         255,
+         255,
+         255,
+         255,
+         255,
+         255,
+         256,
+         256,
+         256,
+         256,
+         256,
+         256,
+         256,
+         256,
+         256,
+         1000000000,
+         1,
+         1000000000,
+         1000000000
+        ]
+       ],
+       [
+        [
+         "BP[30, 6, 5, 0, 1, 0, 5, 1, 1]"
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       "BP[9, 0, 256, 0]"
+      ],
+      [
+       "RLE[7, 3]",
+       "RLE[2, 4]"
+      ],
+      [
+       "RLE[255, 12]",
+       "RLE[256, 9]",
+       "BP[30, 1000000000, 1, 1000000000, 1000000000]"
+      ],
+      [
+       6,
+       5,
+       0,
+       1,
+       0,
+       5,
+       1,
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68d9756679db2fbcd7d7db74": {
+   "constraints": [
+    "1 <= s.length <= 1e5",
+    "s matches [a-z]+"
+   ],
+   "clarifyingQuestions": [
+    "Is zero deletions allowed (\"at most one\")?",
+    "Does a letter removed entirely still count with frequency zero?",
+    "What is returned for a single character?"
+   ],
+   "hints": [
+    "Only the multiset of letter frequencies matters.",
+    "With one distinct frequency the string is already good.",
+    "With two distinct frequencies f < g, accept when exactly one letter has g = f + 1, or exactly one letter has f = 1."
+   ],
+   "invariants": [
+    "the answer depends only on the frequency-of-frequency table"
+   ],
+   "chooseWhen": [
+    "A frequency table of at most 26 letters"
+   ],
+   "tradeoffs": [
+    "The case analysis is O(n) but easy to get wrong; trying each of the 26 letters as the deletion is a safe O(26 * 26) alternative"
+   ],
+   "variantLabel": "Inferred single variant: good string after at most one deletion",
+   "examples": [
+    {
+     "input": [
+      "a"
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "aaaaaaaaaaa"
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68102bc42590daeb41a329e6": {
+   "constraints": [
+    "n = 2^h - 1, 1 <= h <= 17",
+    "1 <= latency[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are latencies on nodes or on parent links?",
+    "May latencies be decreased?",
+    "Is the answer the total increase or the number of changed servers?"
+   ],
+   "hints": [
+    "Two sibling subtrees must end with equal path costs; raising the cheaper child fixes them most cheaply.",
+    "Process from the leaves upward, carrying each subtree's path cost to its parent.",
+    "Add |left - right| per internal node and pass up the larger child sum."
+   ],
+   "invariants": [
+    "after processing node v, all paths in v's subtree have the same cost"
+   ],
+   "chooseWhen": [
+    "Equalising path sums in complete trees stored in arrays"
+   ],
+   "tradeoffs": [
+    "Bottom-up needs no recursion; top-down recursion is natural but deep trees would need an explicit stack"
+   ],
+   "variantLabel": "Inferred single variant: minimum increments to equalise root-to-leaf sums",
+   "examples": [
+    {
+     "input": [
+      1,
+      [
+       5
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      31,
+      [
+       3,
+       1,
+       1000000000,
+       1000000000,
+       3,
+       10,
+       1000000000,
+       1000000000,
+       1000000000,
+       1000000000,
+       1,
+       10,
+       3,
+       10,
+       10,
+       1000000000,
+       1000000000,
+       10,
+       1,
+       1,
+       10,
+       2,
+       3,
+       1000000000,
+       1,
+       2,
+       1000000000,
+       2,
+       3,
+       3,
+       1
+      ]
+     ],
+     "output": 6999999997,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:694f5ef093309f91cc14412f": {
+   "constraints": [
+    "up to 40000 nodes, tree depth <= 99 (JSON nesting <= 199)",
+    "|value| <= 1e9",
+    "every intermediate |result| <= 1e15",
+    "no division by zero"
+   ],
+   "clarifyingQuestions": [
+    "Is DIVIDE integer or real division, and how does it round?",
+    "Can a divisor be zero?",
+    "Can values overflow a 64-bit or double range?"
+   ],
+   "hints": [
+    "Evaluate children before the parent (post-order).",
+    "Dispatch on the operation string.",
+    "For truncating division take |a| // |b| and negate when the signs differ; avoid floating division."
+   ],
+   "invariants": [
+    "the value of a node depends only on its subtree"
+   ],
+   "chooseWhen": [
+    "Small arithmetic trees given as nested objects"
+   ],
+   "tradeoffs": [
+    "Recursion mirrors the tree; an explicit stack avoids depth limits for very deep trees"
+   ],
+   "variantLabel": "Inferred single variant: evaluate with truncating integer division",
+   "examples": [
+    {
+     "input": [
+      {
+       "operation": "CONSTANT_NUMBER",
+       "value": 7
+      }
+     ],
+     "output": 7,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "operation": "SUBTRACT",
+       "inputs": [
+        {
+         "operation": "SUBTRACT",
+         "inputs": [
+          {
+           "operation": "CONSTANT_NUMBER",
+           "value": -1
+          },
+          {
+           "operation": "CONSTANT_NUMBER",
+           "value": 2
+          }
+         ]
+        },
+        {
+         "operation": "ADD",
+         "inputs": [
+          {
+           "operation": "CONSTANT_NUMBER",
+           "value": -1
+          },
+          {
+           "operation": "CONSTANT_NUMBER",
+           "value": 2
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "output": -4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c32db81f64f4312b0a3e26": {
+   "constraints": [
+    "1 <= drivers.length <= 1000, names match [A-Za-z]{1,20}",
+    "2 <= L, drivers * L <= 2e5",
+    "1 <= lap time <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Are lap times integers or decimals?",
+    "Should the comparison be exact or rounded?",
+    "Is \"lexicographical\" case-sensitive code-point order?"
+   ],
+   "hints": [
+    "Multiplying an average by L - 1 removes the division.",
+    "Key = sum of earlier laps - last lap * (L - 1); larger is better.",
+    "Track the best key and the smallest name among ties in one pass."
+   ],
+   "invariants": [
+    "the key ordering equals the improvement ordering"
+   ],
+   "chooseWhen": [
+    "Comparing averages exactly with integers"
+   ],
+   "tradeoffs": [
+    "Integer keys avoid floating error; fractions are exact too but slower"
+   ],
+   "variantLabel": "Inferred variant 1 of 2: best last-lap improvement",
+   "examples": [
+    {
+     "input": [
+      [
+       "Al"
+      ],
+      [
+       [
+        1,
+        2
+       ]
+      ]
+     ],
+     "output": "Al",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Zed",
+       "Bo",
+       "Cy",
+       "Bob"
+      ],
+      [
+       [
+        1,
+        60,
+        1000000,
+        1000000,
+        1000000
+       ],
+       [
+        3,
+        1000000,
+        2,
+        1000000,
+        59
+       ],
+       [
+        61,
+        59,
+        60,
+        1000000,
+        2
+       ],
+       [
+        1000000,
+        1,
+        3,
+        1000000,
+        1
+       ]
+      ]
+     ],
+     "output": "Bob",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c32f681f64f4312b0a3e27": {
+   "constraints": [
+    "1 <= drivers.length <= 1000, names match [A-Za-z]{1,20}",
+    "2 <= L, drivers * L <= 2e5",
+    "1 <= lap time <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Is the follow-up a full ranking, a top-k, or something else?",
+    "How are ties ordered?",
+    "Are lap counts still equal for all drivers?"
+   ],
+   "hints": [
+    "Reuse the integer key from the single-best version.",
+    "Sort by (-key, name).",
+    "Return names only, in that order."
+   ],
+   "invariants": [
+    "the output is a permutation of drivers"
+   ],
+   "chooseWhen": [
+    "Ranking with a composite sort key"
+   ],
+   "tradeoffs": [
+    "A full sort costs O(n log n); a top-1 scan is O(n)"
+   ],
+   "variantLabel": "Inferred variant 2 of 2: full ranking by last-lap improvement",
+   "examples": [
+    {
+     "input": [
+      [
+       "Ann"
+      ],
+      [
+       [
+        3,
+        2
+       ]
+      ]
+     ],
+     "output": [
+      "Ann"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Ann",
+       "Zed",
+       "ann",
+       "Bo",
+       "Al"
+      ],
+      [
+       [
+        3,
+        61,
+        60,
+        59
+       ],
+       [
+        61,
+        1000000,
+        1000000,
+        2
+       ],
+       [
+        59,
+        60,
+        60,
+        59
+       ],
+       [
+        1,
+        1000000,
+        1,
+        61
+       ],
+       [
+        61,
+        1000000,
+        61,
+        60
+       ]
+      ]
+     ],
+     "output": [
+      "Zed",
+      "Al",
+      "Bo",
+      "ann",
+      "Ann"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a0226e62608e589a944a229": {
+   "constraints": [
+    "1 <= durations.length <= 100",
+    "1 <= durations[i] <= 1e4",
+    "0 <= totalHours <= 1e4"
+   ],
+   "clarifyingQuestions": [
+    "Are experiences named, and should the bookings themselves be returned?",
+    "What is returned when no combination fits?",
+    "Can totalHours be 0?"
+   ],
+   "hints": [
+    "This is coin change: the minimum number of parts summing exactly to a target.",
+    "best[s] = 1 + min over d of best[s - d].",
+    "Initialise best[0] = 0 and others to infinity; map infinity to -1."
+   ],
+   "invariants": [
+    "best[s] is the fewest bookings summing to s"
+   ],
+   "chooseWhen": [
+    "Unbounded exact-sum minimisation with small targets"
+   ],
+   "tradeoffs": [
+    "DP is O(T * k); BFS has the same bound but more memory churn"
+   ],
+   "variantLabel": "Inferred single variant: minimum bookings to fill the layover exactly",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       14,
+       13,
+       13
+      ],
+      43
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6acfb93f2e3a0349b3a8eb2d": {
+   "constraints": [
+    "up to 1e5 commands",
+    "accounts match [a-z0-9_]{1,20}",
+    "0 <= starting balance <= 1e9",
+    "1 <= amount <= 1e9",
+    "0 <= day, delay <= 1e9, days non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "What are the exact argument layouts of FUND and BALANCE?",
+    "Is a FUND for an unknown account rejected?",
+    "What does BALANCE report for an unknown account?"
+   ],
+   "hints": [
+    "Process commands in order; days never decrease, so settlement is monotone.",
+    "Keep pending funding in a min-heap by settle day per account.",
+    "Before any command on an account, move every due funding into its settled balance."
+   ],
+   "invariants": [
+    "settled balance >= 0 after every accepted command",
+    "once a funding request settles it stays settled"
+   ],
+   "chooseWhen": [
+    "Event logs replayed in time order with delayed effects"
+   ],
+   "tradeoffs": [
+    "A heap per account gives O(log f) settlement; rescanning the history is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred level 1 of 4: delayed settlement",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "INIT a 5",
+       "INIT b 0",
+       "BALANCE 2 a",
+       "BALANCE 3 a",
+       "BALANCE 3 b",
+       "BALANCE 3 a",
+       "BALANCE 4 a",
+       "FUND 6 zz 50 5",
+       "FUND 7 a 1000000000 5",
+       "BALANCE 7 zz",
+       "FUND 12 a 1 0",
+       "FUND 12 b 1 1000000000",
+       "FUND 17 zz 7 1000000000",
+       "BALANCE 18 a",
+       "FUND 20 a 7 2",
+       "FUND 25 a 1 0",
+       "FUND 30 zz 50 0"
+      ]
+     ],
+     "output": [
+      5,
+      5,
+      0,
+      5,
+      5,
+      -1,
+      1000000006
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6acfbd2f2e3a0349b3a8eb4e": {
+   "constraints": [
+    "up to 1e5 commands",
+    "accounts match [a-z0-9_]{1,20}",
+    "0 <= starting balance <= 1e9",
+    "1 <= amount <= 1e9",
+    "0 <= day, delay <= 1e9, days non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "Can a withdrawal use unsettled funds?",
+    "Is a rejected withdrawal reported?",
+    "Does a withdrawal on the same day see funds settling that day?"
+   ],
+   "hints": [
+    "Settle due funding first, then compare the withdrawal with the settled balance.",
+    "A rejected withdrawal changes nothing.",
+    "Accepted withdrawals subtract immediately."
+   ],
+   "invariants": [
+    "settled balance >= 0 after every accepted command",
+    "once a funding request settles it stays settled"
+   ],
+   "chooseWhen": [
+    "Event logs replayed in time order with delayed effects"
+   ],
+   "tradeoffs": [
+    "A heap per account gives O(log f) settlement; rescanning the history is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred level 2 of 4: withdrawals against settled money",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "INIT a 100",
+       "INIT b 100",
+       "FUND 1 a 50 0",
+       "BALANCE 6 b",
+       "FUND 6 a 1000000000 0",
+       "BALANCE 7 zz",
+       "BALANCE 8 a",
+       "FUND 8 zz 1000000000 1000000000",
+       "BALANCE 8 zz",
+       "WITHDRAW 13 b 1",
+       "WITHDRAW 14 zz 1000000000",
+       "FUND 15 a 50 0",
+       "BALANCE 15 b",
+       "BALANCE 16 b",
+       "BALANCE 16 b",
+       "BALANCE 16 b"
+      ]
+     ],
+     "output": [
+      100,
+      -1,
+      1000000150,
+      -1,
+      99,
+      99,
+      99,
+      99
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6acfd33d2e3a0349b3a8ec32": {
+   "constraints": [
+    "up to 1e5 commands",
+    "accounts match [a-z0-9_]{1,20}",
+    "0 <= starting balance <= 1e9",
+    "1 <= amount <= 1e9",
+    "0 <= day, delay <= 1e9, days non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "Does transferred money arrive settled or pending?",
+    "Is a self-transfer allowed?",
+    "Is a transfer from an unknown account reported?"
+   ],
+   "hints": [
+    "Settle the sender before checking its balance.",
+    "Reject unknown accounts and self-transfers.",
+    "Move the amount between settled balances at once."
+   ],
+   "invariants": [
+    "settled balance >= 0 after every accepted command",
+    "once a funding request settles it stays settled"
+   ],
+   "chooseWhen": [
+    "Event logs replayed in time order with delayed effects"
+   ],
+   "tradeoffs": [
+    "A heap per account gives O(log f) settlement; rescanning the history is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred level 3 of 4: transfers",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "INIT a 1000000000",
+       "INIT b 5",
+       "BALANCE 5 b",
+       "BALANCE 5 zz",
+       "FUND 7 a 1000000000 1000000000",
+       "WITHDRAW 12 b 1000000000",
+       "FUND 13 b 50 0",
+       "FUND 13 b 1 0",
+       "TRANSFER 15 a b 50",
+       "WITHDRAW 16 zz 50",
+       "BALANCE 18 b",
+       "TRANSFER 18 a zz 5",
+       "BALANCE 19 a",
+       "BALANCE 21 zz",
+       "TRANSFER 21 b zz 5"
+      ]
+     ],
+     "output": [
+      5,
+      -1,
+      106,
+      999999950,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6acfd3602e3a0349b3a8ec34": {
+   "constraints": [
+    "up to 1e5 commands",
+    "accounts match [a-z0-9_]{1,20}",
+    "0 <= starting balance <= 1e9",
+    "1 <= amount <= 1e9",
+    "0 <= day, delay <= 1e9, days non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "Which funding request does CANCEL target?",
+    "Can a settled funding be cancelled?",
+    "Does PENDING include cancelled requests?"
+   ],
+   "hints": [
+    "Keep a running pending sum per account.",
+    "Settled or cancelled records never become cancellable again, so a stack can drop them for good.",
+    "Cancel the top remaining record and subtract it from the pending sum."
+   ],
+   "invariants": [
+    "settled balance >= 0 after every accepted command",
+    "once a funding request settles it stays settled",
+    "pending sum = uncancelled, unsettled accepted funding"
+   ],
+   "chooseWhen": [
+    "Event logs replayed in time order with delayed effects"
+   ],
+   "tradeoffs": [
+    "A heap per account gives O(log f) settlement; rescanning the history is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred level 4 of 4: pending totals and cancellation",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "INIT a 5",
+       "INIT b 100",
+       "BALANCE 1 a",
+       "BALANCE 1 b",
+       "CANCEL 6 a",
+       "BALANCE 6 a",
+       "WITHDRAW 8 b 5",
+       "BALANCE 8 a",
+       "TRANSFER 13 zz a 50",
+       "TRANSFER 15 a a 50",
+       "PENDING 15 a",
+       "BALANCE 15 b",
+       "BALANCE 16 b",
+       "BALANCE 18 a",
+       "TRANSFER 18 zz zz 1000000000",
+       "CANCEL 20 a",
+       "FUND 25 b 50 0"
+      ]
+     ],
+     "output": [
+      5,
+      100,
+      5,
+      5,
+      0,
+      95,
+      95,
+      5
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:695d3f8768e2c0dd046c4aa3": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "badNodes distinct, each in [0, n)"
+   ],
+   "clarifyingQuestions": [
+    "Is there a limit on the number of test calls, and must it be reported?",
+    "Is the bad set given offline or only through the API?",
+    "In which order must bad nodes be returned?"
+   ],
+   "hints": [
+    "A passing test clears a whole range at once.",
+    "Split a failing range in halves and test each.",
+    "Count calls: the root, plus two for every failing range with more than one node."
+   ],
+   "invariants": [
+    "a range is tested only if its parent range failed"
+   ],
+   "chooseWhen": [
+    "Few defects among many items (group testing)"
+   ],
+   "tradeoffs": [
+    "Halving uses about 2k log(n/k) tests for k bad nodes; testing each node alone needs n"
+   ],
+   "variantLabel": "Inferred single variant: group testing with fixed halving, offline simulation",
+   "examples": [
+    {
+     "input": [
+      1,
+      []
+     ],
+     "output": [
+      [],
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      36,
+      [
+       2,
+       16,
+       26,
+       6,
+       7,
+       11,
+       19,
+       21,
+       30,
+       18,
+       13,
+       9,
+       3,
+       29,
+       10,
+       12,
+       35,
+       28,
+       5,
+       34,
+       32,
+       22,
+       27,
+       17,
+       4,
+       31,
+       8,
+       24,
+       15,
+       20,
+       33,
+       0,
+       1,
+       23,
+       14,
+       25
+      ]
+     ],
+     "output": [
+      [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       30,
+       31,
+       32,
+       33,
+       34,
+       35
+      ],
+      71
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69e9376dfbaf3da6418286a5": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "p is a permutation of 1..n"
+   ],
+   "clarifyingQuestions": [
+    "Does \"prefix\" in the title mean the subarray must start at index 0?",
+    "Is the string 1-indexed by k?",
+    "Can p be empty?"
+   ],
+   "hints": [
+    "A subarray that is a permutation of 1..k must be exactly the span of the positions of 1..k.",
+    "Maintain the minimum and maximum position as k grows.",
+    "k is balanced when that span has length k."
+   ],
+   "invariants": [
+    "after step k, [min, max] is the smallest window containing 1..k"
+   ],
+   "chooseWhen": [
+    "Queries over growing value prefixes of a permutation"
+   ],
+   "tradeoffs": [
+    "O(n) with positions; sliding windows per k would be O(n^2)"
+   ],
+   "variantLabel": "Inferred single variant: balanced numbers via position span",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ]
+     ],
+     "output": "1",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       7,
+       9,
+       2,
+       8,
+       3,
+       6,
+       4,
+       1,
+       10,
+       12,
+       11,
+       5
+      ]
+     ],
+     "output": "100000000001",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:680fc0442590daeb41a329b8": {
+   "constraints": [
+    "0 <= blocks.length <= 1e5",
+    "1 <= startDay <= endDay <= 1e9",
+    "0 <= personId <= 1e9",
+    "1 <= totalDays <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Over which day range is freedom checked?",
+    "Should the answer be days or intervals?",
+    "Can blocks extend beyond the range?"
+   ],
+   "hints": [
+    "A day is free for everyone exactly when no block covers it.",
+    "Add +1 at start and -1 after end (clipped to the horizon) in a difference array.",
+    "Days whose prefix sum is 0 are free."
+   ],
+   "invariants": [
+    "prefix sum at day d = number of blocks covering d"
+   ],
+   "chooseWhen": [
+    "Counting coverage over a bounded day range"
+   ],
+   "tradeoffs": [
+    "A difference array is O(T + b); merging intervals avoids O(T) memory when T is huge"
+   ],
+   "variantLabel": "Inferred variant 1 of 3: free days within a horizon",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        13,
+        22
+       ],
+       [
+        2,
+        17,
+        26
+       ],
+       [
+        1000000000,
+        12,
+        12
+       ],
+       [
+        1000000000,
+        8,
+        9
+       ],
+       [
+        1,
+        14,
+        14
+       ]
+      ],
+      21
+     ],
+     "output": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      10,
+      11
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:680fc04e2590daeb41a329b9": {
+   "constraints": [
+    "0 <= blocks.length <= 1e5",
+    "1 <= startDay <= endDay <= 1e9",
+    "1 <= totalDays <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is the output a list of intervals?",
+    "Are intervals inclusive?",
+    "Are adjacent free days merged into one interval?"
+   ],
+   "hints": [
+    "Person ids do not matter when everyone must be free.",
+    "Sort blocks by start and merge overlapping or touching ones.",
+    "Gaps between merged blocks, clipped to [1, totalDays], are the free intervals."
+   ],
+   "invariants": [
+    "merged busy intervals are disjoint, sorted and non-adjacent"
+   ],
+   "chooseWhen": [
+    "Interval complement over a huge range"
+   ],
+   "tradeoffs": [
+    "Sorting costs O(b log b) but no O(T) memory"
+   ],
+   "variantLabel": "Inferred variant 2 of 3: free intervals by merging",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": [
+      [
+       1,
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        3,
+        3
+       ],
+       [
+        1000000000,
+        8,
+        17
+       ],
+       [
+        0,
+        13,
+        16
+       ],
+       [
+        1000000000,
+        11,
+        11
+       ],
+       [
+        0,
+        13,
+        22
+       ]
+      ],
+      13
+     ],
+     "output": [
+      [
+       1,
+       2
+      ],
+      [
+       4,
+       7
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:680fc04f2590daeb41a329ba": {
+   "constraints": [
+    "0 <= blocks.length <= 1e5",
+    "1 <= startDay <= endDay <= 1e9",
+    "1 <= totalDays <= 1e9",
+    "0 <= k <= number of distinct persons"
+   ],
+   "clarifyingQuestions": [
+    "Who counts as a person: only ids that appear in blocks?",
+    "Is the threshold \"at least k free\" or \"at most k busy\"?",
+    "Do overlapping blocks of one person count twice?"
+   ],
+   "hints": [
+    "Merge each person's blocks first so one person is never counted busy twice.",
+    "Sweep start and end+1 events of the merged intervals in day order.",
+    "Emit segments between events where the free count meets k, clipped to the horizon and joined when adjacent."
+   ],
+   "invariants": [
+    "between two consecutive event days the busy count is constant"
+   ],
+   "chooseWhen": [
+    "Coverage thresholds over many overlapping intervals"
+   ],
+   "tradeoffs": [
+    "A sweep is O(b log b); per-day counting is O(T * b)"
+   ],
+   "variantLabel": "Inferred variant 3 of 3: at-least-k free intervals with per-person merging",
+   "examples": [
+    {
+     "input": [
+      [],
+      1,
+      0
+     ],
+     "output": [
+      [
+       1,
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        2,
+        2,
+        3
+       ],
+       [
+        2,
+        14,
+        17
+       ],
+       [
+        1,
+        3,
+        3
+       ],
+       [
+        1000000000,
+        9,
+        10
+       ],
+       [
+        1000000000,
+        13,
+        13
+       ]
+      ],
+      11,
+      2
+     ],
+     "output": [
+      [
+       1,
+       2
+      ],
+      [
+       4,
+       11
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:690416e84845d25b8e994885": {
+   "constraints": [
+    "1 <= tickets.length <= 1e4",
+    "airports match [A-Z]{3}",
+    "a valid itinerary exists"
+   ],
+   "clarifyingQuestions": [
+    "How is the start deduced when every airport is balanced?",
+    "Are airport codes fixed length?",
+    "Can tickets repeat?"
+   ],
+   "hints": [
+    "Using every ticket once is an Euler path problem.",
+    "The start has out-degree - in-degree = 1; with none, start from the smallest airport.",
+    "Hierholzer with smallest-first edges, written iteratively, yields the smallest itinerary."
+   ],
+   "invariants": [
+    "every ticket is consumed exactly once",
+    "the output has tickets.length + 1 airports"
+   ],
+   "chooseWhen": [
+    "Edge-covering walks in directed multigraphs"
+   ],
+   "tradeoffs": [
+    "Hierholzer is linear after sorting; backtracking is exponential in the worst case"
+   ],
+   "variantLabel": "Inferred single variant: Euler path with deduced start",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "JFK",
+        "SFO"
+       ]
+      ]
+     ],
+     "output": [
+      "JFK",
+      "SFO"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "AAA",
+        "AAA"
+       ],
+       [
+        "BBB",
+        "AAA"
+       ],
+       [
+        "AAA",
+        "BBB"
+       ],
+       [
+        "BBB",
+        "AAA"
+       ],
+       [
+        "AAA",
+        "BBB"
+       ],
+       [
+        "AAA",
+        "BBB"
+       ],
+       [
+        "BBB",
+        "AAA"
+       ],
+       [
+        "BBB",
+        "AAA"
+       ]
+      ]
+     ],
+     "output": [
+      "BBB",
+      "AAA",
+      "AAA",
+      "BBB",
+      "AAA",
+      "BBB",
+      "AAA",
+      "BBB",
+      "AAA"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67843d1e0e1dbb6a0938577d": {
+   "constraints": [
+    "0 <= orderIds.length <= 1e5",
+    "-1e9 <= orderIds[i] <= 1e9, unique"
+   ],
+   "clarifyingQuestions": [
+    "What makes an order eligible?",
+    "Which eligible order is processed first?",
+    "Does eligibility use the current or the original neighbours?"
+   ],
+   "hints": [
+    "An order with a larger neighbour must wait; removals only change the two neighbours of the removed order.",
+    "Keep eligible orders in a min-heap.",
+    "Link indices with prev/next arrays; after removing x, re-check its neighbours and push those that became eligible."
+   ],
+   "invariants": [
+    "the heap holds exactly the currently eligible, unprocessed orders",
+    "a removed order's neighbours were smaller, so no eligible order loses eligibility"
+   ],
+   "chooseWhen": [
+    "Repeated local-extremum removal on a sequence"
+   ],
+   "tradeoffs": [
+    "O(n log n) with a heap and links; rescanning is O(n^2)"
+   ],
+   "variantLabel": "Inferred single variant: smallest local maximum removed first",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       40,
+       7,
+       4,
+       2,
+       1000000000,
+       -1000000000,
+       12,
+       -5,
+       0,
+       3,
+       -1
+      ]
+     ],
+     "output": [
+      3,
+      0,
+      -1,
+      12,
+      -5,
+      40,
+      7,
+      4,
+      1000000000,
+      2,
+      -1000000000
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:680fc0442590daeb41a329b8",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "blocks",
+  "totalDays"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "commonFreeDays",
+  "params": [
+   {
+    "name": "blocks",
+    "type": "integer[][]"
+   },
+   {
+    "name": "totalDays",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each day scan every block",
+  "candidate_design": "difference array over 1..totalDays + 1 with clipped block ends; a prefix sum of 0 marks a free day",
+  "complexity_target": "O(totalDays + blocks) time/O(totalDays) space"
+ },
+ "source_sha256": "3ffd6cb75c4c2c87ce04a9628e7706d0acf7874fc68439a7956bdf5dca0eb22e",
+ "wrapper": "Solution.commonFreeDays"
+}

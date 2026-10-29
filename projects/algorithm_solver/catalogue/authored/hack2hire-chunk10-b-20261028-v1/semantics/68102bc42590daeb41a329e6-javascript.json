@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68102bc42590daeb41a329e6",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "latency"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minIncrements",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "latency",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recompute every subtree's maximum path sum naively and add, per node, the gap between its parent's best child path and its own",
+  "candidate_design": "bottom-up pass over internal nodes from n/2 - 1 down to 0 on a copy of the costs: add |left - right| to the answer and add the larger child cost to the parent",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "987b23d7c5f7452379fbec4ea9e4d6ae0b8a2ad43c788fd955ec1da26497cf56",
+ "wrapper": "named export minIncrements"
+}

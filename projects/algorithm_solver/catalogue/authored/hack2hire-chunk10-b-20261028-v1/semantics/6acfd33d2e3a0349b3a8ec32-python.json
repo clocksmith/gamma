@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6acfd33d2e3a0349b3a8ec32",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "commands"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "processLedger",
+  "params": [
+   {
+    "name": "commands",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recompute both balances from the full history at every check",
+  "candidate_design": "level-2 state; a transfer settles the sender, checks and moves the amount between settled balances",
+  "complexity_target": "O(log f) amortised per command/O(accounts + funding) space"
+ },
+ "source_sha256": "2d97db784c7a83c63ed0bedce1413dd73a3fdacfd33bbea75e079ba1e997852f",
+ "wrapper": "Solution.processLedger"
+}

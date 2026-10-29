@@ -1,0 +1,78 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69026c73d18315042523a913",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "Paginator",
+  "constructor": {
+   "params": [
+    {
+     "name": "totalPages",
+     "type": "integer"
+    },
+    {
+     "name": "visibleCount",
+     "type": "integer"
+    },
+    {
+     "name": "currentPage",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "next",
+    "params": [],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "prev",
+    "params": [],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "goTo",
+    "params": [
+     {
+      "name": "page",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every window of v pages that contains the current page and keep the one whose start is nearest to the centred start",
+  "candidate_design": "clamp the current page, compute the window start with one clamp, then emit the tokens directly",
+  "complexity_target": "O(visibleCount) per call/O(visibleCount) space"
+ },
+ "source_sha256": "3bac16d1e10daac401835cf3c309396eb1bca810b91f1a155e276bf97ff6afbd",
+ "native_class": "Paginator",
+ "native_symbol": "module global Paginator",
+ "void_methods": []
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69e9376dfbaf3da6418286a5",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "p"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "balancedNumbers",
+  "params": [
+   {
+    "name": "p",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every k, test every subarray of length k by sorting it",
+  "candidate_design": "record the position of each value; for k = 1..n keep the minimum and maximum position of 1..k; k is balanced exactly when max - min + 1 == k",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "87a843f3948d06e59a4cda6277de7c2dad9d19a5fdf321b57f0ab6c0c584f486",
+ "wrapper": "named export balancedNumbers"
+}

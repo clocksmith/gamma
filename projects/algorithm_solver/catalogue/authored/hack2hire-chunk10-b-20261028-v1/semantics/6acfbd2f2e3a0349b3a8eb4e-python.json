@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6acfbd2f2e3a0349b3a8eb4e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "commands"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "processLedger",
+  "params": [
+   {
+    "name": "commands",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recompute the balance from the full funding and withdrawal history at every check",
+  "candidate_design": "level-1 heap settlement; withdrawals compare against the freshly settled balance and subtract immediately",
+  "complexity_target": "O(log f) amortised per command/O(accounts + funding) space"
+ },
+ "source_sha256": "03b989571482e8d64c95170c5478c7cde45116d9bc152783ed6e929dbd7d8339",
+ "wrapper": "Solution.processLedger"
+}
