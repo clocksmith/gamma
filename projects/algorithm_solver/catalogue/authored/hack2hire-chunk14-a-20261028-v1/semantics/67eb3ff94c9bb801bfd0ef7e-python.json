@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67eb3ff94c9bb801bfd0ef7e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "house",
+  "street"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "unmatchedTradesWithAttributes",
+  "params": [
+   {
+    "name": "house",
+    "type": "string[]"
+   },
+   {
+    "name": "street",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "two rounds of nested list scans: exact equality first, then (symbol, side, quantity) equality, each time pairing the smallest unused trades of a key",
+  "candidate_design": "hash-map exact round, then group leftovers by the first three fields, sort each group and pair house and street trades positionally; the excess of the larger side remains",
+  "complexity_target": "O((h + s) log(h + s)) time/O(h + s) space"
+ },
+ "source_sha256": "42f6817791e5f80004c4670c03d00648430f9727029bdc98e9392c4452a00ff5",
+ "wrapper": "Solution.unmatchedTradesWithAttributes"
+}

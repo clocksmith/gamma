@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/design.json",
+   "sha256": "93dbc3354560e296e6d24c567455753d767bda71a9a1baaecf15099e0df84058",
+   "selector": "/problems/hack2hire:6887e0fc6509c24ee64e4b21"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+   "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+   "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21"
+  }
+ ],
+ "problemId": "hack2hire:6887e0ec6509c24ee64e4b20",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-records/contract--contract_hack2hire_6887e0ec6509c24ee64e4b20_6887e0fc6509c24ee64e4b21_authored-v1.json",
+  "sha256": "2b415225cfd0bfa6de653ace50cd7057666321df22ba3e4c9c7b177341c12633"
+ },
+ "title": {
+  "status": "present",
+  "value": "greedy with a feasibility test: at each position try letters in order, skipping the previous letter, and accept the first whose removal leaves a multiset that can still be arranged without the same letter first",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/design.json",
+    "sha256": "93dbc3354560e296e6d24c567455753d767bda71a9a1baaecf15099e0df84058",
+    "selector": "/problems/hack2hire:6887e0fc6509c24ee64e4b21/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "greedy with a feasibility test: at each position try letters in order, skipping the previous letter, and accept the first whose removal leaves a multiset that can still be arranged without the same letter first. Complexity target: O(26 * n) time/O(26) extra space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/design.json",
+    "sha256": "93dbc3354560e296e6d24c567455753d767bda71a9a1baaecf15099e0df84058",
+    "selector": "/problems/hack2hire:6887e0fc6509c24ee64e4b21"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Canonical answers for problems with many valid outputs"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Lexicographic greed needs a precise feasibility test; any-valid answers can use a simpler max-heap"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "the prefix built so far never has equal neighbours",
+   "after each step the remaining multiset stays arrangeable after the last letter"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "An arrangement exists iff the most frequent letter appears at most ceil(n / 2) times.",
+   "Build the answer left to right, always trying the smallest letter that differs from the previous one.",
+   "A choice c is safe iff the rest (r letters) has max count <= ceil(r / 2) and, when r is odd and some letter needs every even slot, that letter is not c."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "greedy with a feasibility test: at each position try letters in order, skipping the previous letter, and accept the first whose removal leaves a multiset that can still be arranged without the same letter first",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/design.json",
+      "sha256": "93dbc3354560e296e6d24c567455753d767bda71a9a1baaecf15099e0df84058",
+      "selector": "/problems/hack2hire:6887e0fc6509c24ee64e4b21/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(26 * n) time/O(26) extra space; the independent reference (enumerate distinct permutations of the sorted characters in lexicographic order and return the first valid one) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/design.json",
+      "sha256": "93dbc3354560e296e6d24c567455753d767bda71a9a1baaecf15099e0df84058",
+      "selector": "/problems/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "An arrangement exists iff the most frequent letter appears at most ceil(n / 2) times.",
+     "Build the answer left to right, always trying the smallest letter that differs from the previous one."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-records/artifact--artifact_hack2hire_6887e0ec6509c24ee64e4b20_6887e0fc6509c24ee64e4b21_approach-native_v1.json",
+    "sha256": "060c859beac267fc2bc4088aa6f6e34294984c5431141197fae11db88080b75d"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper reorganize, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/design.json",
+      "sha256": "93dbc3354560e296e6d24c567455753d767bda71a9a1baaecf15099e0df84058",
+      "selector": "/problems/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "A choice c is safe iff the rest (r letters) has max count <= ceil(r / 2) and, when r is odd and some letter needs every even slot, that letter is not c."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-records/artifact--artifact_hack2hire_6887e0ec6509c24ee64e4b20_6887e0fc6509c24ee64e4b21_python_v1.json",
+     "sha256": "c4157ee76b23abca0b345e199aa7a99f5ca82dba35b95a93cf404155a8029dcc"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-records/artifact--artifact_hack2hire_6887e0ec6509c24ee64e4b20_6887e0fc6509c24ee64e4b21_javascript_v1.json",
+     "sha256": "2a7a879bf6e1c6cd1fdb036a854790dc2161f8654fe1a733d55a066bb7ebbb12"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-records/artifact--artifact_hack2hire_6887e0ec6509c24ee64e4b20_6887e0fc6509c24ee64e4b21_approach-native_v1.json",
+    "sha256": "060c859beac267fc2bc4088aa6f6e34294984c5431141197fae11db88080b75d"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (enumerate distinct permutations of the sorted characters in lexicographic order and return the first valid one) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/design.json",
+      "sha256": "93dbc3354560e296e6d24c567455753d767bda71a9a1baaecf15099e0df84058",
+      "selector": "/problems/hack2hire:6887e0fc6509c24ee64e4b21/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/7/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/test_oracles.py",
+      "sha256": "c7f66b62b7dd3ba53ac19d267e5ef22c411f7f0f6aa36360150d31513a604e44",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+      "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+      "selector": "/variants/hack2hire:6887e0fc6509c24ee64e4b21"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-records/artifact--artifact_hack2hire_6887e0ec6509c24ee64e4b20_6887e0fc6509c24ee64e4b21_approach-native_v1.json",
+    "sha256": "060c859beac267fc2bc4088aa6f6e34294984c5431141197fae11db88080b75d"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6887e0ec6509c24ee64e4b20:6887e0fc6509c24ee64e4b21:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-records/artifact--artifact_hack2hire_6887e0ec6509c24ee64e4b20_6887e0fc6509c24ee64e4b21_approach-native_v1.json",
+  "sha256": "060c859beac267fc2bc4088aa6f6e34294984c5431141197fae11db88080b75d"
+ }
+}

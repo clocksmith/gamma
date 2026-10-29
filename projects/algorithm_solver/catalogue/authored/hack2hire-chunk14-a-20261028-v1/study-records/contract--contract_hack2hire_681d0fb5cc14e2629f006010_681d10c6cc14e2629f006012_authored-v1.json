@@ -1,0 +1,495 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:681d0fb5cc14e2629f006010:681d10c6cc14e2629f006012:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+   "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+   "selector": "/problems/20"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/681d0fb5cc14e2629f006010.json",
+   "sha256": "5d30080c3082ec23dfc27241f1250be6d3469572b8ae587132f1e55c37a0786e",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+   "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+   "selector": "/variants/hack2hire:681d10c6cc14e2629f006012"
+  }
+ ],
+ "problemId": "hack2hire:681d0fb5cc14e2629f006010",
+ "variantId": "681d10c6cc14e2629f006012",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: per-type top k pins",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:681d10c6cc14e2629f006012/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "PinManager() starts empty. addPin(pinId, score, pinType) stores a new pin (ids are distinct across all calls). getTopK(pinType, k) returns the ids of the min(k, count) highest-scoring pins of that type, highest score first, ties by smaller id; an unknown type gives []. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/20/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "PinManager() starts empty.",
+   "addPin(pinId, score, pinType) stores a new pin (ids are distinct across all calls).",
+   "getTopK(pinType, k) returns the ids of the min(k, count) highest-scoring pins of that type, highest score first, ties by smaller id; an unknown type gives [].",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/20/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 2e4 calls",
+   "0 <= pinId <= 1e9",
+   "-1e9 <= score <= 1e9",
+   "pinType matches [a-z]{1,10}",
+   "0 <= k <= 1e4"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:681d10c6cc14e2629f006012/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: manage pins, each with an id, a score and a type; add new pins and return the ids of the k highest-scoring pins of a given type (method signatures are cut off); algorithmTags: HEAP, HASH_TABLE; preview response sha256 4de6e994dedd464ba0e819b6b3aa9feecb118237780f21e3699a9d4b54e6d9e3"
+   },
+   {
+    "statement": "Uncertainty: high: pins with id, score and type, adding and top-k by type are in the preview; the class and method names, integer ids, distinct ids, the tie rule and the empty result for unknown types are inferred",
+    "basis": "the public group preview is partial (207 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/20/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/20/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/20/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Can a pin id be added twice (update)?",
+   "How are equal scores ordered?",
+   "What does an unknown type return?",
+   "Are ids or whole pins returned?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:681d10c6cc14e2629f006012/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "PinManager"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "PinManager",
+      "addPin",
+      "addPin",
+      "addPin",
+      "addPin",
+      "addPin",
+      "getTopK",
+      "getTopK",
+      "addPin",
+      "addPin",
+      "addPin",
+      "getTopK",
+      "addPin"
+     ],
+     [
+      [],
+      [
+       30,
+       -1,
+       "b"
+      ],
+      [
+       2,
+       1,
+       "a"
+      ],
+      [
+       35,
+       -1,
+       "a"
+      ],
+      [
+       19,
+       3,
+       "a"
+      ],
+      [
+       5,
+       2,
+       "b"
+      ],
+      [
+       "b",
+       0
+      ],
+      [
+       "c",
+       2
+      ],
+      [
+       0,
+       0,
+       "b"
+      ],
+      [
+       16,
+       1,
+       "b"
+      ],
+      [
+       9,
+       0,
+       "a"
+      ],
+      [
+       "b",
+       1
+      ],
+      [
+       14,
+       1,
+       "b"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     [],
+     [],
+     null,
+     null,
+     null,
+     [
+      5
+     ],
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:681d10c6cc14e2629f006012/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/oracles.py",
+    "sha256": "0354d35ba67d73d7c563067a0aa0586a66789f96ebf992e7938cab6e79df5b4a",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class PinManager:\n    def __init__(self)\n    def addPin(self, pinId, score, pinType) -> void\n    def getTopK(self, pinType, k) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/20/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/681d10c6cc14e2629f006012-python.json",
+     "inferredInterface": {
+      "classname": "PinManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addPin",
+        "params": [
+         {
+          "name": "pinId",
+          "type": "integer"
+         },
+         {
+          "name": "score",
+          "type": "integer"
+         },
+         {
+          "name": "pinType",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getTopK",
+        "params": [
+         {
+          "name": "pinType",
+          "type": "string"
+         },
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/681d10c6cc14e2629f006012-python.json",
+      "sha256": "36f25f903fe1bd6448a2bba4aafd93b979bd68b5273b825d22a5dba18feb516b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class PinManager {\n  constructor()\n  addPin(pinId, score, pinType) /* -> void */\n  getTopK(pinType, k) /* -> integer[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/20/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/681d10c6cc14e2629f006012-javascript.json",
+     "inferredInterface": {
+      "classname": "PinManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addPin",
+        "params": [
+         {
+          "name": "pinId",
+          "type": "integer"
+         },
+         {
+          "name": "score",
+          "type": "integer"
+         },
+         {
+          "name": "pinType",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getTopK",
+        "params": [
+         {
+          "name": "pinType",
+          "type": "string"
+         },
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/681d10c6cc14e2629f006012-javascript.json",
+      "sha256": "172bb07e33f8d180f4d753b86a591420b96698b164c527a0d04045eba0c3d5e7",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/20/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/20/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

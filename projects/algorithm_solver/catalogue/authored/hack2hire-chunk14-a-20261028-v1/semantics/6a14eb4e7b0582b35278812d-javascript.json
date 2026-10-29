@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a14eb4e7b0582b35278812d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "matrix",
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countMatches",
+  "params": [
+   {
+    "name": "matrix",
+    "type": "string[]"
+   },
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every cell and direction compare characters one by one along the path",
+  "candidate_design": "extract every row, column and down-right diagonal as a string and count (overlapping) occurrences of s in each with the Knuth-Morris-Pratt automaton",
+  "complexity_target": "O(m * n + |s|) time/O(m + n + |s|) extra space"
+ },
+ "source_sha256": "7abe8c3206c959985ec108085d0b27eff0d8266c819da31607bffd153f4a6045",
+ "wrapper": "named export countMatches"
+}

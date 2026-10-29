@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68757267ab23078e4e46aa3c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "text",
+  "maxWidth"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minLines",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "maxWidth",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "dynamic programming over word prefixes: the best count for the first i words tries every possible last line",
+  "candidate_design": "greedy single pass: keep the current line length and start a new line exactly when the next word does not fit",
+  "complexity_target": "O(len(text)) time/O(1) extra space beyond the word scan"
+ },
+ "source_sha256": "4cdac36776aed4f190c7d7ffd643ca0d33c221dfd382038885caf2ab368c3e7b",
+ "wrapper": "Solution.minLines"
+}

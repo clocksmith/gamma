@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68d5a07f569e57bd10bbd44e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "sentences",
+  "maxWidth"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "formatJustifiedBoxes",
+  "params": [
+   {
+    "name": "sentences",
+    "type": "string[]"
+   },
+   {
+    "name": "maxWidth",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "wrap by longest fitting prefix, then justify by adding one space at a time to the leftmost smallest gap until the width is reached",
+  "candidate_design": "greedy wrap per sentence, then compute gap sizes arithmetically (base = spaces // gaps, the first spaces % gaps gaps get one more) and render",
+  "complexity_target": "O(total characters + output) time/O(output) space"
+ },
+ "source_sha256": "f94f2ec7ab8019d247465f1110340a9cef9c343c382c463a6527d273e0742dce",
+ "wrapper": "Solution.formatJustifiedBoxes"
+}

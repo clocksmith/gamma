@@ -1,0 +1,344 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67eb346a4c9bb801bfd0ef7c:67eb34914c9bb801bfd0ef7d:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+   "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67eb346a4c9bb801bfd0ef7c.json",
+   "sha256": "9b517db68d210e7c1345cd7abf3bf51d7202f8972977723d81072d8e579c2b48",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+   "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+   "selector": "/variants/hack2hire:67eb34914c9bb801bfd0ef7d"
+  }
+ ],
+ "problemId": "hack2hire:67eb346a4c9bb801bfd0ef7c",
+ "variantId": "67eb34914c9bb801bfd0ef7d",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: exact one-to-one trade matching",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:67eb34914c9bb801bfd0ef7d/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "house and street are lists of trade strings \"SYMBOL,SIDE,QUANTITY,ID\": SYMBOL is 1 to 4 capital letters left-padded with spaces to 4 characters, SIDE is \"B\" or \"S\", QUANTITY is 4 digits and ID is 6 capital letters or digits. Trades may repeat. Level 1: a house trade and a street trade match when their strings are identical; each trade matches at most one other trade, so matching is one-to-one on multisets. Return every trade (from either list) left unmatched, sorted by code point.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "house and street are lists of trade strings \"SYMBOL,SIDE,QUANTITY,ID\": SYMBOL is 1 to 4 capital letters left-padded with spaces to 4 characters, SIDE is \"B\" or \"S\", QUANTITY is 4 digits and ID is 6 capital letters or digits.",
+   "Trades may repeat.",
+   "Level 1: a house trade and a street trade match when their strings are identical; each trade matches at most one other trade, so matching is one-to-one on multisets.",
+   "Return every trade (from either list) left unmatched, sorted by code point."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= house.length, street.length <= 5e4",
+   "each trade matches the four-field format"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:67eb34914c9bb801bfd0ef7d/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: house and street lists of trade strings \"SYMBOL,SIDE,QTY,ID\": a 4-character symbol left-padded with spaces, side B or S, a zero-padded 4-digit quantity and a 6-character alphanumeric id (the matching rules and the output are cut off); algorithmTags: HASH_TABLE; preview response sha256 010bfe0c0c3d36d5520f2127ac959fce2adebbc8094de19c279174b072cde451"
+   },
+   {
+    "statement": "Uncertainty: high: the trade format is in the preview; exact whole-string matching for the first part, one-to-one matching of duplicates and the sorted combined output of unmatched trades are inferred",
+    "basis": "the public group preview is partial (488 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 1 of 2 is exact matching on every field",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is returned: the unmatched trades, the matched pairs, or counts?",
+   "In which order are unmatched trades listed?",
+   "When several trades could match, which pair is chosen?",
+   "Is there a further matching rule (for example house buys offsetting house sells)?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:67eb34914c9bb801bfd0ef7d/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "  GE,B,0050,ID0001",
+      "MSFT,S,0050,ABC123",
+      " IBM,B,0200,ABC123",
+      "  GE,S,0050,ABC123",
+      " IBM,S,0050,ID0001"
+     ],
+     [
+      " IBM,S,0100,XYZ999",
+      "MSFT,S,0050,ABC123",
+      "MSFT,B,0050,ID0001",
+      "MSFT,B,0200,7Q7Q7Q",
+      "  GE,S,0050,ABC123",
+      " IBM,B,0200,ABC123",
+      "  GE,B,0050,7Q7Q7Q",
+      "MSFT,B,0200,7Q7Q7Q"
+     ]
+    ],
+    "output": [
+     "  GE,B,0050,7Q7Q7Q",
+     "  GE,B,0050,ID0001",
+     " IBM,S,0050,ID0001",
+     " IBM,S,0100,XYZ999",
+     "MSFT,B,0050,ID0001",
+     "MSFT,B,0200,7Q7Q7Q",
+     "MSFT,B,0200,7Q7Q7Q"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:67eb34914c9bb801bfd0ef7d/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/oracles.py",
+    "sha256": "0354d35ba67d73d7c563067a0aa0586a66789f96ebf992e7938cab6e79df5b4a",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def unmatchedTrades(house, street) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/67eb34914c9bb801bfd0ef7d-python.json",
+     "inferredInterface": {
+      "name": "unmatchedTrades",
+      "params": [
+       {
+        "name": "house",
+        "type": "string[]"
+       },
+       {
+        "name": "street",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/67eb34914c9bb801bfd0ef7d-python.json",
+      "sha256": "a73927090d73d50361d301cf166e05187e2c17bfecb4223f13b446384477d7cf",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function unmatchedTrades(house, street) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/67eb34914c9bb801bfd0ef7d-javascript.json",
+     "inferredInterface": {
+      "name": "unmatchedTrades",
+      "params": [
+       {
+        "name": "house",
+        "type": "string[]"
+       },
+       {
+        "name": "street",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/67eb34914c9bb801bfd0ef7d-javascript.json",
+      "sha256": "297b6eac06cfbafcb1419495e81769a83900c919eb83f32880ac70009492265c",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

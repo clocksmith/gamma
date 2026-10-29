@@ -1,0 +1,364 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:696a75e5cc483345efb1b220:696a84b7cc483345efb1b23c:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+   "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/696a75e5cc483345efb1b220.json",
+   "sha256": "eb15d213e10dce43b25f0a28d573f368f3cc6fd3ae888a0f984dcf43f7c37ea5",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+   "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+   "selector": "/variants/hack2hire:696a84b7cc483345efb1b23c"
+  }
+ ],
+ "problemId": "hack2hire:696a75e5cc483345efb1b220",
+ "variantId": "696a84b7cc483345efb1b23c",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: tags co-occurring with every filter tag",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:696a84b7cc483345efb1b23c/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "groups is a list of tag lists (a tag may repeat inside a group) and filter is a list of distinct tags. A group is valid when it contains every tag of filter (so every group is valid when filter is empty). Return the distinct tags that appear in at least one valid group and are not in filter, sorted by code point (the source allows any order; sorting makes the answer unique).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "groups is a list of tag lists (a tag may repeat inside a group) and filter is a list of distinct tags.",
+   "A group is valid when it contains every tag of filter (so every group is valid when filter is empty).",
+   "Return the distinct tags that appear in at least one valid group and are not in filter, sorted by code point (the source allows any order; sorting makes the answer unique)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= groups.length <= 1e4",
+   "total tags across groups <= 1e5",
+   "0 <= filter.length <= 50",
+   "tags match [a-z0-9_-]{1,20}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:696a84b7cc483345efb1b23c/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: groups is a list of tag lists and filter a list of tags; a group is valid when it contains every filter tag; return each distinct tag of some valid group that is not in filter, in any order; algorithmTags: HASH_TABLE; preview response sha256 1486e9111e53a90af259438f2a32a0bf67f229d4b1064dc2000f6918c8db7ca1"
+   },
+   {
+    "statement": "Uncertainty: low: the rule is in the preview; only the canonical sorted order, distinct filter tags and the tag alphabet are inferred",
+    "basis": "the public group preview is partial (489 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is an empty filter matched by every group?",
+   "Can a tag repeat in a group?",
+   "Must the output be in a particular order?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:696a84b7cc483345efb1b23c/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "tag"
+      ],
+      [
+       "x-1",
+       "blue",
+       "x-1",
+       "blue",
+       "z9"
+      ],
+      [
+       "z9",
+       "x-1",
+       "tag"
+      ],
+      [
+       "x-1",
+       "red",
+       "x-1",
+       "z9",
+       "z9"
+      ],
+      [
+       "blue",
+       "blue",
+       "big_a",
+       "z9"
+      ],
+      [
+       "big_a",
+       "tag",
+       "blue",
+       "red"
+      ]
+     ],
+     [
+      "blue"
+     ]
+    ],
+    "output": [
+     "big_a",
+     "red",
+     "tag",
+     "x-1",
+     "z9"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:696a84b7cc483345efb1b23c/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/oracles.py",
+    "sha256": "0354d35ba67d73d7c563067a0aa0586a66789f96ebf992e7938cab6e79df5b4a",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def complementTags(groups, filter) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/696a84b7cc483345efb1b23c-python.json",
+     "inferredInterface": {
+      "name": "complementTags",
+      "params": [
+       {
+        "name": "groups",
+        "type": "string[][]"
+       },
+       {
+        "name": "filter",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/696a84b7cc483345efb1b23c-python.json",
+      "sha256": "b003fa2178e4c49152228d74928eda9c10605332763e096f367121124f71be0b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function complementTags(groups, filter) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/696a84b7cc483345efb1b23c-javascript.json",
+     "inferredInterface": {
+      "name": "complementTags",
+      "params": [
+       {
+        "name": "groups",
+        "type": "string[][]"
+       },
+       {
+        "name": "filter",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/696a84b7cc483345efb1b23c-javascript.json",
+      "sha256": "5aaa58e1c9f9abffa2065f0fb6484aea89b65ddf6ed3a8bf6f9b80722175d8e4",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,33 @@
+{
+ "schema": "gamma.hack2hire-chunk14-a-pre-source-freeze.v1",
+ "at": "2026-10-29T10:44:26.052452+00:00",
+ "files": {
+  "oracles.py": "b6ccf6f7a2e300b302d17b2a78d7f054259aba94aa461b731dff9232668fd2cb",
+  "test_oracles.py": "c7f66b62b7dd3ba53ac19d267e5ef22c411f7f0f6aa36360150d31513a604e44",
+  "cases.py": "85ef3c5d90e25fbb1540410def53906bb36715844269aa82981c4b8463014cbd",
+  "contracts.json": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+  "design.json": "93dbc3354560e296e6d24c567455753d767bda71a9a1baaecf15099e0df84058"
+ },
+ "candidate_sources_exist": false,
+ "candidate_executions": 0,
+ "source_free_tests_passed": 19,
+ "note": "References, inferred contracts, case generator and designs frozen before any candidate source was written.",
+ "spec_basis": "inferred (claude-opus-5-5 subagent, 2026-10-29)",
+ "amendments": [
+  {
+   "file": "oracles.py",
+   "from_sha256": "b6ccf6f7a2e300b302d17b2a78d7f054259aba94aa461b731dff9232668fd2cb",
+   "to_sha256": "0354d35ba67d73d7c563067a0aa0586a66789f96ebf992e7938cab6e79df5b4a",
+   "function": "ref_tnl",
+   "reason": "Reference bug found by the first author-local candidate run: lines[len(lines) - n:] used a negative start when n exceeded the line count by less than the count (for example 2 lines and n = 3 returned only the last line); now lines[max(0, len(lines) - n):]. The inferred specification (return all of text when it has at most n lines) is unchanged; candidates were not edited.",
+   "detected_by": "test_oracles.py Candidates on generated row ['  b\\n ', 3]"
+  }
+ ],
+ "current_sha256": {
+  "oracles.py": "0354d35ba67d73d7c563067a0aa0586a66789f96ebf992e7938cab6e79df5b4a",
+  "test_oracles.py": "c7f66b62b7dd3ba53ac19d267e5ef22c411f7f0f6aa36360150d31513a604e44",
+  "cases.py": "85ef3c5d90e25fbb1540410def53906bb36715844269aa82981c4b8463014cbd",
+  "contracts.json": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+  "design.json": "93dbc3354560e296e6d24c567455753d767bda71a9a1baaecf15099e0df84058"
+ }
+}

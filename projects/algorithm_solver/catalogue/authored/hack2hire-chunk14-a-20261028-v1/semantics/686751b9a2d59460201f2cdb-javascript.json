@@ -1,0 +1,69 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:686751b9a2d59460201f2cdb",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "BookSalesTracker",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "recordSale",
+    "params": [
+     {
+      "name": "bookId",
+      "type": "string"
+     },
+     {
+      "name": "quantity",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getTopK",
+    "params": [
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep a dictionary of totals and fully sort all books on every query",
+  "candidate_design": "hash map of totals plus one array of all books sorted by (-total, id); a sale removes the book at its binary-searched position and reinserts it at the new one; getTopK slices",
+  "complexity_target": "O(log B + B memmove) per sale, O(k) per getTopK/O(B) space"
+ },
+ "source_sha256": "ddf205e58989c21a54b91df9c9a8db418d9a330683c937800336235a8b18a3de",
+ "native_class": "BookSalesTracker",
+ "native_symbol": "property BookSalesTracker of the CommonJS solve export",
+ "void_methods": [
+  "recordSale"
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68bad975b5314dcd938cb9ff",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "WordFrequencyTracker",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addText",
+    "params": [
+     {
+      "name": "text",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getTop10",
+    "params": [],
+    "return": {
+     "type": "(string|integer)[][]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recount every added text from scratch and fully sort the distinct words at each query",
+  "candidate_design": "hash-map counts plus a cached top-10 list; because counts only grow, an incremented word can only move up, so each increment updates the cached list in O(10)",
+  "complexity_target": "O(10) per word occurrence, O(10) per getTop10/O(U) space"
+ },
+ "source_sha256": "d070efd270b719d25b814415399d5c99d029e28ae99cf6fbcd30774d117e3e9c",
+ "native_class": "WordFrequencyTracker",
+ "native_symbol": "module global WordFrequencyTracker",
+ "void_methods": [
+  "addText"
+ ]
+}

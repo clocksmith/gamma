@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67eb34914c9bb801bfd0ef7d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "house",
+  "street"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "unmatchedTrades",
+  "params": [
+   {
+    "name": "house",
+    "type": "string[]"
+   },
+   {
+    "name": "street",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each house trade, scan the street list for an unused identical trade and mark it used",
+  "candidate_design": "count street trades in a hash map, consume a count for each identical house trade, then collect leftovers and sort",
+  "complexity_target": "O((h + s) log(h + s)) time/O(h + s) space"
+ },
+ "source_sha256": "6bd482c325e0d459f1c4b1b6d60d2b9186c0c3c728bbc23a414b2f3c12f14564",
+ "wrapper": "named export unmatchedTrades"
+}

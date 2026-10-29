@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68bad7afb5314dcd938cb9fe",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "topTenWords",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "(string|integer)[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "count with a dictionary and sort every distinct word by (-count, word)",
+  "candidate_design": "count with a hash map, then keep a sorted buffer of at most 10 best entries by insertion while scanning the distinct words",
+  "complexity_target": "O(len(s) + U * 10) time/O(U) space"
+ },
+ "source_sha256": "3c539ddc6ff707042cc0aa1e981a288dd27b1b113a6571e52ca3eceb0aa972fa",
+ "wrapper": "named export topTenWords"
+}
