@@ -1,0 +1,338 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69573ac31e6311b59b803d44:695743551e6311b59b803d6a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+   "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69573ac31e6311b59b803d44.json",
+   "sha256": "ff018f2fa0b4de1d84ec76ee5fbb8794e3206e8da27a3ee98d852cca0e21a7f5",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/study-content.json",
+   "sha256": "dfa63133ebe32643373d374ab99dd91232896bb4f4f19b264bad46b66c8fc552",
+   "selector": "/variants/hack2hire:695743551e6311b59b803d6a"
+  }
+ ],
+ "problemId": "hack2hire:69573ac31e6311b59b803d44",
+ "variantId": "695743551e6311b59b803d6a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: merged party windows per neighborhood",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/study-content.json",
+    "sha256": "dfa63133ebe32643373d374ab99dd91232896bb4f4f19b264bad46b66c8fc552",
+    "selector": "/variants/hack2hire:695743551e6311b59b803d6a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Join both lists on partyId (each id appears exactly once in each). Windows are integer hours [start, end) with start < end. For each neighborhood, merge its parties' windows where they overlap or touch. Return rows [neighborhood, start, end] (decimal strings), sorted by neighborhood (code point order) then start (aggregation inferred).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Join both lists on partyId (each id appears exactly once in each).",
+   "Windows are integer hours [start, end) with start < end.",
+   "For each neighborhood, merge its parties' windows where they overlap or touch.",
+   "Return rows [neighborhood, start, end] (decimal strings), sorted by neighborhood (code point order) then start (aggregation inferred)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 parties; every partyId appears exactly once in each list",
+   "hours are integers 0..1e6 as decimal strings, start < end",
+   "ids and neighborhood names are 1..20 characters [A-Za-z0-9_-]"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/study-content.json",
+    "sha256": "dfa63133ebe32643373d374ab99dd91232896bb4f4f19b264bad46b66c8fc552",
+    "selector": "/variants/hack2hire:695743551e6311b59b803d6a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: list layouts and join key; title (interval aggregator); algorithmTags: HASH_TABLE; preview response sha256 79f562786d78e500afce2171a6212fa92d0e084d7866a13b51d1b01824fe22ad"
+   },
+   {
+    "statement": "Uncertainty: high: the preview stops after the input layout; per-neighborhood interval merging is inferred from the title",
+    "basis": "the public group preview is partial (368 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as levels 1-2 over the same inputs",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are windows half-open, and do touching windows merge?",
+   "What is the output order?",
+   "Can a party lack a location record?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/study-content.json",
+    "sha256": "dfa63133ebe32643373d374ab99dd91232896bb4f4f19b264bad46b66c8fc552",
+    "selector": "/variants/hack2hire:695743551e6311b59b803d6a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "p1",
+       "1",
+       "3"
+      ]
+     ],
+     [
+      [
+       "p1",
+       "soma"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "soma",
+      "1",
+      "3"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/study-content.json",
+    "sha256": "dfa63133ebe32643373d374ab99dd91232896bb4f4f19b264bad46b66c8fc552",
+    "selector": "/variants/hack2hire:695743551e6311b59b803d6a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/oracles.py",
+    "sha256": "44bddb7f033fd41bff7218e7d08962eba20a255519a8b101e2f703b645b8ab5a",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def aggregatePartyWindows(partyWindows, geoDataList) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+      "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/semantics/695743551e6311b59b803d6a-python.json",
+     "inferredInterface": {
+      "name": "aggregatePartyWindows",
+      "params": [
+       {
+        "name": "partyWindows",
+        "type": "string[][]"
+       },
+       {
+        "name": "geoDataList",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/semantics/695743551e6311b59b803d6a-python.json",
+      "sha256": "316543129a01853473ea58b6cae8f17ebc4d8fdbd0fa250674b3619a4873f5e9",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function aggregatePartyWindows(partyWindows, geoDataList) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+      "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/semantics/695743551e6311b59b803d6a-javascript.json",
+     "inferredInterface": {
+      "name": "aggregatePartyWindows",
+      "params": [
+       {
+        "name": "partyWindows",
+        "type": "string[][]"
+       },
+       {
+        "name": "geoDataList",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/semantics/695743551e6311b59b803d6a-javascript.json",
+      "sha256": "4c2e87d8f7aef8fee61b3a399ce6cf79a17acdffe881318f2e0dfe529549975a",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

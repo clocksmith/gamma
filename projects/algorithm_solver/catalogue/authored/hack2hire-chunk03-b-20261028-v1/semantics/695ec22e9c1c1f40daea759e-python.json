@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:695ec22e9c1c1f40daea759e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "hands"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findWinners",
+  "params": [
+   {
+    "name": "hands",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "pattern predicates producing comparable tuples; all-pairs dominance check",
+  "candidate_design": "one strength tuple per hand from the rank-count signature; single max scan",
+  "complexity_target": "O(h) time/O(h) space"
+ },
+ "source_sha256": "4c994cd032680a89bd402d4a00584b97494a6b0f3e4056f0faffe5b22dacc6ba",
+ "wrapper": "Solution.findWinners"
+}

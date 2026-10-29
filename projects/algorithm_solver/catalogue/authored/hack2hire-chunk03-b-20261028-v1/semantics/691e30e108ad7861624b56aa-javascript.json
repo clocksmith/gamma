@@ -1,0 +1,88 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:691e30e108ad7861624b56aa",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "MusicPlayer",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addSong",
+    "params": [
+     {
+      "name": "title",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "playSong",
+    "params": [
+     {
+      "name": "songId",
+      "type": "integer"
+     },
+     {
+      "name": "userId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getAnalytics",
+    "params": [],
+    "return": {
+     "type": "list<[string,integer]>"
+    }
+   },
+   {
+    "name": "getLastThreeSongs",
+    "params": [
+     {
+      "name": "userId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal replay of the raw play log, scanning it backwards for recent songs",
+  "candidate_design": "per-user recency list (linked by song id, move-to-front on play); per-song user sets",
+  "complexity_target": "O(1) play; O(1) getLastThreeSongs; O(S log S) getAnalytics"
+ },
+ "source_sha256": "0154e57582cddecf9540629ca6cb8074e5a0e5a707f8ff0a6ae33eede7309d89",
+ "native_class": "MusicPlayer",
+ "native_symbol": "property MusicPlayer of the CommonJS solve export",
+ "void_methods": [
+  "playSong"
+ ]
+}

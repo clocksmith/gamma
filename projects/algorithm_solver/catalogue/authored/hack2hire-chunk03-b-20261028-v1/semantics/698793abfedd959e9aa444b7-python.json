@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:698793abfedd959e9aa444b7",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minOperations",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "memoised recurrence (even: 1+f(n/2); odd: 1+min(f(n-1), f(n+1))), cross-checked against plain BFS for n < 400",
+  "candidate_design": "greedy on the low bits: halve when even; for odd n, decrement when n is 1 or 3 or n % 4 == 1, else increment",
+  "complexity_target": "O(log n) time/O(1) space"
+ },
+ "source_sha256": "0df0fdea3918d18605eb7c54480d58d5e2470a60131ecad5682a48ede8c2d06b",
+ "wrapper": "Solution.minOperations"
+}

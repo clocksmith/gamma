@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67fad958ba41b3368f4e586c",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "text",
+  "bigrams"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "splitBigrams",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "bigrams",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan comparing word slices with every dictionary entry",
+  "candidate_design": "hash set of bigram strings; one left-to-right pass",
+  "complexity_target": "O(total characters) time/O(dictionary) space"
+ },
+ "source_sha256": "1a1aadaaa504502888afb58b1be52387bd675fe162eaebd2d2c7466247740608",
+ "wrapper": "named export splitBigrams"
+}

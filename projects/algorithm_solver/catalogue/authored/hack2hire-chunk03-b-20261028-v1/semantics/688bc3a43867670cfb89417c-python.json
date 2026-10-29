@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:688bc3a43867670cfb89417c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "knownWords",
+  "phoneNumber"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "matchWords",
+  "params": [
+   {
+    "name": "knownWords",
+    "type": "string[]"
+   },
+   {
+    "name": "phoneNumber",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per word, check each letter against the keypad string of its digit",
+  "candidate_design": "letter-to-digit table; compare the word's digit string with phoneNumber",
+  "complexity_target": "O(total letters) time/O(1) extra space"
+ },
+ "source_sha256": "b14e7c0a62c30aba2b0b013543b5326d41ad1952c056d25d6277fc66d011a787",
+ "wrapper": "Solution.matchWords"
+}

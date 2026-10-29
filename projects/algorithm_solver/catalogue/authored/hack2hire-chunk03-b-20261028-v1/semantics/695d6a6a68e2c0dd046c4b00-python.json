@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:695d6a6a68e2c0dd046c4b00",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "hand"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "isValidHand",
+  "params": [
+   {
+    "name": "hand",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "explicit pattern predicates over parsed cards",
+  "candidate_design": "rank-count signature plus flush/straight flags",
+  "complexity_target": "O(1) per hand"
+ },
+ "source_sha256": "a460cb28acc05b0d6e4e01ed7e310aa09c8fb6ec807c63bdda184e05497573a9",
+ "wrapper": "Solution.isValidHand"
+}

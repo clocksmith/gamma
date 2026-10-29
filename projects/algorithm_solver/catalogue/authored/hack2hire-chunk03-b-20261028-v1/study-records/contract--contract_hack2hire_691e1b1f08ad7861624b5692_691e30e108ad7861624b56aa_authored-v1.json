@@ -1,0 +1,450 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:691e1b1f08ad7861624b5692:691e30e108ad7861624b56aa:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+   "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+   "selector": "/problems/9"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/691e1b1f08ad7861624b5692.json",
+   "sha256": "848cc333093929c3be5804c691bacfdc83f5f365ba6fa7160c1861929150e10d",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/study-content.json",
+   "sha256": "dfa63133ebe32643373d374ab99dd91232896bb4f4f19b264bad46b66c8fc552",
+   "selector": "/variants/hack2hire:691e30e108ad7861624b56aa"
+  }
+ ],
+ "problemId": "hack2hire:691e1b1f08ad7861624b5692",
+ "variantId": "691e30e108ad7861624b56aa",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: plus each user's three most recent songs",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/study-content.json",
+    "sha256": "dfa63133ebe32643373d374ab99dd91232896bb4f4f19b264bad46b66c8fc552",
+    "selector": "/variants/hack2hire:691e30e108ad7861624b56aa/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "addSong(title) stores a song and returns its id; ids are 1, 2, 3, ... in call order and never reused; titles may repeat. playSong(songId, userId) records that the user played the song (void). getAnalytics() returns [title, number of DISTINCT users who played the song] for every song, sorted by that count descending, ties by smaller song id (output form and tie rule inferred). Level 2 adds getLastThreeSongs(userId): the ids of the (up to) three most recently played DISTINCT songs of that user, most recent first; an unknown user gets [] (method name and id output inferred).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "addSong(title) stores a song and returns its id.",
+   "ids are 1, 2, 3, ..",
+   "in call order and never reused.",
+   "titles may repeat.",
+   "playSong(songId, userId) records that the user played the song (void).",
+   "getAnalytics() returns [title, number of DISTINCT users who played the song] for every song, sorted by that count descending, ties by smaller song id (output form and tie rule inferred).",
+   "Level 2 adds getLastThreeSongs(userId): the ids of the (up to) three most recently played DISTINCT songs of that user, most recent first.",
+   "an unknown user gets [] (method name and id output inferred)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 20000 calls in one trace",
+   "at most 2000 songs; titles 1..30 letters, digits or spaces",
+   "user ids 1..1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/study-content.json",
+    "sha256": "dfa63133ebe32643373d374ab99dd91232896bb4f4f19b264bad46b66c8fc552",
+    "selector": "/variants/hack2hire:691e30e108ad7861624b56aa/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: class and distinct-user analytics; algorithmTags: SIMULATION; codingQuestions (variant count/order); preview response sha256 b0a619cf5133d92b996c6d3df2ea843ff06b7115932e8dca5b2b70a8f9e66fa8"
+   },
+   {
+    "statement": "Uncertainty: high: the preview shows only level 1 framing; the recent-songs follow-up is inferred",
+    "basis": "the public group preview is partial (429 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as cumulative levels 1-3",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/9/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/9/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/9/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Should analytics count plays or distinct listeners?",
+   "How are ties in the analytics order broken?",
+   "Are song ids assigned by the system or passed in?",
+   "Should repeated plays of the same song count once in the recent list?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/study-content.json",
+    "sha256": "dfa63133ebe32643373d374ab99dd91232896bb4f4f19b264bad46b66c8fc552",
+    "selector": "/variants/hack2hire:691e30e108ad7861624b56aa/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "MusicPlayer",
+      "getAnalytics"
+     ],
+     [
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "MusicPlayer",
+      "addSong",
+      "playSong"
+     ],
+     [
+      [],
+      [
+       "Blue"
+      ],
+      [
+       1,
+       2
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     1,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/study-content.json",
+    "sha256": "dfa63133ebe32643373d374ab99dd91232896bb4f4f19b264bad46b66c8fc552",
+    "selector": "/variants/hack2hire:691e30e108ad7861624b56aa/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/oracles.py",
+    "sha256": "44bddb7f033fd41bff7218e7d08962eba20a255519a8b101e2f703b645b8ab5a",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class MusicPlayer:\n    def __init__(self)\n    def addSong(self, title) -> integer\n    def playSong(self, songId, userId) -> void\n    def getAnalytics(self) -> list<[string,integer]>\n    def getLastThreeSongs(self, userId) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+      "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/semantics/691e30e108ad7861624b56aa-python.json",
+     "inferredInterface": {
+      "classname": "MusicPlayer",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addSong",
+        "params": [
+         {
+          "name": "title",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "playSong",
+        "params": [
+         {
+          "name": "songId",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getAnalytics",
+        "params": [],
+        "return": {
+         "type": "list<[string,integer]>"
+        }
+       },
+       {
+        "name": "getLastThreeSongs",
+        "params": [
+         {
+          "name": "userId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/semantics/691e30e108ad7861624b56aa-python.json",
+      "sha256": "127b25a823f86c9151d364e00c11f88d4916a11435efbff51438281b81657b7f",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class MusicPlayer {\n  constructor()\n  addSong(title) /* -> integer */\n  playSong(songId, userId) /* -> void */\n  getAnalytics() /* -> list<[string,integer]> */\n  getLastThreeSongs(userId) /* -> integer[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+      "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/semantics/691e30e108ad7861624b56aa-javascript.json",
+     "inferredInterface": {
+      "classname": "MusicPlayer",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addSong",
+        "params": [
+         {
+          "name": "title",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "playSong",
+        "params": [
+         {
+          "name": "songId",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getAnalytics",
+        "params": [],
+        "return": {
+         "type": "list<[string,integer]>"
+        }
+       },
+       {
+        "name": "getLastThreeSongs",
+        "params": [
+         {
+          "name": "userId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/semantics/691e30e108ad7861624b56aa-javascript.json",
+      "sha256": "7d509dc132ecb4342e32f59a6b60bdf683aee203f44a4e184985883be3c418bf",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/9/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk03-b-20261028-v1/contracts.json",
+    "sha256": "ad1caac8596edaec7be7f71528b1814b3eca591c1f9bd9aba9f21c1ae6caa7dc",
+    "selector": "/problems/9/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

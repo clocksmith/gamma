@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69fff432574d87bc4900732f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "current",
+  "desired"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minOperations",
+  "params": [
+   {
+    "name": "current",
+    "type": "integer[]"
+   },
+   {
+    "name": "desired",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "BFS over whole permutations",
+  "candidate_design": "n minus the longest prefix of current whose desired positions are strictly increasing (untouched elements form such a prefix)",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "6cc565558856ac93503710f8c8812b221ebdf34886e71f37945d6b9ad2e1af6f",
+ "wrapper": "named export minOperations"
+}

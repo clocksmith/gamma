@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69609171bb250997304ac843",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "partyWindows",
+  "geoDataList"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "peakConcurrentParties",
+  "params": [
+   {
+    "name": "partyWindows",
+    "type": "string[][]"
+   },
+   {
+    "name": "geoDataList",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every window start, count windows covering it",
+  "candidate_design": "per neighborhood sweep over sorted start/end events (ends before starts at equal hours)",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "441936f07bedfb3e3eeb00d63c58e555d47b419bfb37d796a5a8165993a5db23",
+ "wrapper": "Solution.peakConcurrentParties"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:695743551e6311b59b803d6a",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "partyWindows",
+  "geoDataList"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "aggregatePartyWindows",
+  "params": [
+   {
+    "name": "partyWindows",
+    "type": "string[][]"
+   },
+   {
+    "name": "geoDataList",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "repeated pairwise merging until a fixpoint",
+  "candidate_design": "group by neighborhood, sort windows by start, single merge pass",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "79f9028b2c1da72726bd7619da9762222c7acf52df5a7befb686f62c6e2ce0c6",
+ "wrapper": "Solution.aggregatePartyWindows"
+}

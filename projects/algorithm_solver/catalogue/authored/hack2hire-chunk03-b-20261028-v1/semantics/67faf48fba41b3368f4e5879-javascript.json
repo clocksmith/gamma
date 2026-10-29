@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67faf48fba41b3368f4e5879",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "text",
+  "ngrams"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "splitNgrams",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "ngrams",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan comparing word slices with every dictionary entry",
+  "candidate_design": "word trie of the dictionary; walk forward up to 5 words and keep the longest terminal",
+  "complexity_target": "O(words * 5) time/O(dictionary) space"
+ },
+ "source_sha256": "e4dfd2e57def1d6e96c659253e5c009876acc2f82a9bb6539406cb117008f005",
+ "wrapper": "named export splitNgrams"
+}
