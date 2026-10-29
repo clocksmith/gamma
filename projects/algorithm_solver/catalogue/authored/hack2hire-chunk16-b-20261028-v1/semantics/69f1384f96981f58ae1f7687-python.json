@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69f1384f96981f58ae1f7687",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "fromNodes",
+  "toNodes"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minEdgeReversals",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "fromNodes",
+    "type": "integer[]"
+   },
+   {
+    "name": "toNodes",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "breadth-first search from every candidate root counting edges traversed against their direction",
+  "candidate_design": "one iterative traversal from node 1 for its cost, then re-rooting: moving the root across an edge changes the cost by +1 or -1 depending on the edge direction",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "1155c1236eb20971f206a1bd461b048525f7728c9dd2290d493a2588c5bdee35",
+ "wrapper": "Solution.minEdgeReversals"
+}

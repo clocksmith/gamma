@@ -1,0 +1,555 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69cda510ff3ebde766cee833:69cda519ff3ebde766cee834:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+   "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+   "selector": "/problems/8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69cda510ff3ebde766cee833.json",
+   "sha256": "8a66883321357ec468d0fbaa6525a010a033e7b01f9842cda638e9ec80182fb3",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+   "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+   "selector": "/variants/hack2hire:69cda519ff3ebde766cee834"
+  }
+ ],
+ "problemId": "hack2hire:69cda510ff3ebde766cee833",
+ "variantId": "69cda519ff3ebde766cee834",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: packed field offsets with append and remove",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:69cda519ff3ebde766cee834/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "ObjectLayout(names, sizes) packs the fields in order from byte 0 with no gaps (field i has sizes[i] > 0 bytes). getOffset(name) returns the first byte of the field, or -1 when there is no such field. fieldAt(offset) returns the name of the field covering that byte, or \"\" when the offset is at or beyond the total size. totalSize() returns the sum of sizes. addField(name, size) appends a new field at the end and returns true, or returns false (and changes nothing) when the name exists. removeField(name) deletes the field and closes the gap, shifting later fields down, and returns true, or returns false when absent. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "ObjectLayout(names, sizes) packs the fields in order from byte 0 with no gaps (field i has sizes[i] > 0 bytes).",
+   "getOffset(name) returns the first byte of the field, or -1 when there is no such field.",
+   "fieldAt(offset) returns the name of the field covering that byte, or \"\" when the offset is at or beyond the total size.",
+   "totalSize() returns the sum of sizes.",
+   "addField(name, size) appends a new field at the end and returns true, or returns false (and changes nothing) when the name exists.",
+   "removeField(name) deletes the field and closes the gap, shifting later fields down, and returns true, or returns false when absent.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= names.length = sizes.length <= 1e5",
+   "names are distinct, 1 to 12 characters from a-z, 0-9 and _",
+   "1 <= size <= 1e4",
+   "at most 1e5 method calls",
+   "0 <= offset <= 1e10"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:69cda519ff3ebde766cee834/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: a class modelling the byte layout of an object with an ordered list of named fields, each a contiguous byte range, packed from offset 0 with no gaps; an example with three fields of sizes 3, 6 and 2 (the layout and the class methods are cut off); algorithmTags: DESIGN; preview response sha256 0f24e3449ccc0ac34cddb50b02abe243a45d08f10e1bf8dc538ee938099e35fb"
+   },
+   {
+    "statement": "Uncertainty: high: only the packed-layout model and an example are visible; every method, its name, the \"\" and -1 conventions and the append/remove operations are inferred",
+    "basis": "the public group preview is partial (374 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/8/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/8/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/8/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which queries does the class answer: offset by name, field by offset, total size?",
+   "What is returned for an unknown field or an offset past the end?",
+   "Can fields be added or removed after construction, and do later fields shift?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:69cda519ff3ebde766cee834/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ObjectLayout"
+     ],
+     [
+      [
+       [],
+       []
+      ]
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ObjectLayout",
+      "getOffset",
+      "addField",
+      "removeField",
+      "removeField",
+      "getOffset",
+      "getOffset",
+      "addField",
+      "fieldAt",
+      "getOffset",
+      "fieldAt",
+      "removeField",
+      "fieldAt",
+      "getOffset"
+     ],
+     [
+      [
+       [
+        "a"
+       ],
+       [
+        4
+       ]
+      ],
+      [
+       "f"
+      ],
+      [
+       "b",
+       1
+      ],
+      [
+       "g_1"
+      ],
+      [
+       "a"
+      ],
+      [
+       "c"
+      ],
+      [
+       "a"
+      ],
+      [
+       "d",
+       3
+      ],
+      [
+       0
+      ],
+      [
+       "f"
+      ],
+      [
+       6
+      ],
+      [
+       "e"
+      ],
+      [
+       19
+      ],
+      [
+       "d"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     -1,
+     true,
+     false,
+     true,
+     -1,
+     -1,
+     true,
+     "b",
+     -1,
+     "",
+     false,
+     "",
+     1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:69cda519ff3ebde766cee834/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/oracles.py",
+    "sha256": "92fece1257387b75c988990ebb8ad1201e0d63b7f49cb53360d12cb5ea69b321",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ObjectLayout:\n    def __init__(self, names, sizes)\n    def getOffset(self, name) -> integer\n    def fieldAt(self, offset) -> string\n    def totalSize(self) -> integer\n    def addField(self, name, size) -> boolean\n    def removeField(self, name) -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/69cda519ff3ebde766cee834-python.json",
+     "inferredInterface": {
+      "classname": "ObjectLayout",
+      "constructor": {
+       "params": [
+        {
+         "name": "names",
+         "type": "string[]"
+        },
+        {
+         "name": "sizes",
+         "type": "integer[]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "getOffset",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "fieldAt",
+        "params": [
+         {
+          "name": "offset",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "totalSize",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "addField",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "size",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "removeField",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/69cda519ff3ebde766cee834-python.json",
+      "sha256": "881aca4fb631c790c7fd37d409fbb5782804542f3da85c5605c9f0b6ea72ad36",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ObjectLayout {\n  constructor(names, sizes)\n  getOffset(name) /* -> integer */\n  fieldAt(offset) /* -> string */\n  totalSize() /* -> integer */\n  addField(name, size) /* -> boolean */\n  removeField(name) /* -> boolean */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/69cda519ff3ebde766cee834-javascript.json",
+     "inferredInterface": {
+      "classname": "ObjectLayout",
+      "constructor": {
+       "params": [
+        {
+         "name": "names",
+         "type": "string[]"
+        },
+        {
+         "name": "sizes",
+         "type": "integer[]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "getOffset",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "fieldAt",
+        "params": [
+         {
+          "name": "offset",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "totalSize",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "addField",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "size",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "removeField",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/69cda519ff3ebde766cee834-javascript.json",
+      "sha256": "c144f4f1b53f51de9aa72c0aef83434bfd9eb87f78bedbc91958828b99e736b0",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/8/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/8/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

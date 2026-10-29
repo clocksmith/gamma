@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/design.json",
+   "sha256": "a8bf96f45791dd1ba110aad403238fbe8f3fe5f2a600582d01f126635bbda41e",
+   "selector": "/problems/hack2hire:69cac664ff3ebde766ced9a5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+   "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+   "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5"
+  }
+ ],
+ "problemId": "hack2hire:69cac65eff3ebde766ced9a4",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-records/contract--contract_hack2hire_69cac65eff3ebde766ced9a4_69cac664ff3ebde766ced9a5_authored-v1.json",
+  "sha256": "37122029f74c21d9db4daae11387f50e8f4e0f1c3fb63a7f52e827faa2d1b859"
+ },
+ "title": {
+  "status": "present",
+  "value": "sort a copy, take the minimum adjacent gap, then collect adjacent pairs with that gap",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/design.json",
+    "sha256": "a8bf96f45791dd1ba110aad403238fbe8f3fe5f2a600582d01f126635bbda41e",
+    "selector": "/problems/hack2hire:69cac664ff3ebde766ced9a5/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "sort a copy, take the minimum adjacent gap, then collect adjacent pairs with that gap. Complexity target: O(n log n) time/O(n) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/design.json",
+    "sha256": "a8bf96f45791dd1ba110aad403238fbe8f3fe5f2a600582d01f126635bbda41e",
+    "selector": "/problems/hack2hire:69cac664ff3ebde766ced9a5"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Closest-pair queries on one-dimensional data"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Sorting costs O(n log n); a counting approach needs a small value range"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "pairs come out in ascending order of their first value",
+   "every reported pair has gap d"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "In sorted order the closest pair is always adjacent.",
+   "Sort a copy and compute the minimum gap between neighbours.",
+   "Walk the neighbours again and keep every pair whose gap equals the minimum."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "sort a copy, take the minimum adjacent gap, then collect adjacent pairs with that gap",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/design.json",
+      "sha256": "a8bf96f45791dd1ba110aad403238fbe8f3fe5f2a600582d01f126635bbda41e",
+      "selector": "/problems/hack2hire:69cac664ff3ebde766ced9a5/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n log n) time/O(n) space; the independent reference (compare every pair of values) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/design.json",
+      "sha256": "a8bf96f45791dd1ba110aad403238fbe8f3fe5f2a600582d01f126635bbda41e",
+      "selector": "/problems/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "In sorted order the closest pair is always adjacent.",
+     "Sort a copy and compute the minimum gap between neighbours."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-records/artifact--artifact_hack2hire_69cac65eff3ebde766ced9a4_69cac664ff3ebde766ced9a5_approach-native_v1.json",
+    "sha256": "90ca255ae041af5c6ca8b9d03c0580b43e0f7c7d6b676bad8237642630be7886"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper minimumAbsDifference, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/design.json",
+      "sha256": "a8bf96f45791dd1ba110aad403238fbe8f3fe5f2a600582d01f126635bbda41e",
+      "selector": "/problems/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Walk the neighbours again and keep every pair whose gap equals the minimum."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-records/artifact--artifact_hack2hire_69cac65eff3ebde766ced9a4_69cac664ff3ebde766ced9a5_python_v1.json",
+     "sha256": "6b27b7cf281fbbf67a55b327441fab75df4a91359683ecddc3a1c948feaf58bd"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-records/artifact--artifact_hack2hire_69cac65eff3ebde766ced9a4_69cac664ff3ebde766ced9a5_javascript_v1.json",
+     "sha256": "95d0de1a796796abb19df91467844d54bb0a33522e918c816752633a9d316db1"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-records/artifact--artifact_hack2hire_69cac65eff3ebde766ced9a4_69cac664ff3ebde766ced9a5_approach-native_v1.json",
+    "sha256": "90ca255ae041af5c6ca8b9d03c0580b43e0f7c7d6b676bad8237642630be7886"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (compare every pair of values) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/design.json",
+      "sha256": "a8bf96f45791dd1ba110aad403238fbe8f3fe5f2a600582d01f126635bbda41e",
+      "selector": "/problems/hack2hire:69cac664ff3ebde766ced9a5/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/2/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/test_oracles.py",
+      "sha256": "80f19c5389a53b7b98ec151d7b3e169e1c0bdaa023c1e4968c838d76ebdb58b3",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+      "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+      "selector": "/variants/hack2hire:69cac664ff3ebde766ced9a5"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-records/artifact--artifact_hack2hire_69cac65eff3ebde766ced9a4_69cac664ff3ebde766ced9a5_approach-native_v1.json",
+    "sha256": "90ca255ae041af5c6ca8b9d03c0580b43e0f7c7d6b676bad8237642630be7886"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:69cac65eff3ebde766ced9a4:69cac664ff3ebde766ced9a5:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-records/artifact--artifact_hack2hire_69cac65eff3ebde766ced9a4_69cac664ff3ebde766ced9a5_approach-native_v1.json",
+  "sha256": "90ca255ae041af5c6ca8b9d03c0580b43e0f7c7d6b676bad8237642630be7886"
+ }
+}

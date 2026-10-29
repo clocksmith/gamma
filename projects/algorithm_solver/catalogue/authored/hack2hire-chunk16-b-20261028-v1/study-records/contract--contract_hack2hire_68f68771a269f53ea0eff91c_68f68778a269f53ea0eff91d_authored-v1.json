@@ -1,0 +1,352 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68f68771a269f53ea0eff91c:68f68778a269f53ea0eff91d:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+   "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68f68771a269f53ea0eff91c.json",
+   "sha256": "8569d3951efa92f738e1be64551329b3ddb48ef22785d87607f0ee8450fea3ad",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+   "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+   "selector": "/variants/hack2hire:68f68778a269f53ea0eff91d"
+  }
+ ],
+ "problemId": "hack2hire:68f68771a269f53ea0eff91c",
+ "variantId": "68f68778a269f53ea0eff91d",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: price as of a date per item",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68f68778a269f53ea0eff91d/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "log is a list of \"<item_name>, <date>, <price>\" strings in any order; (item, date) pairs are unique. queries is a list of [item_name, date] pairs. For each query return the price of the log entry for that item with the latest date not after the query date, or -1 when there is none. Return the answers in query order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "log is a list of \"<item_name>, <date>, <price>\" strings in any order; (item, date) pairs are unique.",
+   "queries is a list of [item_name, date] pairs.",
+   "For each query return the price of the log entry for that item with the latest date not after the query date, or -1 when there is none.",
+   "Return the answers in query order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= log.length <= 1e5",
+   "1 <= queries.length <= 1e5",
+   "item names are 1 to 20 characters: letters and digits with single inner spaces, no commas",
+   "dates are yyyy-mm-dd with year 2000 to 2099, month 01 to 12, day 01 to 28",
+   "0 <= price <= 1e9, written without leading zeros"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68f68778a269f53ea0eff91d/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: stated as a variation of LeetCode 981; a price log of strings \"<item_name>, <date>, <price>\" where the item name may contain spaces, the date is a unique ISO yyyy-mm-dd string and the price is an integer number of cents (the queries are cut off); algorithmTags: HASH_TABLE; preview response sha256 b675f3c600aaf3c2420ad10e4027b3c585d6622bc1a3861983a004148bfb6e2b"
+   },
+   {
+    "statement": "Uncertainty: high: the log format is in the preview; the query shape, \"latest entry at or before the date\" (the LeetCode 981 rule) and -1 for no entry are inferred, as is uniqueness per item rather than across the whole log",
+    "basis": "the public group preview is partial (566 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does a query look like?",
+   "Is a date unique per item or across the log?",
+   "Which price applies between two log dates, and before the first one?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68f68778a269f53ea0eff91d/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [
+      [
+       "a",
+       "2000-01-01"
+      ]
+     ]
+    ],
+    "output": [
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "milk, 2000-01-26, 184",
+      "milk, 2000-02-02, 206",
+      "Big Box, 2000-01-07, 453",
+      "Big Box, 2000-01-02, 758",
+      "Big Box, 2000-01-27, 91",
+      "tea 2, 2000-02-06, 999",
+      "milk, 2000-01-14, 956",
+      "Big Box, 2000-02-12, 63",
+      "milk, 2000-02-01, 302"
+     ],
+     [
+      [
+       "milk",
+       "2000-01-02"
+      ],
+      [
+       "Big Box",
+       "2000-01-15"
+      ]
+     ]
+    ],
+    "output": [
+     -1,
+     453
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68f68778a269f53ea0eff91d/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/oracles.py",
+    "sha256": "92fece1257387b75c988990ebb8ad1201e0d63b7f49cb53360d12cb5ea69b321",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def getPrices(log, queries) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68f68778a269f53ea0eff91d-python.json",
+     "inferredInterface": {
+      "name": "getPrices",
+      "params": [
+       {
+        "name": "log",
+        "type": "string[]"
+       },
+       {
+        "name": "queries",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68f68778a269f53ea0eff91d-python.json",
+      "sha256": "3fe73671e3b82d6ad90b4eb2a19b1a7a11f8440c4e49273fa9d24d4a69329361",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function getPrices(log, queries) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68f68778a269f53ea0eff91d-javascript.json",
+     "inferredInterface": {
+      "name": "getPrices",
+      "params": [
+       {
+        "name": "log",
+        "type": "string[]"
+       },
+       {
+        "name": "queries",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68f68778a269f53ea0eff91d-javascript.json",
+      "sha256": "c1fff993a08186efbaf2c2cda84da9d3460915de65ebc8be779e4f4cde7e541a",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

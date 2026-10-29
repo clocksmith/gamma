@@ -1,0 +1,1323 @@
+{
+ "schema": "gamma.hack2hire-chunk16-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:6a31cf175117d1b543567dcc": {
+   "constraints": [
+    "1 <= arr.length <= 1e5",
+    "1 <= arr[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "May x be merged into a value that is not present?",
+    "Does the final array have to keep at least two values?",
+    "Is an already contiguous array answered with 0?"
+   ],
+   "hints": [
+    "Merging values never helps unless their occurrence ranges overlap.",
+    "Cut the array at every index where no value occurs on both sides; each piece must end up as one value.",
+    "Each operation removes one distinct value, so the answer is distinct values minus the number of pieces; find pieces with the last occurrence of every value."
+   ],
+   "invariants": [
+    "every piece is closed: no value occurs both inside and outside it",
+    "the answer never exceeds distinct values minus 1"
+   ],
+   "chooseWhen": [
+    "Partitioning a sequence into value-closed pieces"
+   ],
+   "tradeoffs": [
+    "Last-occurrence sweep is linear; explicit union-find over overlapping ranges is equivalent but heavier"
+   ],
+   "variantLabel": "Single variant: fewest relabel operations to make every value contiguous",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       3,
+       1,
+       1,
+       1,
+       1,
+       3,
+       2,
+       3,
+       1,
+       1,
+       2,
+       1,
+       2
+      ]
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6796992ab10bc587828f27ae": {
+   "constraints": [
+    "1 <= transactions.length <= 1e5",
+    "timestamps are decimal integers 0 to 1e9, non-decreasing",
+    "1 <= amount <= 1e4",
+    "1 <= price <= 1e6",
+    "a sell never exceeds the shares held"
+   ],
+   "clarifyingQuestions": [
+    "Which purchased shares does a sell consume?",
+    "Is the tax computed per sell or on the net profit of all sells?",
+    "How should the tax be formatted?",
+    "Can a sell exceed the shares currently held?"
+   ],
+   "hints": [
+    "Selling the most expensive shares first makes each sell's profit as small as possible.",
+    "Keep the lots in a max-heap keyed by buy price.",
+    "For a sell, pop lots until the amount is covered (push back a partial remainder), sum (sell price - lot price) * shares, and add max(0, profit) to an integer total of tenths; format total // 10 and total % 10."
+   ],
+   "invariants": [
+    "the heap holds exactly the unsold shares",
+    "the integer profit total never goes negative"
+   ],
+   "chooseWhen": [
+    "Lot matching with a priority rule"
+   ],
+   "tradeoffs": [
+    "A heap gives O(log n) per lot; re-sorting is simpler but quadratic"
+   ],
+   "variantLabel": "Single variant: total tax when sells consume the costliest shares first",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "0",
+        "buy",
+        "3",
+        "9"
+       ]
+      ]
+     ],
+     "output": "0.0",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "0",
+        "buy",
+        "5",
+        "15"
+       ],
+       [
+        "1",
+        "sell",
+        "4",
+        "26"
+       ],
+       [
+        "1",
+        "buy",
+        "5",
+        "18"
+       ],
+       [
+        "3",
+        "buy",
+        "5",
+        "21"
+       ],
+       [
+        "5",
+        "sell",
+        "8",
+        "1"
+       ],
+       [
+        "6",
+        "sell",
+        "2",
+        "26"
+       ],
+       [
+        "7",
+        "sell",
+        "1",
+        "5"
+       ],
+       [
+        "7",
+        "buy",
+        "5",
+        "18"
+       ],
+       [
+        "7",
+        "buy",
+        "2",
+        "15"
+       ],
+       [
+        "9",
+        "buy",
+        "3",
+        "16"
+       ],
+       [
+        "10",
+        "sell",
+        "1",
+        "15"
+       ]
+      ]
+     ],
+     "output": "6.0",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69cac664ff3ebde766ced9a5": {
+   "constraints": [
+    "2 <= latencies.length <= 1e5",
+    "-1e6 <= latencies[i] <= 1e6",
+    "values are distinct"
+   ],
+   "clarifyingQuestions": [
+    "Can latencies repeat?",
+    "How are pairs ordered, and is each pair written smaller value first?"
+   ],
+   "hints": [
+    "In sorted order the closest pair is always adjacent.",
+    "Sort a copy and compute the minimum gap between neighbours.",
+    "Walk the neighbours again and keep every pair whose gap equals the minimum."
+   ],
+   "invariants": [
+    "pairs come out in ascending order of their first value",
+    "every reported pair has gap d"
+   ],
+   "chooseWhen": [
+    "Closest-pair queries on one-dimensional data"
+   ],
+   "tradeoffs": [
+    "Sorting costs O(n log n); a counting approach needs a small value range"
+   ],
+   "variantLabel": "Single variant: all value pairs at the minimum difference",
+   "examples": [
+    {
+     "input": [
+      [
+       8,
+       -7
+      ]
+     ],
+     "output": [
+      [
+       -7,
+       8
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       18,
+       -15,
+       11,
+       -2,
+       -16,
+       13,
+       14,
+       -19,
+       8,
+       -14,
+       -4
+      ]
+     ],
+     "output": [
+      [
+       -16,
+       -15
+      ],
+      [
+       -15,
+       -14
+      ],
+      [
+       13,
+       14
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67803efe6fee41e51af73ddc": {
+   "constraints": [
+    "1 <= coins.length <= 1e5",
+    "1 <= coins[i] <= 1e9",
+    "1 <= max <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Can a denomination be used more than once?",
+    "When is the answer -1?",
+    "Do denominations above max matter?"
+   ],
+   "hints": [
+    "If the chosen coins can pay every amount up to r, a new coin c <= r + 1 extends that to r + c.",
+    "Greedily add the largest denomination not above r + 1.",
+    "The same denomination repeats until the next one becomes usable or max is reached; compute that repetition count with one division."
+   ],
+   "invariants": [
+    "after every pick all amounts 1..r are payable",
+    "r strictly increases"
+   ],
+   "chooseWhen": [
+    "Covering a range with subset sums"
+   ],
+   "tradeoffs": [
+    "The greedy with jumps runs per denomination; simulating coin by coin can take max steps"
+   ],
+   "variantLabel": "Single variant: smallest coin multiset covering 1..max",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       8,
+       22,
+       13,
+       18,
+       17
+      ],
+      117
+     ],
+     "output": 14,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a74eeddd713d873ca7a8195": {
+   "constraints": [
+    "0 <= x, y <= 1e9",
+    "1 <= edgeCost, inputCost, bundleCost <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Can more bundles be bought than either requirement?",
+    "Can x or y be 0?"
+   ],
+   "hints": [
+    "Fix the number of bundles b; the rest is bought singly.",
+    "cost(b) = b * bundleCost + max(0, x - b) * edgeCost + max(0, y - b) * inputCost is piecewise linear with breaks at x and y.",
+    "The minimum is at b = 0, b = min(x, y) or b = max(x, y)."
+   ],
+   "invariants": [
+    "every evaluated plan satisfies both requirements"
+   ],
+   "chooseWhen": [
+    "Small linear purchase optimisations"
+   ],
+   "tradeoffs": [
+    "Checking breakpoints is O(1); scanning all b is simple but linear in the requirements"
+   ],
+   "variantLabel": "Single variant: cheapest mix of single items and bundles",
+   "examples": [
+    {
+     "input": [
+      0,
+      0,
+      1,
+      1,
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      10,
+      29,
+      5,
+      7,
+      17
+     ],
+     "output": 253,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a31cd3f5117d1b543567dbe": {
+   "constraints": [
+    "1 <= products.length <= 1e5",
+    "0 <= products[i] <= 1e4",
+    "sum(products) is divisible by products.length"
+   ],
+   "clarifyingQuestions": [
+    "Must all units move the same way?",
+    "Is the cost per unit per link?"
+   ],
+   "hints": [
+    "With clockwise moves only, the flow on link i equals c + prefix_i for some constant c >= -min(prefix).",
+    "Total cost is the sum of link flows, minimised by the smallest valid c.",
+    "Counterclockwise is the mirror image with c' - prefix_i; return the cheaper direction."
+   ],
+   "invariants": [
+    "link flows are non-negative",
+    "flow conservation holds at every warehouse"
+   ],
+   "chooseWhen": [
+    "Circular balancing with a direction restriction"
+   ],
+   "tradeoffs": [
+    "The prefix formula is linear; trying every zero-flow link is quadratic"
+   ],
+   "variantLabel": "Single variant: one-direction rebalancing on a ring",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       3,
+       8,
+       9,
+       9,
+       2,
+       5,
+       14,
+       6
+      ]
+     ],
+     "output": 24,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f1384f96981f58ae1f7687": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "fromNodes.length = toNodes.length = n - 1",
+    "the edges form a tree when directions are ignored"
+   ],
+   "clarifyingQuestions": [
+    "Is the input guaranteed to be a tree?",
+    "Should the root also be reported?"
+   ],
+   "hints": [
+    "Count reversals for one root with a traversal.",
+    "Moving the root from u to its neighbour v only changes the edge between them.",
+    "If the edge points u -> v the cost grows by 1, otherwise it shrinks by 1; take the minimum over all nodes, iteratively to avoid deep recursion."
+   ],
+   "invariants": [
+    "cost(v) = cost(u) + 1 when the edge is u -> v and cost(u) - 1 when it is v -> u"
+   ],
+   "chooseWhen": [
+    "Rerooting dynamic programming on trees"
+   ],
+   "tradeoffs": [
+    "Rerooting is linear; per-root search is quadratic"
+   ],
+   "variantLabel": "Single variant: best root for an oriented tree",
+   "examples": [
+    {
+     "input": [
+      1,
+      [],
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      11,
+      [
+       11,
+       11,
+       9,
+       1,
+       6,
+       5,
+       7,
+       9,
+       3,
+       9
+      ],
+      [
+       2,
+       10,
+       7,
+       2,
+       7,
+       2,
+       8,
+       4,
+       2,
+       10
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67888093402dc47b67a14948": {
+   "constraints": [
+    "1 <= x.length = y.length <= 1e5",
+    "-1e9 <= x[i], y[i] <= 1e9",
+    "positions are distinct"
+   ],
+   "clarifyingQuestions": [
+    "Must the neighbouring robots be adjacent, or anywhere on the same row or column?",
+    "Are positions distinct?"
+   ],
+   "hints": [
+    "Only extremes matter: a robot has someone above it unless it is the topmost on its column.",
+    "Record the min and max y per x and the min and max x per y.",
+    "Count robots strictly between the extremes in both directions."
+   ],
+   "invariants": [
+    "a robot at a column or row extreme is never idle"
+   ],
+   "chooseWhen": [
+    "Per-row and per-column aggregate queries"
+   ],
+   "tradeoffs": [
+    "Hash maps give linear time; sorting rows and columns is an alternative"
+   ],
+   "variantLabel": "Single variant: robots surrounded on four sides",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      [
+       0
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       4,
+       3,
+       4,
+       0,
+       1,
+       0,
+       2,
+       3,
+       0,
+       1,
+       2,
+       4,
+       3,
+       1,
+       4,
+       0,
+       2,
+       2,
+       0
+      ],
+      [
+       4,
+       0,
+       1,
+       0,
+       3,
+       1,
+       4,
+       1,
+       2,
+       4,
+       3,
+       3,
+       4,
+       1,
+       2,
+       3,
+       1,
+       0,
+       4
+      ]
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69cda519ff3ebde766cee834": {
+   "constraints": [
+    "0 <= names.length = sizes.length <= 1e5",
+    "names are distinct, 1 to 12 characters from a-z, 0-9 and _",
+    "1 <= size <= 1e4",
+    "at most 1e5 method calls",
+    "0 <= offset <= 1e10"
+   ],
+   "clarifyingQuestions": [
+    "Which queries does the class answer: offset by name, field by offset, total size?",
+    "What is returned for an unknown field or an offset past the end?",
+    "Can fields be added or removed after construction, and do later fields shift?"
+   ],
+   "hints": [
+    "The offset of a field is the sum of sizes of the live fields before it.",
+    "Keep sizes in a Fenwick tree indexed by insertion slot; a removed field becomes size 0.",
+    "fieldAt walks down the Fenwick tree to the first slot whose prefix sum exceeds the offset."
+   ],
+   "invariants": [
+    "the Fenwick total equals totalSize()",
+    "live fields keep their insertion order"
+   ],
+   "chooseWhen": [
+    "Prefix-sum layouts with deletions"
+   ],
+   "tradeoffs": [
+    "A Fenwick tree makes every query logarithmic; a plain list is simpler but linear per call"
+   ],
+   "variantLabel": "Single variant: packed field offsets with append and remove",
+   "examples": [
+    {
+     "input": [
+      [
+       "ObjectLayout"
+      ],
+      [
+       [
+        [],
+        []
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ObjectLayout",
+       "getOffset",
+       "addField",
+       "removeField",
+       "removeField",
+       "getOffset",
+       "getOffset",
+       "addField",
+       "fieldAt",
+       "getOffset",
+       "fieldAt",
+       "removeField",
+       "fieldAt",
+       "getOffset"
+      ],
+      [
+       [
+        [
+         "a"
+        ],
+        [
+         4
+        ]
+       ],
+       [
+        "f"
+       ],
+       [
+        "b",
+        1
+       ],
+       [
+        "g_1"
+       ],
+       [
+        "a"
+       ],
+       [
+        "c"
+       ],
+       [
+        "a"
+       ],
+       [
+        "d",
+        3
+       ],
+       [
+        0
+       ],
+       [
+        "f"
+       ],
+       [
+        6
+       ],
+       [
+        "e"
+       ],
+       [
+        19
+       ],
+       [
+        "d"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1,
+      true,
+      false,
+      true,
+      -1,
+      -1,
+      true,
+      "b",
+      -1,
+      "",
+      false,
+      "",
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68d89bb279db2fbcd7d7db16": {
+   "constraints": [
+    "at most 1e5 calls",
+    "c is one character from a-z, A-Z or 0-9; comparison is case-sensitive"
+   ],
+   "clarifyingQuestions": [
+    "Is the empty stream a palindrome?",
+    "Is the comparison case-sensitive, and which characters can arrive?",
+    "How often is isPalindrome called relative to track?"
+   ],
+   "hints": [
+    "Rechecking the whole string per query is quadratic; a rolling hash is fast but can collide.",
+    "Track the longest palindromic suffix of the stream as it grows.",
+    "A palindromic tree updates that suffix in amortised O(1) per character; the stream is a palindrome when the suffix length equals the stream length."
+   ],
+   "invariants": [
+    "the tracked suffix is the longest palindromic suffix of the stream",
+    "suffix links point to strictly shorter palindromes"
+   ],
+   "chooseWhen": [
+    "Online palindrome checks without hashing"
+   ],
+   "tradeoffs": [
+    "The eertree is exact; polynomial hashing is simpler but probabilistic"
+   ],
+   "variantLabel": "Single variant: is the whole stream a palindrome",
+   "examples": [
+    {
+     "input": [
+      [
+       "PalindromeStream"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "PalindromeStream",
+       "track",
+       "track",
+       "track",
+       "track",
+       "isPalindrome",
+       "track",
+       "track",
+       "track",
+       "isPalindrome",
+       "track",
+       "isPalindrome",
+       "isPalindrome",
+       "track",
+       "track"
+      ],
+      [
+       [],
+       [
+        "a"
+       ],
+       [
+        "a"
+       ],
+       [
+        "A"
+       ],
+       [
+        "A"
+       ],
+       [],
+       [
+        "A"
+       ],
+       [
+        "a"
+       ],
+       [
+        "A"
+       ],
+       [],
+       [
+        "A"
+       ],
+       [],
+       [],
+       [
+        "a"
+       ],
+       [
+        "A"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      false,
+      null,
+      null,
+      null,
+      false,
+      null,
+      false,
+      false,
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6907b46fe1919109b6df119a": {
+   "constraints": [
+    "pattern.length = 9",
+    "characters are \"1\"..\"9\" or \"?\"",
+    "fixed digits are distinct"
+   ],
+   "clarifyingQuestions": [
+    "What is the equation: ABC + DEF = GHI?",
+    "Do ABC + DEF and DEF + ABC count as different assignments?",
+    "Is there any input, or is the answer a constant?"
+   ],
+   "hints": [
+    "Work from the units column: C + F gives I and a carry.",
+    "Once two addend digits are chosen, the sum digit of that column is forced; reject it if used or fixed differently.",
+    "Recurse to the tens and hundreds columns; the hundreds column must not carry."
+   ],
+   "invariants": [
+    "each digit 1..9 is used at most once along a search path",
+    "the carry is 0 or 1"
+   ],
+   "chooseWhen": [
+    "Cryptarithm counting"
+   ],
+   "tradeoffs": [
+    "Column-wise backtracking prunes early; brute-force permutations are 9! checks"
+   ],
+   "variantLabel": "Single variant: count digit assignments with ABC + DEF = GHI (pattern extension)",
+   "examples": [
+    {
+     "input": [
+      "123456789"
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "1????????"
+     ],
+     "output": 68,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68f283fbf567e950995157d6": {
+   "constraints": [
+    "0 <= sentence.length <= 1e5",
+    "letters a-z, A-Z and single spaces; words are non-empty"
+   ],
+   "clarifyingQuestions": [
+    "Is \"y\" a vowel?",
+    "Does a moved capital letter stay capital?",
+    "Are there punctuation or extra rules, as in Goat Latin?"
+   ],
+   "hints": [
+    "Handle each word independently.",
+    "Check the first letter against the vowels in both cases.",
+    "Vowel: word + \"way\"; consonant: word[1:] + word[0] + \"ay\"; join with spaces."
+   ],
+   "invariants": [
+    "the output has as many words as the input"
+   ],
+   "chooseWhen": [
+    "Word-level string rewriting"
+   ],
+   "tradeoffs": [
+    "Splitting is clearest; a single character scan avoids temporary lists"
+   ],
+   "variantLabel": "Single variant: two-rule Pig Latin per word",
+   "examples": [
+    {
+     "input": [
+      ""
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "quiet apple apple U Tree xyz"
+     ],
+     "output": "uietqay appleway appleway Uway reeTay yzxay",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67cd196d3363b83a81fc99a7": {
+   "constraints": [
+    "1 <= securities.length <= 1e5",
+    "symbol is 1 to 5 letters A-Z",
+    "1 <= P <= 1e4",
+    "0 <= S <= 1e4",
+    "0 <= A <= 1e6",
+    "0 <= funds <= 1e12"
+   ],
+   "clarifyingQuestions": [
+    "Can fractional shares be bought?",
+    "Does leftover cash count towards the value?",
+    "How should the value be rounded and formatted?"
+   ],
+   "hints": [
+    "Each dollar spent on security i returns S_i / P_i of future value.",
+    "Buy in decreasing S / P order, comparing ratios by cross-multiplication.",
+    "Buy whole maximum lots while they fit, then the affordable fraction of the next security; keep the result exact until the final rounding."
+   ],
+   "invariants": [
+    "spent funds never exceed funds",
+    "the fractional purchase, if any, is the last one"
+   ],
+   "chooseWhen": [
+    "Fractional knapsack with exact output"
+   ],
+   "tradeoffs": [
+    "Greedy by ratio is optimal for fractional shares; whole shares would need a different algorithm"
+   ],
+   "variantLabel": "Single variant: fractional knapsack over securities",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "A",
+        3,
+        1,
+        5
+       ]
+      ],
+      1
+     ],
+     "output": "0.33",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "CDE",
+        11,
+        10,
+        4
+       ],
+       [
+        "AA",
+        5,
+        10,
+        5
+       ],
+       [
+        "CDE",
+        2,
+        14,
+        1
+       ],
+       [
+        "CDE",
+        5,
+        9,
+        3
+       ],
+       [
+        "B",
+        10,
+        13,
+        5
+       ],
+       [
+        "AA",
+        2,
+        9,
+        2
+       ]
+      ],
+      47
+     ],
+     "output": "110.30",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68e8736a80f69c7a01706891": {
+   "constraints": [
+    "1 <= idList.length <= 1e5",
+    "ids are distinct integers 1 to 1e9",
+    "every child id is in idList and has exactly one parent; no cycles",
+    "names are 1 to 10 characters from letters, digits and _",
+    "1 <= targetId <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "How is the path printed: joined names, a list, a leading slash?",
+    "What if targetId does not exist?",
+    "Can the forest be deep?"
+   ],
+   "hints": [
+    "Each folder has at most one parent.",
+    "Build a child-to-parent map and an id-to-name map.",
+    "Walk parents from targetId to the top, collecting names, then reverse and join; iterate, do not recurse."
+   ],
+   "invariants": [
+    "the walk visits each ancestor once and stops at a top-level folder"
+   ],
+   "chooseWhen": [
+    "Ancestor paths in forests"
+   ],
+   "tradeoffs": [
+    "A parent map answers one query in path length; a top-down search needs the whole forest"
+   ],
+   "variantLabel": "Single variant: root-to-node folder path",
+   "examples": [
+    {
+     "input": [
+      [
+       35
+      ],
+      [
+       []
+      ],
+      [
+       "f3"
+      ],
+      35
+     ],
+     "output": "f3",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       32,
+       18,
+       57,
+       17,
+       40,
+       29,
+       21,
+       45,
+       56,
+       15,
+       37
+      ],
+      [
+       [],
+       [],
+       [
+        56,
+        37,
+        40
+       ],
+       [
+        29
+       ],
+       [],
+       [],
+       [],
+       [],
+       [
+        15,
+        17
+       ],
+       [],
+       [
+        45
+       ]
+      ],
+      [
+       "f2",
+       "f4",
+       "f0",
+       "f2",
+       "f3",
+       "f1",
+       "f1",
+       "f4",
+       "f3",
+       "f4",
+       "f4"
+      ],
+      18
+     ],
+     "output": "f4",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68f68778a269f53ea0eff91d": {
+   "constraints": [
+    "0 <= log.length <= 1e5",
+    "1 <= queries.length <= 1e5",
+    "item names are 1 to 20 characters: letters and digits with single inner spaces, no commas",
+    "dates are yyyy-mm-dd with year 2000 to 2099, month 01 to 12, day 01 to 28",
+    "0 <= price <= 1e9, written without leading zeros"
+   ],
+   "clarifyingQuestions": [
+    "What does a query look like?",
+    "Is a date unique per item or across the log?",
+    "Which price applies between two log dates, and before the first one?"
+   ],
+   "hints": [
+    "ISO dates compare correctly as strings.",
+    "Split each entry on its last two \", \" separators, since names may contain spaces.",
+    "Sort each item's (date, price) list and binary-search the last date <= the query date."
+   ],
+   "invariants": [
+    "each item's list is sorted by date",
+    "answers are -1 exactly when no entry is on or before the query date"
+   ],
+   "chooseWhen": [
+    "Point-in-time lookups"
+   ],
+   "tradeoffs": [
+    "Sorting plus binary search handles unsorted logs; a scan is simpler but O(n) per query"
+   ],
+   "variantLabel": "Single variant: price as of a date per item",
+   "examples": [
+    {
+     "input": [
+      [],
+      [
+       [
+        "a",
+        "2000-01-01"
+       ]
+      ]
+     ],
+     "output": [
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "milk, 2000-01-26, 184",
+       "milk, 2000-02-02, 206",
+       "Big Box, 2000-01-07, 453",
+       "Big Box, 2000-01-02, 758",
+       "Big Box, 2000-01-27, 91",
+       "tea 2, 2000-02-06, 999",
+       "milk, 2000-01-14, 956",
+       "Big Box, 2000-02-12, 63",
+       "milk, 2000-02-01, 302"
+      ],
+      [
+       [
+        "milk",
+        "2000-01-02"
+       ],
+       [
+        "Big Box",
+        "2000-01-15"
+       ]
+      ]
+     ],
+     "output": [
+      -1,
+      453
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68aceb961bf7d2097f647f62": {
+   "constraints": [
+    "at most 1e5 calls",
+    "1 <= timestamp <= 1e9",
+    "1 <= price <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "What do the queries return before any update?",
+    "Does a replaced price still count for the maximum or minimum?",
+    "Is \"latest\" the newest timestamp or the newest call?"
+   ],
+   "hints": [
+    "Keep the current price per timestamp in a hash map and remember the largest timestamp.",
+    "Push every update into a max-heap and a min-heap as (price, timestamp).",
+    "On a query pop heap tops whose price no longer matches the map for their timestamp; the remaining top is the answer."
+   ],
+   "invariants": [
+    "the map holds exactly one price per recorded timestamp",
+    "every live record has an entry in both heaps"
+   ],
+   "chooseWhen": [
+    "Aggregates over a corrected time series"
+   ],
+   "tradeoffs": [
+    "Lazy heaps give logarithmic amortised time; a sorted multiset would also delete eagerly"
+   ],
+   "variantLabel": "Single variant: latest, max and min price with corrections",
+   "examples": [
+    {
+     "input": [
+      [
+       "ProductPrice",
+       "update"
+      ],
+      [
+       [],
+       [
+        1,
+        12
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ProductPrice",
+       "current",
+       "current",
+       "minimum",
+       "minimum",
+       "current",
+       "update",
+       "update",
+       "maximum",
+       "maximum",
+       "current",
+       "update",
+       "minimum",
+       "minimum",
+       "update",
+       "maximum",
+       "current",
+       "update"
+      ],
+      [
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [
+        6,
+        9
+       ],
+       [
+        5,
+        7
+       ],
+       [],
+       [],
+       [],
+       [
+        8,
+        9
+       ],
+       [],
+       [],
+       [
+        6,
+        16
+       ],
+       [],
+       [],
+       [
+        5,
+        15
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      null,
+      null,
+      9,
+      9,
+      9,
+      null,
+      7,
+      7,
+      null,
+      16,
+      9,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

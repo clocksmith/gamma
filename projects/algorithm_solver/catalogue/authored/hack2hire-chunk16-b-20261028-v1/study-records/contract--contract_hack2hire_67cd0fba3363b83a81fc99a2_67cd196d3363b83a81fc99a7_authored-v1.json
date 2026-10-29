@@ -1,0 +1,367 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67cd0fba3363b83a81fc99a2:67cd196d3363b83a81fc99a7:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+   "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+   "selector": "/problems/12"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67cd0fba3363b83a81fc99a2.json",
+   "sha256": "f57f095fdf33c7c3e078af30ecdd4e42f16138a0e08911e3b5cb927830d1bc13",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+   "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+   "selector": "/variants/hack2hire:67cd196d3363b83a81fc99a7"
+  }
+ ],
+ "problemId": "hack2hire:67cd0fba3363b83a81fc99a2",
+ "variantId": "67cd196d3363b83a81fc99a7",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: fractional knapsack over securities",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:67cd196d3363b83a81fc99a7/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "securities is a list of [symbol, P, S, A] rows with integer P >= 1, S >= 0 and A >= 0; funds is a non-negative integer. Buy a (possibly fractional) number of shares q_i with 0 <= q_i <= A_i and total cost sum(q_i * P_i) <= funds, maximising sum(q_i * S_i), the predicted value of the bought shares (unspent funds do not count). Return that maximum rounded half up to two decimals, as a string with exactly two digits after the point.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "securities is a list of [symbol, P, S, A] rows with integer P >= 1, S >= 0 and A >= 0; funds is a non-negative integer.",
+   "Buy a (possibly fractional) number of shares q_i with 0 <= q_i <= A_i and total cost sum(q_i * P_i) <= funds, maximising sum(q_i * S_i), the predicted value of the bought shares (unspent funds do not count).",
+   "Return that maximum rounded half up to two decimals, as a string with exactly two digits after the point."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= securities.length <= 1e5",
+   "symbol is 1 to 5 letters A-Z",
+   "1 <= P <= 1e4",
+   "0 <= S <= 1e4",
+   "0 <= A <= 1e6",
+   "0 <= funds <= 1e12"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:67cd196d3363b83a81fc99a7/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: securities with a symbol, current price P, predicted price S and a maximum share count A; limited funds; maximise the predicted future value of the portfolio (whether shares are fractional and the output format are cut off); algorithmTags: ARRAY, GREEDY; preview response sha256 68d6769a113686061a6636ff53f2c6acdf1499f72c5d8c162b47651b52b1be24"
+   },
+   {
+    "statement": "Uncertainty: high: the inputs and the goal are in the preview; fractional shares (a fractional knapsack, consistent with the GREEDY tag and difficulty 1), counting only the bought shares and the exact two-decimal string output are inferred",
+    "basis": "the public group preview is partial (419 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/12/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/12/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/12/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Can fractional shares be bought?",
+   "Does leftover cash count towards the value?",
+   "How should the value be rounded and formatted?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:67cd196d3363b83a81fc99a7/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "A",
+       3,
+       1,
+       5
+      ]
+     ],
+     1
+    ],
+    "output": "0.33",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "CDE",
+       11,
+       10,
+       4
+      ],
+      [
+       "AA",
+       5,
+       10,
+       5
+      ],
+      [
+       "CDE",
+       2,
+       14,
+       1
+      ],
+      [
+       "CDE",
+       5,
+       9,
+       3
+      ],
+      [
+       "B",
+       10,
+       13,
+       5
+      ],
+      [
+       "AA",
+       2,
+       9,
+       2
+      ]
+     ],
+     47
+    ],
+    "output": "110.30",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:67cd196d3363b83a81fc99a7/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/oracles.py",
+    "sha256": "92fece1257387b75c988990ebb8ad1201e0d63b7f49cb53360d12cb5ea69b321",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def maximizePortfolioValue(securities, funds) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/67cd196d3363b83a81fc99a7-python.json",
+     "inferredInterface": {
+      "name": "maximizePortfolioValue",
+      "params": [
+       {
+        "name": "securities",
+        "type": "(string|integer)[][]"
+       },
+       {
+        "name": "funds",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/67cd196d3363b83a81fc99a7-python.json",
+      "sha256": "768dfc5f3e8a9c28588a48e81e6b7b37db9af032b64e9d44cbcd072e171402a3",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function maximizePortfolioValue(securities, funds) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/67cd196d3363b83a81fc99a7-javascript.json",
+     "inferredInterface": {
+      "name": "maximizePortfolioValue",
+      "params": [
+       {
+        "name": "securities",
+        "type": "(string|integer)[][]"
+       },
+       {
+        "name": "funds",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/67cd196d3363b83a81fc99a7-javascript.json",
+      "sha256": "cdf99159dcaeb328c302923a6639b99cf93e80873b3b9d3a5cb6b699ab8a5a3d",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/12/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/12/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69cac664ff3ebde766ced9a5",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "latencies"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minimumAbsDifference",
+  "params": [
+   {
+    "name": "latencies",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "compare every pair of values",
+  "candidate_design": "sort a copy, take the minimum adjacent gap, then collect adjacent pairs with that gap",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "b0cbc1c2458ff33851935a75c2e353b4ef3ddf702923de70f244957245f26119",
+ "wrapper": "Solution.minimumAbsDifference"
+}

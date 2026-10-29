@@ -1,0 +1,395 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68e8733480f69c7a0170688f:68e8736a80f69c7a01706891:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+   "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68e8733480f69c7a0170688f.json",
+   "sha256": "577704800d1cadcfb649a69344e32fb2d49e2610eaa98775d5e12efa0443b356",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+   "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+   "selector": "/variants/hack2hire:68e8736a80f69c7a01706891"
+  }
+ ],
+ "problemId": "hack2hire:68e8733480f69c7a0170688f",
+ "variantId": "68e8736a80f69c7a01706891",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: root-to-node folder path",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68e8736a80f69c7a01706891/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "idList holds distinct folder ids, children[i] the ids of the direct children of folder idList[i], nameList[i] its name; the structure is a forest. Return the names on the path from the top-level ancestor of targetId down to targetId, joined by \"/\". Return \"\" when targetId is not in idList.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "idList holds distinct folder ids, children[i] the ids of the direct children of folder idList[i], nameList[i] its name; the structure is a forest.",
+   "Return the names on the path from the top-level ancestor of targetId down to targetId, joined by \"/\".",
+   "Return \"\" when targetId is not in idList."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= idList.length <= 1e5",
+   "ids are distinct integers 1 to 1e9",
+   "every child id is in idList and has exactly one parent; no cycles",
+   "names are 1 to 10 characters from letters, digits and _",
+   "1 <= targetId <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68e8736a80f69c7a01706891/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: folders as idList (distinct ids), children[i] (ids of direct children of idList[i]) and nameList[i]; the folders form a forest; folders that are nobody's child are top level; find the path from a top-level folder to targetId (output format cut off); algorithmTags: UNION_FIND; preview response sha256 a231198107a04fb8c707207e987a8d0d0cf8dffd7af3b9c963fba3ae3b3621b4"
+   },
+   {
+    "statement": "Uncertainty: medium: the inputs and task are in the preview; joining names with \"/\" (no leading slash) and \"\" for an unknown id are inferred",
+    "basis": "the public group preview is partial (688 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is the path printed: joined names, a list, a leading slash?",
+   "What if targetId does not exist?",
+   "Can the forest be deep?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68e8736a80f69c7a01706891/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      35
+     ],
+     [
+      []
+     ],
+     [
+      "f3"
+     ],
+     35
+    ],
+    "output": "f3",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      32,
+      18,
+      57,
+      17,
+      40,
+      29,
+      21,
+      45,
+      56,
+      15,
+      37
+     ],
+     [
+      [],
+      [],
+      [
+       56,
+       37,
+       40
+      ],
+      [
+       29
+      ],
+      [],
+      [],
+      [],
+      [],
+      [
+       15,
+       17
+      ],
+      [],
+      [
+       45
+      ]
+     ],
+     [
+      "f2",
+      "f4",
+      "f0",
+      "f2",
+      "f3",
+      "f1",
+      "f1",
+      "f4",
+      "f3",
+      "f4",
+      "f4"
+     ],
+     18
+    ],
+    "output": "f4",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68e8736a80f69c7a01706891/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/oracles.py",
+    "sha256": "92fece1257387b75c988990ebb8ad1201e0d63b7f49cb53360d12cb5ea69b321",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def getFolderPath(idList, children, nameList, targetId) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68e8736a80f69c7a01706891-python.json",
+     "inferredInterface": {
+      "name": "getFolderPath",
+      "params": [
+       {
+        "name": "idList",
+        "type": "integer[]"
+       },
+       {
+        "name": "children",
+        "type": "integer[][]"
+       },
+       {
+        "name": "nameList",
+        "type": "string[]"
+       },
+       {
+        "name": "targetId",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68e8736a80f69c7a01706891-python.json",
+      "sha256": "43cd1e68ef4a47bc1c4ad0d690cf1abb1c3ee73067840ee9cf81751d42b99fba",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function getFolderPath(idList, children, nameList, targetId) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68e8736a80f69c7a01706891-javascript.json",
+     "inferredInterface": {
+      "name": "getFolderPath",
+      "params": [
+       {
+        "name": "idList",
+        "type": "integer[]"
+       },
+       {
+        "name": "children",
+        "type": "integer[][]"
+       },
+       {
+        "name": "nameList",
+        "type": "string[]"
+       },
+       {
+        "name": "targetId",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68e8736a80f69c7a01706891-javascript.json",
+      "sha256": "d3af6a47241cefd7b098f9a333055ec33fbb2038db251028c286fce6d7ca6756",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

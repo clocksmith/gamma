@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67888093402dc47b67a14948",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "x",
+  "y"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countIdleDrives",
+  "params": [
+   {
+    "name": "x",
+    "type": "integer[]"
+   },
+   {
+    "name": "y",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every robot scan all robots for the four directions",
+  "candidate_design": "hash maps from x to the min and max y on that column and from y to the min and max x on that row; a robot is idle when it is strictly inside both ranges",
+  "complexity_target": "O(n) expected time/O(n) space"
+ },
+ "source_sha256": "59e69506b3c67461c8cdb1662eb75fc7797cbe48ba34743e9f019a35a70c4085",
+ "wrapper": "Solution.countIdleDrives"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67803efe6fee41e51af73ddc",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "coins",
+  "max"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minCoins",
+  "params": [
+   {
+    "name": "coins",
+    "type": "integer[]"
+   },
+   {
+    "name": "max",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "breadth-first search over (reachable prefix, largest coin used) states adding coins in non-decreasing order, each at most reachable + 1",
+  "candidate_design": "greedy on sorted distinct denominations: repeatedly add the largest coin not above reachable + 1, jumping many identical picks at once with integer division",
+  "complexity_target": "O(k log k) time/O(k) space, k = number of denominations"
+ },
+ "source_sha256": "debe78f3b7b6ca9ef31df27e02f988215fc62f76c43343c5658d2fe742df4d68",
+ "wrapper": "Solution.minCoins"
+}

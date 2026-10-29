@@ -1,0 +1,389 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:679698ffb10bc587828f27ad:6796992ab10bc587828f27ae:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+   "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/679698ffb10bc587828f27ad.json",
+   "sha256": "9a06cf4f8541634962440f841b0d98514f55927032c7971ed848a2df9d12a908",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+   "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+   "selector": "/variants/hack2hire:6796992ab10bc587828f27ae"
+  }
+ ],
+ "problemId": "hack2hire:679698ffb10bc587828f27ad",
+ "variantId": "6796992ab10bc587828f27ae",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: total tax when sells consume the costliest shares first",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:6796992ab10bc587828f27ae/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "transactions is a list of [timestamp, type, amount, price] string rows ordered by non-decreasing timestamp; type is \"buy\" or \"sell\"; amount and price are decimal integers. Shares are held in lots, one per buy, at the buy price. A sell of amount shares consumes held shares from the lots with the highest buy price first (the heap-greedy rule). The profit of a sell is the sum over consumed shares of (sell price - lot price); its tax is 10% of the profit when the profit is positive and 0 otherwise. Return the total tax as a decimal string with exactly one digit after the point (exact, since each tax is a whole number of tenths).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "transactions is a list of [timestamp, type, amount, price] string rows ordered by non-decreasing timestamp; type is \"buy\" or \"sell\"; amount and price are decimal integers.",
+   "Shares are held in lots, one per buy, at the buy price.",
+   "A sell of amount shares consumes held shares from the lots with the highest buy price first (the heap-greedy rule).",
+   "The profit of a sell is the sum over consumed shares of (sell price - lot price); its tax is 10% of the profit when the profit is positive and 0 otherwise.",
+   "Return the total tax as a decimal string with exactly one digit after the point (exact, since each tax is a whole number of tenths)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= transactions.length <= 1e5",
+   "timestamps are decimal integers 0 to 1e9, non-decreasing",
+   "1 <= amount <= 1e4",
+   "1 <= price <= 1e6",
+   "a sell never exceeds the shares held"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:6796992ab10bc587828f27ae/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: stock transactions in timestamp order, each [timestamp, \"buy\" or \"sell\", amount, price] as strings; every sell pays 10% tax on its profit and nothing when there is no profit (how the sold shares are matched to purchases and the output are cut off); algorithmTags: HEAP, GREEDY; preview response sha256 15c6807d930030596a5b76d37afb384e6a9ae9fcd362625362993718cec2ad40"
+   },
+   {
+    "statement": "Uncertainty: high: the row format and the 10% rule per sell are in the preview; that sells take the highest-priced shares first (the greedy the HEAP and GREEDY tags suggest, rather than a global optimum over all matchings), that sells never exceed the shares held, and the exact string output format are inferred",
+    "basis": "the public group preview is partial (315 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which purchased shares does a sell consume?",
+   "Is the tax computed per sell or on the net profit of all sells?",
+   "How should the tax be formatted?",
+   "Can a sell exceed the shares currently held?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:6796992ab10bc587828f27ae/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "0",
+       "buy",
+       "3",
+       "9"
+      ]
+     ]
+    ],
+    "output": "0.0",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "0",
+       "buy",
+       "5",
+       "15"
+      ],
+      [
+       "1",
+       "sell",
+       "4",
+       "26"
+      ],
+      [
+       "1",
+       "buy",
+       "5",
+       "18"
+      ],
+      [
+       "3",
+       "buy",
+       "5",
+       "21"
+      ],
+      [
+       "5",
+       "sell",
+       "8",
+       "1"
+      ],
+      [
+       "6",
+       "sell",
+       "2",
+       "26"
+      ],
+      [
+       "7",
+       "sell",
+       "1",
+       "5"
+      ],
+      [
+       "7",
+       "buy",
+       "5",
+       "18"
+      ],
+      [
+       "7",
+       "buy",
+       "2",
+       "15"
+      ],
+      [
+       "9",
+       "buy",
+       "3",
+       "16"
+      ],
+      [
+       "10",
+       "sell",
+       "1",
+       "15"
+      ]
+     ]
+    ],
+    "output": "6.0",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:6796992ab10bc587828f27ae/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/oracles.py",
+    "sha256": "92fece1257387b75c988990ebb8ad1201e0d63b7f49cb53360d12cb5ea69b321",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def minimizeTax(transactions) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/6796992ab10bc587828f27ae-python.json",
+     "inferredInterface": {
+      "name": "minimizeTax",
+      "params": [
+       {
+        "name": "transactions",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/6796992ab10bc587828f27ae-python.json",
+      "sha256": "e21cbccdd54cc1e684e84d66845fc5f38582d351756eee6da69c897247287695",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function minimizeTax(transactions) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/6796992ab10bc587828f27ae-javascript.json",
+     "inferredInterface": {
+      "name": "minimizeTax",
+      "params": [
+       {
+        "name": "transactions",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/6796992ab10bc587828f27ae-javascript.json",
+      "sha256": "5f71311edcaafe479ab6a44f87afe8c46edcc539ed74f83fb6c7eaff9323f5c6",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

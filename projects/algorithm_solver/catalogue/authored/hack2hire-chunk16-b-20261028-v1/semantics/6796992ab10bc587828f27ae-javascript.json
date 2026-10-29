@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6796992ab10bc587828f27ae",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "transactions"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minimizeTax",
+  "params": [
+   {
+    "name": "transactions",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep a plain list of lots and fully re-sort it by price before each sell",
+  "candidate_design": "max-heap of [price, remaining amount] lots; a sell pops or reduces the top lots",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "41b1f9a910f74f1ed72a2143e124b33c7835a4ed5f667a45b105c273981fc85d",
+ "wrapper": "named export minimizeTax"
+}

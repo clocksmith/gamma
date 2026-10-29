@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68e8736a80f69c7a01706891",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "idList",
+  "children",
+  "nameList",
+  "targetId"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "getFolderPath",
+  "params": [
+   {
+    "name": "idList",
+    "type": "integer[]"
+   },
+   {
+    "name": "children",
+    "type": "integer[][]"
+   },
+   {
+    "name": "nameList",
+    "type": "string[]"
+   },
+   {
+    "name": "targetId",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive search from every top-level folder carrying the path so far",
+  "candidate_design": "parent map from child id to parent id, then walk up from targetId and reverse",
+  "complexity_target": "O(n + total children) time/O(n) space"
+ },
+ "source_sha256": "0f1594076ba211d6b641abf4bb4853edbe3ed07260c2682400a0025e325a878e",
+ "wrapper": "Solution.getFolderPath"
+}
