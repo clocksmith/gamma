@@ -1,0 +1,1100 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/approach/chooseWhen",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/803",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A sequence of deletions asks about connectivity after each one, and all deletions are known in advance (offline).",
+      "Grids are large and per-hit flood fills would be quadratic in the worst case."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:803:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/contract--contract_leetcode_803_official_authored-v1.json",
+    "sha256": "37a45b6172b58a16adff9605d825c3bb1c1febbd334e84429a0d80674bbf97d3",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/approach/explanation",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/803",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+      }
+    ],
+    "status": "present",
+    "value": "Removing bricks splits components, which union-find cannot do, but adding bricks only merges them. So apply every hit first, build components of the remaining bricks with a virtual roof node joined to every top-row brick, and then restore the hits in reverse order. When a brick that existed originally is restored, the bricks that newly become connected to the roof are exactly those that fell when it was hit. The answer for that hit is the growth of the roof component's size minus one (the restored brick itself), floored at 0."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/approach/hints",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/803",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Is it easier to delete bricks or to add them back?",
+      "Process the hits backwards so every step is a merge.",
+      "Add a virtual roof node connected to every top-row brick and track component sizes.",
+      "When restoring an originally present brick, the answer is (roof size after - roof size before - 1), floored at 0; skip hits on originally empty cells."
+    ]
+  },
+  "id": "approach:leetcode:803:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/approach/invariants",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/803",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "At reverse step k, the structure reflects the grid after hits 0..k-1 only.",
+      "size[find(roof)] - 1 is the number of bricks currently connected to the top row.",
+      "Restoring a brick only adds bricks to the roof component; it never removes any."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:803:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_803_official_approach-native_v1.json",
+    "sha256": "61dafe925309ba65bbe1e69f884f9da38195af67f8f8f3f49bc6d6584fb91e8f",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/803",
+      "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+    }
+  ],
+  "problemId": "leetcode:803",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/0/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "Connectivity under deletions is hard, but under insertions union-find handles it. Since all hits are given, apply them all, then replay them backwards as insertions. The bricks that join the roof component when a brick is re-inserted are the ones that fell at that hit."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/0/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Measure the size of the roof set before and after each re-insertion."
+        ]
+      },
+      "id": "approach:leetcode:803:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/0/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "On the first example, remove the hit brick, then add it back and see which bricks reconnect to the top.",
+          "Decide how to represent 'connected to the top row' as one union-find set."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:803:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_803_official_approach-native_v1.json",
+        "sha256": "61dafe925309ba65bbe1e69f884f9da38195af67f8f8f3f49bc6d6584fb91e8f",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/0/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A virtual roof node makes 'stable' equal to 'in the roof set'.",
+          "Bricks never attached to the top initially never join the roof set, so they are never counted."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/0/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "How can you avoid recomputing connectivity from scratch after every hit?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/0/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "Reversing time converts a splitting problem into a merging problem with a known efficient structure."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/0/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/0/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "Turn deletions into insertions"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:803:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_803_official_python_v1.json",
+          "sha256": "e8bdcdcc32e7395f9d6ce9a6681006b914426f3e2fc39adf7805a6ae2a8d3a6e",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:803:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_803_official_javascript_v1.json",
+          "sha256": "cef44845eba77049a2669799743ed45cdeb744ddd48330695d11973021525b9c",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/1/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "Copy the grid, clear every hit cell, and union each remaining brick with its present neighbours and, for row 0, with the roof (index m*n). Then for k from the last hit down to the first: if the original cell was empty, the answer is 0; otherwise record the roof size, set the cell, union it with the roof if in row 0 and with present neighbours, and store max(0, new size - old size - 1)."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/1/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Use the original grid, not the working copy, to tell whether a hit cell had a brick."
+        ]
+      },
+      "id": "approach:leetcode:803:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/1/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Make a working copy of the grid so the input stays unchanged.",
+          "Implement find with path compression and union by size.",
+          "Union all remaining bricks after clearing hits.",
+          "Replay hits in reverse, computing roof-size growth."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:803:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_803_official_approach-native_v1.json",
+        "sha256": "61dafe925309ba65bbe1e69f884f9da38195af67f8f8f3f49bc6d6584fb91e8f",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/1/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The max(0, ...) handles a restored brick that is itself not connected to the roof.",
+          "JavaScript uses typed arrays for parent and size."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/1/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement the replay and the per-hit counts?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/1/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "Each brick and hit costs a constant number of union-find operations, so the whole run is near linear."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/1/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/1/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "Build the final state and replay hits in reverse"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/2/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "Compare on random small grids with a forward simulation that removes the hit brick and flood-fills from the top row after each hit. Include hits on empty cells, hits in the top row, and initial floating bricks."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/2/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A one-row grid never drops anything."
+        ]
+      },
+      "id": "approach:leetcode:803:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/2/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Write the BFS simulation and compare on random grids up to 6 by 6 with random hit orders.",
+          "Include an initial grid with a brick not connected to row 0 and hit it."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:803:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_803_official_approach-native_v1.json",
+        "sha256": "61dafe925309ba65bbe1e69f884f9da38195af67f8f8f3f49bc6d6584fb91e8f",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/2/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The interpretation for initially floating bricks must match in both versions."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/2/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "Which cases test the edge handling of the reverse method?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/2/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "The forward simulation states the definition directly, so agreement on many small grids is strong evidence."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/2/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/approach/stages/2/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/803",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "Compare against a literal simulation"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/approach/title",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/803",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+      }
+    ],
+    "status": "present",
+    "value": "Reverse time with union-find and a virtual roof"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/approach/tradeoffs",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/803",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A per-hit BFS from the top row (the cohort reference) is simple and obviously correct but costs O(m*n) per hit.",
+      "The reverse method requires knowing all hits up front and careful handling of hits on empty cells.",
+      "Union-find with path compression and union by size gives near-constant amortised operations."
+    ]
+  },
+  "version": 1
+}

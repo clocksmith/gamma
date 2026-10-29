@@ -1,0 +1,1095 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/808/approach/chooseWhen",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/808",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "n is huge but the answer converges, so a cutoff keeps the table small.",
+      "Amounts move in fixed steps, allowing a coarser unit."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:808:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/contract--contract_leetcode_808_official_authored-v1.json",
+    "sha256": "1319aae01ae58b684b7e1a203a7fb86a9edac887ca5cf322c5ecee1d366c622e",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/808/approach/explanation",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/808",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+      }
+    ],
+    "status": "present",
+    "value": "All servings are multiples of 25 mL, so measure in units of 25, rounding n up. Let f(a, b) be the answer with a and b units left: f = 0.5 if both are <= 0, 1 if only a is <= 0, 0 if only b is <= 0, otherwise the average of f(a-4, b), f(a-3, b-1), f(a-2, b-2), f(a-1, b-3). Fill a table bottom up. Because A is served 2.5 units per step on average versus 1.5 for B, the answer approaches 1 quickly; once there are 200 or more units it is within 1e-5 of 1, so return 1.0 directly."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/808/approach/hints",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/808",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Can you measure soup in a larger unit than 1 mL?",
+      "Define the answer as a function of the remaining amounts of A and B and write its recurrence.",
+      "A is consumed faster on average, so for large n the answer tends to 1.",
+      "Use units = ceil(n/25), return 1.0 when units >= 200, else fill a units x units table bottom up."
+    ]
+  },
+  "id": "approach:leetcode:808:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/808/approach/invariants",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/808",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "table[a][b] holds f(a, b) for all a, b >= 1 computed so far, and the base cases are handled by a value() helper.",
+      "Each entry depends only on entries with strictly smaller a."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:808:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_808_official_approach-native_v1.json",
+    "sha256": "356f93f38ed6952a0a40300e0b9d928a1fd633eea3f55ce2600b600e3ece73f8",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/808",
+      "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+    }
+  ],
+  "problemId": "leetcode:808",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/0/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "The state is the remaining amount of each soup. Stopping cases are A empty (1), B empty (0) and both empty (0.5). Otherwise average the four successor states. In 25 mL units the servings are (4,0), (3,1), (2,2), (1,3)."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/0/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Round n up to a whole number of 25 mL units; partial units behave like full ones."
+        ]
+      },
+      "id": "approach:leetcode:808:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/0/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compute f for n = 10 by hand (1 unit each).",
+          "Compare the expected amount served of A and of B per step."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:808:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_808_official_approach-native_v1.json",
+        "sha256": "356f93f38ed6952a0a40300e0b9d928a1fd633eea3f55ce2600b600e3ece73f8",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/0/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A loses 2.5 units per step on average and B 1.5, so A usually empties first for large n."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/0/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "What state determines the answer, and what are the stopping cases?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/0/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "With a clear recurrence the only remaining problem is the size of n."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/0/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/0/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "Set up the probability recurrence"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:808:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_808_official_python_v1.json",
+          "sha256": "7ea950ca14a716f14f10da37c4282806b682a42475db82466f996aa6c51ac0eb",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:808:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_808_official_javascript_v1.json",
+          "sha256": "91b2681c6ccc3c257b5c620bf3fd5a92c1c5d57e51e1c000f9cb32512063e4a6",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/1/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "Compute units = (n + 24) // 25. If units >= 200 return 1.0. Otherwise allocate a (units+1) square table and, for a and b from 1 upward, set table[a][b] to a quarter of the sum of value(a-4, b), value(a-3, b-1), value(a-2, b-2), value(a-1, b-3), where value() applies the base cases for non-positive arguments. Return value(units, units)."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/1/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Check the both-empty case before the single-empty cases."
+        ]
+      },
+      "id": "approach:leetcode:808:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/1/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Implement value(a, b) with the three base cases before table lookup.",
+          "Loop a then b from 1 to units.",
+          "Return the cutoff value for large inputs before allocating."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:808:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_808_official_approach-native_v1.json",
+        "sha256": "356f93f38ed6952a0a40300e0b9d928a1fd633eea3f55ce2600b600e3ece73f8",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/1/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "n = 0 gives units = 0 and value(0, 0) = 0.5."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/1/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement the recurrence safely for n up to 10^9?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/1/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "Bottom-up order guarantees dependencies are ready, and the cutoff bounds the table at 200 by 200."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/1/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/1/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "Fill the table with a cutoff"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/2/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "Compute the table exactly or in high precision for units up to a few hundred and observe 1 - f(units, units) falling below 1e-5 before 200 units. Check small n by hand, including n that is not a multiple of 25."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/2/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare float and exact results for small units to measure rounding."
+        ]
+      },
+      "id": "approach:leetcode:808:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/2/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Evaluate the DP with fractions for units 190 to 210 and confirm the gap to 1 is below 1e-5.",
+          "Check n = 1 equals n = 25."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:808:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_808_official_approach-native_v1.json",
+        "sha256": "356f93f38ed6952a0a40300e0b9d928a1fd633eea3f55ce2600b600e3ece73f8",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/2/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The gap to 1 decreases monotonically in this range."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/2/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "How do you know returning 1.0 is accurate enough?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/2/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "The cutoff is a numerical claim and should be measured, as the cohort reference does."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/2/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/808/approach/stages/2/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/808",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+          }
+        ],
+        "status": "present",
+        "value": "Verify the cutoff and small values"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/808/approach/title",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/808",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+      }
+    ],
+    "status": "present",
+    "value": "DP over 25 mL units with a large-n cutoff"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/808/approach/tradeoffs",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/808",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/808.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "28f4e7e70215a0c04920624bfeca60a01bb429bee4408806bc60f4fce285973f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Memoised recursion is shorter but deep for large tables; a bottom-up table avoids recursion limits.",
+      "The cutoff must be justified numerically; the cohort reference checks it with a high-precision Decimal table and a tail bound.",
+      "Floats suffice within the 1e-5 tolerance; exact fractions are only needed for verification."
+    ]
+  },
+  "version": 1
+}

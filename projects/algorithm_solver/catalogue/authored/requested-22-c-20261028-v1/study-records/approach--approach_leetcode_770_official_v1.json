@@ -1,0 +1,1107 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/approach/chooseWhen",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/770",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "You must simplify symbolic expressions rather than evaluate them to a number.",
+      "Operator precedence is the usual two levels, so a small recursive-descent parser is the clearest fit.",
+      "Expression length is small enough that expanding products term by term is affordable."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:770:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/contract--contract_leetcode_770_official_authored-v1.json",
+    "sha256": "102eeb39e80628f988d544b0ce238874dd8264ca5ae3952a9873b61a8a54823b",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/approach/explanation",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/770",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+      }
+    ],
+    "status": "present",
+    "value": "Represent a polynomial as a map from a sorted tuple of variable names (the monomial) to an integer coefficient; the empty tuple is the constant. Parse with the classic grammar expr := term (('+'|'-') term)*, term := factor ('*' factor)*, factor := number | name | '(' expr ')'. A factor becomes a one-term polynomial (a known variable becomes a constant), addition merges maps with a sign, and multiplication combines every pair of terms by concatenating and re-sorting their variable tuples. Zero coefficients are removed after each operation. Finally sort terms by (-degree, variables) and format them."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/approach/hints",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/770",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "What data structure can represent an expression that still contains unknown variables?",
+      "Treat a polynomial as a map from a monomial to its coefficient, and make the monomial key canonical.",
+      "Write one parsing function per precedence level: expression, term, factor.",
+      "Multiply two polynomials by pairing every term of one with every term of the other, merging sorted variable lists; drop zero coefficients and sort by (-degree, variables) at the end."
+    ]
+  },
+  "id": "approach:leetcode:770:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/approach/invariants",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/770",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Every polynomial map contains no zero coefficients.",
+      "Monomial keys are always sorted, so equal monomials written in different orders collide on the same key.",
+      "After parsing a factor, term or expression, the token position points to the first token not consumed."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:770:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_770_official_approach-native_v1.json",
+    "sha256": "d60850aaad25abe56365997480093b82a354e9460e7a4b6bce5e5b63af4b4c1b",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/770",
+      "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+    }
+  ],
+  "problemId": "leetcode:770",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/0/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "A sub-expression evaluates to a polynomial, not a number. Keying terms by their sorted multiset of variables makes like terms combine automatically, and the constant is the empty key."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/0/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Sort the variable names inside each monomial.",
+          "Use an empty tuple or list for the constant term."
+        ]
+      },
+      "id": "approach:leetcode:770:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/0/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Write (x + 1) * (x - 2) as a map before and after multiplying.",
+          "Decide what key the term y*x should have so it matches x*y."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:770:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_770_official_approach-native_v1.json",
+        "sha256": "d60850aaad25abe56365997480093b82a354e9460e7a4b6bce5e5b63af4b4c1b",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/0/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Substituted variables are just constants at the leaf level.",
+          "Cancellation (a*b - b*a) only happens if keys are canonical."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/0/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "What value should parsing a sub-expression like (x - y) return when x and y are unknown?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/0/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "Once every sub-result is a polynomial, +, - and * become closed operations on maps and the parser stays an ordinary evaluator."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/0/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/0/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "Choose a representation for partial results"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:770:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_770_official_python_v1.json",
+          "sha256": "3fad14ddbab8f285a9a291c91effd64b5823114c5189c9a58c4e96e7ff3069c2",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:770:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_770_official_javascript_v1.json",
+          "sha256": "7f4c6c9cb22de0fcb0a836f536879bca3fe6ddafef074ec806861d282cfc24ba",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/1/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "The tokenizer splits on spaces and single-character symbols, grouping alphanumeric runs. expr calls term and folds + and - by merging maps with sign +1 or -1; term calls factor and folds * by pairwise multiplication; factor consumes a number, a name (constant if bound, else a one-variable monomial) or a parenthesised expr. Both candidates filter zero coefficients after every combine and multiply, then sort by (-len(key), key) and format coefficient plus '*name' parts."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/1/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "After '(' recurse into expr, then skip the matching ')'.",
+          "Sorting by the tuple (-degree, variables) puts the constant (degree 0) last automatically."
+        ]
+      },
+      "id": "approach:leetcode:770:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/1/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Build the token list, keeping a shared position index.",
+          "Implement factor, term and expr as mutually recursive functions over that index.",
+          "Implement combine(left, right, sign) and multiply(left, right) on maps, removing zeros.",
+          "Sort the final terms by degree descending, then variables, and format each one with its coefficient."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:770:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_770_official_approach-native_v1.json",
+        "sha256": "d60850aaad25abe56365997480093b82a354e9460e7a4b6bce5e5b63af4b4c1b",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/1/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A literal 0 or a variable bound to 0 becomes the empty polynomial immediately.",
+          "JavaScript keys need a string encoding of the sorted variable list and BigInt coefficients."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/1/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement precedence and expansion without an explicit tree?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/1/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "Each grammar level handles exactly one precedence, so the evaluation order is correct by construction and the work done is proportional to the polynomial sizes involved."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/1/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5",
+          "R6",
+          "R7"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/1/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "Tokenise, parse and expand"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/2/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "Check expressions that cancel completely, terms that differ only in variable order, equal-degree ties, negative coefficients, nested parentheses and substitutions to zero. Compare with hand expansion on small cases."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/2/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Expand small inputs by hand and compare term by term.",
+          "Try a substitution that makes a whole bracket zero."
+        ]
+      },
+      "id": "approach:leetcode:770:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/2/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples, then 'a - a' (expect an empty list) and 'b * a + a * b' (expect ['2*a*b']).",
+          "Check that 'x * x + y * y + x * y' orders the three degree-2 terms by variable sequence.",
+          "Check that a coefficient of 1 is still printed."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:770:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_770_official_approach-native_v1.json",
+        "sha256": "d60850aaad25abe56365997480093b82a354e9460e7a4b6bce5e5b63af4b4c1b",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/2/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "An empty result is a valid answer, not an error."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/2/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "Which inputs reveal mistakes in like-term collection or output order?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/2/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "Most bugs are non-canonical keys, a leftover zero term or the wrong tie order rather than parsing errors."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/2/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R3",
+          "R4",
+          "R5",
+          "R6"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/approach/stages/2/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/770",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "Test cancellation, ordering and formatting"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/approach/title",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/770",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+      }
+    ],
+    "status": "present",
+    "value": "Recursive-descent parser over polynomial maps"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/approach/tradeoffs",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/770",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A shunting-yard or postfix evaluator (the cohort reference method) works too, but recursive descent maps directly onto the precedence levels.",
+      "Expanding products can blow up the number of terms exponentially in the number of distinct factors; the method is only as cheap as the output.",
+      "In JavaScript, intermediate products can exceed 2**53 before cancellation, so the candidate uses BigInt coefficients; Python ints are unbounded."
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,463 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/assumptions",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/3",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "06dd6eb159cf8ec1a32b35eedf2f819feaa06013fb02b6792dfe7c1dcdba981f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+        "basis": "contracts.json records the official response sha256 616de092f80ad5ccbac72700c820577de3b5eee804881fe5f3f476f0b5da35b9 and statement content sha256 173db5c63a42033ba31f16d50a899fe6dbeaa6c8f33b34358a43cfa8a5c84b94; the official text is not stored on this machine."
+      },
+      {
+        "assumption": "Bricks that are unstable before any hit are never counted as falling, and hitting one drops nothing.",
+        "basis": "README post-freeze amendment for 803: the statement does not settle this; the adopted reading matches the reverse union-find model."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/clarifyingQuestions",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "06dd6eb159cf8ec1a32b35eedf2f819feaa06013fb02b6792dfe7c1dcdba981f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "The statement does not settle it; this cohort treats them as never counted.",
+        "basis": "README 803 amendment.",
+        "question": "Can the initial grid contain bricks that are not attached to the top?"
+      },
+      {
+        "answer": "No, only the bricks that fall as a consequence.",
+        "basis": "Candidate subtracts one for the restored brick.",
+        "question": "Is the hit brick itself counted?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/803-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "29ce7b94c57a4fb66df39b1e806d12f46358713d70be6121487e2d4175588a44"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/803-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "adc08c3106174432b4c5a399b530d0acf04874b66f4394d625307f05494fd522"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/constraints",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "d3d1407337edd5064907aeddadb90372ec51b6b67d2ba96395695b8898f31c28"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The grid has 1 to 200 rows and 1 to 200 columns, all rows the same width, cells 0 or 1.",
+      "There are 1 to 40000 hits, each a valid cell, and no cell is hit twice."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/803-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "29ce7b94c57a4fb66df39b1e806d12f46358713d70be6121487e2d4175588a44"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/803-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "adc08c3106174432b4c5a399b530d0acf04874b66f4394d625307f05494fd522"
+      }
+    ],
+    "status": "present",
+    "value": "grid rows and hit pairs unchanged; fresh result list"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/examples",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "grid": [
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              1
+            ]
+          ],
+          "hits": [
+            [
+              0,
+              1
+            ]
+          ]
+        },
+        "explanation": "Removing the top-middle brick detaches the column below it and the brick to its lower right, three bricks in all; the top corners stay.",
+        "output": [
+          3
+        ]
+      },
+      {
+        "arguments": {
+          "grid": [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              1
+            ]
+          ],
+          "hits": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              0
+            ]
+          ]
+        },
+        "explanation": "The first hit cuts off the rightmost bottom brick. The second removes a brick whose only remaining neighbour is the top-row brick above it, so nothing else falls.",
+        "output": [
+          1,
+          0
+        ]
+      },
+      {
+        "arguments": {
+          "grid": [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          "hits": [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ]
+        },
+        "explanation": "Neither hit disconnects any other brick from the top row.",
+        "output": [
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "id": "contract:leetcode:803:official:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/interfaces/python/declaration",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(grid: list[list[int]], hits: list[list[int]]) -> list[int]; class Solution: def hitBricks(self, grid, hits) -> list[int]"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/3/official_interface",
+            "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "hitBricks",
+          "params": [
+            {
+              "name": "grid",
+              "type": "integer[][]"
+            },
+            {
+              "name": "hits",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/803/interfaces/javascript/declaration",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/803.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4ee39317de704ac640c00ed5db322776a296655336e9703e057349ed37fd35e8"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(grid, hits) -> number[]; module.exports = solve; module.exports.hitBricks(grid, hits) -> number[]"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/3/official_interface",
+            "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "hitBricks",
+          "params": [
+            {
+              "name": "grid",
+              "type": "integer[][]"
+            },
+            {
+              "name": "hits",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/3",
+      "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+    }
+  ],
+  "problemId": "leetcode:803",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/requirements",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/3",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/803-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "29ce7b94c57a4fb66df39b1e806d12f46358713d70be6121487e2d4175588a44"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/803-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "adc08c3106174432b4c5a399b530d0acf04874b66f4394d625307f05494fd522"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "Process hits in order; each hit removes the brick at that cell if present."
+      },
+      {
+        "id": "R2",
+        "text": "After a hit, every brick no longer connected to the top row falls and is removed from the grid."
+      },
+      {
+        "id": "R3",
+        "text": "Report, per hit, the number of bricks that fell, excluding the erased brick; a hit on an empty cell reports 0."
+      },
+      {
+        "id": "R4",
+        "text": "Bricks that are already unstable in the initial grid are never counted, and a hit on such a brick drops nothing."
+      },
+      {
+        "id": "R5",
+        "text": "Leave the grid and the hit list unchanged; return a fresh list."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/statement",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/3",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      }
+    ],
+    "status": "present",
+    "value": "A grid holds bricks (1) and empty cells (0). A brick is stable if it is in the top row or is connected, through up, down, left and right neighbours, to a brick in the top row. You receive a sequence of hits; each hit erases the brick at a cell if one is there, after which every brick that is no longer stable falls and disappears. For each hit, return how many bricks fell because of it, not counting the hit brick itself."
+  },
+  "variantId": "official",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/3",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      }
+    ],
+    "status": "present",
+    "value": "Bricks Falling When Hit"
+  },
+  "version": 1
+}

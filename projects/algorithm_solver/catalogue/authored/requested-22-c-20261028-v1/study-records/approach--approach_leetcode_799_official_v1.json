@@ -1,0 +1,1092 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/approach/chooseWhen",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/799",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Flow is acyclic and moves strictly downward, so a single pass in row order computes every inflow.",
+      "Only one row is queried, so later rows are never needed."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:799:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/contract--contract_leetcode_799_official_authored-v1.json",
+    "sha256": "754822061096e21ddbefdf37a3121e3c5280c104bf69f446d1dcbff2fd9e8536",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/approach/explanation",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/799",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+      }
+    ],
+    "status": "present",
+    "value": "Track the total liquid that flows into each glass of the current row, without capping. For the next row, every glass with more than one unit sends (amount - 1) / 2 to each glass below. Repeat until the queried row, then cap the queried glass at 1. Only the previous row is needed at each step."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/approach/hints",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/799",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Can you compute a glass's inflow from the row directly above?",
+      "Keep uncapped inflow amounts per glass and cap only when you answer.",
+      "Each glass with inflow a > 1 gives (a - 1) / 2 to each child; simulate row by row up to the query row."
+    ]
+  },
+  "id": "approach:leetcode:799:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/approach/invariants",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/799",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "row[c] is the total liquid that has flowed into glass c of the current row, before capping.",
+      "Liquid passed downward from a glass is max(0, row[c] - 1), split equally."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:799:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_799_official_approach-native_v1.json",
+    "sha256": "b186cd621f6c1ad7b5b447d943a16873ecb8618f21130c218ebf64ddd0231350",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/799",
+      "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+    }
+  ],
+  "problemId": "leetcode:799",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/0/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "No. Only the total that reaches each glass matters, and a glass's inflow depends only on the two glasses above it. So the final state can be computed row by row without simulating time."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/0/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Each parent contributes max(0, inflow - 1) / 2."
+        ]
+      },
+      "id": "approach:leetcode:799:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/0/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Write the inflow of glass (r, c) in terms of glasses (r-1, c-1) and (r-1, c).",
+          "Do the 10-unit example by hand to row 3."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:799:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_799_official_approach-native_v1.json",
+        "sha256": "b186cd621f6c1ad7b5b447d943a16873ecb8618f21130c218ebf64ddd0231350",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/0/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Edge glasses have only one parent.",
+          "Capping happens only for the answer; overflow uses the uncapped inflow minus one."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/0/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "Does the order in which glasses fill matter for the final amounts?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/0/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "Removing time from the model reduces the problem to a simple recurrence."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/0/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/0/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "Model inflow rather than time"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:799:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_799_official_python_v1.json",
+          "sha256": "45859edf7b848d72d85641ee5f0f5e71a615331a76b3564f811e476952e20072",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:799:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_799_official_javascript_v1.json",
+          "sha256": "47aab3e0856f02fb9f8c394911d9a557fb8cccbb62d90b352458692474cb917f",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/1/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "Start with row = [poured]. For r from 0 to query_row - 1, make a zero array of length r + 2 and, for each glass with amount above 1, add half the excess to positions c and c + 1. Return min(1, row[query_glass]). Both candidates use double-precision floats."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/1/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Skip glasses with amount <= 1; they pass nothing down."
+        ]
+      },
+      "id": "approach:leetcode:799:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/1/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Initialise the current row with the poured amount.",
+          "Build the next row from the overflow of the current one, query_row times.",
+          "Cap the queried glass at 1 and return it."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:799:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_799_official_approach-native_v1.json",
+        "sha256": "b186cd621f6c1ad7b5b447d943a16873ecb8618f21130c218ebf64ddd0231350",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/1/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "With poured up to 1e9 and 100 rows, magnitudes and rounding are far within the 1e-5 tolerance."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/1/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement the recurrence with O(r) memory?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/1/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "Pushing overflow forward from each parent is equivalent to pulling from two parents and handles edges without special cases."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/1/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/1/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "Simulate with a rolling row"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/2/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "Compare small cases with hand calculation and with an exact Fraction version of the same recurrence, including large pours at row 99 where edge glasses get tiny amounts."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/2/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Zero poured must return 0 for every glass."
+        ]
+      },
+      "id": "approach:leetcode:799:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/2/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Rewrite the loop with fractions.Fraction and compare for poured = 10^9, row 99, several glasses."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:799:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_799_official_approach-native_v1.json",
+        "sha256": "b186cd621f6c1ad7b5b447d943a16873ecb8618f21130c218ebf64ddd0231350",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/2/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Edge glasses at row 99 are nonzero but far below 1 even for 10^9 units."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/2/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "How can you be confident the floating result is accurate enough?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/2/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "The tolerance assumption is inferred, so measuring the actual error against exact arithmetic is the right check."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/2/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/approach/stages/2/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/799",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "Check small towers and deep edges"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/approach/title",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/799",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+      }
+    ],
+    "status": "present",
+    "value": "Row-by-row overflow simulation down to the queried row"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/approach/tradeoffs",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/799",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Exact rational arithmetic (the cohort reference) avoids rounding but is slower; doubles are accurate well within 1e-5 here.",
+      "Storing the full triangle is simpler to debug but uses O(r^2) memory; a rolling row uses O(r)."
+    ]
+  },
+  "version": 1
+}

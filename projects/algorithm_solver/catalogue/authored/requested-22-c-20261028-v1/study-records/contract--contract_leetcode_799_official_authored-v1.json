@@ -1,0 +1,419 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/assumptions",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/2",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "06dd6eb159cf8ec1a32b35eedf2f819feaa06013fb02b6792dfe7c1dcdba981f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+        "basis": "contracts.json records the official response sha256 e160ecb20b183bf5464cb3b4c4c14f68add512f817104abaf7296f99d144233c and statement content sha256 88b301804cefe2a388fc532d80a8d236d5af79d4c65d4d79be12c8bbafc1a629; the official text is not stored on this machine."
+      },
+      {
+        "assumption": "Answers are accepted within an absolute tolerance of 1e-5.",
+        "basis": "README float note: the 799 statement states no tolerance; 1e-5 is inferred from its five-decimal outputs."
+      },
+      {
+        "assumption": "Glasses far from the centre in deep rows may receive tiny but nonzero amounts (about 1e9/2^99), not exactly 0 or 1.",
+        "basis": "README post-freeze amendment: a hand expectation of 1.0 at row 99 edges was wrong and was replaced by the exact reference."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/clarifyingQuestions",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "06dd6eb159cf8ec1a32b35eedf2f819feaa06013fb02b6792dfe7c1dcdba981f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "Absolute 1e-5 in this cohort; the statement itself does not say.",
+        "basis": "README float note.",
+        "question": "What tolerance is used for the answer?"
+      },
+      {
+        "answer": "No, only to the two glasses directly below.",
+        "basis": "Flow model.",
+        "question": "Does liquid ever flow sideways?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/799-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a2c4d6d45b561ea6ffd07c3cc3a493341d23fbbc70f6500fc7bcd065fbcb19d1"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/799-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c345768706f0313c7d6772a1e3a7e083e94fccfb478c1d069147c39156462d25"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "absolute_tolerance": 1e-05,
+      "policy": "finite float absolute tolerance"
+    }
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/constraints",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "d3d1407337edd5064907aeddadb90372ec51b6b67d2ba96395695b8898f31c28"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The poured amount is an integer from 0 to 10^9.",
+      "The query row is from 0 to 99, and the glass index is from 0 to the query row."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/799-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a2c4d6d45b561ea6ffd07c3cc3a493341d23fbbc70f6500fc7bcd065fbcb19d1"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/799-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c345768706f0313c7d6772a1e3a7e083e94fccfb478c1d069147c39156462d25"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/examples",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "poured": 4,
+          "query_glass": 1,
+          "query_row": 2
+        },
+        "explanation": "Row 0 keeps 1 and passes 1.5 to each row-1 glass; each keeps 1 and passes 0.25 to each side, so the middle glass of row 2 gets 0.5.",
+        "output": 0.5
+      },
+      {
+        "arguments": {
+          "poured": 4,
+          "query_glass": 0,
+          "query_row": 2
+        },
+        "explanation": "The edge glass of row 2 receives only one 0.25 share.",
+        "output": 0.25
+      },
+      {
+        "arguments": {
+          "poured": 1,
+          "query_glass": 1,
+          "query_row": 1
+        },
+        "explanation": "One unit exactly fills the top glass; nothing overflows.",
+        "output": 0.0
+      },
+      {
+        "arguments": {
+          "poured": 10,
+          "query_glass": 0,
+          "query_row": 3
+        },
+        "explanation": "Row 1 glasses hold 4.5 each, row 2 is 1.75, 3.5, 1.75, and the left edge of row 3 gets half of 0.75.",
+        "output": 0.375
+      }
+    ]
+  },
+  "id": "contract:leetcode:799:official:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/interfaces/python/declaration",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(poured: int, query_row: int, query_glass: int) -> float; class Solution: def champagneTower(self, poured, query_row, query_glass) -> float"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/2/official_interface",
+            "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "champagneTower",
+          "params": [
+            {
+              "name": "poured",
+              "type": "integer"
+            },
+            {
+              "name": "query_row",
+              "type": "integer"
+            },
+            {
+              "name": "query_glass",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "double"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/799/interfaces/javascript/declaration",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/799.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1b6bcf19db19dbfadd68e888f6bf50211591657f32ed8e4a14f94561a0fa86e5"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(poured, query_row, query_glass) -> number; module.exports = solve; module.exports.champagneTower(poured, query_row, query_glass) -> number"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/2/official_interface",
+            "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "champagneTower",
+          "params": [
+            {
+              "name": "poured",
+              "type": "integer"
+            },
+            {
+              "name": "query_row",
+              "type": "integer"
+            },
+            {
+              "name": "query_glass",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "double"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/2",
+      "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+    }
+  ],
+  "problemId": "leetcode:799",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/requirements",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/2",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/799-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a2c4d6d45b561ea6ffd07c3cc3a493341d23fbbc70f6500fc7bcd065fbcb19d1"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/799-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c345768706f0313c7d6772a1e3a7e083e94fccfb478c1d069147c39156462d25"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "Pour the whole amount into the single glass of row 0."
+      },
+      {
+        "id": "R2",
+        "text": "Each glass keeps at most one unit and sends half of any excess to each of its two lower neighbours."
+      },
+      {
+        "id": "R3",
+        "text": "Return the amount in the queried glass, capped at 1."
+      },
+      {
+        "id": "R4",
+        "text": "The result is compared with an absolute tolerance of 1e-5."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/statement",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/2",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      }
+    ],
+    "status": "present",
+    "value": "Glasses are stacked in a triangle: row r (counting from 0) has r + 1 glasses, and each glass holds one unit. A given amount of liquid is poured into the top glass. When a glass is full, any excess splits equally into the two glasses directly below it; liquid that overflows the bottom of the tower is lost. Return how full a specified glass (row and index within the row) is, as a number between 0 and 1."
+  },
+  "variantId": "official",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/2",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      }
+    ],
+    "status": "present",
+    "value": "Champagne Tower"
+  },
+  "version": 1
+}

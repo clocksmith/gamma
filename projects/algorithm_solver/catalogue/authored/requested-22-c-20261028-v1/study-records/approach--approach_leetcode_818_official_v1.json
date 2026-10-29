@@ -1,0 +1,1092 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/818/approach/chooseWhen",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/818",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The state space can be reduced to distances because the remaining problem after a reversal looks like the original from speed 1.",
+      "Targets are up to 10^4, so an O(t log t) table is cheap."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:818:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/contract--contract_leetcode_818_official_authored-v1.json",
+    "sha256": "0c6c4675036fc3059ca5803e988b762f76936184f6782bc0e0527b59954fe706",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/818/approach/explanation",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/818",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+      }
+    ],
+    "status": "present",
+    "value": "Let k be the bit length of t, so 2^(k-1) <= t < 2^k. k accelerations travel 2^k - 1. If t = 2^k - 1, the answer is k. Otherwise there are two shapes of an optimal first run. Overshoot: k A's, then R, then solve the remaining distance 2^k - 1 - t, costing k + 1 + dp[2^k - 1 - t]. Stop short: k - 1 A's reach 2^(k-1) - 1, then R, then j A's backwards (0 <= j < k - 1) covering 2^j - 1, then R, then solve the remaining distance t - (2^(k-1) - 1) + (2^j - 1), costing (k - 1) + 1 + j + 1 + dp[...]. Take the minimum. Distances are symmetric under direction, so dp on positive distances suffices."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/818/approach/hints",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/818",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Where can the car be after n consecutive A's starting at speed 1?",
+      "After a reversal (or two) the speed is back to magnitude 1, so the rest is a smaller instance of the same problem.",
+      "Let k be the bit length of t: either go past with k A's and return, or stop at k - 1 A's, back up j steps, and continue forward.",
+      "dp[t] = k if t = 2^k - 1, else min(k + 1 + dp[2^k - 1 - t], min over j < k - 1 of k + 1 + j + dp[t - 2^(k-1) + 2^j])."
+    ]
+  },
+  "id": "approach:leetcode:818:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/818/approach/invariants",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/818",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "dp[d] is the minimum instruction count to travel distance d starting at speed +1.",
+      "Every candidate for dp[t] refers only to dp of strictly smaller distances."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:818:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_818_official_approach-native_v1.json",
+    "sha256": "449adbf36931c76c2020588f948211f9d6e37228fb077861abf16b423256b5d1",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/818",
+      "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+    }
+  ],
+  "problemId": "leetcode:818",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/0/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "R resets the speed to magnitude 1, so whatever distance is left is a fresh instance of the problem in some direction. Runs of A's cover 1, 3, 7, ..., 2^n - 1. So a path is a sequence of such runs separated by reversals, and you only need to decide the first one or two runs."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/0/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Use the bit length of the target to bound the first run."
+        ]
+      },
+      "id": "approach:leetcode:818:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/0/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "List the positions after 1 to 4 A's.",
+          "For target 4, compare going to 7 and back with going to 3 and adjusting."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:818:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_818_official_approach-native_v1.json",
+        "sha256": "449adbf36931c76c2020588f948211f9d6e37228fb077861abf16b423256b5d1",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/0/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Going beyond 2^k - 1 on the first run is never useful.",
+          "A double R (RR) is a zero-length backwards run that resets speed in place."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/0/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "After an R, what does the remaining task look like?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/0/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "Reducing the state to a distance makes a one-dimensional DP possible."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/0/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/0/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "Find the reusable subproblem"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:818:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_818_official_python_v1.json",
+          "sha256": "f4c273838eb4c498c03b9a96d67706cedcedd7345a7063d3d28e809ec26be430",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:818:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_818_official_javascript_v1.json",
+          "sha256": "13bf1acb8ca926285d255243909672b2125108b59c6e772d87e6a01af948e856",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/1/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "For t from 1 to target, compute k as the bit length. If t is 2^k - 1, set dp[t] = k. Otherwise start with the overshoot cost k + 1 + dp[2^k - 1 - t], then for j from 0 to k - 2 try k + 1 + j + dp[t - (2^(k-1) - 1) + (2^j - 1)]. Both candidates use this exact loop; JavaScript computes the bit length with 32 - Math.clz32(t)."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/1/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Check that 2^k - 1 - t < t so the overshoot case looks back, not forward."
+        ]
+      },
+      "id": "approach:leetcode:818:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/1/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Allocate dp of size target + 1.",
+          "Compute k and handle the exact case.",
+          "Evaluate the overshoot and the stop-short options and keep the minimum."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:818:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_818_official_approach-native_v1.json",
+        "sha256": "449adbf36931c76c2020588f948211f9d6e37228fb077861abf16b423256b5d1",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/1/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The stop-short cost (k - 1) + 1 + j + 1 simplifies to k + 1 + j."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/1/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement the two cases in a bottom-up loop?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/1/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "All referenced distances are smaller than t, so a forward loop fills dependencies in time."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/1/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/1/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "Fill dp from 1 to target"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/2/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "Run a BFS over (position, speed) states with generous bounds for targets up to a few hundred and compare every answer with the DP."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/2/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Include targets just above and below powers of two."
+        ]
+      },
+      "id": "approach:leetcode:818:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/2/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Write a BFS with positions in [-2*target, 2*target] and compare for targets 1..300."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:818:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_818_official_approach-native_v1.json",
+        "sha256": "449adbf36931c76c2020588f948211f9d6e37228fb077861abf16b423256b5d1",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/2/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Targets of the form 2^k - 1 are the cheapest for their size."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/2/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "How do you confirm the structural shortcuts lose no optimal path?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/2/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "The DP's correctness rests on a proof sketch; exhaustive search on small targets is the practical check."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/2/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/818/approach/stages/2/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/818",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with BFS on small targets"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/818/approach/title",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/818",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+      }
+    ],
+    "status": "present",
+    "value": "DP over targets: overshoot and come back, or stop short and adjust"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/818/approach/tradeoffs",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/818",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/818.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a414576bff7c53ee33d6627b7626a76e830ffa2f61040a97969ad7b9ac4c9253"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/818.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67e102309fff36f7a6fcbda55d87958fd8344d400262a773ed81facdab1849fa"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A BFS over (position, speed) (the cohort reference) is simpler to trust but needs a chosen bound on positions and speeds and explores many states.",
+      "The DP relies on a structural argument about optimal paths: never go further than 2^k - 1 forward on the first run, and never go back more than 2^(k-1) - 1."
+    ]
+  },
+  "version": 1
+}

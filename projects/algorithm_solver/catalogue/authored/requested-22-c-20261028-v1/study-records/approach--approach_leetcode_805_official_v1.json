@@ -1,0 +1,1094 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/805/approach/chooseWhen",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/805",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "n is around 30, so 2^n subsets are too many but 2^(n/2) per half is fine.",
+      "The condition can be rewritten as a subset-sum-equals-target question."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:805:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/contract--contract_leetcode_805_official_authored-v1.json",
+    "sha256": "da9343887612106e4ae57c0f6c6a1a8ebe4c03294fbecd96540f45af541c5446",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/805/approach/explanation",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/805",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+      }
+    ],
+    "status": "present",
+    "value": "If both groups have equal averages, each equals the overall average. Replace each value x by n*x - total; now the overall average is 0 and the question becomes whether some non-empty proper subset sums to 0 (its complement then also sums to 0). Split the array into two halves and list all subset sums of each. A zero-sum subset is either a non-empty subset of one half (excluding the full array) or a combination of a non-empty subset of the right half with a subset of the left half whose sum is the negation. To keep the subset proper, the left part used with the full right half cannot also be the full left half."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/805/approach/hints",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/805",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "What must each group's average equal if the two averages match?",
+      "Subtract the mean from every value (scale by n to stay in integers); now look for a subset summing to zero.",
+      "Thirty elements is too many for brute force but fifteen is not: split the array in two.",
+      "Check zero sums inside one half, then match each non-empty right-half sum s against -s among left-half sums that are neither empty nor the full left half."
+    ]
+  },
+  "id": "approach:leetcode:805:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/805/approach/invariants",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/805",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "After scaling, a subset has the overall average exactly when its scaled sum is 0.",
+      "The full array always has scaled sum 0, so it must be excluded explicitly.",
+      "Each half's sum list includes the empty subset at index 0 and the full half at the last index."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:805:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_805_official_approach-native_v1.json",
+    "sha256": "f4991b547b24d4eef7163514e9374dfdaf51da8fea281c1cd29aa0638c69f9e7",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/805",
+      "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+    }
+  ],
+  "problemId": "leetcode:805",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/0/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "Equal averages force both to equal total/n. A subset A of size k has that average iff sum(A)*n = k*total, iff the sum of (n*x - total) over A is 0. So shift values and look for a non-empty proper subset with sum 0."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/0/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Multiply by n so all shifted values are integers."
+        ]
+      },
+      "id": "approach:leetcode:805:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/0/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Scale [2, 4, 6, 8] and find a zero-sum subset.",
+          "Explain why the complement of a zero-sum subset is also zero-sum."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:805:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_805_official_approach-native_v1.json",
+        "sha256": "f4991b547b24d4eef7163514e9374dfdaf51da8fea281c1cd29aa0638c69f9e7",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/0/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The empty set and the full array always sum to 0 and must be excluded."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/0/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "How can the equal-average condition be expressed without division?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/0/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "The shifted form removes the subset size from the condition, turning it into plain subset sum."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/0/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/0/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "Reduce to a zero-sum subset"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:805:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_805_official_python_v1.json",
+          "sha256": "e17e363814d48594058c8dffa7575c6d1686dd0a800ad12cc660bcf1236846d2",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:805:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_805_official_javascript_v1.json",
+          "sha256": "3b76ec37c31845c84089c0b4e3914e123d9131f67ad69e346a79f3d68ab62dc1",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/1/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "Both candidates build subset-sum lists by doubling: start with [0] and, for each value, append every existing sum plus that value. Then return true if 0 appears in either list beyond index 0. Otherwise put the left sums except the first (empty) and last (full left half) into a set, and for every non-empty right sum s check whether -s is in it."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/1/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "If the full right half pairs with a proper left subset, the union is still proper."
+        ]
+      },
+      "id": "approach:leetcode:805:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/1/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Return false immediately if n < 2.",
+          "Compute scaled values, split at n // 2 and enumerate subset sums of each half.",
+          "Check for zero inside each half, then join through a hash set."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:805:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_805_official_approach-native_v1.json",
+        "sha256": "f4991b547b24d4eef7163514e9374dfdaf51da8fea281c1cd29aa0638c69f9e7",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/1/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The doubling enumeration keeps the empty subset first and the full half last.",
+          "Scaled values stay well below 2^53, so JavaScript numbers are exact."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/1/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you combine the two halves without creating the empty or full subset?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/1/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "Excluding the full left half when pairing ensures the combined subset is never the full array; combinations with an empty side are already covered by the per-half check."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/1/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/1/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "Enumerate half sums and join"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/2/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with brute force over all subsets for n up to 12, using exact fractions for averages. Include arrays of equal values, single-element arrays and arrays where only the full array has the mean."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/2/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Generate arrays with no valid split, like [1, 2], to test the false path."
+        ]
+      },
+      "id": "approach:leetcode:805:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/2/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples, then [7] (false) and [3, 3] (true).",
+          "Brute-force random arrays of length up to 12 and compare."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:805:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_805_official_approach-native_v1.json",
+        "sha256": "f4991b547b24d4eef7163514e9374dfdaf51da8fea281c1cd29aa0638c69f9e7",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/2/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "All-equal arrays of length 2 or more are always true."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/2/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "Which inputs test the exclusion of trivial subsets?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/2/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "Off-by-one exclusion of the empty or full subset produces false positives that brute force will catch."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/2/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/805/approach/stages/2/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/805",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+          }
+        ],
+        "status": "present",
+        "value": "Check against brute force"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/805/approach/title",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/805",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+      }
+    ],
+    "status": "present",
+    "value": "Shift to zero mean, then meet in the middle on subset sums"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/805/approach/tradeoffs",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/805",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "32540ea9bcc7c45002f61adcf3a3b189cd4aa76fb21873efd56f2a255c5febf8"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e7bebaa922b5dd7d2f20fad79dc967070c7aa652fae0930d7d975d81d429088e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A dynamic program over (size, sum) bitsets (used by the cohort reference for larger n) is polynomial in total value; meet in the middle depends only on n.",
+      "Meet in the middle stores 2^(n/2) sums per half, about 32768 for n = 30.",
+      "Excluding the empty set and the full array needs care at the join step."
+    ]
+  },
+  "version": 1
+}
