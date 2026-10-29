@@ -1,0 +1,60 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (trait configuration, one value per trait, duplicates permitted)",
+      "algorithmTags HASH_TABLE, BINARY_SEARCH"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "high: the no-duplicates follow-up is inferred from the preview stressing that duplicates are permitted; the virtual Fisher-Yates model and n > T -> [] are author choices."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.generateUniqueNFTs",
+    "kind": "function",
+    "name": "generateUniqueNFTs",
+    "params": [
+      {
+        "name": "traits",
+        "type": "list<[string trait, list<string value>]>"
+      },
+      {
+        "name": "n",
+        "type": "integer"
+      },
+      {
+        "name": "randoms",
+        "type": "list<integer>"
+      }
+    ],
+    "python_wrapper": "Solution().generateUniqueNFTs",
+    "return": {
+      "type": "list<list<string>>"
+    }
+  },
+  "language": "javascript",
+  "parameters": [
+    "traits",
+    "n",
+    "randoms"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "virtual Fisher-Yates with a hash map of displaced positions; mixed-radix decoding",
+    "complexity_target": "O(n*t) time/O(n) map",
+    "reference": "materialize all combinations with itertools.product and run a literal partial Fisher-Yates"
+  },
+  "source_sha256": "21b4d3af27cd44089bc48a3f695ce40d1aa39eb06ff01c954fc8e32783a5fe04",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6791b5ff74ebe9de6650635e",
+  "variant_id": "6791b5ff74ebe9de6650635e"
+}

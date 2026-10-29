@@ -1,0 +1,313 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/assumptions",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "Streams are read in the given order",
+        "basis": "author choice",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      },
+      {
+        "assumption": "Constructor receives stream contents",
+        "basis": "determinism modelling",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      },
+      {
+        "assumption": "STACK tag not reflected",
+        "basis": "no visible text explains it",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/clarifyingQuestions",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Are streams consumed sequentially or interleaved?",
+      "Can the reader peek or push back characters?"
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/23/comparison",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/constraints",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "<= 2000 streams, total length <= 200000",
+      "trace length <= 20000"
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/23/effects",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh result containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/examples",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "input": [
+          [
+            "MultiStreamReader",
+            "read",
+            "read",
+            "read"
+          ],
+          [
+            [
+              [
+                "012",
+                "34",
+                ""
+              ]
+            ],
+            [
+              2
+            ],
+            [
+              4
+            ],
+            [
+              2
+            ]
+          ]
+        ],
+        "output": [
+          null,
+          "01",
+          "234",
+          ""
+        ],
+        "outputSource": "computed by oracles.py reference over the inferred spec"
+      }
+    ]
+  },
+  "id": "contract:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/23/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": "class MultiStreamReader:\n    def __init__(self, streams)\n    def read(self, n)  # -> string"
+      },
+      "kind": "class",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/23/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "MultiStreamReader",
+          "constructor": {
+            "params": [
+              {
+                "name": "streams",
+                "type": "list<string>"
+              }
+            ]
+          },
+          "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+          "kind": "class",
+          "methods": [
+            {
+              "name": "read",
+              "params": [
+                {
+                  "name": "n",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "string"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/23/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": "class MultiStreamReader {\n  constructor(streams)\n  read(n)  // -> string\n}  // module.exports.MultiStreamReader"
+      },
+      "kind": "class",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/23/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "MultiStreamReader",
+          "constructor": {
+            "params": [
+              {
+                "name": "streams",
+                "type": "list<string>"
+              }
+            ]
+          },
+          "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+          "kind": "class",
+          "methods": [
+            {
+              "name": "read",
+              "params": [
+                {
+                  "name": "n",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "string"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/23",
+      "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+    }
+  ],
+  "problemId": "hack2hire:67b2cb8275074948935624c6",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/requirements",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Wrap each input string in a read-only Stream",
+      "read(n) returns the next n characters across streams in order",
+      "Buffer characters read but not yet returned"
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/23/inferred_spec",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "The constructor receives the contents of read-only streams; the solution wraps each in a Stream object exposing only read(k) (returns up to k remaining characters, \"\" when empty) and never inspects stream contents directly. read(n) returns the next n characters of the concatenation of all streams in order, or fewer if all streams are exhausted, buffering any characters read from a Stream but not yet returned (read4 II style)."
+  },
+  "variantId": "67b36a7975074948935624c7",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/variantLabel",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Variant 1 of the Hack2Hire group (inferred)"
+  },
+  "version": 1
+}

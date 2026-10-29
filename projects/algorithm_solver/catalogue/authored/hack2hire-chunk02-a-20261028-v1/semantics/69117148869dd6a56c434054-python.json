@@ -1,0 +1,99 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (CreditSystem, out-of-order arrival, revoke at a time, balance at a timestamp)",
+      "algorithmTags HASH_TABLE"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "high: method names, argument order, revoke semantics (per-grant, from t onward) and closed windows are all inferred."
+  },
+  "inferred_interface": {
+    "classname": "CreditSystem",
+    "constructor": {
+      "params": []
+    },
+    "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+    "kind": "class",
+    "methods": [
+      {
+        "name": "addCredit",
+        "params": [
+          {
+            "name": "creditId",
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "type": "integer"
+          },
+          {
+            "name": "startTime",
+            "type": "integer"
+          },
+          {
+            "name": "endTime",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "revokeCredit",
+        "params": [
+          {
+            "name": "creditId",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "getBalance",
+        "params": [
+          {
+            "name": "timestamp",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ]
+  },
+  "language": "python",
+  "native_class": "CreditSystem",
+  "native_route": "direct-class-v1",
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-native-class-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "hash map id -> [amount,start,end,revokedAt]; balance scans grants",
+    "complexity_target": "O(1) add/revoke, O(g) balance; O(g) space",
+    "reference": "scan every grant per query with explicit revocation map"
+  },
+  "source_sha256": "c1b6f1c408ff3226343eace87f9c397dfb764581e5cd38c2529b73cb54813623",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:69117148869dd6a56c434054",
+  "variant_id": "69117148869dd6a56c434054"
+}

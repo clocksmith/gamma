@@ -1,0 +1,64 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (IP and CIDR definitions, ordered ALLOW/DENY rules, first match decides, IpFirewall class)",
+      "algorithmTags BIT_MANIPULATION"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "medium: default-deny when nothing matches, method name and constructor shape are inferred."
+  },
+  "inferred_interface": {
+    "classname": "IpFirewall",
+    "constructor": {
+      "params": [
+        {
+          "name": "rules",
+          "type": "list<[string action, string target]>"
+        }
+      ]
+    },
+    "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+    "kind": "class",
+    "methods": [
+      {
+        "name": "isAllowed",
+        "params": [
+          {
+            "name": "ip",
+            "type": "string"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      }
+    ]
+  },
+  "language": "javascript",
+  "native_class": "IpFirewall",
+  "native_route": "direct-class-v1",
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-native-class-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "pre-parse rules into (mask, masked base, allow) 32-bit integers; first-match scan",
+    "complexity_target": "O(R) per query/O(R) space",
+    "reference": "compare 32-character binary string prefixes per rule"
+  },
+  "source_sha256": "f8f8d2bf5f8b5856b3a1754c31edacbdd681cc1558f85f45fcdbfcdabf17c23a",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:684bada44023c4f502877df5",
+  "variant_id": "684bada44023c4f502877df5"
+}

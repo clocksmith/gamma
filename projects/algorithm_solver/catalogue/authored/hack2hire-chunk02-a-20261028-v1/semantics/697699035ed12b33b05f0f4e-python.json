@@ -1,0 +1,56 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (payment and invoice record formats, memo reference \"paying off:{invoiceId}\")",
+      "algorithmTags STRING",
+      "companies STRIPE"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "medium: structured output instead of a formatted sentence; exact memo id grammar inferred."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.matchPaymentsByMemo",
+    "kind": "function",
+    "name": "matchPaymentsByMemo",
+    "params": [
+      {
+        "name": "payments",
+        "type": "list<string \"paymentId,amount,memo\">"
+      },
+      {
+        "name": "invoices",
+        "type": "list<string \"invoiceId,amount,dueDate\">"
+      }
+    ],
+    "python_wrapper": "Solution().matchPaymentsByMemo",
+    "return": {
+      "type": "list<[string paymentId, string|null invoiceId]>"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "payments",
+    "invoices"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "hash map of invoice ids; manual substring search for the marker",
+    "complexity_target": "O(P*L + I) time/O(I) space",
+    "reference": "regex search and linear invoice scan"
+  },
+  "source_sha256": "032890f4989610f6d49607632c0be492908f7772c3e0f0477d184960c4dde867",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:697699035ed12b33b05f0f4e",
+  "variant_id": "697699035ed12b33b05f0f4e"
+}

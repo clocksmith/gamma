@@ -1,0 +1,1569 @@
+{
+  "schema": "gamma.hack2hire-inferred-contracts.v1",
+  "note": "Every spec and interface below is INFERRED (capability unverified, not official). Previews are paraphrased, never copied.",
+  "problems": [
+    {
+      "uid": "hack2hire:6a7f6aa4d713d873ca7adb44",
+      "variant_id": "6a7f6aa4d713d873ca7adb44",
+      "variant_ordinal": 1,
+      "group_post_id": "6a7f6a37d713d873ca7adb3a",
+      "title": "Find the Most Common Ads",
+      "companies": [
+        "PINTEREST"
+      ],
+      "algorithm_tags": [
+        "HEAP"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a7f6a37d713d873ca7adb3a/practice?questionId=6a7f6aa4d713d873ca7adb44",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a7f6a37d713d873ca7adb3a.json",
+        "response_sha256": "85d0c5f9db03529955c7a0b912d0114813aaf6a690aebd4a9cd622210e63340f",
+        "retrieved_at_utc": "2026-10-29T00:35:42.193851+00:00",
+        "content_preview_sha256": "c8719a6a7f99b600ecd8e564468fdc39fc1ec1e8ddededa4ff3e6523239f1750",
+        "content_preview_characters": 465,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (record format, LeetCode 347 relation)",
+          "algorithmTags HEAP"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "tie-break rule (adId ascending) and output order are guesses; preview names no k parameter."
+      },
+      "inferred_spec": "Count impressions per adId over the whole log (timestamps ignored). Return the k adIds with the highest counts, ordered by count descending then adId ascending (byte order); if fewer than k distinct ads exist return all of them. Empty log returns [].",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "topKAds",
+        "params": [
+          {
+            "name": "impressions",
+            "type": "list<[string timestamp, string adId]>"
+          },
+          {
+            "name": "k",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "list<string>"
+        },
+        "python_wrapper": "Solution().topKAds",
+        "javascript_wrapper": "module.exports.topKAds",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6a7f6b0ad713d873ca7adb47",
+      "variant_id": "6a7f6b0ad713d873ca7adb47",
+      "variant_ordinal": 2,
+      "group_post_id": "6a7f6a37d713d873ca7adb3a",
+      "title": "Find the Most Common Ads",
+      "companies": [
+        "PINTEREST"
+      ],
+      "algorithm_tags": [
+        "HEAP"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a7f6a37d713d873ca7adb3a/practice?questionId=6a7f6b0ad713d873ca7adb47",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a7f6a37d713d873ca7adb3a.json",
+        "response_sha256": "85d0c5f9db03529955c7a0b912d0114813aaf6a690aebd4a9cd622210e63340f",
+        "retrieved_at_utc": "2026-10-29T00:35:42.193851+00:00",
+        "content_preview_sha256": "c8719a6a7f99b600ecd8e564468fdc39fc1ec1e8ddededa4ff3e6523239f1750",
+        "content_preview_characters": 465,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (timestamp field is a decimal string)",
+          "algorithmTags HEAP"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "the time-window follow-up is inferred solely from the presence of a timestamp field; inclusive bounds chosen."
+      },
+      "inferred_spec": "As variant 1, but only impressions whose integer timestamp t satisfies startTime <= t <= endTime are counted. Timestamps are canonical non-negative decimal strings <= 10^12 (exact as doubles).",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "topKAdsInWindow",
+        "params": [
+          {
+            "name": "impressions",
+            "type": "list<[string timestamp, string adId]>"
+          },
+          {
+            "name": "k",
+            "type": "integer"
+          },
+          {
+            "name": "startTime",
+            "type": "integer"
+          },
+          {
+            "name": "endTime",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "list<string>"
+        },
+        "python_wrapper": "Solution().topKAdsInWindow",
+        "javascript_wrapper": "module.exports.topKAdsInWindow",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6a18e226c81f779dc6a230e4",
+      "variant_id": "6a18e226c81f779dc6a230e4",
+      "variant_ordinal": 1,
+      "group_post_id": "6a18e1ebc81f779dc6a230e2",
+      "title": "Fit Saved Rectangles in a Box",
+      "companies": [
+        "EBAY"
+      ],
+      "algorithm_tags": [
+        "ARRAY",
+        "SIMULATION"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a18e1ebc81f779dc6a230e2/practice?questionId=6a18e226c81f779dc6a230e4",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a18e1ebc81f779dc6a230e2.json",
+        "response_sha256": "6f97062c9d5500d297f3fc0381bd651b69fa338bc52bf85b6ecdb7c798cbb6a5",
+        "retrieved_at_utc": "2026-10-29T00:35:45.618594+00:00",
+        "content_preview_sha256": "e9b87fc6206c34ec44fd11f7cb1909b34e55fca5bf683f1fd696bf3a8d05ca0c",
+        "content_preview_characters": 609,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (operation encoding, rotation, independence)",
+          "algorithmTags ARRAY, SIMULATION"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "low: preview fixes semantics; non-strict fit (<=) is inferred."
+      },
+      "inferred_spec": "Process operations left to right. [0,a,b] saves an a x b rectangle. [1,a,b] appends to the output whether every rectangle saved before it fits, independently and axis-aligned with optional 90-degree rotation, inside an a x b box (equal sides fit). With no saved rectangles the answer is true. Output has one boolean per query, in order.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "fitSavedRectangles",
+        "params": [
+          {
+            "name": "operations",
+            "type": "list<[integer type, integer a, integer b]>"
+          }
+        ],
+        "return": {
+          "type": "list<boolean>"
+        },
+        "python_wrapper": "Solution().fitSavedRectangles",
+        "javascript_wrapper": "module.exports.fitSavedRectangles",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:69117148869dd6a56c434054",
+      "variant_id": "69117148869dd6a56c434054",
+      "variant_ordinal": 1,
+      "group_post_id": "69117144869dd6a56c434053",
+      "title": "GPU Credits",
+      "companies": [
+        "OPENAI"
+      ],
+      "algorithm_tags": [
+        "HASH_TABLE"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69117144869dd6a56c434053/practice?questionId=69117148869dd6a56c434054",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/69117144869dd6a56c434053.json",
+        "response_sha256": "a50b5a6afe0be572691462955e73d97dff3737feaea6b618f85f987ffa811213",
+        "retrieved_at_utc": "2026-10-29T00:35:59.482536+00:00",
+        "content_preview_sha256": "dc89b339c8dd430edeea13008852cdef7046f48821746a45185fbafd9545501f",
+        "content_preview_characters": 551,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (CreditSystem, out-of-order arrival, revoke at a time, balance at a timestamp)",
+          "algorithmTags HASH_TABLE"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "high: method names, argument order, revoke semantics (per-grant, from t onward) and closed windows are all inferred."
+      },
+      "inferred_spec": "Grants have unique ids and are valid on the closed window [startTime, endTime]. Events may arrive in any timestamp order; every query reflects all events received so far. revokeCredit(id, t) returns false if the id has not been added yet or was already revoked; otherwise it records that the grant stops counting from time t onward and returns true. getBalance(t) is the sum of amounts of grants with startTime <= t <= endTime that are not revoked at a time <= t.",
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "CreditSystem",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "addCredit",
+            "params": [
+              {
+                "name": "creditId",
+                "type": "string"
+              },
+              {
+                "name": "amount",
+                "type": "integer"
+              },
+              {
+                "name": "startTime",
+                "type": "integer"
+              },
+              {
+                "name": "endTime",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "revokeCredit",
+            "params": [
+              {
+                "name": "creditId",
+                "type": "string"
+              },
+              {
+                "name": "timestamp",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "getBalance",
+            "params": [
+              {
+                "name": "timestamp",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6913b4310ac116974ccedd13",
+      "variant_id": "6913b4310ac116974ccedd13",
+      "variant_ordinal": 1,
+      "group_post_id": "6913b4290ac116974ccedd12",
+      "title": "GPU Credits II",
+      "companies": [
+        "OPENAI",
+        "PERPLEXITY"
+      ],
+      "algorithm_tags": [
+        "HEAP",
+        "HASH_TABLE"
+      ],
+      "source_difficulty": 3,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6913b4290ac116974ccedd12/practice?questionId=6913b4310ac116974ccedd13",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6913b4290ac116974ccedd12.json",
+        "response_sha256": "23103360cb4da28d63aba319c14a3e711c75bf0915944a177d607afc9bf8d095",
+        "retrieved_at_utc": "2026-10-29T00:36:00.680039+00:00",
+        "content_preview_sha256": "8a74957038fc1e6208f1ab51e2c21bcd7e02a8200ebec57441ae2ee2a2b4eda4",
+        "content_preview_characters": 552,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (CreditSystem, out-of-order arrival, consume at a time)",
+          "algorithmTags HEAP, HASH_TABLE"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "high: expiring-first draw order, all-or-nothing consumption, tie-breaks and the replay definition are inferred."
+      },
+      "inferred_spec": "Grants as in GPU Credits (unique ids, closed windows, out-of-order arrival). The state at time t is defined by replaying all received consumptions with timestamp <= t in (timestamp, arrival) order against the received grants. A consumption at time c succeeds only if the remaining amount of grants active at c is >= amount; it then draws from active grants in order of earliest endTime, then earliest startTime, then creditId ascending; a failing consumption has no effect. consumeCredit returns whether it succeeds in the replay of events received so far (later-arriving earlier events may change later answers). getBalance(t) is the remaining amount of grants active at t after that replay.",
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "CreditSystem",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "addCredit",
+            "params": [
+              {
+                "name": "creditId",
+                "type": "string"
+              },
+              {
+                "name": "amount",
+                "type": "integer"
+              },
+              {
+                "name": "startTime",
+                "type": "integer"
+              },
+              {
+                "name": "endTime",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "consumeCredit",
+            "params": [
+              {
+                "name": "amount",
+                "type": "integer"
+              },
+              {
+                "name": "timestamp",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "getBalance",
+            "params": [
+              {
+                "name": "timestamp",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6791b00b74ebe9de6650635c",
+      "variant_id": "6791b00b74ebe9de6650635c",
+      "variant_ordinal": 1,
+      "group_post_id": "6791aa8374ebe9de6650635b",
+      "title": "Generate Random NFT",
+      "companies": [
+        "COINBASE"
+      ],
+      "algorithm_tags": [
+        "HASH_TABLE",
+        "BINARY_SEARCH"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6791aa8374ebe9de6650635b/practice?questionId=6791b00b74ebe9de6650635c",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6791aa8374ebe9de6650635b.json",
+        "response_sha256": "c7567dc4619fa622d8e8e0b10347504b7f11d47f15c2a5f5328b06edb32950e0",
+        "retrieved_at_utc": "2026-10-29T00:36:05.268774+00:00",
+        "content_preview_sha256": "e238290139ce1835fc42467d92376666f88cdc99458364c6659b99de041a067b",
+        "content_preview_characters": 493,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (trait configuration, one value per trait, duplicates permitted)",
+          "algorithmTags HASH_TABLE, BINARY_SEARCH"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "medium: modelling randomness as injected integers with modulo selection is an author choice."
+      },
+      "inferred_spec": "Generate n NFTs with duplicates allowed. For each NFT and each trait in order, take the next random r and choose values[r mod len(values)]. randoms has exactly n * len(traits) entries. Randomness is injected: randoms is a deterministic list of non-negative integers (each <= 10^15) consumed in order. Each NFT is returned as the list of chosen values in trait order.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "generateNFTs",
+        "params": [
+          {
+            "name": "traits",
+            "type": "list<[string trait, list<string value>]>"
+          },
+          {
+            "name": "n",
+            "type": "integer"
+          },
+          {
+            "name": "randoms",
+            "type": "list<integer>"
+          }
+        ],
+        "return": {
+          "type": "list<list<string>>"
+        },
+        "python_wrapper": "Solution().generateNFTs",
+        "javascript_wrapper": "module.exports.generateNFTs",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6791b3fa74ebe9de6650635d",
+      "variant_id": "6791b3fa74ebe9de6650635d",
+      "variant_ordinal": 2,
+      "group_post_id": "6791aa8374ebe9de6650635b",
+      "title": "Generate Random NFT",
+      "companies": [
+        "COINBASE"
+      ],
+      "algorithm_tags": [
+        "HASH_TABLE",
+        "BINARY_SEARCH"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6791aa8374ebe9de6650635b/practice?questionId=6791b3fa74ebe9de6650635d",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6791aa8374ebe9de6650635b.json",
+        "response_sha256": "c7567dc4619fa622d8e8e0b10347504b7f11d47f15c2a5f5328b06edb32950e0",
+        "retrieved_at_utc": "2026-10-29T00:36:05.268774+00:00",
+        "content_preview_sha256": "e238290139ce1835fc42467d92376666f88cdc99458364c6659b99de041a067b",
+        "content_preview_characters": 493,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (trait configuration, one value per trait, duplicates permitted)",
+          "algorithmTags HASH_TABLE, BINARY_SEARCH"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "high: weighted traits are inferred from the BINARY_SEARCH tag only."
+      },
+      "inferred_spec": "Generate n NFTs with duplicates allowed, where each trait value has a positive integer weight. For each NFT and trait in order, take the next random r, let x = r mod (sum of weights), and choose the first value whose cumulative weight exceeds x. randoms has exactly n * len(traits) entries. Randomness is injected: randoms is a deterministic list of non-negative integers (each <= 10^15) consumed in order. Each NFT is returned as the list of chosen values in trait order.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "generateWeightedNFTs",
+        "params": [
+          {
+            "name": "traits",
+            "type": "list<[string trait, list<[string value, integer weight]>]>"
+          },
+          {
+            "name": "n",
+            "type": "integer"
+          },
+          {
+            "name": "randoms",
+            "type": "list<integer>"
+          }
+        ],
+        "return": {
+          "type": "list<list<string>>"
+        },
+        "python_wrapper": "Solution().generateWeightedNFTs",
+        "javascript_wrapper": "module.exports.generateWeightedNFTs",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6791b5ff74ebe9de6650635e",
+      "variant_id": "6791b5ff74ebe9de6650635e",
+      "variant_ordinal": 3,
+      "group_post_id": "6791aa8374ebe9de6650635b",
+      "title": "Generate Random NFT",
+      "companies": [
+        "COINBASE"
+      ],
+      "algorithm_tags": [
+        "HASH_TABLE",
+        "BINARY_SEARCH"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6791aa8374ebe9de6650635b/practice?questionId=6791b5ff74ebe9de6650635e",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6791aa8374ebe9de6650635b.json",
+        "response_sha256": "c7567dc4619fa622d8e8e0b10347504b7f11d47f15c2a5f5328b06edb32950e0",
+        "retrieved_at_utc": "2026-10-29T00:36:05.268774+00:00",
+        "content_preview_sha256": "e238290139ce1835fc42467d92376666f88cdc99458364c6659b99de041a067b",
+        "content_preview_characters": 493,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (trait configuration, one value per trait, duplicates permitted)",
+          "algorithmTags HASH_TABLE, BINARY_SEARCH"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "high: the no-duplicates follow-up is inferred from the preview stressing that duplicates are permitted; the virtual Fisher-Yates model and n > T -> [] are author choices."
+      },
+      "inferred_spec": "Generate n pairwise-distinct NFTs (uniform sampling without replacement modelled deterministically). Index all T = product(len(values)) combinations in mixed-radix order (first trait most significant, values in given order). Run a partial Fisher-Yates over that virtual array: for i in 0..n-1, swap positions i and i + (randoms[i] mod (T - i)) and emit the combination at position i. If n > T return []. randoms has exactly n entries. Randomness is injected: randoms is a deterministic list of non-negative integers (each <= 10^15) consumed in order. Each NFT is returned as the list of chosen values in trait order.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "generateUniqueNFTs",
+        "params": [
+          {
+            "name": "traits",
+            "type": "list<[string trait, list<string value>]>"
+          },
+          {
+            "name": "n",
+            "type": "integer"
+          },
+          {
+            "name": "randoms",
+            "type": "list<integer>"
+          }
+        ],
+        "return": {
+          "type": "list<list<string>>"
+        },
+        "python_wrapper": "Solution().generateUniqueNFTs",
+        "javascript_wrapper": "module.exports.generateUniqueNFTs",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6a611985c16dcdf8ba4ff8a2",
+      "variant_id": "6a611985c16dcdf8ba4ff8a2",
+      "variant_ordinal": 1,
+      "group_post_id": "6a61190bc16dcdf8ba4ff89d",
+      "title": "Group Loans by Top-Level Company",
+      "companies": [
+        "AFFIRM"
+      ],
+      "algorithm_tags": [
+        "HASH_TABLE"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a61190bc16dcdf8ba4ff89d/practice?questionId=6a611985c16dcdf8ba4ff8a2",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a61190bc16dcdf8ba4ff89d.json",
+        "response_sha256": "0005b072a45057300e7e84e6d9301eb09c6945aadd817d2461dd3af3094422a0",
+        "retrieved_at_utc": "2026-10-29T00:36:14.459374+00:00",
+        "content_preview_sha256": "6d4f3115b0d948fafbb916675b119464c8016563a93c714bc4ff6db2685f2fd5",
+        "content_preview_characters": 561,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "algorithmTags HASH_TABLE",
+          "companies AFFIRM"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "highest: this group's cached contentPreview describes DistinctPIIValuesCounter (same text as Live Fraud Detector) and does not match the title; the spec is inferred from the title alone."
+      },
+      "inferred_spec": "parents gives each company at most one direct parent and is acyclic; a company without a parent (including companies absent from parents) is top-level. Map every loan to the top-level ancestor of its company and return one [topCompany, sortedLoanIds] entry per top-level company that has at least one loan, sorted by topCompany ascending. Loan ids are unique.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "groupLoansByTopCompany",
+        "params": [
+          {
+            "name": "parents",
+            "type": "list<[string company, string parentCompany]>"
+          },
+          {
+            "name": "loans",
+            "type": "list<[string loanId, string company]>"
+          }
+        ],
+        "return": {
+          "type": "list<[string topCompany, list<string loanId>]>"
+        },
+        "python_wrapper": "Solution().groupLoansByTopCompany",
+        "javascript_wrapper": "module.exports.groupLoansByTopCompany",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6a7231c748af2ae18e995d8b",
+      "variant_id": "6a7231c748af2ae18e995d8b",
+      "variant_ordinal": 2,
+      "group_post_id": "6a61190bc16dcdf8ba4ff89d",
+      "title": "Group Loans by Top-Level Company",
+      "companies": [
+        "AFFIRM"
+      ],
+      "algorithm_tags": [
+        "HASH_TABLE"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a61190bc16dcdf8ba4ff89d/practice?questionId=6a7231c748af2ae18e995d8b",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a61190bc16dcdf8ba4ff89d.json",
+        "response_sha256": "0005b072a45057300e7e84e6d9301eb09c6945aadd817d2461dd3af3094422a0",
+        "retrieved_at_utc": "2026-10-29T00:36:14.459374+00:00",
+        "content_preview_sha256": "6d4f3115b0d948fafbb916675b119464c8016563a93c714bc4ff6db2685f2fd5",
+        "content_preview_characters": 561,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "algorithmTags HASH_TABLE",
+          "companies AFFIRM"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "highest: preview mismatch as in variant 1; the amount aggregation follow-up is invented from the title."
+      },
+      "inferred_spec": "Same company hierarchy as variant 1. Sum loan amounts per top-level company and return [topCompany, total] for every top-level company with at least one loan, sorted by total descending then topCompany ascending.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "totalLoansByTopCompany",
+        "params": [
+          {
+            "name": "parents",
+            "type": "list<[string company, string parentCompany]>"
+          },
+          {
+            "name": "loans",
+            "type": "list<[string loanId, string company, integer amount]>"
+          }
+        ],
+        "return": {
+          "type": "list<[string topCompany, integer total]>"
+        },
+        "python_wrapper": "Solution().totalLoansByTopCompany",
+        "javascript_wrapper": "module.exports.totalLoansByTopCompany",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6768c33400d569e371e007ec",
+      "variant_id": "6768c33400d569e371e007ec",
+      "variant_ordinal": 1,
+      "group_post_id": "6768bf0900d569e371e007eb",
+      "title": "High Correlation Seller",
+      "companies": [
+        "AFFIRM"
+      ],
+      "algorithm_tags": [
+        "HASH_TABLE"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6768bf0900d569e371e007eb/practice?questionId=6768c33400d569e371e007ec",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6768bf0900d569e371e007eb.json",
+        "response_sha256": "57b485b3789c74de9d0ee1119c2c1951f9f86aa64445bd253367922cf8244c6d",
+        "retrieved_at_utc": "2026-10-29T00:36:19.141959+00:00",
+        "content_preview_sha256": "b66747e2579a837d892b489e710e1ab33da0ed8e9ba157b3866121b3a36c0220",
+        "content_preview_characters": 554,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (sessions of visited stores, co-occurrence, nested list sorted by target store)",
+          "algorithmTags HASH_TABLE"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "high: \"frequently visited together\" is interpreted as the maximum co-occurrence count; no threshold parameter is visible."
+      },
+      "inferred_spec": "Each record is one shopping session (duplicate stores inside a session count once). For every store appearing in any record, its co-occurrence count with another store is the number of sessions containing both. Return [store, associated] for every store sorted by store name, where associated lists, in ascending order, the stores whose co-occurrence count with it equals that store's maximum co-occurrence count, provided that maximum is > 0 (otherwise []).",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "highCorrelationSellers",
+        "params": [
+          {
+            "name": "records",
+            "type": "list<list<string store>>"
+          }
+        ],
+        "return": {
+          "type": "list<[string store, list<string>]>"
+        },
+        "python_wrapper": "Solution().highCorrelationSellers",
+        "javascript_wrapper": "module.exports.highCorrelationSellers",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6a91ef7ccddc54478ddf4a34",
+      "variant_id": "6a91ef7ccddc54478ddf4a34",
+      "variant_ordinal": 1,
+      "group_post_id": "6a91eef2cddc54478ddf4a30",
+      "title": "Highest Average Score",
+      "companies": [
+        "GOLDMAN_SACHS"
+      ],
+      "algorithm_tags": [
+        "HASH_TABLE"
+      ],
+      "source_difficulty": 1,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a91eef2cddc54478ddf4a30/practice?questionId=6a91ef7ccddc54478ddf4a34",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a91eef2cddc54478ddf4a30.json",
+        "response_sha256": "3ad7d9963bed09ace986de3d87bc6e37a15b6256e48224e0577c931a7a7b7ce9",
+        "retrieved_at_utc": "2026-10-29T00:36:20.244639+00:00",
+        "content_preview_sha256": "177118f391a5738d25a2b6a7ede705d30a98738161dd7a06115bb84cc44bba24",
+        "content_preview_characters": 211,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (scores format, string integer scores)",
+          "algorithmTags HASH_TABLE"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "medium: floor rounding and empty -> 0 follow the commonly reported version, not the preview."
+      },
+      "inferred_spec": "score strings are canonical integers in [-10^9, 10^9]. Compute each student's mean score and return the floor (toward negative infinity) of the highest mean. Return 0 when scores is empty.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "highestAverageScore",
+        "params": [
+          {
+            "name": "scores",
+            "type": "list<[string studentName, string score]>"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        },
+        "python_wrapper": "Solution().highestAverageScore",
+        "javascript_wrapper": "module.exports.highestAverageScore",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:684bada44023c4f502877df5",
+      "variant_id": "684bada44023c4f502877df5",
+      "variant_ordinal": 1,
+      "group_post_id": "684baaa84023c4f502877df2",
+      "title": "IP CIDR Firewall",
+      "companies": [
+        "DATABRICKS"
+      ],
+      "algorithm_tags": [
+        "BIT_MANIPULATION"
+      ],
+      "source_difficulty": 3,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/684baaa84023c4f502877df2/practice?questionId=684bada44023c4f502877df5",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/684baaa84023c4f502877df2.json",
+        "response_sha256": "27678706a99768c9163dd31cf3750f7bfe3a802a65b81449edd51105b514f522",
+        "retrieved_at_utc": "2026-10-29T00:36:28.298609+00:00",
+        "content_preview_sha256": "3e90499eb623d206886fc0ef7fa1d2ec670a6e8a5b0d62db60a2416df5e68b8b",
+        "content_preview_characters": 1094,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (IP and CIDR definitions, ordered ALLOW/DENY rules, first match decides, IpFirewall class)",
+          "algorithmTags BIT_MANIPULATION"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "medium: default-deny when nothing matches, method name and constructor shape are inferred."
+      },
+      "inferred_spec": "rules are ordered [action, target] with action ALLOW or DENY and target either a dotted IPv4 address (exact match) or base/k (CIDR, 0 <= k <= 32; host bits of base are ignored). isAllowed(ip) applies the first rule whose target covers ip: true for ALLOW, false for DENY. If no rule matches the answer is false (default deny).",
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "IpFirewall",
+        "constructor": {
+          "params": [
+            {
+              "name": "rules",
+              "type": "list<[string action, string target]>"
+            }
+          ]
+        },
+        "methods": [
+          {
+            "name": "isAllowed",
+            "params": [
+              {
+                "name": "ip",
+                "type": "string"
+              }
+            ],
+            "return": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6987b235fedd959e9aa44515",
+      "variant_id": "6987b235fedd959e9aa44515",
+      "variant_ordinal": 1,
+      "group_post_id": "6987b22efedd959e9aa44513",
+      "title": "IPO Share Allocation",
+      "companies": [
+        "POINT72",
+        "TWOSIGMA"
+      ],
+      "algorithm_tags": [
+        "GREEDY"
+      ],
+      "source_difficulty": 3,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6987b22efedd959e9aa44513/practice?questionId=6987b235fedd959e9aa44515",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6987b22efedd959e9aa44513.json",
+        "response_sha256": "d268cf589feeb976cc0fc06f050f49fecadbab07e63c12bfb4306e8968c5d2c1",
+        "retrieved_at_utc": "2026-10-29T00:36:30.584482+00:00",
+        "content_preview_sha256": "cc890eab7f70941e4b238976597f67d1bc4e3e179013c649f5c79ac816d5dd8f",
+        "content_preview_characters": 729,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (bid fields, highest price allocated first)",
+          "algorithmTags GREEDY",
+          "companies TWOSIGMA, POINT72"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "medium: round-robin by timestamp within a price level and the unallotted-users output follow the widely reported version, not visible preview text."
+      },
+      "inferred_spec": "Each user bids once. Shares go to price levels from highest to lowest. If a level's total requested shares fit in the remaining shares, every bidder there receives their full request. Otherwise the remaining shares are handed out one at a time round-robin over that level's bidders ordered by timestamp (ties by input order), skipping bidders already satisfied, until shares run out. Return the sorted userIds that receive zero shares.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "getUnallottedUsers",
+        "params": [
+          {
+            "name": "bids",
+            "type": "list<[integer userId, integer shares, integer price, integer timestamp]>"
+          },
+          {
+            "name": "totalShares",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "list<integer>"
+        },
+        "python_wrapper": "Solution().getUnallottedUsers",
+        "javascript_wrapper": "module.exports.getUnallottedUsers",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6a90b63acddc54478ddf423a",
+      "variant_id": "6a90b63acddc54478ddf423a",
+      "variant_ordinal": 1,
+      "group_post_id": "6a90b62ccddc54478ddf4239",
+      "title": "Largest Tree Root",
+      "companies": [
+        "GOLDMAN_SACHS",
+        "GOOGLE",
+        "MICROSOFT"
+      ],
+      "algorithm_tags": [
+        "DEPTH_FIRST_SEARCH"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a90b62ccddc54478ddf4239/practice?questionId=6a90b63acddc54478ddf423a",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a90b62ccddc54478ddf4239.json",
+        "response_sha256": "46a96f9ffd3fc32fc916285a1b127dfb7f3f042677f3fe9b61637710fdfc22e4",
+        "retrieved_at_utc": "2026-10-29T00:36:58.262908+00:00",
+        "content_preview_sha256": "b4905f67d4b48a49c3c23eacc64160039da01e8a7fdac5aa47eaf3f15ac96ab1",
+        "content_preview_characters": 437,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (relation format, root and tree-size definitions)",
+          "algorithmTags DEPTH_FIRST_SEARCH"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "low-medium: tie-break (smaller id) and empty -> -1 are inferred."
+      },
+      "inferred_spec": "relations is a valid acyclic forest of [child, parent] edges. Considering only nodes that appear in relations, return the root of the tree with the most nodes, breaking ties by the smaller root id. Return -1 for empty relations.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "largestTreeRoot",
+        "params": [
+          {
+            "name": "relations",
+            "type": "list<[integer child, integer parent]>"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        },
+        "python_wrapper": "Solution().largestTreeRoot",
+        "javascript_wrapper": "module.exports.largestTreeRoot",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6a5941a8665efda9311fa417",
+      "variant_id": "6a5941a8665efda9311fa417",
+      "variant_ordinal": 1,
+      "group_post_id": "6a594182665efda9311fa413",
+      "title": "Live Fraud Detector",
+      "companies": [
+        "AFFIRM"
+      ],
+      "algorithm_tags": [
+        "HASH_TABLE",
+        "DESIGN"
+      ],
+      "source_difficulty": 1,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a594182665efda9311fa413/practice?questionId=6a5941a8665efda9311fa417",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a594182665efda9311fa413.json",
+        "response_sha256": "9409189a97cebcd28709f00928d47a16b7784780b711ff76d7dcb9455a6a6413",
+        "retrieved_at_utc": "2026-10-29T00:37:08.645066+00:00",
+        "content_preview_sha256": "e68d48ff295e0090a6e73116038d4cdad83021f98d637a3b4f5495fce04021f3",
+        "content_preview_characters": 559,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (DistinctPIIValuesCounter, event layout, distinct PII across events)",
+          "algorithmTags HASH_TABLE, DESIGN"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "medium: per-field identity, empty-means-missing and the getter name are inferred."
+      },
+      "inferred_spec": "event = [eventType, address, phone, email, ssn]. A PII value is identified by (field, value), so equal strings in different fields are distinct; empty strings mean missing and are ignored; eventType is ignored. getDistinctPIICount returns the number of distinct PII values over all events processed so far.",
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "DistinctPIIValuesCounter",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "processEvent",
+            "params": [
+              {
+                "name": "event",
+                "type": "list<string>[5]"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "getDistinctPIICount",
+            "params": [],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6a5941f5665efda9311fa41e",
+      "variant_id": "6a5941f5665efda9311fa41e",
+      "variant_ordinal": 2,
+      "group_post_id": "6a594182665efda9311fa413",
+      "title": "Live Fraud Detector",
+      "companies": [
+        "AFFIRM"
+      ],
+      "algorithm_tags": [
+        "HASH_TABLE",
+        "DESIGN"
+      ],
+      "source_difficulty": 1,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a594182665efda9311fa413/practice?questionId=6a5941f5665efda9311fa41e",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a594182665efda9311fa413.json",
+        "response_sha256": "9409189a97cebcd28709f00928d47a16b7784780b711ff76d7dcb9455a6a6413",
+        "retrieved_at_utc": "2026-10-29T00:37:08.645066+00:00",
+        "content_preview_sha256": "e68d48ff295e0090a6e73116038d4cdad83021f98d637a3b4f5495fce04021f3",
+        "content_preview_characters": 559,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title (Live Fraud Detector)",
+          "contentPreview",
+          "algorithmTags HASH_TABLE, DESIGN"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "high: the shared-PII follow-up is inferred from the group title only."
+      },
+      "inferred_spec": "As variant 1, plus getSharedPIICount: the number of distinct PII values that occur in at least two processed events (a fraud signal: PII reused across events). A value repeated inside one event counts once for that event (only possible across different fields, which are distinct values anyway).",
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "DistinctPIIValuesCounter",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "processEvent",
+            "params": [
+              {
+                "name": "event",
+                "type": "list<string>[5]"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "getDistinctPIICount",
+            "params": [],
+            "return": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "getSharedPIICount",
+            "params": [],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:697699035ed12b33b05f0f4e",
+      "variant_id": "697699035ed12b33b05f0f4e",
+      "variant_ordinal": 1,
+      "group_post_id": "697697e35ed12b33b05f0f4b",
+      "title": "Match Payment to Invoice",
+      "companies": [
+        "STRIPE"
+      ],
+      "algorithm_tags": [
+        "STRING"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697697e35ed12b33b05f0f4b/practice?questionId=697699035ed12b33b05f0f4e",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/697697e35ed12b33b05f0f4b.json",
+        "response_sha256": "4a2fbd24952c9c1a9fd2e11db7f411567939b786ba7a98ded9f4eca826a69d86",
+        "retrieved_at_utc": "2026-10-29T00:37:24.829678+00:00",
+        "content_preview_sha256": "932cc5bed2ca76375a2eaa2eb391e50dfab0c83741cbcd086bedb65e2bfdd79a",
+        "content_preview_characters": 444,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (payment and invoice record formats, memo reference \"paying off:{invoiceId}\")",
+          "algorithmTags STRING",
+          "companies STRIPE"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "medium: structured output instead of a formatted sentence; exact memo id grammar inferred."
+      },
+      "inferred_spec": "Parse each payment by splitting at the first two commas (the memo may contain commas). The memo references an invoice through the first occurrence of \"paying off:\" immediately followed by an id made of [A-Za-z0-9_-]. Return, per payment in input order, [paymentId, invoiceId] when the referenced invoice exists, otherwise [paymentId, null]. Invoices may be referenced by several payments. Amounts are integers (minor units).",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "matchPaymentsByMemo",
+        "params": [
+          {
+            "name": "payments",
+            "type": "list<string \"paymentId,amount,memo\">"
+          },
+          {
+            "name": "invoices",
+            "type": "list<string \"invoiceId,amount,dueDate\">"
+          }
+        ],
+        "return": {
+          "type": "list<[string paymentId, string|null invoiceId]>"
+        },
+        "python_wrapper": "Solution().matchPaymentsByMemo",
+        "javascript_wrapper": "module.exports.matchPaymentsByMemo",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6976e8995ed12b33b05f10f7",
+      "variant_id": "6976e8995ed12b33b05f10f7",
+      "variant_ordinal": 2,
+      "group_post_id": "697697e35ed12b33b05f0f4b",
+      "title": "Match Payment to Invoice",
+      "companies": [
+        "STRIPE"
+      ],
+      "algorithm_tags": [
+        "STRING"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697697e35ed12b33b05f0f4b/practice?questionId=6976e8995ed12b33b05f10f7",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/697697e35ed12b33b05f0f4b.json",
+        "response_sha256": "4a2fbd24952c9c1a9fd2e11db7f411567939b786ba7a98ded9f4eca826a69d86",
+        "retrieved_at_utc": "2026-10-29T00:37:24.829678+00:00",
+        "content_preview_sha256": "932cc5bed2ca76375a2eaa2eb391e50dfab0c83741cbcd086bedb65e2bfdd79a",
+        "content_preview_characters": 444,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (record formats, memo reference)",
+          "algorithmTags STRING",
+          "companies STRIPE"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "high: the amount fallback, one-match-per-invoice and due-date ordering follow the commonly reported follow-up, not visible text."
+      },
+      "inferred_spec": "Each invoice can be matched at most once; payments are processed in order. A memo reference to an existing, still unmatched invoice matches it. Otherwise (no reference, unknown id, or already matched) the payment falls back to the unmatched invoice with exactly the same amount and the earliest dueDate (YYYY-MM-DD), ties by invoiceId ascending; if none, null.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "matchPayments",
+        "params": [
+          {
+            "name": "payments",
+            "type": "list<string \"paymentId,amount,memo\">"
+          },
+          {
+            "name": "invoices",
+            "type": "list<string \"invoiceId,amount,dueDate\">"
+          }
+        ],
+        "return": {
+          "type": "list<[string paymentId, string|null invoiceId]>"
+        },
+        "python_wrapper": "Solution().matchPayments",
+        "javascript_wrapper": "module.exports.matchPayments",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6a226625981072682a6f216b",
+      "variant_id": "6a226625981072682a6f216b",
+      "variant_ordinal": 1,
+      "group_post_id": "6a2265c0981072682a6f2163",
+      "title": "Matrix Transpose with Workers",
+      "companies": [
+        "VERKADA"
+      ],
+      "algorithm_tags": [
+        "ARRAY",
+        "MATRIX"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a2265c0981072682a6f2163/practice?questionId=6a226625981072682a6f216b",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a2265c0981072682a6f2163.json",
+        "response_sha256": "6ea690b3d36c159335bc2673de92190e970c0db98389a94e35a2bcd4e497c2f1",
+        "retrieved_at_utc": "2026-10-29T00:37:28.340740+00:00",
+        "content_preview_sha256": "502ce6fa35038b0d5b59025cf853c285cddaadac4b22733e8058b17f315e3182",
+        "content_preview_characters": 610,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (square matrix, numThreads, parallel workers, LeetCode 867 relation)",
+          "algorithmTags ARRAY, MATRIX"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "medium: real thread usage is not observable in a deterministic function; any thread-safety or worker-assignment output the original asks for is not modelled."
+      },
+      "inferred_spec": "Return the transpose of the square matrix (a new matrix; input unchanged). Concurrency is modelled deterministically: rows of the output are partitioned into min(numThreads, n) contiguous blocks and each simulated worker fills its block; the result is independent of the partition, so only the transpose is observable.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "transposeWithWorkers",
+        "params": [
+          {
+            "name": "matrix",
+            "type": "list<list<integer>> n x n"
+          },
+          {
+            "name": "numThreads",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "list<list<integer>>"
+        },
+        "python_wrapper": "Solution().transposeWithWorkers",
+        "javascript_wrapper": "module.exports.transposeWithWorkers",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:69fa55d2661bab75bbca3b9d",
+      "variant_id": "69fa55d2661bab75bbca3b9d",
+      "variant_ordinal": 1,
+      "group_post_id": "69fa55bf661bab75bbca3b9c",
+      "title": "Maximize Hole in Prison Gate",
+      "companies": [
+        "EXPEDIA"
+      ],
+      "algorithm_tags": [
+        "GREEDY"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69fa55bf661bab75bbca3b9c/practice?questionId=69fa55d2661bab75bbca3b9d",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/69fa55bf661bab75bbca3b9c.json",
+        "response_sha256": "ed1f23fca5f25df9c66e63d3c4cfb662388b384162b1a6205249425251299741",
+        "retrieved_at_utc": "2026-10-29T00:37:39.788811+00:00",
+        "content_preview_sha256": "417b3da629041fbf7f2579421b621abcf93a41e674d4201f55ba8c267f92a9bb",
+        "content_preview_characters": 540,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (n horizontal, m vertical bars, unit spacing, removing bars; LeetCode 2943 relation)",
+          "algorithmTags GREEDY",
+          "companies EXPEDIA"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "medium: rectangle (not square) area and \"listed bars are removed\" (not optional) follow the widely reported Expedia \"prison\" version; LeetCode 2943 asks for a square."
+      },
+      "inferred_spec": "The gate has n horizontal bars numbered 1..n and m vertical bars 1..m, inside a fixed frame, one unit apart. The distinct bars listed in h and v are removed. Return the area of the largest rectangular opening: (longest run of consecutive removed horizontal bars + 1) * (longest run of consecutive removed vertical bars + 1).",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "maximizeHole",
+        "params": [
+          {
+            "name": "n",
+            "type": "integer"
+          },
+          {
+            "name": "m",
+            "type": "integer"
+          },
+          {
+            "name": "h",
+            "type": "list<integer>"
+          },
+          {
+            "name": "v",
+            "type": "list<integer>"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        },
+        "python_wrapper": "Solution().maximizeHole",
+        "javascript_wrapper": "module.exports.maximizeHole",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6933c5c85f306485cc5f07c0",
+      "variant_id": "6933c5c85f306485cc5f07c0",
+      "variant_ordinal": 1,
+      "group_post_id": "6933c5bb5f306485cc5f07bf",
+      "title": "Maximum Island Perimeter",
+      "companies": [
+        "GOOGLE",
+        "SNAPCHAT",
+        "TESLA"
+      ],
+      "algorithm_tags": [
+        "DEPTH_FIRST_SEARCH"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6933c5bb5f306485cc5f07bf/practice?questionId=6933c5c85f306485cc5f07c0",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6933c5bb5f306485cc5f07bf.json",
+        "response_sha256": "08796e43b442f1203a2335afee0c050ff6debf5c1315c1bd9e37388ff3d560b5",
+        "retrieved_at_utc": "2026-10-29T00:37:55.930510+00:00",
+        "content_preview_sha256": "ac762ac99d0014f948f5a0d5a3edbf4d94151542dafb5f3106cc9a8fc1502a89",
+        "content_preview_characters": 647,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (grid, connectivity, perimeter edge rule; LeetCode 200 relation)",
+          "algorithmTags DEPTH_FIRST_SEARCH"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "low: preview fixes the definition."
+      },
+      "inferred_spec": "Islands are 4-connected groups of \"1\" cells. A land cell edge counts toward perimeter if it touches water or the grid border. Return the largest island perimeter, or 0 if there is no land.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "maxIslandPerimeter",
+        "params": [
+          {
+            "name": "grid",
+            "type": "list<list<'0'|'1'>>"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        },
+        "python_wrapper": "Solution().maxIslandPerimeter",
+        "javascript_wrapper": "module.exports.maxIslandPerimeter",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:6a7253d448af2ae18e995e99",
+      "variant_id": "6a7253d448af2ae18e995e99",
+      "variant_ordinal": 1,
+      "group_post_id": "6a7253cd48af2ae18e995e98",
+      "title": "Minimum Nondecreasing Increment",
+      "companies": [
+        "IBM"
+      ],
+      "algorithm_tags": [
+        "ARRAY",
+        "GREEDY"
+      ],
+      "source_difficulty": 1,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a7253cd48af2ae18e995e98/practice?questionId=6a7253d448af2ae18e995e99",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/6a7253cd48af2ae18e995e98.json",
+        "response_sha256": "316cb200d512dfab5471a128427443b81c18a715dfea5953d3070c2a6c02f4c5",
+        "retrieved_at_utc": "2026-10-29T00:38:43.188763+00:00",
+        "content_preview_sha256": "7702b05f7d2a32e19a6a1b39e7e15c968a68f619ac85740a836a7ccd873699a1",
+        "content_preview_characters": 218,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (operation definition)",
+          "algorithmTags ARRAY, GREEDY"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "medium: the return value (minimum x, -1 when impossible) is inferred from the title; the operation itself is from the preview."
+      },
+      "inferred_spec": "At most once, choose a set of pairwise non-adjacent indices and a non-negative integer x, and add x to each chosen element. Return the minimum x that makes arr non-decreasing, 0 if it already is, and -1 if impossible.",
+      "inferred_interface": {
+        "kind": "function",
+        "name": "minNondecreasingIncrement",
+        "params": [
+          {
+            "name": "arr",
+            "type": "list<integer>"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        },
+        "python_wrapper": "Solution().minNondecreasingIncrement",
+        "javascript_wrapper": "module.exports.minNondecreasingIncrement",
+        "entrypoint": "solve"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    },
+    {
+      "uid": "hack2hire:67b36a7975074948935624c7",
+      "variant_id": "67b36a7975074948935624c7",
+      "variant_ordinal": 1,
+      "group_post_id": "67b2cb8275074948935624c6",
+      "title": "MultiStream Reader",
+      "companies": [
+        "LYFT"
+      ],
+      "algorithm_tags": [
+        "DESIGN",
+        "STACK"
+      ],
+      "source_difficulty": 2,
+      "url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67b2cb8275074948935624c6/practice?questionId=67b36a7975074948935624c7",
+      "preview_source": {
+        "local_source_cache": "data/question_bank/hack2hire/details/67b2cb8275074948935624c6.json",
+        "response_sha256": "07f3b5631fe6593f9f961430ebcb98f6a7f5fdf7d87d29464f950364f1f8fdd1",
+        "retrieved_at_utc": "2026-10-29T00:39:03.914033+00:00",
+        "content_preview_sha256": "5c589b724033f9026e72c77ac841e6bf43e001ad77eb43f42aee4f3a14a66ca9",
+        "content_preview_characters": 759,
+        "scope": "group-level public preview; partial; not variant-specific"
+      },
+      "spec_basis": "inferred",
+      "inference": {
+        "by": "claude-opus-5-5 subagent",
+        "date": "2026-10-28",
+        "basis": [
+          "title",
+          "contentPreview (Stream.read semantics, set of streams; LeetCode 158 relation)",
+          "algorithmTags DESIGN, STACK"
+        ],
+        "official_spec_seen": false,
+        "uncertainty": "medium: stream order (as given) and the read-only signature are inferred; the STACK tag is not explained by this model."
+      },
+      "inferred_spec": "The constructor receives the contents of read-only streams; the solution wraps each in a Stream object exposing only read(k) (returns up to k remaining characters, \"\" when empty) and never inspects stream contents directly. read(n) returns the next n characters of the concatenation of all streams in order, or fewer if all streams are exhausted, buffering any characters read from a Stream but not yet returned (read4 II style).",
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "MultiStreamReader",
+        "constructor": {
+          "params": [
+            {
+              "name": "streams",
+              "type": "list<string>"
+            }
+          ]
+        },
+        "methods": [
+          {
+            "name": "read",
+            "params": [
+              {
+                "name": "n",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "string"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh result containers",
+      "qualification_status": "unknown"
+    }
+  ]
+}

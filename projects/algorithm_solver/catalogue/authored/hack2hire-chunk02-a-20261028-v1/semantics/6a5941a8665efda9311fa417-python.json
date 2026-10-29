@@ -1,0 +1,66 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (DistinctPIIValuesCounter, event layout, distinct PII across events)",
+      "algorithmTags HASH_TABLE, DESIGN"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "medium: per-field identity, empty-means-missing and the getter name are inferred."
+  },
+  "inferred_interface": {
+    "classname": "DistinctPIIValuesCounter",
+    "constructor": {
+      "params": []
+    },
+    "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+    "kind": "class",
+    "methods": [
+      {
+        "name": "processEvent",
+        "params": [
+          {
+            "name": "event",
+            "type": "list<string>[5]"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "getDistinctPIICount",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ]
+  },
+  "language": "python",
+  "native_class": "DistinctPIIValuesCounter",
+  "native_route": "direct-class-v1",
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-native-class-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "hash set insert per field",
+    "complexity_target": "O(1) per event and query/O(distinct) space",
+    "reference": "recount set of (field,value) over the stored event list per query"
+  },
+  "source_sha256": "7f26d1550abaca9520a08debaca81f5c7588073d38694de1e9c08586fcc45d9c",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a5941a8665efda9311fa417",
+  "variant_id": "6a5941a8665efda9311fa417"
+}

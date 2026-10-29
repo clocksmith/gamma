@@ -1,0 +1,56 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (record formats, memo reference)",
+      "algorithmTags STRING",
+      "companies STRIPE"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "high: the amount fallback, one-match-per-invoice and due-date ordering follow the commonly reported follow-up, not visible text."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.matchPayments",
+    "kind": "function",
+    "name": "matchPayments",
+    "params": [
+      {
+        "name": "payments",
+        "type": "list<string \"paymentId,amount,memo\">"
+      },
+      {
+        "name": "invoices",
+        "type": "list<string \"invoiceId,amount,dueDate\">"
+      }
+    ],
+    "python_wrapper": "Solution().matchPayments",
+    "return": {
+      "type": "list<[string paymentId, string|null invoiceId]>"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "payments",
+    "invoices"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "per-amount buckets sorted by (dueDate, id) with advancing pointers skipping matched ids",
+    "complexity_target": "O(P*L + I log I) time/O(I) space",
+    "reference": "linear scan over all invoices per payment"
+  },
+  "source_sha256": "501dafaac16be63fc73993d25079296e1b954711ab57ecfdb938cb3017b1ec16",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6976e8995ed12b33b05f10f7",
+  "variant_id": "6976e8995ed12b33b05f10f7"
+}

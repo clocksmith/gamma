@@ -1,0 +1,73 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title (Live Fraud Detector)",
+      "contentPreview",
+      "algorithmTags HASH_TABLE, DESIGN"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "high: the shared-PII follow-up is inferred from the group title only."
+  },
+  "inferred_interface": {
+    "classname": "DistinctPIIValuesCounter",
+    "constructor": {
+      "params": []
+    },
+    "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+    "kind": "class",
+    "methods": [
+      {
+        "name": "processEvent",
+        "params": [
+          {
+            "name": "event",
+            "type": "list<string>[5]"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "getDistinctPIICount",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      },
+      {
+        "name": "getSharedPIICount",
+        "params": [],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ]
+  },
+  "language": "javascript",
+  "native_class": "DistinctPIIValuesCounter",
+  "native_route": "direct-class-v1",
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-native-class-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "hash map value -> event count, running shared counter incremented on the 1 -> 2 transition",
+    "complexity_target": "O(1) per event and query/O(distinct) space",
+    "reference": "recount per query over the stored event list"
+  },
+  "source_sha256": "b43d9afc6a6e0a289e7ef7f42541e8f02494be0a32c6a7d77132f3d29c748e5f",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a5941f5665efda9311fa41e",
+  "variant_id": "6a5941f5665efda9311fa41e"
+}

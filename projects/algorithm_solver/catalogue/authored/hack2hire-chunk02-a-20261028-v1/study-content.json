@@ -1,0 +1,3210 @@
+{
+  "schema": "gamma.hack2hire-study-content.v1",
+  "authoredBy": "claude-opus-5-5 subagent, 2026-10-28",
+  "specBasis": "inferred",
+  "note": "Authored teaching content over INFERRED specifications; not official statements.",
+  "variants": {
+    "hack2hire:6a7f6aa4d713d873ca7adb44": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Count impressions per adId",
+        "Return at most k adIds",
+        "Order by count descending, then adId ascending"
+      ],
+      "constraints": [
+        "0 <= len(impressions) <= 100000",
+        "1 <= k <= 100000",
+        "timestamps are canonical decimal strings <= 10^12",
+        "adId matches [A-Za-z0-9_-]{1,12}"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Ties are broken by adId ascending",
+          "basis": "no tie rule visible in the preview",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "k is an explicit parameter",
+          "basis": "title and LeetCode 347 relation",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Timestamps are ignored in this variant",
+          "basis": "preview lists them but gives no use for variant 1",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "How are ties between ads with equal counts ordered?",
+        "Should fewer than k ads be returned when fewer exist?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                "1",
+                "b"
+              ],
+              [
+                "2",
+                "a"
+              ],
+              [
+                "3",
+                "b"
+              ],
+              [
+                "9",
+                "c"
+              ],
+              [
+                "9",
+                "a"
+              ]
+            ],
+            2
+          ],
+          "output": [
+            "a",
+            "b"
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Hash count plus size-k heap",
+        "explanation": "Count occurrences in a hash map, then keep the k strongest (count, adId) pairs in a min-heap whose top is the weakest kept entry; drain and reverse.",
+        "chooseWhen": [
+          "k is much smaller than the number of distinct ads"
+        ],
+        "tradeoffs": [
+          "A full sort is simpler and O(d log d); the heap saves time only when k << d"
+        ],
+        "invariants": [
+          "The heap holds the k best entries seen so far under the (count desc, adId asc) order"
+        ],
+        "hints": [
+          "Counting is the easy half; the ordering rule is where mistakes happen.",
+          "Define \"weaker\": lower count, or equal count with larger adId.",
+          "Keep a min-heap of size k keyed by weakness and replace its top when a stronger entry arrives."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "What total order ranks ads, and how can you keep only the top k of it?",
+            "explanation": "The answer is the first k elements of the order (count desc, adId asc). A bounded heap on the reverse order keeps them in O(d log k).",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: The heap holds the k best entries seen so far under the (count desc, adId asc) order.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Counting is the easy half; the ordering rule is where mistakes happen.",
+              "Define \"weaker\": lower count, or equal count with larger adId."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Hash count plus size-k heap\" identically in both languages?",
+            "explanation": "Count occurrences in a hash map, then keep the k strongest (count, adId) pairs in a min-heap whose top is the weakest kept entry; drain and reverse.",
+            "rationale": "Target complexity O(n + d log k) time/O(d) space. A full sort is simpler and O(d log d); the heap saves time only when k << d.",
+            "instructions": [
+              "Build a hash map adId -> count",
+              "Push entries into a heap capped at k, evicting the weakest",
+              "Pop all and reverse to get strongest first",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Keep a min-heap of size k keyed by weakness and replace its top when a stronger entry arrives."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with sorting all distinct ads by (-count, adId)",
+              "Test empty input, k larger than distinct count, and all-tie inputs"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6a7f6b0ad713d873ca7adb47": {
+      "variantLabel": "Variant 2 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Count only impressions with startTime <= timestamp <= endTime",
+        "Return at most k adIds ordered by count desc then adId asc"
+      ],
+      "constraints": [
+        "0 <= len(impressions) <= 100000",
+        "0 <= startTime <= endTime <= 10^12",
+        "timestamps are canonical decimal strings <= 10^12"
+      ],
+      "assumptions": [
+        {
+          "assumption": "The follow-up restricts counting to a closed time window",
+          "basis": "timestamp field in the preview, no visible variant-2 text",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Window bounds are inclusive",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Tie rule as in variant 1",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Are the window bounds inclusive?",
+        "Can timestamps exceed 2^53 (affects parsing)?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                "1",
+                "b"
+              ],
+              [
+                "2",
+                "a"
+              ],
+              [
+                "3",
+                "b"
+              ],
+              [
+                "9",
+                "c"
+              ],
+              [
+                "9",
+                "a"
+              ],
+              [
+                "10",
+                "c"
+              ]
+            ],
+            5,
+            3,
+            9
+          ],
+          "output": [
+            "a",
+            "b",
+            "c"
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Filter, hash count, size-k heap",
+        "explanation": "Parse each decimal timestamp, keep impressions inside the window, then reuse the bounded-heap top-k selection.",
+        "chooseWhen": [
+          "Single query per log"
+        ],
+        "tradeoffs": [
+          "Many window queries over one log would favour sorting by time and a sliding count structure"
+        ],
+        "invariants": [
+          "Only in-window impressions contribute to counts"
+        ],
+        "hints": [
+          "Parse the timestamp string as an integer before comparing.",
+          "Filtering first reduces the problem to variant 1.",
+          "Remember both bounds are inclusive in this inferred spec."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "Which impressions count, and does that change the ranking logic?",
+            "explanation": "Only the counting input changes; ranking and top-k selection are unchanged.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: Only in-window impressions contribute to counts.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Parse the timestamp string as an integer before comparing.",
+              "Filtering first reduces the problem to variant 1."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Filter, hash count, size-k heap\" identically in both languages?",
+            "explanation": "Parse each decimal timestamp, keep impressions inside the window, then reuse the bounded-heap top-k selection.",
+            "rationale": "Target complexity O(n + d log k) time/O(d) space. Many window queries over one log would favour sorting by time and a sliding count structure.",
+            "instructions": [
+              "Parse and filter by window",
+              "Count per adId",
+              "Bounded heap top-k",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Remember both bounds are inclusive in this inferred spec."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare against a filter-then-sort reference",
+              "Test windows that include nothing and windows on exact boundary timestamps"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6a18e226c81f779dc6a230e4": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Process operations in order",
+        "Answer each query for rectangles saved before it",
+        "Allow 90-degree rotation of each rectangle independently"
+      ],
+      "constraints": [
+        "0 <= len(operations) <= 100000",
+        "1 <= a, b <= 10^9"
+      ],
+      "assumptions": [
+        {
+          "assumption": "A rectangle fits when its sides are <= the box sides (equality fits)",
+          "basis": "preview does not state strictness",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "An empty collection fits any box",
+          "basis": "vacuous truth",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Does a rectangle exactly equal to the box fit?",
+        "What is the answer before any rectangle is saved?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                2,
+                5
+              ],
+              [
+                1,
+                5,
+                2
+              ],
+              [
+                1,
+                2,
+                4
+              ],
+              [
+                0,
+                3,
+                3
+              ],
+              [
+                1,
+                5,
+                3
+              ]
+            ]
+          ],
+          "output": [
+            true,
+            true,
+            false,
+            true
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Running maxima of normalized sides",
+        "explanation": "Normalize every rectangle and box to (short, long). A rectangle fits iff short <= boxShort and long <= boxLong, so all fit iff the maximum short side and maximum long side fit.",
+        "chooseWhen": [
+          "Queries interleave with insertions"
+        ],
+        "tradeoffs": [
+          "Constant space; no need to store rectangles"
+        ],
+        "invariants": [
+          "shortMax and longMax equal the maxima over all rectangles saved so far"
+        ],
+        "hints": [
+          "With rotation allowed, only the sorted pair of sides matters.",
+          "Ask what single rectangle is the hardest to fit.",
+          "Track the maximum short side and maximum long side separately."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "When does one rotated rectangle fit in a box, and how does that extend to all saved rectangles?",
+            "explanation": "Sorting sides reduces fit to two comparisons; the conditions are monotone so maxima suffice.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: shortMax and longMax equal the maxima over all rectangles saved so far.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "With rotation allowed, only the sorted pair of sides matters.",
+              "Ask what single rectangle is the hardest to fit."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Running maxima of normalized sides\" identically in both languages?",
+            "explanation": "Normalize every rectangle and box to (short, long). A rectangle fits iff short <= boxShort and long <= boxLong, so all fit iff the maximum short side and maximum long side fit.",
+            "rationale": "Target complexity O(n) time/O(1) auxiliary. Constant space; no need to store rectangles.",
+            "instructions": [
+              "Keep two running maxima",
+              "On save, update them with the normalized sides",
+              "On query, compare with the normalized box",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Track the maximum short side and maximum long side separately."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with re-checking every saved rectangle in both orientations",
+              "Test squares, equal sides, and queries before any save"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:69117148869dd6a56c434054": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Add grants with unique ids and closed validity windows",
+        "Revoke a grant from a given time onward",
+        "Report the balance at any timestamp from all events received so far"
+      ],
+      "constraints": [
+        "Trace length <= 2000",
+        "1 <= amount <= 10^6",
+        "0 <= startTime <= endTime <= 10^9",
+        "credit ids are unique per addCredit"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Revocation is per grant id and applies from its timestamp onward",
+          "basis": "preview mentions revoking credits at a specified time",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Revoking an unknown or already revoked id returns false",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Validity windows are closed",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Method names addCredit/revokeCredit/getBalance",
+          "basis": "author choice; preview shows only the class name",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Is revocation by id or by amount?",
+        "Does a revocation that arrives before its grant take effect later?",
+        "Are windows inclusive at endTime?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              "CreditSystem",
+              "addCredit",
+              "getBalance",
+              "revokeCredit",
+              "getBalance",
+              "getBalance"
+            ],
+            [
+              [],
+              [
+                "a",
+                5,
+                0,
+                10
+              ],
+              [
+                3
+              ],
+              [
+                "a",
+                4
+              ],
+              [
+                3
+              ],
+              [
+                4
+              ]
+            ]
+          ],
+          "output": [
+            null,
+            null,
+            5,
+            true,
+            5,
+            0
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Hash map of grants with revocation times",
+        "explanation": "Store each grant with an optional revocation time. A balance query sums grants whose window contains t and whose revocation time, if any, is later than t; arrival order does not matter because queries recompute from stored state.",
+        "chooseWhen": [
+          "Few grants per query; simplicity over query speed"
+        ],
+        "tradeoffs": [
+          "Balance is O(g); an interval index would be needed for many queries over many grants"
+        ],
+        "invariants": [
+          "Each grant id maps to exactly one stored grant; revokedAt is set at most once"
+        ],
+        "hints": [
+          "Out-of-order arrival is harmless if every query is recomputed from stored facts.",
+          "Store the revocation time on the grant itself.",
+          "A grant counts at t iff start <= t <= end and (not revoked or t < revokedAt)."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "What state lets any later query answer correctly regardless of arrival order?",
+            "explanation": "Storing facts (grant windows and revocation times) instead of a running balance makes queries order-independent.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: Each grant id maps to exactly one stored grant; revokedAt is set at most once.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Out-of-order arrival is harmless if every query is recomputed from stored facts.",
+              "Store the revocation time on the grant itself."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Hash map of grants with revocation times\" identically in both languages?",
+            "explanation": "Store each grant with an optional revocation time. A balance query sums grants whose window contains t and whose revocation time, if any, is later than t; arrival order does not matter because queries recompute from stored state.",
+            "rationale": "Target complexity O(1) add/revoke, O(g) balance; O(g) space. Balance is O(g); an interval index would be needed for many queries over many grants.",
+            "instructions": [
+              "Map id -> [amount, start, end, revokedAt]",
+              "Reject unknown or repeated revocations",
+              "Sum qualifying grants in getBalance",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "A grant counts at t iff start <= t <= end and (not revoked or t < revokedAt)."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare against a scan-all reference on random traces",
+              "Test revocation before add, double revocation and boundary timestamps"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6913b4310ac116974ccedd13": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Add grants with closed windows",
+        "Consume amounts at timestamps, drawing from earliest-expiring active grants",
+        "Answer balances and consumption outcomes from a replay of events received so far"
+      ],
+      "constraints": [
+        "Trace length <= 400",
+        "1 <= amount <= 10^6",
+        "0 <= timestamps <= 10^9",
+        "credit ids unique"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Consumption is all-or-nothing",
+          "basis": "author choice; preview says \"attempt to consume\"",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Draw order: earliest endTime, then startTime, then id",
+          "basis": "HEAP tag; author tie-breaks",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Outcomes are defined by replaying events in (timestamp, arrival) order",
+          "basis": "preview: events arrive out of order",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "If a consumption cannot be fully covered, is it partial or rejected?",
+        "Which grant is consumed first?",
+        "Can a later-arriving earlier event change a previously reported outcome?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              "CreditSystem",
+              "addCredit",
+              "addCredit",
+              "consumeCredit",
+              "getBalance",
+              "getBalance",
+              "consumeCredit",
+              "getBalance"
+            ],
+            [
+              [],
+              [
+                "a",
+                5,
+                0,
+                10
+              ],
+              [
+                "b",
+                5,
+                0,
+                5
+              ],
+              [
+                3,
+                2
+              ],
+              [
+                6
+              ],
+              [
+                3
+              ],
+              [
+                8,
+                1
+              ],
+              [
+                3
+              ]
+            ]
+          ],
+          "output": [
+            null,
+            null,
+            null,
+            true,
+            5,
+            7,
+            true,
+            2
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Replay with an expiry-ordered heap",
+        "explanation": "For each query, sort known events by time and sweep: activate grants at their start, retire them after their end, and satisfy each consumption from a min-heap keyed by (end, start, id) while tracking the active total.",
+        "chooseWhen": [
+          "Correctness under arbitrary arrival order matters more than per-query speed"
+        ],
+        "tradeoffs": [
+          "O(E log E) per query; incremental maintenance is possible but must undo work when earlier events arrive late"
+        ],
+        "invariants": [
+          "During the sweep, total equals the remaining amount of grants active at the current time"
+        ],
+        "hints": [
+          "Because events arrive out of order, recompute from the full history.",
+          "Process consumptions in timestamp order and use the grant that expires soonest.",
+          "Keep a running active total so the all-or-nothing check is O(1)."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "Which grant should a consumption use, and why must the computation be a replay?",
+            "explanation": "Earliest-expiring first wastes the least credit; a replay is the only definition that is independent of arrival order.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: During the sweep, total equals the remaining amount of grants active at the current time.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Because events arrive out of order, recompute from the full history.",
+              "Process consumptions in timestamp order and use the grant that expires soonest."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Replay with an expiry-ordered heap\" identically in both languages?",
+            "explanation": "For each query, sort known events by time and sweep: activate grants at their start, retire them after their end, and satisfy each consumption from a min-heap keyed by (end, start, id) while tracking the active total.",
+            "rationale": "Target complexity O(E log E) per consume/balance query; O(E) space. O(E log E) per query; incremental maintenance is possible but must undo work when earlier events arrive late.",
+            "instructions": [
+              "Store grants and consumptions with arrival indices",
+              "Sweep sorted events with a heap and lazy expiry",
+              "Return the outcome for the triggering consumption or the active total",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Keep a running active total so the all-or-nothing check is O(1)."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare against a unit-by-unit replay with linear minimum selection",
+              "Test late-arriving earlier consumptions and same-timestamp ties"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6791b00b74ebe9de6650635c": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Generate n NFTs",
+        "Choose one value per trait",
+        "Duplicates allowed"
+      ],
+      "constraints": [
+        "1 <= traits <= 8",
+        "1 <= values per trait <= 50",
+        "0 <= n <= 10000",
+        "randoms are integers in [0, 10^15]"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Randomness is injected as a list of integers",
+          "basis": "determinism requirement for this catalogue",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Selection uses r mod size",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "How is randomness supplied or seeded?",
+        "Are trait values weighted?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                "eyes",
+                [
+                  "x",
+                  "y",
+                  "z"
+                ]
+              ],
+              [
+                "nose",
+                [
+                  "p",
+                  "q"
+                ]
+              ]
+            ],
+            2,
+            [
+              4,
+              1,
+              3,
+              2
+            ]
+          ],
+          "output": [
+            [
+              "y",
+              "q"
+            ],
+            [
+              "x",
+              "p"
+            ]
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Direct modulo selection",
+        "explanation": "Walk NFTs and traits in order, consuming one injected random per choice.",
+        "chooseWhen": [
+          "Deterministic, replayable generation"
+        ],
+        "tradeoffs": [
+          "Modulo introduces slight bias for real RNG ranges"
+        ],
+        "invariants": [
+          "k-th random is used for the k-th choice"
+        ],
+        "hints": [
+          "One random per (NFT, trait) pair.",
+          "Index with r mod number of values.",
+          "Keep trait order stable in the output."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do injected integers map to trait values under the variant rule?",
+            "explanation": "Each choice is a deterministic function of the next random, so output is replayable and testable.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: k-th random is used for the k-th choice.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "One random per (NFT, trait) pair.",
+              "Index with r mod number of values."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Direct modulo selection\" identically in both languages?",
+            "explanation": "Walk NFTs and traits in order, consuming one injected random per choice.",
+            "rationale": "Target complexity O(n*t) time/O(n*t) output. Modulo introduces slight bias for real RNG ranges.",
+            "instructions": [
+              "Loop NFTs, then traits",
+              "Append values[r mod len]",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Keep trait order stable in the output."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with an independent literal reference",
+              "Test single-value traits, n = 0"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6791b3fa74ebe9de6650635d": {
+      "variantLabel": "Variant 2 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Generate n NFTs",
+        "Choose each value with probability proportional to its weight",
+        "Duplicates allowed"
+      ],
+      "constraints": [
+        "1 <= traits <= 8",
+        "1 <= values per trait <= 50",
+        "0 <= n <= 10000",
+        "randoms are integers in [0, 10^15]",
+        "1 <= weight <= 10^6"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Randomness is injected as a list of integers",
+          "basis": "determinism requirement for this catalogue",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Selection uses r mod size",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Values carry integer weights",
+          "basis": "BINARY_SEARCH tag only",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "How is randomness supplied or seeded?",
+        "Are trait values weighted?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                "e",
+                [
+                  [
+                    "x",
+                    1
+                  ],
+                  [
+                    "y",
+                    3
+                  ]
+                ]
+              ]
+            ],
+            3,
+            [
+              0,
+              1,
+              7
+            ]
+          ],
+          "output": [
+            [
+              "x"
+            ],
+            [
+              "y"
+            ],
+            [
+              "y"
+            ]
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Prefix sums with binary search",
+        "explanation": "Precompute cumulative weights per trait; map r mod total to the first prefix strictly greater than it with binary search.",
+        "chooseWhen": [
+          "Deterministic, replayable generation"
+        ],
+        "tradeoffs": [
+          "O(log v) per draw vs O(v) linear scan"
+        ],
+        "invariants": [
+          "prefix[i] is the sum of weights 0..i"
+        ],
+        "hints": [
+          "Think of each value as owning an interval of length equal to its weight.",
+          "Prefix sums give interval ends.",
+          "Binary-search the first prefix greater than r mod total."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do injected integers map to trait values under the variant rule?",
+            "explanation": "Each choice is a deterministic function of the next random, so output is replayable and testable.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: prefix[i] is the sum of weights 0..i.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Think of each value as owning an interval of length equal to its weight.",
+              "Prefix sums give interval ends."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Prefix sums with binary search\" identically in both languages?",
+            "explanation": "Precompute cumulative weights per trait; map r mod total to the first prefix strictly greater than it with binary search.",
+            "rationale": "Target complexity O(sum values + n*t*log v) time. O(log v) per draw vs O(v) linear scan.",
+            "instructions": [
+              "Build prefix sums per trait",
+              "Binary-search per choice",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Binary-search the first prefix greater than r mod total."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with an independent literal reference",
+              "Test single-value traits, n = 0"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6791b5ff74ebe9de6650635e": {
+      "variantLabel": "Variant 3 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Generate n pairwise-distinct NFTs",
+        "Sample uniformly without replacement",
+        "Return [] when n exceeds the number of combinations"
+      ],
+      "constraints": [
+        "1 <= traits <= 8",
+        "1 <= values per trait <= 50",
+        "0 <= n <= 10000",
+        "randoms are integers in [0, 10^15]"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Randomness is injected as a list of integers",
+          "basis": "determinism requirement for this catalogue",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Selection uses r mod size",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Uniqueness follow-up",
+          "basis": "preview emphasizes that duplicates are permitted",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "n > total combinations returns []",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "How is randomness supplied or seeded?",
+        "What should happen if more unique NFTs are requested than exist?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                "eyes",
+                [
+                  "x",
+                  "y",
+                  "z"
+                ]
+              ],
+              [
+                "nose",
+                [
+                  "p",
+                  "q"
+                ]
+              ]
+            ],
+            3,
+            [
+              5,
+              0,
+              0
+            ]
+          ],
+          "output": [
+            [
+              "z",
+              "q"
+            ],
+            [
+              "x",
+              "q"
+            ],
+            [
+              "y",
+              "p"
+            ]
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Virtual Fisher-Yates over mixed-radix indices",
+        "explanation": "Number all combinations 0..T-1 in mixed radix. A partial Fisher-Yates shuffle over that virtual array, storing only displaced positions in a hash map, yields distinct indices that decode to NFTs.",
+        "chooseWhen": [
+          "Deterministic, replayable generation"
+        ],
+        "tradeoffs": [
+          "O(n) memory regardless of T; rejection sampling would be simpler but unbounded"
+        ],
+        "invariants": [
+          "positions 0..i-1 hold the emitted indices; the map stores every displaced position >= i"
+        ],
+        "hints": [
+          "Treat each combination as a number in mixed radix.",
+          "Sampling without replacement is a partial shuffle.",
+          "You never need to materialize the shuffle array: a hash map of swapped positions suffices."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do injected integers map to trait values under the variant rule?",
+            "explanation": "Each choice is a deterministic function of the next random, so output is replayable and testable.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: positions 0..i-1 hold the emitted indices; the map stores every displaced position >= i.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Treat each combination as a number in mixed radix.",
+              "Sampling without replacement is a partial shuffle."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Virtual Fisher-Yates over mixed-radix indices\" identically in both languages?",
+            "explanation": "Number all combinations 0..T-1 in mixed radix. A partial Fisher-Yates shuffle over that virtual array, storing only displaced positions in a hash map, yields distinct indices that decode to NFTs.",
+            "rationale": "Target complexity O(n*t) time/O(n) map. O(n) memory regardless of T; rejection sampling would be simpler but unbounded.",
+            "instructions": [
+              "Compute T",
+              "Run partial Fisher-Yates with a displacement map",
+              "Decode indices in mixed radix",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "You never need to materialize the shuffle array: a hash map of swapped positions suffices."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with an independent literal reference",
+              "Test single-value traits, n = 0 and n > T"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6a611985c16dcdf8ba4ff8a2": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Resolve each company to its top-level ancestor",
+        "Group loan ids by top-level company",
+        "Sort groups and ids ascending"
+      ],
+      "constraints": [
+        "<= 50000 parent relations, acyclic, at most one parent per company",
+        "<= 50000 loans with unique ids"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Group is about loans and parent companies",
+          "basis": "title only; the cached preview text belongs to a different problem",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Companies without a parent entry are top-level",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Output lists sorted loan ids per top company",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "What is the input shape for loans and company relations?",
+        "Should top-level companies with no loans appear?",
+        "The public preview text describes a PII counter; which problem does this group actually ask?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                "b",
+                "a"
+              ],
+              [
+                "c",
+                "b"
+              ],
+              [
+                "e",
+                "d"
+              ]
+            ],
+            [
+              [
+                "L2",
+                "c"
+              ],
+              [
+                "L1",
+                "a"
+              ],
+              [
+                "L3",
+                "e"
+              ],
+              [
+                "L4",
+                "z"
+              ]
+            ]
+          ],
+          "output": [
+            [
+              "a",
+              [
+                "L1",
+                "L2"
+              ]
+            ],
+            [
+              "d",
+              [
+                "L3"
+              ]
+            ],
+            [
+              "z",
+              [
+                "L4"
+              ]
+            ]
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Memoized root finding and hash grouping",
+        "explanation": "Follow parent links iteratively to a root and cache the root for every company on the path, then group loans under their root.",
+        "chooseWhen": [
+          "Deep hierarchies where repeated walks would be quadratic"
+        ],
+        "tradeoffs": [
+          "Memo uses O(companies) memory"
+        ],
+        "invariants": [
+          "root[c] is the top-level ancestor of c whenever present"
+        ],
+        "hints": [
+          "The top-level company is the root of a parent forest.",
+          "Repeated walks up a long chain are wasteful.",
+          "Cache the root for every node visited (path compression)."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do you find each loan's top-level company efficiently?",
+            "explanation": "Root finding with memoization makes total work linear in the number of companies plus loans.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: root[c] is the top-level ancestor of c whenever present.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "The top-level company is the root of a parent forest.",
+              "Repeated walks up a long chain are wasteful."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Memoized root finding and hash grouping\" identically in both languages?",
+            "explanation": "Follow parent links iteratively to a root and cache the root for every company on the path, then group loans under their root.",
+            "rationale": "Target complexity O((p + l) + l log l) time/O(p + l) space. Memo uses O(companies) memory.",
+            "instructions": [
+              "Build child -> parent map",
+              "Iterative find with memo",
+              "Group, sort ids, sort groups",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Cache the root for every node visited (path compression)."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with an unmemoized walk",
+              "Test a 50000-long chain and loans on unknown companies"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6a7231c748af2ae18e995d8b": {
+      "variantLabel": "Variant 2 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Resolve each loan to its top-level company",
+        "Sum amounts per top company",
+        "Sort by total desc then name asc"
+      ],
+      "constraints": [
+        "<= 50000 acyclic relations",
+        "<= 50000 loans, 0 <= amount <= 10^9"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Aggregation of amounts is the follow-up",
+          "basis": "title only; preview mismatch",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Sort by total descending, then name",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Is the output totals or groups?",
+        "How are equal totals ordered?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                "b",
+                "a"
+              ],
+              [
+                "c",
+                "b"
+              ],
+              [
+                "e",
+                "d"
+              ]
+            ],
+            [
+              [
+                "L2",
+                "c",
+                5
+              ],
+              [
+                "L1",
+                "a",
+                5
+              ],
+              [
+                "L3",
+                "e",
+                10
+              ],
+              [
+                "L4",
+                "z",
+                1
+              ]
+            ]
+          ],
+          "output": [
+            [
+              "a",
+              10
+            ],
+            [
+              "d",
+              10
+            ],
+            [
+              "z",
+              1
+            ]
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Memoized root finding and hash totals",
+        "explanation": "Same root finding as variant 1, accumulating amounts per root and sorting by (-total, name).",
+        "chooseWhen": [
+          "Totals are needed rather than loan lists"
+        ],
+        "tradeoffs": [
+          "Same as variant 1"
+        ],
+        "invariants": [
+          "totals[r] is the sum of processed loans whose company resolves to r"
+        ],
+        "hints": [
+          "Reuse variant 1's root finder.",
+          "Accumulate instead of collecting ids.",
+          "Sort with a composite key."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "What changes from variant 1?",
+            "explanation": "Only the aggregation and the ordering key.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: totals[r] is the sum of processed loans whose company resolves to r.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Reuse variant 1's root finder.",
+              "Accumulate instead of collecting ids."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Memoized root finding and hash totals\" identically in both languages?",
+            "explanation": "Same root finding as variant 1, accumulating amounts per root and sorting by (-total, name).",
+            "rationale": "Target complexity O(p + l + g log g) time/O(p + l) space. Same as variant 1.",
+            "instructions": [
+              "Root finder with memo",
+              "Accumulate totals",
+              "Sort by (-total, name)",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Sort with a composite key."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with a walk-per-loan reference",
+              "Test zero amounts and ties"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6768c33400d569e371e007ec": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Count, for every store pair, the sessions containing both",
+        "For each store list the stores with its maximum co-occurrence",
+        "Sort stores and associated lists by name"
+      ],
+      "constraints": [
+        "<= 2000 sessions",
+        "<= 20 stores per session (inferred bound)",
+        "store names [a-z0-9]{1,10}"
+      ],
+      "assumptions": [
+        {
+          "assumption": "\"Frequently visited together\" means maximum co-occurrence",
+          "basis": "no threshold visible in the preview",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Duplicates inside a session count once",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Stores that never co-occur get []",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Is there a minimum co-occurrence threshold?",
+        "Should ties all be returned?",
+        "Are repeated visits in one session counted once?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "b",
+                "c"
+              ],
+              [
+                "a",
+                "b",
+                "c"
+              ],
+              [
+                "d"
+              ]
+            ]
+          ],
+          "output": [
+            [
+              "a",
+              [
+                "b"
+              ]
+            ],
+            [
+              "b",
+              [
+                "a",
+                "c"
+              ]
+            ],
+            [
+              "c",
+              [
+                "b"
+              ]
+            ],
+            [
+              "d",
+              []
+            ]
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Pairwise co-occurrence counting",
+        "explanation": "Deduplicate each session, increment a nested hash count for every unordered pair (both directions), then per store take the maximum and collect ties.",
+        "chooseWhen": [
+          "Sessions are short"
+        ],
+        "tradeoffs": [
+          "Quadratic in session size; very long sessions would need sampling or sparse methods"
+        ],
+        "invariants": [
+          "pairs[a][b] equals the number of processed sessions containing both a and b"
+        ],
+        "hints": [
+          "Co-occurrence is a pair count.",
+          "Deduplicate within a session before counting.",
+          "For each store, the associated list is the argmax set of its row."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "What statistic defines \"high correlation\", and how do you compute it for all pairs?",
+            "explanation": "Session co-occurrence counts computed per session pair; maximum per row defines association in this inferred spec.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: pairs[a][b] equals the number of processed sessions containing both a and b.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Co-occurrence is a pair count.",
+              "Deduplicate within a session before counting."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Pairwise co-occurrence counting\" identically in both languages?",
+            "explanation": "Deduplicate each session, increment a nested hash count for every unordered pair (both directions), then per store take the maximum and collect ties.",
+            "rationale": "Target complexity O(sum s_i^2 + S log S) time/O(pairs) space. Quadratic in session size; very long sessions would need sampling or sparse methods.",
+            "instructions": [
+              "Dedupe and sort each session",
+              "Count pairs in both directions",
+              "Per store compute max and sorted ties",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "For each store, the associated list is the argmax set of its row."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with a reference counting each pair over all sessions",
+              "Test singleton sessions and repeated stores"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6a91ef7ccddc54478ddf4a34": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Group scores by student",
+        "Find the highest mean",
+        "Return its floor"
+      ],
+      "constraints": [
+        "<= 100000 entries",
+        "scores are canonical integers in [-10^9, 10^9]"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Floor toward negative infinity",
+          "basis": "common version of this problem, not visible text",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Empty input returns 0",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Should the average be floored, truncated or exact?",
+        "What is returned for empty input?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                "a",
+                "5"
+              ],
+              [
+                "a",
+                "6"
+              ],
+              [
+                "b",
+                "4"
+              ]
+            ]
+          ],
+          "output": 5,
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        },
+        {
+          "input": [
+            [
+              [
+                "a",
+                "-1"
+              ],
+              [
+                "a",
+                "0"
+              ],
+              [
+                "b",
+                "-3"
+              ]
+            ]
+          ],
+          "output": -1,
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Hash sums with exact comparison",
+        "explanation": "Accumulate (sum, count) per student, compare means by cross-multiplication, and floor-divide the winner exactly.",
+        "chooseWhen": [
+          "Exact numerics are required"
+        ],
+        "tradeoffs": [
+          "Avoids floating-point rounding at the cost of wider integers"
+        ],
+        "invariants": [
+          "best is the (sum, count) with the largest exact mean so far"
+        ],
+        "hints": [
+          "Parse score strings to integers.",
+          "Compare a/b and c/d via a*d vs c*b.",
+          "Floor of a negative mean rounds down, not toward zero."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do you compare and round means without floating point error?",
+            "explanation": "Integer cross-multiplication and floor division are exact.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: best is the (sum, count) with the largest exact mean so far.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Parse score strings to integers.",
+              "Compare a/b and c/d via a*d vs c*b."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Hash sums with exact comparison\" identically in both languages?",
+            "explanation": "Accumulate (sum, count) per student, compare means by cross-multiplication, and floor-divide the winner exactly.",
+            "rationale": "Target complexity O(n) time/O(students) space. Avoids floating-point rounding at the cost of wider integers.",
+            "instructions": [
+              "Accumulate sums/counts",
+              "Pick the best by cross-multiplication",
+              "Floor-divide exactly",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Floor of a negative mean rounds down, not toward zero."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with Fraction-based reference",
+              "Test negative means and empty input"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:684bada44023c4f502877df5": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Parse ALLOW/DENY rules with single IPs or CIDR blocks",
+        "Apply the first matching rule",
+        "Deny when no rule matches"
+      ],
+      "constraints": [
+        "<= 1000 rules",
+        "prefix length 0..32",
+        "trace length <= 3000"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Default deny",
+          "basis": "not visible; author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Host bits in a CIDR base are ignored",
+          "basis": "CIDR definition in the preview",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Method isAllowed(ip)",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "What is the result when no rule matches?",
+        "Is the constructor given the rule list?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              "IpFirewall",
+              "isAllowed",
+              "isAllowed",
+              "isAllowed"
+            ],
+            [
+              [
+                [
+                  [
+                    "DENY",
+                    "10.0.0.5"
+                  ],
+                  [
+                    "ALLOW",
+                    "10.1.2.3/8"
+                  ],
+                  [
+                    "ALLOW",
+                    "0.0.0.0/0"
+                  ]
+                ]
+              ],
+              [
+                "10.0.0.5"
+              ],
+              [
+                "10.200.0.1"
+              ],
+              [
+                "8.8.8.8"
+              ]
+            ]
+          ],
+          "output": [
+            null,
+            false,
+            true,
+            true
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Pre-parsed masks with first-match scan",
+        "explanation": "Convert each rule to (mask, masked base, allow) 32-bit integers; a query converts the IP once and returns the action of the first rule with (ip & mask) == base.",
+        "chooseWhen": [
+          "Moderate rule counts"
+        ],
+        "tradeoffs": [
+          "O(R) per query; a binary trie with rule priorities gives O(32)"
+        ],
+        "invariants": [
+          "Rules are kept in input order so the first match wins"
+        ],
+        "hints": [
+          "An IP is a 32-bit integer.",
+          "A prefix of length k is a mask of k leading ones.",
+          "Compare masked values, scanning rules in order."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do you test CIDR membership with bit operations?",
+            "explanation": "Membership is (ip & mask) == (base & mask), with mask = k leading one bits.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: Rules are kept in input order so the first match wins.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "An IP is a 32-bit integer.",
+              "A prefix of length k is a mask of k leading ones."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Pre-parsed masks with first-match scan\" identically in both languages?",
+            "explanation": "Convert each rule to (mask, masked base, allow) 32-bit integers; a query converts the IP once and returns the action of the first rule with (ip & mask) == base.",
+            "rationale": "Target complexity O(R) per query/O(R) space. O(R) per query; a binary trie with rule priorities gives O(32).",
+            "instructions": [
+              "Parse dotted quads to integers",
+              "Build masks (k = 0 gives mask 0)",
+              "First-match scan",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Compare masked values, scanning rules in order."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with a binary-string prefix reference",
+              "Test /0, /32, host bits in bases and default deny"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6987b235fedd959e9aa44515": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Allocate shares to price levels from highest to lowest",
+        "Within a scarce level hand out one share at a time round-robin by timestamp",
+        "Return sorted users with zero shares"
+      ],
+      "constraints": [
+        "<= 50000 bids, one per user",
+        "1 <= shares, price <= 10^9",
+        "0 <= totalShares <= 10^12"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Round-robin by timestamp at the marginal level",
+          "basis": "commonly reported version",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Timestamp ties keep input order",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "How are shares split among bidders at the same price?",
+        "What is returned: allocations or unallotted users?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                1,
+                5,
+                5,
+                0
+              ],
+              [
+                2,
+                7,
+                8,
+                1
+              ],
+              [
+                3,
+                3,
+                5,
+                2
+              ],
+              [
+                4,
+                2,
+                5,
+                3
+              ],
+              [
+                5,
+                1,
+                4,
+                0
+              ]
+            ],
+            9
+          ],
+          "output": [
+            4,
+            5
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Greedy by price with a round-robin shortcut",
+        "explanation": "Full levels are satisfied while shares last. At the first level that cannot be satisfied, one round of round-robin gives a share to the first `remaining` bidders by timestamp; everyone else and all lower levels get nothing.",
+        "chooseWhen": [
+          "Large share counts where simulation is too slow"
+        ],
+        "tradeoffs": [
+          "Relies on the observation that only the first round decides who gets zero"
+        ],
+        "invariants": [
+          "remaining equals totalShares minus shares already allotted to higher levels"
+        ],
+        "hints": [
+          "Sort by price descending.",
+          "Only the marginal level needs round-robin.",
+          "In round-robin, a bidder gets zero exactly when shares run out before their first turn."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "Who ends with zero shares, without simulating every share?",
+            "explanation": "Bidders below the marginal level and those whose timestamp rank at the marginal level is >= the remaining shares.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: remaining equals totalShares minus shares already allotted to higher levels.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Sort by price descending.",
+              "Only the marginal level needs round-robin."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Greedy by price with a round-robin shortcut\" identically in both languages?",
+            "explanation": "Full levels are satisfied while shares last. At the first level that cannot be satisfied, one round of round-robin gives a share to the first `remaining` bidders by timestamp; everyone else and all lower levels get nothing.",
+            "rationale": "Target complexity O(n log n) time/O(n) space. Relies on the observation that only the first round decides who gets zero.",
+            "instructions": [
+              "Sort bids by (-price, timestamp, index)",
+              "Process levels",
+              "Collect and sort unallotted ids",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "In round-robin, a bidder gets zero exactly when shares run out before their first turn."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with literal one-share simulation",
+              "Test zero shares and exact fits"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6a90b63acddc54478ddf423a": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Build trees from [child, parent] relations",
+        "Find the tree with the most nodes",
+        "Return its root (smaller id on ties)"
+      ],
+      "constraints": [
+        "<= 100000 relations",
+        "ids in [0, 10^9]",
+        "acyclic, one parent per child"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Ties go to the smaller root id",
+          "basis": "not visible; author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Empty relations return -1",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "How are equal-size trees broken?",
+        "What is returned for no relations?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                2,
+                1
+              ],
+              [
+                3,
+                1
+              ],
+              [
+                5,
+                4
+              ],
+              [
+                6,
+                4
+              ],
+              [
+                7,
+                6
+              ]
+            ]
+          ],
+          "output": 4,
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Children adjacency plus iterative DFS",
+        "explanation": "Roots are parents that never appear as children; count each root's subtree with an explicit stack.",
+        "chooseWhen": [
+          "Deep trees where recursion would overflow"
+        ],
+        "tradeoffs": [
+          "O(n) memory for adjacency"
+        ],
+        "invariants": [
+          "Every node is visited exactly once from its unique root"
+        ],
+        "hints": [
+          "Roots are exactly the parents that are never children.",
+          "Count tree size with DFS from each root.",
+          "Use an explicit stack for deep chains."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do you identify roots and their tree sizes?",
+            "explanation": "Roots are non-children; DFS from each root counts its nodes once.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: Every node is visited exactly once from its unique root.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Roots are exactly the parents that are never children.",
+              "Count tree size with DFS from each root."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Children adjacency plus iterative DFS\" identically in both languages?",
+            "explanation": "Roots are parents that never appear as children; count each root's subtree with an explicit stack.",
+            "rationale": "Target complexity O(n) time/O(n) space. O(n) memory for adjacency.",
+            "instructions": [
+              "Build children map and child set",
+              "Iterative DFS per root",
+              "Track best (size, -root)",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Use an explicit stack for deep chains."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with a walk-to-root tally",
+              "Test equal sizes and long chains"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6a5941a8665efda9311fa417": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Process events of five strings",
+        "Count distinct PII values across all processed events"
+      ],
+      "constraints": [
+        "trace length <= 20000",
+        "PII fields up to 30 characters"
+      ],
+      "assumptions": [
+        {
+          "assumption": "PII identity is (field, value)",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Empty strings are missing and ignored",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Separate getter getDistinctPIICount",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Is the same string in two different fields one value or two?",
+        "Do empty fields count?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              "DistinctPIIValuesCounter",
+              "processEvent",
+              "getDistinctPIICount",
+              "processEvent",
+              "getDistinctPIICount"
+            ],
+            [
+              [],
+              [
+                [
+                  "A",
+                  "x",
+                  "1",
+                  "",
+                  "s"
+                ]
+              ],
+              [],
+              [
+                [
+                  "B",
+                  "x",
+                  "2",
+                  "x",
+                  "s"
+                ]
+              ],
+              []
+            ]
+          ],
+          "output": [
+            null,
+            null,
+            3,
+            null,
+            5
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Hash set of (field, value)",
+        "explanation": "Insert every non-empty (field, value) pair into a set; the count is the set size.",
+        "chooseWhen": [
+          "Streaming events"
+        ],
+        "tradeoffs": [
+          "Memory grows with distinct values"
+        ],
+        "invariants": [
+          "The set contains exactly the distinct non-empty PII pairs seen"
+        ],
+        "hints": [
+          "Distinct counting is a set.",
+          "Decide how to key values from different fields.",
+          "Skip empty fields."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "What key identifies one PII value?",
+            "explanation": "The (field, value) pair, so a set gives distinct counts in O(1).",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: The set contains exactly the distinct non-empty PII pairs seen.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Distinct counting is a set.",
+              "Decide how to key values from different fields."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Hash set of (field, value)\" identically in both languages?",
+            "explanation": "Insert every non-empty (field, value) pair into a set; the count is the set size.",
+            "rationale": "Target complexity O(1) per event and query/O(distinct) space. Memory grows with distinct values.",
+            "instructions": [
+              "Iterate fields 1..4",
+              "Insert non-empty pairs",
+              "Return set size",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Skip empty fields."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with recounting all events",
+              "Test empty fields and repeated events"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6a5941f5665efda9311fa41e": {
+      "variantLabel": "Variant 2 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Count distinct PII values",
+        "Count PII values shared by at least two events"
+      ],
+      "constraints": [
+        "trace length <= 20000"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Shared-PII count is the fraud signal",
+          "basis": "title only",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "PII identity (field, value), empty ignored",
+          "basis": "as variant 1",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "What exactly does the fraud detector report?",
+        "Does one event repeating a value count twice?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              "DistinctPIIValuesCounter",
+              "processEvent",
+              "processEvent",
+              "getDistinctPIICount",
+              "getSharedPIICount"
+            ],
+            [
+              [],
+              [
+                [
+                  "A",
+                  "x",
+                  "1",
+                  "",
+                  "s"
+                ]
+              ],
+              [
+                [
+                  "B",
+                  "x",
+                  "2",
+                  "x",
+                  "s"
+                ]
+              ],
+              [],
+              []
+            ]
+          ],
+          "output": [
+            null,
+            null,
+            null,
+            5,
+            2
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Hash counts with transition counter",
+        "explanation": "Track how many events contain each value; increment the shared counter when a count goes from 1 to 2.",
+        "chooseWhen": [
+          "Queries must be O(1)"
+        ],
+        "tradeoffs": [
+          "Counter update is O(1); no rescans"
+        ],
+        "invariants": [
+          "shared equals the number of values whose event count is >= 2"
+        ],
+        "hints": [
+          "Count events per value, not occurrences.",
+          "Deduplicate within one event first.",
+          "Update the shared counter only on the 1 -> 2 transition."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How can the shared count be maintained without rescanning?",
+            "explanation": "The count only changes when a value reaches exactly two events.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: shared equals the number of values whose event count is >= 2.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Count events per value, not occurrences.",
+              "Deduplicate within one event first."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Hash counts with transition counter\" identically in both languages?",
+            "explanation": "Track how many events contain each value; increment the shared counter when a count goes from 1 to 2.",
+            "rationale": "Target complexity O(1) per event and query/O(distinct) space. Counter update is O(1); no rescans.",
+            "instructions": [
+              "Dedupe event fields",
+              "Increment per-value counts",
+              "Bump shared on reaching 2",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Update the shared counter only on the 1 -> 2 transition."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with recounting all events",
+              "Test repeated identical events"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:697699035ed12b33b05f0f4e": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Parse payment and invoice records",
+        "Extract an invoice reference from the memo",
+        "Return per payment the referenced existing invoice or null"
+      ],
+      "constraints": [
+        "<= 20000 payments and invoices",
+        "integer amounts <= 999999999",
+        "dates YYYY-MM-DD"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Structured [paymentId, invoiceId|null] output",
+          "basis": "author choice instead of a formatted message",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Reference grammar: \"paying off:\" then [A-Za-z0-9_-]+",
+          "basis": "preview example",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Memo may contain commas",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "What output format is expected for a match?",
+        "Can a memo contain commas?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              "p1,100,paying off:i2",
+              "p2,100,",
+              "p3,50,note, paying off:i9"
+            ],
+            [
+              "i1,100,2026-02-01",
+              "i2,100,2026-01-01"
+            ]
+          ],
+          "output": [
+            [
+              "p1",
+              "i2"
+            ],
+            [
+              "p2",
+              null
+            ],
+            [
+              "p3",
+              null
+            ]
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Marker search and hash lookup",
+        "explanation": "Split each payment at its first two commas, find the marker, read the id characters after it, and look the id up in a set of invoice ids.",
+        "chooseWhen": [
+          "Memos follow the documented reference pattern"
+        ],
+        "tradeoffs": [
+          "Exact marker match only; fuzzy memos are not handled"
+        ],
+        "invariants": [
+          "Invoice id set is built once"
+        ],
+        "hints": [
+          "Only the first two commas separate fields.",
+          "Find \"paying off:\" and read id characters after it.",
+          "Check the id against a set of invoice ids."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do you parse records robustly and find the reference?",
+            "explanation": "Limited splitting keeps commas in memos; a set gives O(1) existence checks.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: Invoice id set is built once.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Only the first two commas separate fields.",
+              "Find \"paying off:\" and read id characters after it."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Marker search and hash lookup\" identically in both languages?",
+            "explanation": "Split each payment at its first two commas, find the marker, read the id characters after it, and look the id up in a set of invoice ids.",
+            "rationale": "Target complexity O(P*L + I) time/O(I) space. Exact marker match only; fuzzy memos are not handled.",
+            "instructions": [
+              "Build invoice id set",
+              "Parse each payment",
+              "Extract reference and look up",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Check the id against a set of invoice ids."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with a regex-based reference",
+              "Test empty memos, unknown ids and commas in memos"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6976e8995ed12b33b05f10f7": {
+      "variantLabel": "Variant 2 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Match by memo reference when the invoice exists and is unmatched",
+        "Otherwise fall back to an unmatched invoice with the same amount and earliest due date",
+        "Match each invoice at most once"
+      ],
+      "constraints": [
+        "<= 20000 payments and invoices",
+        "invoice ids unique"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Amount-based fallback with earliest due date",
+          "basis": "commonly reported follow-up",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Each invoice matched at most once",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Tie by invoiceId ascending",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Can one invoice be paid by several payments?",
+        "Which invoice wins when several have the same amount?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              "p1,100,paying off:i2",
+              "p2,100,",
+              "p3,50,note, paying off:i9",
+              "p4,100,paying off:i2"
+            ],
+            [
+              "i1,100,2026-02-01",
+              "i2,100,2026-01-01",
+              "i3,100,2026-01-15"
+            ]
+          ],
+          "output": [
+            [
+              "p1",
+              "i2"
+            ],
+            [
+              "p2",
+              "i3"
+            ],
+            [
+              "p3",
+              null
+            ],
+            [
+              "p4",
+              "i1"
+            ]
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Per-amount sorted buckets with advancing pointers",
+        "explanation": "Bucket invoices by amount, sorted by (dueDate, id). A fallback advances a pointer past already matched invoices, so each bucket is scanned once overall.",
+        "chooseWhen": [
+          "Many payments competing for invoices of equal amounts"
+        ],
+        "tradeoffs": [
+          "Pointer skipping is amortized O(1); a heap would also work"
+        ],
+        "invariants": [
+          "Every invoice before a bucket pointer is already matched"
+        ],
+        "hints": [
+          "Process the memo rule first, the amount rule second.",
+          "Group invoices by amount and sort each group by due date.",
+          "Skip matched invoices lazily with a pointer."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do you pick the fallback invoice quickly while respecting single use?",
+            "explanation": "Sorted buckets plus a monotone pointer give the earliest unmatched invoice per amount.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: Every invoice before a bucket pointer is already matched.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Process the memo rule first, the amount rule second.",
+              "Group invoices by amount and sort each group by due date."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Per-amount sorted buckets with advancing pointers\" identically in both languages?",
+            "explanation": "Bucket invoices by amount, sorted by (dueDate, id). A fallback advances a pointer past already matched invoices, so each bucket is scanned once overall.",
+            "rationale": "Target complexity O(P*L + I log I) time/O(I) space. Pointer skipping is amortized O(1); a heap would also work.",
+            "instructions": [
+              "Bucket and sort invoices",
+              "Memo match if valid and unused",
+              "Else bucket fallback; mark used",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Skip matched invoices lazily with a pointer."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with a linear-scan reference",
+              "Test references to already matched invoices"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6a226625981072682a6f216b": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Return the transpose of a square matrix",
+        "Partition work across up to numThreads workers"
+      ],
+      "constraints": [
+        "1 <= n <= 700",
+        "1 <= numThreads <= 64",
+        "values in [-10^9, 10^9]"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Threads are simulated deterministically",
+          "basis": "pure-function modelling rule for this catalogue",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Only the transpose is observable",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Must the transpose be in place?",
+        "Is any per-worker output expected?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                1,
+                2
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            3
+          ],
+          "output": [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Contiguous row blocks per worker",
+        "explanation": "Split output rows into min(numThreads, n) balanced contiguous blocks; each worker writes only its block, so workers never conflict.",
+        "chooseWhen": [
+          "Workers must not share writes"
+        ],
+        "tradeoffs": [
+          "Row blocks avoid write conflicts; in-place swaps would need pairwise ownership"
+        ],
+        "invariants": [
+          "Each output row is written by exactly one worker"
+        ],
+        "hints": [
+          "Transpose is out[j][i] = in[i][j].",
+          "Give each worker disjoint output rows.",
+          "Balance blocks: the first n mod w workers get one extra row."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do you split transpose work so workers never write the same cell?",
+            "explanation": "Partitioning output rows gives disjoint writes and identical results under any schedule.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: Each output row is written by exactly one worker.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Transpose is out[j][i] = in[i][j].",
+              "Give each worker disjoint output rows."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Contiguous row blocks per worker\" identically in both languages?",
+            "explanation": "Split output rows into min(numThreads, n) balanced contiguous blocks; each worker writes only its block, so workers never conflict.",
+            "rationale": "Target complexity O(n^2) time/O(n^2) output. Row blocks avoid write conflicts; in-place swaps would need pairwise ownership.",
+            "instructions": [
+              "Compute block sizes",
+              "Fill each block",
+              "Return the new matrix",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Balance blocks: the first n mod w workers get one extra row."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with zip-based transpose",
+              "Test numThreads > n and n = 1"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:69fa55d2661bab75bbca3b9d": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Remove the listed horizontal and vertical bars",
+        "Return the largest rectangular opening area"
+      ],
+      "constraints": [
+        "1 <= n, m <= 100000",
+        "removed bars distinct and within range"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Listed bars are removed (not optional)",
+          "basis": "commonly reported Expedia version",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Rectangle, not square",
+          "basis": "title says hole, not square",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Bars sit inside a fixed frame",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Must the hole be square as in LeetCode 2943?",
+        "Are listed bars mandatory removals or candidates?"
+      ],
+      "examples": [
+        {
+          "input": [
+            6,
+            6,
+            [
+              4
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          "output": 6,
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Longest consecutive run per direction",
+        "explanation": "Removing k consecutive bars merges k+1 unit gaps; the answer is the product of the best horizontal and vertical gaps.",
+        "chooseWhen": [
+          "Independent dimensions"
+        ],
+        "tradeoffs": [
+          "Sorting is O(h log h); a set-based run scan is O(h)"
+        ],
+        "invariants": [
+          "run is the length of the current consecutive streak of removed bars"
+        ],
+        "hints": [
+          "Rows and columns are independent.",
+          "A gap after removing k adjacent bars has width k + 1.",
+          "Find the longest run of consecutive removed indices."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How does removing adjacent bars change the largest gap?",
+            "explanation": "Each run of k consecutive removed bars produces a gap of k + 1.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: run is the length of the current consecutive streak of removed bars.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Rows and columns are independent.",
+              "A gap after removing k adjacent bars has width k + 1."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Longest consecutive run per direction\" identically in both languages?",
+            "explanation": "Removing k consecutive bars merges k+1 unit gaps; the answer is the product of the best horizontal and vertical gaps.",
+            "rationale": "Target complexity O(h log h + v log v) time/O(h+v) space. Sorting is O(h log h); a set-based run scan is O(h).",
+            "instructions": [
+              "Sort removed bars",
+              "Find longest consecutive run",
+              "Multiply (run + 1) values",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Find the longest run of consecutive removed indices."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with surviving-bar gap reference",
+              "Test no removals and all bars removed"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6933c5c85f306485cc5f07c0": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Find 4-connected islands",
+        "Compute each island perimeter",
+        "Return the maximum (0 if no land)"
+      ],
+      "constraints": [
+        "grid up to 1000 per side, area <= 250000"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Return 0 when there is no land",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Is diagonal adjacency excluded?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              [
+                "1",
+                "1",
+                "0"
+              ],
+              [
+                "0",
+                "0",
+                "1"
+              ]
+            ]
+          ],
+          "output": 6,
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Iterative DFS counting exposed edges",
+        "explanation": "Flood-fill each island with a stack; every neighbour that is water or outside the grid adds one perimeter edge.",
+        "chooseWhen": [
+          "Large grids where recursion depth is risky"
+        ],
+        "tradeoffs": [
+          "O(rc) extra visited memory"
+        ],
+        "invariants": [
+          "Each land cell is pushed exactly once"
+        ],
+        "hints": [
+          "Perimeter counts edges facing water or the border.",
+          "Flood-fill each island once.",
+          "Use an explicit stack."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do you compute an island's perimeter during traversal?",
+            "explanation": "Count, for every land cell, its non-land neighbours.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: Each land cell is pushed exactly once.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Perimeter counts edges facing water or the border.",
+              "Flood-fill each island once."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Iterative DFS counting exposed edges\" identically in both languages?",
+            "explanation": "Flood-fill each island with a stack; every neighbour that is water or outside the grid adds one perimeter edge.",
+            "rationale": "Target complexity O(rc) time/O(rc) space. O(rc) extra visited memory.",
+            "instructions": [
+              "Visited matrix",
+              "Stack DFS per unvisited land cell",
+              "Track maximum perimeter",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Use an explicit stack."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with 4*cells - 2*adjacencies via union-find",
+              "Test snake-shaped islands and full grids"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:6a7253d448af2ae18e995e99": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Apply at most one operation adding x to a non-adjacent index set",
+        "Return the minimum x making arr non-decreasing, or -1"
+      ],
+      "constraints": [
+        "0 <= n <= 100000",
+        "values in [-10^9, 10^9]"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Return minimum x, 0 when already sorted, -1 when impossible",
+          "basis": "title; operation from preview",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "What is returned when no operation works?",
+        "Is x = 0 (no-op) allowed?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              5,
+              2,
+              6,
+              3,
+              9
+            ]
+          ],
+          "output": 3,
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        },
+        {
+          "input": [
+            [
+              3,
+              1,
+              0
+            ]
+          ],
+          "output": -1,
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Forced selection at descents",
+        "explanation": "At every descent arr[i] > arr[i+1], index i+1 must be chosen and i must not. Adjacent forced indices are impossible. x must be at least the largest descent, and larger x only hurts, so test x = max descent against each forced index's right neighbour.",
+        "chooseWhen": [
+          "Linear-time decision"
+        ],
+        "tradeoffs": [
+          "Relies on a monotonicity argument instead of search"
+        ],
+        "invariants": [
+          "Extra chosen indices never help, so the forced set is optimal"
+        ],
+        "hints": [
+          "Look only at positions where the array decreases.",
+          "At a descent, which of the two indices must receive x?",
+          "Choosing x larger than necessary can only break other pairs."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "Which indices must be chosen, and what is the smallest valid x?",
+            "explanation": "Descents force the right element; the smallest x is the largest descent, then verify the forced elements do not overtake their right neighbours.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: Extra chosen indices never help, so the forced set is optimal.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "Look only at positions where the array decreases.",
+              "At a descent, which of the two indices must receive x?"
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Forced selection at descents\" identically in both languages?",
+            "explanation": "At every descent arr[i] > arr[i+1], index i+1 must be chosen and i must not. Adjacent forced indices are impossible. x must be at least the largest descent, and larger x only hurts, so test x = max descent against each forced index's right neighbour.",
+            "rationale": "Target complexity O(n) time/O(1) auxiliary. Relies on a monotonicity argument instead of search.",
+            "instructions": [
+              "Scan descents, detect adjacent forced indices",
+              "x = max descent",
+              "Verify forced right-neighbour constraints",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Choosing x larger than necessary can only break other pairs."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with subset-and-x enumeration on small arrays",
+              "Test consecutive descents and negative values"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    },
+    "hack2hire:67b36a7975074948935624c7": {
+      "variantLabel": "Variant 1 of the Hack2Hire group (inferred)",
+      "requirements": [
+        "Wrap each input string in a read-only Stream",
+        "read(n) returns the next n characters across streams in order",
+        "Buffer characters read but not yet returned"
+      ],
+      "constraints": [
+        "<= 2000 streams, total length <= 200000",
+        "trace length <= 20000"
+      ],
+      "assumptions": [
+        {
+          "assumption": "Streams are read in the given order",
+          "basis": "author choice",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "Constructor receives stream contents",
+          "basis": "determinism modelling",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        },
+        {
+          "assumption": "STACK tag not reflected",
+          "basis": "no visible text explains it",
+          "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+        }
+      ],
+      "clarifyingQuestions": [
+        "Are streams consumed sequentially or interleaved?",
+        "Can the reader peek or push back characters?"
+      ],
+      "examples": [
+        {
+          "input": [
+            [
+              "MultiStreamReader",
+              "read",
+              "read",
+              "read"
+            ],
+            [
+              [
+                [
+                  "012",
+                  "34",
+                  ""
+                ]
+              ],
+              [
+                2
+              ],
+              [
+                4
+              ],
+              [
+                2
+              ]
+            ]
+          ],
+          "output": [
+            null,
+            "01",
+            "234",
+            ""
+          ],
+          "outputSource": "computed by oracles.py reference over the inferred spec"
+        }
+      ],
+      "approach": {
+        "title": "Stream queue with a pending buffer",
+        "explanation": "Serve pending characters first, then pull fixed-size chunks through Stream.read from the current stream, advancing to the next stream on an empty read and stashing any surplus.",
+        "chooseWhen": [
+          "Underlying reads are chunked (read4-style)"
+        ],
+        "tradeoffs": [
+          "Chunk size trades call count against buffer size"
+        ],
+        "invariants": [
+          "pending holds exactly the characters read from streams but not yet returned"
+        ],
+        "hints": [
+          "This is read4 II across several streams.",
+          "An empty read means move to the next stream.",
+          "Keep leftovers from the last chunk for the next call."
+        ],
+        "stages": {
+          "reasoning": {
+            "title": "Reason about the inferred contract",
+            "question": "How do you return exactly n characters when underlying reads are chunked across several streams?",
+            "explanation": "A pending buffer absorbs over-reads; empty reads advance the stream index.",
+            "rationale": "Settling the invariant before coding keeps both language implementations aligned: pending holds exactly the characters read from streams but not yet returned.",
+            "instructions": [
+              "Restate the inferred specification and its assumptions",
+              "Answer the stage question before writing code"
+            ],
+            "hints": [
+              "This is read4 II across several streams.",
+              "An empty read means move to the next stream."
+            ]
+          },
+          "coding": {
+            "title": "Implement in Python and JavaScript",
+            "question": "How do you implement \"Stream queue with a pending buffer\" identically in both languages?",
+            "explanation": "Serve pending characters first, then pull fixed-size chunks through Stream.read from the current stream, advancing to the next stream on an empty read and stashing any surplus.",
+            "rationale": "Target complexity O(n) per read amortized/O(chunk) buffer. Chunk size trades call count against buffer size.",
+            "instructions": [
+              "Wrap strings as Stream objects",
+              "Serve pending first",
+              "Loop reads until n characters or all streams empty",
+              "Do not mutate inputs; return fresh containers"
+            ],
+            "hints": [
+              "Keep leftovers from the last chunk for the next call."
+            ]
+          },
+          "validation": {
+            "title": "Validate against an independent reference",
+            "question": "How do you check the implementation against the inferred contract?",
+            "explanation": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases.",
+            "rationale": "The specification is inferred, so validation is against the author's own reference, not an official judge.",
+            "instructions": [
+              "Compare with slicing the concatenation",
+              "Test empty streams, n = 0 and reads past the end"
+            ],
+            "hints": [
+              "Generate many small random cases and compare exactly with the reference."
+            ]
+          }
+        }
+      }
+    }
+  }
+}

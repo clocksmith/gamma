@@ -1,0 +1,50 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (scores format, string integer scores)",
+      "algorithmTags HASH_TABLE"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "medium: floor rounding and empty -> 0 follow the commonly reported version, not the preview."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.highestAverageScore",
+    "kind": "function",
+    "name": "highestAverageScore",
+    "params": [
+      {
+        "name": "scores",
+        "type": "list<[string studentName, string score]>"
+      }
+    ],
+    "python_wrapper": "Solution().highestAverageScore",
+    "return": {
+      "type": "integer"
+    }
+  },
+  "language": "javascript",
+  "parameters": [
+    "scores"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "hash sum/count; compare means by integer cross-multiplication; exact floor division",
+    "complexity_target": "O(n) time/O(students) space",
+    "reference": "Fraction means per distinct name"
+  },
+  "source_sha256": "602efcc2e0d5516b693e41a05a9b618b27b7cbc5053a660849fd8f22da9367e9",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a91ef7ccddc54478ddf4a34",
+  "variant_id": "6a91ef7ccddc54478ddf4a34"
+}

@@ -1,0 +1,66 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (n horizontal, m vertical bars, unit spacing, removing bars; LeetCode 2943 relation)",
+      "algorithmTags GREEDY",
+      "companies EXPEDIA"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "medium: rectangle (not square) area and \"listed bars are removed\" (not optional) follow the widely reported Expedia \"prison\" version; LeetCode 2943 asks for a square."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.maximizeHole",
+    "kind": "function",
+    "name": "maximizeHole",
+    "params": [
+      {
+        "name": "n",
+        "type": "integer"
+      },
+      {
+        "name": "m",
+        "type": "integer"
+      },
+      {
+        "name": "h",
+        "type": "list<integer>"
+      },
+      {
+        "name": "v",
+        "type": "list<integer>"
+      }
+    ],
+    "python_wrapper": "Solution().maximizeHole",
+    "return": {
+      "type": "integer"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "n",
+    "m",
+    "h",
+    "v"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "sort removed bars, longest consecutive run",
+    "complexity_target": "O(h log h + v log v) time/O(h+v) space",
+    "reference": "list surviving bar positions with frame sentinels and take the widest gap"
+  },
+  "source_sha256": "c7d7d0840f4ae604f44428736ba4d6d18fb9302072839fc3993377a61e9d6f60",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:69fa55d2661bab75bbca3b9d",
+  "variant_id": "69fa55d2661bab75bbca3b9d"
+}
