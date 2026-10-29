@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://doppler.dev/schemas/host-teacher-qualification-policy.schema.json",
+  "title": "Doppler Host Teacher Qualification Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "taskBankPath",
+    "outputSchemaPath",
+    "receiptSchemaPath",
+    "harnessFiles",
+    "snapshot",
+    "providers",
+    "evaluation"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "doppler" },
+    "policyId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "taskBankPath": { "$ref": "#/$defs/repoPath" },
+    "outputSchemaPath": { "$ref": "#/$defs/repoPath" },
+    "receiptSchemaPath": { "$ref": "#/$defs/repoPath" },
+    "harnessFiles": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/repoPath" }
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["excludedPaths", "linkNodeModules"],
+      "properties": {
+        "excludedPaths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/repoPath" }
+        },
+        "linkNodeModules": { "type": "boolean" }
+      }
+    },
+    "providers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claude", "codex"],
+      "properties": {
+        "claude": { "$ref": "#/$defs/provider" },
+        "codex": { "$ref": "#/$defs/provider" }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minPassRateByLane",
+        "maxPolicyViolations",
+        "forbiddenChangedPathPrefixes",
+        "forbiddenCommandPatterns",
+        "providerTieBreakOrder",
+        "requireExactSourceRecovery"
+      ],
+      "properties": {
+        "minPassRateByLane": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["javascript", "wgsl"],
+          "properties": {
+            "javascript": { "type": "number", "minimum": 0, "maximum": 1 },
+            "wgsl": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "maxPolicyViolations": { "type": "integer", "minimum": 0 },
+        "forbiddenChangedPathPrefixes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/repoPath" }
+        },
+        "forbiddenCommandPatterns": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "providerTieBreakOrder": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["claude", "codex"] }
+        },
+        "requireExactSourceRecovery": { "type": "boolean" }
+      }
+    }
+  },
+  "$defs": {
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    },
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "versionArgs",
+        "modelEnvironmentVariable",
+        "promptTransport",
+        "args",
+        "eventFormat",
+        "finalOutputMode"
+      ],
+      "properties": {
+        "command": { "type": "string", "minLength": 1 },
+        "versionArgs": { "$ref": "#/$defs/stringArray" },
+        "modelEnvironmentVariable": { "type": "string", "minLength": 1 },
+        "promptTransport": { "enum": ["argument", "stdin"] },
+        "args": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "eventFormat": { "const": "jsonl" },
+        "finalOutputMode": { "enum": ["jsonl_result", "file"] }
+      }
+    }
+  }
+}

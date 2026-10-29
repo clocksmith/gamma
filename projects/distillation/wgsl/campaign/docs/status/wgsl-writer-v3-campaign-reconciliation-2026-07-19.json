@@ -1,0 +1,97 @@
+{
+  "schema": "doppler.wgsl-writer-v3-campaign-reconciliation/v1",
+  "experimentId": "doppler-wgsl-writer-v3",
+  "recordedAt": "2026-07-19T00:00:00.000Z",
+  "exposureLedgerContract": {
+    "schema": "clocksmith.exposure-ledger/v1",
+    "schemaSha256": "5262a2ed29dd97d163c49f21ab69b54103dc524c68959dc0561defb128fdc038"
+  },
+  "originalGate": {
+    "path": "tools/policies/wgsl-writer-v3-campaign-policy.json",
+    "sha256": "4af9d8cf8791b6c70250cee6ddf8000925f425361c636e36a80e8143305b43bc",
+    "repositoryRevision": "9f0ef19dbe5fd9b1c69e1cd7002005c7d3ea8d6d",
+    "status": "reference_qualified_corpus_materialization_blocked",
+    "trainingAllowed": false,
+    "corpusMaterializationAuthority": false,
+    "promotionAuthority": false
+  },
+  "laterPolicies": [
+    {
+      "path": "tools/policies/wgsl-writer-v3-training-policy.json",
+      "sha256": "9bf2737e76c7d14fe9c426c27e84030d0088522260380d5c1322b4151e118c38",
+      "policyId": "doppler-wgsl-writer-v3-training",
+      "artifactRoot": null,
+      "role": "development",
+      "missingReferences": [
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v1/corpus-manifest.json",
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v1/reference-qualification.json",
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v1/manifest.json"
+      ]
+    },
+    {
+      "path": "tools/policies/wgsl-writer-v3-diversity-training-policy.json",
+      "sha256": "218e80eb75172f3a61e0df6de8ea360e23ceca7340ec26d001f8e45d34e3e5e3",
+      "policyId": "doppler-wgsl-writer-v3-diversity-repair-training",
+      "artifactRoot": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/diversity-repair-v2",
+      "role": "development",
+      "missingReferences": [
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v2-diverse/corpus-manifest.json",
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v2-diverse/reference-qualification.json",
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v2-diverse/manifest.json"
+      ]
+    },
+    {
+      "path": "tools/policies/wgsl-writer-v3-explicit-semantic-training-policy.json",
+      "sha256": "875eb84f87ce0a53e4d0a0ad936be412a3ffaed4106821beeab55305be437bcb",
+      "policyId": "doppler-wgsl-writer-v3-explicit-semantic-training",
+      "artifactRoot": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/explicit-semantic-repair-v3",
+      "role": "development",
+      "missingReferences": [
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v3-explicit-semantic/corpus-manifest.json",
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v3-explicit-semantic/reference-qualification.json",
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v3-explicit-semantic/manifest.json"
+      ]
+    },
+    {
+      "path": "tools/policies/wgsl-writer-v3-explicit-budget-training-policy.json",
+      "sha256": "3b50cdbfc8f3afdfd93142b8408c54055da1e3210ede8cbd277035a9cc9aeec9",
+      "policyId": "doppler-wgsl-writer-v3-explicit-budget-training",
+      "artifactRoot": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/explicit-budget-v4",
+      "role": "development",
+      "missingReferences": [
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v4-explicit-budget/corpus-manifest.json",
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v4-explicit-budget/reference-qualification.json",
+        "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v4-explicit-budget/manifest.json"
+      ]
+    }
+  ],
+  "findings": [
+    "canonical_campaign_blocks_corpus_materialization_and_training",
+    "later_development_policies_exist_without_a_campaign_transition_receipt",
+    "later_policy_materialization_training_selection_and_confirmation_artifacts_are_not_present"
+  ],
+  "resolution": {
+    "canonicalStatus": "developmental_policies_reconciled_prospective_materialization_blocked",
+    "experimentState": "frozen",
+    "laterPolicyRole": "development",
+    "existingResultsRole": "development",
+    "selectionAuthority": false,
+    "confirmationAuthority": false,
+    "promotionAuthority": false,
+    "historicalGatePreserved": true,
+    "prospectiveCampaignRequired": true
+  },
+  "nextRequiredTransition": {
+    "from": "frozen",
+    "to": "materialized",
+    "requirements": [
+      "new_family_disjoint_populations",
+      "immutable_artifact_and_evaluator_custody",
+      "exposure_ledger_registration",
+      "eligible_pool_counts_before_freeze",
+      "duplicate_and_connected_component_split_receipts"
+    ]
+  },
+  "claimBoundary": "Later V3 policies are preserved as developmental evidence. They do not override the original blocked campaign gate and grant no selection, confirmation, promotion, general WGSL writer, or product authority.",
+  "receiptHash": "63bab388ced841c592e2eedf5f38ad881f30e827077894d1675277d632a870a2"
+}

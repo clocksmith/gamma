@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>WGSL family browser qualification</title></head>
+<body>
+<script type="module">
+import {
+  loadLoRAAdapterForPipeline,
+  unloadLoRAAdapterForPipeline,
+} from '/src/client/runtime/lora.js';
+import { destroyDevice, getKernelCapabilities, resetDeviceState } from '/src/gpu/device.js';
+import { initializeInference } from '/src/inference/test-harness.js';
+import { destroyBufferPool } from '/src/memory/buffer-pool.js';
+
+async function withPhase(phase, operation) {
+  try {
+    return await operation();
+  } catch (error) {
+    const detail = error?.stack || error?.message || String(error);
+    throw new Error(`WGSL family browser phase "${phase}" failed: ${detail}`, {
+      cause: error,
+    });
+  }
+}
+
+async function generate(pipeline, prompt, maxTokens, useChatTemplate = false) {
+  pipeline.reset();
+  const chunks = [];
+  const tokenIds = [];
+  for await (const chunk of pipeline.generate(prompt, {
+    useChatTemplate,
+    benchmark: false,
+    maxTokens,
+    temperature: 0,
+    topK: 1,
+    topP: 1,
+    repetitionPenalty: 1,
+    seed: 47,
+    onToken(tokenId) {
+      tokenIds.push(Number(tokenId));
+    },
+  })) {
+    chunks.push(String(chunk));
+  }
+  const output = chunks.join('').trim();
+  const stats = pipeline.getStats?.() || {};
+  return {
+    output,
+    tokenIds,
+    stopReason: stats.stopReason ?? null,
+    timing: {
+      prefillMs: stats.prefillMs ?? stats.prefillTimeMs ?? null,
+      decodeMs: stats.decodeMs ?? stats.decodeTimeMs ?? null,
+      totalMs: stats.totalMs ?? stats.totalTimeMs ?? null,
+    },
+  };
+}
+
+async function capturePrefillLogits(pipeline, prompt, useChatTemplate = false) {
+  pipeline.reset();
+  const prefill = await pipeline.prefillWithLogits(prompt, { useChatTemplate });
+  const logits = prefill?.logits instanceof Float32Array
+    ? prefill.logits
+    : Float32Array.from(prefill?.logits ?? []);
+  const top = Array.from(logits, (logit, tokenId) => ({ tokenId, logit }))
+    .sort((left, right) => right.logit - left.logit)
+    .slice(0, 8);
+  let sum = 0;
+  let sumSquares = 0;
+  for (const logit of logits) {
+    sum += logit;
+    sumSquares += logit * logit;
+  }
+  return {
+    count: logits.length,
+    sum,
+    sumSquares,
+    top,
+  };
+}
+
+window.runWgslFamilyBrowserQualification = async function runQualification(request) {
+  let harness = null;
+  const cleanup = {
+    adapterUnloaded: false,
+    pipelineUnloaded: false,
+    bufferPoolDestroyed: false,
+    deviceDestroyed: false,
+    deviceStateReset: false,
+  };
+  try {
+    harness = await withPhase('initializeInference', () => initializeInference(request.modelUrl, {
+      modelId: request.modelId,
+      loadMode: 'http',
+    }));
+    const candidates = [];
+    for (const adapter of request.adapters) {
+      await withPhase(`unloadAdapter:${adapter.id}`, () => (
+        unloadLoRAAdapterForPipeline(harness.pipeline)
+      ));
+      if (adapter.manifestUrl) {
+        await withPhase(`loadAdapter:${adapter.id}`, () => (
+          loadLoRAAdapterForPipeline(harness.pipeline, adapter.manifestUrl)
+        ));
+      }
+      const active = harness.pipeline.getActiveLoRA?.() ?? null;
+      const activation = {
+        activated: active != null,
+        id: active?.id ?? null,
+        name: active?.name ?? null,
+        baseModel: active?.baseModel ?? null,
+      };
+      const prefillLogits = request.captureLogits === true
+        ? await withPhase(`prefillLogits:${adapter.id}`, () => (
+          capturePrefillLogits(
+            harness.pipeline,
+            request.prompt,
+            request.useChatTemplate === true
+          )
+        ))
+        : null;
+      const generation = await withPhase(`generate:${adapter.id}`, () => (
+        generate(harness.pipeline, request.prompt, request.maxTokens, request.useChatTemplate === true)
+      ));
+      candidates.push({
+        candidateId: adapter.id,
+        activation,
+        prefillLogits,
+        generation,
+      });
+    }
+    await unloadLoRAAdapterForPipeline(harness.pipeline);
+    cleanup.adapterUnloaded = true;
+    return {
+      ok: true,
+      runtime: {
+        userAgent: navigator.userAgent,
+        capabilities: getKernelCapabilities(),
+      },
+      model: {
+        modelId: harness.manifest?.modelId ?? null,
+        modelType: harness.manifest?.modelType ?? null,
+      },
+      candidates,
+      cleanup,
+    };
+  } finally {
+    try {
+      await unloadLoRAAdapterForPipeline(harness?.pipeline);
+      cleanup.adapterUnloaded = true;
+    } catch {}
+    try {
+      await harness?.pipeline?.unload?.();
+      cleanup.pipelineUnloaded = true;
+    } catch {}
+    try {
+      destroyBufferPool();
+      cleanup.bufferPoolDestroyed = true;
+    } catch {}
+    try {
+      destroyDevice();
+      cleanup.deviceDestroyed = true;
+    } catch {}
+    try {
+      resetDeviceState();
+      cleanup.deviceStateReset = true;
+    } catch {}
+  }
+};
+</script>
+</body>
+</html>

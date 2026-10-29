@@ -1,0 +1,163 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-v3-training-policy.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-writer-v3-training",
+  "experimentId": "doppler-wgsl-writer-v3",
+  "status": "frozen_before_training",
+  "admission": {
+    "corpusPolicy": {
+      "path": "tools/policies/wgsl-writer-v3-corpus-policy.json",
+      "sha256": "e3bf70c1b566d9ccc01ac80479dce1ba17021e188621d09b834792226d6be359"
+    },
+    "corpusManifest": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v1/corpus-manifest.json",
+      "sha256": "5a89ccbb2fa955b282414038421798b108d6504989e13bfb14038d1bbe50ba48"
+    },
+    "referenceQualification": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v1/reference-qualification.json",
+      "sha256": "036af96d703fa9039b07b7d52ad4d3f862f5d26b00588f196af1a8916ec904e9"
+    },
+    "trainingLanes": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v1/manifest.json",
+      "sha256": "84402f697fcae4abbfd1264dcdb0b5dc8e610361b1451f1064d7ea19479fc777"
+    }
+  },
+  "model": {
+    "modelId": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "configSha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+    "tokenizerSha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    "localProvisioning": "operator_provided_pinned_snapshot"
+  },
+  "initialization": {
+    "v2AdapterPath": "reports/training/wgsl-writer/doppler-wgsl-writer-v2/seed47/sft/checkpoints/gamma/adapter",
+    "v2AdapterConfigSha256": "3e0f8cbe55289a65addb01bb4e150ec644d149b5a8ac46f70396fc4baa049b66",
+    "v2AdapterWeightsSha256": "64cb65bfd2f409278d666d874c4dc2179058cab8e75609f5fe1fdc8644794667",
+    "evidenceTransfers": false
+  },
+  "lanes": [
+    {
+      "id": "package-base",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v1/package-sft.jsonl",
+        "sha256": "8f8e52598e649a8db2538cdfc702976aed91ffc3464699830194abad095bcbff",
+        "rows": 192,
+        "supervisedCompletionTokens": 142416
+      },
+      "initialization": "base",
+      "screeningSeed": 47,
+      "capabilityAuthority": true
+    },
+    {
+      "id": "package-v2-init",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v1/package-sft.jsonl",
+        "sha256": "8f8e52598e649a8db2538cdfc702976aed91ffc3464699830194abad095bcbff",
+        "rows": 192,
+        "supervisedCompletionTokens": 142416
+      },
+      "initialization": "v2_seed47_adapter",
+      "screeningSeed": 47,
+      "capabilityAuthority": true
+    },
+    {
+      "id": "repair-v2-init",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v1/repair-mixed-sft.jsonl",
+        "sha256": "2dbc2896dcc90d402726f3c9b21be59f604e3667bee52d93c4287c1337bf4d05",
+        "rows": 192,
+        "supervisedCompletionTokens": 142416
+      },
+      "initialization": "v2_seed47_adapter",
+      "screeningSeed": 47,
+      "capabilityAuthority": true
+    },
+    {
+      "id": "count-matched-control",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v1/count-matched-control.jsonl",
+        "sha256": "0c59d2c6b33616d2737946ec3fb76be45a35d11b934a9bad002d00d95f1d7f2c",
+        "rows": 192,
+        "supervisedCompletionTokens": 142416
+      },
+      "initialization": "base",
+      "screeningSeed": 47,
+      "capabilityAuthority": false
+    }
+  ],
+  "trainer": {
+    "owner": "gamma",
+    "protocol": "gamma_wgsl_trainer_json_v1",
+    "action": "sft",
+    "dtype": "bfloat16",
+    "sequenceLength": 3072,
+    "adapter": {
+      "kind": "lora",
+      "rank": 32,
+      "alpha": 64,
+      "dropout": 0.05,
+      "targetModules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "training": {
+      "steps": 192,
+      "gradientAccumulationSteps": 8,
+      "learningRate": 0.0001,
+      "weightDecay": 0.01,
+      "maxGradNorm": 1,
+      "rowOrder": "seed_hash_sorted_v1"
+    },
+    "screeningOrder": [
+      "package-base",
+      "package-v2-init",
+      "repair-v2-init",
+      "count-matched-control"
+    ],
+    "parallelRunsAllowed": false
+  },
+  "evaluation": {
+    "baselines": ["unchanged_base", "unchanged_v2_seed47_adapter"],
+    "calibrationPopulation": "calibration",
+    "selectionPopulation": "checkpoint_selection",
+    "confirmationPopulation": "seed_confirmation",
+    "screeningSeed": 47,
+    "confirmationSeeds": [11, 29],
+    "generation": {
+      "mode": "greedy",
+      "maxNewTokens": 1280,
+      "samplesPerTask": 1
+    },
+    "primaryMetric": "semantic_executable_package_pass_at_1",
+    "minimumSelectionSemanticPassRate": 0.5,
+    "minimumConfirmationMeanSemanticPassRate": 0.75,
+    "minimumConfirmationPerSeedSemanticPassRate": 0.5,
+    "tieBreakers": [
+      "quality_pass_rate",
+      "response_contract_pass_rate",
+      "compile_at_1",
+      "resource_contract_pass_rate",
+      "lower_mean_response_characters",
+      "lane_id"
+    ],
+    "exactDopplerParityRequired": true,
+    "externalPromotionRequired": true
+  },
+  "authority": {
+    "training": true,
+    "checkpointSelection": true,
+    "seedConfirmation": true,
+    "dopplerParity": true,
+    "promotion": false,
+    "generalWgslWriterClaim": false,
+    "productization": false
+  },
+  "claimBoundary": "Matched V3 development lanes may select and seed-confirm only the 20-family executable-package capability under the frozen package, corpus, and evaluator contracts. The control has no capability authority. Exact Doppler parity and one-use external promotion remain mandatory before any bounded authoring claim."
+}

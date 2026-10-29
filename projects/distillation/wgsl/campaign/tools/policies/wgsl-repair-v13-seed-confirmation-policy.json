@@ -1,0 +1,90 @@
+{
+  "$schema": "../../src/config/schema/wgsl-repair-seed-confirmation.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-repair-v13-seed29-confirmation",
+  "status": "frozen_before_candidate_inference",
+  "eligibleLane": "external20",
+  "predecessor": {
+    "adapterPortabilityReceiptPath": "docs/status/wgsl-repair-v12-adapter-portability-2026-07-13.json",
+    "adapterPortabilityReceiptSha256": "589888d414a34a25e386f1b43347dc9b25a68ed858de6e0dc2cc3b46d8ea32e3",
+    "requiredDecision": "diagnostic_import_parity_passed"
+  },
+  "selectionReceipt": {
+    "path": "docs/status/wgsl-repair-v13-seed-selection-2026-07-14.json",
+    "sha256": "8f33d219a6a757e19e22beb2d809b9f9a2770aaf3d563da541c26d0b67b701ef",
+    "requiredDecision": "selected_for_seed_confirmation",
+    "selectedSeed": 29
+  },
+  "materialization": {
+    "policyPath": "tools/policies/wgsl-repair-v13-confirmation-materialization-policy.json",
+    "policySha256": "240396400b690b77f7e4414d336e6a51b2e8adb36b3ff585aa9b9ec4c50bcef0",
+    "freezeCommit": "327589ac633f15dc9ace2d13a48ab1512edef2c8",
+    "algorithm": "commit_sha256_stratified_blueprint_subset_v2"
+  },
+  "runtime": {
+    "modelId": "qwen-3-5-9b-f16-af32",
+    "modelManifestSha256": "2ff1f1eec0345bd379614b8b0bafd66957bbec1c22072132661a6e35300ad398",
+    "artifactStatusPath": "docs/status/qwen35-9b-rdrr-2026-07-11.json",
+    "artifactStatusSha256": "40cbfefb31a8cd2c92b65fe9a1d44b1c5ee50a93054fa2bd20782f0ce613edf8",
+    "conversionConfigPath": "src/config/conversion/qwen3/qwen-3-5-9b-f16-af32.json",
+    "conversionConfigSha256": "b2f3bb3f182b9b1829406f9febf0d38f309c2e79f35f5ee52704f6830642371a",
+    "runtimeProfile": "profiles/production"
+  },
+  "candidateRunner": {
+    "path": "tools/run-wgsl-repair-seed-candidates.js",
+    "sha256": "722e578188e45397a61dad0a8328e8a4f2bb1b79795a517281b6ab2a09d29ddb"
+  },
+  "semanticHarness": {
+    "path": "tools/run-wgsl-repair-semantic-harness.js",
+    "sha256": "458bfaa4484981ceef41b44045de477e9e5f39da8e28064c7ff954f2e7c30c94"
+  },
+  "populations": {
+    "seedConfirmation": {
+      "path": "tools/data/wgsl-repair-v13-semantic-seed-confirmation.json",
+      "sha256": "e86d55497329d5d6adfd579b726b980bf7d42386f1df74d740ff0903fdefb3e9",
+      "selectionAuthority": false,
+      "confirmationAuthority": true
+    }
+  },
+  "eligibleCandidates": [
+    {
+      "seed": 29,
+      "adapterManifestPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.adapter.manifest.json",
+      "adapterManifestSha256": "e5dec965a953aa746e592ae38045f445e7d9b1407feb609f448238427af4b042",
+      "adapterWeightsPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.adapters.safetensors",
+      "adapterWeightsSha256": "0d9ab8e1348a3fcdd6ef2973b624cc1a3d962de90a571976a5a222df27b69394"
+    }
+  ],
+  "promptContract": {
+    "templateId": "wgsl-replacement-only-context-600-v1",
+    "contextCharactersPerSide": 600,
+    "useChatTemplate": false,
+    "responseContract": "replacement_only_wgsl_span_v1"
+  },
+  "generation": {
+    "maxTokens": 64,
+    "temperature": 0,
+    "topP": 1,
+    "topK": 1,
+    "repetitionPenalty": 1,
+    "greedyThreshold": 0
+  },
+  "decisionRule": {
+    "submissionCount": 1,
+    "requiredSemanticTaskPasses": 8,
+    "requiredCompilationPasses": 8,
+    "requiredSemanticVariantPasses": 24,
+    "requiredResponseContractPasses": 8,
+    "requiredHistoricalRegressionPasses": 8,
+    "failureDecision": "seed_confirmation_rejected",
+    "passDecision": "seed_confirmation_passed"
+  },
+  "authority": {
+    "seedConfirmation": true,
+    "promotion": false,
+    "wgslDoctor": false,
+    "completeShaderWriting": false
+  },
+  "claimBoundary": "This frozen policy permits one deterministic seed-29 submission to the commit-derived seed-confirmation population. Passing confirms replacement-only semantic repair on this constructed population; failure rejects V13 confirmation. Neither outcome promotes the adapter, authorizes WGSL Doctor, or establishes complete shader writing."
+}

@@ -1,0 +1,463 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-writer-v3-campaign-v1.schema.json",
+  "title": "WGSL writer v3 general-authoring campaign",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "experimentId",
+    "status",
+    "targetCapability",
+    "predecessor",
+    "mechanics",
+    "populationPlan",
+    "training",
+    "reconciliation",
+    "evaluation",
+    "authority",
+    "blockers",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../src/config/schema/wgsl-writer-v3-campaign.schema.json"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "source": {
+      "const": "doppler"
+    },
+    "policyId": {
+      "const": "doppler-wgsl-writer-v3-general-authoring"
+    },
+    "experimentId": {
+      "const": "doppler-wgsl-writer-v3"
+    },
+    "status": {
+      "enum": [
+        "mechanics_implemented_reference_qualification_blocked",
+        "reference_qualified_corpus_materialization_blocked",
+        "developmental_policies_reconciled_prospective_materialization_blocked"
+      ]
+    },
+    "targetCapability": {
+      "const": "complete_executable_webgpu_shader_package_from_natural_language_and_host_contract"
+    },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "result",
+        "selectedSeed",
+        "initializationMayBeTested",
+        "capabilityClaimTransfers",
+        "weightsPublished"
+      ],
+      "properties": {
+        "result": {
+          "$ref": "#/$defs/binding"
+        },
+        "selectedSeed": {
+          "const": 47
+        },
+        "initializationMayBeTested": {
+          "const": true
+        },
+        "capabilityClaimTransfers": {
+          "const": false
+        },
+        "weightsPublished": {
+          "const": false
+        }
+      }
+    },
+    "mechanics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "responseSchema",
+        "packageValidator",
+        "executionPlanner",
+        "formatCatalog",
+        "capabilityCatalog",
+        "browserExecutor",
+        "referenceQualification"
+      ],
+      "properties": {
+        "responseSchema": {
+          "$ref": "#/$defs/binding"
+        },
+        "packageValidator": {
+          "$ref": "#/$defs/binding"
+        },
+        "executionPlanner": {
+          "$ref": "#/$defs/binding"
+        },
+        "formatCatalog": {
+          "$ref": "#/$defs/binding"
+        },
+        "capabilityCatalog": {
+          "$ref": "#/$defs/binding"
+        },
+        "browserExecutor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "path",
+            "sha256",
+            "status",
+            "mustCompileAndExecuteReturnedPackage"
+          ],
+          "properties": {
+            "required": {
+              "const": true
+            },
+            "path": {
+              "$ref": "#/$defs/repoPath"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "status": {
+              "enum": [
+                "implemented_unqualified",
+                "reference_qualified"
+              ]
+            },
+            "mustCompileAndExecuteReturnedPackage": {
+              "const": true
+            }
+          }
+        },
+        "referenceQualification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "library",
+            "harness",
+            "manifest",
+            "status",
+            "receipt",
+            "mustPassBeforeCorpusFreeze"
+          ],
+          "properties": {
+            "required": {
+              "const": true
+            },
+            "library": {
+              "$ref": "#/$defs/binding"
+            },
+            "harness": {
+              "$ref": "#/$defs/binding"
+            },
+            "manifest": {
+              "$ref": "#/$defs/binding"
+            },
+            "status": {
+              "enum": [
+                "not_run",
+                "qualified"
+              ]
+            },
+            "receipt": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/binding"
+                }
+              ]
+            },
+            "mustPassBeforeCorpusFreeze": {
+              "const": true
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "status": {
+                    "const": "not_run"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "receipt": {
+                    "type": "null"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "status": {
+                    "const": "qualified"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "receipt": {
+                    "$ref": "#/$defs/binding"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "populationPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "familyDisjoint",
+        "promptDisjoint",
+        "referenceSourceDisjoint",
+        "developmentRolesMaterialized",
+        "externalPromotion"
+      ],
+      "properties": {
+        "familyDisjoint": {
+          "const": true
+        },
+        "promptDisjoint": {
+          "const": true
+        },
+        "referenceSourceDisjoint": {
+          "const": true
+        },
+        "developmentRolesMaterialized": {
+          "const": false
+        },
+        "externalPromotion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "custody",
+            "materialized",
+            "sealedOpenings",
+            "promotionAllowed"
+          ],
+          "properties": {
+            "custody": {
+              "const": "external"
+            },
+            "materialized": {
+              "const": false
+            },
+            "sealedOpenings": {
+              "const": 1
+            },
+            "promotionAllowed": {
+              "const": false
+            }
+          }
+        }
+      }
+    },
+    "training": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed",
+        "workloadsFrozen",
+        "reason"
+      ],
+      "properties": {
+        "allowed": {
+          "const": false
+        },
+        "workloadsFrozen": {
+          "const": false
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primaryMetric",
+        "blockingPrerequisites",
+        "requiredStrata",
+        "multipleSeeds",
+        "exactDopplerArtifactParity"
+      ],
+      "properties": {
+        "primaryMetric": {
+          "const": "semantic_executable_package_pass_at_1"
+        },
+        "blockingPrerequisites": {
+          "const": [
+            "response_contract",
+            "host_contract_reconciliation",
+            "feature_and_limit_admission",
+            "chromium_webgpu_compilation",
+            "actual_dispatch_or_draw",
+            "cpu_or_raster_oracle",
+            "buffer_bounds",
+            "metamorphic_relations",
+            "historical_regressions"
+          ]
+        },
+        "requiredStrata": {
+          "const": [
+            "compute",
+            "render",
+            "multi_pass"
+          ]
+        },
+        "multipleSeeds": {
+          "const": true
+        },
+        "exactDopplerArtifactParity": {
+          "const": true
+        }
+      }
+    },
+    "reconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt",
+        "laterPoliciesRole",
+        "historicalGatePreserved",
+        "prospectiveCampaignRequired"
+      ],
+      "properties": {
+        "receipt": { "$ref": "#/$defs/binding" },
+        "laterPoliciesRole": { "const": "development" },
+        "historicalGatePreserved": { "const": true },
+        "prospectiveCampaignRequired": { "const": true }
+      }
+    },
+    "authority": {
+      "const": {
+        "corpusMaterialization": false,
+        "training": false,
+        "checkpointSelection": false,
+        "seedConfirmation": false,
+        "promotion": false,
+        "generalWgslWriterClaim": false,
+        "productization": false
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "claimBoundary": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "mechanics_implemented_reference_qualification_blocked"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "mechanics": {
+            "properties": {
+              "browserExecutor": {
+                "properties": {
+                  "status": {
+                    "const": "implemented_unqualified"
+                  }
+                }
+              },
+              "referenceQualification": {
+                "properties": {
+                  "status": {
+                    "const": "not_run"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "reference_qualified_corpus_materialization_blocked"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "mechanics": {
+            "properties": {
+              "browserExecutor": {
+                "properties": {
+                  "status": {
+                    "const": "reference_qualified"
+                  }
+                }
+              },
+              "referenceQualification": {
+                "properties": {
+                  "status": {
+                    "const": "qualified"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "repoPath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/repoPath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

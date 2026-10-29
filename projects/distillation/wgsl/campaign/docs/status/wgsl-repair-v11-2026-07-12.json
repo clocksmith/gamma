@@ -1,0 +1,284 @@
+{
+  "artifactType": "wgsl_repair_v11_result",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v11",
+  "recordedAt": "2026-07-12",
+  "status": "capability_proven",
+  "capabilityDomain": "single_seed_family_disjoint_public_wgsl_compiler_repair_grpo_rlvr",
+  "hypothesis": "A single clipped GRPO-with-KL update driven only by verifier-varying diagnostic groups improves a frozen Qwen 3.5 9B SFT policy on an evaluation-only family-disjoint public WGSL compiler-repair set.",
+  "model": {
+    "modelId": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "modelConfigSha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+    "tokenizerSha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    "basePolicyHash": "18e0ddabf064e824c0e2dd6c6f7ba1516dbf492fd6f9cadcc6944d7af07760f2",
+    "sftParentPolicyHash": "fcba6cbbfee3b52de597be8df7400ae601f6fdbc15989946da543cb299eebc87"
+  },
+  "frozenDesign": {
+    "trainingTaskSet": {
+      "id": "diagnostic",
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/corpus-v1/diagnostic.jsonl",
+      "rows": 285,
+      "sha256": "8f76617dbda9551d50f2c3720f897db1773d357c26b0bda24a579d3ce87140c8"
+    },
+    "evaluationTaskSet": {
+      "id": "public-test",
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/corpus-v1/public-test.jsonl",
+      "rows": 299,
+      "sha256": "0d8b1886b263da1080e0867662451938b3eaebdc318a428dcbbb4450115ebf53",
+      "usedForOptimizerSelection": false
+    },
+    "sampling": {
+      "groupSize": 8,
+      "seed": 20260711,
+      "temperature": 0.8,
+      "topP": 0.95,
+      "maxTokens": 64
+    },
+    "verifierBundleHash": "5ce6e5bf580307664a6a0afb95deb52aab3413e0e79d780a8c3862de6a0a252e",
+    "runtimeHash": "90b5aa881a018c12ceba56d5c7b15018e9f5b9f8fa6f07911419ac2bde4e7bbd"
+  },
+  "diagnosticSignal": {
+    "groups": 285,
+    "samples": 2280,
+    "rolloutTokens": 39587,
+    "passingSamples": 1965,
+    "passAt1": 0.8631578947368421,
+    "passAt8": 0.8736842105263158,
+    "allPassGroups": 243,
+    "allFailGroups": 36,
+    "mixedPassFailGroups": 6,
+    "varyingGroups": 12,
+    "constructiveVaryingGroups": 11,
+    "exactOnlyVaryingGroups": 1,
+    "nonzeroAdvantageSamples": 96,
+    "sourceSubgroups": {
+      "doppler": {
+        "tasks": 145,
+        "allPassGroups": 145,
+        "allFailGroups": 0,
+        "mixedPassFailGroups": 0
+      },
+      "zero-tvm": {
+        "tasks": 140,
+        "allPassGroups": 98,
+        "allFailGroups": 36,
+        "mixedPassFailGroups": 6,
+        "samplePassRate": 0.71875,
+        "passAt1": 0.7214285714285714,
+        "passAt8": 0.7428571428571429
+      }
+    }
+  },
+  "derivedTrainingData": {
+    "rejectionSftRows": 249,
+    "dpoRows": 11,
+    "referenceAnchoredCorrectiveDpoRows": 36,
+    "referenceAnchoredRowsUsedInV11": false,
+    "rejectionDatasetHash": "7f8851e79427d10c15e2cea255187e031b439a963f6babf07d64fc211d60080b",
+    "dpoDatasetHash": "5b1b8d6589ab2f66af5a8b0ae0c0434f0def8cf60adcb22510f31e16bc99f8c8",
+    "referenceAnchoredDpoDatasetHash": "5c4903cc23ef8131e97e750d3430acec58fc8b2657b5ec91edb96d814dbc647b"
+  },
+  "optimizers": {
+    "dpo": {
+      "methodId": "dpo",
+      "status": "rejected",
+      "inputPolicyHash": "fcba6cbbfee3b52de597be8df7400ae601f6fdbc15989946da543cb299eebc87",
+      "outputPolicyHash": "a2dbde4f0218ce641e41063462c20f3bda2b40fccc3cbae3c2fbad36823a1ace",
+      "pairs": 11,
+      "steps": 400,
+      "finalLoss": 0.00001139584037446184,
+      "meanLoss": 0.013489689065527414,
+      "finalPreferenceMargin": 113.82256317138672,
+      "decision": "Reject: training-pair margin saturated and public pass@1 regressed by 51.5050 points."
+    },
+    "grpo": {
+      "methodId": "grpo_rlvr",
+      "status": "capability_proven",
+      "inputPolicyHash": "fcba6cbbfee3b52de597be8df7400ae601f6fdbc15989946da543cb299eebc87",
+      "outputPolicyHash": "2019fd617a2f586b134e7d38893c1ebbd983c6d2bee2c61db8967a5581d88cfe",
+      "advantageFormula": "(reward - group_mean) / max(group_stddev, 1e-6)",
+      "clipLower": 0.2,
+      "clipUpper": 0.2,
+      "klCoefficient": 0.02,
+      "signalSamples": 96,
+      "microsteps": 400,
+      "optimizerUpdates": 1,
+      "updatesPerRolloutBatch": 1,
+      "maximumStalePolicyUpdates": 0,
+      "dropoutDisabled": true,
+      "sampleOrder": "seed_shuffled",
+      "gradientNorm": 40.59379959106445,
+      "finalLoss": 0.8737163543701172,
+      "meanLoss": 0.0724101322889328
+    }
+  },
+  "publicEvaluation": {
+    "tasks": 299,
+    "samplesPerPolicy": 2392,
+    "grpoRolloutTokens": 47349,
+    "resumedGroups": 0,
+    "sft": {
+      "passingSamples": 2125,
+      "samplePassRate": 0.8883779264214047,
+      "passingTasksAt1": 264,
+      "passAt1": 0.882943143812709,
+      "passingTasksAt8": 270,
+      "passAt8": 0.903010033444816,
+      "exactReferenceSamples": 2124,
+      "blockedSamples": 216
+    },
+    "dpo": {
+      "passingSamples": 865,
+      "samplePassRate": 0.3616220735785953,
+      "passingTasksAt1": 110,
+      "passAt1": 0.36789297658862874,
+      "passingTasksAt8": 161,
+      "passAt8": 0.5384615384615384,
+      "exactReferenceSamples": 649,
+      "blockedSamples": 0,
+      "effectsVsSft": {
+        "samplePassRate": -0.5267558528428093,
+        "passAt1": -0.5150501672240803,
+        "passAt8": -0.36454849498327757
+      },
+      "pairedPassAt1": {
+        "sftOnly": 171,
+        "dpoOnly": 17,
+        "exactMcNemarP": 3.4521150515178205e-33
+      }
+    },
+    "grpo": {
+      "passingSamples": 2279,
+      "samplePassRate": 0.9527591973244147,
+      "passingTasksAt1": 284,
+      "passAt1": 0.9498327759197325,
+      "passingTasksAt8": 288,
+      "passAt8": 0.9632107023411371,
+      "exactReferenceSamples": 2269,
+      "blockedSamples": 11,
+      "effectsVsSft": {
+        "samplePassRate": 0.06438127090301005,
+        "passAt1": 0.06688963210702348,
+        "passAt8": 0.06020066889632114
+      },
+      "pairedSamples": {
+        "bothPass": 2125,
+        "bothFail": 113,
+        "sftOnly": 0,
+        "grpoOnly": 154,
+        "exactMcNemarP": 8.758115402030098e-47
+      },
+      "pairedPassAt1": {
+        "bothPass": 264,
+        "bothFail": 15,
+        "sftOnly": 0,
+        "grpoOnly": 20,
+        "exactMcNemarP": 0.0000019073486328125
+      },
+      "pairedPassAt8": {
+        "bothPass": 270,
+        "bothFail": 11,
+        "sftOnly": 0,
+        "grpoOnly": 18,
+        "exactMcNemarP": 0.00000762939453125
+      }
+    },
+    "subgroups": {
+      "doppler": {
+        "tasks": 186,
+        "sftPassAt1": 0.9838709677419355,
+        "grpoPassAt1": 1.0,
+        "effect": 0.016129032258064502,
+        "sftOnly": 0,
+        "grpoOnly": 3
+      },
+      "zero-tvm": {
+        "tasks": 113,
+        "sftPassAt1": 0.7168141592920354,
+        "grpoPassAt1": 0.8672566371681416,
+        "effect": 0.1504424778761062,
+        "sftOnly": 0,
+        "grpoOnly": 17
+      },
+      "short": {
+        "tasks": 290,
+        "sftPassAt1": 0.9103448275862069,
+        "grpoPassAt1": 0.9758620689655172,
+        "effect": 0.06551724137931025,
+        "sftOnly": 0,
+        "grpoOnly": 19
+      },
+      "long": {
+        "tasks": 9,
+        "sftPassAt1": 0.0,
+        "grpoPassAt1": 0.1111111111111111,
+        "effect": 0.1111111111111111,
+        "sftOnly": 0,
+        "grpoOnly": 1,
+        "grpoExactReferenceSamples": 0
+      }
+    }
+  },
+  "sourceArtifacts": [
+    {
+      "path": "tools/policies/wgsl-repair-v11-policy.json",
+      "sha256": "35d40d3d5a1221f7c87b53311c36dae90c2c0dad109da07ac06695e6fffefd99"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v11/experiment-seed11/gamma/rollout/raw-rollouts.jsonl",
+      "sha256": "20cfab181c3126bbe775270a04f35fa656802f1b7769fd8f9072a74a95fe7338"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v11/experiment-seed11/verified-rollouts/verification-manifest.json",
+      "sha256": "d90623ca920c14e81b419e09f29e60a476204212b910fe42e40626bd2b1babfa"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v11/experiment-seed11/derived-training/derived-dataset-manifest.json",
+      "sha256": "9f9d2efe928b08f60f8fd58621e5d617bd597eaafb92937e264fc9dd4174ad67"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v11/experiment-seed11/gamma/dpo/adapter/adapter_model.safetensors",
+      "sha256": "6f985e8a0a2888d773fd3fe50c9552a27b4a9b8ebf52223c32d9440ff8f168d4"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v11/comparison-sft-vs-dpo.json",
+      "sha256": "95f3981edeb7a696a58126c3600a29a21ceefb36b9772f87c51d00c93ba7cfd6"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v11/experiment-seed11/gamma/grpo/adapter/adapter_model.safetensors",
+      "sha256": "754cdab1de9c363d1c6ffe386f36bcc7df68a4e24a679895ce4a9c2907a88f4d"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v11/eval-grpo-seed11/gamma/rollout/raw-rollouts.jsonl",
+      "sha256": "e1d304c617e638942fc6791706512047a7cbb95782ca8b2f6c0f958275a9c783"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v11/eval-grpo-seed11/verified-rollouts/verification-manifest.json",
+      "sha256": "62c08e2ed83d963d500d539608271b930fa0f54312ccf420e3f568bbd5b5b0bf"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v11/comparison-sft-vs-grpo.json",
+      "sha256": "c779f0782275fd3c2a1c1b4a927b8c9c2283fcb54ddf81d5f1aaab973866b85d"
+    }
+  ],
+  "evidenceBoundary": {
+    "diagnosticOnlyOptimizerData": true,
+    "publicEvaluationOnly": true,
+    "grpoUpdateMechanicsProven": true,
+    "publicCompilerRepairImproved": true,
+    "externalSourceSubgroupImproved": true,
+    "dpoRejected": true,
+    "minimumSeedsCompleted": false,
+    "semanticKernelCorrectnessProven": false,
+    "sealedSemanticSuiteCompleted": false,
+    "promoted": false
+  },
+  "claimBoundary": "V11 proves that one clipped GRPO-with-KL update from 96 nonzero-advantage samples improved one seed-11 Qwen 3.5 9B SFT policy on 299 family-disjoint public WGSL compiler-repair tasks under one frozen sampler and Radeon verifier runtime. It does not prove multi-seed stability, semantic ML-kernel correctness, causal benefit from external SFT curation, or promotion. The matched 400-step DPO lane is rejected.",
+  "nextGates": [
+    "Repeat the frozen SFT-to-GRPO comparison for seeds 29 and 47 without using the public set for checkpoint selection.",
+    "Add dispatch, CPU-oracle, numerical, metamorphic, bounds, and historical-regression rewards before a semantic RLVR claim.",
+    "Run V12 anchor, external20, and random20 full-lane SFT controls separately from the optimizer experiment.",
+    "Evaluate DPO again only with disjoint optimizer selection and early checkpoints; keep reference-anchored corrective DPO as a separate off-policy lane."
+  ]
+}

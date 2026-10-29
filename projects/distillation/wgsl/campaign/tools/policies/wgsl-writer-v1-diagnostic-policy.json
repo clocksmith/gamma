@@ -1,0 +1,60 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-diagnostic.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-writer-v1-zero-shot-diagnostic",
+  "experimentId": "doppler-wgsl-writer-v1",
+  "status": "frozen_before_candidate_inference",
+  "predecessor": {
+    "basePolicy": {
+      "path": "tools/policies/wgsl-writer-v1-policy.json",
+      "sha256": "1a55f4ae3bcc1331cbfb9203d9c3573fdc434dd4775d803b1be121dcf82ecebc"
+    },
+    "referenceReceipt": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v1/mechanics/reference.json",
+      "sha256": "a9ccfbefebce8827669dfb08a515699f8ae57e4902bf81d9edb88366099b99ab",
+      "requiredDecision": "reference_mechanics_passed"
+    }
+  },
+  "population": {
+    "path": "tools/data/wgsl-writer-v1-mechanics.json",
+    "sha256": "5df1979f7487431d6ad9480dd7ac14417e9297fbee5c5d26f6d11b2ff3882dbe",
+    "role": "mechanics_qualification_only",
+    "populationAuthority": "none"
+  },
+  "candidateRunner": {
+    "path": "tools/run-wgsl-writer-candidate.js",
+    "sha256": "7f8603a9b5d7ab87006aab0a65e982e28da00bdb4918dbe71ab291c548591df0"
+  },
+  "semanticHarness": {
+    "path": "tools/run-wgsl-writer-semantic-harness.js",
+    "sha256": "f091af26151aab89b815ec52df94e3ba094085a5c40b5c7042621b02bd264584"
+  },
+  "candidateIds": [
+    "qwen35-9b-f16-base",
+    "v13-seed29-repair-initialization"
+  ],
+  "executionOrder": [
+    "qwen35-9b-f16-base",
+    "v13-seed29-repair-initialization"
+  ],
+  "decisionRule": {
+    "submissionsPerCandidate": 1,
+    "identicalPrompts": true,
+    "identicalGeneration": true,
+    "retryAllowed": false,
+    "selectionAllowed": false,
+    "confirmationAllowed": false,
+    "promotionAllowed": false,
+    "diagnosticQuestion": "Does replacement-only V13 adaptation transfer zero-shot to complete-shader generation under the frozen writer mechanics contract?"
+  },
+  "authority": {
+    "visibleZeroShotDiagnostic": true,
+    "calibration": false,
+    "checkpointSelection": false,
+    "seedConfirmation": false,
+    "promotion": false,
+    "productization": false
+  },
+  "claimBoundary": "This policy permits exactly one deterministic completion receipt and one semantic evaluation for each frozen initialization on the visible mechanics-only tasks. It can diagnose zero-shot transfer but cannot calibrate, select, confirm, promote, or productize a WGSL writer."
+}

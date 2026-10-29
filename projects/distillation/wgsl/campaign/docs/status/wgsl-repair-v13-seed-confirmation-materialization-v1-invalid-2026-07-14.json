@@ -1,0 +1,41 @@
+{
+  "schema": "doppler.wgsl-repair-v13-confirmation-materialization-invalidation/v1",
+  "experimentId": "doppler-wgsl-repair-v13",
+  "freezeCommit": "cc2322a1bfe0576d54d9abed88acadedda3fe8cb",
+  "materializationPolicy": {
+    "path": "tools/policies/wgsl-repair-v13-confirmation-materialization-policy.json",
+    "sha256": "61349eec3ae88f1325986537412a8a2265a5ec18f5d0f0f15b9106d53927a42e"
+  },
+  "generatedManifest": {
+    "path": "tools/data/wgsl-repair-v13-semantic-seed-confirmation.json",
+    "sha256": "8498b3649755f1c6ef86328d71728844b492faac0c2c9639340e184b28689c9a",
+    "committed": false
+  },
+  "selectedBlueprintIds": [
+    "add-scalar-f32",
+    "mask-below-f32",
+    "leaky-relu-f32",
+    "difference-scale-f32",
+    "square-scale-f32",
+    "negate-f32",
+    "cap-f32",
+    "floor-f32"
+  ],
+  "composition": {
+    "taskCount": 8,
+    "unary": 7,
+    "binary": 1,
+    "parameterized": 6,
+    "nonParameterized": 2
+  },
+  "candidateInferencePerformed": false,
+  "referenceQualificationPerformed": false,
+  "decision": "invalid_before_candidate_inference",
+  "reasons": [
+    "unary_binary_composition_not_stratified",
+    "parameterized_nonparameterized_composition_not_stratified"
+  ],
+  "disposition": "The generated manifest and fixtures are discarded without model exposure. A new commit-bound materializer must freeze exact 4/4 arity and 4/4 parameterization strata before producing the authoritative seed-confirmation population.",
+  "claimBoundary": "This receipt preserves an invalid population-design attempt. It contains no candidate result and has no selection, confirmation, promotion, WGSL Doctor, or complete-shader-writing authority.",
+  "receiptHash": "9b9ebbdfb6c26ebc1fc41eecc51de97694634baba890e0ed67cff2ac53260aa1"
+}

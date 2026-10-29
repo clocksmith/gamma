@@ -1,0 +1,87 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-v3-corpus-policy.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-writer-v3-explicit-output-budget",
+  "experimentId": "doppler-wgsl-writer-v3",
+  "status": "frozen_before_materialization",
+  "capability": "complete_executable_webgpu_shader_package_from_natural_language_and_host_contract",
+  "predecessor": {
+    "referenceQualification": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v3-explicit-semantic/reference-qualification.json",
+      "sha256": "28e85fa7ef373bedef4412a4d27ebdbea7b316ce25c183b930d6d33c2927c67b"
+    },
+    "capabilityClaimTransfers": false
+  },
+  "corpus": {
+    "capabilityCatalog": {
+      "path": "tools/data/wgsl-writer-v3-semantic-capability-catalog.json",
+      "sha256": "806fcd49024cbcbef215ae999906e8fa66507ec537a08828c408a1e537efb50c"
+    },
+    "outputRoot": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v4-explicit-budget",
+    "rowsPerFamily": {
+      "training": 24,
+      "calibration": 3,
+      "checkpoint_selection": 3,
+      "seed_confirmation": 3
+    },
+    "splitKey": "semanticFamilyId",
+    "sourceLineage": "human_authored_doppler_explicit_semantic_and_output_budget_contract",
+    "sourceLicense": "Apache-2.0",
+    "packageDiversity": {
+      "mode": "identifier_binding_permutation_v1"
+    }
+  },
+  "promptContract": {
+    "templateId": "wgsl-executable-package-semantic-budget-spec-host-v3",
+    "useChatTemplate": false,
+    "responseContract": "wgsl_author_package_v1",
+    "includesNaturalLanguageSpecification": true,
+    "includesExplicitSemanticContract": true,
+    "includesExplicitHostContract": true,
+    "includesExplicitOutputTokenBudget": true,
+    "outputTokenBudget": 1280,
+    "hardStopDisclosed": true
+  },
+  "runtime": {
+    "headless": true,
+    "requiredBackend": "vulkan",
+    "requiredVendor": "amd",
+    "requiredFeatures": [],
+    "requiredLimits": {},
+    "powerPreference": "high-performance",
+    "executionTimeoutMs": 30000,
+    "browserArgs": [
+      "--enable-unsafe-webgpu",
+      "--enable-dawn-features=allow_unsafe_apis",
+      "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+      "--use-angle=vulkan",
+      "--disable-vulkan-surface"
+    ],
+    "allocationLimits": {
+      "maxBufferBytes": 1048576,
+      "maxTextureBytes": 1048576,
+      "maxTotalBytes": 2097152
+    }
+  },
+  "referenceQualification": {
+    "replayCount": 2,
+    "compileEveryPackage": true,
+    "executeEveryHeldoutTask": true,
+    "executeOneRepresentativePerTrainingFamily": false,
+    "executeEveryTrainingTask": true,
+    "qualityGateBlocking": true,
+    "mustPassBeforeTraining": true
+  },
+  "authority": {
+    "corpusMaterialization": true,
+    "referenceQualification": true,
+    "trainingAfterReferenceQualification": true,
+    "checkpointSelection": true,
+    "seedConfirmation": true,
+    "promotion": false,
+    "generalWgslWriterClaim": false,
+    "productization": false
+  },
+  "claimBoundary": "Every prompt discloses the exact 1280-generated-token hard stop while retaining explicit semantic, host, resource-layout, operation, and pass-order contracts. Reference qualification and family-disjoint evaluation remain mandatory; no earlier capability evidence transfers."
+}

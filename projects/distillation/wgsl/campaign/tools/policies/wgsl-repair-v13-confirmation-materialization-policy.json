@@ -1,0 +1,77 @@
+{
+  "$schema": "../../src/config/schema/wgsl-repair-confirmation-materialization.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-repair-v13-seed-confirmation-materialization",
+  "status": "frozen_before_population_materialization",
+  "generator": {
+    "path": "tools/materialize-wgsl-repair-v13-confirmation.js",
+    "sha256": "c0c66e7a0531126b3323f704697d8ea3447e661472a7891688dadde308d1551d"
+  },
+  "catalog": {
+    "path": "tools/data/wgsl-repair-v13-confirmation-blueprints.json",
+    "sha256": "856d67bdbff25a7971f2c0648bf5427dfc7868b6ad52155dce48a37a32c2281a",
+    "eligibleBlueprintCount": 12
+  },
+  "oracleImplementation": {
+    "path": "tools/lib/wgsl-semantic-harness.js",
+    "sha256": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+    "revision": "wgsl-semantic-cpu-oracles-v1"
+  },
+  "entropy": {
+    "source": "freeze_commit_sha",
+    "commitRequirement": "full_commit_must_contain_byte_identical_policy_generator_and_catalog",
+    "domainSeparator": "doppler-wgsl-v13-confirmation-v1"
+  },
+  "selection": {
+    "algorithm": "commit_sha256_stratified_blueprint_subset_v2",
+    "taskCount": 8,
+    "strata": [
+      {
+        "id": "binary_parameterized",
+        "arity": "binary",
+        "parameterized": true,
+        "count": 1
+      },
+      {
+        "id": "binary_nonparameterized",
+        "arity": "binary",
+        "parameterized": false,
+        "count": 3
+      },
+      {
+        "id": "unary_parameterized",
+        "arity": "unary",
+        "parameterized": true,
+        "count": 3
+      },
+      {
+        "id": "unary_nonparameterized",
+        "arity": "unary",
+        "parameterized": false,
+        "count": 1
+      }
+    ],
+    "subsetRule": "within frozen arity and parameterization strata, rank blueprint ids by domain-separated SHA-256 and take each declared count",
+    "parameterRule": "select declared parameter values, input seeds, and shape variants from independent domain-separated SHA-256 digests"
+  },
+  "outputs": {
+    "manifestPath": "tools/data/wgsl-repair-v13-semantic-seed-confirmation.json",
+    "fixtureDirectory": "tests/fixtures/wgsl-repair-v13/confirmation"
+  },
+  "freezeProtocol": [
+    "commit_and_push_this_policy_generator_catalog_and_oracle_implementation",
+    "derive_the_population_from_that_exact_commit_without_candidate_inference",
+    "commit_and_push_the_generated_sources_manifest_and_evaluation_policy",
+    "qualify_every_reference_dispatch_before_candidate_inference",
+    "run_selected_seed_29_exactly_once_on_the_frozen_confirmation_population"
+  ],
+  "authority": {
+    "candidateInferenceBeforePopulationFreeze": false,
+    "seedConfirmation": true,
+    "promotion": false,
+    "wgslDoctor": false,
+    "completeShaderWriting": false
+  },
+  "claimBoundary": "This pre-evaluation policy can deterministically materialize one disjoint seed-confirmation population after its own freeze commit exists. It cannot select a model, promote an adapter, authorize WGSL Doctor, or establish complete shader writing."
+}

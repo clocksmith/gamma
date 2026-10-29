@@ -1,0 +1,175 @@
+{
+  "schema": "doppler.wgsl-repair-v12-adapter-portability-status/v1",
+  "experimentId": "doppler-wgsl-repair-v12",
+  "lane": "external20",
+  "recordedAt": "2026-07-13",
+  "preservation": {
+    "receiptPath": "docs/status/wgsl-repair-v12-adapter-preservation-verification-2026-07-13.json",
+    "receiptSha256": "2892b97dd87db3247c622ee0d031c9e649eee6a0c5cb560d0ac67f5c2639025c",
+    "receiptHash": "ec82711b0d3beb20024538a59769f55e12ade4fa02165aef7356734b11df60d3",
+    "decision": "complete"
+  },
+  "bridgeImplementation": {
+    "promptTokenizerParity": {
+      "status": "fixed",
+      "commit": "01b843dd",
+      "finding": "Doppler now applies the configured Qwen ByteLevel regex pre-tokenizer and reproduces all 628 frozen prompt token IDs."
+    },
+    "loraWeightLayout": {
+      "status": "fixed",
+      "commit": "25b94c0e",
+      "finding": "Runtime LoRA applies native PEFT A=[K,r] and B=[r,N] matrices without transposing either operand."
+    },
+    "referencePrecisionControl": {
+      "status": "implemented",
+      "commit": "09733df2",
+      "finding": "The reference runner requires an explicit bfloat16 or float32 model dtype."
+    },
+    "gatedSiluSemantics": {
+      "status": "fixed",
+      "commit": "358653e78f0628c227b22edb32acfbd45220a67a",
+      "finding": "The split text FFN path now computes SiLU(gate) times the linear up branch. Gated SiLU callers must declare inputActivation explicitly, preventing the prior implicit SiLU(up) rewrite.",
+      "scope": "Confirmed on the Qwen 3.5 9B F16 split dense FFN path; the same fail-closed contract covers split SiLU MoE callers. Fused FFN paths are outside this finding."
+    }
+  },
+  "frozenParityGate": {
+    "policyPath": "tools/policies/wgsl-repair-v12-adapter-parity-policy.json",
+    "policySha256": "bffa4471eb976105ab5fe80acbbccd905788daf378ee6bcab4426991e6628719",
+    "referencePath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/parity/transformers/reference.json",
+    "referenceSha256": "6bb155e86b00166113fba7447fe22a20887625da9c95f0855a45bff284c39cb5",
+    "priorFailedAttempt": {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/parity/parity-v1-attempt3-failed.json",
+      "sha256": "5b83ba4ffbb02abcf4ea1094d0d6a7327bb8f1e66a915349123b7a72d68c290b",
+      "receiptHash": "b73ece5e3db749f33876e08f536b24ac88329051bb5dfa1106f572b7c4e9c5be",
+      "decision": "diagnostic_import_parity_failed"
+    },
+    "attemptPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/parity/parity-v1-post-silu-fix.json",
+    "attemptSha256": "a35a6de6b0ad2161aa216d727a79355fc608d41974b3f40770a2bd1baa579cbe",
+    "attemptReceiptHash": "629e4329923ab772ca050c4ad755794836b2d6a6612ed70af3b86d9fad09d9ab",
+    "dopplerCommit": "358653e78f0628c227b22edb32acfbd45220a67a",
+    "decision": "diagnostic_import_parity_passed",
+    "base": {
+      "promptTokenIdsExact": true,
+      "firstTokenIdExact": true,
+      "completionTokenIdsExact": true,
+      "logitCosineSimilarity": 0.9997408223878427,
+      "minimumLogitCosineSimilarity": 0.995,
+      "topKTokenOverlap": 10,
+      "minimumTopKTokenOverlap": 8,
+      "pass": true
+    },
+    "adapters": [
+      {
+        "seed": 11,
+        "promptTokenIdsExact": true,
+        "firstTokenIdExact": true,
+        "completionTokenIdsExact": true,
+        "completionCommonPrefixTokens": 20,
+        "referenceCompletionTokens": 20,
+        "dopplerCompletionTokens": 20,
+        "dopplerCompletionText": "@group(0) @binding(0) var<uniform> u: Uniforms;",
+        "logitCosineSimilarity": 0.9998450720213284,
+        "topKTokenOverlap": 10,
+        "adapterDeltaCosineSimilarity": 0.999624420777064,
+        "referenceAdapterDeltaL2Norm": 1393.039465193776,
+        "dopplerAdapterDeltaL2Norm": 1392.7062635764075,
+        "pass": true
+      },
+      {
+        "seed": 29,
+        "promptTokenIdsExact": true,
+        "firstTokenIdExact": true,
+        "completionTokenIdsExact": true,
+        "completionCommonPrefixTokens": 20,
+        "referenceCompletionTokens": 20,
+        "dopplerCompletionTokens": 20,
+        "dopplerCompletionText": "@group(0) @binding(0) var<uniform> u: Uniforms;",
+        "logitCosineSimilarity": 0.9998451765293753,
+        "topKTokenOverlap": 10,
+        "adapterDeltaCosineSimilarity": 0.9995723071656879,
+        "referenceAdapterDeltaL2Norm": 1309.8557817700498,
+        "dopplerAdapterDeltaL2Norm": 1312.2034025265307,
+        "pass": true
+      },
+      {
+        "seed": 47,
+        "promptTokenIdsExact": true,
+        "firstTokenIdExact": true,
+        "completionTokenIdsExact": true,
+        "completionCommonPrefixTokens": 20,
+        "referenceCompletionTokens": 20,
+        "dopplerCompletionTokens": 20,
+        "dopplerCompletionText": "@group(0) @binding(0) var<uniform> u: Uniforms;",
+        "logitCosineSimilarity": 0.9997632068449565,
+        "topKTokenOverlap": 10,
+        "adapterDeltaCosineSimilarity": 0.999653013690437,
+        "referenceAdapterDeltaL2Norm": 1617.2282930458837,
+        "dopplerAdapterDeltaL2Norm": 1632.8415839164563,
+        "pass": true
+      }
+    ]
+  },
+  "float32Control": {
+    "purpose": "Test whether the F16/F32 Doppler versus BF16 reference precision boundary explains the failed parity gate.",
+    "seed": 11,
+    "referencePath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/parity/transformers-f32/reference-seed11.json",
+    "referenceSha256": "1786a7e7165c030e813d50ac25fbcd9cffc5268a035f7993e524ee5f7634b326",
+    "referenceAdapterCompletionExact": true,
+    "dopplerVersusReference": {
+      "baseLogitCosineSimilarity": 0.8544647839801742,
+      "adapterLogitCosineSimilarity": 0.6646887239278002,
+      "adapterDeltaCosineSimilarity": 0.6679044327910002,
+      "baseTopKTokenOverlap": 6,
+      "adapterTopKTokenOverlap": 3
+    },
+    "conclusion": "reference_precision_not_causal"
+  },
+  "artifactEvidence": {
+    "base": {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/parity/doppler/base.post-silu-fix.json",
+      "sha256": "7b7defe3f0292c507b4c0bdb77d039d8d1a04e43cbbb3bcc24c7c0175c303ed3"
+    },
+    "adapters": [
+      {
+        "seed": 11,
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/parity/doppler/seed11.post-silu-fix.json",
+        "sha256": "2707f895fba0c4eae9305bfc2aed9a271af571398c94d464b17004f6f4221b89"
+      },
+      {
+        "seed": 29,
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/parity/doppler/seed29.post-silu-fix.json",
+        "sha256": "bb780d65afeb599c2becdea88acecc09be81b95a64b576a07948e4018e701f5e"
+      },
+      {
+        "seed": 47,
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/parity/doppler/seed47.post-silu-fix.json",
+        "sha256": "05f27bcbf1273dddf7e8b23e2ece819d773ae001d4754bc72136624ae4400d48"
+      }
+    ],
+    "layerZeroBoundary": {
+      "transformersPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/parity/transformers/base.layer0-slice.json",
+      "transformersSha256": "4424b6a11b5a3e550e0ca620dd45ba255a1d7590076bf8e431023c836e56655e",
+      "dopplerPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/parity/doppler/base.layer0-slice.json",
+      "dopplerSha256": "4958104961a499f6801ec2d026b07512ffc9bf91503883c06375343abbe487a0",
+      "finding": "The first material divergence was the gated FFN activation. After commit 358653e7, layer-zero FFN activation and down-projection statistics and samples agree with the Transformers BF16 reference."
+    }
+  },
+  "selection": {
+    "seedSelected": false,
+    "selectedSeed": null,
+    "reason": "All external20 adapters passed the frozen portability gate, but that gate explicitly has no checkpoint-selection authority. A new unexamined diagnostic population and frozen selection policy are required."
+  },
+  "v13Admission": {
+    "trainerToDopplerParitySatisfied": true,
+    "semanticEvaluationAllowed": false,
+    "wgslDoctorAllowed": false
+  },
+  "blockers": [
+    "deployable_seed_not_selected_under_frozen_policy",
+    "semantic_dispatch_oracle_contract_absent",
+    "historical_regression_population_absent"
+  ],
+  "nextDiagnosticBoundary": "Freeze a seed-selection policy on a new unexamined diagnostic population, then run the separately governed semantic dispatch and CPU-oracle campaign. Do not use the inspected V1 parity probe to choose a seed.",
+  "claimBoundary": "This receipt proves artifact preservation, exact prompt tokenization, base runtime parity, adapter identity and activation, exact deterministic completion parity, and aligned nonzero adapter effects for all three external20 seeds on the frozen V1 probe. It does not select a checkpoint, establish semantic WGSL correctness, promote an adapter, or authorize WGSL Doctor.",
+  "receiptHash": "2452092749b5333f019118d554fde3076f70e9b9e6909e93536ec25d4095b09b"
+}

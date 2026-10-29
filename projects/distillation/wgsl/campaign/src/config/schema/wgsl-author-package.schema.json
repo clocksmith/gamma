@@ -1,0 +1,974 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-author-package-v1.schema.json",
+  "title": "Executable WGSL author package v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "requirements",
+    "modules",
+    "resources",
+    "passes",
+    "outputs"
+  ],
+  "properties": {
+    "schema": {
+      "const": "doppler.wgsl-author-package/v1"
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "features",
+        "limits"
+      ],
+      "properties": {
+        "features": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          }
+        },
+        "limits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "minimum"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "#/$defs/identifier"
+              },
+              "minimum": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "modules": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {
+        "$ref": "#/$defs/module"
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/resource"
+      }
+    },
+    "passes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/computePass"
+          },
+          {
+            "$ref": "#/$defs/renderPass"
+          }
+        ]
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[-_][a-z0-9]+)*$"
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+    },
+    "expression": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "value"
+          ],
+          "properties": {
+            "kind": {
+              "const": "literal"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "name"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "parameter",
+                "override"
+              ]
+            },
+            "name": {
+              "$ref": "#/$defs/identifier"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "operator",
+            "operands"
+          ],
+          "properties": {
+            "kind": {
+              "const": "operation"
+            },
+            "operator": {
+              "enum": [
+                "add",
+                "multiply",
+                "max",
+                "min",
+                "ceil_div"
+              ]
+            },
+            "operands": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "prefixItems": [
+                {
+                  "$ref": "#/$defs/expression"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "wgsl"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "wgsl": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24000
+        }
+      }
+    },
+    "bufferDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "byteLength"
+      ],
+      "properties": {
+        "byteLength": {
+          "$ref": "#/$defs/expression"
+        }
+      }
+    },
+    "textureDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "dimension",
+        "width",
+        "height",
+        "depthOrArrayLayers",
+        "mipLevelCount",
+        "sampleCount"
+      ],
+      "properties": {
+        "format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dimension": {
+          "enum": [
+            "1d",
+            "2d",
+            "2d-array",
+            "cube",
+            "cube-array",
+            "3d"
+          ]
+        },
+        "width": {
+          "$ref": "#/$defs/expression"
+        },
+        "height": {
+          "$ref": "#/$defs/expression"
+        },
+        "depthOrArrayLayers": {
+          "$ref": "#/$defs/expression"
+        },
+        "mipLevelCount": {
+          "$ref": "#/$defs/expression"
+        },
+        "sampleCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sampleType": {
+          "enum": [
+            "float",
+            "unfilterable-float",
+            "depth",
+            "sint",
+            "uint"
+          ]
+        }
+      }
+    },
+    "samplerDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "samplerType",
+        "addressModeU",
+        "addressModeV",
+        "addressModeW",
+        "magFilter",
+        "minFilter",
+        "mipmapFilter",
+        "lodMinClamp",
+        "lodMaxClamp",
+        "compare",
+        "maxAnisotropy"
+      ],
+      "properties": {
+        "samplerType": {
+          "enum": [
+            "filtering",
+            "non-filtering",
+            "comparison"
+          ]
+        },
+        "addressModeU": {
+          "enum": [
+            "clamp-to-edge",
+            "repeat",
+            "mirror-repeat"
+          ]
+        },
+        "addressModeV": {
+          "enum": [
+            "clamp-to-edge",
+            "repeat",
+            "mirror-repeat"
+          ]
+        },
+        "addressModeW": {
+          "enum": [
+            "clamp-to-edge",
+            "repeat",
+            "mirror-repeat"
+          ]
+        },
+        "magFilter": {
+          "enum": [
+            "nearest",
+            "linear"
+          ]
+        },
+        "minFilter": {
+          "enum": [
+            "nearest",
+            "linear"
+          ]
+        },
+        "mipmapFilter": {
+          "enum": [
+            "nearest",
+            "linear"
+          ]
+        },
+        "lodMinClamp": {
+          "type": "number",
+          "minimum": 0
+        },
+        "lodMaxClamp": {
+          "type": "number",
+          "minimum": 0
+        },
+        "compare": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "enum": [
+                "never",
+                "less",
+                "equal",
+                "less-equal",
+                "greater",
+                "not-equal",
+                "greater-equal",
+                "always"
+              ]
+            }
+          ]
+        },
+        "maxAnisotropy": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        }
+      }
+    },
+    "vertexBufferDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "byteLength",
+        "arrayStride",
+        "stepMode",
+        "attributes"
+      ],
+      "properties": {
+        "byteLength": {
+          "$ref": "#/$defs/expression"
+        },
+        "arrayStride": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stepMode": {
+          "enum": [
+            "vertex",
+            "instance"
+          ]
+        },
+        "attributes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "shaderLocation",
+              "offset",
+              "format"
+            ],
+            "properties": {
+              "shaderLocation": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "offset": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "format": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "indexBufferDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "byteLength",
+        "indexFormat"
+      ],
+      "properties": {
+        "byteLength": {
+          "$ref": "#/$defs/expression"
+        },
+        "indexFormat": {
+          "enum": [
+            "uint16",
+            "uint32"
+          ]
+        }
+      }
+    },
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "access",
+        "ownership",
+        "descriptor"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "storage_buffer",
+            "uniform_buffer",
+            "sampled_texture",
+            "storage_texture",
+            "sampler",
+            "vertex_buffer",
+            "index_buffer",
+            "render_target"
+          ]
+        },
+        "access": {
+          "enum": [
+            "read",
+            "write",
+            "read_write"
+          ]
+        },
+        "ownership": {
+          "enum": [
+            "host",
+            "generated"
+          ]
+        },
+        "descriptor": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/bufferDescriptor"
+            },
+            {
+              "$ref": "#/$defs/textureDescriptor"
+            },
+            {
+              "$ref": "#/$defs/samplerDescriptor"
+            },
+            {
+              "$ref": "#/$defs/vertexBufferDescriptor"
+            },
+            {
+              "$ref": "#/$defs/indexBufferDescriptor"
+            }
+          ]
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "group",
+        "binding",
+        "resourceId",
+        "shaderName"
+      ],
+      "properties": {
+        "group": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "binding": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "resourceId": {
+          "$ref": "#/$defs/id"
+        },
+        "shaderName": {
+          "$ref": "#/$defs/identifier"
+        }
+      }
+    },
+    "pipelineConstant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/identifier"
+        },
+        "value": {
+          "$ref": "#/$defs/expression"
+        }
+      }
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height",
+        "minDepth",
+        "maxDepth"
+      ],
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/expression"
+        },
+        "y": {
+          "$ref": "#/$defs/expression"
+        },
+        "width": {
+          "$ref": "#/$defs/expression"
+        },
+        "height": {
+          "$ref": "#/$defs/expression"
+        },
+        "minDepth": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "maxDepth": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "scissor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/expression"
+        },
+        "y": {
+          "$ref": "#/$defs/expression"
+        },
+        "width": {
+          "$ref": "#/$defs/expression"
+        },
+        "height": {
+          "$ref": "#/$defs/expression"
+        }
+      }
+    },
+    "computePass": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "moduleId",
+        "entryPoints",
+        "constants",
+        "bindings",
+        "dispatch"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "compute"
+        },
+        "moduleId": {
+          "$ref": "#/$defs/id"
+        },
+        "entryPoints": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compute"
+          ],
+          "properties": {
+            "compute": {
+              "$ref": "#/$defs/identifier"
+            }
+          }
+        },
+        "constants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pipelineConstant"
+          }
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/binding"
+          }
+        },
+        "dispatch": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "x",
+            "y",
+            "z"
+          ],
+          "properties": {
+            "x": {
+              "$ref": "#/$defs/expression"
+            },
+            "y": {
+              "$ref": "#/$defs/expression"
+            },
+            "z": {
+              "$ref": "#/$defs/expression"
+            }
+          }
+        }
+      }
+    },
+    "directDraw": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "vertexCount",
+        "instanceCount",
+        "firstVertex",
+        "firstInstance"
+      ],
+      "properties": {
+        "kind": {
+          "const": "direct"
+        },
+        "vertexCount": {
+          "$ref": "#/$defs/expression"
+        },
+        "instanceCount": {
+          "$ref": "#/$defs/expression"
+        },
+        "firstVertex": {
+          "$ref": "#/$defs/expression"
+        },
+        "firstInstance": {
+          "$ref": "#/$defs/expression"
+        }
+      }
+    },
+    "indexedDraw": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "indexCount",
+        "instanceCount",
+        "firstIndex",
+        "baseVertex",
+        "firstInstance"
+      ],
+      "properties": {
+        "kind": {
+          "const": "indexed"
+        },
+        "indexCount": {
+          "$ref": "#/$defs/expression"
+        },
+        "instanceCount": {
+          "$ref": "#/$defs/expression"
+        },
+        "firstIndex": {
+          "$ref": "#/$defs/expression"
+        },
+        "baseVertex": {
+          "$ref": "#/$defs/expression"
+        },
+        "firstInstance": {
+          "$ref": "#/$defs/expression"
+        }
+      }
+    },
+    "renderPass": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "moduleId",
+        "entryPoints",
+        "constants",
+        "bindings",
+        "vertexBuffers",
+        "indexBuffer",
+        "draw",
+        "primitive",
+        "multisample",
+        "viewport",
+        "scissor",
+        "targets"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "render"
+        },
+        "moduleId": {
+          "$ref": "#/$defs/id"
+        },
+        "entryPoints": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "vertex",
+            "fragment"
+          ],
+          "properties": {
+            "vertex": {
+              "$ref": "#/$defs/identifier"
+            },
+            "fragment": {
+              "$ref": "#/$defs/identifier"
+            }
+          }
+        },
+        "constants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pipelineConstant"
+          }
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/binding"
+          }
+        },
+        "vertexBuffers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "slot",
+              "resourceId"
+            ],
+            "properties": {
+              "slot": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "resourceId": {
+                "$ref": "#/$defs/id"
+              }
+            }
+          }
+        },
+        "indexBuffer": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "resourceId"
+              ],
+              "properties": {
+                "resourceId": {
+                  "$ref": "#/$defs/id"
+                }
+              }
+            }
+          ]
+        },
+        "draw": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/directDraw"
+            },
+            {
+              "$ref": "#/$defs/indexedDraw"
+            }
+          ]
+        },
+        "primitive": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "topology",
+            "frontFace",
+            "cullMode",
+            "stripIndexFormat",
+            "unclippedDepth"
+          ],
+          "properties": {
+            "topology": {
+              "enum": [
+                "triangle-list",
+                "triangle-strip",
+                "line-list",
+                "line-strip",
+                "point-list"
+              ]
+            },
+            "frontFace": {
+              "enum": [
+                "ccw",
+                "cw"
+              ]
+            },
+            "cullMode": {
+              "enum": [
+                "none",
+                "front",
+                "back"
+              ]
+            },
+            "stripIndexFormat": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "enum": [
+                    "uint16",
+                    "uint32"
+                  ]
+                }
+              ]
+            },
+            "unclippedDepth": {
+              "type": "boolean"
+            }
+          }
+        },
+        "multisample": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "count",
+            "mask",
+            "alphaToCoverageEnabled"
+          ],
+          "properties": {
+            "count": {
+              "enum": [
+                1,
+                4
+              ]
+            },
+            "mask": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295
+            },
+            "alphaToCoverageEnabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "viewport": {
+          "$ref": "#/$defs/viewport"
+        },
+        "scissor": {
+          "$ref": "#/$defs/scissor"
+        },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "resourceId",
+              "format",
+              "loadOp",
+              "storeOp",
+              "clearValue",
+              "blend",
+              "writeMask"
+            ],
+            "properties": {
+              "resourceId": {
+                "$ref": "#/$defs/id"
+              },
+              "format": {
+                "type": "string",
+                "minLength": 1
+              },
+              "loadOp": {
+                "enum": [
+                  "clear",
+                  "load"
+                ]
+              },
+              "storeOp": {
+                "enum": [
+                  "store",
+                  "discard"
+                ]
+              },
+              "clearValue": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "array",
+                    "minItems": 4,
+                    "maxItems": 4,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                ]
+              },
+              "blend": {
+                "type": "null"
+              },
+              "writeMask": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 15
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

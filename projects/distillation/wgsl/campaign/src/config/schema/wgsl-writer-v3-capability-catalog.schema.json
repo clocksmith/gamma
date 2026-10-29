@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-writer-v3-capability-catalog-v1.schema.json",
+  "title": "WGSL writer v3 capability family plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "catalogId",
+    "status",
+    "targetCapability",
+    "responseContract",
+    "populationRoles",
+    "families",
+    "promotion",
+    "blockers"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../src/config/schema/wgsl-writer-v3-capability-catalog.schema.json"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "source": {
+      "const": "doppler"
+    },
+    "catalogId": {
+      "const": "doppler-wgsl-writer-v3-capability-families"
+    },
+    "status": {
+      "const": "planned_before_corpus_materialization"
+    },
+    "targetCapability": {
+      "const": "complete_executable_webgpu_shader_package_from_natural_language_and_host_contract"
+    },
+    "responseContract": {
+      "const": "doppler.wgsl-author-package/v1"
+    },
+    "populationRoles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "training",
+        "calibration",
+        "checkpoint_selection",
+        "seed_confirmation"
+      ],
+      "properties": {
+        "training": {
+          "$ref": "#/$defs/populationRole"
+        },
+        "calibration": {
+          "$ref": "#/$defs/populationRole"
+        },
+        "checkpoint_selection": {
+          "$ref": "#/$defs/populationRole"
+        },
+        "seed_confirmation": {
+          "$ref": "#/$defs/populationRole"
+        }
+      }
+    },
+    "families": {
+      "type": "array",
+      "minItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/family"
+      }
+    },
+    "promotion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "custody",
+        "materialized",
+        "naturalSpecificationsRequired",
+        "licensedSourceLineageRequired",
+        "familyDisjointFromAllDevelopmentRoles",
+        "sealedOpenings",
+        "promotionAllowed"
+      ],
+      "properties": {
+        "custody": {
+          "const": "external"
+        },
+        "materialized": {
+          "const": false
+        },
+        "naturalSpecificationsRequired": {
+          "const": true
+        },
+        "licensedSourceLineageRequired": {
+          "const": true
+        },
+        "familyDisjointFromAllDevelopmentRoles": {
+          "const": true
+        },
+        "sealedOpenings": {
+          "const": 1
+        },
+        "promotionAllowed": {
+          "const": false
+        }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "populationRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "familyPlanCount",
+        "materialized"
+      ],
+      "properties": {
+        "familyPlanCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "materialized": {
+          "const": false
+        }
+      }
+    },
+    "family": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "populationRole",
+        "pipelineKind",
+        "taskClass",
+        "specificationSource",
+        "requiredResourceKinds",
+        "requiredWgslFeatures",
+        "verification"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "populationRole": {
+          "enum": [
+            "training",
+            "calibration",
+            "checkpoint_selection",
+            "seed_confirmation"
+          ]
+        },
+        "pipelineKind": {
+          "enum": [
+            "compute",
+            "render",
+            "multi_pass"
+          ]
+        },
+        "taskClass": {
+          "type": "string",
+          "minLength": 1
+        },
+        "specificationSource": {
+          "const": "human_authored_doppler_reference"
+        },
+        "requiredResourceKinds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "storage_buffer",
+              "uniform_buffer",
+              "sampled_texture",
+              "storage_texture",
+              "sampler",
+              "vertex_buffer",
+              "index_buffer",
+              "render_target"
+            ]
+          }
+        },
+        "requiredWgslFeatures": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compilation",
+            "actualExecution",
+            "oracle",
+            "bufferBounds",
+            "metamorphic",
+            "requiredVariations",
+            "historicalRegressions"
+          ],
+          "properties": {
+            "compilation": {
+              "const": true
+            },
+            "actualExecution": {
+              "const": true
+            },
+            "oracle": {
+              "enum": [
+                "cpu_numeric",
+                "cpu_image",
+                "raster_reference",
+                "raster_invariants",
+                "cross_pass_cpu_oracle"
+              ]
+            },
+            "bufferBounds": {
+              "const": true
+            },
+            "metamorphic": {
+              "const": true
+            },
+            "requiredVariations": {
+              "type": "array",
+              "minItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "shape",
+                  "workgroup",
+                  "dispatch",
+                  "draw",
+                  "resource_size",
+                  "texture_size",
+                  "vertex_count",
+                  "instance_count"
+                ]
+              }
+            },
+            "historicalRegressions": {
+              "const": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

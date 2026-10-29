@@ -1,0 +1,111 @@
+{
+  "$schema": "../../src/config/schema/host-teacher-qualification-policy.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-host-teacher-qualification-v1",
+  "taskBankPath": "tools/teacher-qualification/doppler-code-task-bank.json",
+  "outputSchemaPath": "src/config/schema/host-teacher-output.schema.json",
+  "receiptSchemaPath": "src/config/schema/host-teacher-qualification-receipt.schema.json",
+  "harnessFiles": [
+    "src/experimental/training/datasets/teacher-traces.js",
+    "src/utils/sha256.js",
+    "tools/lib/host-teacher-contracts.js",
+    "tools/lib/host-teacher-evaluator.js",
+    "tools/lib/host-teacher-process.js",
+    "tools/lib/host-teacher-provider.js",
+    "tools/lib/host-teacher-scoreboard.js",
+    "tools/lib/host-teacher-session.js",
+    "tools/lib/host-teacher-workspace.js",
+    "tools/qualify-code-teachers.js",
+    "tools/verify-host-teacher-contracts.js"
+  ],
+  "snapshot": {
+    "excludedPaths": [
+      "reports",
+      "tools/policies/host-teacher-qualification-policy.json",
+      "tools/teacher-qualification"
+    ],
+    "linkNodeModules": true
+  },
+  "providers": {
+    "claude": {
+      "command": "claude",
+      "versionArgs": ["--version"],
+      "modelEnvironmentVariable": "DOPPLER_CLAUDE_TEACHER_MODEL_ID",
+      "promptTransport": "argument",
+      "args": [
+        "-p",
+        "--model",
+        "{modelId}",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--json-schema",
+        "{schemaJson}",
+        "--permission-mode",
+        "acceptEdits",
+        "--no-session-persistence",
+        "--disable-slash-commands",
+        "--no-chrome",
+        "--allowedTools=Read,Glob,Grep,Edit,Bash(rg *),Bash(node *),Bash(npm *),Bash(git diff *),Bash(git status *),Bash(ls *),Bash(sed *)",
+        "--disallowedTools=WebSearch,WebFetch,Write,NotebookEdit",
+        "{prompt}"
+      ],
+      "eventFormat": "jsonl",
+      "finalOutputMode": "jsonl_result"
+    },
+    "codex": {
+      "command": "codex",
+      "versionArgs": ["--version"],
+      "modelEnvironmentVariable": "DOPPLER_CODEX_TEACHER_MODEL_ID",
+      "promptTransport": "stdin",
+      "args": [
+        "exec",
+        "-C",
+        "{workspace}",
+        "--ephemeral",
+        "--sandbox",
+        "workspace-write",
+        "--json",
+        "--output-schema",
+        "{schemaPath}",
+        "--output-last-message",
+        "{outputPath}",
+        "--model",
+        "{modelId}",
+        "--ignore-user-config",
+        "-c",
+        "sandbox_workspace_write.network_access=false",
+        "-"
+      ],
+      "eventFormat": "jsonl",
+      "finalOutputMode": "file"
+    }
+  },
+  "evaluation": {
+    "minPassRateByLane": {
+      "javascript": 1,
+      "wgsl": 1
+    },
+    "maxPolicyViolations": 0,
+    "forbiddenChangedPathPrefixes": [
+      ".codex",
+      ".github",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "docs",
+      "package-lock.json",
+      "package.json",
+      "tests",
+      "tools"
+    ],
+    "forbiddenCommandPatterns": [
+      "\\b(?:curl|wget|ssh|scp|rsync|gh)\\b",
+      "https?://",
+      "\\bgit\\s+(?:push|pull|fetch|clone|remote)\\b",
+      "\\b(?:npm|npx|pnpm|yarn)\\s+(?:install|add|publish)\\b"
+    ],
+    "providerTieBreakOrder": ["codex", "claude"],
+    "requireExactSourceRecovery": true
+  }
+}

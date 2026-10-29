@@ -1,0 +1,861 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-v3-semantic-capability-catalog.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "catalogId": "doppler-wgsl-writer-v3-explicit-semantic-capability-families",
+  "status": "planned_before_corpus_materialization",
+  "targetCapability": "complete_executable_webgpu_shader_package_from_natural_language_and_host_contract",
+  "responseContract": "doppler.wgsl-author-package/v1",
+  "populationRoles": {
+    "training": {
+      "familyPlanCount": 8,
+      "materialized": false
+    },
+    "calibration": {
+      "familyPlanCount": 4,
+      "materialized": false
+    },
+    "checkpoint_selection": {
+      "familyPlanCount": 4,
+      "materialized": false
+    },
+    "seed_confirmation": {
+      "familyPlanCount": 4,
+      "materialized": false
+    }
+  },
+  "families": [
+    {
+      "id": "buffer-map",
+      "populationRole": "training",
+      "pipelineKind": "compute",
+      "taskClass": "bounded elementwise and coordinate transforms over typed storage buffers",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "source and result are tightly packed runtime-sized arrays of f32 with byteLength bytes each."
+        ],
+        "operation": [
+          "For every index below elementCount, write result[index] = source[index] * 1.5 - 0.25. Guard all tail invocations."
+        ],
+        "passGraph": [
+          "Run one compute pass with a WORKGROUP_SIZE override and x = ceil_div(elementCount, WORKGROUP_SIZE); output result."
+        ]
+      },
+      "requiredResourceKinds": [
+        "storage_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "runtime-sized-arrays",
+        "builtins"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "tiled-matrix-transform",
+      "populationRole": "training",
+      "pipelineKind": "compute",
+      "taskClass": "two-dimensional tiled matrix transforms with boundary tiles",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "source and result are row-major packed f32 matrices with byteLength bytes. matrix-config is exactly 16 bytes: width:u32, height:u32, reserved_0:u32, reserved_1:u32."
+        ],
+        "operation": [
+          "Transpose the matrix so result[x * height + y] = source[y * width + x]. Stage values through workgroup memory, synchronize before reading, and guard boundary tiles."
+        ],
+        "passGraph": [
+          "Run one two-dimensional compute pass using WORKGROUP_SIZE for x and y; dispatch ceil_div(width, WORKGROUP_SIZE) by ceil_div(height, WORKGROUP_SIZE); output result."
+        ]
+      },
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "workgroup-memory",
+        "barriers",
+        "overrides"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "workgroup",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "storage-texture-filter",
+      "populationRole": "training",
+      "pipelineKind": "compute",
+      "taskClass": "neighborhood image filters over sampled and storage textures",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "source-texture is an rgba8unorm sampled 2D texture, source-sampler is a nearest clamp-to-edge filtering sampler, and result-texture is an rgba8unorm write-only storage texture; both textures are width by height."
+        ],
+        "operation": [
+          "Copy each source texel exactly to the matching result coordinate. Exercise both textureLoad and explicit-level nearest sampling without changing the copied value, and guard coordinates outside width and height."
+        ],
+        "passGraph": [
+          "Run one two-dimensional compute pass with WORKGROUP_SIZE and ceil-divided width and height; output result-texture."
+        ]
+      },
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "storage_texture",
+        "sampler"
+      ],
+      "requiredWgslFeatures": [
+        "texture-load",
+        "texture-store",
+        "edge-policy"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "atomic-histogram",
+      "populationRole": "training",
+      "pipelineKind": "compute",
+      "taskClass": "contention-safe histograms and counters with deterministic totals",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "samples is a packed runtime-sized array of u32 with inputBytes bytes. histogram is a four-element array of atomic<u32> with outputBytes bytes."
+        ],
+        "operation": [
+          "Count every sample into bin samples[index] % 4. Initialize four workgroup-local atomic bins, synchronize, accumulate valid samples, synchronize again, and atomically merge all four bins into histogram."
+        ],
+        "passGraph": [
+          "Run one compute pass with WORKGROUP_SIZE at least four and x = ceil_div(elementCount, WORKGROUP_SIZE); output histogram."
+        ]
+      },
+      "requiredResourceKinds": [
+        "storage_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "atomics",
+        "workgroup-memory",
+        "barriers"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "procedural-raster",
+      "populationRole": "training",
+      "pipelineKind": "render",
+      "taskClass": "procedural vertex geometry with fragment-coordinate shading",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "scene is exactly 16 bytes containing tint:vec4<f32>. color is an rgba8unorm render target sized width by height."
+        ],
+        "operation": [
+          "Generate a viewport-covering triangle from vertex_index with clip positions (-1,-1), (3,-1), and (-1,3). Shade every covered fragment with scene.tint."
+        ],
+        "passGraph": [
+          "Run one direct render pass drawing three vertices and one instance to color; output color."
+        ]
+      },
+      "requiredResourceKinds": [
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "vertex-builtins",
+        "fragment-builtins",
+        "interpolation"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "raster_reference",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "draw",
+          "texture_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "indexed-vertex-color",
+      "populationRole": "training",
+      "pipelineKind": "render",
+      "taskClass": "indexed meshes using explicit vertex layouts and interpolated attributes",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "vertices uses arrayStride 24 with position float32x2 at offset 0 and color float32x4 at offset 8. indices is uint32. transform is exactly 16 bytes: scale:vec2<f32>, offset:vec2<f32>. color is an rgba8unorm target."
+        ],
+        "operation": [
+          "Transform each position as position * scale + offset, pass the vertex color to the fragment stage, and return the interpolated color unchanged."
+        ],
+        "passGraph": [
+          "Run one indexed render pass using indexCount, one instance, vertices slot 0, and indices; output color."
+        ]
+      },
+      "requiredResourceKinds": [
+        "vertex_buffer",
+        "index_buffer",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "vertex-inputs",
+        "indexed-draw",
+        "interpolation"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "raster_reference",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "vertex_count",
+          "draw",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "textured-sprite",
+      "populationRole": "training",
+      "pipelineKind": "render",
+      "taskClass": "sampled-texture sprites with coordinate transforms and filtering contracts",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "sprite-texture is a 2x2 rgba8unorm sampled texture, sprite-sampler is nearest clamp-to-edge, sprite-config is exactly 16 bytes containing tint:vec4<f32>, and color is an rgba8unorm target."
+        ],
+        "operation": [
+          "Generate a viewport-covering triangle, map clip position to texture UV with a vertical flip, sample the sprite, and multiply by tint. Exercise fragment derivatives without changing the color."
+        ],
+        "passGraph": [
+          "Run one direct render pass drawing three vertices and one instance; output color."
+        ]
+      },
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "sampler",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "texture-sampling",
+        "derivatives",
+        "interpolation"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "draw"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "compute-to-raster",
+      "populationRole": "training",
+      "pipelineKind": "multi_pass",
+      "taskClass": "compute-generated geometry or attributes consumed by a render pass",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "positions is exactly 24 bytes for three vec2<f32> values. draw-config is exactly 16 bytes containing color:vec4<f32>. color is an rgba8unorm target."
+        ],
+        "operation": [
+          "The compute pass writes clip positions (-1,-1), (3,-1), and (-1,3) into positions. The render pass reads those positions by vertex_index and shades all fragments with draw-config.color."
+        ],
+        "passGraph": [
+          "Run the compute pass first, then a direct three-vertex render pass consuming the same positions buffer; output color."
+        ]
+      },
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "multi-pass-resource-flow",
+        "storage-buffer-vertex-read"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cross_pass_cpu_oracle",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "dispatch",
+          "draw",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "bounded-reduction",
+      "populationRole": "calibration",
+      "pipelineKind": "compute",
+      "taskClass": "multi-workgroup reductions with partial final groups",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "source is a packed runtime-sized f32 array with inputBytes bytes. partials is a packed f32 array with outputBytes bytes. reduce-config is exactly 16 bytes: element_count:u32, group_count:u32, reserved_0:u32, reserved_1:u32."
+        ],
+        "operation": [
+          "Each workgroup sums its consecutive WORKGROUP_SIZE source elements into one partial. Treat indices at or beyond element_count as zero and perform a synchronized tree reduction in workgroup memory."
+        ],
+        "passGraph": [
+          "Run one compute pass with x = ceil_div(elementCount, WORKGROUP_SIZE); output partials."
+        ]
+      },
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "workgroup-memory",
+        "barriers",
+        "overrides"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "cellular-step",
+      "populationRole": "calibration",
+      "pipelineKind": "compute",
+      "taskClass": "two-dimensional cellular updates with explicit boundary semantics",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "current-state is an rgba8unorm sampled texture, next-state is an rgba8unorm write-only storage texture, and grid-config is exactly 16 bytes: width:u32, height:u32, reserved_0:u32, reserved_1:u32."
+        ],
+        "operation": [
+          "For every in-range coordinate, load current-state and write next-state with red = 1 - red while preserving green, blue, and alpha."
+        ],
+        "passGraph": [
+          "Run one bounded two-dimensional compute pass using WORKGROUP_SIZE and ceil-divided width and height; output next-state."
+        ]
+      },
+      "requiredResourceKinds": [
+        "storage_texture",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "texture-load",
+        "texture-store",
+        "coordinate-neighborhoods"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "instanced-glyphs",
+      "populationRole": "calibration",
+      "pipelineKind": "render",
+      "taskClass": "instanced geometry with per-instance storage and uniform transforms",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "glyph-vertices has arrayStride 8 with position float32x2 at offset 0. instances is a runtime-sized array of vec2<f32> offsets. glyph-config is exactly 32 bytes: scale:vec2<f32>, reserved:vec2<f32>, color:vec4<f32>."
+        ],
+        "operation": [
+          "For each instance, transform each glyph vertex as position * scale + instance_offsets[instance_index]. Shade every fragment with glyph-config.color."
+        ],
+        "passGraph": [
+          "Run one direct instanced render pass with vertexCount and instanceCount using glyph-vertices slot 0; output color."
+        ]
+      },
+      "requiredResourceKinds": [
+        "vertex_buffer",
+        "storage_buffer",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "instance-index",
+        "vertex-inputs",
+        "storage-buffer-vertex-read"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "raster_invariants",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "instance_count",
+          "vertex_count",
+          "draw"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "offscreen-postprocess",
+      "populationRole": "calibration",
+      "pipelineKind": "multi_pass",
+      "taskClass": "offscreen render followed by sampled-texture postprocessing",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "scene is exactly 16 bytes containing color:vec4<f32>. offscreen is a width-by-height rgba8unorm render target readable by the next pass, postprocess-sampler is nearest clamp-to-edge, and color is the final rgba8unorm target."
+        ],
+        "operation": [
+          "The first full-screen pass writes scene.color to offscreen. The second full-screen pass maps clip position to vertically flipped UV and samples offscreen unchanged into color."
+        ],
+        "passGraph": [
+          "Run offscreen-pass before postprocess-pass; each draws a viewport-covering triangle; output color."
+        ]
+      },
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "sampler",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "multi-pass-resource-flow",
+        "texture-sampling",
+        "fragment-builtins"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "draw"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "normalized-convolution",
+      "populationRole": "checkpoint_selection",
+      "pipelineKind": "compute",
+      "taskClass": "parameterized separable and normalized convolutions with edge handling",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "source-image is a width-by-height rgba8unorm sampled texture, image-sampler is nearest clamp-to-edge, filtered-image is an rgba8unorm write-only storage texture, and filter-config is exactly 16 bytes: width:u32, height:u32, reserved_0:u32, reserved_1:u32."
+        ],
+        "operation": [
+          "At each in-range coordinate, apply the horizontal normalized kernel [1,2,1] / 4 using explicit-level sampling at center-step, center, and center+step. Also exercise textureLoad without changing the result."
+        ],
+        "passGraph": [
+          "Run one bounded two-dimensional compute pass using WORKGROUP_SIZE and ceil-divided width and height; output filtered-image."
+        ]
+      },
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "storage_texture",
+        "uniform_buffer",
+        "sampler"
+      ],
+      "requiredWgslFeatures": [
+        "texture-load",
+        "texture-store",
+        "overrides"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "particle-integration",
+      "populationRole": "checkpoint_selection",
+      "pipelineKind": "compute",
+      "taskClass": "stateful particle integration with bounded domains and deterministic forces",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "particles and next-particles are packed runtime-sized arrays of Particle { position:vec2<f32>, velocity:vec2<f32> }, 16 bytes per particle. integration-config is exactly 16 bytes: delta_time:f32, domain_max:f32, count:u32, reserved:u32."
+        ],
+        "operation": [
+          "For each index below integration-config.count, write position = clamp(position + velocity * delta_time, vec2(0), vec2(domain_max)) and copy velocity unchanged."
+        ],
+        "passGraph": [
+          "Run one compute pass with x = ceil_div(particleCount, WORKGROUP_SIZE), guarding by config count; output next-particles."
+        ]
+      },
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "struct-arrays",
+        "runtime-sized-arrays",
+        "builtins"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "dispatch",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "sampled-mesh-transform",
+      "populationRole": "checkpoint_selection",
+      "pipelineKind": "render",
+      "taskClass": "indexed transformed meshes with sampled material data",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "mesh-vertices has arrayStride 16 with position float32x2 at offset 0 and uv float32x2 at offset 8. mesh-indices is uint32. mesh-transform is exactly 16 bytes: scale:vec2<f32>, offset:vec2<f32>. material-texture is 2x2 rgba8unorm with a nearest clamp-to-edge sampler."
+        ],
+        "operation": [
+          "Transform positions as position * scale + offset, pass UV unchanged, and shade fragments by sampling material-texture at the interpolated UV."
+        ],
+        "passGraph": [
+          "Run one indexed render pass using indexCount, mesh-vertices slot 0, and mesh-indices; output color."
+        ]
+      },
+      "requiredResourceKinds": [
+        "vertex_buffer",
+        "index_buffer",
+        "uniform_buffer",
+        "sampled_texture",
+        "sampler",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "indexed-draw",
+        "matrix-transforms",
+        "texture-sampling"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "raster_reference",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "vertex_count",
+          "texture_size",
+          "draw"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "simulation-visualization",
+      "populationRole": "checkpoint_selection",
+      "pipelineKind": "multi_pass",
+      "taskClass": "compute simulation state rendered through a separate visualization pass",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "simulation-state is exactly 24 bytes for three vec2<f32> clip positions. visual-config is exactly 16 bytes containing color:vec4<f32>. color is an rgba8unorm target."
+        ],
+        "operation": [
+          "The compute pass writes clip positions (-1,-1), (3,-1), and (-1,3). The render pass reads them by vertex_index for each instance and shades with visual-config.color; instance_index must not change the position."
+        ],
+        "passGraph": [
+          "Run compute before an instanced direct render of three vertices and instanceCount instances; output color."
+        ]
+      },
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "multi-pass-resource-flow",
+        "storage-buffer-vertex-read",
+        "instance-index"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cross_pass_cpu_oracle",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "dispatch",
+          "instance_count",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "segmented-reduction",
+      "populationRole": "seed_confirmation",
+      "pipelineKind": "compute",
+      "taskClass": "segmented reductions with irregular boundaries and neutral elements",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "source is a packed runtime-sized f32 array with inputBytes bytes. partials stores one f32 per segment with outputBytes bytes. reduce-config is exactly 16 bytes: element_count:u32, segment_count:u32, reserved_0:u32, reserved_1:u32."
+        ],
+        "operation": [
+          "For segment s, sum every source[index] where index % segment_count == s. Each workgroup owns one segment, strides by WORKGROUP_SIZE, and combines lane sums with a synchronized workgroup reduction."
+        ],
+        "passGraph": [
+          "Run one compute pass with x = segmentCount workgroups and WORKGROUP_SIZE lanes; output partials."
+        ]
+      },
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "workgroup-memory",
+        "barriers",
+        "struct-arrays"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "workgroup",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "coordinate-image-warp",
+      "populationRole": "seed_confirmation",
+      "pipelineKind": "compute",
+      "taskClass": "coordinate image warps with explicit sampling and out-of-range policy",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "source-image is a width-by-height rgba8unorm sampled texture, warp-sampler is nearest clamp-to-edge, warped-image is an rgba8unorm write-only storage texture, and warp-config is exactly 16 bytes: width:u32, height:u32, reserved_0:u32, reserved_1:u32."
+        ],
+        "operation": [
+          "Mirror horizontally: destination (x,y) samples source (width - 1 - x,y) at the source texel center. Guard all out-of-range destination invocations."
+        ],
+        "passGraph": [
+          "Run one bounded two-dimensional compute pass using WORKGROUP_SIZE and ceil-divided width and height; output warped-image."
+        ]
+      },
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "storage_texture",
+        "sampler",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "texture-sampling",
+        "texture-store",
+        "coordinate-transforms"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "indexed-shaded-mesh",
+      "populationRole": "seed_confirmation",
+      "pipelineKind": "render",
+      "taskClass": "indexed mesh shading with transformed normals and directional lighting",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "shaded-vertices has arrayStride 20 with position float32x2 at offset 0 and normal float32x3 at offset 8. shaded-indices is uint32. lighting is exactly 32 bytes: light_direction:vec3<f32>, reserved:f32, base_color:vec4<f32>."
+        ],
+        "operation": [
+          "Pass clip-space position and normal through the vertex stage. In the fragment stage compute intensity = max(dot(normalize(normal), normalize(light_direction)), 0) and return base_color.rgb * intensity with base_color.a."
+        ],
+        "passGraph": [
+          "Run one indexed render pass using indexCount, shaded-vertices slot 0, and shaded-indices; output color."
+        ]
+      },
+      "requiredResourceKinds": [
+        "vertex_buffer",
+        "index_buffer",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "indexed-draw",
+        "matrix-transforms",
+        "normal-interpolation"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "raster_reference",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "vertex_count",
+          "draw",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "ping-pong-visualization",
+      "populationRole": "seed_confirmation",
+      "pipelineKind": "multi_pass",
+      "taskClass": "alternating state textures followed by a visualization pass",
+      "specificationSource": "human_authored_doppler_reference",
+      "semanticContract": {
+        "resourceLayouts": [
+          "state-a is a width-by-height rgba8unorm sampled texture, state-b is a matching rgba8unorm storage texture that is sampled by the next pass, state-sampler is nearest clamp-to-edge, and color is the final rgba8unorm target."
+        ],
+        "operation": [
+          "The compute pass copies every in-range texel from state-a to state-b exactly. The visualization pass maps a viewport-covering triangle to vertically flipped UV and samples state-b unchanged."
+        ],
+        "passGraph": [
+          "Run the bounded compute pass before the full-screen render pass; output color."
+        ]
+      },
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "storage_texture",
+        "sampler",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "multi-pass-resource-flow",
+        "texture-load",
+        "texture-store",
+        "texture-sampling"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cross_pass_cpu_oracle",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "dispatch",
+          "draw"
+        ],
+        "historicalRegressions": true
+      }
+    }
+  ],
+  "promotion": {
+    "custody": "external",
+    "materialized": false,
+    "naturalSpecificationsRequired": true,
+    "licensedSourceLineageRequired": true,
+    "familyDisjointFromAllDevelopmentRoles": true,
+    "sealedOpenings": 1,
+    "promotionAllowed": false
+  },
+  "blockers": [
+    "capability_tasks_and_oracles_not_materialized",
+    "render_depth_stencil_blend_state_not_represented",
+    "mipmapped_and_multisampled_resource_execution_not_supported",
+    "indirect_draw_and_dispatch_not_represented",
+    "external_promotion_population_not_materialized"
+  ]
+}

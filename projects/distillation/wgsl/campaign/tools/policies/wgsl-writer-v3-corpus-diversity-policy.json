@@ -1,0 +1,83 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-v3-corpus-policy.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-writer-v3-corpus-diversity-repair",
+  "experimentId": "doppler-wgsl-writer-v3",
+  "status": "frozen_before_materialization",
+  "capability": "complete_executable_webgpu_shader_package_from_natural_language_and_host_contract",
+  "predecessor": {
+    "referenceQualification": {
+      "path": "docs/status/wgsl-writer-v3-reference-qualification-2026-07-18.json",
+      "sha256": "0ce2f83e7b8ab71f87a8a50ed623d4b34f8169856a8012d0eff5f3a126368f24"
+    },
+    "capabilityClaimTransfers": false
+  },
+  "corpus": {
+    "capabilityCatalog": {
+      "path": "tools/data/wgsl-writer-v3-capability-catalog.json",
+      "sha256": "e9b54639ae5b7eb121652427adc704da434ecf8b35940fc33fa5eb3371e7c990"
+    },
+    "outputRoot": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v2-diverse",
+    "rowsPerFamily": {
+      "training": 24,
+      "calibration": 3,
+      "checkpoint_selection": 3,
+      "seed_confirmation": 3
+    },
+    "splitKey": "semanticFamilyId",
+    "sourceLineage": "human_authored_doppler_parametric_reference_with_verified_alpha_layout_variants",
+    "sourceLicense": "Apache-2.0",
+    "packageDiversity": {
+      "mode": "identifier_binding_permutation_v1"
+    }
+  },
+  "promptContract": {
+    "templateId": "wgsl-executable-package-spec-host-v1",
+    "useChatTemplate": false,
+    "responseContract": "wgsl_author_package_v1",
+    "includesNaturalLanguageSpecification": true,
+    "includesExplicitHostContract": true
+  },
+  "runtime": {
+    "headless": true,
+    "requiredBackend": "vulkan",
+    "requiredVendor": "amd",
+    "requiredFeatures": [],
+    "requiredLimits": {},
+    "powerPreference": "high-performance",
+    "executionTimeoutMs": 30000,
+    "browserArgs": [
+      "--enable-unsafe-webgpu",
+      "--enable-dawn-features=allow_unsafe_apis",
+      "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+      "--use-angle=vulkan",
+      "--disable-vulkan-surface"
+    ],
+    "allocationLimits": {
+      "maxBufferBytes": 1048576,
+      "maxTextureBytes": 1048576,
+      "maxTotalBytes": 2097152
+    }
+  },
+  "referenceQualification": {
+    "replayCount": 2,
+    "compileEveryPackage": true,
+    "executeEveryHeldoutTask": true,
+    "executeOneRepresentativePerTrainingFamily": false,
+    "executeEveryTrainingTask": true,
+    "qualityGateBlocking": true,
+    "mustPassBeforeTraining": true
+  },
+  "authority": {
+    "corpusMaterialization": true,
+    "referenceQualification": true,
+    "trainingAfterReferenceQualification": true,
+    "checkpointSelection": true,
+    "seedConfirmation": true,
+    "promotion": false,
+    "generalWgslWriterClaim": false,
+    "productization": false
+  },
+  "claimBoundary": "This repair corpus keeps checkpoint and confirmation families disjoint while replacing eight repeated training packages with 192 qualified identifier, entry-point, binding-layout, and serialization variants. It cannot establish external promotion, arbitrary WGSL authorship, or product readiness."
+}

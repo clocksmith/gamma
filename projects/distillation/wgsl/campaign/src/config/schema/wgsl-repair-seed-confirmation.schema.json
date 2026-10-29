@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-repair-seed-confirmation-v1.schema.json",
+  "title": "WGSL repair V13 seed-confirmation evaluation policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "status",
+    "eligibleLane",
+    "predecessor",
+    "selectionReceipt",
+    "materialization",
+    "runtime",
+    "candidateRunner",
+    "semanticHarness",
+    "populations",
+    "eligibleCandidates",
+    "promptContract",
+    "generation",
+    "decisionRule",
+    "authority",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": { "const": "../../src/config/schema/wgsl-repair-seed-confirmation.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "doppler" },
+    "policyId": { "const": "doppler-wgsl-repair-v13-seed29-confirmation" },
+    "status": { "const": "frozen_before_candidate_inference" },
+    "eligibleLane": { "const": "external20" },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapterPortabilityReceiptPath", "adapterPortabilityReceiptSha256", "requiredDecision"],
+      "properties": {
+        "adapterPortabilityReceiptPath": { "$ref": "#/$defs/repoPath" },
+        "adapterPortabilityReceiptSha256": { "$ref": "#/$defs/sha256" },
+        "requiredDecision": { "const": "diagnostic_import_parity_passed" }
+      }
+    },
+    "selectionReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "requiredDecision", "selectedSeed"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "requiredDecision": { "const": "selected_for_seed_confirmation" },
+        "selectedSeed": { "const": 29 }
+      }
+    },
+    "materialization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyPath", "policySha256", "freezeCommit", "algorithm"],
+      "properties": {
+        "policyPath": { "$ref": "#/$defs/repoPath" },
+        "policySha256": { "$ref": "#/$defs/sha256" },
+        "freezeCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "algorithm": { "const": "commit_sha256_stratified_blueprint_subset_v2" }
+      }
+    },
+    "runtime": { "$ref": "#/$defs/runtime" },
+    "candidateRunner": { "$ref": "#/$defs/binding" },
+    "semanticHarness": { "$ref": "#/$defs/binding" },
+    "populations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seedConfirmation"],
+      "properties": {
+        "seedConfirmation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256", "selectionAuthority", "confirmationAuthority"],
+          "properties": {
+            "path": { "$ref": "#/$defs/repoPath" },
+            "sha256": { "$ref": "#/$defs/sha256" },
+            "selectionAuthority": { "const": false },
+            "confirmationAuthority": { "const": true }
+          }
+        }
+      }
+    },
+    "eligibleCandidates": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": { "$ref": "#/$defs/candidate" }
+    },
+    "promptContract": {
+      "const": {
+        "templateId": "wgsl-replacement-only-context-600-v1",
+        "contextCharactersPerSide": 600,
+        "useChatTemplate": false,
+        "responseContract": "replacement_only_wgsl_span_v1"
+      }
+    },
+    "generation": {
+      "const": {
+        "maxTokens": 64,
+        "temperature": 0,
+        "topP": 1,
+        "topK": 1,
+        "repetitionPenalty": 1,
+        "greedyThreshold": 0
+      }
+    },
+    "decisionRule": {
+      "const": {
+        "submissionCount": 1,
+        "requiredSemanticTaskPasses": 8,
+        "requiredCompilationPasses": 8,
+        "requiredSemanticVariantPasses": 24,
+        "requiredResponseContractPasses": 8,
+        "requiredHistoricalRegressionPasses": 8,
+        "failureDecision": "seed_confirmation_rejected",
+        "passDecision": "seed_confirmation_passed"
+      }
+    },
+    "authority": {
+      "const": {
+        "seedConfirmation": true,
+        "promotion": false,
+        "wgslDoctor": false,
+        "completeShaderWriting": false
+      }
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["modelId", "modelManifestSha256", "artifactStatusPath", "artifactStatusSha256", "conversionConfigPath", "conversionConfigSha256", "runtimeProfile"],
+      "properties": {
+        "modelId": { "const": "qwen-3-5-9b-f16-af32" },
+        "modelManifestSha256": { "$ref": "#/$defs/sha256" },
+        "artifactStatusPath": { "$ref": "#/$defs/repoPath" },
+        "artifactStatusSha256": { "$ref": "#/$defs/sha256" },
+        "conversionConfigPath": { "$ref": "#/$defs/repoPath" },
+        "conversionConfigSha256": { "$ref": "#/$defs/sha256" },
+        "runtimeProfile": { "const": "profiles/production" }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seed", "adapterManifestPath", "adapterManifestSha256", "adapterWeightsPath", "adapterWeightsSha256"],
+      "properties": {
+        "seed": { "const": 29 },
+        "adapterManifestPath": { "$ref": "#/$defs/repoPath" },
+        "adapterManifestSha256": { "$ref": "#/$defs/sha256" },
+        "adapterWeightsPath": { "$ref": "#/$defs/repoPath" },
+        "adapterWeightsSha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

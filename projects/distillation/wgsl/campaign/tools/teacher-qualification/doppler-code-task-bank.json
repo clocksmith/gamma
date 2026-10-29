@@ -1,0 +1,538 @@
+{
+  "$schema": "../../src/config/schema/host-teacher-task-bank.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "bankId": "doppler-js-wgsl-repair-v1",
+  "baseRevision": "d9eb95510178eb7bbfc59af307a58793b85fb51e",
+  "studentBaseModelId": "google/gemma-3-270m-it",
+  "tasks": [
+    {
+      "id": "js-qualification-command-object-gate",
+      "lane": "javascript",
+      "split": "qualification",
+      "title": "Restore the command request object gate",
+      "prompt": "A regression lets arrays and primitive values reach command normalization. Restore the fail-closed plain-object boundary without changing accepted command requests.",
+      "sourceFiles": ["src/tooling/command-api.js", "tests/integration/command-api.test.js"],
+      "allowedChangedPaths": ["src/tooling/command-api.js"],
+      "mutations": [
+        {
+          "path": "src/tooling/command-api.js",
+          "find": "if (!isPlainObject(input)) {",
+          "replace": "if (input == null) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "command-api-tests",
+          "command": "node",
+          "args": ["tools/run-node-tests.js", "tests/integration/command-api.test.js"]
+        }
+      ]
+    },
+    {
+      "id": "js-qualification-browser-distill-gate",
+      "lane": "javascript",
+      "split": "qualification",
+      "title": "Restore browser rejection for distillation",
+      "prompt": "A regression allows the Node-only distillation command through the browser surface gate. Restore the existing fail-closed browser contract and preserve the other command cases.",
+      "sourceFiles": ["src/tooling/command-api.js", "tests/integration/training-operator-command-api.test.js"],
+      "allowedChangedPaths": ["src/tooling/command-api.js"],
+      "mutations": [
+        {
+          "path": "src/tooling/command-api.js",
+          "find": "request.command === 'lora'\n      || request.command === 'distill'",
+          "replace": "request.command === 'lora'\n      || request.command === 'lora'",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "training-command-tests",
+          "command": "node",
+          "args": ["tools/run-node-tests.js", "tests/integration/training-operator-command-api.test.js", "tests/integration/command-api.test.js"]
+        }
+      ]
+    },
+    {
+      "id": "js-qualification-agent-eval-record-gate",
+      "lane": "javascript",
+      "split": "qualification",
+      "title": "Reject arrays as agent-eval records",
+      "prompt": "Agent heldout evaluation now treats arrays as object records, corrupting candidate and policy checks. Restore the shared fail-closed record predicate.",
+      "sourceFiles": ["src/experimental/training/operator-agent-eval.js", "tests/training/agent-heldout-eval.test.js"],
+      "allowedChangedPaths": ["src/experimental/training/operator-agent-eval.js"],
+      "mutations": [
+        {
+          "path": "src/experimental/training/operator-agent-eval.js",
+          "find": "return value && typeof value === 'object' && !Array.isArray(value);",
+          "replace": "return value && typeof value === 'object';",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "agent-heldout-tests",
+          "command": "node",
+          "args": ["tools/run-node-tests.js", "tests/training/agent-heldout-eval.test.js"]
+        }
+      ]
+    },
+    {
+      "id": "js-label-text-pair-collection-gate",
+      "lane": "javascript",
+      "split": "label",
+      "title": "Restore safe text-pair collection mapping",
+      "prompt": "The collection mapper can now call map on arbitrary truthy values. Restore its deterministic non-array behavior without changing valid arrays.",
+      "sourceFiles": ["src/experimental/training/datasets/text-pairs.js", "tests/training/text-pairs.test.js"],
+      "allowedChangedPaths": ["src/experimental/training/datasets/text-pairs.js"],
+      "mutations": [
+        {
+          "path": "src/experimental/training/datasets/text-pairs.js",
+          "find": "const rows = Array.isArray(records) ? records : [];",
+          "replace": "const rows = records || [];",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "text-pair-tests",
+          "command": "node",
+          "args": ["tools/run-node-tests.js", "tests/training/text-pairs.test.js"]
+        }
+      ]
+    },
+    {
+      "id": "js-label-teacher-trace-object-gate",
+      "lane": "javascript",
+      "split": "label",
+      "title": "Restore teacher-trace object validation",
+      "prompt": "Teacher-trace parsing mistakenly treats arrays as object records. Repair the shared predicate so malformed trace structures fail closed.",
+      "sourceFiles": ["src/experimental/training/datasets/teacher-traces.js", "tests/training/teacher-trace-dataset.test.js"],
+      "allowedChangedPaths": ["src/experimental/training/datasets/teacher-traces.js"],
+      "mutations": [
+        {
+          "path": "src/experimental/training/datasets/teacher-traces.js",
+          "find": "return value && typeof value === 'object' && !Array.isArray(value);",
+          "replace": "return value && typeof value === 'object';",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "teacher-trace-tests",
+          "command": "node",
+          "args": ["tools/run-node-tests.js", "tests/training/teacher-trace-dataset.test.js"]
+        }
+      ]
+    },
+    {
+      "id": "js-label-bleu-cardinality-gate",
+      "lane": "javascript",
+      "split": "label",
+      "title": "Restore BLEU input cardinality validation",
+      "prompt": "BLEU evaluation no longer rejects a different number of hypotheses and references. Restore the public validation contract without changing metric math.",
+      "sourceFiles": ["src/experimental/training/operator-eval.js"],
+      "allowedChangedPaths": ["src/experimental/training/operator-eval.js"],
+      "mutations": [
+        {
+          "path": "src/experimental/training/operator-eval.js",
+          "find": "if (!Array.isArray(hypotheses) || !Array.isArray(references) || hypotheses.length !== references.length) {\n    throw new Error('computeBleuScore requires equally sized hypothesis and reference arrays.');",
+          "replace": "if (!Array.isArray(hypotheses) || !Array.isArray(references)) {\n    throw new Error('computeBleuScore requires equally sized hypothesis and reference arrays.');",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "bleu-cardinality-check",
+          "command": "node",
+          "args": ["--input-type=module", "-e", "import { computeBleuScore } from './src/experimental/training/operator-eval.js'; try { computeBleuScore(['a'], []); process.exit(1); } catch (error) { if (!String(error.message).includes('equally sized')) process.exit(1); }"]
+        }
+      ]
+    },
+    {
+      "id": "js-label-lora-export-collection-gates",
+      "lane": "javascript",
+      "split": "label",
+      "title": "Restore both LoRA export collection gates",
+      "prompt": "LoRA export now accepts arbitrary truthy values as tensor collections. Restore both fail-closed array gates without changing valid tensor exports.",
+      "sourceFiles": ["src/experimental/training/export.js", "tests/training/lora-export-safetensors.test.js"],
+      "allowedChangedPaths": ["src/experimental/training/export.js"],
+      "mutations": [
+        {
+          "path": "src/experimental/training/export.js",
+          "find": "if (!Array.isArray(tensors) || tensors.length === 0) {",
+          "replace": "if (!tensors || tensors.length === 0) {",
+          "occurrences": 2
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "lora-export-tests",
+          "command": "node",
+          "args": ["tools/run-node-tests.js", "tests/training/lora-export-safetensors.test.js"]
+        }
+      ]
+    },
+    {
+      "id": "js-label-translation-row-record-gate",
+      "lane": "javascript",
+      "split": "label",
+      "title": "Restore translation-row record validation",
+      "prompt": "Translation dataset normalization mistakenly accepts arrays as row records. Restore the fail-closed record predicate while preserving valid translation rows.",
+      "sourceFiles": ["src/experimental/training/distillation/dataset.js"],
+      "allowedChangedPaths": ["src/experimental/training/distillation/dataset.js"],
+      "mutations": [
+        {
+          "path": "src/experimental/training/distillation/dataset.js",
+          "find": "if (!record || typeof record !== 'object' || Array.isArray(record)) {",
+          "replace": "if (!record || typeof record !== 'object') {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "translation-row-record-check",
+          "command": "node",
+          "args": ["--input-type=module", "-e", "import assert from 'node:assert/strict'; import { normalizeTranslationPairRow } from './src/experimental/training/distillation/dataset.js'; assert.equal(normalizeTranslationPairRow([], 0), null); assert.equal(normalizeTranslationPairRow({ source: 'hello', target: 'hola' }, 0).source, 'hello');"]
+        }
+      ]
+    },
+    {
+      "id": "js-label-gepa-candidate-record-gate",
+      "lane": "javascript",
+      "split": "label",
+      "title": "Restore GEPA candidate record validation",
+      "prompt": "GEPA frontier parsing now treats arrays as candidate records. Restore the shared fail-closed record predicate without changing valid frontier candidates.",
+      "sourceFiles": ["src/experimental/training/datasets/gepa-frontier.js", "tests/training/gepa-frontier-dataset.test.js"],
+      "allowedChangedPaths": ["src/experimental/training/datasets/gepa-frontier.js"],
+      "mutations": [
+        {
+          "path": "src/experimental/training/datasets/gepa-frontier.js",
+          "find": "return value && typeof value === 'object' && !Array.isArray(value);",
+          "replace": "return value && typeof value === 'object';",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "gepa-frontier-tests",
+          "command": "node",
+          "args": ["tools/run-node-tests.js", "tests/training/gepa-frontier-dataset.test.js"]
+        }
+      ]
+    },
+    {
+      "id": "js-holdout-optional-boolean-gate",
+      "lane": "javascript",
+      "split": "student_holdout",
+      "title": "Restore optional boolean type validation",
+      "prompt": "The tooling command helper rejects booleans and accepts strings for optional boolean fields. Restore its null-or-boolean contract without changing null handling.",
+      "sourceFiles": ["src/tooling/command-api-helpers.js", "tests/integration/command-api.test.js"],
+      "allowedChangedPaths": ["src/tooling/command-api-helpers.js"],
+      "mutations": [
+        {
+          "path": "src/tooling/command-api-helpers.js",
+          "find": "if (typeof value !== 'boolean') {\n    throw new Error(`tooling command: ${label} must be a boolean when provided.`);",
+          "replace": "if (typeof value !== 'string') {\n    throw new Error(`tooling command: ${label} must be a boolean when provided.`);",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "command-api-tests",
+          "command": "node",
+          "args": ["tools/run-node-tests.js", "tests/integration/command-api.test.js"]
+        }
+      ]
+    },
+    {
+      "id": "js-holdout-positive-integer-gate",
+      "lane": "javascript",
+      "split": "student_holdout",
+      "title": "Restore positive-integer validation",
+      "prompt": "Optional positive-integer normalization now accepts zero. Restore the strictly positive boundary without changing numeric string support.",
+      "sourceFiles": ["src/tooling/command-api-helpers.js", "tests/integration/command-api.test.js"],
+      "allowedChangedPaths": ["src/tooling/command-api-helpers.js"],
+      "mutations": [
+        {
+          "path": "src/tooling/command-api-helpers.js",
+          "find": "if (!Number.isInteger(parsed) || parsed < 1) {",
+          "replace": "if (!Number.isInteger(parsed) || parsed < 0) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "command-api-tests",
+          "command": "node",
+          "args": ["tools/run-node-tests.js", "tests/integration/command-api.test.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-qualification-energy-tail-guard",
+      "lane": "wgsl",
+      "split": "qualification",
+      "title": "Restore the energy update tail guard",
+      "prompt": "The energy update kernel can access the first element beyond the logical buffer. Repair the dispatch tail guard and preserve the update equation.",
+      "sourceFiles": ["src/gpu/kernels/energy_update.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/energy_update.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/energy_update.wgsl",
+          "find": "if (idx >= u.count) {",
+          "replace": "if (idx > u.count) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-qualification-relu-tail-guard",
+      "lane": "wgsl",
+      "split": "qualification",
+      "title": "Restore the ReLU tail guard",
+      "prompt": "The f16 ReLU kernel permits an invocation whose flattened index equals the logical size. Repair the bounds check while preserving 2D dispatch flattening.",
+      "sourceFiles": ["src/gpu/kernels/relu_f16.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/relu_f16.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/relu_f16.wgsl",
+          "find": "if (idx >= u.size) {",
+          "replace": "if (idx > u.size) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-qualification-cast-f16-tail-guard",
+      "lane": "wgsl",
+      "split": "qualification",
+      "title": "Restore the f16-to-f32 cast tail guard",
+      "prompt": "The f16-to-f32 cast kernel can read and write one element past the logical count. Restore the dispatch guard without changing conversion semantics.",
+      "sourceFiles": ["src/gpu/kernels/cast_f16_to_f32.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/cast_f16_to_f32.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/cast_f16_to_f32.wgsl",
+          "find": "if (idx >= u.count) {",
+          "replace": "if (idx > u.count) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-label-cast-f32-tail-guard",
+      "lane": "wgsl",
+      "split": "label",
+      "title": "Restore the f32-to-f16 cast tail guard",
+      "prompt": "The 2D f32-to-f16 cast kernel accepts a flattened invocation at exactly the logical size. Repair the tail guard and preserve its flattening formula.",
+      "sourceFiles": ["src/gpu/kernels/cast_f32_to_f16.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/cast_f32_to_f16.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/cast_f32_to_f16.wgsl",
+          "find": "if (i >= u.size) {",
+          "replace": "if (i > u.size) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-label-q6k-block-guard",
+      "lane": "wgsl",
+      "split": "label",
+      "title": "Restore the Q6_K block guard",
+      "prompt": "The Q6_K dequantizer allows a workgroup whose block index equals num_blocks. Repair the block boundary before any quantized-buffer read.",
+      "sourceFiles": ["src/gpu/kernels/dequant_q6k.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/dequant_q6k.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/dequant_q6k.wgsl",
+          "find": "if (block_idx >= u.num_blocks) {",
+          "replace": "if (block_idx > u.num_blocks) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-label-conv-output-guard",
+      "lane": "wgsl",
+      "split": "label",
+      "title": "Restore both Conv2D output bounds",
+      "prompt": "The f32 Conv2D entrypoint no longer rejects an output channel exactly at out_channels. Restore both dimensions of its early output guard without touching generated variants.",
+      "sourceFiles": ["src/gpu/kernels/conv2d.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/conv2d.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/conv2d.wgsl",
+          "find": "if (out_c >= u.out_channels || out_spatial_idx >= out_spatial) {",
+          "replace": "if (out_c > u.out_channels || out_spatial_idx >= out_spatial) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-label-scale-tail-guards",
+      "lane": "wgsl",
+      "split": "label",
+      "title": "Restore both scale tail guards",
+      "prompt": "Both scale entrypoints admit an invocation at exactly the logical count. Restore both dispatch tail guards without changing scale arithmetic or bindings.",
+      "sourceFiles": ["src/gpu/kernels/scale.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/scale.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/scale.wgsl",
+          "find": "if (idx >= u.count) {",
+          "replace": "if (idx > u.count) {",
+          "occurrences": 2
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-label-layernorm-token-guard",
+      "lane": "wgsl",
+      "split": "label",
+      "title": "Restore the LayerNorm token guard",
+      "prompt": "The LayerNorm kernel accepts a workgroup whose token index equals num_tokens. Restore the token boundary before any buffer access and preserve normalization math.",
+      "sourceFiles": ["src/gpu/kernels/layernorm.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/layernorm.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/layernorm.wgsl",
+          "find": "if (token_idx >= u.num_tokens) {",
+          "replace": "if (token_idx > u.num_tokens) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-label-gelu-tail-guard",
+      "lane": "wgsl",
+      "split": "label",
+      "title": "Restore the GeLU tail guard",
+      "prompt": "The scalar GeLU entrypoint writes at an index equal to its logical size. Restore its dispatch boundary without changing the row-split or gated variants.",
+      "sourceFiles": ["src/gpu/kernels/gelu.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/gelu.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/gelu.wgsl",
+          "find": "let idx = global_id.x;\n    if (idx >= u.size) {",
+          "replace": "let idx = global_id.x;\n    if (idx > u.size) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-holdout-clamp-tail-guard",
+      "lane": "wgsl",
+      "split": "student_holdout",
+      "title": "Restore the clamp tail guard",
+      "prompt": "The clamp kernel writes at an index equal to its logical size. Restore the dispatch tail boundary without changing clamp behavior.",
+      "sourceFiles": ["src/gpu/kernels/clamp.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/clamp.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/clamp.wgsl",
+          "find": "if (idx >= u.size) {",
+          "replace": "if (idx > u.size) {",
+          "occurrences": 1
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    },
+    {
+      "id": "wgsl-holdout-softmax-row-guards",
+      "lane": "wgsl",
+      "split": "student_holdout",
+      "title": "Restore both softmax row guards",
+      "prompt": "Both softmax entrypoints accept a row index equal to outer_size. Restore the row boundary in each entrypoint and leave reduction math unchanged.",
+      "sourceFiles": ["src/gpu/kernels/softmax.wgsl"],
+      "allowedChangedPaths": ["src/gpu/kernels/softmax.wgsl"],
+      "mutations": [
+        {
+          "path": "src/gpu/kernels/softmax.wgsl",
+          "find": "if (row_idx >= u.outer_size) {",
+          "replace": "if (row_idx > u.outer_size) {",
+          "occurrences": 2
+        }
+      ],
+      "validationCommands": [
+        {
+          "id": "kernel-contract-check",
+          "command": "node",
+          "args": ["tools/check-kernels.js"]
+        }
+      ]
+    }
+  ]
+}

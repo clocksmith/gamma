@@ -1,0 +1,129 @@
+{
+  "artifactType": "wgsl_repair_v12_design",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v12",
+  "recordedAt": "2026-07-12",
+  "status": "harness_ready",
+  "hypothesis": "Replacing 20% of a full, seed-ordered Doppler SFT lane with pinned Zero-TVM repairs improves external and long-span WGSL compiler repair beyond both a Doppler-only anchor and a random in-domain replacement control.",
+  "model": {
+    "modelId": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "initialization": "base",
+    "adapter": {
+      "kind": "lora",
+      "rank": 32,
+      "alpha": 64,
+      "dropout": 0.05,
+      "targetModules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    }
+  },
+  "training": {
+    "seed": 11,
+    "microsteps": 1200,
+    "gradientAccumulationSteps": 8,
+    "optimizerUpdates": 150,
+    "rowOrder": "seed_hash_sorted_v1",
+    "rowOrderFormula": "sha256(seed + NUL + rowId)",
+    "consumeEveryLaneRowOnce": true,
+    "lanes": {
+      "anchor": {
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-anchor",
+        "datasetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/corpus-v1/train-anchor.jsonl",
+        "datasetFileSha256": "fad2f7821ef8424cf8531df7556694d10167e572681b5948c4f76354276dad3d",
+        "workloadFileSha256": "3b5e8690b51c62abe6b97244a9397936c0cd7e747ee62f2e6599a2eb48a0a32b",
+        "configHash": "4961518f308b2c035ce1b5f9cc05d14c7ad2b15090fc46f97ad13ab9e37b3b7f",
+        "rows": 1200,
+        "sourceRows": { "doppler": 1200 },
+        "rowOrderSha256": "d03f28eafc80a94958a7d0e24d07f7f6214c0dfebe3212f2572abe73d39c744c"
+      },
+      "external20": {
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-external20",
+        "datasetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/corpus-v1/train-external20.jsonl",
+        "datasetFileSha256": "2b933d7ff94f5f89002f2bc882396de8ed967ac96ce20554e3e917f0a602e6f1",
+        "workloadFileSha256": "3577f9add4c49ff9ee07f28d8e21affd137dcb04b0714bc4c2ec50e4562e4cf4",
+        "configHash": "cd22a753333b2f62f94cff8532cbdb56127321e27f094e529f13583fd1f9589b",
+        "rows": 1200,
+        "sourceRows": { "doppler": 960, "zero-tvm": 240 },
+        "rowOrderSha256": "033c182d1c1e28adf71977934803c0d539487dfa466db49d7cd1e0a09794593e"
+      },
+      "random20": {
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-random20",
+        "datasetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/corpus-v1/train-random20.jsonl",
+        "datasetFileSha256": "5ab74861dd88dbbd799d9006933f1b55f0adb7c7c61fba930828270000e34fac",
+        "workloadFileSha256": "24442cf96932c42b8e629dee4ab035adc0a9083c45d8f00a8843c213bd3adc04",
+        "configHash": "f5158eb0110b5f160156c982b75cba3eed12dd84e34736a778cba99385b847a3",
+        "rows": 1200,
+        "sourceRows": { "doppler": 1200 },
+        "rowOrderSha256": "29fbb49b0a9350f101100b84c24bcf893d9a2d53741885a5fabeafd53b7f908e"
+      }
+    }
+  },
+  "lengthStrata": {
+    "assignmentField": "span.broken.length",
+    "assignmentUnit": "unicode_code_units",
+    "thresholdChars": 128,
+    "shortMaxTokens": 64,
+    "longMaxTokens": 640,
+    "derivationDatasetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/corpus-v1/train-external20.jsonl",
+    "derivationDatasetSha256": "2b933d7ff94f5f89002f2bc882396de8ed967ac96ce20554e3e917f0a602e6f1",
+    "derivation": {
+      "shortMaximumTargetTokensIncludingEos": 54,
+      "longRows": 22,
+      "longRowsOver64TargetTokens": 21,
+      "maximumTargetTokensIncludingEos": 619,
+      "longMarginTokens": 21
+    },
+    "holdoutReferenceUsedForAssignment": false,
+    "diagnostic": {
+      "inputRows": 285,
+      "inputSha256": "8f76617dbda9551d50f2c3720f897db1773d357c26b0bda24a579d3ce87140c8",
+      "shortRows": 275,
+      "shortSha256": "b5783ecd8ea9cdaca52328afd5daa46a759ee7157a40a4033ff71b0620cfa5b0",
+      "longRows": 10,
+      "longSha256": "884356c83ad4c29d2f709c6b37cc7360a4c1111cbff723222a029c129e307026",
+      "manifestSha256": "76aaa187319cbceed92cd9fabe726420a062d905f221170374bcc365dc2aa130"
+    },
+    "publicTest": {
+      "inputRows": 299,
+      "inputSha256": "0d8b1886b263da1080e0867662451938b3eaebdc318a428dcbbb4450115ebf53",
+      "shortRows": 290,
+      "shortSha256": "13afb837ac72056be82e2c71b205ad18339172e0b5b68afd82fe16d33eed6831",
+      "longRows": 9,
+      "longSha256": "56e4484ada36ac858858d3bd96d20ca2a06dd2b1facb5902719457cd283e49c6",
+      "manifestSha256": "b4c8378f9818277609d5dc1f3d1688d670993ec4c33ce9663a23ab1277983e29"
+    },
+    "recombineOriginalDenominator": true
+  },
+  "implementation": {
+    "dopplerRevision": "8acd0908bcef904f0fdef0c75421355ea5702303",
+    "gammaRevision": "73501b25dd9c92cc3335c21755a742c5bebdd382",
+    "lengthStrataTool": {
+      "path": "tools/build-wgsl-length-strata.js",
+      "sha256": "9406088aec57f0056e67125f0d48fe2dc75acfa6524c6b78e7c5cffb5013baa9"
+    },
+    "workloadRegistrySha256": "28189c996b9e6ade23d461c1acb548850440cd4b77a15910420769b5178d4673"
+  },
+  "evidenceBoundary": {
+    "workloadsRegistered": true,
+    "rowOrderReceiptImplemented": true,
+    "lengthStrataMaterialized": true,
+    "laneTrainingCompleted": false,
+    "capabilityProven": false,
+    "promoted": false
+  },
+  "claimBoundary": "V12 freezes a full-lane, seed-ordered data ablation and an input-visible short/long evaluation contract. It has no V12 trained adapter or outcome. V10 remains the measured SFT result, and V11 remains the separate optimizer experiment.",
+  "nextGates": [
+    "Train base-initialized anchor, external20, and random20 seed-11 adapters from the checked-in workloads.",
+    "Select a data lane on the complete diagnostic short-plus-long denominator without consulting public outcomes.",
+    "Repeat the selected comparison for seeds 29 and 47.",
+    "Run public and sealed semantic evaluation under the same selected checkpoint rule."
+  ]
+}

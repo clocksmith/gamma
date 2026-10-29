@@ -1,0 +1,202 @@
+{
+  "$schema": "../../src/config/schema/wgsl-repair-experiment-policy.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-repair-v9",
+  "status": "frozen",
+  "claimBoundary": "V9 replaces the rejected eight-row Gemma 270M replay with a diverse replacement-only WGSL program. A prepared corpus or successful optimizer step is not a capability claim; promotion requires the sealed multi-seed gates in this policy.",
+  "sourceCatalogPath": "tools/data/wgsl-training-source-catalog-v1.json",
+  "corpus": {
+    "taskContract": "replacement_only_wgsl_span_v1",
+    "targetVerifiedRows": 2400,
+    "minimumVerifiedRows": 1000,
+    "minimumDistinctKernels": 300,
+    "fixedExternalTrainingFraction": 0.2,
+    "laneRows": 1200,
+    "laneSeed": 20260711,
+    "lanes": {
+      "anchor": "Doppler-only fixed control",
+      "external20": "Replace 20% of the shared Doppler core with pinned external kernels",
+      "random20": "Replace 20% of the shared Doppler core with a disjoint random Doppler sample"
+    },
+    "splitKey": "kernelFamilyId",
+    "splits": {
+      "train": { "weight": 0.8, "visibleToTraining": true },
+      "diagnostic": { "weight": 0.1, "visibleToTraining": false },
+      "public-test": { "weight": 0.1, "visibleToTraining": false }
+    },
+    "mutationOperators": [
+      "address_space",
+      "attribute_name",
+      "builtin_name",
+      "declared_type",
+      "function_name",
+      "identifier_reference",
+      "missing_semicolon",
+      "numeric_literal_suffix",
+      "storage_access"
+    ],
+    "admission": {
+      "requireCleanCompile": true,
+      "requireMutantCompileFailure": true,
+      "requireReferenceCompile": true,
+      "requireUniqueFingerprint": true,
+      "forbidFamilyOverlap": true
+    }
+  },
+  "models": {
+    "primary": {
+      "modelId": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+      "role": "primary_student",
+      "weightsProvisioning": "user_provisioned",
+      "provisionedAtFreeze": true
+    },
+    "efficiencyControl": {
+      "modelId": "Qwen/Qwen3.5-2B",
+      "role": "efficiency_control",
+      "weightsProvisioning": "user_provisioned",
+      "gatesPrimary": false
+    },
+    "teacherCeiling": {
+      "modelId": "Qwen/Qwen3.6-27B",
+      "role": "teacher_and_ceiling",
+      "weightsProvisioning": "existing_huggingface_snapshot",
+      "gatesPrimary": false
+    },
+    "crossFamilyConfirmation": {
+      "modelId": "google/gemma-4-12b-it",
+      "role": "cross_family_confirmation",
+      "weightsProvisioning": "user_provisioned",
+      "gatesPrimary": false
+    }
+  },
+  "trainer": {
+    "owner": "gamma",
+    "protocol": "gamma_wgsl_trainer_json_v1",
+    "pythonRequirement": "3.11",
+    "transformersRequirement": ">=5.13.1",
+    "torchBackend": "rocm",
+    "dtype": "bfloat16",
+    "adapter": {
+      "kind": "lora",
+      "rank": 32,
+      "alpha": 64,
+      "dropout": 0.05,
+      "targetModules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "gradientCheckpointing": true,
+    "sequenceLength": 2048,
+    "seeds": [11, 29, 47]
+  },
+  "methods": {
+    "baseline": { "id": "base", "parent": null },
+    "sft": {
+      "id": "execution_verified_sft",
+      "parent": "base",
+      "training": {
+        "steps": 800,
+        "gradientAccumulationSteps": 8,
+        "learningRate": 0.0001,
+        "weightDecay": 0.01,
+        "maxGradNorm": 1
+      }
+    },
+    "rollout": {
+      "temperature": 0.8,
+      "topP": 0.95,
+      "maxTokens": 512,
+      "seed": 20260711
+    },
+    "rejectionSampling": {
+      "id": "rejection_sampling",
+      "parent": "execution_verified_sft",
+      "samplesPerTask": 8
+    },
+    "dpo": {
+      "id": "dpo",
+      "parent": "execution_verified_sft",
+      "beta": 0.1,
+      "minimumRewardGap": 0.5,
+      "training": {
+        "steps": 400,
+        "learningRate": 0.00005,
+        "weightDecay": 0.01,
+        "maxGradNorm": 1
+      }
+    },
+    "rlvr": {
+      "id": "grpo_rlvr",
+      "parent": "execution_verified_sft",
+      "groupSize": 8,
+      "advantageFormula": "(reward - group_mean) / max(group_stddev, 1e-6)",
+      "advantageEpsilon": 0.000001,
+      "zeroVariancePolicy": "zero_advantages",
+      "clipLower": 0.2,
+      "clipUpper": 0.2,
+      "klCoefficient": 0.02,
+      "updatesPerRolloutBatch": 1,
+      "maximumStalePolicyUpdates": 0,
+      "training": {
+        "steps": 400,
+        "learningRate": 0.00002,
+        "weightDecay": 0.01,
+        "maxGradNorm": 1
+      }
+    }
+  },
+  "verifier": {
+    "bundleId": "doppler-wgsl-compile-regression-v1",
+    "responseContract": "replacement_only_wgsl_span_v1",
+    "browser": {
+      "headless": true,
+      "powerPreference": "high-performance",
+      "requiredVendor": "amd",
+      "requiredFeatures": ["shader-f16", "subgroups"],
+      "browserArgs": [
+        "--enable-unsafe-webgpu",
+        "--enable-dawn-features=allow_unsafe_apis",
+        "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+        "--use-angle=vulkan",
+        "--disable-vulkan-surface"
+      ]
+    },
+    "roles": {
+      "training": "compiler mutations and public regression fixtures",
+      "diagnostic": "family-disjoint public diagnostics",
+      "promotion": "externally provisioned sealed semantic WGSL repairs"
+    },
+    "rewardReduction": "wgsl_lexicographic_compile_regression_v1"
+  },
+  "promotion": {
+    "primaryMetric": "sealed_replacement_pass_at_1",
+    "requiredComparisons": [
+      "base_to_execution_verified_sft",
+      "execution_verified_sft_to_grpo_rlvr"
+    ],
+    "minimumSeeds": 3,
+    "requireStrictImprovement": true,
+    "requireExactMcNemar": true,
+    "requireClusterAwareConfidenceInterval": true,
+    "requireZeroPolicyViolations": true,
+    "requireZeroHistoricalRegressions": true,
+    "sealedOpenings": 1,
+    "trainingLossIsDiagnosticOnly": true
+  },
+  "requiredArtifactTypes": [
+    "training_rollout_group",
+    "training_reward_vector",
+    "training_policy_update",
+    "training_verifier_report",
+    "training_policy_checkpoint",
+    "training_promotion_decision"
+  ]
+}

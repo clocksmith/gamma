@@ -1,0 +1,237 @@
+{
+  "$schema": "../../src/config/schema/wgsl-repair-experiment-policy.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-repair-v11",
+  "status": "frozen",
+  "claimBoundary": "V11 derives DPO and GRPO updates only from the 285-task family-disjoint diagnostic split and reserves the 299-task public split for policy comparison. It reuses the frozen V10 model, checkpoint, sampler, and verifier; promotion still requires three seeds and the sealed semantic suite.",
+  "sourceCatalogPath": "tools/data/wgsl-training-source-catalog-v1.json",
+  "corpus": {
+    "taskContract": "replacement_only_wgsl_span_v1",
+    "targetVerifiedRows": 2400,
+    "minimumVerifiedRows": 1000,
+    "minimumDistinctKernels": 300,
+    "fixedExternalTrainingFraction": 0.2,
+    "laneRows": 1200,
+    "laneSeed": 20260711,
+    "lanes": {
+      "anchor": "Doppler-only fixed control",
+      "external20": "Replace 20% of the shared Doppler core with pinned external kernels",
+      "random20": "Replace 20% of the shared Doppler core with a disjoint random Doppler sample"
+    },
+    "splitKey": "kernelFamilyId",
+    "splits": {
+      "train": { "weight": 0.8, "visibleToTraining": true },
+      "diagnostic": { "weight": 0.1, "visibleToTraining": true },
+      "public-test": { "weight": 0.1, "visibleToTraining": false }
+    },
+    "mutationOperators": [
+      "address_space",
+      "attribute_name",
+      "builtin_name",
+      "declared_type",
+      "function_name",
+      "identifier_reference",
+      "missing_semicolon",
+      "numeric_literal_suffix",
+      "storage_access"
+    ],
+    "admission": {
+      "requireCleanCompile": true,
+      "requireMutantCompileFailure": true,
+      "requireReferenceCompile": true,
+      "requireUniqueFingerprint": true,
+      "forbidFamilyOverlap": true
+    }
+  },
+  "models": {
+    "primary": {
+      "modelId": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+      "role": "primary_student",
+      "weightsProvisioning": "user_provisioned",
+      "provisionedAtFreeze": true
+    },
+    "efficiencyControl": {
+      "modelId": "Qwen/Qwen3.5-2B",
+      "role": "efficiency_control",
+      "weightsProvisioning": "user_provisioned",
+      "gatesPrimary": false
+    },
+    "teacherCeiling": {
+      "modelId": "Qwen/Qwen3.6-27B",
+      "role": "teacher_and_ceiling",
+      "weightsProvisioning": "existing_huggingface_snapshot",
+      "gatesPrimary": false
+    },
+    "crossFamilyConfirmation": {
+      "modelId": "google/gemma-4-12b-it",
+      "role": "cross_family_confirmation",
+      "weightsProvisioning": "user_provisioned",
+      "gatesPrimary": false
+    }
+  },
+  "trainer": {
+    "owner": "gamma",
+    "protocol": "gamma_wgsl_trainer_json_v1",
+    "pythonRequirement": "3.11",
+    "transformersRequirement": ">=5.13.1",
+    "torchBackend": "rocm",
+    "dtype": "bfloat16",
+    "adapter": {
+      "kind": "lora",
+      "rank": 32,
+      "alpha": 64,
+      "dropout": 0.05,
+      "targetModules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "gradientCheckpointing": true,
+    "sequenceLength": 2048,
+    "seeds": [11, 29, 47]
+  },
+  "methods": {
+    "baseline": { "id": "base", "parent": null },
+    "sft": {
+      "id": "execution_verified_sft",
+      "parent": "base",
+      "evaluationCheckpoint": {
+        "parentPolicyId": "doppler-wgsl-repair-v9",
+        "seed": 11,
+        "policyHash": "fcba6cbbfee3b52de597be8df7400ae601f6fdbc15989946da543cb299eebc87",
+        "checkpointStep": 800
+      },
+      "training": {
+        "steps": 800,
+        "gradientAccumulationSteps": 8,
+        "learningRate": 0.0001,
+        "weightDecay": 0.01,
+        "maxGradNorm": 1
+      }
+    },
+    "rollout": {
+      "taskSet": "diagnostic",
+      "taskSetRows": 285,
+      "taskSetSha256": "8f76617dbda9551d50f2c3720f897db1773d357c26b0bda24a579d3ce87140c8",
+      "evaluationTaskSet": "public-test",
+      "evaluationTaskSetRows": 299,
+      "evaluationTaskSetSha256": "0d8b1886b263da1080e0867662451938b3eaebdc318a428dcbbb4450115ebf53",
+      "temperature": 0.8,
+      "topP": 0.95,
+      "maxTokens": 64,
+      "seed": 20260711,
+      "maxTokensDerivation": {
+        "sourcePath": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/corpus-v1/train-anchor.jsonl",
+        "sourceSha256": "fad2f7821ef8424cf8531df7556694d10167e572681b5948c4f76354276dad3d",
+        "sourceRows": 1200,
+        "tokenizerModelId": "Qwen/Qwen3.5-9B",
+        "tokenizerRevision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+        "tokenizerSha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+        "maximumTargetTokensIncludingEos": 41,
+        "marginTokens": 23,
+        "holdoutOutcomesUsed": false
+      }
+    },
+    "rejectionSampling": {
+      "id": "rejection_sampling",
+      "parent": "execution_verified_sft",
+      "samplesPerTask": 8
+    },
+    "dpo": {
+      "id": "dpo",
+      "parent": "execution_verified_sft",
+      "beta": 0.1,
+      "minimumRewardGap": 0.5,
+      "training": {
+        "steps": 400,
+        "learningRate": 0.00005,
+        "weightDecay": 0.01,
+        "maxGradNorm": 1
+      }
+    },
+    "rlvr": {
+      "id": "grpo_rlvr",
+      "parent": "execution_verified_sft",
+      "groupSize": 8,
+      "advantageFormula": "(reward - group_mean) / max(group_stddev, 1e-6)",
+      "advantageEpsilon": 0.000001,
+      "zeroVariancePolicy": "zero_advantages",
+      "clipLower": 0.2,
+      "clipUpper": 0.2,
+      "klCoefficient": 0.02,
+      "updatesPerRolloutBatch": 1,
+      "maximumStalePolicyUpdates": 0,
+      "training": {
+        "steps": 400,
+        "learningRate": 0.00002,
+        "weightDecay": 0.01,
+        "maxGradNorm": 1
+      }
+    }
+  },
+  "verifier": {
+    "bundleId": "doppler-wgsl-compile-regression-v1",
+    "protocolRevision": 2,
+    "responseContract": "replacement_only_wgsl_span_v1",
+    "compilationFailurePolicy": "timeout_or_verifier_exception_is_failed_sample",
+    "sessionResetPolicy": "relaunch_browser_and_require_same_device_identity",
+    "priorBlockedAttempt": {
+      "rawRolloutSha256": "d0b3569ff54fafbf55c2bf1190325263c8caa35ad30e05d9471bcbd6df5af813",
+      "groupCount": 299,
+      "sampleCount": 2392,
+      "scoreArtifactsWritten": false,
+      "reason": "unbounded_shader_compilation_promise"
+    },
+    "browser": {
+      "headless": true,
+      "powerPreference": "high-performance",
+      "requiredVendor": "amd",
+      "requiredFeatures": ["shader-f16", "subgroups"],
+      "compilationTimeoutMs": 10000,
+      "progressEvery": 100,
+      "browserArgs": [
+        "--enable-unsafe-webgpu",
+        "--enable-dawn-features=allow_unsafe_apis",
+        "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+        "--use-angle=vulkan",
+        "--disable-vulkan-surface"
+      ]
+    },
+    "roles": {
+      "training": "family-disjoint diagnostic compiler mutations",
+      "diagnostic": "family-disjoint public-test compiler diagnostics",
+      "promotion": "externally provisioned sealed semantic WGSL repairs"
+    },
+    "rewardReduction": "wgsl_lexicographic_compile_regression_v1"
+  },
+  "promotion": {
+    "primaryMetric": "sealed_replacement_pass_at_1",
+    "requiredComparisons": [
+      "base_to_execution_verified_sft",
+      "execution_verified_sft_to_grpo_rlvr"
+    ],
+    "minimumSeeds": 3,
+    "requireStrictImprovement": true,
+    "requireExactMcNemar": true,
+    "requireClusterAwareConfidenceInterval": true,
+    "requireZeroPolicyViolations": true,
+    "requireZeroHistoricalRegressions": true,
+    "sealedOpenings": 1,
+    "trainingLossIsDiagnosticOnly": true
+  },
+  "requiredArtifactTypes": [
+    "training_rollout_group",
+    "training_reward_vector",
+    "training_policy_update",
+    "training_verifier_report",
+    "training_policy_checkpoint",
+    "training_promotion_decision"
+  ]
+}

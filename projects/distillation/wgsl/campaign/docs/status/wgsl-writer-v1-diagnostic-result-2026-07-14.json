@@ -1,0 +1,184 @@
+{
+  "schema": "doppler.wgsl-writer-v1-zero-shot-diagnostic-result/v1",
+  "experimentId": "doppler-wgsl-writer-v1",
+  "policy": {
+    "path": "tools/policies/wgsl-writer-v1-diagnostic-policy.json",
+    "sha256": "6def2ed2bf0a8f4cc5a93888a5ae3d78ad4c4c6fc38ecdbbc97143c48e123b75"
+  },
+  "predecessor": {
+    "basePolicy": {
+      "path": "tools/policies/wgsl-writer-v1-policy.json",
+      "sha256": "1a55f4ae3bcc1331cbfb9203d9c3573fdc434dd4775d803b1be121dcf82ecebc"
+    },
+    "referenceReceipt": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v1/mechanics/reference.json",
+      "sha256": "a9ccfbefebce8827669dfb08a515699f8ae57e4902bf81d9edb88366099b99ab",
+      "requiredDecision": "reference_mechanics_passed"
+    }
+  },
+  "population": {
+    "path": "tools/data/wgsl-writer-v1-mechanics.json",
+    "sha256": "5df1979f7487431d6ad9480dd7ac14417e9297fbee5c5d26f6d11b2ff3882dbe",
+    "role": "mechanics_qualification_only",
+    "populationAuthority": "none"
+  },
+  "matchedExecution": {
+    "identicalPrompts": true,
+    "identicalGeneration": true,
+    "submissionsPerCandidate": 1,
+    "retriesPerformed": false
+  },
+  "lanes": {
+    "base": {
+      "candidateId": "qwen35-9b-f16-base",
+      "candidateKind": "base_model_control",
+      "completionReceipt": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v1/diagnostic/base.completions.json",
+        "sha256": "d17246a90a12e67352024024038bd46b2b061b7b00fdce846583d60f75d01dfc",
+        "receiptHash": "6524355aa5adae7257d5a55d44a57803dfd0ef34f9870444071f14e4ba4500f1"
+      },
+      "semanticReceipt": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v1/diagnostic/base.semantic.json",
+        "sha256": "340b3f00d848d581442ec37d8a67c5d5e12dc417fa8a1b82d1e3d4f7f651738e",
+        "receiptHash": "14a85602f53021156e2b36c17e749480f25a9962a163dfe237d6b2234a303878",
+        "decision": "candidate_tasks_failed"
+      },
+      "metrics": {
+        "taskCount": 3,
+        "responseContractPasses": 0,
+        "compilationPasses": 0,
+        "semanticTaskPasses": 0,
+        "dispatchVariantPasses": 0,
+        "historicalRegressionPasses": 0,
+        "exactReferenceCompletions": 0,
+        "maxTokenCapHits": 3
+      },
+      "taskOutcomes": [
+        {
+          "taskId": "writer-v1-mechanics-vector-add-f32",
+          "pass": false,
+          "blockers": [
+            "compilation_failure",
+            "cpu_oracle_mismatch",
+            "dispatch_failure",
+            "historical_regression",
+            "metamorphic_failure",
+            "read_only_buffer_mutation",
+            "response_contract_violation"
+          ]
+        },
+        {
+          "taskId": "writer-v1-mechanics-affine-f32",
+          "pass": false,
+          "blockers": [
+            "compilation_failure",
+            "cpu_oracle_mismatch",
+            "dispatch_failure",
+            "historical_regression",
+            "metamorphic_failure",
+            "read_only_buffer_mutation",
+            "response_contract_violation"
+          ]
+        },
+        {
+          "taskId": "writer-v1-mechanics-clamp-f32",
+          "pass": false,
+          "blockers": [
+            "compilation_failure",
+            "cpu_oracle_mismatch",
+            "dispatch_failure",
+            "historical_regression",
+            "metamorphic_failure",
+            "read_only_buffer_mutation",
+            "response_contract_violation"
+          ]
+        }
+      ],
+      "completeVisibleMechanicsPass": false
+    },
+    "repairAdapter": {
+      "candidateId": "v13-seed29-repair-initialization",
+      "candidateKind": "repair_adapter_initialization",
+      "completionReceipt": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v1/diagnostic/seed29.completions.json",
+        "sha256": "34eab46140fb93c58006e5da95d4929c85e974b66699983a2443588df6c02d6e",
+        "receiptHash": "7fe46f701eed96f70936fc20b313d2af737f18f849b4cc8fa771e14937af21b4"
+      },
+      "semanticReceipt": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v1/diagnostic/seed29.semantic.json",
+        "sha256": "de2598a3691a2d170e9ff56ee310b6fc7b4e4991b14bedb6df31932464b914af",
+        "receiptHash": "04617e227c80d6b6fe45ea90ccf7454b85aabd864488106d0dcfc4f7b7f0c8db",
+        "decision": "candidate_tasks_failed"
+      },
+      "metrics": {
+        "taskCount": 3,
+        "responseContractPasses": 0,
+        "compilationPasses": 0,
+        "semanticTaskPasses": 0,
+        "dispatchVariantPasses": 0,
+        "historicalRegressionPasses": 0,
+        "exactReferenceCompletions": 0,
+        "maxTokenCapHits": 0
+      },
+      "taskOutcomes": [
+        {
+          "taskId": "writer-v1-mechanics-vector-add-f32",
+          "pass": false,
+          "blockers": [
+            "compilation_failure",
+            "cpu_oracle_mismatch",
+            "dispatch_failure",
+            "historical_regression",
+            "metamorphic_failure",
+            "read_only_buffer_mutation",
+            "response_contract_violation"
+          ]
+        },
+        {
+          "taskId": "writer-v1-mechanics-affine-f32",
+          "pass": false,
+          "blockers": [
+            "compilation_failure",
+            "cpu_oracle_mismatch",
+            "dispatch_failure",
+            "historical_regression",
+            "metamorphic_failure",
+            "read_only_buffer_mutation",
+            "response_contract_violation"
+          ]
+        },
+        {
+          "taskId": "writer-v1-mechanics-clamp-f32",
+          "pass": false,
+          "blockers": [
+            "compilation_failure",
+            "cpu_oracle_mismatch",
+            "dispatch_failure",
+            "historical_regression",
+            "metamorphic_failure",
+            "read_only_buffer_mutation",
+            "response_contract_violation"
+          ]
+        }
+      ],
+      "completeVisibleMechanicsPass": false
+    }
+  },
+  "comparison": {
+    "semanticTaskPassDelta": 0,
+    "compilationPassDelta": 0,
+    "responseContractPassDelta": 0,
+    "transferObserved": false,
+    "anyCompleteWriterBehavior": false,
+    "finding": "no_complete_shader_behavior_observed_on_visible_mechanics"
+  },
+  "decision": "zero_shot_diagnostic_complete",
+  "candidateSelected": false,
+  "writerCapabilityEstablished": false,
+  "confirmationAuthority": false,
+  "promotionAuthority": false,
+  "productizationAllowed": false,
+  "nextBoundary": "Do not tune against the visible mechanics tasks. Build a separate writer-training corpus and freeze disjoint calibration, checkpoint-selection, seed-confirmation, and one-use promotion populations before making a writer capability claim.",
+  "claimBoundary": "Both frozen initializations were evaluated once on visible mechanics-only tasks. This paired negative diagnostic can reject current zero-shot writer readiness; it cannot estimate general writer quality, select a candidate, or promote a product.",
+  "receiptHash": "2784912ee9810c1e82ef3f89ee03638ff59a466327aa7e62d5853fecce68c85c"
+}

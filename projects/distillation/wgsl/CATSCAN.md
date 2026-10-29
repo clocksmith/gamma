@@ -9,11 +9,12 @@ Measure whether student models gain verifiable WGSL-generation capability under 
 ## Authority
 
 - Owns WGSL data, generation constraints, verifier protocol, and lane-specific evaluations.
+- Owns the WGSL repair/writer campaign moved from Doppler on 2026-10-29.
 - Does not own WebGPU runtime compatibility or general code-generation claims.
 
 ## Scope
 
-- Applies to WGSL data, generation constraints, verifier protocol, and lane-specific evaluations.
+- Applies to WGSL data, generation constraints, verifier protocol, lane-specific evaluations, and the [moved Doppler campaign](campaign/CATSCAN.md).
 
 ## Contracts
 

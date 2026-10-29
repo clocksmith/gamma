@@ -1,0 +1,641 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-v3-capability-catalog.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "catalogId": "doppler-wgsl-writer-v3-capability-families",
+  "status": "planned_before_corpus_materialization",
+  "targetCapability": "complete_executable_webgpu_shader_package_from_natural_language_and_host_contract",
+  "responseContract": "doppler.wgsl-author-package/v1",
+  "populationRoles": {
+    "training": {
+      "familyPlanCount": 8,
+      "materialized": false
+    },
+    "calibration": {
+      "familyPlanCount": 4,
+      "materialized": false
+    },
+    "checkpoint_selection": {
+      "familyPlanCount": 4,
+      "materialized": false
+    },
+    "seed_confirmation": {
+      "familyPlanCount": 4,
+      "materialized": false
+    }
+  },
+  "families": [
+    {
+      "id": "buffer-map",
+      "populationRole": "training",
+      "pipelineKind": "compute",
+      "taskClass": "bounded elementwise and coordinate transforms over typed storage buffers",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "storage_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "runtime-sized-arrays",
+        "builtins"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "tiled-matrix-transform",
+      "populationRole": "training",
+      "pipelineKind": "compute",
+      "taskClass": "two-dimensional tiled matrix transforms with boundary tiles",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "workgroup-memory",
+        "barriers",
+        "overrides"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "workgroup",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "storage-texture-filter",
+      "populationRole": "training",
+      "pipelineKind": "compute",
+      "taskClass": "neighborhood image filters over sampled and storage textures",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "storage_texture",
+        "sampler"
+      ],
+      "requiredWgslFeatures": [
+        "texture-load",
+        "texture-store",
+        "edge-policy"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "atomic-histogram",
+      "populationRole": "training",
+      "pipelineKind": "compute",
+      "taskClass": "contention-safe histograms and counters with deterministic totals",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "storage_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "atomics",
+        "workgroup-memory",
+        "barriers"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "procedural-raster",
+      "populationRole": "training",
+      "pipelineKind": "render",
+      "taskClass": "procedural vertex geometry with fragment-coordinate shading",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "vertex-builtins",
+        "fragment-builtins",
+        "interpolation"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "raster_reference",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "draw",
+          "texture_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "indexed-vertex-color",
+      "populationRole": "training",
+      "pipelineKind": "render",
+      "taskClass": "indexed meshes using explicit vertex layouts and interpolated attributes",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "vertex_buffer",
+        "index_buffer",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "vertex-inputs",
+        "indexed-draw",
+        "interpolation"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "raster_reference",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "vertex_count",
+          "draw",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "textured-sprite",
+      "populationRole": "training",
+      "pipelineKind": "render",
+      "taskClass": "sampled-texture sprites with coordinate transforms and filtering contracts",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "sampler",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "texture-sampling",
+        "derivatives",
+        "interpolation"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "draw"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "compute-to-raster",
+      "populationRole": "training",
+      "pipelineKind": "multi_pass",
+      "taskClass": "compute-generated geometry or attributes consumed by a render pass",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "multi-pass-resource-flow",
+        "storage-buffer-vertex-read"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cross_pass_cpu_oracle",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "dispatch",
+          "draw",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "bounded-reduction",
+      "populationRole": "calibration",
+      "pipelineKind": "compute",
+      "taskClass": "multi-workgroup reductions with partial final groups",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "workgroup-memory",
+        "barriers",
+        "overrides"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "cellular-step",
+      "populationRole": "calibration",
+      "pipelineKind": "compute",
+      "taskClass": "two-dimensional cellular updates with explicit boundary semantics",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "storage_texture",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "texture-load",
+        "texture-store",
+        "coordinate-neighborhoods"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "instanced-glyphs",
+      "populationRole": "calibration",
+      "pipelineKind": "render",
+      "taskClass": "instanced geometry with per-instance storage and uniform transforms",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "vertex_buffer",
+        "storage_buffer",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "instance-index",
+        "vertex-inputs",
+        "storage-buffer-vertex-read"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "raster_invariants",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "instance_count",
+          "vertex_count",
+          "draw"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "offscreen-postprocess",
+      "populationRole": "calibration",
+      "pipelineKind": "multi_pass",
+      "taskClass": "offscreen render followed by sampled-texture postprocessing",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "sampler",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "multi-pass-resource-flow",
+        "texture-sampling",
+        "fragment-builtins"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "draw"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "normalized-convolution",
+      "populationRole": "checkpoint_selection",
+      "pipelineKind": "compute",
+      "taskClass": "parameterized separable and normalized convolutions with edge handling",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "storage_texture",
+        "uniform_buffer",
+        "sampler"
+      ],
+      "requiredWgslFeatures": [
+        "texture-load",
+        "texture-store",
+        "overrides"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "particle-integration",
+      "populationRole": "checkpoint_selection",
+      "pipelineKind": "compute",
+      "taskClass": "stateful particle integration with bounded domains and deterministic forces",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "struct-arrays",
+        "runtime-sized-arrays",
+        "builtins"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "dispatch",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "sampled-mesh-transform",
+      "populationRole": "checkpoint_selection",
+      "pipelineKind": "render",
+      "taskClass": "indexed transformed meshes with sampled material data",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "vertex_buffer",
+        "index_buffer",
+        "uniform_buffer",
+        "sampled_texture",
+        "sampler",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "indexed-draw",
+        "matrix-transforms",
+        "texture-sampling"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "raster_reference",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "vertex_count",
+          "texture_size",
+          "draw"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "simulation-visualization",
+      "populationRole": "checkpoint_selection",
+      "pipelineKind": "multi_pass",
+      "taskClass": "compute simulation state rendered through a separate visualization pass",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "multi-pass-resource-flow",
+        "storage-buffer-vertex-read",
+        "instance-index"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cross_pass_cpu_oracle",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "dispatch",
+          "instance_count",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "segmented-reduction",
+      "populationRole": "seed_confirmation",
+      "pipelineKind": "compute",
+      "taskClass": "segmented reductions with irregular boundaries and neutral elements",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "storage_buffer",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "workgroup-memory",
+        "barriers",
+        "struct-arrays"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_numeric",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "shape",
+          "workgroup",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "coordinate-image-warp",
+      "populationRole": "seed_confirmation",
+      "pipelineKind": "compute",
+      "taskClass": "coordinate image warps with explicit sampling and out-of-range policy",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "storage_texture",
+        "sampler",
+        "uniform_buffer"
+      ],
+      "requiredWgslFeatures": [
+        "texture-sampling",
+        "texture-store",
+        "coordinate-transforms"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cpu_image",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "workgroup",
+          "dispatch"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "indexed-shaded-mesh",
+      "populationRole": "seed_confirmation",
+      "pipelineKind": "render",
+      "taskClass": "indexed mesh shading with transformed normals and directional lighting",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "vertex_buffer",
+        "index_buffer",
+        "uniform_buffer",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "indexed-draw",
+        "matrix-transforms",
+        "normal-interpolation"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "raster_reference",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "vertex_count",
+          "draw",
+          "resource_size"
+        ],
+        "historicalRegressions": true
+      }
+    },
+    {
+      "id": "ping-pong-visualization",
+      "populationRole": "seed_confirmation",
+      "pipelineKind": "multi_pass",
+      "taskClass": "alternating state textures followed by a visualization pass",
+      "specificationSource": "human_authored_doppler_reference",
+      "requiredResourceKinds": [
+        "sampled_texture",
+        "storage_texture",
+        "sampler",
+        "render_target"
+      ],
+      "requiredWgslFeatures": [
+        "multi-pass-resource-flow",
+        "texture-load",
+        "texture-store",
+        "texture-sampling"
+      ],
+      "verification": {
+        "compilation": true,
+        "actualExecution": true,
+        "oracle": "cross_pass_cpu_oracle",
+        "bufferBounds": true,
+        "metamorphic": true,
+        "requiredVariations": [
+          "texture_size",
+          "dispatch",
+          "draw"
+        ],
+        "historicalRegressions": true
+      }
+    }
+  ],
+  "promotion": {
+    "custody": "external",
+    "materialized": false,
+    "naturalSpecificationsRequired": true,
+    "licensedSourceLineageRequired": true,
+    "familyDisjointFromAllDevelopmentRoles": true,
+    "sealedOpenings": 1,
+    "promotionAllowed": false
+  },
+  "blockers": [
+    "capability_tasks_and_oracles_not_materialized",
+    "render_depth_stencil_blend_state_not_represented",
+    "mipmapped_and_multisampled_resource_execution_not_supported",
+    "indirect_draw_and_dispatch_not_represented",
+    "external_promotion_population_not_materialized"
+  ]
+}
