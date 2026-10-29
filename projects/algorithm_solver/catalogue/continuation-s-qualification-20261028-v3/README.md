@@ -6,7 +6,7 @@ Derived from [the v2 controller](../continuation-s-qualification-20261028-v2/REA
 
 - `OBSERVER` is [continuation-s-observers-20261028-v2](../continuation-s-observers-20261028-v2/README.md), with `PROFILE_SHA` set to its `native-bindings.json`. The controller rejects any lineage other than `previous_profile_sha256` = the v1 profile. Only the two JavaScript observer files differ, so `PLAN_SHA`, cases, the host checker and the 208 supplement are unchanged.
 - `RERUN = (222, javascript)`. All 20 slots are still verified; only `RERUN` is reviewed, frozen and dispatched.
-- `SOURCE_REVIEW_SHA = None` and `OBSERVER_REVIEW_SHA = None`. Both v2 receipts bind v1 observer hashes, so freeze and run refuse until new independent receipts are pinned.
+- `SOURCE_REVIEW_SHA` is pinned to `da7b6322e59b4e4add33ac828ec825a4e8e1820a6992b014322cb7735d18c7f0` (independent source re-review of 222 JavaScript against observer v2) and `OBSERVER_REVIEW_SHA` to `41631f32cdfa2ea0b9b9008d8a857235fd94ef078c22443063e7d4b98f11e5af` (independent observer v2 review), both 2026-10-28. The v2 receipts bound v1 observer hashes and could not approve this dispatch.
 - The 208 scope note's `prepared_scope.source_review_sha256` is checked against the original v2 source review (`PRIOR_SOURCE_REVIEW_SHA`). That note describes the original prepared scope. `required-domain-supplement.json` is byte-identical.
 - The schema is `gamma.s20-official-execution.v3`. The freeze, identity and report carry a verified `rerun` lineage record, checked before any manifest or gate access.
 

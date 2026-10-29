@@ -37,8 +37,8 @@ PRIOR_OBSERVER_REVIEW_SHA='4006b13fa78e937009ab007f185f061788f8456712ce79634e68e
 # source review (gamma.s-independent-mandatory-static-review.v1, static_reviewed_programs=len(RERUN),
 # per-program observer_sha256/native_graphs_sha256 from PROFILE) and a separate observer review
 # (profile_sha256=PROFILE_SHA, source_review_sha256=SOURCE_REVIEW_SHA). None keeps freeze/run fail-closed.
-SOURCE_REVIEW_SHA=None
-OBSERVER_REVIEW_SHA=None
+SOURCE_REVIEW_SHA='da7b6322e59b4e4add33ac828ec825a4e8e1820a6992b014322cb7735d18c7f0'
+OBSERVER_REVIEW_SHA='41631f32cdfa2ea0b9b9008d8a857235fd94ef078c22443063e7d4b98f11e5af'
 PLAN_SHA='e3aef8f45d87d776fdef85414ce1f8c2f5d3d4bad75b401b0b71f3edff6d6cf1'
 SCHEMA='gamma.s20-official-execution.v3'
 SCOPE_NOTE_SHA='d064f0501f9fd19d49639f3bde0fdb244b4554825cd1090f649e0ba50aa70f6d'
