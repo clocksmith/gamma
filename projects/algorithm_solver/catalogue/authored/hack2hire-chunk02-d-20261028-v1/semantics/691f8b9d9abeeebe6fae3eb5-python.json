@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:691f8b9d9abeeebe6fae3eb5",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "rules",
+  "expenses"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findViolations",
+  "params": [
+   {
+    "name": "rules",
+    "type": "string[][]"
+   },
+   {
+    "name": "expenses",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "Fraction arithmetic, per-trip re-summation",
+  "candidate_design": "integer cents parse once; per rule single pass; trip sums in insertion-ordered map",
+  "complexity_target": "O(R*E) time/O(E) space"
+ },
+ "source_sha256": "39764eb700bb60530128c793d52eea7485b0f546898f8551fd6b9a9c53c02a6c",
+ "wrapper": "Solution.findViolations"
+}

@@ -1,0 +1,433 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69f789f030f41dfd539fc6bb:69f78c6830f41dfd539fc6dc:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+   "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+   "selector": "/problems/8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69f789f030f41dfd539fc6bb.json",
+   "sha256": "ba16b9b4f75a6412c3479185009d6fa3a9d84e799fc4193c8fb3e5af7f392174",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+   "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+   "selector": "/variants/hack2hire:69f78c6830f41dfd539fc6dc"
+  }
+ ],
+ "problemId": "hack2hire:69f789f030f41dfd539fc6bb",
+ "variantId": "69f78c6830f41dfd539fc6dc",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: live formulas without cycles",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:69f78c6830f41dfd539fc6dc/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Cells A1..Z100, all initially 0. Inferred exact-numeric domain: a cell holds a non-negative decimal integer literal (<=10^6) or a formula \"=\" t1 \"+\" t2 ... (1..20 terms) where each term is a cell reference or such a literal. getCell evaluates live (references reflect later edits) and returns an integer; resetCell restores 0. Inference narrows the source's double values to integers so both languages are exact; results above 2^53-1 are outside the inferred domain. Level 1 inputs never create a circular reference.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Cells A1..Z100, all initially 0.",
+   "Inferred exact-numeric domain: a cell holds a non-negative decimal integer literal (<=10^6) or a formula \"=\" t1 \"+\" t2 ..",
+   "(1..20 terms) where each term is a cell reference or such a literal.",
+   "getCell evaluates live (references reflect later edits) and returns an integer.",
+   "resetCell restores 0.",
+   "Inference narrows the source's double values to integers so both languages are exact.",
+   "results above 2^53-1 are outside the inferred domain.",
+   "Level 1 inputs never create a circular reference."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "cells A1..Z100",
+   "literals 0..1e6",
+   "1..20 terms per formula",
+   "up to 3000 operations",
+   "results <= 2^53-1"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:69f78c6830f41dfd539fc6dc/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview; algorithmTags; codingQuestions (variant count/order); LeetCode 3484 relationship named in preview; preview response sha256 56874d0a2db9a508036ce249652a683fd52b56ad0cc868bcc7b580cffcc523ab"
+   },
+   {
+    "statement": "Uncertainty: high: the preview names the grid and setCell; the formula grammar, integer domain and resetCell are inferred (the source uses doubles)",
+    "basis": "the public group preview is partial (728 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as levels 1-2 (cycles appear in level 2)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/8/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/8/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/8/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which operators may formulas use?",
+   "Are values doubles or integers?",
+   "Should getCell reflect later edits to referenced cells?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:69f78c6830f41dfd539fc6dc/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "Spreadsheet",
+      "getCell"
+     ],
+     [
+      [],
+      [
+       "A2"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "Spreadsheet",
+      "getCell"
+     ],
+     [
+      [],
+      [
+       "C3"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:69f78c6830f41dfd539fc6dc/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/oracles.py",
+    "sha256": "835d874bb60ce64d055c150a50d55640901958cb4e5de62ec06465af0ee4fc62",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Spreadsheet:\n    def __init__(self)\n    def setCell(self, cell, value) -> void\n    def getCell(self, cell) -> integer\n    def resetCell(self, cell) -> void",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/69f78c6830f41dfd539fc6dc-python.json",
+     "inferredInterface": {
+      "classname": "Spreadsheet",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "setCell",
+        "params": [
+         {
+          "name": "cell",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getCell",
+        "params": [
+         {
+          "name": "cell",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "resetCell",
+        "params": [
+         {
+          "name": "cell",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/69f78c6830f41dfd539fc6dc-python.json",
+      "sha256": "1b079446b96c67edbbc97a5fd6472f1325a8bc69d857bc4e92166b3311176b4c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Spreadsheet {\n  constructor()\n  setCell(cell, value) /* -> void */\n  getCell(cell) /* -> integer */\n  resetCell(cell) /* -> void */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/69f78c6830f41dfd539fc6dc-javascript.json",
+     "inferredInterface": {
+      "classname": "Spreadsheet",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "setCell",
+        "params": [
+         {
+          "name": "cell",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getCell",
+        "params": [
+         {
+          "name": "cell",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "resetCell",
+        "params": [
+         {
+          "name": "cell",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/69f78c6830f41dfd539fc6dc-javascript.json",
+      "sha256": "5428d4845021a9519cd2ada0895d114175b393aa62d5c94e2fc62f2bc39ed85c",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/8/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/8/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

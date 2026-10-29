@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69eb97f0fbaf3da6418293d1",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "lines1",
+  "lines2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "patienceDiff",
+  "params": [
+   {
+    "name": "lines1",
+    "type": "string[]"
+   },
+   {
+    "name": "lines2",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "direct recursion over slices using the quadratic chain reference",
+  "candidate_design": "explicit work stack over segment bounds; per segment prefix/suffix trim, hash counts, DIFF2 chain routine",
+  "complexity_target": "O(n^2) worst case, n<=2000"
+ },
+ "source_sha256": "8a8416fbb8db747b11b2d5ca00d934c9339bdd8011346d711f1ebed986766da0",
+ "wrapper": "Solution.patienceDiff"
+}

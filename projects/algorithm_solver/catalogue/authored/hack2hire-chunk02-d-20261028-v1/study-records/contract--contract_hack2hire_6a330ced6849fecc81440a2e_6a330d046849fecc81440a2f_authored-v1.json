@@ -1,0 +1,336 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a330ced6849fecc81440a2e:6a330d046849fecc81440a2f:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+   "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a330ced6849fecc81440a2e.json",
+   "sha256": "a8b1c8e13012d5ed50e229bc4bbf159013c5af3219875900234b957402ece65c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+   "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+   "selector": "/variants/hack2hire:6a330d046849fecc81440a2f"
+  }
+ ],
+ "problemId": "hack2hire:6a330ced6849fecc81440a2e",
+ "variantId": "6a330d046849fecc81440a2f",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: nearest server along each diagonal",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:6a330d046849fecc81440a2f/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Start at locations[0]. For each direction in order, move to the server on that diagonal ray with the smallest Z>=1; if no server lies on the ray the request stays put (inference). Return the final [x, y].",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Start at locations[0].",
+   "For each direction in order, move to the server on that diagonal ray with the smallest Z>=1.",
+   "if no server lies on the ray the request stays put (inference).",
+   "Return the final [x, y]."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1..1e5 unique servers, coordinates within +-1e9",
+   "0..1e5 redirects"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:6a330d046849fecc81440a2f/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: direction definitions; algorithmTags: HASH_TABLE; preview response sha256 f52b9b7632f239c9a7acf67ded81235bd563938fc5deabb09e5522fd61f62b8b"
+   },
+   {
+    "statement": "Uncertainty: medium: directions are in the preview; nearest-hop choice and staying put when blocked are inferred",
+    "basis": "the public group preview is partial (755 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does a redirect jump to the nearest server or the farthest?",
+   "What happens when no server lies on the diagonal?",
+   "Is the answer the final coordinate?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:6a330d046849fecc81440a2f/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       0,
+       0
+      ]
+     ],
+     []
+    ],
+    "output": [
+     0,
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       0,
+       -3
+      ]
+     ],
+     []
+    ],
+    "output": [
+     0,
+     -3
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:6a330d046849fecc81440a2f/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/oracles.py",
+    "sha256": "835d874bb60ce64d055c150a50d55640901958cb4e5de62ec06465af0ee4fc62",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findFinalServer(locations, redirectRecords) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/6a330d046849fecc81440a2f-python.json",
+     "inferredInterface": {
+      "name": "findFinalServer",
+      "params": [
+       {
+        "name": "locations",
+        "type": "integer[][]"
+       },
+       {
+        "name": "redirectRecords",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/6a330d046849fecc81440a2f-python.json",
+      "sha256": "d24d1584c4457084c06307975c9943b810155dcc9b5132194a315aa8fe223b2d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findFinalServer(locations, redirectRecords) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/6a330d046849fecc81440a2f-javascript.json",
+     "inferredInterface": {
+      "name": "findFinalServer",
+      "params": [
+       {
+        "name": "locations",
+        "type": "integer[][]"
+       },
+       {
+        "name": "redirectRecords",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/6a330d046849fecc81440a2f-javascript.json",
+      "sha256": "8e42be7189b03aca8df0b4da4e5b7e92e325348cd4dbcacf3b591ba8ac1acd98",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,169 @@
+{
+ "problems": {
+  "hack2hire:68ac41b61bf7d2097f647ef1": {
+   "reference": "literal per-request count of previously allowed timestamps inside the window",
+   "candidate_design": "deque of allowed timestamps; evict below t-windowSize+1; allow if size<maxRequests",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:694af9676e481a4b09cbc77d": {
+   "reference": "literal replay into an ordered active list for every query (prefix replay for point-in-time queries)",
+   "candidate_design": "single replay into user->rank map plus per-user effective state-change lists; bisect for point-in-time status; rank-sorted moderator list",
+   "complexity_target": "O(L log L) build; O(1)/O(U) current queries; O(log L) canRemoveAt; O(U log L+U log U) getModeratorsAt"
+  },
+  "hack2hire:694b056e6e481a4b09cbc7e4": {
+   "reference": "literal replay into an ordered active list for every query (prefix replay for point-in-time queries)",
+   "candidate_design": "single replay into user->rank map plus per-user effective state-change lists; bisect for point-in-time status; rank-sorted moderator list",
+   "complexity_target": "O(L log L) build; O(1)/O(U) current queries; O(log L) canRemoveAt; O(U log L+U log U) getModeratorsAt"
+  },
+  "hack2hire:694b08dc6e481a4b09cbc807": {
+   "reference": "literal replay into an ordered active list for every query (prefix replay for point-in-time queries)",
+   "candidate_design": "single replay into user->rank map plus per-user effective state-change lists; bisect for point-in-time status; rank-sorted moderator list",
+   "complexity_target": "O(L log L) build; O(1)/O(U) current queries; O(log L) canRemoveAt; O(U log L+U log U) getModeratorsAt"
+  },
+  "hack2hire:6ac95215339e3a32c154ddc3": {
+   "reference": "explicit bottom-to-top id list with full-state snapshots for undo",
+   "candidate_design": "id->(box,z-key,active); fresh increasing z-keys; topmost by max key scan; undo stack of inverse operations",
+   "complexity_target": "O(1) mutations; O(R) getTopRectangle; O(R) space"
+  },
+  "hack2hire:6ac95252339e3a32c154ddc8": {
+   "reference": "explicit bottom-to-top id list with full-state snapshots for undo",
+   "candidate_design": "id->(box,z-key,active); fresh increasing z-keys; topmost by max key scan; undo stack of inverse operations",
+   "complexity_target": "O(1) mutations; O(R) getTopRectangle; O(R) space"
+  },
+  "hack2hire:6ac95279339e3a32c154ddca": {
+   "reference": "explicit bottom-to-top id list with full-state snapshots for undo",
+   "candidate_design": "id->(box,z-key,active); fresh increasing z-keys; topmost by max key scan; undo stack of inverse operations",
+   "complexity_target": "O(1) mutations; O(R) getTopRectangle; O(R) space"
+  },
+  "hack2hire:6ac952f0339e3a32c154ddd2": {
+   "reference": "explicit bottom-to-top id list with full-state snapshots for undo",
+   "candidate_design": "id->(box,z-key,active); fresh increasing z-keys; topmost by max key scan; undo stack of inverse operations",
+   "complexity_target": "O(1) mutations; O(R) getTopRectangle; O(R) space"
+  },
+  "hack2hire:69f78c6830f41dfd539fc6dc": {
+   "reference": "recursive memoised evaluation of every cell after each set; cycle = re-entry",
+   "candidate_design": "parsed term lists; getCell iterative post-order DFS with per-call memo; v2 iterative reachability check before storing",
+   "complexity_target": "O(V+E) per getCell and per v2 setCell"
+  },
+  "hack2hire:69f78ced30f41dfd539fc6e1": {
+   "reference": "recursive memoised evaluation of every cell after each set; cycle = re-entry",
+   "candidate_design": "parsed term lists; getCell iterative post-order DFS with per-call memo; v2 iterative reachability check before storing",
+   "complexity_target": "O(V+E) per getCell and per v2 setCell"
+  },
+  "hack2hire:6a330d046849fecc81440a2f": {
+   "reference": "scan every server for every redirect",
+   "candidate_design": "hash map from diagonal key (x-y or x+y) to sorted x list; bisect for nearest along ray",
+   "complexity_target": "O(n log n + r log n) time/O(n) space"
+  },
+  "hack2hire:691f8b9d9abeeebe6fae3eb5": {
+   "reference": "Fraction arithmetic, per-trip re-summation",
+   "candidate_design": "integer cents parse once; per rule single pass; trip sums in insertion-ordered map",
+   "complexity_target": "O(R*E) time/O(E) space"
+  },
+  "hack2hire:6920bd4a94b324049c3251a5": {
+   "reference": "Fraction arithmetic, per-trip re-summation",
+   "candidate_design": "integer cents parse once; per rule single pass; trip sums in insertion-ordered map",
+   "complexity_target": "O(R*E) time/O(E) space"
+  },
+  "hack2hire:6ab32819e74ebb7457a3f0f5": {
+   "reference": "list-based simulation with sorted hold scans and repeated prerequisite scans",
+   "candidate_design": "ready deque, min-heap of (deadline,seq,task) with lazy invalidation, attempts map; v2 indegree counters, dependents lists sorted by taskIds position, BFS cascade",
+   "complexity_target": "O((q+n+d) log n) time/O(n+d) space"
+  },
+  "hack2hire:6ab328bbe74ebb7457a3f0fc": {
+   "reference": "list-based simulation with sorted hold scans and repeated prerequisite scans",
+   "candidate_design": "ready deque, min-heap of (deadline,seq,task) with lazy invalidation, attempts map; v2 indegree counters, dependents lists sorted by taskIds position, BFS cascade",
+   "complexity_target": "O((q+n+d) log n) time/O(n+d) space"
+  },
+  "hack2hire:69d184ef17b72775cc49c04e": {
+   "reference": "per query full forest traversal propagating grant flags",
+   "candidate_design": "iterative Euler tour; per user outermost granting intervals sorted by entry time; bisect per query",
+   "complexity_target": "O(N + G log G + Q log G) time/O(N+G) space"
+  },
+  "hack2hire:67c76f386c89e288437c3031": {
+   "reference": "enumerate every binary tree with every operator, render with minimal parentheses, deduplicate",
+   "candidate_design": "interval memo of canonical Sum/Product forms (sum of non-sum parts, product of non-product parts) carrying values; each rendering produced exactly once",
+   "complexity_target": "output-sensitive; k<=7"
+  },
+  "hack2hire:68fd342247bea664c0bba313": {
+   "reference": "1440-entry busy minute array and sliding scan",
+   "candidate_design": "parse, sort intervals, sweep merged busy blocks checking each gap length",
+   "complexity_target": "O(e log e) time/O(e) space"
+  },
+  "hack2hire:6a7cd372d713d873ca7ac6ef": {
+   "reference": "1000-entry used array scan",
+   "candidate_design": "sort ranges by start; sweep gaps between consecutive ranges and to 999",
+   "complexity_target": "O(r log r) time/O(r) space"
+  },
+  "hack2hire:6a7cd38bd713d873ca7ac6f0": {
+   "reference": "1000-entry used array scan",
+   "candidate_design": "sort ranges by start; sweep gaps between consecutive ranges and to 999",
+   "complexity_target": "O(r log r) time/O(r) space"
+  },
+  "hack2hire:6a0b74fac84b6e8a3be18c83": {
+   "reference": "regex runs of [0-9.] and full-match octet regex",
+   "candidate_design": "iterative traversal; manual character scan of digit/dot runs; split and octet checks; set then sort",
+   "complexity_target": "O(total chars + u log u) time"
+  },
+  "hack2hire:6a21c269d5c5b3e5f9c34546": {
+   "reference": "reverse-move search from target back to start",
+   "candidate_design": "multiset check then iterative forward DFS with visited set",
+   "complexity_target": "O(reachable states * n)"
+  },
+  "hack2hire:67d793931989183df53824a0": {
+   "reference": "Fraction shares with unit-step loops for whole-share buys/sells",
+   "candidate_design": "integer hundredths with ceil/floor division",
+   "complexity_target": "O(o + s log s) time"
+  },
+  "hack2hire:68fd2f6247bea664c0bba309": {
+   "reference": "adjacency-matrix mutual counts for every pair",
+   "candidate_design": "friend-of-friend counting with stamped arrays per user",
+   "complexity_target": "O(sum over users of sum of friend degrees) time/O(n+m) space"
+  },
+  "hack2hire:69308197cd79766b0b310225": {
+   "reference": "explicit frame-run enumeration per depth with sorted event keys",
+   "candidate_design": "incremental common-prefix diff of consecutive stacks with an open-frame stack; v2 buffered keyed events sorted once; v3 interval accumulation",
+   "complexity_target": "O(total frames) (+ sort for v2)"
+  },
+  "hack2hire:69308714cd79766b0b310228": {
+   "reference": "explicit frame-run enumeration per depth with sorted event keys",
+   "candidate_design": "incremental common-prefix diff of consecutive stacks with an open-frame stack; v2 buffered keyed events sorted once; v3 interval accumulation",
+   "complexity_target": "O(total frames) (+ sort for v2)"
+  },
+  "hack2hire:69308716cd79766b0b310229": {
+   "reference": "explicit frame-run enumeration per depth with sorted event keys",
+   "candidate_design": "incremental common-prefix diff of consecutive stacks with an open-frame stack; v2 buffered keyed events sorted once; v3 interval accumulation",
+   "complexity_target": "O(total frames) (+ sort for v2)"
+  },
+  "hack2hire:697bdcee9731315964cfaf6f": {
+   "reference": "tuple sort of all generated triples",
+   "candidate_design": "generate triples then comparator sort (day, guest, touchpoint)",
+   "complexity_target": "O(R*T log(R*T))"
+  },
+  "hack2hire:697bdf679731315964cfaf77": {
+   "reference": "tuple sort of all generated triples",
+   "candidate_design": "generate triples then comparator sort (day, guest, touchpoint)",
+   "complexity_target": "O(R*T log(R*T))"
+  },
+  "hack2hire:697bdf8c9731315964cfaf78": {
+   "reference": "tuple sort of all generated triples",
+   "candidate_design": "generate triples then comparator sort (day, guest, touchpoint)",
+   "complexity_target": "O(R*T log(R*T))"
+  },
+  "hack2hire:69bd5fda1cbff60a929be96f": {
+   "reference": "list.count/list.index per line",
+   "candidate_design": "two counting hash maps, first qualifying i",
+   "complexity_target": "O(n+m)"
+  },
+  "hack2hire:69eb97bffbaf3da6418293cf": {
+   "reference": "O(k^2) suffix DP with explicit lexicographic comparison of index lists",
+   "candidate_design": "patience LIS on reversed order for suffix chain lengths; greedy smallest-index pick per length level via bisect",
+   "complexity_target": "O(k log k)"
+  },
+  "hack2hire:69eb97f0fbaf3da6418293d1": {
+   "reference": "direct recursion over slices using the quadratic chain reference",
+   "candidate_design": "explicit work stack over segment bounds; per segment prefix/suffix trim, hash counts, DIFF2 chain routine",
+   "complexity_target": "O(n^2) worst case, n<=2000"
+  }
+ }
+}

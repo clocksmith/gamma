@@ -1,0 +1,108 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6ab32819e74ebb7457a3f0f5",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "WorkQueue",
+  "constructor": {
+   "params": [
+    {
+     "name": "taskIds",
+     "type": "integer[]"
+    },
+    {
+     "name": "leaseDuration",
+     "type": "integer"
+    },
+    {
+     "name": "maxAttempts",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "reserve",
+    "params": [
+     {
+      "name": "time",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "complete",
+    "params": [
+     {
+      "name": "time",
+      "type": "integer"
+     },
+     {
+      "name": "taskId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "fail",
+    "params": [
+     {
+      "name": "time",
+      "type": "integer"
+     },
+     {
+      "name": "taskId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getDeadLetters",
+    "params": [
+     {
+      "name": "time",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "list-based simulation with sorted hold scans and repeated prerequisite scans",
+  "candidate_design": "ready deque, min-heap of (deadline,seq,task) with lazy invalidation, attempts map; v2 indegree counters, dependents lists sorted by taskIds position, BFS cascade",
+  "complexity_target": "O((q+n+d) log n) time/O(n+d) space"
+ },
+ "source_sha256": "625dec7554d4a9acc9fc17eea50f9d4c57e5f461b4ba8bea5a0e249e1438ea71",
+ "native_class": "WorkQueue",
+ "native_symbol": "module global WorkQueue",
+ "void_methods": []
+}

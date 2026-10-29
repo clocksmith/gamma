@@ -1,0 +1,342 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69d184e717b72775cc49c04d:69d184ef17b72775cc49c04e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+   "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+   "selector": "/problems/15"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69d184e717b72775cc49c04d.json",
+   "sha256": "22e06b1d77d8e12433146378138749df9dfb3ef5451b2beec8431f48567ce261",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+   "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+   "selector": "/variants/hack2hire:69d184ef17b72775cc49c04e"
+  }
+ ],
+ "problemId": "hack2hire:69d184e717b72775cc49c04d",
+ "variantId": "69d184ef17b72775cc49c04e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: batch access checks with inherited permissions",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:69d184ef17b72775cc49c04e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Entity is {uuid, type: TEAM|FOLDER|FILE, userIds, children}; teams are roots, files have no children, uuids are unique. A user can access an entity iff the user is listed on it or on any ancestor. For each query [userId, uuid] return that boolean (unknown uuid -> false). The batch-query interface is an inference.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Entity is {uuid, type: TEAM|FOLDER|FILE, userIds, children}.",
+   "teams are roots, files have no children, uuids are unique.",
+   "A user can access an entity iff the user is listed on it or on any ancestor.",
+   "For each query [userId, uuid] return that boolean (unknown uuid -> false).",
+   "The batch-query interface is an inference."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 100000 entities, depth <= 200",
+   "up to 100000 queries"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:69d184ef17b72775cc49c04e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: entity model and inheritance rule; algorithmTags: DEPTH_FIRST_SEARCH; preview response sha256 26d79267b94a30f6d08f19511db113207eed1d7e3f1d2c2d1f201c0868ed878d"
+   },
+   {
+    "statement": "Uncertainty: medium-high: the entity model and inheritance rule are in the preview; the batch-query interface is inferred",
+    "basis": "the public group preview is partial (662 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/15/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/15/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/15/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What exactly must be answered: one check, a list of accessible entities, or both?",
+   "Is an unknown uuid an error or false?",
+   "Do teams nest?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:69d184ef17b72775cc49c04e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [
+      [
+       "u1",
+       "x"
+      ]
+     ]
+    ],
+    "output": [
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      {
+       "uuid": "n1",
+       "type": "TEAM",
+       "userIds": [],
+       "children": []
+      }
+     ],
+     [
+      [
+       "u1",
+       "n2"
+      ]
+     ]
+    ],
+    "output": [
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:69d184ef17b72775cc49c04e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/oracles.py",
+    "sha256": "835d874bb60ce64d055c150a50d55640901958cb4e5de62ec06465af0ee4fc62",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def checkAccess(teams, queries) -> boolean[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/69d184ef17b72775cc49c04e-python.json",
+     "inferredInterface": {
+      "name": "checkAccess",
+      "params": [
+       {
+        "name": "teams",
+        "type": "Entity[]"
+       },
+       {
+        "name": "queries",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "boolean[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/69d184ef17b72775cc49c04e-python.json",
+      "sha256": "297a74f096b4ea140be88b1685c5574c073fd0a5fd3131d6064ee7baa6981356",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function checkAccess(teams, queries) /* -> boolean[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/69d184ef17b72775cc49c04e-javascript.json",
+     "inferredInterface": {
+      "name": "checkAccess",
+      "params": [
+       {
+        "name": "teams",
+        "type": "Entity[]"
+       },
+       {
+        "name": "queries",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "boolean[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/69d184ef17b72775cc49c04e-javascript.json",
+      "sha256": "a932750672241bd8aa21b48270cd4951bef2f053eaf5cda979fd6179fe1633b0",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/15/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/15/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

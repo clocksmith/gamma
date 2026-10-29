@@ -1,0 +1,337 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:697bdcdd9731315964cfaf6e:697bdcee9731315964cfaf6f:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+   "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+   "selector": "/problems/27"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/697bdcdd9731315964cfaf6e.json",
+   "sha256": "be6ee0dc3fbc5aafec876d5e169d8d8fe5873093ddba99d5c733d3333327df95",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+   "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+   "selector": "/variants/hack2hire:697bdcee9731315964cfaf6f"
+  }
+ ],
+ "problemId": "hack2hire:697bdcdd9731315964cfaf6e",
+ "variantId": "697bdcee9731315964cfaf6f",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: offsets from check-in",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:697bdcee9731315964cfaf6f/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "reservations is a list of objects {guest_name, room_type, check_in_day, stay_length}; check_out_day = check_in_day + stay_length. Output is every (send_day, guest_name, touchpoint_name) triple, sorted ascending by day, then guest name, then touchpoint name (code-point order); duplicates are kept. Level 1: emailTouchpoints maps touchpoint name -> day offset from check_in_day.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/27/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "reservations is a list of objects {guest_name, room_type, check_in_day, stay_length}.",
+   "check_out_day = check_in_day + stay_length.",
+   "Output is every (send_day, guest_name, touchpoint_name) triple, sorted ascending by day, then guest name, then touchpoint name (code-point order).",
+   "duplicates are kept.",
+   "Level 1: emailTouchpoints maps touchpoint name -> day offset from check_in_day."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/27/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 5000 reservations, up to 20 touchpoints",
+   "check_in_day 0..1e6, stay_length 1..365",
+   "offsets -365..365"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:697bdcee9731315964cfaf6f/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: reservation fields; title; preview response sha256 282b1d0810deabf40275c33ec02c76560deac2d23b9e8336081c72cfbf83def8"
+   },
+   {
+    "statement": "Uncertainty: high: reservation fields are in the preview; the touchpoint shape and output are inferred",
+    "basis": "the public group preview is partial (450 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as levels 1-3",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/27/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/27/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/27/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does a touchpoint specify?",
+   "How is the schedule ordered?",
+   "Are emails before day 0 dropped?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:697bdcee9731315964cfaf6f/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     {}
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      {
+       "guest_name": "Cy",
+       "room_type": "king",
+       "check_in_day": 3,
+       "stay_length": 3
+      }
+     ],
+     {
+      "survey": 4
+     }
+    ],
+    "output": [
+     [
+      7,
+      "Cy",
+      "survey"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:697bdcee9731315964cfaf6f/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/oracles.py",
+    "sha256": "835d874bb60ce64d055c150a50d55640901958cb4e5de62ec06465af0ee4fc62",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def buildEmailSchedule(reservations, emailTouchpoints) -> list<[integer,string,string]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/27/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/697bdcee9731315964cfaf6f-python.json",
+     "inferredInterface": {
+      "name": "buildEmailSchedule",
+      "params": [
+       {
+        "name": "reservations",
+        "type": "object[]"
+       },
+       {
+        "name": "emailTouchpoints",
+        "type": "object"
+       }
+      ],
+      "return": {
+       "type": "list<[integer,string,string]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/697bdcee9731315964cfaf6f-python.json",
+      "sha256": "927cdf0c970c7583d981d543ebfebe6a4145a29a2bc95dcc06a0b320e9a1155b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function buildEmailSchedule(reservations, emailTouchpoints) /* -> list<[integer,string,string]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/27/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/697bdcee9731315964cfaf6f-javascript.json",
+     "inferredInterface": {
+      "name": "buildEmailSchedule",
+      "params": [
+       {
+        "name": "reservations",
+        "type": "object[]"
+       },
+       {
+        "name": "emailTouchpoints",
+        "type": "object"
+       }
+      ],
+      "return": {
+       "type": "list<[integer,string,string]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/697bdcee9731315964cfaf6f-javascript.json",
+      "sha256": "cec72aa0a3307f01e9d73eba876d457bb9931069ddcbf8857834b9b570d02d86",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/27/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/27/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

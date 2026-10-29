@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69308197cd79766b0b310225",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "samples"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "generateEvents",
+  "params": [
+   {
+    "name": "samples",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string,string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "explicit frame-run enumeration per depth with sorted event keys",
+  "candidate_design": "incremental common-prefix diff of consecutive stacks with an open-frame stack; v2 buffered keyed events sorted once; v3 interval accumulation",
+  "complexity_target": "O(total frames) (+ sort for v2)"
+ },
+ "source_sha256": "aed960470677603a754bcdb5f44f5ef8ea87c818df309dda22a854e97d958b64",
+ "wrapper": "named export generateEvents"
+}

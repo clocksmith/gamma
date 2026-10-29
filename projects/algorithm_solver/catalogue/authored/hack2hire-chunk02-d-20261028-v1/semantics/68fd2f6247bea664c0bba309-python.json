@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68fd2f6247bea664c0bba309",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "friendships"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "recommendFriends",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "friendships",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "adjacency-matrix mutual counts for every pair",
+  "candidate_design": "friend-of-friend counting with stamped arrays per user",
+  "complexity_target": "O(sum over users of sum of friend degrees) time/O(n+m) space"
+ },
+ "source_sha256": "fa9d71a3eb0b103582332c94efccbd9c5deac88a762fc15de7e81cffc34e887a",
+ "wrapper": "Solution.recommendFriends"
+}

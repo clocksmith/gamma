@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69bd5fda1cbff60a929be96f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "lines1",
+  "lines2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findUniqueCommonLine",
+  "params": [
+   {
+    "name": "lines1",
+    "type": "string[]"
+   },
+   {
+    "name": "lines2",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "list.count/list.index per line",
+  "candidate_design": "two counting hash maps, first qualifying i",
+  "complexity_target": "O(n+m)"
+ },
+ "source_sha256": "55f87e5764b3f5734ba443f3ccaeddec53917e5a092a35304463dc39265d6642",
+ "wrapper": "named export findUniqueCommonLine"
+}
