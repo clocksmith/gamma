@@ -1,0 +1,325 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:679f05d8e818521cacd22470:679f09b9e818521cacd22471:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+   "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+   "selector": "/problems/16"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/679f05d8e818521cacd22470.json",
+   "sha256": "1f477c956415253191efb8d1274932d759576e53c036249e99df5918cdbda4c1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/study-content.json",
+   "sha256": "5d27b24db848c0b3d0fefb898fe5d490faab6f406937c84b6af063bbc723045b",
+   "selector": "/variants/hack2hire:679f09b9e818521cacd22471"
+  }
+ ],
+ "problemId": "hack2hire:679f05d8e818521cacd22470",
+ "variantId": "679f09b9e818521cacd22471",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: lowest-numbered free machine assignment",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/study-content.json",
+    "sha256": "5d27b24db848c0b3d0fefb898fe5d490faab6f406937c84b6af063bbc723045b",
+    "selector": "/variants/hack2hire:679f09b9e818521cacd22471/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "jobs[i] = [jobId, start \"HHMM\", duration minutes as a decimal string], in non-decreasing start order. Process jobs in order. A machine is free for a job when its last job ends (start + duration) at or before the job's start. Assign the job to the free machine with the smallest number; if none is free, open a new machine numbered one more than the current count. Machines are named \"M1\", \"M2\", .... Return [jobId, machine name] for every job in input order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "jobs[i] = [jobId, start \"HHMM\", duration minutes as a decimal string], in non-decreasing start order.",
+   "Process jobs in order.",
+   "A machine is free for a job when its last job ends (start + duration) at or before the job's start.",
+   "Assign the job to the free machine with the smallest number; if none is free, open a new machine numbered one more than the current count.",
+   "Machines are named \"M1\", \"M2\", ...",
+   "Return [jobId, machine name] for every job in input order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 100000 jobs",
+   "start 0000..2359",
+   "duration 1..10000 minutes",
+   "job ids [A-Za-z0-9]{1,10}, unique"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/study-content.json",
+    "sha256": "5d27b24db848c0b3d0fefb898fe5d490faab6f406937c84b6af063bbc723045b",
+    "selector": "/variants/hack2hire:679f09b9e818521cacd22471/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: job id, HHMM start, duration, sorted by start time; algorithmTags: HEAP; preview response sha256 42c556abf1a81da042dd7549018dda28de99f80c9ec5e5114492b64b54749ad0"
+   },
+   {
+    "statement": "Uncertainty: high: the input format is in the preview; the assignment rule, machine names and output are inferred",
+    "basis": "the public group preview is partial (342 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/16/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/16/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/16/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which free machine gets the job?",
+   "Can a machine take a job that starts exactly when its previous job ends?",
+   "Do jobs cross midnight?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/study-content.json",
+    "sha256": "5d27b24db848c0b3d0fefb898fe5d490faab6f406937c84b6af063bbc723045b",
+    "selector": "/variants/hack2hire:679f09b9e818521cacd22471/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "J0",
+       "0010",
+       "2"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "J0",
+      "M1"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/study-content.json",
+    "sha256": "5d27b24db848c0b3d0fefb898fe5d490faab6f406937c84b6af063bbc723045b",
+    "selector": "/variants/hack2hire:679f09b9e818521cacd22471/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/oracles.py",
+    "sha256": "facbec54559ee05588b53a9a940d1eb828f4e7f25f1661f9855fdcd46bb92b5b",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def assignMachines(jobs) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+      "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/semantics/679f09b9e818521cacd22471-python.json",
+     "inferredInterface": {
+      "name": "assignMachines",
+      "params": [
+       {
+        "name": "jobs",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/semantics/679f09b9e818521cacd22471-python.json",
+      "sha256": "19f3ea85c960869f75ac3b682ca27f59df3bbb934ed1ac1c489d7ba9acd1d074",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function assignMachines(jobs) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+      "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/semantics/679f09b9e818521cacd22471-javascript.json",
+     "inferredInterface": {
+      "name": "assignMachines",
+      "params": [
+       {
+        "name": "jobs",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/semantics/679f09b9e818521cacd22471-javascript.json",
+      "sha256": "e29d3a9a84711981e7c690cd95af88105800a897fc336ba17da38c50fb8774f8",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/16/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/16/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

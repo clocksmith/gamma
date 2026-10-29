@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:688baac33867670cfb894157",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "longestCircularOnes",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every start and every length up to n, counting zeros directly",
+  "candidate_design": "if zeros <= k answer n; otherwise a sliding window over the doubled array (windows then never exceed n)",
+  "complexity_target": "O(n)"
+ },
+ "source_sha256": "d9e87a47ef18844d748dacc61af385bcb7b53d0ef9b203069b1eeae4031024a5",
+ "wrapper": "named export longestCircularOnes"
+}

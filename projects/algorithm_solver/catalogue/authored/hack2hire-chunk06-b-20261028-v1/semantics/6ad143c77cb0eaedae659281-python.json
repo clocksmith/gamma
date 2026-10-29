@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6ad143c77cb0eaedae659281",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "records"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "formatTasks",
+  "params": [
+   {
+    "name": "records",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive display with record rescans, passing the outline prefix down",
+  "candidate_design": "level 2 structure; the DFS stack also carries the outline number string of each pending task",
+  "complexity_target": "O(records + output characters)"
+ },
+ "source_sha256": "3a9fb1c3afe1932097eea031ae4846761619e578de8bf055a39a6c9a25ba0580",
+ "wrapper": "Solution.formatTasks"
+}

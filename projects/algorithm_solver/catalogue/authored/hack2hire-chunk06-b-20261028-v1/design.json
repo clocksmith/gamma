@@ -1,0 +1,114 @@
+{
+ "problems": {
+  "hack2hire:685b15536d39467927d2f285": {
+   "reference": "recursive serialisation into one string, then split into tokens at each \"<\"",
+   "candidate_design": "explicit stack of (node, next child index); emit the open token on push and the close token on pop",
+   "complexity_target": "O(total nodes) time, O(depth) extra space"
+  },
+  "hack2hire:6ad141cb7cb0eaedae659263": {
+   "reference": "recursive display that rescans every record to find the children of each task",
+   "candidate_design": "hash map id -> ordered child list plus a root list; iterative DFS with an explicit stack",
+   "complexity_target": "O(records + output characters)"
+  },
+  "hack2hire:6ad142657cb0eaedae65926e": {
+   "reference": "fixed-point marking of displayable tasks by repeated passes, then recursive display with record rescans",
+   "candidate_design": "validate and deduplicate in one pass; child lists by parent; DFS from the roots so orphans and cycles are never reached",
+   "complexity_target": "O(records + output characters)"
+  },
+  "hack2hire:6ad143c77cb0eaedae659281": {
+   "reference": "recursive display with record rescans, passing the outline prefix down",
+   "candidate_design": "level 2 structure; the DFS stack also carries the outline number string of each pending task",
+   "complexity_target": "O(records + output characters)"
+  },
+  "hack2hire:6ad1440c7cb0eaedae659287": {
+   "reference": "recursive completion check per task (re-walks subtrees) plus recursive display with record rescans",
+   "candidate_design": "level 3 structure plus a post-order pass over the displayed forest that computes each task's shown completion from its children",
+   "complexity_target": "O(records + output characters)"
+  },
+  "hack2hire:68f6f36986f7cb4953d40fbc": {
+   "reference": "simulate every starting layer layer by layer",
+   "candidate_design": "prefix sums of costs and points; the stopping layer is non-decreasing in the start, so one moving pointer finds every stop",
+   "complexity_target": "O(n) time"
+  },
+  "hack2hire:68edba975abdefad4f6693e3": {
+   "reference": "union-find over adjacent non-boundary cells; each region takes its colour from (row + col) parity and is checked against every pre-coloured cell",
+   "candidate_design": "BFS per region from a pre-coloured cell (or its first cell), alternating colours and checking every edge",
+   "complexity_target": "O(M * N) time and space"
+  },
+  "hack2hire:6a1cc5df8b879849ebc0fc16": {
+   "reference": "regular-expression scan of each message for boundary tokens; per member, a membership test over the collected ids",
+   "candidate_design": "single pass per message: split on spaces, parse \"@\" tokens, collect member indices in a per-message set, then increment",
+   "complexity_target": "O(total message characters + members)"
+  },
+  "hack2hire:68cdc7ec3735a578b6f27eec": {
+   "reference": "literal server object plus a candidate-set check: all 10^4 strings consistent with every answer must shrink to the secret before the final guess",
+   "candidate_design": "digit counts in one array; per position, filler-padded probes; strings built once per guess",
+   "complexity_target": "O(1) per secret (at most 9 + 9 + 1 guesses)"
+  },
+  "hack2hire:69c84ccb21f6ab4226966c5a": {
+   "reference": "literal game object and an explicit candidate set: every answer filters the remaining values one by one",
+   "candidate_design": "C is always an interval [lo, hi]; each answer cuts it at the midpoint of the last two queries and drops the queried end",
+   "complexity_target": "O(log 1000) queries per target, O(1) work per query"
+  },
+  "hack2hire:6ab4186ae74ebb7457a3f74a": {
+   "reference": "literal server simulation with an explicit call log; feedback read back from the log",
+   "candidate_design": "interval arithmetic; the call count is two per round",
+   "complexity_target": "O(log upperBound) calls"
+  },
+  "hack2hire:6ab470ffb8a9a175a39ba128": {
+   "reference": "literal server simulation with an explicit call log; feedback read back from the log",
+   "candidate_design": "interval arithmetic; delay + 1 calls per round",
+   "complexity_target": "O((delay + 1) log upperBound) calls"
+  },
+  "hack2hire:68bacaefb5314dcd938cb9fb": {
+   "reference": "at each word start, compare every phrase directly (longest first)",
+   "candidate_design": "trie of lower-cased phrases holding the first category; walk the trie from each word start, remembering the last node that ends a phrase at a word boundary",
+   "complexity_target": "O(review length * longest phrase + total phrase length)"
+  },
+  "hack2hire:6788830e402dc47b67a1494a": {
+   "reference": "word list built from a literal dictionary per value",
+   "candidate_design": "lookup table of the ten digit words",
+   "complexity_target": "O(1)"
+  },
+  "hack2hire:678884a8402dc47b67a1494c": {
+   "reference": "recursive decomposition by the largest named value not above num",
+   "candidate_design": "tables for 1-19 and the tens; hundreds digit then the remainder below 100",
+   "complexity_target": "O(1)"
+  },
+  "hack2hire:67888746402dc47b67a1494d": {
+   "reference": "recursive decomposition by the largest named value not above num",
+   "candidate_design": "three-digit chunks from the low end, each converted with the level 2 helper and suffixed with its scale word; empty chunks skipped",
+   "complexity_target": "O(number of digits)"
+  },
+  "hack2hire:679f09b9e818521cacd22471": {
+   "reference": "scan all machines in number order for each job",
+   "candidate_design": "min-heap of busy (end, machine) and min-heap of free machine numbers; release finished machines before each assignment",
+   "complexity_target": "O(n log n)"
+  },
+  "hack2hire:677c44295cbaff553b53b06a": {
+   "reference": "set of reachable cells per letter; each next cell checked against every reachable cell",
+   "candidate_design": "per step, a two-pass L1 distance transform of the reachable cells gives each cell its distance to the nearest reachable cell",
+   "complexity_target": "O(word length * m * n)"
+  },
+  "hack2hire:6907a349e1919109b6df1193": {
+   "reference": "enumerate every simple path by DFS and keep the shortest ones",
+   "candidate_design": "BFS distances from start, then DFS that only follows edges increasing the distance by one and ends at end",
+   "complexity_target": "O(number of shortest paths * path length)"
+  },
+  "hack2hire:6a73ba2dd713d873ca7a77a1": {
+   "reference": "repeated bubble passes swapping adjacent same-parity digits when that increases the string, until no pass swaps",
+   "candidate_design": "one pass splitting maximal same-parity runs; counting sort of each run in descending order",
+   "complexity_target": "O(n)"
+  },
+  "hack2hire:696c25586b040fa4d120bc21": {
+   "reference": "per latency, find its bucket by scanning bucket ranges from 0",
+   "candidate_design": "integer division per latency, capped at the last bucket (sortedness is not needed)",
+   "complexity_target": "O(n + numOfBuckets)"
+  },
+  "hack2hire:688baac33867670cfb894157": {
+   "reference": "try every start and every length up to n, counting zeros directly",
+   "candidate_design": "if zeros <= k answer n; otherwise a sliding window over the doubled array (windows then never exceed n)",
+   "complexity_target": "O(n)"
+  }
+ }
+}

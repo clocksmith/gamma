@@ -1,0 +1,1107 @@
+{
+ "schema": "gamma.hack2hire-chunk06-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-28",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:685b15536d39467927d2f285": {
+   "constraints": [
+    "1 to 20000 nodes",
+    "tree depth at most 90 levels (JSON nesting stays below 200)",
+    "tag matches [a-z][a-z0-9]{0,9}"
+   ],
+   "clarifyingQuestions": [
+    "Should the result be one string or a list of tokens?",
+    "Are closing tags required, or only the pre-order tag names?",
+    "Can the tree be deep enough to overflow recursion?"
+   ],
+   "hints": [
+    "Every node contributes exactly two tokens.",
+    "The close token is emitted only after every child is finished: that is the DFS post-visit.",
+    "Use an explicit stack holding (node, next child index) so deep trees cannot overflow the call stack."
+   ],
+   "invariants": [
+    "the stack holds exactly the open, not yet closed, tags from the root down",
+    "the output length is 2 * number of nodes"
+   ],
+   "chooseWhen": [
+    "Trees may be deep and the language has a small recursion limit"
+   ],
+   "tradeoffs": [
+    "An explicit stack is longer to write than recursion but has no depth limit"
+   ],
+   "variantLabel": "Inferred: open/close tag token list in DFS order",
+   "examples": [
+    {
+     "input": [
+      {
+       "tag": "b",
+       "children": []
+      }
+     ],
+     "output": [
+      "<b>",
+      "</b>"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "tag": "a",
+       "children": []
+      }
+     ],
+     "output": [
+      "<a>",
+      "</a>"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ad141cb7cb0eaedae659263": {
+   "constraints": [
+    "up to 20000 records, each at most 80 printable ASCII characters",
+    "ids [A-Za-z0-9_]{1,10}; names [A-Za-z0-9 _-]{1,20}; no commas inside fields",
+    "displayed hierarchy depth at most 100"
+   ],
+   "clarifyingQuestions": [
+    "In which order are siblings displayed?",
+    "What does one output line look like?",
+    "Can a child be listed before its parent?"
+   ],
+   "hints": [
+    "Records can arrive in any order, so read them all before printing anything.",
+    "Group children by parent id while keeping record order.",
+    "Walk the forest with an explicit stack, pushing children in reverse so the first child is printed first."
+   ],
+   "invariants": [
+    "children[p] lists the subtasks of p in record order",
+    "a line is printed only after its parent line"
+   ],
+   "chooseWhen": [
+    "Records are unordered and the hierarchy is wide or deep"
+   ],
+   "tradeoffs": [
+    "Recursion is simpler but limited in depth; a stack avoids that"
+   ],
+   "variantLabel": "Inferred level 1: indented forest from task records",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "5,task,a,Root"
+      ]
+     ],
+     "output": [
+      "Root"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ad142657cb0eaedae65926e": {
+   "constraints": [
+    "up to 20000 records, each at most 80 printable ASCII characters",
+    "ids [A-Za-z0-9_]{1,10}; names [A-Za-z0-9 _-]{1,20}; no commas inside fields",
+    "displayed hierarchy depth at most 100",
+    "records may be malformed"
+   ],
+   "clarifyingQuestions": [
+    "In which order are siblings displayed?",
+    "What does one output line look like?",
+    "Can a child be listed before its parent?",
+    "Which definition wins for a duplicated id?",
+    "What happens to subtasks whose parent never appears?"
+   ],
+   "hints": [
+    "Decide validity per record before building anything.",
+    "Only tasks reachable from a root task are displayed.",
+    "A DFS from the roots never enters a cycle or an orphan chain, because none of them is reachable from a root."
+   ],
+   "invariants": [
+    "each id is defined at most once (first valid definition)",
+    "displayed tasks are exactly those reachable from roots"
+   ],
+   "chooseWhen": [
+    "Input exports can be dirty"
+   ],
+   "tradeoffs": [
+    "Ignoring bad records silently hides data problems; an error list would be an alternative"
+   ],
+   "variantLabel": "Inferred level 2: skip malformed, duplicate and orphaned records",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "5,task,a,Root"
+      ]
+     ],
+     "output": [
+      "Root"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ad143c77cb0eaedae659281": {
+   "constraints": [
+    "up to 20000 records, each at most 80 printable ASCII characters",
+    "ids [A-Za-z0-9_]{1,10}; names [A-Za-z0-9 _-]{1,20}; no commas inside fields",
+    "displayed hierarchy depth at most 100",
+    "records may be malformed"
+   ],
+   "clarifyingQuestions": [
+    "In which order are siblings displayed?",
+    "What does one output line look like?",
+    "Can a child be listed before its parent?",
+    "Do outline numbers count only displayed siblings?"
+   ],
+   "hints": [
+    "Numbering depends only on the position among displayed siblings.",
+    "Carry the parent number down the DFS.",
+    "The j-th child of a task numbered N is numbered N + \".\" + j."
+   ],
+   "invariants": [
+    "outline numbers are unique",
+    "a child number extends its parent number by one component"
+   ],
+   "chooseWhen": [
+    "A readable outline must be printed"
+   ],
+   "tradeoffs": [
+    "Building number strings costs O(depth) per line"
+   ],
+   "variantLabel": "Inferred level 3: outline-numbered hierarchy",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "5,task,a,Root"
+      ]
+     ],
+     "output": [
+      "1 Root"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ad1440c7cb0eaedae659287": {
+   "constraints": [
+    "up to 20000 records, each at most 80 printable ASCII characters",
+    "ids [A-Za-z0-9_]{1,10}; names [A-Za-z0-9 _-]{1,20}; no commas inside fields",
+    "displayed hierarchy depth at most 100",
+    "records may be malformed"
+   ],
+   "clarifyingQuestions": [
+    "In which order are siblings displayed?",
+    "What does one output line look like?",
+    "Can a child be listed before its parent?",
+    "Is a parent complete when all its subtasks are?",
+    "Can a completion record precede the task definition?"
+   ],
+   "hints": [
+    "Completion of a parent depends on its children, so compute it bottom-up.",
+    "A post-order traversal visits children before parents.",
+    "Leaves show [x] only when marked; inner tasks also show [x] when every displayed child does."
+   ],
+   "invariants": [
+    "shown(t) = marked(t) or (children(t) nonempty and all shown(children))"
+   ],
+   "chooseWhen": [
+    "Status must roll up from subtasks"
+   ],
+   "tradeoffs": [
+    "A second pass over the forest is needed; caching shown status avoids quadratic re-walks"
+   ],
+   "variantLabel": "Inferred level 4: completion checkboxes rolled up from subtasks",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "5,task,a,Root"
+      ]
+     ],
+     "output": [
+      "1 [ ] Root"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68f6f36986f7cb4953d40fbc": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "0 <= energyCosts[i] <= 10000",
+    "-10000 <= points[i] <= 10000",
+    "0 <= initialEnergy <= 10^9"
+   ],
+   "clarifyingQuestions": [
+    "Is the tower circular like Gas Station?",
+    "May the player stop early to avoid negative layers?",
+    "Does a reward refill energy?"
+   ],
+   "hints": [
+    "From a fixed start the stopping layer is the first point where the cost prefix exceeds the energy.",
+    "Moving the start down never moves the stopping layer up, because costs are non-negative.",
+    "Keep a running cost and point sum over the window [start, stop) and slide both ends."
+   ],
+   "invariants": [
+    "window cost <= initialEnergy",
+    "stop(s) is non-decreasing in s"
+   ],
+   "chooseWhen": [
+    "Costs are non-negative"
+   ],
+   "tradeoffs": [
+    "Prefix sums plus binary search is an O(n log n) alternative"
+   ],
+   "variantLabel": "Inferred: best start in a one-way tower with forced continuation",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      [
+       5
+      ],
+      0
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5
+      ],
+      [
+       6
+      ],
+      7
+     ],
+     "output": 6,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68edba975abdefad4f6693e3": {
+   "constraints": [
+    "1 <= M, N and M * N <= 100000",
+    "cells in {1, 0, 9, -1}"
+   ],
+   "clarifyingQuestions": [
+    "Must adjacent cells differ or match?",
+    "Which colour does a region without pre-coloured cells get?",
+    "What is returned when no colouring exists?"
+   ],
+   "hints": [
+    "Boundaries split the board into independent regions.",
+    "A grid region is bipartite: every cell's colour is fixed once one cell is fixed.",
+    "BFS from a pre-coloured cell, alternate colours, and fail when a neighbour already has the same colour."
+   ],
+   "invariants": [
+    "colour(r, c) xor colour(r2, c2) = 1 for adjacent non-boundary cells"
+   ],
+   "chooseWhen": [
+    "Cells are only constrained by their neighbours"
+   ],
+   "tradeoffs": [
+    "BFS needs a queue of up to M * N cells; parity reasoning needs no queue but still a region scan"
+   ],
+   "variantLabel": "Inferred: two-colouring of regions split by boundaries",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        9
+       ]
+      ]
+     ],
+     "output": [
+      [
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0
+       ]
+      ]
+     ],
+     "output": [
+      [
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1cc5df8b879849ebc0fc16": {
+   "constraints": [
+    "up to 1000 members (distinct valid ids)",
+    "up to 10000 messages, each at most 300 printable ASCII characters",
+    "every boundary \"@\" token is well formed"
+   ],
+   "clarifyingQuestions": [
+    "Is there an \"@all\" or \"@here\" token?",
+    "What is the output shape?",
+    "Are mentions of non-members counted?"
+   ],
+   "hints": [
+    "Only tokens that begin at a word boundary are mentions.",
+    "Collect each message's mentioned members in a set before counting.",
+    "Map member ids to positions with a hash map so each mention is O(1)."
+   ],
+   "invariants": [
+    "each message adds at most 1 to each member"
+   ],
+   "chooseWhen": [
+    "Messages are short and members are many"
+   ],
+   "tradeoffs": [
+    "A per-message set costs memory proportional to the mentions in it"
+   ],
+   "variantLabel": "Inferred: per-member message mention counts",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "id2"
+      ],
+      [
+       "hi"
+      ]
+     ],
+     "output": [
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68cdc7ec3735a578b6f27eec": {
+   "constraints": [
+    "secret matches [0-9]{4}"
+   ],
+   "clarifyingQuestions": [
+    "What is the query budget?",
+    "Is the final confirming guess required?",
+    "May guesses repeat?"
+   ],
+   "hints": [
+    "Guessing dddd tells you how many times d occurs.",
+    "A digit that does not occur is a perfect filler: it can never match.",
+    "Probe one position at a time with one candidate digit and filler elsewhere; the answer is 1 exactly when that digit is there."
+   ],
+   "invariants": [
+    "counts sum to 4 after phase 1",
+    "a filler probe answers 0 or 1"
+   ],
+   "chooseWhen": [
+    "Each query is expensive and only exact matches are reported"
+   ],
+   "tradeoffs": [
+    "At most 19 guesses here; adaptive candidate-set strategies can use fewer but cost more computation"
+   ],
+   "variantLabel": "Inferred: digit counting then filler probes, as a guess transcript",
+   "examples": [
+    {
+     "input": [
+      "0000"
+     ],
+     "output": [
+      "0000"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "9999"
+     ],
+     "output": [
+      "0000",
+      "1111",
+      "2222",
+      "3333",
+      "4444",
+      "5555",
+      "6666",
+      "7777",
+      "8888",
+      "9999"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69c84ccb21f6ab4226966c5a": {
+   "constraints": [
+    "0 <= target <= 999"
+   ],
+   "clarifyingQuestions": [
+    "What do later responses mean?",
+    "Is there a query limit?",
+    "What does \"First\" tell you?"
+   ],
+   "hints": [
+    "Comparing two queries tells you which one the target is closer to.",
+    "Closer to q than to p means the target lies on q's side of their midpoint.",
+    "The consistent set stays an interval: alternate querying its two ends, cut at the midpoint and drop the queried end; \"Same\" pins the midpoint."
+   ],
+   "invariants": [
+    "C = [lo, hi] contains target",
+    "every answer is consistent with every target in C"
+   ],
+   "chooseWhen": [
+    "Feedback is relative to the previous query"
+   ],
+   "tradeoffs": [
+    "Two queries per halving; reusing the previous query as one end can save queries but is harder to reason about"
+   ],
+   "variantLabel": "Inferred: hot/cold alternating-endpoint search, as a query transcript",
+   "examples": [
+    {
+     "input": [
+      0
+     ],
+     "output": [
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      1
+     ],
+     "output": [
+      0,
+      999,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ab4186ae74ebb7457a3f74a": {
+   "constraints": [
+    "1 <= secret <= upperBound <= 10^9"
+   ],
+   "clarifyingQuestions": [
+    "Is there a call limit?",
+    "Does the final CORRECT have to be observed?",
+    "What is returned?"
+   ],
+   "hints": [
+    "Feedback about a guess arrives on the next call.",
+    "Repeating the same guess turns the second answer into feedback about it.",
+    "Run ordinary binary search with two identical calls per probe."
+   ],
+   "invariants": [
+    "lo <= secret <= hi",
+    "each round costs exactly 2 calls"
+   ],
+   "chooseWhen": [
+    "Simplicity matters more than the call count"
+   ],
+   "tradeoffs": [
+    "Speculative probing can save calls but needs branching"
+   ],
+   "variantLabel": "Inferred level 1: one-call delay, repeated probe",
+   "examples": [
+    {
+     "input": [
+      1,
+      1
+     ],
+     "output": [
+      1,
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      2,
+      1
+     ],
+     "output": [
+      1,
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ab470ffb8a9a175a39ba128": {
+   "constraints": [
+    "1 <= secret <= upperBound <= 10^9",
+    "1 <= delay <= 20"
+   ],
+   "clarifyingQuestions": [
+    "Is the delay a parameter or part of the server?",
+    "Are PENDING answers counted as calls?"
+   ],
+   "hints": [
+    "With delay k, the answer to a guess arrives k calls later.",
+    "Repeating one guess k + 1 times makes the last answer about it.",
+    "Each round is a fixed block of k + 1 identical calls followed by an ordinary binary-search update."
+   ],
+   "invariants": [
+    "each round costs delay + 1 calls"
+   ],
+   "chooseWhen": [
+    "The delay is small relative to log(upperBound)"
+   ],
+   "tradeoffs": [
+    "Pipelining speculative guesses could hide the delay but complicates the state"
+   ],
+   "variantLabel": "Inferred level 2: k-call delay",
+   "examples": [
+    {
+     "input": [
+      2,
+      1,
+      1
+     ],
+     "output": [
+      1,
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      7,
+      3,
+      4
+     ],
+     "output": [
+      4,
+      4
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68bacaefb5314dcd938cb9fb": {
+   "constraints": [
+    "review up to 20000 printable ASCII characters",
+    "up to 500 mappings; phrase at most 40 characters",
+    "category [A-Za-z0-9_]{1,20}"
+   ],
+   "clarifyingQuestions": [
+    "Is matching case-sensitive?",
+    "Which phrase wins when two overlap?",
+    "Can one phrase map to several categories?"
+   ],
+   "hints": [
+    "Only word starts can begin a match.",
+    "Prefer the longest phrase, so collect every phrase end you pass and keep the last valid one.",
+    "A trie lets you test all phrases from one start in a single walk."
+   ],
+   "invariants": [
+    "replacements never overlap",
+    "text outside replacements is copied unchanged"
+   ],
+   "chooseWhen": [
+    "Many phrases share prefixes"
+   ],
+   "tradeoffs": [
+    "Aho-Corasick finds all matches at once but the left-to-right greedy rule only needs a trie walk"
+   ],
+   "variantLabel": "Inferred: longest whole-word phrase tagging",
+   "examples": [
+    {
+     "input": [
+      "",
+      []
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "x",
+      []
+     ],
+     "output": "x",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6788830e402dc47b67a1494a": {
+   "constraints": [
+    "0 <= num <= 9"
+   ],
+   "clarifyingQuestions": [
+    "Is \"and\" used after Hundred?",
+    "Are hyphens used (\"Twenty-One\")?",
+    "What is the upper limit of each level?"
+   ],
+   "hints": [
+    "There are only ten answers.",
+    "Store them in an array indexed by the digit.",
+    "Design the table so later levels can reuse it."
+   ],
+   "invariants": [
+    "ONES[d] is the word for d"
+   ],
+   "chooseWhen": [
+    "Small fixed ranges"
+   ],
+   "tradeoffs": [
+    "A table is trivial to extend"
+   ],
+   "variantLabel": "Inferred level 1: digits 0-9",
+   "examples": [
+    {
+     "input": [
+      0
+     ],
+     "output": "Zero",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      1
+     ],
+     "output": "One",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678884a8402dc47b67a1494c": {
+   "constraints": [
+    "0 <= num <= 999"
+   ],
+   "clarifyingQuestions": [
+    "Is \"and\" used after Hundred?",
+    "Are hyphens used (\"Twenty-One\")?",
+    "What is the upper limit of each level?"
+   ],
+   "hints": [
+    "Numbers below 20 are irregular; store them.",
+    "Between 20 and 99 combine a tens word and an optional ones word.",
+    "Hundreds add \"<digit> Hundred\" before the part below 100."
+   ],
+   "invariants": [
+    "words for 0 appear only when num is 0"
+   ],
+   "chooseWhen": [
+    "Ranges up to the hundreds"
+   ],
+   "tradeoffs": [
+    "Tables trade a little memory for no special cases"
+   ],
+   "variantLabel": "Inferred level 2: 0-999",
+   "examples": [
+    {
+     "input": [
+      0
+     ],
+     "output": "Zero",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      1
+     ],
+     "output": "One",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67888746402dc47b67a1494d": {
+   "constraints": [
+    "0 <= num <= 2147483647"
+   ],
+   "clarifyingQuestions": [
+    "Is \"and\" used after Hundred?",
+    "Are hyphens used (\"Twenty-One\")?",
+    "What is the upper limit of each level?"
+   ],
+   "hints": [
+    "Group digits by three.",
+    "Each group is a number below 1000 followed by a scale word.",
+    "Skip a group that is zero so \"One Million\" has no \"Thousand\"."
+   ],
+   "invariants": [
+    "each non-zero chunk contributes its words then its scale word"
+   ],
+   "chooseWhen": [
+    "Large ranges"
+   ],
+   "tradeoffs": [
+    "Chunking keeps the code linear in the number of scales"
+   ],
+   "variantLabel": "Inferred level 3: full 32-bit range",
+   "examples": [
+    {
+     "input": [
+      0
+     ],
+     "output": "Zero",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      1
+     ],
+     "output": "One",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:679f09b9e818521cacd22471": {
+   "constraints": [
+    "up to 100000 jobs",
+    "start 0000..2359",
+    "duration 1..10000 minutes",
+    "job ids [A-Za-z0-9]{1,10}, unique"
+   ],
+   "clarifyingQuestions": [
+    "Which free machine gets the job?",
+    "Can a machine take a job that starts exactly when its previous job ends?",
+    "Do jobs cross midnight?"
+   ],
+   "hints": [
+    "Convert HHMM to minutes once.",
+    "Keep busy machines in a heap by end time and release every machine that has ended before the job starts.",
+    "Keep released machine numbers in a second min-heap so the smallest is taken first."
+   ],
+   "invariants": [
+    "every machine is in exactly one heap",
+    "machine count = maximum overlap so far"
+   ],
+   "chooseWhen": [
+    "Many jobs and machines"
+   ],
+   "tradeoffs": [
+    "Two heaps are needed because the release order (end time) differs from the choice order (number)"
+   ],
+   "variantLabel": "Inferred: lowest-numbered free machine assignment",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "J0",
+        "0010",
+        "2"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "J0",
+       "M1"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677c44295cbaff553b53b06a": {
+   "constraints": [
+    "1 <= m, n <= 30",
+    "cells are single lowercase letters",
+    "0 <= maxDistance <= 60",
+    "word 1..1000 lowercase letters"
+   ],
+   "clarifyingQuestions": [
+    "Where does typing start?",
+    "Can a letter appear on several keys?",
+    "Is staying on the same key a jump of 0?"
+   ],
+   "hints": [
+    "Track the set of cells you could be on after each letter.",
+    "A next cell is valid when its distance to the nearest current cell is at most maxDistance.",
+    "Compute the nearest-cell distance for every cell at once with two sweeps of an L1 distance transform."
+   ],
+   "invariants": [
+    "reachable[i] contains exactly the cells of word[i] reachable by a valid typing of word[0..i]"
+   ],
+   "chooseWhen": [
+    "Letters repeat on the keyboard"
+   ],
+   "tradeoffs": [
+    "Pairwise checks are simpler but quadratic in the number of keys per letter"
+   ],
+   "variantLabel": "Inferred: reachability over repeated keys with a Manhattan limit",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "a"
+       ]
+      ],
+      0,
+      "a"
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "b",
+        "c"
+       ]
+      ],
+      1,
+      "b"
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6907a349e1919109b6df1193": {
+   "constraints": [
+    "0 <= start, end <= 9"
+   ],
+   "clarifyingQuestions": [
+    "Is the answer a count, a length or the paths?",
+    "How are paths ordered?",
+    "What if the keys are equal?"
+   ],
+   "hints": [
+    "The keypad graph has only ten nodes; write its edges by hand or derive them from coordinates.",
+    "BFS gives the shortest distance to every key.",
+    "A DFS that only steps to keys one level farther enumerates exactly the shortest paths."
+   ],
+   "invariants": [
+    "every returned path has length dist(start, end) + 1"
+   ],
+   "chooseWhen": [
+    "Small fixed graph"
+   ],
+   "tradeoffs": [
+    "Brute-force DFS also works at this size but does not scale"
+   ],
+   "variantLabel": "Inferred: all shortest knight paths between two keys",
+   "examples": [
+    {
+     "input": [
+      0,
+      0
+     ],
+     "output": [
+      "0"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      0,
+      1
+     ],
+     "output": [
+      "061"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a73ba2dd713d873ca7a77a1": {
+   "constraints": [
+    "1 <= length <= 100000",
+    "num matches [0-9]+ (leading zeros allowed)"
+   ],
+   "clarifyingQuestions": [
+    "Are leading zeros allowed in the input?",
+    "Is the answer a string or a number?"
+   ],
+   "hints": [
+    "A digit cannot move past a digit of the other parity.",
+    "Within a run of one parity, adjacent swaps can produce any order.",
+    "Sort each maximal run descending; counting sort keeps it linear."
+   ],
+   "invariants": [
+    "run boundaries never change",
+    "each run is a permutation of the original run"
+   ],
+   "chooseWhen": [
+    "Long numeric strings"
+   ],
+   "tradeoffs": [
+    "Counting sort beats comparison sort for ten digit values"
+   ],
+   "variantLabel": "Inferred: sort each same-parity run descending",
+   "examples": [
+    {
+     "input": [
+      "0"
+     ],
+     "output": "0",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "9"
+     ],
+     "output": "9",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696c25586b040fa4d120bc21": {
+   "constraints": [
+    "0 <= n <= 100000",
+    "1 <= latencies[i] <= 10^9, non-decreasing",
+    "1 <= bucketWidth <= 10^9",
+    "1 <= numOfBuckets <= 100000"
+   ],
+   "clarifyingQuestions": [
+    "Is the last bucket an overflow bucket?",
+    "Can latencies be 0?",
+    "What is returned?"
+   ],
+   "hints": [
+    "The bucket of a latency x is x divided by the width, rounded down.",
+    "Anything past the last bucket goes into the last bucket.",
+    "Because the input is sorted, a moving boundary would also work; division is simpler."
+   ],
+   "invariants": [
+    "sum of counts = number of latencies"
+   ],
+   "chooseWhen": [
+    "Simple fixed-width histograms"
+   ],
+   "tradeoffs": [
+    "Division per element ignores the sortedness"
+   ],
+   "variantLabel": "Inferred: fixed-width histogram with overflow bucket",
+   "examples": [
+    {
+     "input": [
+      [],
+      1,
+      1
+     ],
+     "output": [
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [],
+      2,
+      4
+     ],
+     "output": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:688baac33867670cfb894157": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "nums[i] in {0, 1}",
+    "0 <= k <= n"
+   ],
+   "clarifyingQuestions": [
+    "Can the run wrap around the end?",
+    "What if k covers every zero?"
+   ],
+   "hints": [
+    "Unroll the circle by concatenating the array with itself.",
+    "A window may hold at most k zeros; shrink it from the left when it holds more.",
+    "If the whole array has at most k zeros the answer is n; otherwise no valid window can reach length n."
+   ],
+   "invariants": [
+    "window zero count <= k",
+    "answer <= n"
+   ],
+   "chooseWhen": [
+    "Circular sequences"
+   ],
+   "tradeoffs": [
+    "Doubling costs O(n) extra index arithmetic but no copy is needed"
+   ],
+   "variantLabel": "Inferred: Max Consecutive Ones III on a circle",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       0
+      ],
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67888746402dc47b67a1494d",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "num"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "numberToWords",
+  "params": [
+   {
+    "name": "num",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive decomposition by the largest named value not above num",
+  "candidate_design": "three-digit chunks from the low end, each converted with the level 2 helper and suffixed with its scale word; empty chunks skipped",
+  "complexity_target": "O(number of digits)"
+ },
+ "source_sha256": "007fee0cd6ca235dac6f9206beb5913cbe326a7e18f52f7d44bd6650a7c8b250",
+ "wrapper": "Solution.numberToWords"
+}

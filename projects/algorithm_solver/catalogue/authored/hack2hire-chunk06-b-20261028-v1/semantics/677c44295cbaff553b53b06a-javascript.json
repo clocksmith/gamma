@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:677c44295cbaff553b53b06a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "keyboard",
+  "maxDistance",
+  "word"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "canTypeWord",
+  "params": [
+   {
+    "name": "keyboard",
+    "type": "string[][]"
+   },
+   {
+    "name": "maxDistance",
+    "type": "integer"
+   },
+   {
+    "name": "word",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "set of reachable cells per letter; each next cell checked against every reachable cell",
+  "candidate_design": "per step, a two-pass L1 distance transform of the reachable cells gives each cell its distance to the nearest reachable cell",
+  "complexity_target": "O(word length * m * n)"
+ },
+ "source_sha256": "c255b0a9568c2019f6b5b5a8beb3cdb6f92d0f2461760cfff8058075ab853da4",
+ "wrapper": "named export canTypeWord"
+}

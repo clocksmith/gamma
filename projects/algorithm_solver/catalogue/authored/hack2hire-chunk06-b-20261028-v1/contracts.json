@@ -1,0 +1,1290 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:685b15536d39467927d2f285",
+   "variant_id": "685b15536d39467927d2f285",
+   "variant_ordinal": 1,
+   "title": "Flatten HTML tags",
+   "source": {
+    "post_id": "685b112c6d39467927d2f283",
+    "group_title": "Flatten HTML tags",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/685b112c6d39467927d2f283",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/685b112c6d39467927d2f283/practice?questionId=685b15536d39467927d2f285",
+    "preview_response_sha256": "b31ba359d6d1297e8db7f9c154b2c7bc8f5e929302bdc7f2d59cadc74ed0d93a",
+    "preview_content_sha256": "9b24608188bbb41e33fa1b27469b90e978804a0019cb712882c60403a3e0556c",
+    "preview_characters": 292,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/685b112c6d39467927d2f283.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "TIKTOK"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: HtmlNode shape (tag, children) and tag/children rules",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "A node is an object {\"tag\": t, \"children\": [...]} with t a non-empty lowercase tag name. Return the flat list of tag tokens of a depth-first pre-order walk: \"<t>\" when a node is entered, then the tokens of its children in order, then \"</t>\" when it is left. The output format (open/close token list) is inferred.",
+   "inference_uncertainty": "high: the preview defines only the node shape; the task (what \"flatten\" returns) and the token format are inferred",
+   "inferred_interface": {
+    "name": "flattenHtml",
+    "params": [
+     {
+      "name": "root",
+      "type": "HtmlNode"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FLAT"
+  },
+  {
+   "uid": "hack2hire:6ad141cb7cb0eaedae659263",
+   "variant_id": "6ad141cb7cb0eaedae659263",
+   "variant_ordinal": 1,
+   "title": "Format a Task Hierarchy",
+   "source": {
+    "post_id": "6ad141c07cb0eaedae659262",
+    "group_title": "Format a Task Hierarchy",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ad141c07cb0eaedae659262",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ad141c07cb0eaedae659262/practice?questionId=6ad141cb7cb0eaedae659263",
+    "preview_response_sha256": "2e453ae2425825ce562262c4a18eeae37e1bf4fe1757ac718cdbb4caa6a9c63a",
+    "preview_content_sha256": "8d4250629eda761ffb0b758309cd02b40b943effd8a6db188b06be3ce80d092f",
+    "preview_characters": 370,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ad141c07cb0eaedae659262.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: the two record formats and the opaque timestamp",
+    "algorithmTags: HASH_TABLE, DEPTH_FIRST_SEARCH",
+    "codingQuestions (four variants, order)"
+   ],
+   "inferred_spec": "records are strings \"<timestamp>,task,<taskId>,<taskName>\" (root task) or \"<timestamp>,subtask,<parentId>,<taskId>,<taskName>\". The timestamp is opaque and ignored. Display the forest depth-first in pre-order: roots in record order, the children of each task in record order (a child may be recorded before its parent). Each displayed line is two spaces per depth level followed by the task name. Level 1: every record is well formed, task ids are unique and every parent exists, so the records form a forest.",
+   "inference_uncertainty": "high: the two record formats are in the preview; sibling order, the line format and the cumulative variant ladder are inferred",
+   "inferred_interface": {
+    "name": "formatTasks",
+    "params": [
+     {
+      "name": "records",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "four variants inferred as cumulative levels 1-4 (forest, robustness, outline numbers, completion)",
+   "oracle_constant": "TASK1"
+  },
+  {
+   "uid": "hack2hire:6ad142657cb0eaedae65926e",
+   "variant_id": "6ad142657cb0eaedae65926e",
+   "variant_ordinal": 2,
+   "title": "Format a Task Hierarchy",
+   "source": {
+    "post_id": "6ad141c07cb0eaedae659262",
+    "group_title": "Format a Task Hierarchy",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ad141c07cb0eaedae659262",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ad141c07cb0eaedae659262/practice?questionId=6ad142657cb0eaedae65926e",
+    "preview_response_sha256": "2e453ae2425825ce562262c4a18eeae37e1bf4fe1757ac718cdbb4caa6a9c63a",
+    "preview_content_sha256": "8d4250629eda761ffb0b758309cd02b40b943effd8a6db188b06be3ce80d092f",
+    "preview_characters": 370,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ad141c07cb0eaedae659262.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: the two record formats and the opaque timestamp",
+    "algorithmTags: HASH_TABLE, DEPTH_FIRST_SEARCH",
+    "codingQuestions (four variants, order)"
+   ],
+   "inferred_spec": "records are strings \"<timestamp>,task,<taskId>,<taskName>\" (root task) or \"<timestamp>,subtask,<parentId>,<taskId>,<taskName>\". The timestamp is opaque and ignored. Display the forest depth-first in pre-order: roots in record order, the children of each task in record order (a child may be recorded before its parent). Each displayed line is two spaces per depth level followed by the task name. Level 2 adds robustness: a record is skipped when its type is unknown, its field count is wrong for its type, or its id or name is empty; a later definition of an already defined task id is ignored; a subtask whose parent is never defined (or that is its own ancestor) is not displayed, nor are its descendants.",
+   "inference_uncertainty": "very high: no level 2 text is public; every robustness rule is inferred",
+   "inferred_interface": {
+    "name": "formatTasks",
+    "params": [
+     {
+      "name": "records",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "four variants inferred as cumulative levels 1-4 (forest, robustness, outline numbers, completion)",
+   "oracle_constant": "TASK2"
+  },
+  {
+   "uid": "hack2hire:6ad143c77cb0eaedae659281",
+   "variant_id": "6ad143c77cb0eaedae659281",
+   "variant_ordinal": 3,
+   "title": "Format a Task Hierarchy",
+   "source": {
+    "post_id": "6ad141c07cb0eaedae659262",
+    "group_title": "Format a Task Hierarchy",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ad141c07cb0eaedae659262",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ad141c07cb0eaedae659262/practice?questionId=6ad143c77cb0eaedae659281",
+    "preview_response_sha256": "2e453ae2425825ce562262c4a18eeae37e1bf4fe1757ac718cdbb4caa6a9c63a",
+    "preview_content_sha256": "8d4250629eda761ffb0b758309cd02b40b943effd8a6db188b06be3ce80d092f",
+    "preview_characters": 370,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ad141c07cb0eaedae659262.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: the two record formats and the opaque timestamp",
+    "algorithmTags: HASH_TABLE, DEPTH_FIRST_SEARCH",
+    "codingQuestions (four variants, order)"
+   ],
+   "inferred_spec": "records are strings \"<timestamp>,task,<taskId>,<taskName>\" (root task) or \"<timestamp>,subtask,<parentId>,<taskId>,<taskName>\". The timestamp is opaque and ignored. Display the forest depth-first in pre-order: roots in record order, the children of each task in record order (a child may be recorded before its parent). Each displayed line is two spaces per depth level followed by the task name. Level 2 adds robustness: a record is skipped when its type is unknown, its field count is wrong for its type, or its id or name is empty; a later definition of an already defined task id is ignored; a subtask whose parent is never defined (or that is its own ancestor) is not displayed, nor are its descendants. Level 3 prefixes each name with its outline number and a space: the root at sibling position i (1-based) is \"i\", its j-th displayed child is \"i.j\", and so on.",
+   "inference_uncertainty": "very high: outline numbering is inferred from the \"format\" title only",
+   "inferred_interface": {
+    "name": "formatTasks",
+    "params": [
+     {
+      "name": "records",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "four variants inferred as cumulative levels 1-4 (forest, robustness, outline numbers, completion)",
+   "oracle_constant": "TASK3"
+  },
+  {
+   "uid": "hack2hire:6ad1440c7cb0eaedae659287",
+   "variant_id": "6ad1440c7cb0eaedae659287",
+   "variant_ordinal": 4,
+   "title": "Format a Task Hierarchy",
+   "source": {
+    "post_id": "6ad141c07cb0eaedae659262",
+    "group_title": "Format a Task Hierarchy",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ad141c07cb0eaedae659262",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ad141c07cb0eaedae659262/practice?questionId=6ad1440c7cb0eaedae659287",
+    "preview_response_sha256": "2e453ae2425825ce562262c4a18eeae37e1bf4fe1757ac718cdbb4caa6a9c63a",
+    "preview_content_sha256": "8d4250629eda761ffb0b758309cd02b40b943effd8a6db188b06be3ce80d092f",
+    "preview_characters": 370,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ad141c07cb0eaedae659262.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: the two record formats and the opaque timestamp",
+    "algorithmTags: HASH_TABLE, DEPTH_FIRST_SEARCH",
+    "codingQuestions (four variants, order)"
+   ],
+   "inferred_spec": "records are strings \"<timestamp>,task,<taskId>,<taskName>\" (root task) or \"<timestamp>,subtask,<parentId>,<taskId>,<taskName>\". The timestamp is opaque and ignored. Display the forest depth-first in pre-order: roots in record order, the children of each task in record order (a child may be recorded before its parent). Each displayed line is two spaces per depth level followed by the task name. Level 2 adds robustness: a record is skipped when its type is unknown, its field count is wrong for its type, or its id or name is empty; a later definition of an already defined task id is ignored; a subtask whose parent is never defined (or that is its own ancestor) is not displayed, nor are its descendants. Level 3 prefixes each name with its outline number and a space: the root at sibling position i (1-based) is \"i\", its j-th displayed child is \"i.j\", and so on. Level 4 adds records \"<timestamp>,complete,<taskId>\" (3 fields; any order, unknown ids ignored). After the outline number a line shows \"[x] \" when the task is marked complete or has at least one displayed child and all displayed children show [x]; otherwise \"[ ] \".",
+   "inference_uncertainty": "very high: completion records and the roll-up rule are inferred",
+   "inferred_interface": {
+    "name": "formatTasks",
+    "params": [
+     {
+      "name": "records",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "four variants inferred as cumulative levels 1-4 (forest, robustness, outline numbers, completion)",
+   "oracle_constant": "TASK4"
+  },
+  {
+   "uid": "hack2hire:68f6f36986f7cb4953d40fbc",
+   "variant_id": "68f6f36986f7cb4953d40fbc",
+   "variant_ordinal": 1,
+   "title": "Game Machine",
+   "source": {
+    "post_id": "68f6f35f86f7cb4953d40fbb",
+    "group_title": "Game Machine",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f6f35f86f7cb4953d40fbb",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f6f35f86f7cb4953d40fbb/practice?questionId=68f6f36986f7cb4953d40fbc",
+    "preview_response_sha256": "14595b0218a652f4cb76e7602b0577e315df87ded0ffb169d09208eb74ed60d1",
+    "preview_content_sha256": "b3ec7a644c50680bbc681b01bd99a45779c332634b54278a20e48777265b32d7",
+    "preview_characters": 929,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f6f35f86f7cb4953d40fbb.json",
+    "algorithm_tags": [
+     "PREFIX_SUM"
+    ],
+    "companies": [
+     "GOOGLE",
+     "ORACLE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: energy cost and reward per layer, any start layer, stop when energy is insufficient",
+    "algorithmTags: PREFIX_SUM"
+   ],
+   "inferred_spec": "Layers 0..n-1 are passed top to bottom. Starting at any layer s with energy initialEnergy, the ball passes layer i (i = s, s+1, ...) only when its remaining energy is at least energyCosts[i]; passing subtracts energyCosts[i] and adds points[i] (possibly negative) to the score. The ball cannot stop voluntarily: it stops at the first layer it cannot pass or after layer n-1 (no wrap-around). Return the maximum score over all starting layers (a start that passes nothing scores 0).",
+   "inference_uncertainty": "medium: the movement rule is in the preview; no wrap-around, forced continuation and the zero score for an immediate stop are inferred",
+   "inferred_interface": {
+    "name": "maxGamePoints",
+    "params": [
+     {
+      "name": "energyCosts",
+      "type": "integer[]"
+     },
+     {
+      "name": "points",
+      "type": "integer[]"
+     },
+     {
+      "name": "initialEnergy",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "GAME"
+  },
+  {
+   "uid": "hack2hire:68edba975abdefad4f6693e3",
+   "variant_id": "68edba975abdefad4f6693e3",
+   "variant_ordinal": 1,
+   "title": "Grid Coloring with Boundaries",
+   "source": {
+    "post_id": "68edba915abdefad4f6693e2",
+    "group_title": "Grid Coloring with Boundaries",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68edba915abdefad4f6693e2",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68edba915abdefad4f6693e2/practice?questionId=68edba975abdefad4f6693e3",
+    "preview_response_sha256": "8aaa30c2df657c39b8162907dee69396aeac9625000249f44d87164de8b91afc",
+    "preview_content_sha256": "d3deedc270ecf3b5495d96cc1fc656d937d0b3b64dffcf781c749b9d55917ea1",
+    "preview_characters": 442,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68edba915abdefad4f6693e2.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "NETFLIX",
+     "TIKTOK"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: four cell kinds and their values",
+    "algorithmTags: BREADTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "Cells are 1 (black), 0 (white), 9 (empty) or -1 (boundary). Fill every empty cell with 0 or 1 so that every pair of 4-adjacent non-boundary cells has different colours; boundary cells stay -1. In a connected region (4-adjacency through non-boundary cells) with no pre-coloured cell, the first cell in row-major order is black. Return the filled grid, or [] when the pre-coloured cells make that impossible.",
+   "inference_uncertainty": "high: only the cell encoding is public; the alternating-colour rule, default black and the [] failure value are inferred",
+   "inferred_interface": {
+    "name": "colorGrid",
+    "params": [
+     {
+      "name": "grid",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "GRID"
+  },
+  {
+   "uid": "hack2hire:6a1cc5df8b879849ebc0fc16",
+   "variant_id": "6a1cc5df8b879849ebc0fc16",
+   "variant_ordinal": 1,
+   "title": "Group Chat Mention Counter",
+   "source": {
+    "post_id": "6a1cc5d98b879849ebc0fc15",
+    "group_title": "Group Chat Mention Counter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1cc5d98b879849ebc0fc15",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1cc5d98b879849ebc0fc15/practice?questionId=6a1cc5df8b879849ebc0fc16",
+    "preview_response_sha256": "c4e30574407a69cad6029abf6bd6b2e95c6077bcaa1b301c84bd0f40cae186da",
+    "preview_content_sha256": "9c8ee602bbd4a6e40399f087d250317ecf5e3ae890613e29bab6772d42665625",
+    "preview_characters": 1041,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1cc5d98b879849ebc0fc15.json",
+    "algorithm_tags": [
+     "STRING",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "EBAY"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: token boundary rule, id format, comma lists, count once per message",
+    "algorithmTags: STRING, HASH_TABLE"
+   ],
+   "inferred_spec": "A mention token starts with \"@\" at the start of a message or right after a space and ends before the next space or at the end. Its body is either comma-separated user ids \"id<k>\" (k from 1 to 999, no leading zero) or the word \"all\" (inferred), which covers every member. An \"@\" inside a word is ignored. Return, aligned with members, the number of messages that mention each member at least once. Ids not in members are ignored.",
+   "inference_uncertainty": "medium: tokens, ids and the once-per-message rule are in the preview; \"@all\", the aligned output and ignoring unknown ids are inferred",
+   "inferred_interface": {
+    "name": "countMentions",
+    "params": [
+     {
+      "name": "members",
+      "type": "string[]"
+     },
+     {
+      "name": "messages",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MENTION"
+  },
+  {
+   "uid": "hack2hire:68cdc7ec3735a578b6f27eec",
+   "variant_id": "68cdc7ec3735a578b6f27eec",
+   "variant_ordinal": 1,
+   "title": "Guess Number",
+   "source": {
+    "post_id": "68cdc7e53735a578b6f27eeb",
+    "group_title": "Guess Number",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68cdc7e53735a578b6f27eeb",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68cdc7e53735a578b6f27eeb/practice?questionId=68cdc7ec3735a578b6f27eec",
+    "preview_response_sha256": "a0b5dfaafa8a2f3a8ed5b701f8f524c2d6b67d122f225a8e90df6aad0f1b97ef",
+    "preview_content_sha256": "0dc7654c3495fce477344204b2330976486cd614187557198913abef44441bca",
+    "preview_characters": 618,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68cdc7e53735a578b6f27eeb.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "AIRBNB"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: GuessServer.guessNumber returns exact position matches; 4-digit secret with leading zeros",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "Interactive problem modelled as a deterministic transcript. A simulated server holds secret (4 digits, leading zeros allowed) and answers a 4-digit guess with the number of positions where guess and secret agree. Return every guess the following strategy makes, in order. Phase 1: for d = 0, 1, ... stop when the known digit counts already sum to 4; for d = 9 infer its count without a guess; otherwise guess dddd to learn the count of d, and stop at once if the answer is 4. Phase 2: let f be the smallest digit with count 0. For each position p = 0..3, with D the ascending distinct digits still unplaced: if D has one digit it is at p; else for each d in D except the last, guess the string with d at p and f elsewhere, and if the answer is 1 place d at p; if no guess hits, place the last. Phase 3: guess the secret itself (answer 4) unless the last guess already was.",
+   "inference_uncertainty": "very high: the official task is interactive and likely accepts any strategy within a budget; the transcript output and this exact strategy are modelling choices for exact comparison",
+   "inferred_interface": {
+    "name": "guessTranscript",
+    "params": [
+     {
+      "name": "secret",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "GUESS"
+  },
+  {
+   "uid": "hack2hire:69c84ccb21f6ab4226966c5a",
+   "variant_id": "69c84ccb21f6ab4226966c5a",
+   "variant_ordinal": 1,
+   "title": "Guess Number II",
+   "source": {
+    "post_id": "69c844cf21f6ab4226966c24",
+    "group_title": "Guess Number II",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69c844cf21f6ab4226966c24",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69c844cf21f6ab4226966c24/practice?questionId=69c84ccb21f6ab4226966c5a",
+    "preview_response_sha256": "d918b9f45c5f31c9a5dabb32bcf043d5cec2c26cf0c1f5bb6e12f7a21a1ff05a",
+    "preview_content_sha256": "08f772f2aecac041a6cdd835b5252bd5bf4b7bd7704d7903d8e7ba6055a92503",
+    "preview_characters": 353,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69c844cf21f6ab4226966c24.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH"
+    ],
+    "companies": [
+     "HRT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: hidden target in [0, 999], query(int) returning \"Correct\" or \"First\" on the first query",
+    "algorithmTags: BINARY_SEARCH"
+   ],
+   "inferred_spec": "Interactive problem modelled as a deterministic transcript. A simulated game holds target in [0, 999]. query(g) returns \"Correct\" if g = target, \"First\" on the first query otherwise, and afterwards (inferred) \"Hotter\", \"Colder\" or \"Same\" when |g - target| is smaller than, larger than or equal to |previous query - target|. Strategy: keep the set C of targets consistent with every answer so far (initially 0..999; a queried value leaves C unless it was correct). The next query is the only element of C when |C| = 1, otherwise min(C) when an even number of queries has been made and max(C) when odd. Stop at \"Correct\" and return the queried numbers in order.",
+   "inference_uncertainty": "very high: the responses after the first query are not visible; the hot/cold semantics, this strategy and the transcript output are inferred",
+   "inferred_interface": {
+    "name": "hotColdTranscript",
+    "params": [
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "GUESS2"
+  },
+  {
+   "uid": "hack2hire:6ab4186ae74ebb7457a3f74a",
+   "variant_id": "6ab4186ae74ebb7457a3f74a",
+   "variant_ordinal": 1,
+   "title": "Guess Number with Delay",
+   "source": {
+    "post_id": "6ab4185be74ebb7457a3f748",
+    "group_title": "Guess Number with Delay",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab4185be74ebb7457a3f748",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab4185be74ebb7457a3f748/practice?questionId=6ab4186ae74ebb7457a3f74a",
+    "preview_response_sha256": "b533edff355530e8bd850533ae41b8e2d2acd43883eedca93511216ad8f2fb72",
+    "preview_content_sha256": "f5a41eeb67b151134a4c3ea2596a5186f5d14f8215819080c3da947cc1b27a32",
+    "preview_characters": 526,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ab4185be74ebb7457a3f748.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH",
+     "SIMULATION"
+    ],
+    "companies": [
+     "OPENAI",
+     "SNOWFLAKE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: secret in [1, upperBound], check(guess) feedback delayed by one call, first call PENDING",
+    "algorithmTags: BINARY_SEARCH, SIMULATION",
+    "codingQuestions (two variants)"
+   ],
+   "inferred_spec": "Interactive problem modelled with a simulated server holding secret in [1, upperBound]. check(g) returns \"PENDING\" on the first call and afterwards feedback about the previous call's guess: \"TOO_LOW\", \"TOO_HIGH\" or \"CORRECT\". Strategy: binary search with lo = 1, hi = upperBound; each round sets mid = floor((lo + hi) / 2) and calls check(mid) twice; the second answer is the feedback on mid (the first answer is ignored). Stop on \"CORRECT\". Return [found secret, total number of check calls].",
+   "inference_uncertainty": "high: the delayed-feedback rule is in the preview; the double-call strategy and the [secret, calls] output are modelling choices",
+   "inferred_interface": {
+    "name": "findSecret",
+    "params": [
+     {
+      "name": "upperBound",
+      "type": "integer"
+     },
+     {
+      "name": "secret",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants inferred as delay 1 and general delay k",
+   "oracle_constant": "DELAY1"
+  },
+  {
+   "uid": "hack2hire:6ab470ffb8a9a175a39ba128",
+   "variant_id": "6ab470ffb8a9a175a39ba128",
+   "variant_ordinal": 2,
+   "title": "Guess Number with Delay",
+   "source": {
+    "post_id": "6ab4185be74ebb7457a3f748",
+    "group_title": "Guess Number with Delay",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab4185be74ebb7457a3f748",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab4185be74ebb7457a3f748/practice?questionId=6ab470ffb8a9a175a39ba128",
+    "preview_response_sha256": "b533edff355530e8bd850533ae41b8e2d2acd43883eedca93511216ad8f2fb72",
+    "preview_content_sha256": "f5a41eeb67b151134a4c3ea2596a5186f5d14f8215819080c3da947cc1b27a32",
+    "preview_characters": 526,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ab4185be74ebb7457a3f748.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH",
+     "SIMULATION"
+    ],
+    "companies": [
+     "OPENAI",
+     "SNOWFLAKE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: secret in [1, upperBound], check(guess) feedback delayed by one call, first call PENDING",
+    "algorithmTags: BINARY_SEARCH, SIMULATION",
+    "codingQuestions (two variants)"
+   ],
+   "inferred_spec": "Level 2 (inferred) generalises the delay: the first delay calls return \"PENDING\" and call j (1-based, j > delay) returns feedback about the guess of call j - delay. Strategy: binary search with lo = 1, hi = upperBound; each round sets mid = floor((lo + hi) / 2) and calls check(mid) delay + 1 times; the last answer is the feedback on that round's first call. Stop on \"CORRECT\". Return [found secret, total number of check calls].",
+   "inference_uncertainty": "very high: the second variant is unseen; a general delay k is inferred from the title and SIMULATION tag",
+   "inferred_interface": {
+    "name": "findSecretWithDelay",
+    "params": [
+     {
+      "name": "upperBound",
+      "type": "integer"
+     },
+     {
+      "name": "delay",
+      "type": "integer"
+     },
+     {
+      "name": "secret",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants inferred as delay 1 and general delay k",
+   "oracle_constant": "DELAY2"
+  },
+  {
+   "uid": "hack2hire:68bacaefb5314dcd938cb9fb",
+   "variant_id": "68bacaefb5314dcd938cb9fb",
+   "variant_ordinal": 1,
+   "title": "Highlight Phrases in Review",
+   "source": {
+    "post_id": "68bacaaeb5314dcd938cb9fa",
+    "group_title": "Highlight Phrases in Review",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68bacaaeb5314dcd938cb9fa",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68bacaaeb5314dcd938cb9fa/practice?questionId=68bacaefb5314dcd938cb9fb",
+    "preview_response_sha256": "de6d3e53ab20824274718f63edd82803ef41270fb69e0d3c67705e092eb7e0dc",
+    "preview_content_sha256": "28bf789dd5e504f7c4cd270025cd491e3392242d31ebf742b9ee8610e9dec80c",
+    "preview_characters": 705,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68bacaaeb5314dcd938cb9fa.json",
+    "algorithm_tags": [
+     "STRING",
+     "TRIE"
+    ],
+    "companies": [
+     "AIRBNB"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: replacement format \"[category]{matched_text}\" and the whole-word rule",
+    "algorithmTags: STRING, TRIE"
+   ],
+   "inferred_spec": "mapping holds [phrase, category] pairs; a phrase is one or more alphanumeric words joined by single spaces. Scan review left to right. At a word start (an alphanumeric character at index 0 or after a non-alphanumeric one), take the longest phrase that matches the text there ignoring ASCII case and is followed by a non-alphanumeric character or the end; replace that text by \"[category]{text}\" keeping the original text, and continue after it. Otherwise copy one character. Case-insensitive matching, longest match, left-to-right non-overlapping replacement and \"first mapping wins\" for duplicate phrases are inferred.",
+   "inference_uncertainty": "high: the format and whole-word rule are in the preview; case handling, overlap resolution and duplicate handling are inferred",
+   "inferred_interface": {
+    "name": "highlightReview",
+    "params": [
+     {
+      "name": "review",
+      "type": "string"
+     },
+     {
+      "name": "mapping",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "HIGHLIGHT"
+  },
+  {
+   "uid": "hack2hire:6788830e402dc47b67a1494a",
+   "variant_id": "6788830e402dc47b67a1494a",
+   "variant_ordinal": 1,
+   "title": "Integer to English Converter",
+   "source": {
+    "post_id": "678882de402dc47b67a14949",
+    "group_title": "Integer to English Converter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678882de402dc47b67a14949",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678882de402dc47b67a14949/practice?questionId=6788830e402dc47b67a1494a",
+    "preview_response_sha256": "be428b2a22e8f3aa82d5ce9107f68fbfef7e8403eb8dadc780b8d31d4b3374c4",
+    "preview_content_sha256": "608d947512c99664141b6fac9a5dad94cd542ded811c2db436372009ab851334",
+    "preview_characters": 578,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/678882de402dc47b67a14949.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: LeetCode 273 variation; level 1 range 0 to 9 and increasing ranges",
+    "codingQuestions (three variants)"
+   ],
+   "inferred_spec": "Return the English words for num in the LeetCode 273 style: capitalised words separated by single spaces, \"Zero\" for 0, no \"and\" and no hyphens. Level 1: 0 <= num <= 9.",
+   "inference_uncertainty": "low: the preview states this level; only the word casing is inferred",
+   "inferred_interface": {
+    "name": "numberToWords",
+    "params": [
+     {
+      "name": "num",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants inferred as ranges 0-9, 0-999, 0-2^31-1",
+   "oracle_constant": "INT1"
+  },
+  {
+   "uid": "hack2hire:678884a8402dc47b67a1494c",
+   "variant_id": "678884a8402dc47b67a1494c",
+   "variant_ordinal": 2,
+   "title": "Integer to English Converter",
+   "source": {
+    "post_id": "678882de402dc47b67a14949",
+    "group_title": "Integer to English Converter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678882de402dc47b67a14949",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678882de402dc47b67a14949/practice?questionId=678884a8402dc47b67a1494c",
+    "preview_response_sha256": "be428b2a22e8f3aa82d5ce9107f68fbfef7e8403eb8dadc780b8d31d4b3374c4",
+    "preview_content_sha256": "608d947512c99664141b6fac9a5dad94cd542ded811c2db436372009ab851334",
+    "preview_characters": 578,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/678882de402dc47b67a14949.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: LeetCode 273 variation; level 1 range 0 to 9 and increasing ranges",
+    "codingQuestions (three variants)"
+   ],
+   "inferred_spec": "Return the English words for num in the LeetCode 273 style: capitalised words separated by single spaces, \"Zero\" for 0, no \"and\" and no hyphens. Level 2 (inferred range): 0 <= num <= 999.",
+   "inference_uncertainty": "medium: the middle range is inferred",
+   "inferred_interface": {
+    "name": "numberToWords",
+    "params": [
+     {
+      "name": "num",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants inferred as ranges 0-9, 0-999, 0-2^31-1",
+   "oracle_constant": "INT2"
+  },
+  {
+   "uid": "hack2hire:67888746402dc47b67a1494d",
+   "variant_id": "67888746402dc47b67a1494d",
+   "variant_ordinal": 3,
+   "title": "Integer to English Converter",
+   "source": {
+    "post_id": "678882de402dc47b67a14949",
+    "group_title": "Integer to English Converter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678882de402dc47b67a14949",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678882de402dc47b67a14949/practice?questionId=67888746402dc47b67a1494d",
+    "preview_response_sha256": "be428b2a22e8f3aa82d5ce9107f68fbfef7e8403eb8dadc780b8d31d4b3374c4",
+    "preview_content_sha256": "608d947512c99664141b6fac9a5dad94cd542ded811c2db436372009ab851334",
+    "preview_characters": 578,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/678882de402dc47b67a14949.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: LeetCode 273 variation; level 1 range 0 to 9 and increasing ranges",
+    "codingQuestions (three variants)"
+   ],
+   "inferred_spec": "Return the English words for num in the LeetCode 273 style: capitalised words separated by single spaces, \"Zero\" for 0, no \"and\" and no hyphens. Level 3 (inferred range): 0 <= num <= 2^31 - 1, using Thousand, Million and Billion.",
+   "inference_uncertainty": "medium: LeetCode 273 range assumed for the last level",
+   "inferred_interface": {
+    "name": "numberToWords",
+    "params": [
+     {
+      "name": "num",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants inferred as ranges 0-9, 0-999, 0-2^31-1",
+   "oracle_constant": "INT3"
+  },
+  {
+   "uid": "hack2hire:679f09b9e818521cacd22471",
+   "variant_id": "679f09b9e818521cacd22471",
+   "variant_ordinal": 1,
+   "title": "Job Scheduler",
+   "source": {
+    "post_id": "679f05d8e818521cacd22470",
+    "group_title": "Job Scheduler",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/679f05d8e818521cacd22470",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/679f05d8e818521cacd22470/practice?questionId=679f09b9e818521cacd22471",
+    "preview_response_sha256": "42c556abf1a81da042dd7549018dda28de99f80c9ec5e5114492b64b54749ad0",
+    "preview_content_sha256": "191f2fed7361b45ee37c4f3b06e0cf7348e48a42b16ef6e33841a536a1b12022",
+    "preview_characters": 342,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/679f05d8e818521cacd22470.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "LYFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: job id, HHMM start, duration, sorted by start time",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "jobs[i] = [jobId, start \"HHMM\", duration minutes as a decimal string], in non-decreasing start order. Process jobs in order. A machine is free for a job when its last job ends (start + duration) at or before the job's start. Assign the job to the free machine with the smallest number; if none is free, open a new machine numbered one more than the current count. Machines are named \"M1\", \"M2\", .... Return [jobId, machine name] for every job in input order.",
+   "inference_uncertainty": "high: the input format is in the preview; the assignment rule, machine names and output are inferred",
+   "inferred_interface": {
+    "name": "assignMachines",
+    "params": [
+     {
+      "name": "jobs",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "JOB"
+  },
+  {
+   "uid": "hack2hire:677c44295cbaff553b53b06a",
+   "variant_id": "677c44295cbaff553b53b06a",
+   "variant_ordinal": 1,
+   "title": "Keyboard Jump Challenge",
+   "source": {
+    "post_id": "677c3ffa5cbaff553b53b069",
+    "group_title": "Keyboard Jump Challenge",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677c3ffa5cbaff553b53b069",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677c3ffa5cbaff553b53b069/practice?questionId=677c44295cbaff553b53b06a",
+    "preview_response_sha256": "af4cd931866a7fc80672c1d6e44a013c2d6c2194ce3517abc10a2280aa2c8fd3",
+    "preview_content_sha256": "e36319d466843f2f2db41548e6d7934f57953d4b6378a30acbe310d1187bb731",
+    "preview_characters": 400,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677c3ffa5cbaff553b53b069.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "GOOGLE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: m x n character matrix, maximum jump distance, Manhattan distance, word up to 1000 characters",
+    "algorithmTags: BREADTH_FIRST_SEARCH, HASH_TABLE"
+   ],
+   "inferred_spec": "keyboard is an m x n matrix of one-character strings (letters may repeat). Typing starts on any cell holding word[0]; each next letter must be typed on a cell holding it whose Manhattan distance from the current cell is at most maxDistance (the same cell is allowed). Return true when the whole word can be typed.",
+   "inference_uncertainty": "medium: distance and inputs are in the preview; the free start, repeated keys and boolean result are inferred",
+   "inferred_interface": {
+    "name": "canTypeWord",
+    "params": [
+     {
+      "name": "keyboard",
+      "type": "string[][]"
+     },
+     {
+      "name": "maxDistance",
+      "type": "integer"
+     },
+     {
+      "name": "word",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "KEYS"
+  },
+  {
+   "uid": "hack2hire:6907a349e1919109b6df1193",
+   "variant_id": "6907a349e1919109b6df1193",
+   "variant_ordinal": 1,
+   "title": "Knight Paths on a Phone Keypad",
+   "source": {
+    "post_id": "68fe4a1f7e1bd8f9501bf146",
+    "group_title": "Knight Paths on a Phone Keypad",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fe4a1f7e1bd8f9501bf146",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fe4a1f7e1bd8f9501bf146/practice?questionId=6907a349e1919109b6df1193",
+    "preview_response_sha256": "4d347412a164869aac04437d9372b86fa9532c018d89b21d74b46b116366aa74",
+    "preview_content_sha256": "2efbf5453bc237dc7008dfcce39d747340f50e9fb781600a1b1891fa2ddd6892",
+    "preview_characters": 633,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68fe4a1f7e1bd8f9501bf146.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "CITADEL"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: keypad layout, knight move rule, LeetCode 1197 variation",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "On the phone keypad (1 2 3 / 4 5 6 / 7 8 9 / _ 0 _) a knight moves in an L to another key. Return every shortest knight path from start to end as a digit string (start and end included), sorted ascending; [\"<start>\"] when start = end and [] when end is unreachable (5 has no moves).",
+   "inference_uncertainty": "high: the board and moves are in the preview; the question (all shortest paths between two keys) and output format are inferred",
+   "inferred_interface": {
+    "name": "knightPaths",
+    "params": [
+     {
+      "name": "start",
+      "type": "integer"
+     },
+     {
+      "name": "end",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "KNIGHT"
+  },
+  {
+   "uid": "hack2hire:6a73ba2dd713d873ca7a77a1",
+   "variant_id": "6a73ba2dd713d873ca7a77a1",
+   "variant_ordinal": 1,
+   "title": "Largest Number by Parity Swaps",
+   "source": {
+    "post_id": "6a73ba21d713d873ca7a77a0",
+    "group_title": "Largest Number by Parity Swaps",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a73ba21d713d873ca7a77a0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a73ba21d713d873ca7a77a0/practice?questionId=6a73ba2dd713d873ca7a77a1",
+    "preview_response_sha256": "26376f8ee2e1a94ff1f8dfddaffbe52a1881241ba0a69c9f77560812c67cf236",
+    "preview_content_sha256": "b65e73d4ca1cb49da72335309a263713f087bf293252b771f19c29e60c583e62",
+    "preview_characters": 478,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a73ba21d713d873ca7a77a0.json",
+    "algorithm_tags": [
+     "STRING",
+     "SORTING"
+    ],
+    "companies": [
+     "IBM"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: adjacent swaps of same-parity digits, any number of times",
+    "algorithmTags: STRING, SORTING"
+   ],
+   "inferred_spec": "Adjacent digits may be swapped only when both are odd or both are even, any number of times. Return the largest string obtainable. Because a digit can never pass one of the other parity, every maximal run of same-parity digits can be rearranged freely and is sorted in descending order; nothing else changes.",
+   "inference_uncertainty": "low: the swap rule is in the preview; only the return format (string, leading zeros kept) is inferred",
+   "inferred_interface": {
+    "name": "largestByParitySwaps",
+    "params": [
+     {
+      "name": "num",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PARITY"
+  },
+  {
+   "uid": "hack2hire:696c25586b040fa4d120bc21",
+   "variant_id": "696c25586b040fa4d120bc21",
+   "variant_ordinal": 1,
+   "title": "Latency Bucket Counter",
+   "source": {
+    "post_id": "696c20b16b040fa4d120bbfe",
+    "group_title": "Latency Bucket Counter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696c20b16b040fa4d120bbfe",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696c20b16b040fa4d120bbfe/practice?questionId=696c25586b040fa4d120bc21",
+    "preview_response_sha256": "a37278bf987638c889c8fb4f43c82fbe71877e0d0099c428d7b24add83458ecd",
+    "preview_content_sha256": "3799de04ecdad3ce1d91cfca104d15675c3f4be0f8f22ce09c862a84593f708f",
+    "preview_characters": 690,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/696c20b16b040fa4d120bbfe.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "DATADOG"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: sorted latencies, fixed bucket width, overflow last bucket",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "latencies are positive integers in non-decreasing order. Bucket i (0 <= i < numOfBuckets) covers [i * bucketWidth, (i + 1) * bucketWidth - 1]; the last bucket also takes every latency at or above its lower bound. Return the count per bucket.",
+   "inference_uncertainty": "low: the bucket rule is in the preview; the output shape (count array) is inferred",
+   "inferred_interface": {
+    "name": "countLatencyBuckets",
+    "params": [
+     {
+      "name": "latencies",
+      "type": "integer[]"
+     },
+     {
+      "name": "bucketWidth",
+      "type": "integer"
+     },
+     {
+      "name": "numOfBuckets",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LATENCY"
+  },
+  {
+   "uid": "hack2hire:688baac33867670cfb894157",
+   "variant_id": "688baac33867670cfb894157",
+   "variant_ordinal": 1,
+   "title": "Longest Circular Sequence of Ones",
+   "source": {
+    "post_id": "688baabb3867670cfb894156",
+    "group_title": "Longest Circular Sequence of Ones",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688baabb3867670cfb894156",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688baabb3867670cfb894156/practice?questionId=688baac33867670cfb894157",
+    "preview_response_sha256": "1252aaf43054aff248775cafbd171ad7383c47ccd614ff621a51cdb3e67d88d7",
+    "preview_content_sha256": "c16e171c9c5f3c14c5ae99ea0912ab38dd2ab0a9e12d3295b786596d4a05f818",
+    "preview_characters": 601,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/688baabb3867670cfb894156.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "LINKEDIN",
+     "TIKTOK"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: circular binary array, flip at most k zeros, maximum consecutive ones",
+    "algorithmTags: SLIDING_WINDOW"
+   ],
+   "inferred_spec": "nums is a circular binary array. Flip at most k zeros to ones and return the maximum number of consecutive ones along the circle (at most n).",
+   "inference_uncertainty": "low: the preview states the task; only the bounds are inferred",
+   "inferred_interface": {
+    "name": "longestCircularOnes",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CIRC"
+  }
+ ]
+}

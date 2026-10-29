@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68f6f36986f7cb4953d40fbc",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "energyCosts",
+  "points",
+  "initialEnergy"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxGamePoints",
+  "params": [
+   {
+    "name": "energyCosts",
+    "type": "integer[]"
+   },
+   {
+    "name": "points",
+    "type": "integer[]"
+   },
+   {
+    "name": "initialEnergy",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate every starting layer layer by layer",
+  "candidate_design": "prefix sums of costs and points; the stopping layer is non-decreasing in the start, so one moving pointer finds every stop",
+  "complexity_target": "O(n) time"
+ },
+ "source_sha256": "04c2dd1ef0a052d69f42c979674b19b3f0076b17187668d370fb17d5d34cee0b",
+ "wrapper": "named export maxGamePoints"
+}

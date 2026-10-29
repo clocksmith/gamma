@@ -1,0 +1,340 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68f6f35f86f7cb4953d40fbb:68f6f36986f7cb4953d40fbc:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+   "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68f6f35f86f7cb4953d40fbb.json",
+   "sha256": "b27c9ba6e88da9a6821bd6bea5cc665e183b8bad1d608981409d9004e659a67e",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/study-content.json",
+   "sha256": "5d27b24db848c0b3d0fefb898fe5d490faab6f406937c84b6af063bbc723045b",
+   "selector": "/variants/hack2hire:68f6f36986f7cb4953d40fbc"
+  }
+ ],
+ "problemId": "hack2hire:68f6f35f86f7cb4953d40fbb",
+ "variantId": "68f6f36986f7cb4953d40fbc",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: best start in a one-way tower with forced continuation",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/study-content.json",
+    "sha256": "5d27b24db848c0b3d0fefb898fe5d490faab6f406937c84b6af063bbc723045b",
+    "selector": "/variants/hack2hire:68f6f36986f7cb4953d40fbc/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Layers 0..n-1 are passed top to bottom. Starting at any layer s with energy initialEnergy, the ball passes layer i (i = s, s+1, ...) only when its remaining energy is at least energyCosts[i]; passing subtracts energyCosts[i] and adds points[i] (possibly negative) to the score. The ball cannot stop voluntarily: it stops at the first layer it cannot pass or after layer n-1 (no wrap-around). Return the maximum score over all starting layers (a start that passes nothing scores 0).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Layers 0..n-1 are passed top to bottom.",
+   "Starting at any layer s with energy initialEnergy, the ball passes layer i (i = s, s+1, ...) only when its remaining energy is at least energyCosts[i]; passing subtracts energyCosts[i] and adds points[i] (possibly negative) to the score.",
+   "The ball cannot stop voluntarily: it stops at the first layer it cannot pass or after layer n-1 (no wrap-around).",
+   "Return the maximum score over all starting layers (a start that passes nothing scores 0)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n <= 100000",
+   "0 <= energyCosts[i] <= 10000",
+   "-10000 <= points[i] <= 10000",
+   "0 <= initialEnergy <= 10^9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/study-content.json",
+    "sha256": "5d27b24db848c0b3d0fefb898fe5d490faab6f406937c84b6af063bbc723045b",
+    "selector": "/variants/hack2hire:68f6f36986f7cb4953d40fbc/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: energy cost and reward per layer, any start layer, stop when energy is insufficient; algorithmTags: PREFIX_SUM; preview response sha256 14595b0218a652f4cb76e7602b0577e315df87ded0ffb169d09208eb74ed60d1"
+   },
+   {
+    "statement": "Uncertainty: medium: the movement rule is in the preview; no wrap-around, forced continuation and the zero score for an immediate stop are inferred",
+    "basis": "the public group preview is partial (929 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the tower circular like Gas Station?",
+   "May the player stop early to avoid negative layers?",
+   "Does a reward refill energy?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/study-content.json",
+    "sha256": "5d27b24db848c0b3d0fefb898fe5d490faab6f406937c84b6af063bbc723045b",
+    "selector": "/variants/hack2hire:68f6f36986f7cb4953d40fbc/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      0
+     ],
+     [
+      5
+     ],
+     0
+    ],
+    "output": 5,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      5
+     ],
+     [
+      6
+     ],
+     7
+    ],
+    "output": 6,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/study-content.json",
+    "sha256": "5d27b24db848c0b3d0fefb898fe5d490faab6f406937c84b6af063bbc723045b",
+    "selector": "/variants/hack2hire:68f6f36986f7cb4953d40fbc/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/oracles.py",
+    "sha256": "facbec54559ee05588b53a9a940d1eb828f4e7f25f1661f9855fdcd46bb92b5b",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def maxGamePoints(energyCosts, points, initialEnergy) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+      "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/semantics/68f6f36986f7cb4953d40fbc-python.json",
+     "inferredInterface": {
+      "name": "maxGamePoints",
+      "params": [
+       {
+        "name": "energyCosts",
+        "type": "integer[]"
+       },
+       {
+        "name": "points",
+        "type": "integer[]"
+       },
+       {
+        "name": "initialEnergy",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/semantics/68f6f36986f7cb4953d40fbc-python.json",
+      "sha256": "8c55c5dacce4283b081aa928cca8b0b963e2d45ccdc721040b8385e1c10e8399",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function maxGamePoints(energyCosts, points, initialEnergy) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+      "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/semantics/68f6f36986f7cb4953d40fbc-javascript.json",
+     "inferredInterface": {
+      "name": "maxGamePoints",
+      "params": [
+       {
+        "name": "energyCosts",
+        "type": "integer[]"
+       },
+       {
+        "name": "points",
+        "type": "integer[]"
+       },
+       {
+        "name": "initialEnergy",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/semantics/68f6f36986f7cb4953d40fbc-javascript.json",
+      "sha256": "a7d95308f6c2e7dff863e6211908ce5a689a52c9df1c2476855622ecef0bee13",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-b-20261028-v1/contracts.json",
+    "sha256": "9b45427ee65a0467344aa6db91e9b0ff0426a40d4670db3973ca60de4d6eaf26",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

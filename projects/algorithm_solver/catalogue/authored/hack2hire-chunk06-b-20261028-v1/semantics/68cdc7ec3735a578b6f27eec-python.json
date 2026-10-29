@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68cdc7ec3735a578b6f27eec",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "secret"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "guessTranscript",
+  "params": [
+   {
+    "name": "secret",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal server object plus a candidate-set check: all 10^4 strings consistent with every answer must shrink to the secret before the final guess",
+  "candidate_design": "digit counts in one array; per position, filler-padded probes; strings built once per guess",
+  "complexity_target": "O(1) per secret (at most 9 + 9 + 1 guesses)"
+ },
+ "source_sha256": "b75c0d68dead392f6bcbfd24c410375521a5e48dab7e379eb8b501f6cf897c7d",
+ "wrapper": "Solution.guessTranscript"
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6ad142657cb0eaedae65926e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "records"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "formatTasks",
+  "params": [
+   {
+    "name": "records",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "fixed-point marking of displayable tasks by repeated passes, then recursive display with record rescans",
+  "candidate_design": "validate and deduplicate in one pass; child lists by parent; DFS from the roots so orphans and cycles are never reached",
+  "complexity_target": "O(records + output characters)"
+ },
+ "source_sha256": "7fd4788dcd965f521bad54cb1f11e8e786d2161d078e10368ca46fddd9b4aabd",
+ "wrapper": "named export formatTasks"
+}
