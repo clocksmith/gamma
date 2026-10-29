@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:677b5ef978175fce2ecdfc12",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "transactions"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "endOfDayBalance",
+  "params": [
+   {
+    "name": "transactions",
+    "type": "list<[string,string,integer]>"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per party, scan the whole transaction list and add or subtract each matching row",
+  "candidate_design": "one pass into a hash map of running balances, then sort the party names",
+  "complexity_target": "O(t + p log p) time/O(p) space"
+ },
+ "source_sha256": "38c65c58a579629dfca0f7b896fd0bbe82e43a61ca6cb8d57cfaa9c3de421882",
+ "wrapper": "Solution.endOfDayBalance"
+}

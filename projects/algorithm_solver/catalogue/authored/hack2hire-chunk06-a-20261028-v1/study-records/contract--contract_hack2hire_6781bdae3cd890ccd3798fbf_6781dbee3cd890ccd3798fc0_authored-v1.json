@@ -1,0 +1,389 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6781bdae3cd890ccd3798fbf:6781dbee3cd890ccd3798fc0:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+   "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+   "selector": "/problems/19"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6781bdae3cd890ccd3798fbf.json",
+   "sha256": "c10a6f0c878cd4f2b4ede9b1dd490145893b2e458fedc00d74e69616fc2473ea",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+   "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+   "selector": "/variants/hack2hire:6781dbee3cd890ccd3798fc0"
+  }
+ ],
+ "problemId": "hack2hire:6781bdae3cd890ccd3798fbf",
+ "variantId": "6781dbee3cd890ccd3798fc0",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: nearest city on the same row or column",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6781dbee3cd890ccd3798fc0/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "cities[i] is at (xs[i], ys[i]); names are distinct and so are coordinate pairs. For each queried city name, return the name of the other city that shares its x or its y coordinate and has the smallest Manhattan distance to it, ties to the smaller name in code-point order; return \"NONE\" when no other city shares a coordinate.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "cities[i] is at (xs[i], ys[i]).",
+   "names are distinct and so are coordinate pairs.",
+   "For each queried city name, return the name of the other city that shares its x or its y coordinate and has the smallest Manhattan distance to it, ties to the smaller name in code-point order.",
+   "return \"NONE\" when no other city shares a coordinate."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n, q <= 1e5",
+   "names match [a-z0-9]{1,10}",
+   "1 <= x, y <= 1e9",
+   "queries name existing cities"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6781dbee3cd890ccd3798fc0/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: cities with coordinates, nearest city sharing x or y, Manhattan distance; algorithmTags: BINARY_SEARCH; LeetCode 1779 reference in the preview; preview response sha256 ab6a516258c80424e04ce45a0e303bbf9088fcf3840ec7dd7157d2530144fbcc"
+   },
+   {
+    "statement": "Uncertainty: medium: the core rule is in the preview; the tie rule, the \"NONE\" sentinel, distinct coordinates and the parallel-array interface are inferred",
+    "basis": "the public group preview is partial (527 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/19/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/19/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/19/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How are ties broken?",
+   "What is returned when no city shares a coordinate?",
+   "Can two cities share both coordinates?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6781dbee3cd890ccd3798fc0/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "a"
+     ],
+     [
+      1
+     ],
+     [
+      1
+     ],
+     [
+      "a"
+     ]
+    ],
+    "output": [
+     "NONE"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "c12",
+      "c11",
+      "c17",
+      "c24",
+      "c21",
+      "c13",
+      "c22",
+      "c14"
+     ],
+     [
+      2,
+      1,
+      4,
+      3,
+      1,
+      5,
+      4,
+      1
+     ],
+     [
+      5,
+      4,
+      3,
+      2,
+      2,
+      3,
+      2,
+      1
+     ],
+     [
+      "c12",
+      "c11",
+      "c22",
+      "c11"
+     ]
+    ],
+    "output": [
+     "NONE",
+     "c21",
+     "c17",
+     "c21"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6781dbee3cd890ccd3798fc0/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/oracles.py",
+    "sha256": "f88624d89226e15b0d938e3d9cf90720573eb824aa1aea3aae6b3ce6129622cc",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def nearestCities(cities, xs, ys, queries) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6781dbee3cd890ccd3798fc0-python.json",
+     "inferredInterface": {
+      "name": "nearestCities",
+      "params": [
+       {
+        "name": "cities",
+        "type": "string[]"
+       },
+       {
+        "name": "xs",
+        "type": "integer[]"
+       },
+       {
+        "name": "ys",
+        "type": "integer[]"
+       },
+       {
+        "name": "queries",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6781dbee3cd890ccd3798fc0-python.json",
+      "sha256": "8c23170ee4f5ef912a37fdbe7183b2831fdd5018eeacd039d6277c0fcc234b7f",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function nearestCities(cities, xs, ys, queries) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6781dbee3cd890ccd3798fc0-javascript.json",
+     "inferredInterface": {
+      "name": "nearestCities",
+      "params": [
+       {
+        "name": "cities",
+        "type": "string[]"
+       },
+       {
+        "name": "xs",
+        "type": "integer[]"
+       },
+       {
+        "name": "ys",
+        "type": "integer[]"
+       },
+       {
+        "name": "queries",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6781dbee3cd890ccd3798fc0-javascript.json",
+      "sha256": "c264f9bff3a9c92127227ecb1cbcf962b0e3082de964afe4a53e72c0fbe2d459",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/19/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/19/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

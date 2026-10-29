@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6781dbee3cd890ccd3798fc0",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "cities",
+  "xs",
+  "ys",
+  "queries"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "nearestCities",
+  "params": [
+   {
+    "name": "cities",
+    "type": "string[]"
+   },
+   {
+    "name": "xs",
+    "type": "integer[]"
+   },
+   {
+    "name": "ys",
+    "type": "integer[]"
+   },
+   {
+    "name": "queries",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each query, scan every city",
+  "candidate_design": "group cities by x (sorted by y) and by y (sorted by x); a query only needs the adjacent entries in its two groups",
+  "complexity_target": "O((n + q) log n) time/O(n) space"
+ },
+ "source_sha256": "9164d3be276306486543877dd0062e4546189d252228ee2d23a73e3603f897ae",
+ "wrapper": "Solution.nearestCities"
+}

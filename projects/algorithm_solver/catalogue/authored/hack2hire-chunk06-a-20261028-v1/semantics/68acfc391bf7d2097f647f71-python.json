@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68acfc391bf7d2097f647f71",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "logs",
+  "maxTime"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findValidUsers",
+  "params": [
+   {
+    "name": "logs",
+    "type": "string[]"
+   },
+   {
+    "name": "maxTime",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per user, filter that user's logs from the full list and replay them",
+  "candidate_design": "one pass with a hash map of open signin times and a set of valid users, then sort",
+  "complexity_target": "O(n + u log u) time/O(u) space"
+ },
+ "source_sha256": "c5ffb588981005720d9cd4c00a7d1b8e27a9ec7e1f9140c9b6693a7032ba23ab",
+ "wrapper": "Solution.findValidUsers"
+}

@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+   "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+   "selector": "/problems/hack2hire:67e4adbf50b60b77022f384b"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+   "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+   "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+  }
+ ],
+ "problemId": "hack2hire:67e4a41750b60b77022f3847",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/contract--contract_hack2hire_67e4a41750b60b77022f3847_67e4adbf50b60b77022f384b_authored-v1.json",
+  "sha256": "10fdaf8416b2a76a45e416380d39737e200fca20bd5462374c78875de5753496"
+ },
+ "title": {
+  "status": "present",
+  "value": "topological order; for each course a bitset of possible distances from a start (forward) and to an end (backward); a course is a middle when some up-distance a and down-distance b satisfy b == a or b == a + 1",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+    "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+    "selector": "/problems/hack2hire:67e4adbf50b60b77022f384b/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "topological order; for each course a bitset of possible distances from a start (forward) and to an end (backward); a course is a middle when some up-distance a and down-distance b satisfy b == a or b == a + 1. Complexity target: O(e * n / w) time/O(n^2 / w) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+    "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+    "selector": "/problems/hack2hire:67e4adbf50b60b77022f384b"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Many overlapping paths share prefixes and suffixes"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Bitsets cost O(n) bits per course; with at most 1000 courses that is small"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "up(v) holds exactly the distances of start-to-v paths",
+   "down(v) holds exactly the distances of v-to-end paths"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "The number of paths can be exponential, so do not enumerate them.",
+   "A course v is the middle of a path with a courses before it and b after it exactly when b == a or b == a + 1.",
+   "Propagate sets of possible a values forward and b values backward in topological order; bitsets make the union a shift and an OR."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "topological order; for each course a bitset of possible distances from a start (forward) and to an end (backward); a course is a middle when some up-distance a and down-distance b satisfy b == a or b == a + 1",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+      "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+      "selector": "/problems/hack2hire:67e4adbf50b60b77022f384b/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(e * n / w) time/O(n^2 / w) space; the independent reference (enumerate every start-to-end path explicitly (tiny graphs) and collect index (L-1)//2) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+      "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+      "selector": "/problems/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "The number of paths can be exponential, so do not enumerate them.",
+     "A course v is the middle of a path with a courses before it and b after it exactly when b == a or b == a + 1."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_67e4a41750b60b77022f3847_67e4adbf50b60b77022f384b_approach-native_v1.json",
+    "sha256": "e4a34fb257e78928845d840b0335bf1cdca83059a3d5a1f0f809589568bbaa4a"
+   }
+  },
+  {
+   "id": "approach:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper findMiddleCourses, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+      "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+      "selector": "/problems/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use iterative traversal where depth may be large."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Propagate sets of possible a values forward and b values backward in topological order; bitsets make the union a shift and an OR."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_67e4a41750b60b77022f3847_67e4adbf50b60b77022f384b_python_v1.json",
+     "sha256": "f86c43181e8a9c23f12c0a0040963a1aa74b87e720605b8c9ae497255fc265f3"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_67e4a41750b60b77022f3847_67e4adbf50b60b77022f384b_javascript_v1.json",
+     "sha256": "11beec9378e63573ec4bc7dea48c00af9480a073b6ec4814128bb79f8c8c89f8"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_67e4a41750b60b77022f3847_67e4adbf50b60b77022f384b_approach-native_v1.json",
+    "sha256": "e4a34fb257e78928845d840b0335bf1cdca83059a3d5a1f0f809589568bbaa4a"
+   }
+  },
+  {
+   "id": "approach:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (enumerate every start-to-end path explicitly (tiny graphs) and collect index (L-1)//2) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+      "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+      "selector": "/problems/hack2hire:67e4adbf50b60b77022f384b/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/11/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/test_oracles.py",
+      "sha256": "61a8dc56a1130c74a3673758c87492bacd668b6f315e0593fff71ace369a1265",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_67e4a41750b60b77022f3847_67e4adbf50b60b77022f384b_approach-native_v1.json",
+    "sha256": "e4a34fb257e78928845d840b0335bf1cdca83059a3d5a1f0f809589568bbaa4a"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_67e4a41750b60b77022f3847_67e4adbf50b60b77022f384b_approach-native_v1.json",
+  "sha256": "e4a34fb257e78928845d840b0335bf1cdca83059a3d5a1f0f809589568bbaa4a"
+ }
+}

@@ -1,0 +1,366 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6769d68d11bbd512d60ce761:677b5f4078175fce2ecdfc13:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+   "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6769d68d11bbd512d60ce761.json",
+   "sha256": "54efe27e86b01203afec79b3dfb53dc2101eed6283ad520581041940cc8c9a41",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+   "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+   "selector": "/variants/hack2hire:677b5f4078175fce2ecdfc13"
+  }
+ ],
+ "problemId": "hack2hire:6769d68d11bbd512d60ce761",
+ "variantId": "677b5f4078175fce2ecdfc13",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: greedy settlement transfers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:677b5f4078175fce2ecdfc13/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "transactions is a list of [payer, payee, amount] rows (party names are strings, payer != payee, amount a positive integer number of cents). Every row moves amount from payer to payee. The end-of-day balance of a party is the total it received minus the total it paid. Level 2: settle all balances with transfers chosen greedily. While some balance is non-zero, take the creditor with the largest positive balance and the debtor with the most negative balance (ties to the smaller name in code-point order), transfer min(credit, -debt) from the debtor to the creditor and record [debtor, creditor, amount]. Return the recorded transfers in order (empty when everything already nets to zero).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "transactions is a list of [payer, payee, amount] rows (party names are strings, payer != payee, amount a positive integer number of cents).",
+   "Every row moves amount from payer to payee.",
+   "The end-of-day balance of a party is the total it received minus the total it paid.",
+   "Level 2: settle all balances with transfers chosen greedily.",
+   "While some balance is non-zero, take the creditor with the largest positive balance and the debtor with the most negative balance (ties to the smaller name in code-point order), transfer min(credit, -debt) from the debtor to the creditor and record [debtor, creditor, amount].",
+   "Return the recorded transfers in order (empty when everything already nets to zero)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= transactions.length <= 1e5",
+   "party names match [A-Za-z0-9_]{1,20}",
+   "1 <= amount <= 1e9 (integer cents)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:677b5f4078175fce2ecdfc13/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: buy-now-pay-later setting, money moved between customers, company, merchants and third parties; algorithmTags: HASH_TABLE, GREEDY; codingQuestions (variant count/order); preview response sha256 13db8e6cfc56b77691a4fd40718655628d9a9f7160a8fc1c17a66459985fb34b"
+   },
+   {
+    "statement": "Uncertainty: very high: the second variant is unseen; a greedy largest-creditor/largest-debtor settlement is inferred from the GREEDY tag and the money-movement theme; tie rules and output order are author choices",
+    "basis": "the public group preview is partial (580 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = net balances, 2 = greedy settlement transfers (GREEDY tag)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are amounts integers or decimals?",
+   "Should parties with a zero balance be reported?",
+   "In what order should parties or transfers be listed?",
+   "Is the minimum number of transfers required, or a specific greedy order?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:677b5f4078175fce2ecdfc13/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "al",
+       "bo",
+       2
+      ],
+      [
+       "al",
+       "bo",
+       1000000000
+      ],
+      [
+       "al",
+       "bo",
+       1000000000
+      ],
+      [
+       "al",
+       "bo",
+       5
+      ],
+      [
+       "bo",
+       "al",
+       5
+      ],
+      [
+       "bo",
+       "al",
+       5
+      ],
+      [
+       "al",
+       "bo",
+       3
+      ],
+      [
+       "al",
+       "bo",
+       1000000000
+      ],
+      [
+       "al",
+       "bo",
+       10
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "al",
+      "bo",
+      3000000010
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:677b5f4078175fce2ecdfc13/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/oracles.py",
+    "sha256": "f88624d89226e15b0d938e3d9cf90720573eb824aa1aea3aae6b3ce6129622cc",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def settleBalances(transactions) -> list<[string,string,integer]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/677b5f4078175fce2ecdfc13-python.json",
+     "inferredInterface": {
+      "name": "settleBalances",
+      "params": [
+       {
+        "name": "transactions",
+        "type": "list<[string,string,integer]>"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/677b5f4078175fce2ecdfc13-python.json",
+      "sha256": "beb4281b0bb4534c9c56d4fff18868f2df3601bc12382d1bc8b6ed11c0afb985",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function settleBalances(transactions) /* -> list<[string,string,integer]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/677b5f4078175fce2ecdfc13-javascript.json",
+     "inferredInterface": {
+      "name": "settleBalances",
+      "params": [
+       {
+        "name": "transactions",
+        "type": "list<[string,string,integer]>"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/677b5f4078175fce2ecdfc13-javascript.json",
+      "sha256": "482573f3a4094290453e4d19586f162421d147af08f05d059af03c92a4cf1ad0",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

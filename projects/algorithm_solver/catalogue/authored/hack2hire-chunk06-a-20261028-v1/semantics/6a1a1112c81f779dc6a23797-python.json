@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1a1112c81f779dc6a23797",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "costs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minimumCost",
+  "params": [
+   {
+    "name": "costs",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every combination for tiny inputs and keep the cheapest valid one",
+  "candidate_design": "DP over factories keeping the best and second-best (cost, option index) of the previous row",
+  "complexity_target": "O(total options) time/O(max row) space"
+ },
+ "source_sha256": "3f46c0d7c1d0c1525a668babe21534be9ceb07cdaa2367753c28578ab07638bf",
+ "wrapper": "Solution.minimumCost"
+}

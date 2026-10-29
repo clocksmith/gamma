@@ -1,0 +1,406 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a5e8723bd09995a83107ec2:6a5e8727bd09995a83107ec3:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+   "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a5e8723bd09995a83107ec2.json",
+   "sha256": "d27783402f2e3c823a486f02469e24c674f9820dbf38db8439c4df988fd4876b",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+   "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+   "selector": "/variants/hack2hire:6a5e8727bd09995a83107ec3"
+  }
+ ],
+ "problemId": "hack2hire:6a5e8723bd09995a83107ec2",
+ "variantId": "6a5e8727bd09995a83107ec3",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: per-user redeemable offers after an event replay",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6a5e8727bd09995a83107ec3/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "offers rows are [offerId, startAt, endAt, maxCount] and events rows are [userId, timestamp, action, offerId] with decimal-string numbers; action is \"redeem\" or \"unredeem\". Process events in input order. An event takes effect only if its offer exists, startAt <= timestamp <= endAt and timestamp <= processingTime. A redeem raises the user's count for that offer when the count is below maxCount (otherwise it is ignored); an unredeem lowers a positive count. Return [userId, offerIds] for every user that appears in events, sorted by userId in code-point order, where offerIds lists (in offers order) the offers with startAt <= processingTime <= endAt whose count for that user is below maxCount.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "offers rows are [offerId, startAt, endAt, maxCount] and events rows are [userId, timestamp, action, offerId] with decimal-string numbers.",
+   "action is \"redeem\" or \"unredeem\".",
+   "Process events in input order.",
+   "An event takes effect only if its offer exists, startAt <= timestamp <= endAt and timestamp <= processingTime.",
+   "A redeem raises the user's count for that offer when the count is below maxCount (otherwise it is ignored).",
+   "an unredeem lowers a positive count.",
+   "Return [userId, offerIds] for every user that appears in events, sorted by userId in code-point order, where offerIds lists (in offers order) the offers with startAt <= processingTime <= endAt whose count for that user is below maxCount."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "offers.length <= 200 with unique offerIds",
+   "events.length <= 1e5 with at most 500 distinct users",
+   "times and counts are decimal strings in 0..1e9, startAt <= endAt",
+   "0 <= processingTime <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6a5e8727bd09995a83107ec3/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: offers [offerId, startAt, endAt, userMaxRedemptionCount], events [userId, timestamp, action, offerId], decimal-string numbers, input-order processing, redeem/unredeem; algorithmTags: HASH_TABLE, SIMULATION; preview response sha256 62b1fcccf208eb4b474f56ff0e8741748ca853a2989badebae4c461b1a3a990a"
+   },
+   {
+    "statement": "Uncertainty: high: offer and event shapes, input-order processing and the actions are in the preview; the condition list is cut off, so the window test, the processingTime cut-off, the ignore rules and the output shape are inferred",
+    "basis": "the public group preview is partial (657 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Do events after processingTime count?",
+   "Is a redeem beyond the limit an error or ignored?",
+   "Which users appear in the output?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6a5e8727bd09995a83107ec3/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [],
+     0
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "o0",
+       "19",
+       "30",
+       "2"
+      ],
+      [
+       "o1",
+       "8",
+       "18",
+       "0"
+      ],
+      [
+       "o2",
+       "11",
+       "15",
+       "2"
+      ]
+     ],
+     [
+      [
+       "u2",
+       "35",
+       "unredeem",
+       "o0"
+      ],
+      [
+       "u2",
+       "28",
+       "unredeem",
+       "o1"
+      ],
+      [
+       "u2",
+       "8",
+       "redeem",
+       "o5"
+      ],
+      [
+       "u2",
+       "22",
+       "unredeem",
+       "o2"
+      ],
+      [
+       "U3",
+       "17",
+       "redeem",
+       "o5"
+      ],
+      [
+       "u2",
+       "1",
+       "redeem",
+       "o4"
+      ],
+      [
+       "U3",
+       "11",
+       "unredeem",
+       "o2"
+      ]
+     ],
+     32
+    ],
+    "output": [
+     [
+      "U3",
+      []
+     ],
+     [
+      "u2",
+      []
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6a5e8727bd09995a83107ec3/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/oracles.py",
+    "sha256": "f88624d89226e15b0d938e3d9cf90720573eb824aa1aea3aae6b3ce6129622cc",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def redeemableOffers(offers, events, processingTime) -> list<[string,string[]]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6a5e8727bd09995a83107ec3-python.json",
+     "inferredInterface": {
+      "name": "redeemableOffers",
+      "params": [
+       {
+        "name": "offers",
+        "type": "list<[string,string,string,string]>"
+       },
+       {
+        "name": "events",
+        "type": "list<[string,string,string,string]>"
+       },
+       {
+        "name": "processingTime",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string[]]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6a5e8727bd09995a83107ec3-python.json",
+      "sha256": "644fc09ec35884eb48056cd06e61e4dc1881b34655fad3ca5aed09667090918f",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function redeemableOffers(offers, events, processingTime) /* -> list<[string,string[]]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6a5e8727bd09995a83107ec3-javascript.json",
+     "inferredInterface": {
+      "name": "redeemableOffers",
+      "params": [
+       {
+        "name": "offers",
+        "type": "list<[string,string,string,string]>"
+       },
+       {
+        "name": "events",
+        "type": "list<[string,string,string,string]>"
+       },
+       {
+        "name": "processingTime",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string[]]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6a5e8727bd09995a83107ec3-javascript.json",
+      "sha256": "5693c451bda961f2e3469cf48beb909001f5eb8625ae8ad48c03138f87db1fdc",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

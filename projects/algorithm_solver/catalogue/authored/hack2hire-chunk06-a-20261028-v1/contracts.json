@@ -1,0 +1,1333 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:677b5ef978175fce2ecdfc12",
+   "variant_id": "677b5ef978175fce2ecdfc12",
+   "variant_ordinal": 1,
+   "title": "End Of Day Balance",
+   "source": {
+    "post_id": "6769d68d11bbd512d60ce761",
+    "group_title": "End Of Day Balance",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6769d68d11bbd512d60ce761",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6769d68d11bbd512d60ce761/practice?questionId=677b5ef978175fce2ecdfc12",
+    "preview_response_sha256": "13db8e6cfc56b77691a4fd40718655628d9a9f7160a8fc1c17a66459985fb34b",
+    "preview_content_sha256": "d725753e79c825446fcb7263ed9b28aba6e4425fad1db18219ffa292294040c6",
+    "preview_characters": 580,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6769d68d11bbd512d60ce761.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "GREEDY"
+    ],
+    "companies": [
+     "AFFIRM"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: buy-now-pay-later setting, money moved between customers, company, merchants and third parties",
+    "algorithmTags: HASH_TABLE, GREEDY",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "transactions is a list of [payer, payee, amount] rows (party names are strings, payer != payee, amount a positive integer number of cents). Every row moves amount from payer to payee. The end-of-day balance of a party is the total it received minus the total it paid. Level 1: return [party, balance] for every party that appears in any row, including zero balances, sorted by party name in code-point order.",
+   "inference_uncertainty": "high: the preview only sets the scene (parties moving money); the row shape, integer cents, output shape and ordering are inferred",
+   "inferred_interface": {
+    "name": "endOfDayBalance",
+    "params": [
+     {
+      "name": "transactions",
+      "type": "list<[string,string,integer]>"
+     }
+    ],
+    "return": {
+     "type": "list<[string,integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = net balances, 2 = greedy settlement transfers (GREEDY tag)",
+   "oracle_constant": "EOD1"
+  },
+  {
+   "uid": "hack2hire:677b5f4078175fce2ecdfc13",
+   "variant_id": "677b5f4078175fce2ecdfc13",
+   "variant_ordinal": 2,
+   "title": "End Of Day Balance",
+   "source": {
+    "post_id": "6769d68d11bbd512d60ce761",
+    "group_title": "End Of Day Balance",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6769d68d11bbd512d60ce761",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6769d68d11bbd512d60ce761/practice?questionId=677b5f4078175fce2ecdfc13",
+    "preview_response_sha256": "13db8e6cfc56b77691a4fd40718655628d9a9f7160a8fc1c17a66459985fb34b",
+    "preview_content_sha256": "d725753e79c825446fcb7263ed9b28aba6e4425fad1db18219ffa292294040c6",
+    "preview_characters": 580,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6769d68d11bbd512d60ce761.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "GREEDY"
+    ],
+    "companies": [
+     "AFFIRM"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: buy-now-pay-later setting, money moved between customers, company, merchants and third parties",
+    "algorithmTags: HASH_TABLE, GREEDY",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "transactions is a list of [payer, payee, amount] rows (party names are strings, payer != payee, amount a positive integer number of cents). Every row moves amount from payer to payee. The end-of-day balance of a party is the total it received minus the total it paid. Level 2: settle all balances with transfers chosen greedily. While some balance is non-zero, take the creditor with the largest positive balance and the debtor with the most negative balance (ties to the smaller name in code-point order), transfer min(credit, -debt) from the debtor to the creditor and record [debtor, creditor, amount]. Return the recorded transfers in order (empty when everything already nets to zero).",
+   "inference_uncertainty": "very high: the second variant is unseen; a greedy largest-creditor/largest-debtor settlement is inferred from the GREEDY tag and the money-movement theme; tie rules and output order are author choices",
+   "inferred_interface": {
+    "name": "settleBalances",
+    "params": [
+     {
+      "name": "transactions",
+      "type": "list<[string,string,integer]>"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string,integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = net balances, 2 = greedy settlement transfers (GREEDY tag)",
+   "oracle_constant": "EOD2"
+  },
+  {
+   "uid": "hack2hire:67872240e20f8f324213c297",
+   "variant_id": "67872240e20f8f324213c297",
+   "variant_ordinal": 1,
+   "title": "Evaluate String Expression",
+   "source": {
+    "post_id": "67872156e20f8f324213c296",
+    "group_title": "Evaluate String Expression",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67872156e20f8f324213c296",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67872156e20f8f324213c296/practice?questionId=67872240e20f8f324213c297",
+    "preview_response_sha256": "a80c69f5dd3680e6a497159592c46507db12cd66b6f2d9726391cb00ce36145f",
+    "preview_content_sha256": "2225213103d597bff74545891e2e9965510ee7387702a7ac3902cb80f6ee1670",
+    "preview_characters": 504,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67872156e20f8f324213c296.json",
+    "algorithm_tags": [
+     "STACK"
+    ],
+    "companies": [
+     "GOOGLE",
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: nested add/sub functions, add sums its arguments, sub subtracts the second from the first",
+    "algorithmTags: STACK",
+    "LeetCode 224 reference in the preview"
+   ],
+   "inferred_spec": "expression is an integer literal or a call add(e1,e2,...,ek) with k >= 2 arguments or sub(e1,e2) with exactly two, where each argument is again an expression. Literals are optional '-' followed by decimal digits without leading zeros (absolute value at most 1e9). Spaces may appear between any two tokens and are ignored. add returns the sum of its arguments, sub returns e1 - e2. Return the integer value of the whole expression.",
+   "inference_uncertainty": "medium: function names and semantics are in the preview; the call syntax (parentheses and commas), argument counts, negative literals and whitespace rule are inferred",
+   "inferred_interface": {
+    "name": "evaluate",
+    "params": [
+     {
+      "name": "expression",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "EVAL"
+  },
+  {
+   "uid": "hack2hire:6a1a10e2c81f779dc6a23794",
+   "variant_id": "6a1a10e2c81f779dc6a23794",
+   "variant_ordinal": 1,
+   "title": "Factory Network Cost Minimization",
+   "source": {
+    "post_id": "6a1a10d2c81f779dc6a23793",
+    "group_title": "Factory Network Cost Minimization",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a10d2c81f779dc6a23793",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a10d2c81f779dc6a23793/practice?questionId=6a1a10e2c81f779dc6a23794",
+    "preview_response_sha256": "78843faf192e6c620bf3e546ca0c4e713d7999f8590b349e114eec77c12cd196",
+    "preview_content_sha256": "98f13e74b75a2cb25c72b18c823c62bbec207cffa8202b6bab33849571fecd72",
+    "preview_characters": 458,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1a10d2c81f779dc6a23793.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH",
+     "MEMOIZATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: one option per factory, costs[i][j], minimise the total build cost",
+    "algorithmTags: DEPTH_FIRST_SEARCH, MEMOIZATION",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "costs[i][j] is the cost of option j for factory i (rows may have different lengths, each at least 1). Every factory picks exactly one option; the total cost is the sum of the picked costs. Level 1: there are no further constraints; return the minimum total cost.",
+   "inference_uncertainty": "low: the preview states this level almost completely; only the bounds are inferred",
+   "inferred_interface": {
+    "name": "minimumCost",
+    "params": [
+     {
+      "name": "costs",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels: 1 = independent choices, 2 = adjacent factories in index order may not pick the same option index, 3 = factories joined by tree edges may not pick the same option index",
+   "oracle_constant": "FAC1"
+  },
+  {
+   "uid": "hack2hire:6a1a1112c81f779dc6a23797",
+   "variant_id": "6a1a1112c81f779dc6a23797",
+   "variant_ordinal": 2,
+   "title": "Factory Network Cost Minimization",
+   "source": {
+    "post_id": "6a1a10d2c81f779dc6a23793",
+    "group_title": "Factory Network Cost Minimization",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a10d2c81f779dc6a23793",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a10d2c81f779dc6a23793/practice?questionId=6a1a1112c81f779dc6a23797",
+    "preview_response_sha256": "78843faf192e6c620bf3e546ca0c4e713d7999f8590b349e114eec77c12cd196",
+    "preview_content_sha256": "98f13e74b75a2cb25c72b18c823c62bbec207cffa8202b6bab33849571fecd72",
+    "preview_characters": 458,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1a10d2c81f779dc6a23793.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH",
+     "MEMOIZATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: one option per factory, costs[i][j], minimise the total build cost",
+    "algorithmTags: DEPTH_FIRST_SEARCH, MEMOIZATION",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "costs[i][j] is the cost of option j for factory i (rows may have different lengths, each at least 1). Every factory picks exactly one option; the total cost is the sum of the picked costs. Level 2: factories i and i+1 are neighbours and may not pick the same option index j. Return the minimum total cost, or -1 when no valid assignment exists.",
+   "inference_uncertainty": "very high: the unseen second variant is inferred to add a neighbour constraint (paint-house style) from the \"network\" title and MEMOIZATION tag; the -1 sentinel is inferred",
+   "inferred_interface": {
+    "name": "minimumCost",
+    "params": [
+     {
+      "name": "costs",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels: 1 = independent choices, 2 = adjacent factories in index order may not pick the same option index, 3 = factories joined by tree edges may not pick the same option index",
+   "oracle_constant": "FAC2"
+  },
+  {
+   "uid": "hack2hire:6a2b14eb97d3b4b32966cb00",
+   "variant_id": "6a2b14eb97d3b4b32966cb00",
+   "variant_ordinal": 3,
+   "title": "Factory Network Cost Minimization",
+   "source": {
+    "post_id": "6a1a10d2c81f779dc6a23793",
+    "group_title": "Factory Network Cost Minimization",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a10d2c81f779dc6a23793",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a10d2c81f779dc6a23793/practice?questionId=6a2b14eb97d3b4b32966cb00",
+    "preview_response_sha256": "78843faf192e6c620bf3e546ca0c4e713d7999f8590b349e114eec77c12cd196",
+    "preview_content_sha256": "98f13e74b75a2cb25c72b18c823c62bbec207cffa8202b6bab33849571fecd72",
+    "preview_characters": 458,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1a10d2c81f779dc6a23793.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH",
+     "MEMOIZATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: one option per factory, costs[i][j], minimise the total build cost",
+    "algorithmTags: DEPTH_FIRST_SEARCH, MEMOIZATION",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "costs[i][j] is the cost of option j for factory i (rows may have different lengths, each at least 1). Every factory picks exactly one option; the total cost is the sum of the picked costs. Level 3: edges is a list of [u, v] pairs that join the n = costs.length factories into one tree (n-1 edges); joined factories may not pick the same option index. Return the minimum total cost, or -1 when no valid assignment exists.",
+   "inference_uncertainty": "very high: the unseen third variant is inferred to generalise the neighbour constraint to a tree network searched with DFS and memoisation; the tree guarantee keeps it polynomial; edges and -1 are inferred",
+   "inferred_interface": {
+    "name": "minimumCost",
+    "params": [
+     {
+      "name": "costs",
+      "type": "integer[][]"
+     },
+     {
+      "name": "edges",
+      "type": "list<[integer,integer]>"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels: 1 = independent choices, 2 = adjacent factories in index order may not pick the same option index, 3 = factories joined by tree edges may not pick the same option index",
+   "oracle_constant": "FAC3"
+  },
+  {
+   "uid": "hack2hire:68fbce5f378ce2f46141f920",
+   "variant_id": "68fbce5f378ce2f46141f920",
+   "variant_ordinal": 1,
+   "title": "File System Collection",
+   "source": {
+    "post_id": "68fbce56378ce2f46141f91f",
+    "group_title": "File System Collection",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fbce56378ce2f46141f91f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fbce56378ce2f46141f91f/practice?questionId=68fbce5f378ce2f46141f920",
+    "preview_response_sha256": "bb728bd6815098dd0b0974783ed93acd76852eeb156b6d72838ac38f15d0403c",
+    "preview_content_sha256": "841223c490ebcc14f82c96046a404b79ba810344afac694e14582d3186876034",
+    "preview_characters": 898,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68fbce56378ce2f46141f91f.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "ATLASSIAN"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: record format, FileSystemStats(files) constructor, global and direct collection totals, possible collection hierarchy",
+    "algorithmTags: DESIGN, HASH_TABLE"
+   ],
+   "inferred_spec": "FileSystemStats(files) takes records \"<name>,<size>,<collectionId>...\" (size a positive integer, zero or more collection ids; a repeated id in one record counts once). getTotalSize() returns the sum of all file sizes. getCollectionSize(id) returns the direct total of that collection (0 for an unknown id). getTopCollections(k) returns the ids of the min(k, C) collections with the largest direct total among the C collections named in any record, ties to the smaller id in code-point order. setParent(childId, parentId) makes childId a sub-collection of parentId (ids need not appear in records; a child gets at most one parent and no cycle is formed). getHierarchySize(id) returns the direct total of id plus the direct totals of all its descendant collections (a file in two of them counts twice).",
+   "inference_uncertainty": "very high: the constructor, record format and the direct total are in the preview; every method name, the top-k query, the parent-link method and the hierarchy-sum rule are inferred",
+   "inferred_interface": {
+    "classname": "FileSystemStats",
+    "constructor": {
+     "params": [
+      {
+       "name": "files",
+       "type": "string[]"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "getTotalSize",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getCollectionSize",
+      "params": [
+       {
+        "name": "collectionId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getTopCollections",
+      "params": [
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "setParent",
+      "params": [
+       {
+        "name": "childId",
+        "type": "string"
+       },
+       {
+        "name": "parentId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "getHierarchySize",
+      "params": [
+       {
+        "name": "collectionId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FSC",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6962cbcef731aa3969ef5176",
+   "variant_id": "6962cbcef731aa3969ef5176",
+   "variant_ordinal": 1,
+   "title": "File System Deletion",
+   "source": {
+    "post_id": "6962cbc7f731aa3969ef5175",
+    "group_title": "File System Deletion",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6962cbc7f731aa3969ef5175",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6962cbc7f731aa3969ef5175/practice?questionId=6962cbcef731aa3969ef5176",
+    "preview_response_sha256": "65c6d05fbc2213d316733ca5ca10e03ad5999129e0f8a63f43a2973b73ab4629",
+    "preview_content_sha256": "0a875c9ee2a287b9d41d2860db3ce93e9b95b9523826781fa0c97c2f54ba872d",
+    "preview_characters": 950,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6962cbc7f731aa3969ef5175.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "DATADOG"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: FileSystem(dirs, edges, files) with delete (file or empty directory), isDirectory and non-recursive getAllFiles",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "dirs and files are disjoint lists of absolute paths; edges are [parent, child] pairs where parent is a directory and child = parent + \"/\" + name. Every file and every non-root directory has exactly one parent edge. getAllFiles(dir) lists a directory's children in the order their edges appear, and delete(p) only removes a file or an empty directory. Delete path and everything below it using only those operations: children first, in getAllFiles order, each subtree completely, then the directory itself. Return the paths in the order delete is called; return [] when path does not exist.",
+   "inference_uncertainty": "high: the API is in the preview, but the task statement is cut off; recursive deletion, the child order and returning the deletion sequence (instead of a boolean) are inferred",
+   "inferred_interface": {
+    "name": "deletePath",
+    "params": [
+     {
+      "name": "dirs",
+      "type": "string[]"
+     },
+     {
+      "name": "edges",
+      "type": "list<[string,string]>"
+     },
+     {
+      "name": "files",
+      "type": "string[]"
+     },
+     {
+      "name": "path",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FSD"
+  },
+  {
+   "uid": "hack2hire:696442bb3b4797da7459a055",
+   "variant_id": "696442bb3b4797da7459a055",
+   "variant_ordinal": 1,
+   "title": "File System Directory Size Sum",
+   "source": {
+    "post_id": "696442b33b4797da7459a054",
+    "group_title": "File System Directory Size Sum",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696442b33b4797da7459a054",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696442b33b4797da7459a054/practice?questionId=696442bb3b4797da7459a055",
+    "preview_response_sha256": "a905f05b505ff7a5484b98d206573ee43d2ab8db21bceb9c8cd775877d7d6b67",
+    "preview_content_sha256": "c91af993d5b0c02765cbf879a0e99d53d0106099f9710a1ceda84453d8701ae1",
+    "preview_characters": 344,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/696442b33b4797da7459a054.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "DATADOG"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: FileEntry tree; files have non-negative sizes, directories hold children",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "root is a directory entry. A file entry is {\"name\": string, \"size\": integer >= 0}; a directory entry is {\"name\": string, \"children\": [entries]}. The total size of a directory is the sum of the sizes of all files below it at any depth. Return the sum of the total sizes of every directory (the root included) whose total size is at most limit.",
+   "inference_uncertainty": "high: the tree shape is in the preview but the question is cut off; the \"sum of directory totals at most limit\" query, the JSON node encoding and the limit parameter are inferred from the title",
+   "inferred_interface": {
+    "name": "sumDirectorySizes",
+    "params": [
+     {
+      "name": "root",
+      "type": "node (file {name,size} | directory {name,children})"
+     },
+     {
+      "name": "limit",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FSDS"
+  },
+  {
+   "uid": "hack2hire:684ba2bf4023c4f502877de9",
+   "variant_id": "684ba2bf4023c4f502877de9",
+   "variant_ordinal": 1,
+   "title": "Find Defendency Bottleneck",
+   "source": {
+    "post_id": "684b54b44023c4f502877db8",
+    "group_title": "Find Defendency Bottleneck",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/684b54b44023c4f502877db8",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/684b54b44023c4f502877db8/practice?questionId=684ba2bf4023c4f502877de9",
+    "preview_response_sha256": "5974261d56005daaf65d024387a5341d63c0e6429df289ba32e23f9df042608a",
+    "preview_content_sha256": "22d83617e787dc7cd275e102551d5c5f9bcefa1739075a69ad574d5f8ded110e",
+    "preview_characters": 531,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/684b54b44023c4f502877db8.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "DATABRICKS",
+     "META"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title (spelling \"Defendency\" as published; the preview describes dependencies)",
+    "contentPreview: n dependencies, acyclic edges [u, v], unit build time, parallel builds, bottleneck = only one being built at a time step",
+    "algorithmTags: BREADTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "n dependencies 0..n-1 and acyclic edges [u, v] (v needs u). Every dependency takes one time unit and starts as soon as all its prerequisites are complete, in parallel with any others. A dependency is a bottleneck when it is the only one being built at its time step. Return the bottlenecks ordered by time step (equivalently ascending build step).",
+   "inference_uncertainty": "low: the definition is in the preview; the output order is inferred (by time step) and duplicate edges are excluded by assumption",
+   "inferred_interface": {
+    "name": "findBottlenecks",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "edges",
+      "type": "list<[integer,integer]>"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "BOTT"
+  },
+  {
+   "uid": "hack2hire:67e4a80550b60b77022f3848",
+   "variant_id": "67e4a80550b60b77022f3848",
+   "variant_ordinal": 1,
+   "title": "Find Middle Course",
+   "source": {
+    "post_id": "67e4a41750b60b77022f3847",
+    "group_title": "Find Middle Course",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4a41750b60b77022f3847",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4a41750b60b77022f3847/practice?questionId=67e4a80550b60b77022f3848",
+    "preview_response_sha256": "a8cc592a33e9c5485ee3e039ab7ebb3b02d159a78fa1019c39a2ca3830e54d06",
+    "preview_content_sha256": "9edfdc4df1f94ae9cd8c932f4750c92ac5964d6dec967862674dd3aab0bbdbe4",
+    "preview_characters": 728,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67e4a41750b60b77022f3847.json",
+    "algorithm_tags": [
+     "GRAPH",
+     "MEMOIZATION",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: [prerequisite, course] pairs forming one chain with an odd number of courses",
+    "algorithmTags: GRAPH, MEMOIZATION, DEPTH_FIRST_SEARCH",
+    "LeetCode 207 reference in the preview",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "pairs are [prerequisite, course] edges that form one chain covering every course exactly once, with an odd number of courses (so pairs.length is even and at least 2). Return the course at the middle position of the chain.",
+   "inference_uncertainty": "low: the chain guarantee and odd count are in the preview; string course names are inferred",
+   "inferred_interface": {
+    "name": "findMiddleCourse",
+    "params": [
+     {
+      "name": "pairs",
+      "type": "list<[string,string]>"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = single chain, 2 = middle courses of every start-to-end path in a DAG",
+   "oracle_constant": "MID1"
+  },
+  {
+   "uid": "hack2hire:67e4adbf50b60b77022f384b",
+   "variant_id": "67e4adbf50b60b77022f384b",
+   "variant_ordinal": 2,
+   "title": "Find Middle Course",
+   "source": {
+    "post_id": "67e4a41750b60b77022f3847",
+    "group_title": "Find Middle Course",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4a41750b60b77022f3847",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4a41750b60b77022f3847/practice?questionId=67e4adbf50b60b77022f384b",
+    "preview_response_sha256": "a8cc592a33e9c5485ee3e039ab7ebb3b02d159a78fa1019c39a2ca3830e54d06",
+    "preview_content_sha256": "9edfdc4df1f94ae9cd8c932f4750c92ac5964d6dec967862674dd3aab0bbdbe4",
+    "preview_characters": 728,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67e4a41750b60b77022f3847.json",
+    "algorithm_tags": [
+     "GRAPH",
+     "MEMOIZATION",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: [prerequisite, course] pairs forming one chain with an odd number of courses",
+    "algorithmTags: GRAPH, MEMOIZATION, DEPTH_FIRST_SEARCH",
+    "LeetCode 207 reference in the preview",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "pairs are distinct [prerequisite, course] edges of a directed acyclic graph; every course appears in at least one pair. Consider every path that starts at a course with no prerequisite and ends at a course that is no prerequisite of anything. The middle course of a path of L courses is the one at index (L-1)//2 (the left middle when L is even). Return the distinct middle courses of all such paths, sorted in code-point order.",
+   "inference_uncertainty": "very high: the unseen second variant is inferred to generalise the chain to all start-to-end paths (MEMOIZATION tag); the left-middle rule for even lengths and the sorted output are inferred",
+   "inferred_interface": {
+    "name": "findMiddleCourses",
+    "params": [
+     {
+      "name": "pairs",
+      "type": "list<[string,string]>"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = single chain, 2 = middle courses of every start-to-end path in a DAG",
+   "oracle_constant": "MID2"
+  },
+  {
+   "uid": "hack2hire:68f93bebd7ff180d0ab95208",
+   "variant_id": "68f93bebd7ff180d0ab95208",
+   "variant_ordinal": 1,
+   "title": "Find Nearest Exit in Maze",
+   "source": {
+    "post_id": "68f7fb6786f7cb4953d41094",
+    "group_title": "Find Nearest Exit in Maze",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f7fb6786f7cb4953d41094",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f7fb6786f7cb4953d41094/practice?questionId=68f93bebd7ff180d0ab95208",
+    "preview_response_sha256": "c1e4e1d6bf926d2b986e641054ef4e7031c8e8bd024c49185117e959af19a118",
+    "preview_content_sha256": "fb87ab2d4a7f3019d74fc0d918fea3a22ab1e138ffc0236d3a02c15ab179a5e1",
+    "preview_characters": 780,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f7fb6786f7cb4953d41094.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "SQUARE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: binary matrix (1 open, 0 wall), entrance, 4-directional moves, exit on the border, entrance excluded",
+    "algorithmTags: BREADTH_FIRST_SEARCH",
+    "LeetCode 1926 reference in the preview",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "matrix is a grid of 0 (wall) and 1 (open); entrance [r, c] is open. Moves go up, down, left or right between open cells. An exit is an open cell in the first or last row or column, other than the entrance. Level 1: return the number of moves to the nearest exit, or -1 if none is reachable.",
+   "inference_uncertainty": "low: this level follows the preview and LeetCode 1926 with the cell values inverted",
+   "inferred_interface": {
+    "name": "nearestExit",
+    "params": [
+     {
+      "name": "matrix",
+      "type": "integer[][]"
+     },
+     {
+      "name": "entrance",
+      "type": "integer[2]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = distance to nearest exit, 2 = coordinates of the nearest exit with a tie rule",
+   "oracle_constant": "EXIT1"
+  },
+  {
+   "uid": "hack2hire:68f9a7290fa32e4d82f4fb89",
+   "variant_id": "68f9a7290fa32e4d82f4fb89",
+   "variant_ordinal": 2,
+   "title": "Find Nearest Exit in Maze",
+   "source": {
+    "post_id": "68f7fb6786f7cb4953d41094",
+    "group_title": "Find Nearest Exit in Maze",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f7fb6786f7cb4953d41094",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f7fb6786f7cb4953d41094/practice?questionId=68f9a7290fa32e4d82f4fb89",
+    "preview_response_sha256": "c1e4e1d6bf926d2b986e641054ef4e7031c8e8bd024c49185117e959af19a118",
+    "preview_content_sha256": "fb87ab2d4a7f3019d74fc0d918fea3a22ab1e138ffc0236d3a02c15ab179a5e1",
+    "preview_characters": 780,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f7fb6786f7cb4953d41094.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "SQUARE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: binary matrix (1 open, 0 wall), entrance, 4-directional moves, exit on the border, entrance excluded",
+    "algorithmTags: BREADTH_FIRST_SEARCH",
+    "LeetCode 1926 reference in the preview",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "matrix is a grid of 0 (wall) and 1 (open); entrance [r, c] is open. Moves go up, down, left or right between open cells. An exit is an open cell in the first or last row or column, other than the entrance. Level 2: return [row, col] of the nearest reachable exit; among equally near exits choose the smallest row, then the smallest column. Return [-1, -1] if none is reachable.",
+   "inference_uncertainty": "very high: the second variant is unseen; returning the exit coordinates with a row-then-column tie rule is inferred",
+   "inferred_interface": {
+    "name": "nearestExitCell",
+    "params": [
+     {
+      "name": "matrix",
+      "type": "integer[][]"
+     },
+     {
+      "name": "entrance",
+      "type": "integer[2]"
+     }
+    ],
+    "return": {
+     "type": "integer[2]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = distance to nearest exit, 2 = coordinates of the nearest exit with a tie rule",
+   "oracle_constant": "EXIT2"
+  },
+  {
+   "uid": "hack2hire:6a5e8727bd09995a83107ec3",
+   "variant_id": "6a5e8727bd09995a83107ec3",
+   "variant_ordinal": 1,
+   "title": "Find Redeemable Offers",
+   "source": {
+    "post_id": "6a5e8723bd09995a83107ec2",
+    "group_title": "Find Redeemable Offers",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a5e8723bd09995a83107ec2",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a5e8723bd09995a83107ec2/practice?questionId=6a5e8727bd09995a83107ec3",
+    "preview_response_sha256": "62b1fcccf208eb4b474f56ff0e8741748ca853a2989badebae4c461b1a3a990a",
+    "preview_content_sha256": "40eb7dba73d1e583dfb55dd8531b94d8dd7dd21321922ea6c52cb00890b609e7",
+    "preview_characters": 657,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a5e8723bd09995a83107ec2.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "SIMULATION"
+    ],
+    "companies": [
+     "AFFIRM"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: offers [offerId, startAt, endAt, userMaxRedemptionCount], events [userId, timestamp, action, offerId], decimal-string numbers, input-order processing, redeem/unredeem",
+    "algorithmTags: HASH_TABLE, SIMULATION"
+   ],
+   "inferred_spec": "offers rows are [offerId, startAt, endAt, maxCount] and events rows are [userId, timestamp, action, offerId] with decimal-string numbers; action is \"redeem\" or \"unredeem\". Process events in input order. An event takes effect only if its offer exists, startAt <= timestamp <= endAt and timestamp <= processingTime. A redeem raises the user's count for that offer when the count is below maxCount (otherwise it is ignored); an unredeem lowers a positive count. Return [userId, offerIds] for every user that appears in events, sorted by userId in code-point order, where offerIds lists (in offers order) the offers with startAt <= processingTime <= endAt whose count for that user is below maxCount.",
+   "inference_uncertainty": "high: offer and event shapes, input-order processing and the actions are in the preview; the condition list is cut off, so the window test, the processingTime cut-off, the ignore rules and the output shape are inferred",
+   "inferred_interface": {
+    "name": "redeemableOffers",
+    "params": [
+     {
+      "name": "offers",
+      "type": "list<[string,string,string,string]>"
+     },
+     {
+      "name": "events",
+      "type": "list<[string,string,string,string]>"
+     },
+     {
+      "name": "processingTime",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string[]]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "OFFER"
+  },
+  {
+   "uid": "hack2hire:67e4ab3b50b60b77022f384a",
+   "variant_id": "67e4ab3b50b60b77022f384a",
+   "variant_ordinal": 1,
+   "title": "Find Shortest Unique Prefix",
+   "source": {
+    "post_id": "67e4aa9a50b60b77022f3849",
+    "group_title": "Find Shortest Unique Prefix",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4aa9a50b60b77022f3849",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4aa9a50b60b77022f3849/practice?questionId=67e4ab3b50b60b77022f384a",
+    "preview_response_sha256": "0bdae9e14764a7e5c970a2f995bb521afb0de744013193a14165cd1785663461",
+    "preview_content_sha256": "c1054a8f94e45c08fe7b745455d10e6a1282f7dc38d312e1f0c0ae2a3de29b50",
+    "preview_characters": 536,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67e4aa9a50b60b77022f3849.json",
+    "algorithm_tags": [
+     "TRIE"
+    ],
+    "companies": [
+     "META"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: shortest unique prefix per word, input order, constraints (lowercase, no word is a prefix of another)",
+    "algorithmTags: TRIE"
+   ],
+   "inferred_spec": "For each word return its shortest prefix that is not a prefix of any other word in the list, in input order. Words are lowercase and no word is a prefix of another (so all are distinct).",
+   "inference_uncertainty": "low: the preview states the task and constraints; only the author test bound on total characters is added",
+   "inferred_interface": {
+    "name": "shortestUniquePrefix",
+    "params": [
+     {
+      "name": "words",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PREFIX"
+  },
+  {
+   "uid": "hack2hire:687e85b47bd121d1f502da90",
+   "variant_id": "687e85b47bd121d1f502da90",
+   "variant_ordinal": 1,
+   "title": "Find Smallest Hub",
+   "source": {
+    "post_id": "687e85af7bd121d1f502da8f",
+    "group_title": "Find Smallest Hub",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/687e85af7bd121d1f502da8f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/687e85af7bd121d1f502da8f/practice?questionId=687e85b47bd121d1f502da90",
+    "preview_response_sha256": "51c1bab394357e48df9d2dc56d0dd47a4fe358da446aa065d1b273e31f8f5030",
+    "preview_content_sha256": "e0ef8e75d44c9ea08f271d3f2d88702ff07fd4141732e74d8f9787429c68612f",
+    "preview_characters": 893,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/687e85af7bd121d1f502da8f.json",
+    "algorithm_tags": [
+     "TWO_POINTER",
+     "GREEDY"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: capacities, booked \"start:end\" intervals per hub (inclusive), requiredCapacity, taskInterval",
+    "algorithmTags: TWO_POINTER, GREEDY"
+   ],
+   "inferred_spec": "A hub is eligible when capacities[i] >= requiredCapacity and none of its booked intervals overlaps taskInterval (all intervals are inclusive \"start:end\" strings; [a,b] and [c,d] overlap when a <= d and c <= b). Return the index of the eligible hub with the smallest capacity, ties to the smaller index, or -1 if none is eligible.",
+   "inference_uncertainty": "medium: inputs are in the preview; the selection rule (smallest sufficient capacity, then index) and the -1 sentinel are inferred from the title",
+   "inferred_interface": {
+    "name": "findSmallestHub",
+    "params": [
+     {
+      "name": "capacities",
+      "type": "integer[]"
+     },
+     {
+      "name": "intervals",
+      "type": "string[][]"
+     },
+     {
+      "name": "requiredCapacity",
+      "type": "integer"
+     },
+     {
+      "name": "taskInterval",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "HUB"
+  },
+  {
+   "uid": "hack2hire:67707837366afdc1233e4ff7",
+   "variant_id": "67707837366afdc1233e4ff7",
+   "variant_ordinal": 1,
+   "title": "Find Special Sequence Pairs",
+   "source": {
+    "post_id": "67707582366afdc1233e4ff6",
+    "group_title": "Find Special Sequence Pairs",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67707582366afdc1233e4ff6",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67707582366afdc1233e4ff6/practice?questionId=67707837366afdc1233e4ff7",
+    "preview_response_sha256": "6187637af34b29e32fc99ac644b366b90fbf8a8849c6c50210cfc5d47d57e2e1",
+    "preview_content_sha256": "4ed53fd94a105e8b41540e63337825b49a5469a3a1a9307d3a662954a8187d95",
+    "preview_characters": 260,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67707582366afdc1233e4ff6.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: story only (ancient DNA strands, genome-matching tool); no rule is visible",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "sequences are DNA strings over A, C, G, T. A pair (i, j) with i < j is special when sequences[j] equals the reverse complement of sequences[i] (reverse the string and swap A<->T, C<->G). Return the number of special pairs.",
+   "inference_uncertainty": "very high: the visible preview is only a story; the pair rule (reverse complement), the count output and the alphabet are inferred from the title, the DNA theme and the HASH_TABLE tag",
+   "inferred_interface": {
+    "name": "countSpecialPairs",
+    "params": [
+     {
+      "name": "sequences",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "DNA"
+  },
+  {
+   "uid": "hack2hire:68acfc391bf7d2097f647f71",
+   "variant_id": "68acfc391bf7d2097f647f71",
+   "variant_ordinal": 1,
+   "title": "Find Users with Valid Login Sessions",
+   "source": {
+    "post_id": "68acfb6c1bf7d2097f647f6f",
+    "group_title": "Find Users with Valid Login Sessions",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68acfb6c1bf7d2097f647f6f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68acfb6c1bf7d2097f647f6f/practice?questionId=68acfc391bf7d2097f647f71",
+    "preview_response_sha256": "f015bdcc0cbcac6aeb3cbd3cd8462f376ed0c24e52bd9437aabc6549d52a6ca4",
+    "preview_content_sha256": "01eea9668b041d4376595aa254a796b325abc657f18ee0b01b7c6f9957cbc493",
+    "preview_characters": 449,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68acfb6c1bf7d2097f647f6f.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "LINKEDIN",
+     "ORACLE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: \"<userId> <action> <timestamp>\" logs in chronological order, signin/signout, maxTime",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "Each log is \"<userId> <action> <timestamp>\" with action signin or signout; logs are in non-decreasing timestamp order. Per user, a signin opens a session (a signin while a session is open replaces its start time); a signout closes the open session and is ignored when none is open. A closed session is valid when signout time - signin time <= maxTime. Return the users with at least one valid session, sorted in code-point order.",
+   "inference_uncertainty": "medium: the log format, ordering and maxTime are in the preview; the validity rule (duration <= maxTime), the handling of repeated signins or stray signouts and the sorted output are inferred",
+   "inferred_interface": {
+    "name": "findValidUsers",
+    "params": [
+     {
+      "name": "logs",
+      "type": "string[]"
+     },
+     {
+      "name": "maxTime",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LOGIN"
+  },
+  {
+   "uid": "hack2hire:6781dbee3cd890ccd3798fc0",
+   "variant_id": "6781dbee3cd890ccd3798fc0",
+   "variant_ordinal": 1,
+   "title": "Find the Nearest City",
+   "source": {
+    "post_id": "6781bdae3cd890ccd3798fbf",
+    "group_title": "Find the Nearest City",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6781bdae3cd890ccd3798fbf",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6781bdae3cd890ccd3798fbf/practice?questionId=6781dbee3cd890ccd3798fc0",
+    "preview_response_sha256": "ab6a516258c80424e04ce45a0e303bbf9088fcf3840ec7dd7157d2530144fbcc",
+    "preview_content_sha256": "8ebea9786148c23294d8254d7e6b851476fa17b5fc1b84aa544838cb2bba4d05",
+    "preview_characters": 527,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6781bdae3cd890ccd3798fbf.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH"
+    ],
+    "companies": [
+     "DOORDASH",
+     "POINT72"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: cities with coordinates, nearest city sharing x or y, Manhattan distance",
+    "algorithmTags: BINARY_SEARCH",
+    "LeetCode 1779 reference in the preview"
+   ],
+   "inferred_spec": "cities[i] is at (xs[i], ys[i]); names are distinct and so are coordinate pairs. For each queried city name, return the name of the other city that shares its x or its y coordinate and has the smallest Manhattan distance to it, ties to the smaller name in code-point order; return \"NONE\" when no other city shares a coordinate.",
+   "inference_uncertainty": "medium: the core rule is in the preview; the tie rule, the \"NONE\" sentinel, distinct coordinates and the parallel-array interface are inferred",
+   "inferred_interface": {
+    "name": "nearestCities",
+    "params": [
+     {
+      "name": "cities",
+      "type": "string[]"
+     },
+     {
+      "name": "xs",
+      "type": "integer[]"
+     },
+     {
+      "name": "ys",
+      "type": "integer[]"
+     },
+     {
+      "name": "queries",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CITY"
+  },
+  {
+   "uid": "hack2hire:67dcd82499f4f89b276f188a",
+   "variant_id": "67dcd82499f4f89b276f188a",
+   "variant_ordinal": 1,
+   "title": "Find Shortest Path in Matrix",
+   "source": {
+    "post_id": "67dcd81b99f4f89b276f1889",
+    "group_title": "Find Shortest Path in Matrix",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67dcd81b99f4f89b276f1889",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67dcd81b99f4f89b276f1889/practice?questionId=67dcd82499f4f89b276f188a",
+    "preview_response_sha256": "79de4d72d26fa288275f6f24701f9168cf1c93f7903d957489cfe5744019820d",
+    "preview_content_sha256": "26a50ad4d5c31a34e81b86243a140832e636054c901b3919a4cfe962b217d959",
+    "preview_characters": 656,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67dcd81b99f4f89b276f1889.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "META"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: grid of digits, 1-9 walkable, 0 wall, 8-directional moves from (0,0) to (m-1,n-1)",
+    "algorithmTags: BREADTH_FIRST_SEARCH",
+    "LeetCode 1091 reference in the preview"
+   ],
+   "inferred_spec": "grid is a matrix of digits 0..9; cells 1..9 are walkable and 0 is a wall. Moves go to any of the eight neighbouring cells. Return the number of cells on a shortest path from (0, 0) to (m-1, n-1), counting both ends, or -1 if either end is a wall or no path exists.",
+   "inference_uncertainty": "medium: the grid, walls and moves are in the preview; the return value (path length in cells, as in LeetCode 1091) and the -1 sentinel are inferred; digit values are treated as unweighted",
+   "inferred_interface": {
+    "name": "shortestPath",
+    "params": [
+     {
+      "name": "grid",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PATH"
+  }
+ ]
+}

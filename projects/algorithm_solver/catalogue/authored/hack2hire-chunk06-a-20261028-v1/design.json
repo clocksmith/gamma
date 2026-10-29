@@ -1,0 +1,109 @@
+{
+ "problems": {
+  "hack2hire:677b5ef978175fce2ecdfc12": {
+   "reference": "per party, scan the whole transaction list and add or subtract each matching row",
+   "candidate_design": "one pass into a hash map of running balances, then sort the party names",
+   "complexity_target": "O(t + p log p) time/O(p) space"
+  },
+  "hack2hire:677b5f4078175fce2ecdfc13": {
+   "reference": "net balances, then repeatedly scan every party for the current largest creditor and debtor",
+   "candidate_design": "net balances into a hash map, then a max-heap of creditors and a max-heap of debtors keyed by (amount, name); pop both, transfer, push back the remainder",
+   "complexity_target": "O(t + p log p) time/O(p) space"
+  },
+  "hack2hire:67872240e20f8f324213c297": {
+   "reference": "strip spaces, then repeatedly replace the innermost add(...)/sub(...) call by its value with a regular expression",
+   "candidate_design": "single left-to-right scan with an explicit stack of open calls (name plus collected argument values)",
+   "complexity_target": "O(L) time/O(depth) space"
+  },
+  "hack2hire:6a1a10e2c81f779dc6a23794": {
+   "reference": "enumerate every combination for tiny inputs",
+   "candidate_design": "sum of row minima",
+   "complexity_target": "O(total options) time/O(1) space"
+  },
+  "hack2hire:6a1a1112c81f779dc6a23797": {
+   "reference": "enumerate every combination for tiny inputs and keep the cheapest valid one",
+   "candidate_design": "DP over factories keeping the best and second-best (cost, option index) of the previous row",
+   "complexity_target": "O(total options) time/O(max row) space"
+  },
+  "hack2hire:6a2b14eb97d3b4b32966cb00": {
+   "reference": "enumerate every combination for tiny trees and keep the cheapest valid one",
+   "candidate_design": "tree DP in iterative post-order from root 0: dp[v][j] = costs[v][j] + sum over children of the best child value with a different index, using each child's best and second-best",
+   "complexity_target": "O(n + total options) time/O(n + total options) space"
+  },
+  "hack2hire:68fbce5f378ce2f46141f920": {
+   "reference": "literal file list and parent map; every query rescans all files or walks the ancestor chain of every collection",
+   "candidate_design": "direct totals in a hash map, top-k order precomputed once (totals never change), hierarchy totals maintained incrementally by adding a child's hierarchy total to every ancestor on setParent",
+   "complexity_target": "O(F + C log C) construction, O(k) top-k, O(depth) setParent, O(1) other queries"
+  },
+  "hack2hire:6962cbcef731aa3969ef5176": {
+   "reference": "emulate the FileSystem API (delete refuses non-empty directories) and delete recursively on a small tree",
+   "candidate_design": "children lists from edges, then an iterative post-order traversal with an explicit stack of (directory, next child index)",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:696442bb3b4797da7459a055": {
+   "reference": "for every directory, a separate full traversal of its subtree to compute its total",
+   "candidate_design": "one iterative post-order traversal computing each directory total once from its children",
+   "complexity_target": "O(n) time/O(depth) space"
+  },
+  "hack2hire:684ba2bf4023c4f502877de9": {
+   "reference": "longest-path levels by repeated relaxation over all edges until stable, then count nodes per level",
+   "candidate_design": "Kahn topological sort processed frontier by frontier; a frontier of size 1 is a bottleneck",
+   "complexity_target": "O(n + e) time/O(n + e) space"
+  },
+  "hack2hire:67e4a80550b60b77022f3848": {
+   "reference": "rebuild the chain by repeatedly searching the pair list for the edge leaving the current course",
+   "candidate_design": "hash map next[prerequisite]; the start is the only prerequisite that is never a course; walk pairs.length/2 steps",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:67e4adbf50b60b77022f384b": {
+   "reference": "enumerate every start-to-end path explicitly (tiny graphs) and collect index (L-1)//2",
+   "candidate_design": "topological order; for each course a bitset of possible distances from a start (forward) and to an end (backward); a course is a middle when some up-distance a and down-distance b satisfy b == a or b == a + 1",
+   "complexity_target": "O(e * n / w) time/O(n^2 / w) space"
+  },
+  "hack2hire:68f93bebd7ff180d0ab95208": {
+   "reference": "distances by repeated relaxation sweeps over the grid until nothing changes",
+   "candidate_design": "breadth-first search from the entrance with a flat array queue; stop at the first exit dequeued",
+   "complexity_target": "O(rows * cols) time/O(rows * cols) space"
+  },
+  "hack2hire:68f9a7290fa32e4d82f4fb89": {
+   "reference": "distances by repeated relaxation sweeps, then the minimum (distance, row, col) over all exits",
+   "candidate_design": "level-by-level breadth-first search; at the first level that contains exits, return the smallest (row, col) among them",
+   "complexity_target": "O(rows * cols) time/O(rows * cols) space"
+  },
+  "hack2hire:6a5e8727bd09995a83107ec3": {
+   "reference": "for every (user, offer) pair, replay the whole event list from the start",
+   "candidate_design": "one pass over events with a hash map keyed by (user, offer); then one row per sorted user over the active offers",
+   "complexity_target": "O(E + U log U + U * O) time/O(E) space"
+  },
+  "hack2hire:67e4ab3b50b60b77022f384a": {
+   "reference": "for each word, try every prefix length and test it against every other word",
+   "candidate_design": "sort word indices; the answer length is 1 + the longer common prefix with the sorted neighbours",
+   "complexity_target": "O(S log n) time/O(n) space"
+  },
+  "hack2hire:687e85b47bd121d1f502da90": {
+   "reference": "expand every interval into its overlap test against the task literally, then a full scan for the best hub",
+   "candidate_design": "one pass over hubs; skip hubs with too little capacity before parsing their intervals; keep the best (capacity, index)",
+   "complexity_target": "O(n + total intervals) time/O(1) extra space"
+  },
+  "hack2hire:67707837366afdc1233e4ff7": {
+   "reference": "compare every pair (i, j) directly",
+   "candidate_design": "hash map of counts of earlier sequences; for each j add the count of its reverse complement, then record it",
+   "complexity_target": "O(S) time/O(S) space"
+  },
+  "hack2hire:68acfc391bf7d2097f647f71": {
+   "reference": "per user, filter that user's logs from the full list and replay them",
+   "candidate_design": "one pass with a hash map of open signin times and a set of valid users, then sort",
+   "complexity_target": "O(n + u log u) time/O(u) space"
+  },
+  "hack2hire:6781dbee3cd890ccd3798fc0": {
+   "reference": "for each query, scan every city",
+   "candidate_design": "group cities by x (sorted by y) and by y (sorted by x); a query only needs the adjacent entries in its two groups",
+   "complexity_target": "O((n + q) log n) time/O(n) space"
+  },
+  "hack2hire:67dcd82499f4f89b276f188a": {
+   "reference": "distances by repeated relaxation sweeps over the grid until stable",
+   "candidate_design": "breadth-first search with a flat array queue over 8 neighbours",
+   "complexity_target": "O(m * n) time/O(m * n) space"
+  }
+ }
+}

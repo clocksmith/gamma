@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67e4a80550b60b77022f3848",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "pairs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findMiddleCourse",
+  "params": [
+   {
+    "name": "pairs",
+    "type": "list<[string,string]>"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rebuild the chain by repeatedly searching the pair list for the edge leaving the current course",
+  "candidate_design": "hash map next[prerequisite]; the start is the only prerequisite that is never a course; walk pairs.length/2 steps",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "7469ff78b563375ff3950b88e295ff7a38975464baaf639c3dd5948924664cb3",
+ "wrapper": "Solution.findMiddleCourse"
+}

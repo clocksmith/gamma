@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67e4adbf50b60b77022f384b",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "pairs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findMiddleCourses",
+  "params": [
+   {
+    "name": "pairs",
+    "type": "list<[string,string]>"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every start-to-end path explicitly (tiny graphs) and collect index (L-1)//2",
+  "candidate_design": "topological order; for each course a bitset of possible distances from a start (forward) and to an end (backward); a course is a middle when some up-distance a and down-distance b satisfy b == a or b == a + 1",
+  "complexity_target": "O(e * n / w) time/O(n^2 / w) space"
+ },
+ "source_sha256": "77b86563bbafe82c5793f7e6c1ddf51af16009bf6263abaa278390a0548ffacb",
+ "wrapper": "Solution.findMiddleCourses"
+}

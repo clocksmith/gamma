@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68f93bebd7ff180d0ab95208",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "matrix",
+  "entrance"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "nearestExit",
+  "params": [
+   {
+    "name": "matrix",
+    "type": "integer[][]"
+   },
+   {
+    "name": "entrance",
+    "type": "integer[2]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "distances by repeated relaxation sweeps over the grid until nothing changes",
+  "candidate_design": "breadth-first search from the entrance with a flat array queue; stop at the first exit dequeued",
+  "complexity_target": "O(rows * cols) time/O(rows * cols) space"
+ },
+ "source_sha256": "bea5bf19e0fe2e7b75a1f469bc5a26c3cbbcf0f49321ec5e87e7310774ee4cdc",
+ "wrapper": "named export nearestExit"
+}
