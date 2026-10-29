@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:699f7bb56e73e4abccc9b565",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "events"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "rankVehicles",
+  "params": [
+   {
+    "name": "events",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every vehicle id, rescan all events and count the chunk ids it sent",
+  "candidate_design": "one pass counting chunk ids per sender into a hash map (registering receivers with 0), then one sort by (-contribution, id)",
+  "complexity_target": "O(total chunk ids + v log v) time/O(v) space"
+ },
+ "source_sha256": "ef35ed9ec0e9d0efd1f2a2a212687227e32d3229f5146122730cc8677cd02264",
+ "wrapper": "Solution.rankVehicles"
+}

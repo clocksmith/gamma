@@ -1,0 +1,419 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a1e2de18b879849ebc10899:6a1e2e688b879849ebc1089e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+   "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a1e2de18b879849ebc10899.json",
+   "sha256": "d6db03d9650550c2b3597dabe57e01cbb1c9f394a3d09c3696fe3d8e4a108f7b",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+   "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+   "selector": "/variants/hack2hire:6a1e2e688b879849ebc1089e"
+  }
+ ],
+ "problemId": "hack2hire:6a1e2de18b879849ebc10899",
+ "variantId": "6a1e2e688b879849ebc1089e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: place obstacles and check free blocks",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:6a1e2e688b879849ebc1089e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Operations run in order on an initially empty number line of non-negative positions. [1, x] places an obstacle at x (placing one where an obstacle already stands changes nothing). [2, x, size] checks the size positions x - size to x - 1 and appends the character \"1\" to the result when none holds an obstacle, otherwise \"0\"; checks change nothing. Return the result as one string (empty when there are no checks).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Operations run in order on an initially empty number line of non-negative positions. [1, x] places an obstacle at x (placing one where an obstacle already stands changes nothing). [2, x, size] checks the size positions x - size to x - 1 and appends the character \"1\" to the result when none holds an obstacle, otherwise \"0\"; checks change nothing.",
+   "Return the result as one string (empty when there are no checks)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= operations.length <= 1e5",
+   "[1, x]: 0 <= x <= 1e9",
+   "[2, x, size]: 1 <= size <= x <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:6a1e2e688b879849ebc1089e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: operations [1, x] place an obstacle at x and [2, x, size] check whether positions x - size .. x - 1 are free, appending \"1\" (free) or \"0\" to the result; position x itself is not checked; variation of LeetCode 3161; algorithmTags: DESIGN, SORTING; preview response sha256 d6d902a472e68d119b45072e25fe0ebd10ebfcc749de33dd52ea60721399372d"
+   },
+   {
+    "statement": "Uncertainty: medium: the two operations and the checked range are in the preview; the result as one concatenated string, repeated placements and the bound size <= x are inferred",
+    "basis": "the public group preview is partial (786 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the result a string or a list of strings?",
+   "Can an obstacle be placed twice at the same position?",
+   "Can the checked range reach below position 0?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:6a1e2e688b879849ebc1089e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": "",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       1,
+       8
+      ],
+      [
+       2,
+       8,
+       4
+      ],
+      [
+       1,
+       4
+      ],
+      [
+       2,
+       6,
+       4
+      ],
+      [
+       1,
+       4
+      ],
+      [
+       2,
+       11,
+       8
+      ],
+      [
+       2,
+       3,
+       3
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       2,
+       1,
+       1
+      ],
+      [
+       2,
+       12,
+       7
+      ],
+      [
+       2,
+       16,
+       3
+      ],
+      [
+       2,
+       4,
+       4
+      ],
+      [
+       1,
+       4
+      ],
+      [
+       1,
+       14
+      ],
+      [
+       2,
+       4,
+       3
+      ],
+      [
+       1,
+       15
+      ],
+      [
+       2,
+       12,
+       9
+      ],
+      [
+       2,
+       5,
+       2
+      ],
+      [
+       2,
+       4,
+       1
+      ],
+      [
+       1,
+       10
+      ],
+      [
+       2,
+       5,
+       4
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       1,
+       4
+      ]
+     ]
+    ],
+    "output": "1001101000010",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:6a1e2e688b879849ebc1089e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/oracles.py",
+    "sha256": "c6bcb2d1fc23114d25e5bb4a288e235431ebd2a84be21cbfb67a059c6dd79eb2",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def processOperations(operations) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/6a1e2e688b879849ebc1089e-python.json",
+     "inferredInterface": {
+      "name": "processOperations",
+      "params": [
+       {
+        "name": "operations",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/6a1e2e688b879849ebc1089e-python.json",
+      "sha256": "5bcdbee41e11918271b424fdbb90dfc11dab227d408fb48bd15af38703d25f81",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function processOperations(operations) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/6a1e2e688b879849ebc1089e-javascript.json",
+     "inferredInterface": {
+      "name": "processOperations",
+      "params": [
+       {
+        "name": "operations",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/6a1e2e688b879849ebc1089e-javascript.json",
+      "sha256": "f75251b7cdaa07a4729efdf7d2d6665e504f28790e9ea052f6f23a8f540e8b56",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:688fb256b3f942cc1004c00e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "k",
+  "m"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "reduceMaximum",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   },
+   {
+    "name": "m",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "repeat k times: find the maximum with a linear scan and halve it",
+  "candidate_design": "a binary max-heap; k pops and pushes of the halved maximum, stopping early once the maximum is 0",
+  "complexity_target": "O(n + k log n) time/O(n) space"
+ },
+ "source_sha256": "35495ca129abddf9481a0cac812c3cb0580e0d1d35c0f85cd9fc6f85eb916abb",
+ "wrapper": "named export reduceMaximum"
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6827b84d285cf34924f48286",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "boards",
+  "pin1",
+  "pin2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "arePinsRelated",
+  "params": [
+   {
+    "name": "boards",
+    "type": "integer[][]"
+   },
+   {
+    "name": "pin1",
+    "type": "integer"
+   },
+   {
+    "name": "pin2",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "grow the set of boards reachable from pin1 by repeated passes until no board is added",
+  "candidate_design": "union-find over pins, joining each board's pins to its first pin; compare the roots of pin1 and pin2",
+  "complexity_target": "O(P alpha(P)) time/O(P) space for P total pins"
+ },
+ "source_sha256": "3c18098e309b732909b67194d59f6379ef9c55bef333ab051e35b66df261fc37",
+ "wrapper": "Solution.arePinsRelated"
+}

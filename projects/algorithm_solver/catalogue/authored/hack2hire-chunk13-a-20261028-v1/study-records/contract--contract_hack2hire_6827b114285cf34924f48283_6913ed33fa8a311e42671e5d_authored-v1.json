@@ -1,0 +1,359 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6827b114285cf34924f48283:6913ed33fa8a311e42671e5d:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+   "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+   "selector": "/problems/9"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6827b114285cf34924f48283.json",
+   "sha256": "b475cb6782068f3474e7d5e788d3732bcb169bdcf748792c82e2c2e4153e24d8",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+   "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+   "selector": "/variants/hack2hire:6913ed33fa8a311e42671e5d"
+  }
+ ],
+ "problemId": "hack2hire:6827b114285cf34924f48283",
+ "variantId": "6913ed33fa8a311e42671e5d",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 2: fewest boards between two pins",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:6913ed33fa8a311e42671e5d/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "boards is a list of non-empty boards; each board is a list of distinct positive integer pins and a pin may appear on several boards. Two pins on a common board are directly connected; relatedness is the transitive closure of direct connection. pin1 and pin2 are distinct positive integers that need not appear on any board (a pin on no board is related to nothing). Variant 2: return the minimum number of boards on a route from pin1 to pin2, where a route is a sequence of boards, the first holding pin1, the last holding pin2, and each consecutive pair sharing a pin (1 when one board holds both); return -1 when the pins are not related.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "boards is a list of non-empty boards; each board is a list of distinct positive integer pins and a pin may appear on several boards.",
+   "Two pins on a common board are directly connected; relatedness is the transitive closure of direct connection. pin1 and pin2 are distinct positive integers that need not appear on any board (a pin on no board is related to nothing).",
+   "Variant 2: return the minimum number of boards on a route from pin1 to pin2, where a route is a sequence of boards, the first holding pin1, the last holding pin2, and each consecutive pair sharing a pin (1 when one board holds both); return -1 when the pins are not related."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= boards.length <= 1e5",
+   "1 <= board length; total pins over all boards <= 2e5",
+   "1 <= pin <= 1e9; pins within a board are distinct",
+   "1 <= pin1, pin2 <= 1e9 and pin1 != pin2"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:6913ed33fa8a311e42671e5d/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: boards are lists of distinct positive integer pins; a pin may sit on several boards; two pins are related when one can be reached from the other by hopping across shared boards; given boards, pin1 and pin2 return true when related; algorithmTags: BREADTH_FIRST_SEARCH, UNION_FIND; codingQuestions: two variant ids in this order; preview response sha256 b80bb9fd22b6d16507464425553f08a79e03a9766f9b81fdc14da706ca20f72b"
+   },
+   {
+    "statement": "Uncertainty: very high: there is no variant-2 text; the minimum board count is inferred from the BREADTH_FIRST_SEARCH tag and the variant order",
+    "basis": "the public group preview is partial (546 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: two variants with no per-variant text; the preview states the boolean task, assigned to variant 1; the author assigned variant 2 the minimum number of boards on a path (suggested by the BREADTH_FIRST_SEARCH tag)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/9/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/9/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/9/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the distance counted in boards or in pins?",
+   "What is returned when the pins are not related?",
+   "Is the answer 1 when one board holds both pins?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:6913ed33fa8a311e42671e5d/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     1,
+     2
+    ],
+    "output": -1,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       8,
+       6,
+       10
+      ],
+      [
+       8,
+       3,
+       6
+      ],
+      [
+       3
+      ],
+      [
+       1,
+       7
+      ],
+      [
+       6,
+       5,
+       3
+      ],
+      [
+       1,
+       9,
+       4
+      ]
+     ],
+     1,
+     6
+    ],
+    "output": -1,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:6913ed33fa8a311e42671e5d/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/oracles.py",
+    "sha256": "c6bcb2d1fc23114d25e5bb4a288e235431ebd2a84be21cbfb67a059c6dd79eb2",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def minBoardsBetweenPins(boards, pin1, pin2) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/6913ed33fa8a311e42671e5d-python.json",
+     "inferredInterface": {
+      "name": "minBoardsBetweenPins",
+      "params": [
+       {
+        "name": "boards",
+        "type": "integer[][]"
+       },
+       {
+        "name": "pin1",
+        "type": "integer"
+       },
+       {
+        "name": "pin2",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/6913ed33fa8a311e42671e5d-python.json",
+      "sha256": "0cbc483a3823e03b8380a4a6733474f1f76f1e0dcb3b83ec53266cfed6d9f771",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function minBoardsBetweenPins(boards, pin1, pin2) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/6913ed33fa8a311e42671e5d-javascript.json",
+     "inferredInterface": {
+      "name": "minBoardsBetweenPins",
+      "params": [
+       {
+        "name": "boards",
+        "type": "integer[][]"
+       },
+       {
+        "name": "pin1",
+        "type": "integer"
+       },
+       {
+        "name": "pin2",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/6913ed33fa8a311e42671e5d-javascript.json",
+      "sha256": "34b9dd77f3e6ca43e5af33f0d86bbf2bbee2970f0f980fb35bf77fddc15743e1",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/9/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/9/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

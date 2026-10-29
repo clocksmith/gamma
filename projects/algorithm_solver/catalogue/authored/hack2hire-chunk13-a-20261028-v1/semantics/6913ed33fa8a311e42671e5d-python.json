@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6913ed33fa8a311e42671e5d",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "boards",
+  "pin1",
+  "pin2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minBoardsBetweenPins",
+  "params": [
+   {
+    "name": "boards",
+    "type": "integer[][]"
+   },
+   {
+    "name": "pin1",
+    "type": "integer"
+   },
+   {
+    "name": "pin2",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "Bellman-Ford style relaxation of board distances until nothing changes",
+  "candidate_design": "breadth-first search over the pin-board bipartite graph from pin1; each board is expanded once, and its distance is the number of boards used",
+  "complexity_target": "O(P) time/O(P) space for P total pins"
+ },
+ "source_sha256": "82093279cccf60c563e42051e1b487109a59af3b37452a8b34392f9719c169be",
+ "wrapper": "Solution.minBoardsBetweenPins"
+}

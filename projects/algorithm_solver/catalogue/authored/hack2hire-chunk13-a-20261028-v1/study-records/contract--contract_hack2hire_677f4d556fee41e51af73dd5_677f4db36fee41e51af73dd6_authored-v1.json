@@ -1,0 +1,506 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:677f4d556fee41e51af73dd5:677f4db36fee41e51af73dd6:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+   "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/677f4d556fee41e51af73dd5.json",
+   "sha256": "8a716517ffc6747ef194bdb68ca351a0571b49b0f903b34419aa7b2d4dcdec69",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+   "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+   "selector": "/variants/hack2hire:677f4db36fee41e51af73dd6"
+  }
+ ],
+ "problemId": "hack2hire:677f4d556fee41e51af73dd5",
+ "variantId": "677f4db36fee41e51af73dd6",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: versioned stack with integer handles",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:677f4db36fee41e51af73dd6/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "PStack() creates the structure holding only version 0, the empty stack. Versions are immutable stacks named by integers. push(version, val) creates a new version equal to that version with val on top and returns its number; the k-th push call returns k. pop(version) returns the number of the version that the given version was pushed onto, that is, the stack without its top. peek(version) returns the top value of that version. size(version) returns its number of elements. Every version passed exists; pop and peek are only called on non-empty versions. Every method call is answered in call order on one instance; each call runs in O(1).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "PStack() creates the structure holding only version 0, the empty stack.",
+   "Versions are immutable stacks named by integers. push(version, val) creates a new version equal to that version with val on top and returns its number; the k-th push call returns k. pop(version) returns the number of the version that the given version was pushed onto, that is, the stack without its top. peek(version) returns the top value of that version. size(version) returns its number of elements.",
+   "Every version passed exists; pop and peek are only called on non-empty versions.",
+   "Every method call is answered in call order on one instance; each call runs in O(1)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 2e5 calls",
+   "-1e9 <= val <= 1e9",
+   "every version argument already exists",
+   "pop and peek only on non-empty versions"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:677f4db36fee41e51af73dd6/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: implement a persistent stack PStack whose every operation runs in O(1); PStack() initialises an empty stack (the remaining operations are cut off); algorithmTags: LINKED_LIST; preview response sha256 ea59e682cc283ec17f6167f59d8ae26abaf5580b0466d843595410013e00d1bf"
+   },
+   {
+    "statement": "Uncertainty: very high: only the class name PStack, the O(1) requirement and the empty constructor are in the preview; persistence through integer version handles, all method names and semantics are inferred so that the trace is plain JSON",
+    "basis": "the public group preview is partial (184 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How are versions represented: returned stack objects or handles?",
+   "Does pop create a new version or return an existing one?",
+   "What do pop and peek do on an empty stack?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:677f4db36fee41e51af73dd6/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "PStack"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "PStack",
+      "push",
+      "push",
+      "peek",
+      "pop",
+      "peek",
+      "push",
+      "size",
+      "pop",
+      "push",
+      "size",
+      "peek",
+      "size"
+     ],
+     [
+      [],
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       7
+      ],
+      [
+       2
+      ],
+      [
+       2
+      ],
+      [
+       1
+      ],
+      [
+       1,
+       9
+      ],
+      [
+       3
+      ],
+      [
+       3
+      ],
+      [
+       0,
+       -1
+      ],
+      [
+       4
+      ],
+      [
+       4
+      ],
+      [
+       2
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     1,
+     2,
+     7,
+     1,
+     5,
+     3,
+     2,
+     1,
+     4,
+     1,
+     -1,
+     2
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/study-content.json",
+    "sha256": "d7d227e2a3f6e0de2c08eea14a73e4e89cf6ca1dfbcce96accd78d2d08528128",
+    "selector": "/variants/hack2hire:677f4db36fee41e51af73dd6/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/oracles.py",
+    "sha256": "c6bcb2d1fc23114d25e5bb4a288e235431ebd2a84be21cbfb67a059c6dd79eb2",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class PStack:\n    def __init__(self)\n    def push(self, version, val) -> integer\n    def pop(self, version) -> integer\n    def peek(self, version) -> integer\n    def size(self, version) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/677f4db36fee41e51af73dd6-python.json",
+     "inferredInterface": {
+      "classname": "PStack",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "push",
+        "params": [
+         {
+          "name": "version",
+          "type": "integer"
+         },
+         {
+          "name": "val",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "pop",
+        "params": [
+         {
+          "name": "version",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "peek",
+        "params": [
+         {
+          "name": "version",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "size",
+        "params": [
+         {
+          "name": "version",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/677f4db36fee41e51af73dd6-python.json",
+      "sha256": "899bdfc79538d2a0f61910d99de4b74f6143c75947228e565dd362190789c2c2",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class PStack {\n  constructor()\n  push(version, val) /* -> integer */\n  pop(version) /* -> integer */\n  peek(version) /* -> integer */\n  size(version) /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+      "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/677f4db36fee41e51af73dd6-javascript.json",
+     "inferredInterface": {
+      "classname": "PStack",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "push",
+        "params": [
+         {
+          "name": "version",
+          "type": "integer"
+         },
+         {
+          "name": "val",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "pop",
+        "params": [
+         {
+          "name": "version",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "peek",
+        "params": [
+         {
+          "name": "version",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "size",
+        "params": [
+         {
+          "name": "version",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/semantics/677f4db36fee41e51af73dd6-javascript.json",
+      "sha256": "18a6a6e420b2b6424b969728ba3d19844ceeaeb19a45ff760294395987b5217f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-a-20261028-v1/contracts.json",
+    "sha256": "d206e7c4dbc145d85df87e97246409db606590b60f69ecf404fdb551d1cc9bc3",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

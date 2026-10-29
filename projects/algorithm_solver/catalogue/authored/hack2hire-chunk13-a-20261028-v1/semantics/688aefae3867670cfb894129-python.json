@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:688aefae3867670cfb894129",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "VisitorTracker",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "login",
+    "params": [
+     {
+      "name": "username",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getOldestOneTimeVisitor",
+    "params": [],
+    "return": {
+     "type": "string"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep the whole login log and, on each query, count every username in it and return the first with count 1",
+  "candidate_design": "a login counter per username plus a queue of first logins with a head index; a query drops queue heads whose count exceeds 1",
+  "complexity_target": "O(1) amortised per call/O(u) space"
+ },
+ "source_sha256": "cb83a1af435b5ae92686df43160f43ef72f716fa4985239fa9cf8ec3befe7b5a",
+ "native_class": "VisitorTracker",
+ "native_symbol": "module global VisitorTracker",
+ "void_methods": [
+  "login"
+ ]
+}

@@ -1,0 +1,94 @@
+{
+ "problems": {
+  "hack2hire:692d2a491abcca80b11223bf": {
+   "reference": "label propagation (every person repeatedly takes the smallest label among its friends until nothing changes), then compare the labels of every pair",
+   "candidate_design": "union-find with union by size and path halving; answer = n(n-1)/2 minus the sum of s(s-1)/2 over group sizes s",
+   "complexity_target": "O(n + m alpha(n)) time/O(n) space"
+  },
+  "hack2hire:6a1e2e688b879849ebc1089e": {
+   "reference": "replay with a plain set and test every obstacle against each checked range",
+   "candidate_design": "offline: compress the placed positions, then for each check binary-search the obstacle positions in the range and count the ones already placed with a Fenwick tree",
+   "complexity_target": "O(q log q) time/O(q) space"
+  },
+  "hack2hire:688aefae3867670cfb894129": {
+   "reference": "keep the whole login log and, on each query, count every username in it and return the first with count 1",
+   "candidate_design": "a login counter per username plus a queue of first logins with a head index; a query drops queue heads whose count exceeds 1",
+   "complexity_target": "O(1) amortised per call/O(u) space"
+  },
+  "hack2hire:6a513eaa665efda9311f609d": {
+   "reference": "exhaustive search over every non-empty index subset",
+   "candidate_design": "dp[j] = price[j] + max(0, best dp over earlier keys <= key[j]) with key = price + index; a prefix-maximum Fenwick tree over compressed keys",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:6a95d744cddc54478ddf6a6d": {
+   "reference": "exhaustive search over every subset, checking each member against its counts",
+   "candidate_design": "binary search the team size k; a size is feasible when a left-to-right greedy takes developer i whenever taken-so-far <= lowerSkill[i] and k - 1 - taken-so-far <= higherSkill[i], reaching k",
+   "complexity_target": "O(n log n) time/O(1) extra space"
+  },
+  "hack2hire:677de8b2052a260e0165706a": {
+   "reference": "scan shelves 0..limit-1 for the minimum count for every book",
+   "candidate_design": "shelf counts stay non-increasing by index, so the target is the first shelf whose count equals count[limit - 1]; keep the first index of every count value and move it by one per book",
+   "complexity_target": "O(numShelves + books) time/O(numShelves) space"
+  },
+  "hack2hire:68ace5011bf7d2097f647f50": {
+   "reference": "build the filtered list and compare it with its reverse",
+   "candidate_design": "a set of ignored characters and two pointers moving inward, skipping ignored characters",
+   "complexity_target": "O(n + k) time/O(k) space"
+  },
+  "hack2hire:677f4db36fee41e51af73dd6": {
+   "reference": "store every version as a full copied list",
+   "candidate_design": "versions are nodes of a parent-pointer linked list kept in parallel arrays (parent, value, size); push appends a node, pop returns the parent",
+   "complexity_target": "O(1) per call/O(pushes) space"
+  },
+  "hack2hire:6827b84d285cf34924f48286": {
+   "reference": "grow the set of boards reachable from pin1 by repeated passes until no board is added",
+   "candidate_design": "union-find over pins, joining each board's pins to its first pin; compare the roots of pin1 and pin2",
+   "complexity_target": "O(P alpha(P)) time/O(P) space for P total pins"
+  },
+  "hack2hire:6913ed33fa8a311e42671e5d": {
+   "reference": "Bellman-Ford style relaxation of board distances until nothing changes",
+   "candidate_design": "breadth-first search over the pin-board bipartite graph from pin1; each board is expanded once, and its distance is the number of boards used",
+   "complexity_target": "O(P) time/O(P) space for P total pins"
+  },
+  "hack2hire:68fd5b9d47bea664c0bba367": {
+   "reference": "compare the hand with each of the ten possible straights as sets",
+   "candidate_design": "map the values to ranks, then test max - min == 4 with the ace as 1, and again with the ace as 14",
+   "complexity_target": "O(1) time/O(1) space"
+  },
+  "hack2hire:691e0f0208ad7861624b5677": {
+   "reference": "find each employee's depth by walking its manager chain, and build the order recursively by scanning the whole list for each manager's reports",
+   "candidate_design": "group reports per manager in input order, then an iterative depth-first traversal with an explicit stack of (employee, depth), appending dash prefixes and names to a list joined once",
+   "complexity_target": "O(n + output length) time/O(n) space"
+  },
+  "hack2hire:68e8779c80f69c7a01706899": {
+   "reference": "for every distinct rider, rescan all races to add up its points, then take the best (total, name) pair",
+   "candidate_design": "one pass adding 15/10/5 points into a hash map, then one scan for the highest total with the smallest name",
+   "complexity_target": "O(entries) time/O(riders) space"
+  },
+  "hack2hire:68e9554c149617c9114ecdd1": {
+   "reference": "repeatedly select the best remaining rider by comparing totals and recounted placings from the raw races",
+   "candidate_design": "one pass building [points, firsts, seconds, thirds] per rider, then one sort by (-points, -firsts, -seconds, -thirds, name)",
+   "complexity_target": "O(entries + r log r) time/O(riders) space"
+  },
+  "hack2hire:6a00c4cbf1b0b7030ba32383": {
+   "reference": "compare songs pairwise by recounting each position from the raw lists, and order them with a selection of the best remaining song",
+   "candidate_design": "an m x m count table indexed by (song, position), then one sort of song ids by (negated count row, id)",
+   "complexity_target": "O(n m + m^2 log m) time/O(m^2) space"
+  },
+  "hack2hire:699f7bb56e73e4abccc9b565": {
+   "reference": "for every vehicle id, rescan all events and count the chunk ids it sent",
+   "candidate_design": "one pass counting chunk ids per sender into a hash map (registering receivers with 0), then one sort by (-contribution, id)",
+   "complexity_target": "O(total chunk ids + v log v) time/O(v) space"
+  },
+  "hack2hire:67eae60e4c9bb801bfd0ef48": {
+   "reference": "exhaustive backtracking for feasibility, plus the canonical filling done by fully re-sorting the remaining counts for every neighborhood",
+   "candidate_design": "a max-heap of (remaining copies, number); each neighborhood pops its size many entries, records the numbers sorted, and pushes back the ones with copies left",
+   "complexity_target": "O(N log D) time/O(D) space for N houses and D distinct numbers"
+  },
+  "hack2hire:688fb256b3f942cc1004c00e": {
+   "reference": "repeat k times: find the maximum with a linear scan and halve it",
+   "candidate_design": "a binary max-heap; k pops and pushes of the halved maximum, stopping early once the maximum is 0",
+   "complexity_target": "O(n + k log n) time/O(n) space"
+  }
+ }
+}

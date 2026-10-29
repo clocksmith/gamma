@@ -1,0 +1,1134 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:692d2a491abcca80b11223bf",
+   "variant_id": "692d2a491abcca80b11223bf",
+   "variant_ordinal": 1,
+   "title": "Non-connected People Pairs",
+   "source": {
+    "post_id": "692d2a411abcca80b11223be",
+    "group_title": "Non-connected People Pairs",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/692d2a411abcca80b11223be",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/692d2a411abcca80b11223be/practice?questionId=692d2a491abcca80b11223bf",
+    "preview_response_sha256": "9dbd46140e8ddea1d54f1529239086c691eefa21edfd44e431643c71e242b2dd",
+    "preview_content_sha256": "ecfb08cd445fe86ae2c3eb56710035949de9b740dc3175d3453d7bd1232d1064",
+    "preview_characters": 438,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/692d2a411abcca80b11223be.json",
+    "algorithm_tags": [
+     "UNION_FIND"
+    ],
+    "companies": [
+     "SNAPCHAT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n people labelled 0..n-1, mutual friendships given as connections [a, b], friend group = connected component (the task itself is cut off)",
+    "algorithmTags: UNION_FIND"
+   ],
+   "inferred_spec": "People are labelled 0 to n - 1 and each connection [a, b] is a mutual friendship. Two people are in the same friend group when a chain of friendships joins them. Return the number of unordered pairs of distinct people who are in different friend groups.",
+   "inference_uncertainty": "medium: the people, connections and friend-group definition are in the preview; the task (count pairs in different groups) is inferred from the title",
+   "inferred_interface": {
+    "name": "countNonConnectedPairs",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "connections",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "NCP"
+  },
+  {
+   "uid": "hack2hire:6a1e2e688b879849ebc1089e",
+   "variant_id": "6a1e2e688b879849ebc1089e",
+   "variant_ordinal": 1,
+   "title": "Obstacle Placement and Block Check",
+   "source": {
+    "post_id": "6a1e2de18b879849ebc10899",
+    "group_title": "Obstacle Placement and Block Check",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1e2de18b879849ebc10899",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1e2de18b879849ebc10899/practice?questionId=6a1e2e688b879849ebc1089e",
+    "preview_response_sha256": "d6d902a472e68d119b45072e25fe0ebd10ebfcc749de33dd52ea60721399372d",
+    "preview_content_sha256": "36785bd41162248e8391a7e3d06d6e51dfc1f05688cb0863d7417627825d24c8",
+    "preview_characters": 786,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1e2de18b879849ebc10899.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "SORTING"
+    ],
+    "companies": [
+     "EBAY"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: operations [1, x] place an obstacle at x and [2, x, size] check whether positions x - size .. x - 1 are free, appending \"1\" (free) or \"0\" to the result; position x itself is not checked; variation of LeetCode 3161",
+    "algorithmTags: DESIGN, SORTING"
+   ],
+   "inferred_spec": "Operations run in order on an initially empty number line of non-negative positions. [1, x] places an obstacle at x (placing one where an obstacle already stands changes nothing). [2, x, size] checks the size positions x - size to x - 1 and appends the character \"1\" to the result when none holds an obstacle, otherwise \"0\"; checks change nothing. Return the result as one string (empty when there are no checks).",
+   "inference_uncertainty": "medium: the two operations and the checked range are in the preview; the result as one concatenated string, repeated placements and the bound size <= x are inferred",
+   "inferred_interface": {
+    "name": "processOperations",
+    "params": [
+     {
+      "name": "operations",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "OPB"
+  },
+  {
+   "uid": "hack2hire:688aefae3867670cfb894129",
+   "variant_id": "688aefae3867670cfb894129",
+   "variant_ordinal": 1,
+   "title": "Oldest One-Time Visitor",
+   "source": {
+    "post_id": "688aefa53867670cfb894128",
+    "group_title": "Oldest One-Time Visitor",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688aefa53867670cfb894128",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688aefa53867670cfb894128/practice?questionId=688aefae3867670cfb894129",
+    "preview_response_sha256": "48d8854d06be8f10373ff22037859c40bbcc91205bb2ab80e30b824b02ed1f2e",
+    "preview_content_sha256": "9c4d3b2816b8b10a8928122654552f43bdb667db5351adffaf4fb5ddbaa1a66d",
+    "preview_characters": 367,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/688aefa53867670cfb894128.json",
+    "algorithm_tags": [
+     "QUEUE"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: design a system that records each user login by unique username and efficiently returns the first user, in login order, who has logged in exactly once",
+    "algorithmTags: QUEUE"
+   ],
+   "inferred_spec": "VisitorTracker() starts with no logins. login(username) records one login by that user. getOldestOneTimeVisitor() returns the username, among users who have logged in exactly once so far, whose single login came first; it returns \"\" when no user has logged in exactly once. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: the login stream and the oldest one-time visitor query are in the preview; the class and method names and the \"\" result when none exists are inferred",
+   "inferred_interface": {
+    "classname": "VisitorTracker",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "login",
+      "params": [
+       {
+        "name": "username",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "getOldestOneTimeVisitor",
+      "params": [],
+      "return": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "OOV",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6a513eaa665efda9311f609d",
+   "variant_id": "6a513eaa665efda9311f609d",
+   "variant_ordinal": 1,
+   "title": "Optimal Stock Price Subsequence",
+   "source": {
+    "post_id": "6a513e88665efda9311f609c",
+    "group_title": "Optimal Stock Price Subsequence",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a513e88665efda9311f609c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a513e88665efda9311f609c/practice?questionId=6a513eaa665efda9311f609d",
+    "preview_response_sha256": "d6b98751040b7f20da781f267c04c1f994e28086b8f9e7c03b5f95f246822441",
+    "preview_content_sha256": "d16f14783c689c05439f1244815faa3a957170c600bdd30e42fa31a55ed3ba43",
+    "preview_characters": 641,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a513e88665efda9311f609c.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "POINT72"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: stockPrice[i] is the closing price on day i; a subsequence is balanced when consecutive chosen i < j satisfy stockPrice[j] + j >= stockPrice[i] + i (the objective is cut off); variation of LeetCode 2926",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "A subsequence keeps chosen indices in increasing order. It is balanced when every pair of consecutive chosen indices i < j satisfies stockPrice[j] + j >= stockPrice[i] + i; a single element is balanced. Return the largest sum of a non-empty balanced subsequence.",
+   "inference_uncertainty": "medium: the balanced condition is stated in the preview (it differs from LeetCode 2926, which uses price minus index); the objective (maximum sum, non-empty) is inferred from the referenced LeetCode problem",
+   "inferred_interface": {
+    "name": "maxBalancedSum",
+    "params": [
+     {
+      "name": "stockPrice",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "OSP"
+  },
+  {
+   "uid": "hack2hire:6a95d744cddc54478ddf6a6d",
+   "variant_id": "6a95d744cddc54478ddf6a6d",
+   "variant_ordinal": 1,
+   "title": "Optimal Team Selection",
+   "source": {
+    "post_id": "6a95d64acddc54478ddf6a5b",
+    "group_title": "Optimal Team Selection",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a95d64acddc54478ddf6a5b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a95d64acddc54478ddf6a5b/practice?questionId=6a95d744cddc54478ddf6a6d",
+    "preview_response_sha256": "ab63058e1b002fdd296adbb30ef2ad6bead0cad9c750fc5f2b9d38cbcdb9f906",
+    "preview_content_sha256": "e598de5467e60ebc97098a16ebaa39673a353ca3653a0d9ffcf95c1ff1174cb1",
+    "preview_characters": 454,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a95d64acddc54478ddf6a5b.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH",
+     "GREEDY"
+    ],
+    "companies": [
+     "GOLDMAN_SACHS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n developers with skills 1..n; developer i joins only if at most lowerSkill[i] selected teammates are less skilled and at most higherSkill[i] are more skilled (the objective is cut off)",
+    "algorithmTags: BINARY_SEARCH, GREEDY"
+   ],
+   "inferred_spec": "Developer i has skill i + 1. A team is valid when every member i has at most lowerSkill[i] fellow members of lower skill and at most higherSkill[i] fellow members of higher skill. Return the size of the largest valid team.",
+   "inference_uncertainty": "low-medium: the acceptance rule is in the preview; returning the maximum team size (rather than the team) is inferred",
+   "inferred_interface": {
+    "name": "maxTeamSize",
+    "params": [
+     {
+      "name": "lowerSkill",
+      "type": "integer[]"
+     },
+     {
+      "name": "higherSkill",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "OTS"
+  },
+  {
+   "uid": "hack2hire:677de8b2052a260e0165706a",
+   "variant_id": "677de8b2052a260e0165706a",
+   "variant_ordinal": 1,
+   "title": "Organize Books to Shelves",
+   "source": {
+    "post_id": "677de4ed052a260e01657069",
+    "group_title": "Organize Books to Shelves",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677de4ed052a260e01657069",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677de4ed052a260e01657069/practice?questionId=677de8b2052a260e0165706a",
+    "preview_response_sha256": "4b2733a2a92dfb2d25eded0ebab71911213cc38628267358aedfc71d1f9c28b8",
+    "preview_content_sha256": "c6b79aca382e2dee6853a0c8655f58fc4281287e69ccf958ee61ce6540114c17",
+    "preview_characters": 669,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677de4ed052a260e01657069.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: numShelves empty shelves; book i goes on the shelf with the fewest books among shelves 0..limit[i]-1, smallest index on ties (the output is cut off)",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "Shelves 0 to numShelves - 1 start empty. Books arrive in order; book i goes on the shelf holding the fewest books among shelves 0 to limit[i] - 1, the smallest index on a tie, and that shelf gains one book. Return the shelf index chosen for each book, in order.",
+   "inference_uncertainty": "medium: the placement rule is in the preview; returning the chosen shelf per book (rather than final counts) is inferred",
+   "inferred_interface": {
+    "name": "organizeBooks",
+    "params": [
+     {
+      "name": "numShelves",
+      "type": "integer"
+     },
+     {
+      "name": "limit",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "OBS"
+  },
+  {
+   "uid": "hack2hire:68ace5011bf7d2097f647f50",
+   "variant_id": "68ace5011bf7d2097f647f50",
+   "variant_ordinal": 1,
+   "title": "Palindrome Check with Ignore Set",
+   "source": {
+    "post_id": "68ace4f31bf7d2097f647f4f",
+    "group_title": "Palindrome Check with Ignore Set",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68ace4f31bf7d2097f647f4f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68ace4f31bf7d2097f647f4f/practice?questionId=68ace5011bf7d2097f647f50",
+    "preview_response_sha256": "bba03812c631e5f0f8b08a7754364c047d2f64a76968db26d7c8b45ab146f9f2",
+    "preview_content_sha256": "824555470f4f34ee309cbe06f926b2e7f9e55f01a4d3c34c07fd887427d9cd54",
+    "preview_characters": 472,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68ace4f31bf7d2097f647f4f.json",
+    "algorithm_tags": [
+     "TWO_POINTER"
+    ],
+    "companies": [
+     "ORACLE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two character arrays ignoreArray and inputArray; return whether inputArray is a palindrome after skipping characters in ignoreArray; O(1) extra space beyond the ignore set is expected",
+    "algorithmTags: TWO_POINTER"
+   ],
+   "inferred_spec": "Both arguments are arrays of one-character strings. Remove every element of inputArray that also occurs in ignoreArray; return true when the remaining sequence reads the same forwards and backwards (an empty sequence counts), else false. Characters compare exactly (case-sensitive).",
+   "inference_uncertainty": "low: the task and output are in the preview; case-sensitivity and the character alphabet are inferred",
+   "inferred_interface": {
+    "name": "isPalindromeIgnoring",
+    "params": [
+     {
+      "name": "ignoreArray",
+      "type": "string[]"
+     },
+     {
+      "name": "inputArray",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PCI"
+  },
+  {
+   "uid": "hack2hire:677f4db36fee41e51af73dd6",
+   "variant_id": "677f4db36fee41e51af73dd6",
+   "variant_ordinal": 1,
+   "title": "Persistent Stack",
+   "source": {
+    "post_id": "677f4d556fee41e51af73dd5",
+    "group_title": "Persistent Stack",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677f4d556fee41e51af73dd5",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677f4d556fee41e51af73dd5/practice?questionId=677f4db36fee41e51af73dd6",
+    "preview_response_sha256": "ea59e682cc283ec17f6167f59d8ae26abaf5580b0466d843595410013e00d1bf",
+    "preview_content_sha256": "ee74ca650d3434e419b1c06b6ff0a1567b303781be1756129c81fc15cdfc9b87",
+    "preview_characters": 184,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677f4d556fee41e51af73dd5.json",
+    "algorithm_tags": [
+     "LINKED_LIST"
+    ],
+    "companies": [
+     "AFFIRM"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: implement a persistent stack PStack whose every operation runs in O(1); PStack() initialises an empty stack (the remaining operations are cut off)",
+    "algorithmTags: LINKED_LIST"
+   ],
+   "inferred_spec": "PStack() creates the structure holding only version 0, the empty stack. Versions are immutable stacks named by integers. push(version, val) creates a new version equal to that version with val on top and returns its number; the k-th push call returns k. pop(version) returns the number of the version that the given version was pushed onto, that is, the stack without its top. peek(version) returns the top value of that version. size(version) returns its number of elements. Every version passed exists; pop and peek are only called on non-empty versions. Every method call is answered in call order on one instance; each call runs in O(1).",
+   "inference_uncertainty": "very high: only the class name PStack, the O(1) requirement and the empty constructor are in the preview; persistence through integer version handles, all method names and semantics are inferred so that the trace is plain JSON",
+   "inferred_interface": {
+    "classname": "PStack",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "push",
+      "params": [
+       {
+        "name": "version",
+        "type": "integer"
+       },
+       {
+        "name": "val",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "pop",
+      "params": [
+       {
+        "name": "version",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "peek",
+      "params": [
+       {
+        "name": "version",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "size",
+      "params": [
+       {
+        "name": "version",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PST",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6827b84d285cf34924f48286",
+   "variant_id": "6827b84d285cf34924f48286",
+   "variant_ordinal": 1,
+   "title": "Pin Board Connectivity",
+   "source": {
+    "post_id": "6827b114285cf34924f48283",
+    "group_title": "Pin Board Connectivity",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6827b114285cf34924f48283",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6827b114285cf34924f48283/practice?questionId=6827b84d285cf34924f48286",
+    "preview_response_sha256": "b80bb9fd22b6d16507464425553f08a79e03a9766f9b81fdc14da706ca20f72b",
+    "preview_content_sha256": "1de5be0ab3b7332a83ed1a91dbe9280486a8b6e7785829c656a5fba9996e1ec2",
+    "preview_characters": 546,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6827b114285cf34924f48283.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH",
+     "UNION_FIND"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: boards are lists of distinct positive integer pins; a pin may sit on several boards; two pins are related when one can be reached from the other by hopping across shared boards; given boards, pin1 and pin2 return true when related",
+    "algorithmTags: BREADTH_FIRST_SEARCH, UNION_FIND",
+    "codingQuestions: two variant ids in this order"
+   ],
+   "inferred_spec": "boards is a list of non-empty boards; each board is a list of distinct positive integer pins and a pin may appear on several boards. Two pins on a common board are directly connected; relatedness is the transitive closure of direct connection. pin1 and pin2 are distinct positive integers that need not appear on any board (a pin on no board is related to nothing). Variant 1: return true when pin1 and pin2 are related, else false.",
+   "inference_uncertainty": "low-medium: the task and output are in the preview; the handling of pins on no board and the restriction pin1 != pin2 are inferred",
+   "inferred_interface": {
+    "name": "arePinsRelated",
+    "params": [
+     {
+      "name": "boards",
+      "type": "integer[][]"
+     },
+     {
+      "name": "pin1",
+      "type": "integer"
+     },
+     {
+      "name": "pin2",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants with no per-variant text; the preview states the boolean task, assigned to variant 1; the author assigned variant 2 the minimum number of boards on a path (suggested by the BREADTH_FIRST_SEARCH tag)",
+   "oracle_constant": "PBC1"
+  },
+  {
+   "uid": "hack2hire:6913ed33fa8a311e42671e5d",
+   "variant_id": "6913ed33fa8a311e42671e5d",
+   "variant_ordinal": 2,
+   "title": "Pin Board Connectivity",
+   "source": {
+    "post_id": "6827b114285cf34924f48283",
+    "group_title": "Pin Board Connectivity",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6827b114285cf34924f48283",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6827b114285cf34924f48283/practice?questionId=6913ed33fa8a311e42671e5d",
+    "preview_response_sha256": "b80bb9fd22b6d16507464425553f08a79e03a9766f9b81fdc14da706ca20f72b",
+    "preview_content_sha256": "1de5be0ab3b7332a83ed1a91dbe9280486a8b6e7785829c656a5fba9996e1ec2",
+    "preview_characters": 546,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6827b114285cf34924f48283.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH",
+     "UNION_FIND"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: boards are lists of distinct positive integer pins; a pin may sit on several boards; two pins are related when one can be reached from the other by hopping across shared boards; given boards, pin1 and pin2 return true when related",
+    "algorithmTags: BREADTH_FIRST_SEARCH, UNION_FIND",
+    "codingQuestions: two variant ids in this order"
+   ],
+   "inferred_spec": "boards is a list of non-empty boards; each board is a list of distinct positive integer pins and a pin may appear on several boards. Two pins on a common board are directly connected; relatedness is the transitive closure of direct connection. pin1 and pin2 are distinct positive integers that need not appear on any board (a pin on no board is related to nothing). Variant 2: return the minimum number of boards on a route from pin1 to pin2, where a route is a sequence of boards, the first holding pin1, the last holding pin2, and each consecutive pair sharing a pin (1 when one board holds both); return -1 when the pins are not related.",
+   "inference_uncertainty": "very high: there is no variant-2 text; the minimum board count is inferred from the BREADTH_FIRST_SEARCH tag and the variant order",
+   "inferred_interface": {
+    "name": "minBoardsBetweenPins",
+    "params": [
+     {
+      "name": "boards",
+      "type": "integer[][]"
+     },
+     {
+      "name": "pin1",
+      "type": "integer"
+     },
+     {
+      "name": "pin2",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants with no per-variant text; the preview states the boolean task, assigned to variant 1; the author assigned variant 2 the minimum number of boards on a path (suggested by the BREADTH_FIRST_SEARCH tag)",
+   "oracle_constant": "PBC2"
+  },
+  {
+   "uid": "hack2hire:68fd5b9d47bea664c0bba367",
+   "variant_id": "68fd5b9d47bea664c0bba367",
+   "variant_ordinal": 1,
+   "title": "Poker Straight Sequence Check",
+   "source": {
+    "post_id": "68fd5b9347bea664c0bba366",
+    "group_title": "Poker Straight Sequence Check",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fd5b9347bea664c0bba366",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fd5b9347bea664c0bba366/practice?questionId=68fd5b9d47bea664c0bba367",
+    "preview_response_sha256": "c4f2c23587a06453632fee4bfabc3e29789ab0cb0610fb4494de8e3040d44235",
+    "preview_content_sha256": "1901fd02f3e9e20ba8766d641a19f82041d5b92999392c2e67ca841207e2899b",
+    "preview_characters": 474,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68fd5b9347bea664c0bba366.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "MATH"
+    ],
+    "companies": [
+     "ORACLE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: five distinct card values from A, 2..10, J, Q, K in any order; the ace is 1 or 14 but not both; decide whether they form five consecutive values",
+    "algorithmTags: ARRAY, MATH"
+   ],
+   "inferred_spec": "cards holds five distinct values from \"A\", \"2\" to \"10\", \"J\", \"Q\", \"K\" in any order, with J, Q and K worth 11, 12 and 13. Return true when the five values are consecutive, the ace counting as either 1 or 14 (but one value in a given hand), else false.",
+   "inference_uncertainty": "low: the values, ace rule, distinctness and order-independence are in the preview; only the boolean return name is inferred",
+   "inferred_interface": {
+    "name": "isStraight",
+    "params": [
+     {
+      "name": "cards",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PSS"
+  },
+  {
+   "uid": "hack2hire:691e0f0208ad7861624b5677",
+   "variant_id": "691e0f0208ad7861624b5677",
+   "variant_ordinal": 1,
+   "title": "Print Employee Org Chart",
+   "source": {
+    "post_id": "691e0d9308ad7861624b5675",
+    "group_title": "Print Employee Org Chart",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691e0d9308ad7861624b5675",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691e0d9308ad7861624b5675/practice?questionId=691e0f0208ad7861624b5677",
+    "preview_response_sha256": "67077be3512ada3b5483983c1d6a088161610d848b823028da30916117f42eb7",
+    "preview_content_sha256": "42d7c668ac81da7dac4925d67e79b7578b925a558d29a3cec030aacaf71ff82e",
+    "preview_characters": 542,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/691e0d9308ad7861624b5675.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "SNAPCHAT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: employees are [id, managerId, name] strings; the CEO is the only employee managed by itself; output each name on its own line separated by line breaks (none after the last), each direct report indented four dashes more than its manager",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "Each employee is [id, managerId, name] with a unique id; exactly one employee (the CEO) has managerId equal to its own id, every other managerId names an employee, and every management chain reaches the CEO. Return the chart as one string: one line per employee, each line the employee's name prefixed by four dashes per level below the CEO, lines joined by \"\\n\" with no trailing newline. The order is depth-first from the CEO, each manager followed by its direct reports in their order in the input list.",
+   "inference_uncertainty": "medium: the input triples, CEO rule, line format and four-dash indentation are in the preview; the depth-first order and the order of siblings by input position are inferred",
+   "inferred_interface": {
+    "name": "printOrgChart",
+    "params": [
+     {
+      "name": "employees",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PEO"
+  },
+  {
+   "uid": "hack2hire:68e8779c80f69c7a01706899",
+   "variant_id": "68e8779c80f69c7a01706899",
+   "variant_ordinal": 1,
+   "title": "Racing Points and Winner",
+   "source": {
+    "post_id": "68e41d06319ce0401971957a",
+    "group_title": "Racing Points and Winner",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68e41d06319ce0401971957a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68e41d06319ce0401971957a/practice?questionId=68e8779c80f69c7a01706899",
+    "preview_response_sha256": "9a31b23ae8f4ddc4c79a6c6d21a561b5031f03fcb0d55277e17f323b641ee9d6",
+    "preview_content_sha256": "5c54bcbecc7e662e3de1bed16f6e59bb4956bd8d73180cd7845680fdc48b4634",
+    "preview_characters": 356,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68e41d06319ce0401971957a.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "SORTING"
+    ],
+    "companies": [
+     "SQUARE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: races is a list of races, each a list of rider names from first to last; 1st place earns 15 points, 2nd 10, 3rd 5 and any later place 0 (the task after the scoring rule is cut off)",
+    "algorithmTags: HASH_TABLE, SORTING",
+    "codingQuestions: two variant ids in this order"
+   ],
+   "inferred_spec": "races is a non-empty list of non-empty races; each race lists distinct rider names in finishing order. In each race the rider in 1st place earns 15 points, 2nd 10, 3rd 5, and every later place 0. A rider's total is the sum over all races; every rider named in any race takes part in the standings, even with 0 points. Names compare by plain character code order. Variant 1: return the rider with the highest total; on a tie return the smallest name.",
+   "inference_uncertainty": "high: the scoring is in the preview; the task (single winner) and the tie-break by smallest name are inferred",
+   "inferred_interface": {
+    "name": "seasonWinner",
+    "params": [
+     {
+      "name": "races",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants with no per-variant text; the author assigned variant 1 the single season winner (ties to the smallest name) and variant 2 the full standings with a countback tie-break",
+   "oracle_constant": "RPW1"
+  },
+  {
+   "uid": "hack2hire:68e9554c149617c9114ecdd1",
+   "variant_id": "68e9554c149617c9114ecdd1",
+   "variant_ordinal": 2,
+   "title": "Racing Points and Winner",
+   "source": {
+    "post_id": "68e41d06319ce0401971957a",
+    "group_title": "Racing Points and Winner",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68e41d06319ce0401971957a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68e41d06319ce0401971957a/practice?questionId=68e9554c149617c9114ecdd1",
+    "preview_response_sha256": "9a31b23ae8f4ddc4c79a6c6d21a561b5031f03fcb0d55277e17f323b641ee9d6",
+    "preview_content_sha256": "5c54bcbecc7e662e3de1bed16f6e59bb4956bd8d73180cd7845680fdc48b4634",
+    "preview_characters": 356,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68e41d06319ce0401971957a.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "SORTING"
+    ],
+    "companies": [
+     "SQUARE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: races is a list of races, each a list of rider names from first to last; 1st place earns 15 points, 2nd 10, 3rd 5 and any later place 0 (the task after the scoring rule is cut off)",
+    "algorithmTags: HASH_TABLE, SORTING",
+    "codingQuestions: two variant ids in this order"
+   ],
+   "inferred_spec": "races is a non-empty list of non-empty races; each race lists distinct rider names in finishing order. In each race the rider in 1st place earns 15 points, 2nd 10, 3rd 5, and every later place 0. A rider's total is the sum over all races; every rider named in any race takes part in the standings, even with 0 points. Names compare by plain character code order. Variant 2: return every rider ordered by total descending, then by number of 1st places, 2nd places and 3rd places descending (countback), then by name ascending.",
+   "inference_uncertainty": "very high: there is no variant-2 text; the full standings and the countback tie-break are inferred",
+   "inferred_interface": {
+    "name": "seasonStandings",
+    "params": [
+     {
+      "name": "races",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "two variants with no per-variant text; the author assigned variant 1 the single season winner (ties to the smallest name) and variant 2 the full standings with a countback tie-break",
+   "oracle_constant": "RPW2"
+  },
+  {
+   "uid": "hack2hire:6a00c4cbf1b0b7030ba32383",
+   "variant_id": "6a00c4cbf1b0b7030ba32383",
+   "variant_ordinal": 1,
+   "title": "Rank Songs by Popularity",
+   "source": {
+    "post_id": "6a00c4b5f1b0b7030ba32382",
+    "group_title": "Rank Songs by Popularity",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a00c4b5f1b0b7030ba32382",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a00c4b5f1b0b7030ba32382/practice?questionId=6a00c4cbf1b0b7030ba32383",
+    "preview_response_sha256": "1a30fb1465f0670a0444e67b3e0f7483bfd31b580794b0fb7db759f69ebcb473",
+    "preview_content_sha256": "8530e3489e8634b0d8f7c5731fccc1db7606ea7fc18e2d06e76ff39965d7800f",
+    "preview_characters": 535,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a00c4b5f1b0b7030ba32382.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "SORTING"
+    ],
+    "companies": [
+     "EXPEDIA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n users and m songs; pref[i] is a permutation of song ids 0..m-1 and earlier means preferred (the ranking rule is cut off); variation of LeetCode 1366",
+    "algorithmTags: ARRAY, SORTING"
+   ],
+   "inferred_spec": "pref[i] is user i's permutation of song ids 0 to m - 1, most preferred first. Rank songs by how many users put them in position 0, more first; ties go to the count in position 1, then position 2, and so on through every position; songs still tied are ordered by smaller id. Return the song ids in rank order.",
+   "inference_uncertainty": "high: the preference lists are in the preview; the ranking rule is inferred from LeetCode 1366 (votes per position, then a final tie-break, here the smaller id)",
+   "inferred_interface": {
+    "name": "rankSongs",
+    "params": [
+     {
+      "name": "pref",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "RSP"
+  },
+  {
+   "uid": "hack2hire:699f7bb56e73e4abccc9b565",
+   "variant_id": "699f7bb56e73e4abccc9b565",
+   "variant_ordinal": 1,
+   "title": "Rank Vehicles by Contribution",
+   "source": {
+    "post_id": "699f79396e73e4abccc9b556",
+    "group_title": "Rank Vehicles by Contribution",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/699f79396e73e4abccc9b556",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/699f79396e73e4abccc9b556/practice?questionId=699f7bb56e73e4abccc9b565",
+    "preview_response_sha256": "718cf1cce0f549a1ab8e5c098c9a3de3aa7f9de3429c2eb3b676af6517807c98",
+    "preview_content_sha256": "cd9b8c9656eb074cddd5f23dad53d03c38b21e8b365708e9af3885578ae3dbec",
+    "preview_characters": 539,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/699f79396e73e4abccc9b556.json",
+    "algorithm_tags": [
+     "GRAPH"
+    ],
+    "companies": [
+     "TESLA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: vehicles share 10 MB update chunks peer to peer; events are [from, chunkList, to] with from a vehicle id or \"server\", chunkList space-separated chunk ids and to the receiving vehicle (the ranking rule is cut off)",
+    "algorithmTags: GRAPH"
+   ],
+   "inferred_spec": "Each event [from, chunkList, to] is a successful transfer of the space-separated chunk ids in chunkList from from to to; from is a vehicle id or \"server\", to is always a vehicle id different from from. A vehicle's contribution is the total number of chunk ids it sent over all events (repeats count each time). Return every vehicle id that appears in any event (never \"server\"), ordered by contribution descending, then by id ascending in character code order.",
+   "inference_uncertainty": "very high: the event format and the server source are in the preview; the contribution measure (chunks sent), the inclusion of vehicles that only received and the tie-break are inferred",
+   "inferred_interface": {
+    "name": "rankVehicles",
+    "params": [
+     {
+      "name": "events",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "RVC"
+  },
+  {
+   "uid": "hack2hire:67eae60e4c9bb801bfd0ef48",
+   "variant_id": "67eae60e4c9bb801bfd0ef48",
+   "variant_ordinal": 1,
+   "title": "Rearrange Houses in Neighborhoods",
+   "source": {
+    "post_id": "67eae4964c9bb801bfd0ef47",
+    "group_title": "Rearrange Houses in Neighborhoods",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67eae4964c9bb801bfd0ef47",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67eae4964c9bb801bfd0ef47/practice?questionId=67eae60e4c9bb801bfd0ef48",
+    "preview_response_sha256": "09db5f1d5d0cb67ef2e0ae9486f57bbb7a8ca161bccc1266f1e8b087f22acd81",
+    "preview_content_sha256": "dfee61a1bc23c2c2b9df9f2d9a491b3234485e159e5e31ca176dbd36f83d692c",
+    "preview_characters": 398,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67eae4964c9bb801bfd0ef47.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "GOOGLE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: houses is a 2D array of neighborhoods of house numbers; rearrange so each neighborhood is sorted ascending, has no repeated number and keeps its size (the rest is cut off)",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "Redistribute all house numbers of houses among the neighborhoods so that every neighborhood keeps its size, holds no repeated number and is sorted ascending. To make the answer unique: fill neighborhoods in input order; each takes, among the numbers still to place, its size many distinct numbers with the most remaining copies, preferring the smaller number on equal copies. Return the result, or [] when no valid arrangement exists (this filling succeeds exactly when some valid arrangement exists).",
+   "inference_uncertainty": "high: the three conditions are in the preview; the output when impossible ([]) and the canonical choice among many valid arrangements are inferred (the original likely accepts any valid arrangement)",
+   "inferred_interface": {
+    "name": "rearrangeHouses",
+    "params": [
+     {
+      "name": "houses",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "RHN"
+  },
+  {
+   "uid": "hack2hire:688fb256b3f942cc1004c00e",
+   "variant_id": "688fb256b3f942cc1004c00e",
+   "variant_ordinal": 1,
+   "title": "Reduce The Maximum To Even K Times",
+   "source": {
+    "post_id": "688fb248b3f942cc1004c00d",
+    "group_title": "Reduce The Maximum To Even K Times",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688fb248b3f942cc1004c00d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688fb248b3f942cc1004c00d/practice?questionId=688fb256b3f942cc1004c00e",
+    "preview_response_sha256": "623f68e17a08617429819538ba86f2182e151a7b5953d60fdc00df4fe18001e5",
+    "preview_content_sha256": "e7f42f85ffa8183d1b2c11ed377ce8e548fa8aeefad7c03a9535471d3a90d718",
+    "preview_characters": 260,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/688fb248b3f942cc1004c00d.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "ORACLE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: non-negative nums and integers k and m; exactly k operations, each finds the current maximum N and replaces it with N - (N % 2) (the remaining steps and the output are cut off)",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "Perform exactly k operations on a working copy of nums. Each operation takes the current maximum N (any one copy) and replaces it with (N - N mod 2) / 2, that is, N made even and then halved. Return the sum of the final values modulo m.",
+   "inference_uncertainty": "very high: the first two steps (find the maximum N, make it even with N - N mod 2) are in the preview; the halving step and the role of m (the modulus of the final sum) are inferred",
+   "inferred_interface": {
+    "name": "reduceMaximum",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     },
+     {
+      "name": "m",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "RMK"
+  }
+ ]
+}

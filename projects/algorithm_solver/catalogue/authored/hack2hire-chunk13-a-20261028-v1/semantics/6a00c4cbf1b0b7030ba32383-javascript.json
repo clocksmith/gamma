@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a00c4cbf1b0b7030ba32383",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "pref"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "rankSongs",
+  "params": [
+   {
+    "name": "pref",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "compare songs pairwise by recounting each position from the raw lists, and order them with a selection of the best remaining song",
+  "candidate_design": "an m x m count table indexed by (song, position), then one sort of song ids by (negated count row, id)",
+  "complexity_target": "O(n m + m^2 log m) time/O(m^2) space"
+ },
+ "source_sha256": "18a9016450a2ff82336068f366208cb18dda7540e4cba5abc39094bc3466f7c5",
+ "wrapper": "named export rankSongs"
+}

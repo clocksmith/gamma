@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68ace5011bf7d2097f647f50",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "ignoreArray",
+  "inputArray"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "isPalindromeIgnoring",
+  "params": [
+   {
+    "name": "ignoreArray",
+    "type": "string[]"
+   },
+   {
+    "name": "inputArray",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "build the filtered list and compare it with its reverse",
+  "candidate_design": "a set of ignored characters and two pointers moving inward, skipping ignored characters",
+  "complexity_target": "O(n + k) time/O(k) space"
+ },
+ "source_sha256": "ecd8d439bd616d38474c20ff59bd0ff82986fcfff3e880c3c32594e90909819b",
+ "wrapper": "Solution.isPalindromeIgnoring"
+}

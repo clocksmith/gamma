@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1e2e688b879849ebc1089e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operations"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "processOperations",
+  "params": [
+   {
+    "name": "operations",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "replay with a plain set and test every obstacle against each checked range",
+  "candidate_design": "offline: compress the placed positions, then for each check binary-search the obstacle positions in the range and count the ones already placed with a Fenwick tree",
+  "complexity_target": "O(q log q) time/O(q) space"
+ },
+ "source_sha256": "9b5cd5fb5019245a748b31101a28305a0485d02e1cfd0d79b8ea78cb25e5b5bd",
+ "wrapper": "named export processOperations"
+}

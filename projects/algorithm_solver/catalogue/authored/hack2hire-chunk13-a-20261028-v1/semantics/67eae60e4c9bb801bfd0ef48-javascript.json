@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67eae60e4c9bb801bfd0ef48",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "houses"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "rearrangeHouses",
+  "params": [
+   {
+    "name": "houses",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exhaustive backtracking for feasibility, plus the canonical filling done by fully re-sorting the remaining counts for every neighborhood",
+  "candidate_design": "a max-heap of (remaining copies, number); each neighborhood pops its size many entries, records the numbers sorted, and pushes back the ones with copies left",
+  "complexity_target": "O(N log D) time/O(D) space for N houses and D distinct numbers"
+ },
+ "source_sha256": "3c9ea99fd2a6f9f53f2dfcbfffb74e1248bb39579e0ddf633e846ad297cde47b",
+ "wrapper": "named export rearrangeHouses"
+}
