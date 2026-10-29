@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a361ab6e73e4abccc9bfd0",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "matrix"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxExpressionPathValue",
+  "params": [
+   {
+    "name": "matrix",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every right/down path from every cell and evaluate the valid ones",
+  "candidate_design": "DP in row-major order: best value ending at each digit cell; an operator cell carries the best value of its digit predecessors",
+  "complexity_target": "O(m * n)"
+ },
+ "source_sha256": "6093239ebf13b04a14d4479836b16ab2b6ba426295016b69f6389c524859af1a",
+ "wrapper": "named export maxExpressionPathValue"
+}

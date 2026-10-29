@@ -1,0 +1,799 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk07-a (16 Hack2Hire groups, 18 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:6a0237332608e589a944a2be",
+   "title": "Longest Common Subsequence-Substring",
+   "variant_ordinal": 1,
+   "group_post_id": "6a0236a62608e589a944a2b9",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "longestSubsequenceSubstring",
+     "params": [
+      {
+       "name": "x",
+       "type": "string"
+      },
+      {
+       "name": "y",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every substring of y and test it as a subsequence of x with a greedy two-pointer scan",
+    "candidate_design": "DP over (prefix of x, end position in y): dp[i][j] = longest substring of y ending at j that is a subsequence of x[:i]; one rolling row",
+    "complexity_target": "O(|x| * |y|) time, O(|y|) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b064c3661a7b402c3500d77436b571f2f87bb69e2571fbd00e0a67b102582f8a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69a351986e73e4abccc9bf81",
+   "title": "Longest Consecutive Segment After Insertions",
+   "variant_ordinal": 1,
+   "group_post_id": "69a351856e73e4abccc9bf80",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "longestSegments",
+     "params": [
+      {
+       "name": "queries",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep the occupied set; after every query sort it and scan for the longest run",
+    "candidate_design": "hash map from each run endpoint to its run length; a built house extends the run ending at p - 1 or the run starting at p + 1 (never both, by the build rule)",
+    "complexity_target": "O(n) expected time"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "fefa4f36c47bef27fbf02afcc7426a3ebc91b1820cda25ac07b093e9e8a70363",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6854ca09c201117d348a25d5",
+   "title": "Longest Semi-Alternating Substring",
+   "variant_ordinal": 1,
+   "group_post_id": "6854c50ec201117d348a25d4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "longestSemiAlternating",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "check every substring directly for three equal consecutive characters",
+    "candidate_design": "one pass: a window start that jumps to i - 1 whenever s[i-2..i] are equal",
+    "complexity_target": "O(n)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "89896bcb3b2899bdbae4158d201f7c36b7ae8d9440c7be67abb9e26bc91cdcec",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a974f580ca9cc4e1c789f3b",
+   "title": "Longest Subarray Under Limit",
+   "variant_ordinal": 1,
+   "group_post_id": "6a974d070ca9cc4e1c789f24",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "longestSubarrayUnderLimit",
+     "params": [
+      {
+       "name": "a",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "prefix sums and a check of every (start, end) pair",
+    "candidate_design": "two-pointer window: extend right, shrink left while the sum exceeds k",
+    "complexity_target": "O(n)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4ba4962da70084a2b0b5a006f856430c9523b7b60abde20af2cbc7d5030fab16",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67fbdd34216af53465a721a5",
+   "title": "Lowercase Before Uppercase Count",
+   "variant_ordinal": 1,
+   "group_post_id": "67fbd93f216af53465a721a1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countLowerBeforeUpper",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each letter, compare every lowercase position with every uppercase position",
+    "candidate_design": "one pass recording the last lowercase index and first uppercase index per letter",
+    "complexity_target": "O(n + 26)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "94171022a32076cd74600465a2bf82f10407a71fc05bb12cb808b5a03f5f82ed",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67d266555e44a1b0c201ee79",
+   "title": "Margin Call",
+   "variant_ordinal": 1,
+   "group_post_id": "67d25b3c5e44a1b0c201ee78",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "marginCall",
+     "params": [
+      {
+       "name": "trades",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "replay trades on a list of [symbol, shares] pairs searched linearly",
+    "candidate_design": "hash map symbol -> shares and integer cash; sort the held symbols once at the end",
+    "complexity_target": "O(T + H log H)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "601c49c63a456c322dfe5473ea6625d1faade23587d53a58c70e7650748d971c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67d2675b5e44a1b0c201ee7a",
+   "title": "Margin Call",
+   "variant_ordinal": 2,
+   "group_post_id": "67d25b3c5e44a1b0c201ee78",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "marginCall",
+     "params": [
+      {
+       "name": "trades",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "after each trade, while cash < 0, rescan all holdings for the best symbol and sell exactly one share",
+    "candidate_design": "max-heap of (latest price, symbol) with lazy invalidation; sell ceil(deficit / price) shares of the best symbol at once, capped by its holding",
+    "complexity_target": "O(T log T)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "601c49c63a456c322dfe5473ea6625d1faade23587d53a58c70e7650748d971c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67d2675c5e44a1b0c201ee7b",
+   "title": "Margin Call",
+   "variant_ordinal": 3,
+   "group_post_id": "67d25b3c5e44a1b0c201ee78",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "marginCall",
+     "params": [
+      {
+       "name": "trades",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "after each trade, while cash < 0, recompute every sellable share and sell exactly one share of the best symbol",
+    "candidate_design": "heap as in level 2; when the best is an option whose stock is better, sell in closed form: options alone until the counts are equal, then option/stock pairs",
+    "complexity_target": "O(T log T)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "601c49c63a456c322dfe5473ea6625d1faade23587d53a58c70e7650748d971c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1c7cfc8b879849ebc0f85d",
+   "title": "Max Matrix Border Distinct Sum",
+   "variant_ordinal": 1,
+   "group_post_id": "6a1c7cf98b879849ebc0f85c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxFrameDistinctSum",
+     "params": [
+      {
+       "name": "matrix",
+       "type": "integer[][]"
+      },
+      {
+       "name": "frameSize",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per square, test every cell of the square for being on its border and collect the values in a set",
+    "candidate_design": "per square, walk only the 4k - 4 border cells into a hash set",
+    "complexity_target": "O((m - k + 1)(n - k + 1) k)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "2ff1a80107d7dad050c0c7df89e65f7b398812b96c9bf130f7ee3c2ed2b799f3",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6827f7c3f13ac663af91d7a5",
+   "title": "Max Non-overlapping Tasks",
+   "variant_ordinal": 1,
+   "group_post_id": "6827f586f13ac663af91d7a4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxNonOverlappingTasks",
+     "params": [
+      {
+       "name": "tasks",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every subset and keep the largest pairwise non-overlapping one",
+    "candidate_design": "sort by end; take a task when its start is at least the last taken end",
+    "complexity_target": "O(n log n)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "91ea98ab863eb1dc7bb5f3a8497ac3350d3f18193e75fbcec38619d9dc87160d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69e933bdfbaf3da641828694",
+   "title": "Maximize Portfolio Floor Value",
+   "variant_ordinal": 1,
+   "group_post_id": "69e933affbaf3da641828693",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxPortfolioFloor",
+     "params": [
+      {
+       "name": "values",
+       "type": "integer[]"
+      },
+      {
+       "name": "costs",
+       "type": "integer[]"
+      },
+      {
+       "name": "totalCost",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "raise a target floor one unit at a time while the cost of lifting every asset to it stays within budget",
+    "candidate_design": "binary search the floor T in [min(values), min(values) + totalCost]; feasibility sums (T - v) * c with an early exit",
+    "complexity_target": "O(n log totalCost)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ca02c9ce503ba342953bf94c15d85fe00bba569cd1079f101a585b6c122bbdfb",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a725ef948af2ae18e995ee1",
+   "title": "Maximum Bounded XOR",
+   "variant_ordinal": 1,
+   "group_post_id": "6a725eef48af2ae18e995ee0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxBoundedXor",
+     "params": [
+      {
+       "name": "lo",
+       "type": "integer"
+      },
+      {
+       "name": "hi",
+       "type": "integer"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every pair a < b in [lo, hi]",
+    "candidate_design": "bitwise DP from the top bit over tightness flags for a and b against lo and hi, tightness of the XOR against k and an a < b flag; greedy 1 bits first",
+    "complexity_target": "O(31 * 2^6 * 4)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "acfc849026a62c73361fff8f62e2bca19e5346ed664ef49e9e9266842c5c70ee",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:676efc4fb2c9d428b406a287",
+   "title": "Maximum Combination Health",
+   "variant_ordinal": 1,
+   "group_post_id": "676efae4b2c9d428b406a286",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxCombinationHealth",
+     "params": [
+      {
+       "name": "health",
+       "type": "integer[]"
+      },
+      {
+       "name": "series",
+       "type": "string[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every set of at most k series and sum their servers",
+    "candidate_design": "hash map series -> total health; a min-heap of size k keeps the k largest totals",
+    "complexity_target": "O(n + s log k)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "f1cf5c5cf8d0d80fd8f56bce1ad7d9496c35cc33943e0078cbf3e69137b34ce2",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a724c9748af2ae18e995e5e",
+   "title": "Maximum Distinct Split Sum",
+   "variant_ordinal": 1,
+   "group_post_id": "6a724c9348af2ae18e995e5d",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxDistinctSplitSum",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every split, build both sets from scratch",
+    "candidate_design": "prefix distinct counts left to right and suffix distinct counts right to left",
+    "complexity_target": "O(n)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "35582c1227644242ac0eee22b530e94b2dc2b969b73d13f818c0a8915b478054",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68c2e2221f64f4312b0a3df8",
+   "title": "Maximum Task Rewards",
+   "variant_ordinal": 1,
+   "group_post_id": "68c2e21a1f64f4312b0a3df7",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxTaskRewards",
+     "params": [
+      {
+       "name": "tasks",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every subset; a subset is schedulable when its i-th smallest deadline is at least i",
+    "candidate_design": "sort by deadline; min-heap of chosen profits, popping the smallest whenever the heap outgrows the deadline",
+    "complexity_target": "O(n log n)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4134a54255c6c8afb75da1d0a0f9dd5b473f25486cf7b8a9b1728f74cf7e56c7",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a8664a4701a76fc6843b36e",
+   "title": "Maximum Testing Efficiency",
+   "variant_ordinal": 1,
+   "group_post_id": "6a866493701a76fc6843b36d",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxTestingEfficiency",
+     "params": [
+      {
+       "name": "arrivalTime",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every pair of arrival times as window ends and count arrivals inside directly",
+    "candidate_design": "sort, group equal times, Kadane over distinct times: best ending at t_j = c_j + max(0, best ending at t_{j-1} - gap)",
+    "complexity_target": "O(n log n)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "28df8bc7442db6c0740a937a349e29a6c12fef7fea785ae670f1b7aed1ca9976",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69a361ab6e73e4abccc9bfd0",
+   "title": "Maximum Value of Valid Expression Path",
+   "variant_ordinal": 1,
+   "group_post_id": "69a361a36e73e4abccc9bfcf",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxExpressionPathValue",
+     "params": [
+      {
+       "name": "matrix",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every right/down path from every cell and evaluate the valid ones",
+    "candidate_design": "DP in row-major order: best value ending at each digit cell; an operator cell carries the best value of its digit predecessors",
+    "complexity_target": "O(m * n)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3a8fd216c0f36f2dc6f33be7e01a484d2be5f50721dbcd15fe150fb9bf6c5b8b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67d33f6a488516fd8ad5a064",
+   "title": "Minimal Board Length for Holes",
+   "variant_ordinal": 1,
+   "group_post_id": "67d33c395e44a1b0c201ee93",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minimalBoardLength",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try L = 1, 2, ... and test coverage greedily (first board at the leftmost hole, second at the leftmost uncovered hole)",
+    "candidate_design": "sort; the answer is max(1, min over split points i of max(a[i] - a[0], a[n-1] - a[i+1])), or max(1, 0) when all holes fit one board",
+    "complexity_target": "O(n log n)"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "7c7186c6ea6a1a9023b310b20aa0d92cf97f7907d0510cd106842e3b39221015",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67d266555e44a1b0c201ee79",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "trades"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "marginCall",
+  "params": [
+   {
+    "name": "trades",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "replay trades on a list of [symbol, shares] pairs searched linearly",
+  "candidate_design": "hash map symbol -> shares and integer cash; sort the held symbols once at the end",
+  "complexity_target": "O(T + H log H)"
+ },
+ "source_sha256": "53f2313c0f08c2db803ee27cc9544fac38689f3fa199b8cf4a6bc1a024b71562",
+ "wrapper": "Solution.marginCall"
+}

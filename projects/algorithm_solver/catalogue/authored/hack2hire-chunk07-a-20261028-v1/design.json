@@ -1,0 +1,94 @@
+{
+ "problems": {
+  "hack2hire:6a0237332608e589a944a2be": {
+   "reference": "enumerate every substring of y and test it as a subsequence of x with a greedy two-pointer scan",
+   "candidate_design": "DP over (prefix of x, end position in y): dp[i][j] = longest substring of y ending at j that is a subsequence of x[:i]; one rolling row",
+   "complexity_target": "O(|x| * |y|) time, O(|y|) space"
+  },
+  "hack2hire:69a351986e73e4abccc9bf81": {
+   "reference": "keep the occupied set; after every query sort it and scan for the longest run",
+   "candidate_design": "hash map from each run endpoint to its run length; a built house extends the run ending at p - 1 or the run starting at p + 1 (never both, by the build rule)",
+   "complexity_target": "O(n) expected time"
+  },
+  "hack2hire:6854ca09c201117d348a25d5": {
+   "reference": "check every substring directly for three equal consecutive characters",
+   "candidate_design": "one pass: a window start that jumps to i - 1 whenever s[i-2..i] are equal",
+   "complexity_target": "O(n)"
+  },
+  "hack2hire:6a974f580ca9cc4e1c789f3b": {
+   "reference": "prefix sums and a check of every (start, end) pair",
+   "candidate_design": "two-pointer window: extend right, shrink left while the sum exceeds k",
+   "complexity_target": "O(n)"
+  },
+  "hack2hire:67fbdd34216af53465a721a5": {
+   "reference": "for each letter, compare every lowercase position with every uppercase position",
+   "candidate_design": "one pass recording the last lowercase index and first uppercase index per letter",
+   "complexity_target": "O(n + 26)"
+  },
+  "hack2hire:67d266555e44a1b0c201ee79": {
+   "reference": "replay trades on a list of [symbol, shares] pairs searched linearly",
+   "candidate_design": "hash map symbol -> shares and integer cash; sort the held symbols once at the end",
+   "complexity_target": "O(T + H log H)"
+  },
+  "hack2hire:67d2675b5e44a1b0c201ee7a": {
+   "reference": "after each trade, while cash < 0, rescan all holdings for the best symbol and sell exactly one share",
+   "candidate_design": "max-heap of (latest price, symbol) with lazy invalidation; sell ceil(deficit / price) shares of the best symbol at once, capped by its holding",
+   "complexity_target": "O(T log T)"
+  },
+  "hack2hire:67d2675c5e44a1b0c201ee7b": {
+   "reference": "after each trade, while cash < 0, recompute every sellable share and sell exactly one share of the best symbol",
+   "candidate_design": "heap as in level 2; when the best is an option whose stock is better, sell in closed form: options alone until the counts are equal, then option/stock pairs",
+   "complexity_target": "O(T log T)"
+  },
+  "hack2hire:6a1c7cfc8b879849ebc0f85d": {
+   "reference": "per square, test every cell of the square for being on its border and collect the values in a set",
+   "candidate_design": "per square, walk only the 4k - 4 border cells into a hash set",
+   "complexity_target": "O((m - k + 1)(n - k + 1) k)"
+  },
+  "hack2hire:6827f7c3f13ac663af91d7a5": {
+   "reference": "try every subset and keep the largest pairwise non-overlapping one",
+   "candidate_design": "sort by end; take a task when its start is at least the last taken end",
+   "complexity_target": "O(n log n)"
+  },
+  "hack2hire:69e933bdfbaf3da641828694": {
+   "reference": "raise a target floor one unit at a time while the cost of lifting every asset to it stays within budget",
+   "candidate_design": "binary search the floor T in [min(values), min(values) + totalCost]; feasibility sums (T - v) * c with an early exit",
+   "complexity_target": "O(n log totalCost)"
+  },
+  "hack2hire:6a725ef948af2ae18e995ee1": {
+   "reference": "try every pair a < b in [lo, hi]",
+   "candidate_design": "bitwise DP from the top bit over tightness flags for a and b against lo and hi, tightness of the XOR against k and an a < b flag; greedy 1 bits first",
+   "complexity_target": "O(31 * 2^6 * 4)"
+  },
+  "hack2hire:676efc4fb2c9d428b406a287": {
+   "reference": "try every set of at most k series and sum their servers",
+   "candidate_design": "hash map series -> total health; a min-heap of size k keeps the k largest totals",
+   "complexity_target": "O(n + s log k)"
+  },
+  "hack2hire:6a724c9748af2ae18e995e5e": {
+   "reference": "for every split, build both sets from scratch",
+   "candidate_design": "prefix distinct counts left to right and suffix distinct counts right to left",
+   "complexity_target": "O(n)"
+  },
+  "hack2hire:68c2e2221f64f4312b0a3df8": {
+   "reference": "try every subset; a subset is schedulable when its i-th smallest deadline is at least i",
+   "candidate_design": "sort by deadline; min-heap of chosen profits, popping the smallest whenever the heap outgrows the deadline",
+   "complexity_target": "O(n log n)"
+  },
+  "hack2hire:6a8664a4701a76fc6843b36e": {
+   "reference": "try every pair of arrival times as window ends and count arrivals inside directly",
+   "candidate_design": "sort, group equal times, Kadane over distinct times: best ending at t_j = c_j + max(0, best ending at t_{j-1} - gap)",
+   "complexity_target": "O(n log n)"
+  },
+  "hack2hire:69a361ab6e73e4abccc9bfd0": {
+   "reference": "enumerate every right/down path from every cell and evaluate the valid ones",
+   "candidate_design": "DP in row-major order: best value ending at each digit cell; an operator cell carries the best value of its digit predecessors",
+   "complexity_target": "O(m * n)"
+  },
+  "hack2hire:67d33f6a488516fd8ad5a064": {
+   "reference": "try L = 1, 2, ... and test coverage greedily (first board at the leftmost hole, second at the leftmost uncovered hole)",
+   "candidate_design": "sort; the answer is max(1, min over split points i of max(a[i] - a[0], a[n-1] - a[i+1])), or max(1, 0) when all holes fit one board",
+   "complexity_target": "O(n log n)"
+  }
+ }
+}
