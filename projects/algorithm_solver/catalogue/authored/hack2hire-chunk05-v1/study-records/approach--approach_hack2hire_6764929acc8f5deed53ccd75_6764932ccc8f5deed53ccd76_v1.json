@@ -1,0 +1,521 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:hack2hire:6764929acc8f5deed53ccd75:6764932ccc8f5deed53ccd76:v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+      "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+      "selector": "/6764932ccc8f5deed53ccd76"
+    }
+  ],
+  "problemId": "hack2hire:6764929acc8f5deed53ccd75",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:hack2hire:6764929acc8f5deed53ccd75:6764932ccc8f5deed53ccd76:authored-v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/contract--contract_hack2hire_6764929acc8f5deed53ccd75_6764932ccc8f5deed53ccd76_authored-v1.json",
+    "sha256": "86fdf0872755a31869c1bf76ac611d2abc264f154750cc38aad5625a68099a3d"
+  },
+  "title": {
+    "status": "present",
+    "value": "Try the six assignments; validate month length with a 400/100/4 Gregorian leap predicate.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+        "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+        "selector": "/6764932ccc8f5deed53ccd76/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Try the six assignments; validate month length with a 400/100/4 Gregorian leap predicate.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+        "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+        "selector": "/6764932ccc8f5deed53ccd76/candidate_design"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/6764932ccc8f5deed53ccd76/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) time and space"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/6764932ccc8f5deed53ccd76/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "Return true if any permutation of the three supplied integers is a valid proleptic Gregorian [year,month,day], with year 1..9999. Consider all six permutations, including century leap-year rules.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/6764932ccc8f5deed53ccd76/invariants"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Try the six assignments; validate month length with a 400/100/4 Gregorian leap predicate.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/6764932ccc8f5deed53ccd76/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Reasoning",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which rules are known and which remain inferred?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6764932ccc8f5deed53ccd76/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Return true if any permutation of the three supplied integers is a valid proleptic Gregorian [year,month,day], with year 1..9999. Consider all six permutations, including century leap-year rules.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/8/inferred_spec"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Which rules are known and which remain inferred?"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "First state the invariant and clarify the explicitly inferred rules."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6764932ccc8f5deed53ccd76/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/8"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:6764929acc8f5deed53ccd75:6764932ccc8f5deed53ccd76:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6764929acc8f5deed53ccd75_6764932ccc8f5deed53ccd76_approach-native_v1.json",
+        "sha256": "4d17f0a1edd14da2b8f19f9f030a756ef46229101a862136370c36c5e4ce93e6"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Coding",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which invariant and data structure implement this exact contract?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6764932ccc8f5deed53ccd76/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Try the six assignments; validate month length with a 400/100/4 Gregorian leap predicate.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Try the six assignments; validate month length with a 400/100/4 Gregorian leap predicate."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Try the six assignments; validate month length with a 400/100/4 Gregorian leap predicate."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6764932ccc8f5deed53ccd76/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/8"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:6764929acc8f5deed53ccd75:6764932ccc8f5deed53ccd76:python:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6764929acc8f5deed53ccd75_6764932ccc8f5deed53ccd76_python_v1.json",
+          "sha256": "004d4152a409722332706bf5cbd1c9538334e77360ae816043000942d67692e9"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:6764929acc8f5deed53ccd75:6764932ccc8f5deed53ccd76:javascript:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6764929acc8f5deed53ccd75_6764932ccc8f5deed53ccd76_javascript_v1.json",
+          "sha256": "4f1fcf3a15c4d7f4c8e85846748af42cac83459b939830c285afc286a8f06805"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:6764929acc8f5deed53ccd75:6764932ccc8f5deed53ccd76:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6764929acc8f5deed53ccd75_6764932ccc8f5deed53ccd76_approach-native_v1.json",
+        "sha256": "4d17f0a1edd14da2b8f19f9f030a756ef46229101a862136370c36c5e4ce93e6"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Validation",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which boundary or failed transition would falsify the implementation?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6764932ccc8f5deed53ccd76/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Compare each language independently with the frozen reference: Use standard-library calendar month lengths over all permutations. Local success applies only to the inferred contract; exact hidden-variant behavior, official resource limits and independent qualification remain unknown.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Which boundary or failed transition would falsify the implementation?"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [
+          "Use standard-library calendar month lengths over all permutations."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6764932ccc8f5deed53ccd76"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Test boundaries and rejected transitions before relying on the optimized data structure."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6764932ccc8f5deed53ccd76/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/8"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:6764929acc8f5deed53ccd75:6764932ccc8f5deed53ccd76:development-suite:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6764929acc8f5deed53ccd75_6764932ccc8f5deed53ccd76_development-suite_v1.json",
+          "sha256": "60bd5b98b2cf67446c5b6af862f6435289f9c7dfb2e9354363a8a68e1a382206"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:6764929acc8f5deed53ccd75:6764932ccc8f5deed53ccd76:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6764929acc8f5deed53ccd75_6764932ccc8f5deed53ccd76_approach-native_v1.json",
+        "sha256": "4d17f0a1edd14da2b8f19f9f030a756ef46229101a862136370c36c5e4ce93e6"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6764929acc8f5deed53ccd75:6764932ccc8f5deed53ccd76:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6764929acc8f5deed53ccd75_6764932ccc8f5deed53ccd76_approach-native_v1.json",
+    "sha256": "4d17f0a1edd14da2b8f19f9f030a756ef46229101a862136370c36c5e4ce93e6"
+  }
+}

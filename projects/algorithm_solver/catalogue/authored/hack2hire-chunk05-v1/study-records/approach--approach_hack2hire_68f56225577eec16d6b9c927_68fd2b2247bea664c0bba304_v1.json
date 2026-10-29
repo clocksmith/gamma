@@ -1,0 +1,521 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:hack2hire:68f56225577eec16d6b9c927:68fd2b2247bea664c0bba304:v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+      "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+      "selector": "/68fd2b2247bea664c0bba304"
+    }
+  ],
+  "problemId": "hack2hire:68f56225577eec16d6b9c927",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:hack2hire:68f56225577eec16d6b9c927:68fd2b2247bea664c0bba304:authored-v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/contract--contract_hack2hire_68f56225577eec16d6b9c927_68fd2b2247bea664c0bba304_authored-v1.json",
+    "sha256": "de7b16e7c538ce2ae25cbc68539c0aec9c23bcb4133377b2d21b0f2835436884"
+  },
+  "title": {
+    "status": "present",
+    "value": "For each reachable OR value retain the smallest final element; smaller tails dominate larger tails when extending strictly increasing subsequences.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+        "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+        "selector": "/68fd2b2247bea664c0bba304/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "For each reachable OR value retain the smallest final element; smaller tails dominate larger tails when extending strictly increasing subsequences.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+        "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+        "selector": "/68fd2b2247bea664c0bba304/candidate_design"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/68fd2b2247bea664c0bba304/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(n*distinct OR states) time, O(distinct OR states) space"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/68fd2b2247bea664c0bba304/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "Return the sorted distinct bitwise-OR values of strictly increasing subsequences, including zero for the empty subsequence. Input values are nonnegative safe integers; order is preserved and equal successive values cannot extend a subsequence.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/68fd2b2247bea664c0bba304/invariants"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "For each reachable OR value retain the smallest final element; smaller tails dominate larger tails when extending strictly increasing subsequences.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/68fd2b2247bea664c0bba304/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Reasoning",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which rules are known and which remain inferred?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/68fd2b2247bea664c0bba304/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Return the sorted distinct bitwise-OR values of strictly increasing subsequences, including zero for the empty subsequence. Input values are nonnegative safe integers; order is preserved and equal successive values cannot extend a subsequence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/37/inferred_spec"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Which rules are known and which remain inferred?"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "First state the invariant and clarify the explicitly inferred rules."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/68fd2b2247bea664c0bba304/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/37"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:68f56225577eec16d6b9c927:68fd2b2247bea664c0bba304:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_68f56225577eec16d6b9c927_68fd2b2247bea664c0bba304_approach-native_v1.json",
+        "sha256": "d80da13e2486545cbbe602bc777d6055090801397963540de7da818a0e16b57a"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Coding",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which invariant and data structure implement this exact contract?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/68fd2b2247bea664c0bba304/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "For each reachable OR value retain the smallest final element; smaller tails dominate larger tails when extending strictly increasing subsequences.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "For each reachable OR value retain the smallest final element; smaller tails dominate larger tails when extending strictly increasing subsequences."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "For each reachable OR value retain the smallest final element; smaller tails dominate larger tails when extending strictly increasing subsequences."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/68fd2b2247bea664c0bba304/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/37"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:68f56225577eec16d6b9c927:68fd2b2247bea664c0bba304:python:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_68f56225577eec16d6b9c927_68fd2b2247bea664c0bba304_python_v1.json",
+          "sha256": "637bb78bebad18b63e45a7197f6a28a523f9c18862816a47708a6e54fcee0a80"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:68f56225577eec16d6b9c927:68fd2b2247bea664c0bba304:javascript:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_68f56225577eec16d6b9c927_68fd2b2247bea664c0bba304_javascript_v1.json",
+          "sha256": "cc961836ce69da0c5cd3cd7f7adcc604f4988f48ad9da1a824c739f530d11312"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:68f56225577eec16d6b9c927:68fd2b2247bea664c0bba304:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_68f56225577eec16d6b9c927_68fd2b2247bea664c0bba304_approach-native_v1.json",
+        "sha256": "d80da13e2486545cbbe602bc777d6055090801397963540de7da818a0e16b57a"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Validation",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which boundary or failed transition would falsify the implementation?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/68fd2b2247bea664c0bba304/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Compare each language independently with the frozen reference: Enumerate every subset and reject non-increasing selections. Local success applies only to the inferred contract; exact hidden-variant behavior, official resource limits and independent qualification remain unknown.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Which boundary or failed transition would falsify the implementation?"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [
+          "Enumerate every subset and reject non-increasing selections."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/68fd2b2247bea664c0bba304"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Test boundaries and rejected transitions before relying on the optimized data structure."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/68fd2b2247bea664c0bba304/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/37"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:68f56225577eec16d6b9c927:68fd2b2247bea664c0bba304:development-suite:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_68f56225577eec16d6b9c927_68fd2b2247bea664c0bba304_development-suite_v1.json",
+          "sha256": "65f6c84b63494d1db451c8de49df559b1001f86c8eee7ce9e34403d1dee67ccd"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:68f56225577eec16d6b9c927:68fd2b2247bea664c0bba304:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_68f56225577eec16d6b9c927_68fd2b2247bea664c0bba304_approach-native_v1.json",
+        "sha256": "d80da13e2486545cbbe602bc777d6055090801397963540de7da818a0e16b57a"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68f56225577eec16d6b9c927:68fd2b2247bea664c0bba304:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_68f56225577eec16d6b9c927_68fd2b2247bea664c0bba304_approach-native_v1.json",
+    "sha256": "d80da13e2486545cbbe602bc777d6055090801397963540de7da818a0e16b57a"
+  }
+}

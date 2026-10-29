@@ -1,0 +1,51 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:685df8f70807241a1a2453fb",
+  "source_sha256": "f6183f5f1c698644df2b25d52990234799e241e6dc63e39d88232def053c745c",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "RateLimiter",
+    "constructor": {
+      "params": [
+        "rules"
+      ]
+    },
+    "methods": {
+      "allow": [
+        "timestamp"
+      ]
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:685df8f70807241a1a2453fb",
+    "key": "rate",
+    "candidate_design": "Keep accepted timestamps in a queue per rule. Prune expired entries in every rule, decide once, then append to all queues only on success.",
+    "complexity_target": "O(rules) amortized per request plus retained timestamps",
+    "reference": "Retain all accepted times and recount each rule window on every attempt.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "For nondecreasing integer timestamps, accept iff every [limit,window] rule has fewer than limit accepted requests in (timestamp-window,timestamp]. Rejected attempts do not consume any rule. Apply acceptance atomically across rules in this sequential exercise; no production concurrency guarantee is inferred."
+    }
+  ]
+}

@@ -1,0 +1,521 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:hack2hire:678ede8e3d1b82777aa24f9b:678fc891f0089e5ca02db267:v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+      "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+      "selector": "/678fc891f0089e5ca02db267"
+    }
+  ],
+  "problemId": "hack2hire:678ede8e3d1b82777aa24f9b",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:hack2hire:678ede8e3d1b82777aa24f9b:678fc891f0089e5ca02db267:authored-v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/contract--contract_hack2hire_678ede8e3d1b82777aa24f9b_678fc891f0089e5ca02db267_authored-v1.json",
+    "sha256": "4d4abc2b907830a48190ee4f224eefafa953190b4160858e78ced37c89ee6914"
+  },
+  "title": {
+    "status": "present",
+    "value": "Use an explicit transition table and ID-indexed records. Sort only live snapshots for listing.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+        "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+        "selector": "/678fc891f0089e5ca02db267/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Use an explicit transition table and ID-indexed records. Sort only live snapshots for listing.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+        "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+        "selector": "/678fc891f0089e5ca02db267/candidate_design"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/678fc891f0089e5ca02db267/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(1) transitions; O(n log n) listing"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/678fc891f0089e5ca02db267/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/678fc891f0089e5ca02db267/invariants"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Use an explicit transition table and ID-indexed records. Sort only live snapshots for listing.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/678fc891f0089e5ca02db267/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Reasoning",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which rules are known and which remain inferred?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/678fc891f0089e5ca02db267/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Maintain orders by unique ID. place creates live orders; pause accepts live, resume accepts paused, cancel accepts live/paused, complete accepts live. Other transitions return false. listLive(currency) returns fresh live snapshots by timestamp then ID, optionally filtering currency. Terminal IDs cannot be reused.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/21/inferred_spec"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Which rules are known and which remain inferred?"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "First state the invariant and clarify the explicitly inferred rules."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/678fc891f0089e5ca02db267/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/21"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:678ede8e3d1b82777aa24f9b:678fc891f0089e5ca02db267:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_678ede8e3d1b82777aa24f9b_678fc891f0089e5ca02db267_approach-native_v1.json",
+        "sha256": "4048bb306561d41a2a0859bf184a589fc9be3006d46e30dadb7b876a4ce80f20"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Coding",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which invariant and data structure implement this exact contract?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/678fc891f0089e5ca02db267/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Use an explicit transition table and ID-indexed records. Sort only live snapshots for listing.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Use an explicit transition table and ID-indexed records. Sort only live snapshots for listing."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Use an explicit transition table and ID-indexed records. Sort only live snapshots for listing."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/678fc891f0089e5ca02db267/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/21"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:678ede8e3d1b82777aa24f9b:678fc891f0089e5ca02db267:python:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_678ede8e3d1b82777aa24f9b_678fc891f0089e5ca02db267_python_v1.json",
+          "sha256": "d7ad7cb18e0cff1acda605ced97e859db15a2d1bb5d1a841acbeea429e1352d2"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:678ede8e3d1b82777aa24f9b:678fc891f0089e5ca02db267:javascript:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_678ede8e3d1b82777aa24f9b_678fc891f0089e5ca02db267_javascript_v1.json",
+          "sha256": "43a6d939462bc235cd3e76bcd85125bd832bb91c63ab3d43831dfde8772ea1e4"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:678ede8e3d1b82777aa24f9b:678fc891f0089e5ca02db267:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_678ede8e3d1b82777aa24f9b_678fc891f0089e5ca02db267_approach-native_v1.json",
+        "sha256": "4048bb306561d41a2a0859bf184a589fc9be3006d46e30dadb7b876a4ce80f20"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Validation",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which boundary or failed transition would falsify the implementation?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/678fc891f0089e5ca02db267/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Compare each language independently with the frozen reference: Literal state-machine replay with independently spelled transition rules. Local success applies only to the inferred contract; exact hidden-variant behavior, official resource limits and independent qualification remain unknown.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Which boundary or failed transition would falsify the implementation?"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [
+          "Literal state-machine replay with independently spelled transition rules."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/678fc891f0089e5ca02db267"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Test boundaries and rejected transitions before relying on the optimized data structure."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/678fc891f0089e5ca02db267/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/21"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:678ede8e3d1b82777aa24f9b:678fc891f0089e5ca02db267:development-suite:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_678ede8e3d1b82777aa24f9b_678fc891f0089e5ca02db267_development-suite_v1.json",
+          "sha256": "41da8df2fbd0dcb1494dd5388adb88d1e2bbe363e56961545a2c986cca66c586"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:678ede8e3d1b82777aa24f9b:678fc891f0089e5ca02db267:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_678ede8e3d1b82777aa24f9b_678fc891f0089e5ca02db267_approach-native_v1.json",
+        "sha256": "4048bb306561d41a2a0859bf184a589fc9be3006d46e30dadb7b876a4ce80f20"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:678ede8e3d1b82777aa24f9b:678fc891f0089e5ca02db267:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_678ede8e3d1b82777aa24f9b_678fc891f0089e5ca02db267_approach-native_v1.json",
+    "sha256": "4048bb306561d41a2a0859bf184a589fc9be3006d46e30dadb7b876a4ce80f20"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:68c87699df5a6365aa774b1e",
+  "source_sha256": "169b2836e86965fafd475920515e0d9a3cea04d34de26eabc534699bf089c9fd",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "CustomerSupportSystem",
+    "constructor": {
+      "params": []
+    },
+    "methods": {
+      "record": [
+        "agentId",
+        "score",
+        "month"
+      ],
+      "rank": [
+        "month"
+      ]
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:68c87699df5a6365aa774b1e",
+    "key": "ratings",
+    "candidate_design": "Maintain sum/count aggregates per agent globally and per month; rank by cross-multiplied rational averages and reduce output fractions.",
+    "complexity_target": "O(1) record; O(agents log agents) rank",
+    "reference": "Retain all feedback rows and regroup/rescan for every query.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "record(agentId,score,month) records one integer score. rank(month) returns [agentId,numerator,denominator] rows for exact reduced average scores, descending by average then ASCII agent ID. A null month means all time; empty groups are absent."
+    }
+  ]
+}

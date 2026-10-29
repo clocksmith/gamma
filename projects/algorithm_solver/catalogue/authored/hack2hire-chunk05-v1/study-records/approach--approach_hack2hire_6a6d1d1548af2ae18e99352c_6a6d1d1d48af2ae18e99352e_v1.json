@@ -1,0 +1,521 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:hack2hire:6a6d1d1548af2ae18e99352c:6a6d1d1d48af2ae18e99352e:v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+      "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+      "selector": "/6a6d1d1d48af2ae18e99352e"
+    }
+  ],
+  "problemId": "hack2hire:6a6d1d1548af2ae18e99352c",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:hack2hire:6a6d1d1548af2ae18e99352c:6a6d1d1d48af2ae18e99352e:authored-v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/contract--contract_hack2hire_6a6d1d1548af2ae18e99352c_6a6d1d1d48af2ae18e99352e_authored-v1.json",
+    "sha256": "4f5548babd545acf61b0febfab70ccadd37638f3055cef99d9e7b033f54cb153"
+  },
+  "title": {
+    "status": "present",
+    "value": "Consume a direction only while that axis still needs movement toward the target; return when both deficits become zero.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+        "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+        "selector": "/6a6d1d1d48af2ae18e99352e/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Consume a direction only while that axis still needs movement toward the target; return when both deficits become zero.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+        "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+        "selector": "/6a6d1d1d48af2ae18e99352e/candidate_design"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/6a6d1d1d48af2ae18e99352e/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(direction count) time, O(1) space"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/6a6d1d1d48af2ae18e99352e/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "Return the earliest prefix length in which the target can be reached using each direction only at its listed second, with waiting permitted. Return zero when already there and -1 if no prefix suffices.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/6a6d1d1d48af2ae18e99352e/invariants"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Consume a direction only while that axis still needs movement toward the target; return when both deficits become zero.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/6a6d1d1d48af2ae18e99352e/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Reasoning",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which rules are known and which remain inferred?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6a6d1d1d48af2ae18e99352e/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Return the earliest prefix length in which the target can be reached using each direction only at its listed second, with waiting permitted. Return zero when already there and -1 if no prefix suffices.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/41/inferred_spec"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Which rules are known and which remain inferred?"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "First state the invariant and clarify the explicitly inferred rules."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6a6d1d1d48af2ae18e99352e/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/41"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:6a6d1d1548af2ae18e99352c:6a6d1d1d48af2ae18e99352e:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6a6d1d1548af2ae18e99352c_6a6d1d1d48af2ae18e99352e_approach-native_v1.json",
+        "sha256": "4fe3d5795b7f7c0d7676cdd02a8e1c0dc8d349de02af1167899909d8ed35e835"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Coding",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which invariant and data structure implement this exact contract?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6a6d1d1d48af2ae18e99352e/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Consume a direction only while that axis still needs movement toward the target; return when both deficits become zero.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Consume a direction only while that axis still needs movement toward the target; return when both deficits become zero."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Consume a direction only while that axis still needs movement toward the target; return when both deficits become zero."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6a6d1d1d48af2ae18e99352e/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/41"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:6a6d1d1548af2ae18e99352c:6a6d1d1d48af2ae18e99352e:python:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6a6d1d1548af2ae18e99352c_6a6d1d1d48af2ae18e99352e_python_v1.json",
+          "sha256": "a3fa93809a39d2aedbf640952ce43d4535c03e0d17232fa2c358ea86acdee00f"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:6a6d1d1548af2ae18e99352c:6a6d1d1d48af2ae18e99352e:javascript:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6a6d1d1548af2ae18e99352c_6a6d1d1d48af2ae18e99352e_javascript_v1.json",
+          "sha256": "e7aab309a31095091575fb0c50596221d57fa9c8048add999aabeb8b62d5e958"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:6a6d1d1548af2ae18e99352c:6a6d1d1d48af2ae18e99352e:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6a6d1d1548af2ae18e99352c_6a6d1d1d48af2ae18e99352e_approach-native_v1.json",
+        "sha256": "4fe3d5795b7f7c0d7676cdd02a8e1c0dc8d349de02af1167899909d8ed35e835"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Validation",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which boundary or failed transition would falsify the implementation?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6a6d1d1d48af2ae18e99352e/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Compare each language independently with the frozen reference: Track every reachable coordinate under move-or-wait choices. Local success applies only to the inferred contract; exact hidden-variant behavior, official resource limits and independent qualification remain unknown.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Which boundary or failed transition would falsify the implementation?"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [
+          "Track every reachable coordinate under move-or-wait choices."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/6a6d1d1d48af2ae18e99352e"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Test boundaries and rejected transitions before relying on the optimized data structure."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/6a6d1d1d48af2ae18e99352e/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/41"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:6a6d1d1548af2ae18e99352c:6a6d1d1d48af2ae18e99352e:development-suite:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6a6d1d1548af2ae18e99352c_6a6d1d1d48af2ae18e99352e_development-suite_v1.json",
+          "sha256": "16fba0bf90536c3a37b351db7f28174fdac5db24ef25d06d527a905a665982da"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:6a6d1d1548af2ae18e99352c:6a6d1d1d48af2ae18e99352e:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6a6d1d1548af2ae18e99352c_6a6d1d1d48af2ae18e99352e_approach-native_v1.json",
+        "sha256": "4fe3d5795b7f7c0d7676cdd02a8e1c0dc8d349de02af1167899909d8ed35e835"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a6d1d1548af2ae18e99352c:6a6d1d1d48af2ae18e99352e:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6a6d1d1548af2ae18e99352c_6a6d1d1d48af2ae18e99352e_approach-native_v1.json",
+    "sha256": "4fe3d5795b7f7c0d7676cdd02a8e1c0dc8d349de02af1167899909d8ed35e835"
+  }
+}

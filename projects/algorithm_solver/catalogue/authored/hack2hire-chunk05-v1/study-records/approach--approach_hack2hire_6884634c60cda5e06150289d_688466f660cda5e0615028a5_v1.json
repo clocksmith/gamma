@@ -1,0 +1,521 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:hack2hire:6884634c60cda5e06150289d:688466f660cda5e0615028a5:v1",
+  "version": 1,
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+      "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+      "selector": "/688466f660cda5e0615028a5"
+    }
+  ],
+  "problemId": "hack2hire:6884634c60cda5e06150289d",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:hack2hire:6884634c60cda5e06150289d:688466f660cda5e0615028a5:authored-v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/contract--contract_hack2hire_6884634c60cda5e06150289d_688466f660cda5e0615028a5_authored-v1.json",
+    "sha256": "cb87824d31f07d2c2f50b5b2bf2821408dabc4e30809f32b38c176a5a208b3fd"
+  },
+  "title": {
+    "status": "present",
+    "value": "Parse the two coordinate integers and index the board at row y, column x.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+        "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+        "selector": "/688466f660cda5e0615028a5/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Parse the two coordinate integers and index the board at row y, column x.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+        "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+        "selector": "/688466f660cda5e0615028a5/candidate_design"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Use this approach for the explicitly inferred exercise, after confirming its contract."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/688466f660cda5e0615028a5/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "This is authored practice from a partial preview, not an official problem qualification.",
+      "O(coordinate text length) time, O(1) extra space"
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/688466f660cda5e0615028a5/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "The first string contains [x,y]. Treat x as the zero-based column and y as the zero-based row in the subsequent rectangular uppercase-letter board. Return that one character. Inputs contain an in-range coordinate.",
+      "Observing a result must not change earlier returned snapshots or mutate input containers."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/688466f660cda5e0615028a5/invariants"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "First state the invariant and clarify the explicitly inferred rules.",
+      "Parse the two coordinate integers and index the board at row y, column x.",
+      "Test boundaries and rejected transitions before relying on the optimized data structure."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+        "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+        "selector": "/688466f660cda5e0615028a5/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Reasoning",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which rules are known and which remain inferred?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/688466f660cda5e0615028a5/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "The first string contains [x,y]. Treat x as the zero-based column and y as the zero-based row in the subsequent rectangular uppercase-letter board. Return that one character. Inputs contain an in-range coordinate.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/12/inferred_spec"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Which rules are known and which remain inferred?"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "First state the invariant and clarify the explicitly inferred rules."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/688466f660cda5e0615028a5/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/12"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:6884634c60cda5e06150289d:688466f660cda5e0615028a5:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6884634c60cda5e06150289d_688466f660cda5e0615028a5_approach-native_v1.json",
+        "sha256": "2b6e0c3367c0612004135af9c765122337a8cbb0798517b994423a10dfb05506"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Coding",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which invariant and data structure implement this exact contract?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/688466f660cda5e0615028a5/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Parse the two coordinate integers and index the board at row y, column x.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Parse the two coordinate integers and index the board at row y, column x."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Parse the two coordinate integers and index the board at row y, column x."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/688466f660cda5e0615028a5/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/12"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:6884634c60cda5e06150289d:688466f660cda5e0615028a5:python:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6884634c60cda5e06150289d_688466f660cda5e0615028a5_python_v1.json",
+          "sha256": "eabc9072fe0680df760e9f7736fdfbadddec39c4780857fc36c16af50e7e3a84"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:6884634c60cda5e06150289d:688466f660cda5e0615028a5:javascript:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6884634c60cda5e06150289d_688466f660cda5e0615028a5_javascript_v1.json",
+          "sha256": "66b53d8f40ced98ee8878bc5997c0e5087ad1d53a13f19f206b0ab8fb9cec0f4"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:6884634c60cda5e06150289d:688466f660cda5e0615028a5:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6884634c60cda5e06150289d_688466f660cda5e0615028a5_approach-native_v1.json",
+        "sha256": "2b6e0c3367c0612004135af9c765122337a8cbb0798517b994423a10dfb05506"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Validation",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which boundary or failed transition would falsify the implementation?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/688466f660cda5e0615028a5/clarifyingQuestions"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Compare each language independently with the frozen reference: Enumerate every board cell and select the matching coordinate. Local success applies only to the inferred contract; exact hidden-variant behavior, official resource limits and independent qualification remain unknown.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Separate the inferred contract, implementation choice and actual development evidence.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Which boundary or failed transition would falsify the implementation?"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "observations": {
+        "status": "present",
+        "value": [
+          "Enumerate every board cell and select the matching coordinate."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/design.json",
+            "sha256": "53e9d0ca4109619216b7225648d814b7e4cb639dd364c4c07a27f6dd54a90467",
+            "selector": "/688466f660cda5e0615028a5"
+          }
+        ]
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Test boundaries and rejected transitions before relying on the optimized data structure."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-content.json",
+            "sha256": "adf62e909eb9449406d41645e7b41a2d6d8b7836d0cbd8329546b41c6eb9211d",
+            "selector": "/688466f660cda5e0615028a5/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/contracts.json",
+            "sha256": "b3f94a38c3447e52b23bb04f512ccfac1f35c0b16fe9022b0befd0b69c33ea71",
+            "selector": "/problems/12"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:hack2hire:6884634c60cda5e06150289d:688466f660cda5e0615028a5:development-suite:v1",
+          "version": 1,
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6884634c60cda5e06150289d_688466f660cda5e0615028a5_development-suite_v1.json",
+          "sha256": "f826d3b77804cd3ffc6b4e15b55d86813e2433a2049d4972d2d80e5287fb0064"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:hack2hire:6884634c60cda5e06150289d:688466f660cda5e0615028a5:approach-native:v1",
+        "version": 1,
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6884634c60cda5e06150289d_688466f660cda5e0615028a5_approach-native_v1.json",
+        "sha256": "2b6e0c3367c0612004135af9c765122337a8cbb0798517b994423a10dfb05506"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6884634c60cda5e06150289d:688466f660cda5e0615028a5:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-v1/study-records/artifact--artifact_hack2hire_6884634c60cda5e06150289d_688466f660cda5e0615028a5_approach-native_v1.json",
+    "sha256": "2b6e0c3367c0612004135af9c765122337a8cbb0798517b994423a10dfb05506"
+  }
+}

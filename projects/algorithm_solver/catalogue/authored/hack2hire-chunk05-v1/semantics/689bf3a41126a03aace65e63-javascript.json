@@ -1,0 +1,50 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:689bf3a41126a03aace65e63",
+  "source_sha256": "f974afe4cd4926c266b4cf4501d731c81a41753ff6e5de0049d1e74f73068073",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "countFullyCoveredClusters",
+    "params": [
+      {
+        "name": "availability",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "users",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:689bf3a41126a03aace65e63",
+    "key": "coverage",
+    "candidate_design": "Flood each user component once; keep a covered flag while visiting all cells, even after finding an uncovered cell.",
+    "complexity_target": "O(rows*columns) time and space",
+    "reference": "Expand component sets by repeated adjacency scans.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Count four-connected components of user cells whose every cell has availability 1. Matrices have identical rectangular dimensions; availability need not connect to other available cells. Empty matrices return zero."
+    }
+  ]
+}

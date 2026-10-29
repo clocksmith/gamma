@@ -1,0 +1,46 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:67a4ce0f2a9ed767fa215431",
+  "source_sha256": "f9bda90f70d41e28fd633d7dadec402fd7154da0a44da4f892e146d7cd97e32b",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "countDistinctPasswords",
+    "params": [
+      {
+        "name": "password",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:67a4ce0f2a9ed767fa215431",
+    "key": "passwords",
+    "candidate_design": "Count unequal endpoint pairs, plus the unchanged string. Strip equal ends from a reversal to identify its unique first/last changed positions.",
+    "complexity_target": "O(n) time, O(alphabet) space",
+    "reference": "Enumerate all substrings, build reversed strings and deduplicate literally.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Count distinct Unicode-code-point strings obtainable by reversing one nonempty contiguous segment. Include the unchanged string; the empty input has one result by an explicit extension."
+    }
+  ]
+}

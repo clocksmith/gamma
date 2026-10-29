@@ -1,0 +1,55 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:69baff097d8d5a1c3037177a",
+  "source_sha256": "1dff85f4bd7b75f5b4f151c4088cafae7d1837a077f9274dc828c4fcf70c828b",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "TradingSystem",
+    "constructor": {
+      "params": []
+    },
+    "methods": {
+      "addListing": [
+        "seller",
+        "item",
+        "price"
+      ],
+      "buy": [
+        "item",
+        "budget"
+      ]
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:69baff097d8d5a1c3037177a",
+    "key": "trading",
+    "candidate_design": "Maintain a price/insertion-sequence min-heap per item; inspect and pop the cheapest eligible listing.",
+    "complexity_target": "O(log listings) add/buy, O(listings) storage",
+    "reference": "Scan and select the cheapest matching active row.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "addListing adds one unit with seller, item and integer price. buy(item,budget) consumes the cheapest eligible listing, breaking equal-price ties by insertion order, and returns [seller,price] or null. Quantities, cancellation and order books are outside this inferred single-unit marketplace contract."
+    }
+  ]
+}

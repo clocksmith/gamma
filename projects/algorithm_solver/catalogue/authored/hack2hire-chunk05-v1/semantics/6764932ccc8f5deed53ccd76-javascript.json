@@ -1,0 +1,54 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:6764932ccc8f5deed53ccd76",
+  "source_sha256": "22040e1f8079e5749c26d0e64397d205bd99d0ba2ebb08956cdf05f51f163a92",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "isValidDate",
+    "params": [
+      {
+        "name": "a",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "b",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      },
+      {
+        "name": "c",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:6764932ccc8f5deed53ccd76",
+    "key": "date",
+    "candidate_design": "Try the six assignments; validate month length with a 400/100/4 Gregorian leap predicate.",
+    "complexity_target": "O(1) time and space",
+    "reference": "Use standard-library calendar month lengths over all permutations.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Return true if any permutation of the three supplied integers is a valid proleptic Gregorian [year,month,day], with year 1..9999. Consider all six permutations, including century leap-year rules."
+    }
+  ]
+}

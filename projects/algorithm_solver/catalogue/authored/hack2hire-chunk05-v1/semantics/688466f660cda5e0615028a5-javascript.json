@@ -1,0 +1,46 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:688466f660cda5e0615028a5",
+  "source_sha256": "30c8ca8f6a0780d6138ab79d5dea88c5b99e4fbc78d536b62eec255bf95ac7c2",
+  "language": "javascript",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "decodePassword",
+    "params": [
+      {
+        "name": "text",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:688466f660cda5e0615028a5",
+    "key": "decode",
+    "candidate_design": "Parse the two coordinate integers and index the board at row y, column x.",
+    "complexity_target": "O(coordinate text length) time, O(1) extra space",
+    "reference": "Enumerate every board cell and select the matching coordinate.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "The first string contains [x,y]. Treat x as the zero-based column and y as the zero-based row in the subsequent rectangular uppercase-letter board. Return that one character. Inputs contain an in-range coordinate."
+    }
+  ]
+}

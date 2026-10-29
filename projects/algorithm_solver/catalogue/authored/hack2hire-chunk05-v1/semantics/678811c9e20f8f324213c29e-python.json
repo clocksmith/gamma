@@ -1,0 +1,55 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:678811c9e20f8f324213c29e",
+  "source_sha256": "54d6c064e10099b61b65f8767225295bc97b1d109656b310da217dec31531b45",
+  "language": "python",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "class",
+    "classname": "MeetingScheduler",
+    "constructor": {
+      "params": [
+        "rooms"
+      ]
+    },
+    "methods": {
+      "book": [
+        "start",
+        "end"
+      ],
+      "schedule": [
+        "room"
+      ]
+    },
+    "transcript_adapter": "solve(operation_names, argument_lists); null constructor result"
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:678811c9e20f8f324213c29e",
+    "key": "meeting",
+    "candidate_design": "Keep each room’s bookings sorted; binary-search the insertion slot and inspect only neighboring intervals.",
+    "complexity_target": "O(rooms log bookings + bookings) booking; O(bookings) snapshot",
+    "reference": "Scan every interval in each room for overlap.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "Rooms retain constructor order. book(start,end) uses half-open nonempty intervals and assigns the first room with no overlap, returning its ID or null. schedule(room) returns fresh sorted intervals. Cancellation is outside this inferred exercise."
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "gamma.authored-native-semantics.v1",
+  "problem_id": "hack2hire:6884635760cda5e06150289e",
+  "source_sha256": "8029f937bb9568207bee38d3744e87f9ff010cd263b0cb9bf8cd19a19b077d67",
+  "language": "python",
+  "entrypoint": "solve",
+  "inferred_interface": {
+    "kind": "function",
+    "name": "decodePassword",
+    "params": [
+      {
+        "name": "text",
+        "type": "See inferred contract; exact native ABI is not source-confirmed"
+      }
+    ]
+  },
+  "official_interface": null,
+  "comparison": "exact typed result with lossless large-integer wire encoding",
+  "effects": "Inputs and nested containers unchanged; returned mutable snapshots are independent; internal class state may mutate",
+  "status": "unknown",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Author-local runs against inferred preview contracts only; no exact hidden-variant confirmation or independent qualification"
+  },
+  "source_reasoning": {
+    "id": "hack2hire:6884635760cda5e06150289e",
+    "key": "decode",
+    "candidate_design": "Parse the two coordinate integers and index the board at row y, column x.",
+    "complexity_target": "O(coordinate text length) time, O(1) extra space",
+    "reference": "Enumerate every board cell and select the matching coordinate.",
+    "limits": "Only bounded author-development cases are executed; full official domain/resource suitability is unknown"
+  },
+  "numeric_semantics": "Python arbitrary-precision integers; JavaScript BigInt for grid counts, prime products, rational ratings and order quantities. Other input numeric fields are safe integers.",
+  "unicode_semantics": "Passwords use Unicode code points; board and remaining identifier/string domains follow the explicit ASCII/lowercase contracts.",
+  "assumptions": [
+    {
+      "spec_basis": "inferred",
+      "who": "Codex /root",
+      "date": "2026-10-29",
+      "basis": "Public group preview only; no exact variant body"
+    },
+    {
+      "text": "The first string contains [x,y]. Treat x as the zero-based column and y as the zero-based row in the subsequent rectangular uppercase-letter board. Return that one character. Inputs contain an in-range coordinate."
+    }
+  ]
+}
