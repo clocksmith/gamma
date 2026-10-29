@@ -80,8 +80,25 @@ These programs passed every executed case or, in Q, were not dispatched. Their m
 
 In Q, unapproved programs receive no dispatch, so these eight programs were not executed.
 
+## Boundary repair of the 28 case-gap problems
+
+Each repair lane holds every original case for its problems plus new boundary cases whose expected values come from independent references. An independent reviewer that wrote neither the cases nor the sources recomputed every new row (0 mismatches), confirmed that each named wrong program now fails a row, and set every review flag from its own flag-by-flag source verdicts. Limits, observers, transport and comparisons are those of the lane being repaired.
+
+| Lane | Programs | Qualified | New rows | Calls replayed | Batches | Freeze | Review | Report | Host replay |
+|---|---:|---:|---:|---:|---:|---|---|---|---|
+| [Q boundary](../continuation-q-boundary-20261028-v1/README.md) | 8 | 8 | 315 | 1,534 | 214 | `e947d63748f2b2da4e0f1f703676c8be7209bbcab5e1b84f300787547414256e` | `8902a838c3a5d8c9c0ac06298f8defa65370ee32653efa54ab5552fba603bcb1` | `4c046c161e1a70293757ae0faa85199b27da354d8e0019271d8684f0a8a52076` | `64df7ba83eb96a7bada853b49a0ed73bc0da96fd6344cb6192041ea04e06d69b` |
+| [L/M boundary](../continuation-lm-boundary-20261028-v1/README.md) | 22 | 22 | 1,261 | 5,706 | 376 | `258426879befa19ce4c8efa02ea15d75281d38306594d6674f77fd1e8c5c80e6` | `d79e91b0bfaaa24f3ab065606ee58f202705a4e14bb288003b3bfcbd7d67c400` | `e6ccf8e3b33c9f64462385d197b53878bb76da5239efea731073122530124e4d` | `f9e63f9a643a07c52d58b73549bf06d314c3585b8b2c7a62d0a6197a7b4d7c1e` |
+| [N/O boundary](../continuation-no-boundary-20261028-v1/README.md) | 26 | 26 | 638 | 13,350 | 690 | `3229f1cfdb0512bd8d0d20352df30a06e6126bd2591c941bf2141e619c805c2e` | `d60846ae358939068610667b8818d0d9fbaff4bb53a94294714747fd3cc22dd0` | `4809aa4734b2e130903bdffe46dad51e854b2c9fe435d77099601b151c8cc735` | `087de467b2ec806127dcae62921110438f9941323f375b47243cc6163123f75b` |
+
+All 56 programs qualified on their repaired finite suites, and every replay matched. Combined with the table above, 170 of 176 programs are now qualified. The remaining six are the four observer-cost kills and 208 in both languages.
+
+Caveats recorded by the reviewers:
+- **140:** an unpruned DFS is rejected only by the complexity review; its JavaScript CPU rejection on the dead-end batch depends on hardware.
+- **3862:** the "two balanced indices" gap is impossible in the domain (values are at least 1), so it was closed by proof, not cases.
+- **3937:** the circular-residue reading was adopted by the lane operator on third-party evidence (the doocs reference). It is not an owner decision.
+
 ## Next
 
-1. Repair these 28 case sets in new frozen lanes, as for J/K: independent references and boundary cases at the domain maximum, an independent case review, then a new run and replay. 3937 needs its statement reading settled before its reference can be independent.
+1. Done: see the boundary repair section above.
 2. Reduce observer cost for large trees and lists, keeping the same checks, then rerun 234, 235, 236 and 222 in JavaScript.
 3. 208 needs a transport profile that can carry the 20 MB witness without the forbidden workarounds.
