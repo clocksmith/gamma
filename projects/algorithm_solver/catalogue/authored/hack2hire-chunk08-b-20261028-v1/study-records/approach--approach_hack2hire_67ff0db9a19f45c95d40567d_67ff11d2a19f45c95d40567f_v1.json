@@ -1,0 +1,460 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+   "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+   "selector": "/problems/hack2hire:67ff11d2a19f45c95d40567f"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+   "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+   "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f"
+  }
+ ],
+ "problemId": "hack2hire:67ff0db9a19f45c95d40567d",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/contract--contract_hack2hire_67ff0db9a19f45c95d40567d_67ff11d2a19f45c95d40567f_authored-v1.json",
+  "sha256": "64061e57e529ea9058e1bab164d4f728197289fd0823ebf2ba643e5f9de346ef"
+ },
+ "title": {
+  "status": "present",
+  "value": "backtracking with DSATUR order (most constrained uncoloured node first), saturation counters and a fixed colour for the first node of each component",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+    "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+    "selector": "/problems/hack2hire:67ff11d2a19f45c95d40567f/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "backtracking with DSATUR order (most constrained uncoloured node first), saturation counters and a fixed colour for the first node of each component. Complexity target: O(3^n) worst case, far less with the ordering.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+    "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+    "selector": "/problems/hack2hire:67ff11d2a19f45c95d40567f"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Small graphs with an NP-hard decision"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Exhaustive search is simplest; DSATUR ordering prunes most branches in practice"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "no two adjacent coloured nodes share a colour at any point of the search"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Map names to indices and build adjacency lists.",
+   "Colour the node with the fewest remaining colours first; dead ends show up early.",
+   "Colour components independently and fix the first node's colour to break symmetry."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "backtracking with DSATUR order (most constrained uncoloured node first), saturation counters and a fixed colour for the first node of each component",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:67ff11d2a19f45c95d40567f/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(3^n) worst case, far less with the ordering; the independent reference (try all 3^n colour assignments) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Map names to indices and build adjacency lists.",
+     "Colour the node with the fewest remaining colours first; dead ends show up early."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67ff0db9a19f45c95d40567d_67ff11d2a19f45c95d40567f_approach-native_v1.json",
+    "sha256": "3d449d84ce567cbc0da635840b408086559d15f00bd3171b721df60aa7509fce"
+   }
+  },
+  {
+   "id": "approach:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper canThreeColor, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer (or BigInt) arithmetic for every count and amount."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Colour components independently and fix the first node's colour to break symmetry."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67ff0db9a19f45c95d40567d_67ff11d2a19f45c95d40567f_python_v1.json",
+     "sha256": "c34616b0e5a32b71ecb1fbf1589710230a1e31ac9ea7e81306f91a732309cb4f"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67ff0db9a19f45c95d40567d_67ff11d2a19f45c95d40567f_javascript_v1.json",
+     "sha256": "644aee6bbf0450176f5265e4ae9f0e6d16ee657a050f8c170b8beab5ea60c2a7"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67ff0db9a19f45c95d40567d_67ff11d2a19f45c95d40567f_approach-native_v1.json",
+    "sha256": "3d449d84ce567cbc0da635840b408086559d15f00bd3171b721df60aa7509fce"
+   }
+  },
+  {
+   "id": "approach:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (try all 3^n colour assignments) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:67ff11d2a19f45c95d40567f/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/16/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare outputs exactly, including JSON types and list order; for classes, also run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/test_oracles.py",
+      "sha256": "40799712436abf689e2a66bbb8e254483db9832666a6c56ea8deb466e2b06c6d",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67ff11d2a19f45c95d40567f"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67ff0db9a19f45c95d40567d_67ff11d2a19f45c95d40567f_approach-native_v1.json",
+    "sha256": "3d449d84ce567cbc0da635840b408086559d15f00bd3171b721df60aa7509fce"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:67ff0db9a19f45c95d40567d:67ff11d2a19f45c95d40567f:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67ff0db9a19f45c95d40567d_67ff11d2a19f45c95d40567f_approach-native_v1.json",
+  "sha256": "3d449d84ce567cbc0da635840b408086559d15f00bd3171b721df60aa7509fce"
+ }
+}

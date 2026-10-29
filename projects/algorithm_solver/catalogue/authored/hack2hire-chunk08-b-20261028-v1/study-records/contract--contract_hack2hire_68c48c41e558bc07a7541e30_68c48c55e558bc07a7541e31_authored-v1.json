@@ -1,0 +1,393 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68c48c41e558bc07a7541e30:68c48c55e558bc07a7541e31:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+   "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+   "selector": "/problems/3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68c48c41e558bc07a7541e30.json",
+   "sha256": "9bf95dad2caf1a6b6eb2e1fe780a28b33f1ee3279446a98c7a9bd9ca24c02022",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+   "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+   "selector": "/variants/hack2hire:68c48c55e558bc07a7541e31"
+  }
+ ],
+ "problemId": "hack2hire:68c48c41e558bc07a7541e30",
+ "variantId": "68c48c55e558bc07a7541e31",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: boolean move, growth on every fifth move",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:68c48c55e558bc07a7541e31/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "SnakeGame(rows, cols) starts a snake of length 1 at the top-left cell (0, 0) of a rows x cols board. move(direction) with direction \"U\", \"D\", \"L\" or \"R\" counts one move and steps the head one cell. On every fifth move (moves 5, 10, 15, ...) the snake grows: its tail stays put; on other moves the tail cell is vacated first. The game ends when the head leaves the board or enters a cell still occupied by the snake. move returns true while the game continues and false for the move that ends it and for every later move.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "SnakeGame(rows, cols) starts a snake of length 1 at the top-left cell (0, 0) of a rows x cols board.",
+   "move(direction) with direction \"U\", \"D\", \"L\" or \"R\" counts one move and steps the head one cell.",
+   "On every fifth move (moves 5, 10, 15, ...) the snake grows: its tail stays put; on other moves the tail cell is vacated first.",
+   "The game ends when the head leaves the board or enters a cell still occupied by the snake.",
+   "move returns true while the game continues and false for the move that ends it and for every later move."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= rows, cols <= 100000",
+   "rows * cols <= 10^9",
+   "at most 100000 moves per trace",
+   "direction in {\"U\", \"D\", \"L\", \"R\"}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:68c48c55e558bc07a7541e31/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: snake starts at the top-left corner, grows automatically every 5 moves, no food, the game ends on hitting a wall or itself, SnakeGame class; algorithmTags: QUEUE, LINKED_LIST; preview response sha256 c774c800c35f1f1db232ec52213a92380b4b233b195c9f46f2d570376bdccb76"
+   },
+   {
+    "statement": "Uncertainty: high: the start cell, the growth period and the end conditions are in the preview; the constructor arguments, direction letters, the boolean return, the tail rule and the behaviour after game over are inferred",
+    "basis": "the public group preview is partial (392 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/3/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/3/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/3/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does move return?",
+   "Does the tail cell count as occupied on a non-growing move?",
+   "What happens to moves after the game ends?",
+   "Is growth on the fifth move or after it?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:68c48c55e558bc07a7541e31/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "SnakeGame"
+     ],
+     [
+      [
+       1,
+       1
+      ]
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "SnakeGame",
+      "move"
+     ],
+     [
+      [
+       1,
+       1
+      ],
+      [
+       "R"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:68c48c55e558bc07a7541e31/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/oracles.py",
+    "sha256": "baf083b476340a998455b60627423a9b6aaf62ef0f73cea0a05edeb68df1ce89",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class SnakeGame:\n    def __init__(self, rows, cols)\n    def move(self, direction) -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/68c48c55e558bc07a7541e31-python.json",
+     "inferredInterface": {
+      "classname": "SnakeGame",
+      "constructor": {
+       "params": [
+        {
+         "name": "rows",
+         "type": "integer"
+        },
+        {
+         "name": "cols",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "move",
+        "params": [
+         {
+          "name": "direction",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/68c48c55e558bc07a7541e31-python.json",
+      "sha256": "7aea934a1123fe57c1c8ce52b8f645c4344a564dfb0936a0da2215692dc228c8",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class SnakeGame {\n  constructor(rows, cols)\n  move(direction) /* -> boolean */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/68c48c55e558bc07a7541e31-javascript.json",
+     "inferredInterface": {
+      "classname": "SnakeGame",
+      "constructor": {
+       "params": [
+        {
+         "name": "rows",
+         "type": "integer"
+        },
+        {
+         "name": "cols",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "move",
+        "params": [
+         {
+          "name": "direction",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/68c48c55e558bc07a7541e31-javascript.json",
+      "sha256": "9f9edc704dfc2b40c4c8a41f870c5a2546ee27d9d6c136a47430dc4eadc8daf9",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/3/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/3/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

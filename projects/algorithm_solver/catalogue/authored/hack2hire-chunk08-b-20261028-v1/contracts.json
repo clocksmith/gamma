@@ -1,0 +1,1337 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:67cf4b1faca6a2fa74a72cfd",
+   "variant_id": "67cf4b1faca6a2fa74a72cfd",
+   "variant_ordinal": 1,
+   "title": "Set Parity Bits",
+   "source": {
+    "post_id": "67cf48deaca6a2fa74a72cfc",
+    "group_title": "Set Parity Bits",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67cf48deaca6a2fa74a72cfc",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67cf48deaca6a2fa74a72cfc/practice?questionId=67cf4b1faca6a2fa74a72cfd",
+    "preview_response_sha256": "e4c80f9d9b22523102f163a6b3236cbc12b27733fad4077ce2cce3aa1ce590cb",
+    "preview_content_sha256": "bd4bbe82488f4ef673a2eb606040958499623ecd2ae95e7fcc0f1f72bc701c20",
+    "preview_characters": 497,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67cf48deaca6a2fa74a72cfc.json",
+    "algorithm_tags": [
+     "BIT_MANIPULATION"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: one 8-bit byte, only the most significant bit may change, the result must have an even number of 1 bits, bit manipulation required",
+    "algorithmTags: BIT_MANIPULATION"
+   ],
+   "inferred_spec": "The input is one byte given as an integer from 0 to 255. Keep its seven low bits and choose its most significant bit (value 128) so that the byte has an even number of 1 bits. Return the resulting byte as an integer.",
+   "inference_uncertainty": "medium: the rule is stated in the preview; the input and output types (integer rather than an 8-character binary string) are inferred",
+   "inferred_interface": {
+    "name": "setParityBit",
+    "params": [
+     {
+      "name": "byte",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PARITY"
+  },
+  {
+   "uid": "hack2hire:681aa38c0a6e86cbf10c58f9",
+   "variant_id": "681aa38c0a6e86cbf10c58f9",
+   "variant_ordinal": 1,
+   "title": "Shortest Hiking Distance",
+   "source": {
+    "post_id": "681aa0210a6e86cbf10c58f8",
+    "group_title": "Shortest Hiking Distance",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/681aa0210a6e86cbf10c58f8",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/681aa0210a6e86cbf10c58f8/practice?questionId=681aa38c0a6e86cbf10c58f9",
+    "preview_response_sha256": "57139b4df90138611f550a9b571a69c47c6736c3cb9cedf24ee03c95dfb191d2",
+    "preview_content_sha256": "5216cb987864553f4f54953f6c7f3e0cc7e50f0c1b32582f8d60a1c494406518",
+    "preview_characters": 567,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/681aa0210a6e86cbf10c58f8.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH",
+     "GREEDY"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: non-decreasing stop distances starting at 0, up to k intermediate overnight stops, daily distance between consecutive chosen stops",
+    "algorithmTags: BINARY_SEARCH, GREEDY"
+   ],
+   "inferred_spec": "Stops along a trail are given by a non-decreasing array t with t[0] = 0 (the start) and t[n-1] the destination. The hiker may rest overnight at up to k of the intermediate stops t[1..n-2]; each day runs from the previous rest point to the next one. Return the smallest possible value of the longest single-day distance. With n = 1 the answer is 0.",
+   "inference_uncertainty": "medium: the setting is stated; the objective (minimise the maximum daily distance) is inferred from the title and tags, since the preview stops before the question",
+   "inferred_interface": {
+    "name": "minMaxDailyDistance",
+    "params": [
+     {
+      "name": "t",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "HIKE"
+  },
+  {
+   "uid": "hack2hire:680aa01ecbb5948f87732bc0",
+   "variant_id": "680aa01ecbb5948f87732bc0",
+   "variant_ordinal": 1,
+   "title": "Shortest Path in Unweighted Graph",
+   "source": {
+    "post_id": "680a9bbdcbb5948f87732bbe",
+    "group_title": "Shortest Path in Unweighted Graph",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680a9bbdcbb5948f87732bbe",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680a9bbdcbb5948f87732bbe/practice?questionId=680aa01ecbb5948f87732bc0",
+    "preview_response_sha256": "a7708f903026bda9b90905bb853d43eb6160f18000e46165d72b043da9986508",
+    "preview_content_sha256": "0f489dabc6f6e1dc7f05b92924f92b661e9bebe98951c20fd434ea8be6afc644",
+    "preview_characters": 296,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/680a9bbdcbb5948f87732bbe.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH",
+     "GRAPH"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: undirected graph with n nodes and an edge list, shortest distance from source to target, -1 when unreachable",
+    "algorithmTags: BREADTH_FIRST_SEARCH, GRAPH"
+   ],
+   "inferred_spec": "An undirected graph has nodes 0 to n - 1 and an edge list of pairs [u, v]. Return the number of edges on a shortest path from source to target, 0 when they are the same node, and -1 when target cannot be reached.",
+   "inference_uncertainty": "low: the task and the -1 rule are stated; the argument order and bounds are inferred",
+   "inferred_interface": {
+    "name": "shortestPath",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "edges",
+      "type": "integer[][]"
+     },
+     {
+      "name": "source",
+      "type": "integer"
+     },
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "SPATH"
+  },
+  {
+   "uid": "hack2hire:68c48c55e558bc07a7541e31",
+   "variant_id": "68c48c55e558bc07a7541e31",
+   "variant_ordinal": 1,
+   "title": "Snake Game",
+   "source": {
+    "post_id": "68c48c41e558bc07a7541e30",
+    "group_title": "Snake Game",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c48c41e558bc07a7541e30",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c48c41e558bc07a7541e30/practice?questionId=68c48c55e558bc07a7541e31",
+    "preview_response_sha256": "c774c800c35f1f1db232ec52213a92380b4b233b195c9f46f2d570376bdccb76",
+    "preview_content_sha256": "7169b1639de6e00d1cb1fea21d2098f8c1fbbea331499027df8f90eeab444c13",
+    "preview_characters": 392,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68c48c41e558bc07a7541e30.json",
+    "algorithm_tags": [
+     "QUEUE",
+     "LINKED_LIST"
+    ],
+    "companies": [
+     "ATLASSIAN"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: snake starts at the top-left corner, grows automatically every 5 moves, no food, the game ends on hitting a wall or itself, SnakeGame class",
+    "algorithmTags: QUEUE, LINKED_LIST"
+   ],
+   "inferred_spec": "SnakeGame(rows, cols) starts a snake of length 1 at the top-left cell (0, 0) of a rows x cols board. move(direction) with direction \"U\", \"D\", \"L\" or \"R\" counts one move and steps the head one cell. On every fifth move (moves 5, 10, 15, ...) the snake grows: its tail stays put; on other moves the tail cell is vacated first. The game ends when the head leaves the board or enters a cell still occupied by the snake. move returns true while the game continues and false for the move that ends it and for every later move.",
+   "inference_uncertainty": "high: the start cell, the growth period and the end conditions are in the preview; the constructor arguments, direction letters, the boolean return, the tail rule and the behaviour after game over are inferred",
+   "inferred_interface": {
+    "classname": "SnakeGame",
+    "constructor": {
+     "params": [
+      {
+       "name": "rows",
+       "type": "integer"
+      },
+      {
+       "name": "cols",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "move",
+      "params": [
+       {
+        "name": "direction",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "SNAKE",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6842720b61bdd61d17676953",
+   "variant_id": "6842720b61bdd61d17676953",
+   "variant_ordinal": 1,
+   "title": "Spam Caller Counter",
+   "source": {
+    "post_id": "684271e361bdd61d17676952",
+    "group_title": "Spam Caller Counter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/684271e361bdd61d17676952",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/684271e361bdd61d17676952/practice?questionId=6842720b61bdd61d17676953",
+    "preview_response_sha256": "c7be6dd9b1b08569c12db2bf97a6b8e0e26ba1e6043216b500c50ce3a63c5a8c",
+    "preview_content_sha256": "2639680b749fe4f0690b8c7585161f31fdf1aadc8544f92348b337ad24212dd3",
+    "preview_characters": 825,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/684271e361bdd61d17676952.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: call triples with ISO 8601 timestamps, report pairs, a window in seconds, matching on equal receiver and absolute time difference at most window, per-caller counts",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "calls holds [caller, receiver, timestamp] and reports holds [receiver, timestamp], timestamps in the form \"YYYY-MM-DDTHH:MM:SS\". A report matches a call when the receivers are equal and the timestamps differ by at most window seconds. For each caller count the matching (call, report) pairs over all its calls. Return [caller, count] for every caller with a positive count, ordered by count descending and then caller ascending.",
+   "inference_uncertainty": "high: the matching rule is in the preview; whether a count is per pair or per call, the output shape and its order are inferred",
+   "inferred_interface": {
+    "name": "countSpamCalls",
+    "params": [
+     {
+      "name": "calls",
+      "type": "string[][]"
+     },
+     {
+      "name": "reports",
+      "type": "string[][]"
+     },
+     {
+      "name": "window",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "[string, integer][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "SPAM"
+  },
+  {
+   "uid": "hack2hire:68dc5d69dd5418be11109b00",
+   "variant_id": "68dc5d69dd5418be11109b00",
+   "variant_ordinal": 1,
+   "title": "Spelling Bee Word Finder",
+   "source": {
+    "post_id": "68dc0a3c9736cfa4e90623e7",
+    "group_title": "Spelling Bee Word Finder",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68dc0a3c9736cfa4e90623e7",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68dc0a3c9736cfa4e90623e7/practice?questionId=68dc5d69dd5418be11109b00",
+    "preview_response_sha256": "3e2a14bb5a135518b4c233785aa180ee91c557184abe6b97b6e65e46ffa9e520",
+    "preview_content_sha256": "1b75c595bcb422bc51322699358a4b852d1df477d9b85069bd37f9356f0863a7",
+    "preview_characters": 572,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68dc0a3c9736cfa4e90623e7.json",
+    "algorithm_tags": [
+     "STRING",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "BLOOMBERG"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: required letter, list of optional letters, dictionary, three validity rules (length at least 4, required letter present, only allowed letters)",
+    "algorithmTags: STRING, HASH_TABLE"
+   ],
+   "inferred_spec": "Return, in dictionary order and keeping repeats, every dictionary word that has at least 4 characters, contains requiredLetter at least once, and uses no character other than requiredLetter and the optionalLetters.",
+   "inference_uncertainty": "low: the three rules are in the preview; the output order, the handling of repeated words and the lowercase alphabet are inferred",
+   "inferred_interface": {
+    "name": "findValidWords",
+    "params": [
+     {
+      "name": "requiredLetter",
+      "type": "string"
+     },
+     {
+      "name": "optionalLetters",
+      "type": "string[]"
+     },
+     {
+      "name": "dictionary",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "BEE"
+  },
+  {
+   "uid": "hack2hire:688bd40e3867670cfb894186",
+   "variant_id": "688bd40e3867670cfb894186",
+   "variant_ordinal": 1,
+   "title": "String Replacement",
+   "source": {
+    "post_id": "688bd3c53867670cfb894185",
+    "group_title": "String Replacement",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688bd3c53867670cfb894185",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/688bd3c53867670cfb894185/practice?questionId=688bd40e3867670cfb894186",
+    "preview_response_sha256": "a52cda95c95a247aa51eba41bfdb6136aa4404b2bfca01607f39726cbdebcc83",
+    "preview_content_sha256": "e3e2beca387de64c3a744fd4fcabad9202dd8e83849188c5147c8c8ce84e56f0",
+    "preview_characters": 454,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/688bd3c53867670cfb894185.json",
+    "algorithm_tags": [
+     "TWO_POINTER",
+     "STRING"
+    ],
+    "companies": [
+     "LINKEDIN"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: source, target and replacement strings, replace every non-overlapping occurrence, no built-in substring/slice/replace",
+    "algorithmTags: TWO_POINTER, STRING"
+   ],
+   "inferred_spec": "Return source with every non-overlapping occurrence of target, chosen left to right, replaced by replacement. target is non-empty. The intended solution avoids built-in substring, slice and replace functions.",
+   "inference_uncertainty": "low: the operation is in the preview; an empty target is excluded and the character set and bounds are inferred",
+   "inferred_interface": {
+    "name": "replaceAll",
+    "params": [
+     {
+      "name": "source",
+      "type": "string"
+     },
+     {
+      "name": "target",
+      "type": "string"
+     },
+     {
+      "name": "replacement",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "REPL"
+  },
+  {
+   "uid": "hack2hire:67801e4c6fee41e51af73dda",
+   "variant_id": "67801e4c6fee41e51af73dda",
+   "variant_ordinal": 1,
+   "title": "Student Reading Textbook",
+   "source": {
+    "post_id": "67801a786fee41e51af73dd9",
+    "group_title": "Student Reading Textbook",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67801a786fee41e51af73dd9",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67801a786fee41e51af73dd9/practice?questionId=67801e4c6fee41e51af73dda",
+    "preview_response_sha256": "bade238c78ca2ded9736ddacb0a794be660d805594d499e9e582b0928c7e5a45",
+    "preview_content_sha256": "d4d99251adecd89c42baca40be94518b4cbbcd388a90055cd7ff55e37b627879",
+    "preview_characters": 706,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67801a786fee41e51af73dd9.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: chapters read in order, each day read to the chapter end or at most x pages, Koko-style variation",
+    "algorithmTags: BINARY_SEARCH"
+   ],
+   "inferred_spec": "Chapters are read in order; chapter i has pages[i] pages. With a daily limit x, each day the student reads min(x, pages left in the current chapter), so chapter i takes ceil(pages[i] / x) days. Return the smallest positive integer x that finishes all chapters within days days, or -1 when days < n.",
+   "inference_uncertainty": "medium: the reading rule is in the preview; the day budget argument, the objective and the -1 rule are inferred from the Koko analogy",
+   "inferred_interface": {
+    "name": "minimumPagesPerDay",
+    "params": [
+     {
+      "name": "pages",
+      "type": "integer[]"
+     },
+     {
+      "name": "days",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "READ"
+  },
+  {
+   "uid": "hack2hire:677c8aba5cbaff553b53b06e",
+   "variant_id": "677c8aba5cbaff553b53b06e",
+   "variant_ordinal": 1,
+   "title": "Subset Sum Equals K",
+   "source": {
+    "post_id": "677c87c55cbaff553b53b06d",
+    "group_title": "Subset Sum Equals K",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677c87c55cbaff553b53b06d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677c87c55cbaff553b53b06d/practice?questionId=677c8aba5cbaff553b53b06e",
+    "preview_response_sha256": "d3f380d39088a4e78dc76c41b0aa438a2b7ab897fdd5d20970fd02144f8170b7",
+    "preview_content_sha256": "352fc2cf4a4cb7a45ab03343a24c3ff4cc9a441edcbf3540a92a40fe82545085",
+    "preview_characters": 582,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677c87c55cbaff553b53b06d.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "MEMOIZATION"
+    ],
+    "companies": [
+     "CONFLUENT",
+     "GOOGLE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: positive integers with repeats allowed, target k, return true when some subset sums to k, Combination Sum variation; constraints n <= 1000, nums[i] <= 10^6, k <= 10^9",
+    "algorithmTags: DYNAMIC_PROGRAMMING, MEMOIZATION",
+    "codingQuestions: three variant ids with no per-variant text"
+   ],
+   "inferred_spec": "Return true when some subset of positions of nums (each position used at most once) has values summing to k, and false otherwise.",
+   "inference_uncertainty": "low for the rule (stated in the preview); the author-local test cap min(k, sum - k) <= 10^6 is narrower than the preview bounds, which admit inputs no pseudo-polynomial method handles in one second",
+   "inferred_interface": {
+    "name": "subsetSumExists",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred split: level 1 existence, level 2 counting, level 3 listing unique combinations; no per-variant text is public",
+   "oracle_constant": "SUB1"
+  },
+  {
+   "uid": "hack2hire:677c90795cbaff553b53b06f",
+   "variant_id": "677c90795cbaff553b53b06f",
+   "variant_ordinal": 2,
+   "title": "Subset Sum Equals K",
+   "source": {
+    "post_id": "677c87c55cbaff553b53b06d",
+    "group_title": "Subset Sum Equals K",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677c87c55cbaff553b53b06d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677c87c55cbaff553b53b06d/practice?questionId=677c90795cbaff553b53b06f",
+    "preview_response_sha256": "d3f380d39088a4e78dc76c41b0aa438a2b7ab897fdd5d20970fd02144f8170b7",
+    "preview_content_sha256": "352fc2cf4a4cb7a45ab03343a24c3ff4cc9a441edcbf3540a92a40fe82545085",
+    "preview_characters": 582,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677c87c55cbaff553b53b06d.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "MEMOIZATION"
+    ],
+    "companies": [
+     "CONFLUENT",
+     "GOOGLE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: positive integers with repeats allowed, target k, return true when some subset sums to k, Combination Sum variation; constraints n <= 1000, nums[i] <= 10^6, k <= 10^9",
+    "algorithmTags: DYNAMIC_PROGRAMMING, MEMOIZATION",
+    "codingQuestions: three variant ids with no per-variant text"
+   ],
+   "inferred_spec": "Return the number of subsets of positions of nums (positions distinct, equal values at different positions counted separately) whose values sum to k, modulo 1000000007.",
+   "inference_uncertainty": "very high: counting, position-distinct subsets and the modulus are inferred; no per-variant text is public",
+   "inferred_interface": {
+    "name": "countSubsets",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred split: level 1 existence, level 2 counting, level 3 listing unique combinations; no per-variant text is public",
+   "oracle_constant": "SUB2"
+  },
+  {
+   "uid": "hack2hire:677c923c5cbaff553b53b070",
+   "variant_id": "677c923c5cbaff553b53b070",
+   "variant_ordinal": 3,
+   "title": "Subset Sum Equals K",
+   "source": {
+    "post_id": "677c87c55cbaff553b53b06d",
+    "group_title": "Subset Sum Equals K",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677c87c55cbaff553b53b06d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677c87c55cbaff553b53b06d/practice?questionId=677c923c5cbaff553b53b070",
+    "preview_response_sha256": "d3f380d39088a4e78dc76c41b0aa438a2b7ab897fdd5d20970fd02144f8170b7",
+    "preview_content_sha256": "352fc2cf4a4cb7a45ab03343a24c3ff4cc9a441edcbf3540a92a40fe82545085",
+    "preview_characters": 582,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677c87c55cbaff553b53b06d.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "MEMOIZATION"
+    ],
+    "companies": [
+     "CONFLUENT",
+     "GOOGLE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: positive integers with repeats allowed, target k, return true when some subset sums to k, Combination Sum variation; constraints n <= 1000, nums[i] <= 10^6, k <= 10^9",
+    "algorithmTags: DYNAMIC_PROGRAMMING, MEMOIZATION",
+    "codingQuestions: three variant ids with no per-variant text"
+   ],
+   "inferred_spec": "Return every distinct multiset of values, drawn from nums with each position used at most once, whose sum is k. Each combination is listed in ascending order and the combinations are sorted lexicographically (as integer lists). Return [] when there is none.",
+   "inference_uncertainty": "very high: listing unique combinations (Combination Sum II style) is inferred from the Combination Sum reference and the remark that numbers may repeat; ordering and bounds are author choices",
+   "inferred_interface": {
+    "name": "uniqueCombinations",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred split: level 1 existence, level 2 counting, level 3 listing unique combinations; no per-variant text is public",
+   "oracle_constant": "SUB3"
+  },
+  {
+   "uid": "hack2hire:67882811e20f8f324213c2a0",
+   "variant_id": "67882811e20f8f324213c2a0",
+   "variant_ordinal": 1,
+   "title": "Substring Wrapper",
+   "source": {
+    "post_id": "67882765e20f8f324213c29f",
+    "group_title": "Substring Wrapper",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67882765e20f8f324213c29f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67882765e20f8f324213c29f/practice?questionId=67882811e20f8f324213c2a0",
+    "preview_response_sha256": "9062edd0d7de43203809b1d71104e70b4a2721ac17ecda39e6e9468a1cacd113",
+    "preview_content_sha256": "a35fcec3400a7cd1f688e586eaefef52b06fd3a9931e5678d585a79a56e1e52d",
+    "preview_characters": 261,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67882765e20f8f324213c29f.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "META",
+     "UBER"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: words separated by spaces, list of strings, wrap the first matching substring in each word in square brackets",
+    "algorithmTags: STRING"
+   ],
+   "inferred_spec": "s is words separated by single spaces. In each word, find the leftmost start position at which some element of elements occurs; among elements occurring there, take the longest. Wrap that one occurrence in square brackets. Words with no occurrence stay as they are. Return the words joined by single spaces.",
+   "inference_uncertainty": "high: the bracket wrapping is in the preview; \"first\" read as leftmost start with the longest element there, one wrap per word, and single-space separators are inferred",
+   "inferred_interface": {
+    "name": "wrapSubstrings",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     },
+     {
+      "name": "elements",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "WRAP"
+  },
+  {
+   "uid": "hack2hire:69d18c8717b72775cc49c0c2",
+   "variant_id": "69d18c8717b72775cc49c0c2",
+   "variant_ordinal": 1,
+   "title": "Template String Formatter I",
+   "source": {
+    "post_id": "69d18c8117b72775cc49c0c1",
+    "group_title": "Template String Formatter I",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d18c8117b72775cc49c0c1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d18c8117b72775cc49c0c1/practice?questionId=69d18c8717b72775cc49c0c2",
+    "preview_response_sha256": "82e9f8109c74cd83e5bb63776f661e80517a1aae6d736c2f3554dd2136605fbd",
+    "preview_content_sha256": "448c3e6c235fbbd0062fa87dcc2e53bba09a02a1d4141f70e25cfbc9c1c62771",
+    "preview_characters": 546,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d18c8117b72775cc49c0c1.json",
+    "algorithm_tags": [
+     "RECURSION"
+    ],
+    "companies": [
+     "FIGMA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: text with {varName} placeholders, parallel keys and values lists, replace every placeholder, literal characters copied, all placeholders defined and braces well formed",
+    "algorithmTags: RECURSION",
+    "codingQuestions: two variant ids with no per-variant text"
+   ],
+   "inferred_spec": "text contains placeholders {name}; keys[i] is a name and values[i] its replacement. Replace every placeholder by its value and copy all other characters unchanged. Values are plain text without braces.",
+   "inference_uncertainty": "low for the rule (stated in the preview); the level split (plain values here, nested values in level 2) is inferred",
+   "inferred_interface": {
+    "name": "formatTemplate",
+    "params": [
+     {
+      "name": "text",
+      "type": "string"
+     },
+     {
+      "name": "keys",
+      "type": "string[]"
+     },
+     {
+      "name": "values",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred split: level 1 plain values, level 2 values that contain placeholders expanded recursively",
+   "oracle_constant": "TPL1"
+  },
+  {
+   "uid": "hack2hire:69d18cdd17b72775cc49c0c6",
+   "variant_id": "69d18cdd17b72775cc49c0c6",
+   "variant_ordinal": 2,
+   "title": "Template String Formatter I",
+   "source": {
+    "post_id": "69d18c8117b72775cc49c0c1",
+    "group_title": "Template String Formatter I",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d18c8117b72775cc49c0c1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d18c8117b72775cc49c0c1/practice?questionId=69d18cdd17b72775cc49c0c6",
+    "preview_response_sha256": "82e9f8109c74cd83e5bb63776f661e80517a1aae6d736c2f3554dd2136605fbd",
+    "preview_content_sha256": "448c3e6c235fbbd0062fa87dcc2e53bba09a02a1d4141f70e25cfbc9c1c62771",
+    "preview_characters": 546,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d18c8117b72775cc49c0c1.json",
+    "algorithm_tags": [
+     "RECURSION"
+    ],
+    "companies": [
+     "FIGMA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: text with {varName} placeholders, parallel keys and values lists, replace every placeholder, literal characters copied, all placeholders defined and braces well formed",
+    "algorithmTags: RECURSION",
+    "codingQuestions: two variant ids with no per-variant text"
+   ],
+   "inferred_spec": "As level 1, but a value may itself contain placeholders; they are expanded recursively until no placeholder remains. Every referenced name is defined and the references contain no cycle.",
+   "inference_uncertainty": "high: recursive expansion is inferred from the RECURSION tag and the level split; acyclicity and bounds are inferred",
+   "inferred_interface": {
+    "name": "formatTemplate",
+    "params": [
+     {
+      "name": "text",
+      "type": "string"
+     },
+     {
+      "name": "keys",
+      "type": "string[]"
+     },
+     {
+      "name": "values",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred split: level 1 plain values, level 2 values that contain placeholders expanded recursively",
+   "oracle_constant": "TPL2"
+  },
+  {
+   "uid": "hack2hire:6aa861838c97c56cdbdc93e2",
+   "variant_id": "6aa861838c97c56cdbdc93e2",
+   "variant_ordinal": 1,
+   "title": "Tetris Block Drop",
+   "source": {
+    "post_id": "6aa861578c97c56cdbdc93df",
+    "group_title": "Tetris Block Drop",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6aa861578c97c56cdbdc93df",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6aa861578c97c56cdbdc93df/practice?questionId=6aa861838c97c56cdbdc93e2",
+    "preview_response_sha256": "5c0318ddffdd049b6426cfee22caa32edc6ae4011046aa7f5c7d771337181eb1",
+    "preview_content_sha256": "4590ba3c301e4dd6936005b63b17b9db3d34b8fc7d34bee047444e4bc332fea7",
+    "preview_characters": 472,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6aa861578c97c56cdbdc93df.json",
+    "algorithm_tags": [
+     "MATRIX",
+     "SIMULATION"
+    ],
+    "companies": [
+     "DATABRICKS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: binary background grid, binary block mask whose zero cells do not collide, zero-indexed starting column offset",
+    "algorithmTags: MATRIX, SIMULATION",
+    "codingQuestions: two variant ids with no per-variant text"
+   ],
+   "inferred_spec": "The block starts entirely above the grid with its left column at column offset and falls straight down one row at a time. It stops just before one of its 1-cells would leave the bottom of the grid or overlap a 1 in background. Return a new grid equal to background with the landed block's 1-cells set to 1.",
+   "inference_uncertainty": "medium: the inputs are in the preview; the start above the grid, the output grid and the in-grid landing precondition are inferred",
+   "inferred_interface": {
+    "name": "dropBlock",
+    "params": [
+     {
+      "name": "background",
+      "type": "integer[][]"
+     },
+     {
+      "name": "block",
+      "type": "integer[][]"
+     },
+     {
+      "name": "offset",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred split: level 1 returns the grid after landing, level 2 also clears full rows",
+   "oracle_constant": "TET1"
+  },
+  {
+   "uid": "hack2hire:6aa8623b8c97c56cdbdc93eb",
+   "variant_id": "6aa8623b8c97c56cdbdc93eb",
+   "variant_ordinal": 2,
+   "title": "Tetris Block Drop",
+   "source": {
+    "post_id": "6aa861578c97c56cdbdc93df",
+    "group_title": "Tetris Block Drop",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6aa861578c97c56cdbdc93df",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6aa861578c97c56cdbdc93df/practice?questionId=6aa8623b8c97c56cdbdc93eb",
+    "preview_response_sha256": "5c0318ddffdd049b6426cfee22caa32edc6ae4011046aa7f5c7d771337181eb1",
+    "preview_content_sha256": "4590ba3c301e4dd6936005b63b17b9db3d34b8fc7d34bee047444e4bc332fea7",
+    "preview_characters": 472,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6aa861578c97c56cdbdc93df.json",
+    "algorithm_tags": [
+     "MATRIX",
+     "SIMULATION"
+    ],
+    "companies": [
+     "DATABRICKS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: binary background grid, binary block mask whose zero cells do not collide, zero-indexed starting column offset",
+    "algorithmTags: MATRIX, SIMULATION",
+    "codingQuestions: two variant ids with no per-variant text"
+   ],
+   "inferred_spec": "As level 1, then remove every row that is completely filled; the remaining rows keep their order and drop to the bottom, and empty rows are added at the top so the grid keeps its size. Return the new grid.",
+   "inference_uncertainty": "high: row clearing as the second level is inferred from the Tetris theme; whether full rows already present before the drop also clear is inferred (they do)",
+   "inferred_interface": {
+    "name": "dropBlockAndClear",
+    "params": [
+     {
+      "name": "background",
+      "type": "integer[][]"
+     },
+     {
+      "name": "block",
+      "type": "integer[][]"
+     },
+     {
+      "name": "offset",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "inferred split: level 1 returns the grid after landing, level 2 also clears full rows",
+   "oracle_constant": "TET2"
+  },
+  {
+   "uid": "hack2hire:67ff11d2a19f45c95d40567f",
+   "variant_id": "67ff11d2a19f45c95d40567f",
+   "variant_ordinal": 1,
+   "title": "Three-Color Map Coloring",
+   "source": {
+    "post_id": "67ff0db9a19f45c95d40567d",
+    "group_title": "Three-Color Map Coloring",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ff0db9a19f45c95d40567d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ff0db9a19f45c95d40567d/practice?questionId=67ff11d2a19f45c95d40567f",
+    "preview_response_sha256": "4fa8bf1c9d007fd6e899d13f8f6ec7a1f8162d16f097932b31ca69f0541d56d2",
+    "preview_content_sha256": "e9e0ba06cc0a3803a01f6b3ee5823bd9110029d7d9911ece68bc7fb0351253bc",
+    "preview_characters": 321,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67ff0db9a19f45c95d40567d.json",
+    "algorithm_tags": [
+     "BACKTRACKING"
+    ],
+    "companies": [
+     "SNOWFLAKE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: list of nodes, list of adjacent pairs, three colours, adjacent nodes must differ, return true or false",
+    "algorithmTags: BACKTRACKING"
+   ],
+   "inferred_spec": "locations names the nodes and each adjacency [a, b] joins two different nodes. Return true when each node can get one of three colours so that adjacent nodes differ, else false.",
+   "inference_uncertainty": "low: the task is stated in the preview; node naming, the absence of self-loops and the author bound n <= 20 are inferred",
+   "inferred_interface": {
+    "name": "canThreeColor",
+    "params": [
+     {
+      "name": "locations",
+      "type": "string[]"
+     },
+     {
+      "name": "adjacencies",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "COLOR"
+  },
+  {
+   "uid": "hack2hire:684cd590cab8e9bb7ea93b11",
+   "variant_id": "684cd590cab8e9bb7ea93b11",
+   "variant_ordinal": 1,
+   "title": "Tic-Tac-Toe II",
+   "source": {
+    "post_id": "684c9251cab8e9bb7ea93aeb",
+    "group_title": "Tic-Tac-Toe II",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/684c9251cab8e9bb7ea93aeb",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/684c9251cab8e9bb7ea93aeb/practice?questionId=684cd590cab8e9bb7ea93b11",
+    "preview_response_sha256": "fdb6d8fed27579141262b03e8506ff09770022f0ff66e2d8652723ff231e47ca",
+    "preview_content_sha256": "b2be64ec6a5bcf659bb0a2914ec9c2e81098197bff4bf285250eb534b67d99c5",
+    "preview_characters": 666,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/684c9251cab8e9bb7ea93aeb.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "DATABRICKS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n x m board, two players, k consecutive marks horizontally, vertically or diagonally wins, valid moves on empty cells, no moves after a win, LeetCode 348 variation",
+    "algorithmTags: DESIGN"
+   ],
+   "inferred_spec": "TicTacToe(n, m, k) creates an empty n x m board. move(row, col, player) places the mark of player 1 or 2 on an empty cell and returns that player when the mark completes k or more consecutive own marks horizontally, vertically or along either diagonal, and 0 otherwise. Moves are valid and no move follows a win.",
+   "inference_uncertainty": "medium: the rules are in the preview; the class and method names and signatures follow LeetCode 348 and are inferred",
+   "inferred_interface": {
+    "classname": "TicTacToe",
+    "constructor": {
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "m",
+       "type": "integer"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "move",
+      "params": [
+       {
+        "name": "row",
+        "type": "integer"
+       },
+       {
+        "name": "col",
+        "type": "integer"
+       },
+       {
+        "name": "player",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "TTT",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6a95ede5cddc54478ddf6b5b",
+   "variant_id": "6a95ede5cddc54478ddf6b5b",
+   "variant_ordinal": 1,
+   "title": "Triangle Point Membership",
+   "source": {
+    "post_id": "6a95edcccddc54478ddf6b5a",
+    "group_title": "Triangle Point Membership",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a95edcccddc54478ddf6b5a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a95edcccddc54478ddf6b5a/practice?questionId=6a95ede5cddc54478ddf6b5b",
+    "preview_response_sha256": "31089795d9b7f36848baf0ca23819d91546ad62cb5ce4ab0744c930d995c9a3b",
+    "preview_content_sha256": "b7392b72b87f726274684f7bcc6cb05db66284b8db72be0f52d5071ce64f2ae5",
+    "preview_characters": 341,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a95edcccddc54478ddf6b5a.json",
+    "algorithm_tags": [
+     "MATH"
+    ],
+    "companies": [
+     "GOLDMAN_SACHS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: integer points a, b, c, query points p and q, non-degenerate means not collinear, belonging includes the boundary",
+    "algorithmTags: MATH"
+   ],
+   "inferred_spec": "Points a, b, c define a triangle; p and q are query points, all with integer coordinates. Return 0 when a, b, c are collinear; otherwise return 1 when only p lies in the closed triangle, 2 when only q does, 3 when both do and 4 when neither does.",
+   "inference_uncertainty": "medium-high: the setting is in the preview, which stops before the output; the 0/1/2/3/4 code is inferred from a familiar formulation of this problem",
+   "inferred_interface": {
+    "name": "pointsBelong",
+    "params": [
+     {
+      "name": "x1",
+      "type": "integer"
+     },
+     {
+      "name": "y1",
+      "type": "integer"
+     },
+     {
+      "name": "x2",
+      "type": "integer"
+     },
+     {
+      "name": "y2",
+      "type": "integer"
+     },
+     {
+      "name": "x3",
+      "type": "integer"
+     },
+     {
+      "name": "y3",
+      "type": "integer"
+     },
+     {
+      "name": "xp",
+      "type": "integer"
+     },
+     {
+      "name": "yp",
+      "type": "integer"
+     },
+     {
+      "name": "xq",
+      "type": "integer"
+     },
+     {
+      "name": "yq",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "TRI"
+  },
+  {
+   "uid": "hack2hire:69f3a12f42791c82ab992d99",
+   "variant_id": "69f3a12f42791c82ab992d99",
+   "variant_ordinal": 1,
+   "title": "User Flight Location Tracker",
+   "source": {
+    "post_id": "69f3a12842791c82ab992d98",
+    "group_title": "User Flight Location Tracker",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f3a12842791c82ab992d98",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f3a12842791c82ab992d98/practice?questionId=69f3a12f42791c82ab992d99",
+    "preview_response_sha256": "6156604ec5e02169db6a1176c74d5a896b35f18b2d2cb8e21de0a6b12e1e423b",
+    "preview_content_sha256": "d8885b8c0ff6ceaed2baceb014be85a84c892c4af4d0a1e025cf800cefd612ae",
+    "preview_characters": 355,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69f3a12842791c82ab992d98.json",
+    "algorithm_tags": [
+     "SORTING",
+     "STRING"
+    ],
+    "companies": [
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: flight records of five strings (departure airport, departure time, arrival airport, arrival time, user id), query (userId, time), return an IATA code",
+    "algorithmTags: SORTING, STRING"
+   ],
+   "inferred_spec": "Each flight is [departureAirport, departureTime, arrivalAirport, arrivalTime, userId]; times are \"YYYY-MM-DDTHH:MM\" strings. A user's flights do not overlap. Return where userId is at time: the first departure airport before the first flight; the departure airport at exactly a departure time; \"\" strictly between a departure and its arrival; otherwise the arrival airport of the latest flight that has arrived. Return \"\" for a user with no flights.",
+   "inference_uncertainty": "very high: the record format is in the preview; the time format, the airborne result, the rule before the first flight, the boundary rules and the unknown-user result are inferred",
+   "inferred_interface": {
+    "name": "findUserLocation",
+    "params": [
+     {
+      "name": "flights",
+      "type": "string[][]"
+     },
+     {
+      "name": "userId",
+      "type": "string"
+     },
+     {
+      "name": "time",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FLIGHT"
+  }
+ ]
+}

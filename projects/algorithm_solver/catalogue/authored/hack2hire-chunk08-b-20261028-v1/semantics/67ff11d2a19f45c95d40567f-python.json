@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67ff11d2a19f45c95d40567f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "locations",
+  "adjacencies"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "canThreeColor",
+  "params": [
+   {
+    "name": "locations",
+    "type": "string[]"
+   },
+   {
+    "name": "adjacencies",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try all 3^n colour assignments",
+  "candidate_design": "backtracking with DSATUR order (most constrained uncoloured node first), saturation counters and a fixed colour for the first node of each component",
+  "complexity_target": "O(3^n) worst case, far less with the ordering"
+ },
+ "source_sha256": "8c610b3b4446ac02050c8cc17a65bdad010e79be83d07cb20d4f66324c5ce7dc",
+ "wrapper": "Solution.canThreeColor"
+}

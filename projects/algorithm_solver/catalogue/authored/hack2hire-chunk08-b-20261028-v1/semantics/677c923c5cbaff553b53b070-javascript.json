@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:677c923c5cbaff553b53b070",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "uniqueCombinations",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every subset of positions, sort each matching subset and deduplicate through a set of tuples",
+  "candidate_design": "group equal values; a suffix reachability table (one big-integer bitset per distinct value) guides a depth-first enumeration that only enters branches that can still reach k",
+  "complexity_target": "O(D * k / w + output size * D) for D distinct values"
+ },
+ "source_sha256": "bdd5b966a1b980dab09e2a61030c0dcbb8ec6bfb68b760d8cec423d8af037bf6",
+ "wrapper": "named export uniqueCombinations"
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6aa861838c97c56cdbdc93e2",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "background",
+  "block",
+  "offset"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "dropBlock",
+  "params": [
+   {
+    "name": "background",
+    "type": "integer[][]"
+   },
+   {
+    "name": "block",
+    "type": "integer[][]"
+   },
+   {
+    "name": "offset",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate the fall one row at a time from fully above the grid, testing every block cell at each step",
+  "candidate_design": "per block column, the lowest 1-cell and the highest occupied background cell in the matching grid column fix the landing row in one pass",
+  "complexity_target": "O(rows * cols + h * w)"
+ },
+ "source_sha256": "5091861aa0929f5383fa16d7c6dcbe143fe65a6081db29d68a4a1e70be81cbce",
+ "wrapper": "named export dropBlock"
+}

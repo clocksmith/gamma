@@ -1,0 +1,342 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69f3a12842791c82ab992d98:69f3a12f42791c82ab992d99:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+   "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+   "selector": "/problems/19"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69f3a12842791c82ab992d98.json",
+   "sha256": "092242cd56132266ac382d8fbb46b2fbdf3ed43036a5016b9f2749d01dcafe91",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+   "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+   "selector": "/variants/hack2hire:69f3a12f42791c82ab992d99"
+  }
+ ],
+ "problemId": "hack2hire:69f3a12842791c82ab992d98",
+ "variantId": "69f3a12f42791c82ab992d99",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: location at a time, empty while airborne",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:69f3a12f42791c82ab992d99/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Each flight is [departureAirport, departureTime, arrivalAirport, arrivalTime, userId]; times are \"YYYY-MM-DDTHH:MM\" strings. A user's flights do not overlap. Return where userId is at time: the first departure airport before the first flight; the departure airport at exactly a departure time; \"\" strictly between a departure and its arrival; otherwise the arrival airport of the latest flight that has arrived. Return \"\" for a user with no flights.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Each flight is [departureAirport, departureTime, arrivalAirport, arrivalTime, userId]; times are \"YYYY-MM-DDTHH:MM\" strings.",
+   "A user's flights do not overlap.",
+   "Return where userId is at time: the first departure airport before the first flight; the departure airport at exactly a departure time; \"\" strictly between a departure and its arrival; otherwise the arrival airport of the latest flight that has arrived.",
+   "Return \"\" for a user with no flights."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= |flights| <= 100000",
+   "airports match [A-Z]{3}",
+   "times are valid \"YYYY-MM-DDTHH:MM\" strings",
+   "user ids match [A-Za-z0-9_]{1,20}",
+   "per user: departure < arrival <= next departure"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:69f3a12f42791c82ab992d99/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: flight records of five strings (departure airport, departure time, arrival airport, arrival time, user id), query (userId, time), return an IATA code; algorithmTags: SORTING, STRING; preview response sha256 6156604ec5e02169db6a1176c74d5a896b35f18b2d2cb8e21de0a6b12e1e423b"
+   },
+   {
+    "statement": "Uncertainty: very high: the record format is in the preview; the time format, the airborne result, the rule before the first flight, the boundary rules and the unknown-user result are inferred",
+    "basis": "the public group preview is partial (355 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/19/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/19/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/19/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is returned while the user is in the air?",
+   "Where is the user before the first flight?",
+   "Which airport wins at an exact departure or arrival time?",
+   "What is returned for an unknown user?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:69f3a12f42791c82ab992d99/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     "u",
+     "2024-01-01T00:00"
+    ],
+    "output": "",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "JFK",
+       "2024-01-01T10:00",
+       "SFO",
+       "2024-01-01T16:00",
+       "u"
+      ]
+     ],
+     "u",
+     "2024-01-01T09:59"
+    ],
+    "output": "JFK",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:69f3a12f42791c82ab992d99/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/oracles.py",
+    "sha256": "baf083b476340a998455b60627423a9b6aaf62ef0f73cea0a05edeb68df1ce89",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findUserLocation(flights, userId, time) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/69f3a12f42791c82ab992d99-python.json",
+     "inferredInterface": {
+      "name": "findUserLocation",
+      "params": [
+       {
+        "name": "flights",
+        "type": "string[][]"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "time",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/69f3a12f42791c82ab992d99-python.json",
+      "sha256": "799fb17280fdb13ed589d13790c4a71f7ef5ac308e3422e51e71db6e45e35c92",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findUserLocation(flights, userId, time) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/69f3a12f42791c82ab992d99-javascript.json",
+     "inferredInterface": {
+      "name": "findUserLocation",
+      "params": [
+       {
+        "name": "flights",
+        "type": "string[][]"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "time",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/69f3a12f42791c82ab992d99-javascript.json",
+      "sha256": "f095df22eee1426b9e698045ee7b02b9622014a3ea282384238d0971eb66e5bd",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/19/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/19/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

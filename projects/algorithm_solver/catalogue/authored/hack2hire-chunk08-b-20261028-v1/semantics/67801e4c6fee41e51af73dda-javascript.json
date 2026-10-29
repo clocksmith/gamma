@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67801e4c6fee41e51af73dda",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "pages",
+  "days"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minimumPagesPerDay",
+  "params": [
+   {
+    "name": "pages",
+    "type": "integer[]"
+   },
+   {
+    "name": "days",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try x = 1, 2, ... and stop at the first x whose day count fits",
+  "candidate_design": "binary search on x in [1, max(pages)] with the day count sum(ceil(p / x)) as a monotone predicate",
+  "complexity_target": "O(n log max(pages))"
+ },
+ "source_sha256": "9b48df16645b3fb74cd4e42a0776f2e1da591dc5b71e9d6602f20adc3ca1e160",
+ "wrapper": "named export minimumPagesPerDay"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67882811e20f8f324213c2a0",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "s",
+  "elements"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "wrapSubstrings",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   },
+   {
+    "name": "elements",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every word and start position, test every element with startswith and keep the longest",
+  "candidate_design": "a trie of elements; for each start position walk the trie along the word and remember the deepest terminal node; stop at the first start that matches",
+  "complexity_target": "O(|s| * L) for longest element length L"
+ },
+ "source_sha256": "695a7dee170917d99745e44d29b5b23111d317d2a02b5d287200b3d714fc0b75",
+ "wrapper": "Solution.wrapSubstrings"
+}
