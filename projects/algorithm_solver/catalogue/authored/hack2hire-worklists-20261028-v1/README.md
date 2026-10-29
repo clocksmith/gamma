@@ -9,6 +9,7 @@ All 604 Hack2Hire coding question groups (805 variants) from [bank.json](../../.
 | chunk03.txt, chunk04.txt | 64 | Committed: `hack2hire-chunk03-a/-b`, `hack2hire-chunk04-a/-b` |
 | chunk05.txt | 32 | Committed by another session: `hack2hire-chunk05-v1` (nine variants blocked) |
 | chunk06.txt | 32 | Committed: `hack2hire-chunk06-a/-b` |
-| chunk07.txt to chunk18.txt | 372 | Unassigned (32 per file, 20 in the last) |
+| chunk07.txt | 32 | Being solved in `hack2hire-chunk07-a/-b` |
+| chunk08.txt to chunk18.txt | 340 | Unassigned (32 per file, 20 in the last) |
 
 Assignment status is not qualification. Progress links point to the cohort's actual checks and blockers; consult them for source and execution status. Specs for these groups are inferred from public previews, not official. See the question-bank [CATSCAN](../../../../question_bank/CATSCAN.md).
