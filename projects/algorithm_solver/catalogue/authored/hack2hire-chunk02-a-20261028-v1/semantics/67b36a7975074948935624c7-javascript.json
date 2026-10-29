@@ -1,0 +1,64 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (Stream.read semantics, set of streams; LeetCode 158 relation)",
+      "algorithmTags DESIGN, STACK"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "medium: stream order (as given) and the read-only signature are inferred; the STACK tag is not explained by this model."
+  },
+  "inferred_interface": {
+    "classname": "MultiStreamReader",
+    "constructor": {
+      "params": [
+        {
+          "name": "streams",
+          "type": "list<string>"
+        }
+      ]
+    },
+    "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+    "kind": "class",
+    "methods": [
+      {
+        "name": "read",
+        "params": [
+          {
+            "name": "n",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "language": "javascript",
+  "native_class": "MultiStreamReader",
+  "native_route": "direct-class-v1",
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-native-class-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "queue of Stream objects plus a pending buffer; pulls fixed-size chunks through Stream.read",
+    "complexity_target": "O(n) per read amortized/O(chunk) buffer",
+    "reference": "slice the literal concatenation"
+  },
+  "source_sha256": "da951bcdd9ad5de51f6f8fb3b25e6f4c8868fd7c443cda85363d201fa34971b6",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:67b36a7975074948935624c7",
+  "variant_id": "67b36a7975074948935624c7"
+}

@@ -1,0 +1,50 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (operation encoding, rotation, independence)",
+      "algorithmTags ARRAY, SIMULATION"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "low: preview fixes semantics; non-strict fit (<=) is inferred."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.fitSavedRectangles",
+    "kind": "function",
+    "name": "fitSavedRectangles",
+    "params": [
+      {
+        "name": "operations",
+        "type": "list<[integer type, integer a, integer b]>"
+      }
+    ],
+    "python_wrapper": "Solution().fitSavedRectangles",
+    "return": {
+      "type": "list<boolean>"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "operations"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "track max short side and max long side of saved rectangles; compare with sorted box sides",
+    "complexity_target": "O(n) time/O(1) auxiliary",
+    "reference": "re-check every saved rectangle in both orientations per query"
+  },
+  "source_sha256": "4873b78b9179cabf48bb358b5a749a1503d30c00115cf1e9ee87799d4438ffbd",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a18e226c81f779dc6a230e4",
+  "variant_id": "6a18e226c81f779dc6a230e4"
+}

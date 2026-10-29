@@ -1,0 +1,60 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (trait configuration, one value per trait, duplicates permitted)",
+      "algorithmTags HASH_TABLE, BINARY_SEARCH"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "medium: modelling randomness as injected integers with modulo selection is an author choice."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.generateNFTs",
+    "kind": "function",
+    "name": "generateNFTs",
+    "params": [
+      {
+        "name": "traits",
+        "type": "list<[string trait, list<string value>]>"
+      },
+      {
+        "name": "n",
+        "type": "integer"
+      },
+      {
+        "name": "randoms",
+        "type": "list<integer>"
+      }
+    ],
+    "python_wrapper": "Solution().generateNFTs",
+    "return": {
+      "type": "list<list<string>>"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "traits",
+    "n",
+    "randoms"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "direct modulo indexing",
+    "complexity_target": "O(n*t) time/O(n*t) output",
+    "reference": "literal per-trait modulo selection"
+  },
+  "source_sha256": "b1d27f100c1fa60338ae0332d0403da4e815613bc2c579886c5e63d6d865048e",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6791b00b74ebe9de6650635c",
+  "variant_id": "6791b00b74ebe9de6650635c"
+}

@@ -1,0 +1,50 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (sessions of visited stores, co-occurrence, nested list sorted by target store)",
+      "algorithmTags HASH_TABLE"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "high: \"frequently visited together\" is interpreted as the maximum co-occurrence count; no threshold parameter is visible."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.highCorrelationSellers",
+    "kind": "function",
+    "name": "highCorrelationSellers",
+    "params": [
+      {
+        "name": "records",
+        "type": "list<list<string store>>"
+      }
+    ],
+    "python_wrapper": "Solution().highCorrelationSellers",
+    "return": {
+      "type": "list<[string store, list<string>]>"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "records"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "dedupe sessions, nested hash counts over session pairs, per-store max",
+    "complexity_target": "O(sum s_i^2 + S log S) time/O(pairs) space",
+    "reference": "count each ordered store pair by scanning every record"
+  },
+  "source_sha256": "d35f76fbd02fd8f0ea1c49ed0c00b0217e6cb75fe65bc5f3b39d2c7afa94b686",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6768c33400d569e371e007ec",
+  "variant_id": "6768c33400d569e371e007ec"
+}

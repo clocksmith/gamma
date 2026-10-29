@@ -1,0 +1,302 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6987b235fedd959e9aa44515/assumptions",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "Round-robin by timestamp at the marginal level",
+        "basis": "commonly reported version",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      },
+      {
+        "assumption": "Timestamp ties keep input order",
+        "basis": "author choice",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6987b235fedd959e9aa44515/clarifyingQuestions",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "How are shares split among bidders at the same price?",
+      "What is returned: allocations or unallotted users?"
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/13/comparison",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6987b235fedd959e9aa44515/constraints",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "<= 50000 bids, one per user",
+      "1 <= shares, price <= 10^9",
+      "0 <= totalShares <= 10^12"
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/13/effects",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh result containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6987b235fedd959e9aa44515/examples",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "input": [
+          [
+            [
+              1,
+              5,
+              5,
+              0
+            ],
+            [
+              2,
+              7,
+              8,
+              1
+            ],
+            [
+              3,
+              3,
+              5,
+              2
+            ],
+            [
+              4,
+              2,
+              5,
+              3
+            ],
+            [
+              5,
+              1,
+              4,
+              0
+            ]
+          ],
+          9
+        ],
+        "output": [
+          4,
+          5
+        ],
+        "outputSource": "computed by oracles.py reference over the inferred spec"
+      }
+    ]
+  },
+  "id": "contract:hack2hire:6987b22efedd959e9aa44513:6987b235fedd959e9aa44515:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/13/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": "class Solution:\n    def getUnallottedUsers(self, bids, totalShares)  # -> list<integer>"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/13/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "entrypoint": "solve",
+          "javascript_wrapper": "module.exports.getUnallottedUsers",
+          "kind": "function",
+          "name": "getUnallottedUsers",
+          "params": [
+            {
+              "name": "bids",
+              "type": "list<[integer userId, integer shares, integer price, integer timestamp]>"
+            },
+            {
+              "name": "totalShares",
+              "type": "integer"
+            }
+          ],
+          "python_wrapper": "Solution().getUnallottedUsers",
+          "return": {
+            "type": "list<integer>"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/13/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": "function getUnallottedUsers(bids, totalShares)  // -> list<integer>; module.exports.getUnallottedUsers"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/13/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "entrypoint": "solve",
+          "javascript_wrapper": "module.exports.getUnallottedUsers",
+          "kind": "function",
+          "name": "getUnallottedUsers",
+          "params": [
+            {
+              "name": "bids",
+              "type": "list<[integer userId, integer shares, integer price, integer timestamp]>"
+            },
+            {
+              "name": "totalShares",
+              "type": "integer"
+            }
+          ],
+          "python_wrapper": "Solution().getUnallottedUsers",
+          "return": {
+            "type": "list<integer>"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/13",
+      "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+    }
+  ],
+  "problemId": "hack2hire:6987b22efedd959e9aa44513",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6987b235fedd959e9aa44515/requirements",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Allocate shares to price levels from highest to lowest",
+      "Within a scarce level hand out one share at a time round-robin by timestamp",
+      "Return sorted users with zero shares"
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/13/inferred_spec",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "Each user bids once. Shares go to price levels from highest to lowest. If a level's total requested shares fit in the remaining shares, every bidder there receives their full request. Otherwise the remaining shares are handed out one at a time round-robin over that level's bidders ordered by timestamp (ties by input order), skipping bidders already satisfied, until shares run out. Return the sorted userIds that receive zero shares."
+  },
+  "variantId": "6987b235fedd959e9aa44515",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6987b235fedd959e9aa44515/variantLabel",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Variant 1 of the Hack2Hire group (inferred)"
+  },
+  "version": 1
+}

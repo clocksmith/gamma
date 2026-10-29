@@ -1,0 +1,55 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "algorithmTags HASH_TABLE",
+      "companies AFFIRM"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "highest: this group's cached contentPreview describes DistinctPIIValuesCounter (same text as Live Fraud Detector) and does not match the title; the spec is inferred from the title alone."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.groupLoansByTopCompany",
+    "kind": "function",
+    "name": "groupLoansByTopCompany",
+    "params": [
+      {
+        "name": "parents",
+        "type": "list<[string company, string parentCompany]>"
+      },
+      {
+        "name": "loans",
+        "type": "list<[string loanId, string company]>"
+      }
+    ],
+    "python_wrapper": "Solution().groupLoansByTopCompany",
+    "return": {
+      "type": "list<[string topCompany, list<string loanId>]>"
+    }
+  },
+  "language": "javascript",
+  "parameters": [
+    "parents",
+    "loans"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "iterative root find with memoized roots (path compression), hash grouping",
+    "complexity_target": "O((p + l) + l log l) time/O(p + l) space",
+    "reference": "walk the parent chain from a freshly built map per loan, sort groups"
+  },
+  "source_sha256": "9cc9ed9dd14e9eda240ac75f36af7b867996c3738a84621599520cd3fc610b82",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a611985c16dcdf8ba4ff8a2",
+  "variant_id": "6a611985c16dcdf8ba4ff8a2"
+}

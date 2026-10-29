@@ -1,0 +1,452 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/chooseWhen",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Deep hierarchies where repeated walks would be quadratic"
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/contract--contract_hack2hire_6a61190bc16dcdf8ba4ff89d_6a611985c16dcdf8ba4ff8a2_authored-v1.json",
+    "sha256": "950b5e147b738c88aebfbd50bc7d35d93d1e293950209384a2dace48f92e610e",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/explanation",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Follow parent links iteratively to a root and cache the root for every company on the path, then group loans under their root."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/hints",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The top-level company is the root of a parent forest.",
+      "Repeated walks up a long chain are wasteful.",
+      "Cache the root for every node visited (path compression)."
+    ]
+  },
+  "id": "approach:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/invariants",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "root[c] is the top-level ancestor of c whenever present"
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:study-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a61190bc16dcdf8ba4ff89d_6a611985c16dcdf8ba4ff8a2_study-native_v1.json",
+    "sha256": "78d8a0b8de9f3c2ca28815f5ad1461e90980a6afd92d33d4c541ca1d6ea0db23",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach",
+      "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+    }
+  ],
+  "problemId": "hack2hire:6a61190bc16dcdf8ba4ff89d",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/reasoning/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Root finding with memoization makes total work linear in the number of companies plus loans."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/reasoning/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The top-level company is the root of a parent forest.",
+          "Repeated walks up a long chain are wasteful."
+        ]
+      },
+      "id": "approach:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:v1:stage:reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/reasoning/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Restate the inferred specification and its assumptions",
+          "Answer the stage question before writing code"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a61190bc16dcdf8ba4ff89d_6a611985c16dcdf8ba4ff8a2_study-native_v1.json",
+        "sha256": "78d8a0b8de9f3c2ca28815f5ad1461e90980a6afd92d33d4c541ca1d6ea0db23",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/reasoning/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you find each loan's top-level company efficiently?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/reasoning/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Settling the invariant before coding keeps both language implementations aligned: root[c] is the top-level ancestor of c whenever present."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/reasoning/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Reason about the inferred contract"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a61190bc16dcdf8ba4ff89d_6a611985c16dcdf8ba4ff8a2_python_v1.json",
+          "sha256": "a4476de1505c9a98d875166a8d66d676265b42144455307dd52c98d9c693ebb7",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a61190bc16dcdf8ba4ff89d_6a611985c16dcdf8ba4ff8a2_javascript_v1.json",
+          "sha256": "379ff8653c76bb4bedb835e7e0c1bb2a3b2feee5f3a5746c218fc351e1247b66",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/coding/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Follow parent links iteratively to a root and cache the root for every company on the path, then group loans under their root."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/coding/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Cache the root for every node visited (path compression)."
+        ]
+      },
+      "id": "approach:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:v1:stage:coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/coding/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Build child -> parent map",
+          "Iterative find with memo",
+          "Group, sort ids, sort groups",
+          "Do not mutate inputs; return fresh containers"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a61190bc16dcdf8ba4ff89d_6a611985c16dcdf8ba4ff8a2_study-native_v1.json",
+        "sha256": "78d8a0b8de9f3c2ca28815f5ad1461e90980a6afd92d33d4c541ca1d6ea0db23",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/coding/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement \"Memoized root finding and hash grouping\" identically in both languages?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/coding/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Target complexity O((p + l) + l log l) time/O(p + l) space. Memo uses O(companies) memory."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/coding/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Implement in Python and JavaScript"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/validation/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/validation/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Generate many small random cases and compare exactly with the reference."
+        ]
+      },
+      "id": "approach:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:v1:stage:validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/validation/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare with an unmemoized walk",
+          "Test a 50000-long chain and loans on unknown companies"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6a61190bc16dcdf8ba4ff89d:6a611985c16dcdf8ba4ff8a2:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a61190bc16dcdf8ba4ff89d_6a611985c16dcdf8ba4ff8a2_study-native_v1.json",
+        "sha256": "78d8a0b8de9f3c2ca28815f5ad1461e90980a6afd92d33d4c541ca1d6ea0db23",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/validation/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you check the implementation against the inferred contract?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/validation/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "The specification is inferred, so validation is against the author's own reference, not an official judge."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/stages/validation/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Validate against an independent reference"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/title",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Memoized root finding and hash grouping"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a611985c16dcdf8ba4ff8a2/approach/tradeoffs",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Memo uses O(companies) memory"
+    ]
+  },
+  "version": 1
+}

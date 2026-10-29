@@ -1,0 +1,323 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a5941a8665efda9311fa417/assumptions",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "PII identity is (field, value)",
+        "basis": "author choice",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      },
+      {
+        "assumption": "Empty strings are missing and ignored",
+        "basis": "author choice",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      },
+      {
+        "assumption": "Separate getter getDistinctPIICount",
+        "basis": "author choice",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a5941a8665efda9311fa417/clarifyingQuestions",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Is the same string in two different fields one value or two?",
+      "Do empty fields count?"
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/15/comparison",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a5941a8665efda9311fa417/constraints",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "trace length <= 20000",
+      "PII fields up to 30 characters"
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/15/effects",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh result containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a5941a8665efda9311fa417/examples",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "input": [
+          [
+            "DistinctPIIValuesCounter",
+            "processEvent",
+            "getDistinctPIICount",
+            "processEvent",
+            "getDistinctPIICount"
+          ],
+          [
+            [],
+            [
+              [
+                "A",
+                "x",
+                "1",
+                "",
+                "s"
+              ]
+            ],
+            [],
+            [
+              [
+                "B",
+                "x",
+                "2",
+                "x",
+                "s"
+              ]
+            ],
+            []
+          ]
+        ],
+        "output": [
+          null,
+          null,
+          3,
+          null,
+          5
+        ],
+        "outputSource": "computed by oracles.py reference over the inferred spec"
+      }
+    ]
+  },
+  "id": "contract:hack2hire:6a594182665efda9311fa413:6a5941a8665efda9311fa417:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/15/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": "class DistinctPIIValuesCounter:\n    def __init__(self)\n    def processEvent(self, event)  # -> void\n    def getDistinctPIICount(self)  # -> integer"
+      },
+      "kind": "class",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/15/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "DistinctPIIValuesCounter",
+          "constructor": {
+            "params": []
+          },
+          "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+          "kind": "class",
+          "methods": [
+            {
+              "name": "processEvent",
+              "params": [
+                {
+                  "name": "event",
+                  "type": "list<string>[5]"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "getDistinctPIICount",
+              "params": [],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/15/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": "class DistinctPIIValuesCounter {\n  constructor()\n  processEvent(event)  // -> void\n  getDistinctPIICount()  // -> integer\n}  // module.exports.DistinctPIIValuesCounter"
+      },
+      "kind": "class",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/15/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "DistinctPIIValuesCounter",
+          "constructor": {
+            "params": []
+          },
+          "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+          "kind": "class",
+          "methods": [
+            {
+              "name": "processEvent",
+              "params": [
+                {
+                  "name": "event",
+                  "type": "list<string>[5]"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "getDistinctPIICount",
+              "params": [],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/15",
+      "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+    }
+  ],
+  "problemId": "hack2hire:6a594182665efda9311fa413",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a5941a8665efda9311fa417/requirements",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Process events of five strings",
+      "Count distinct PII values across all processed events"
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/15/inferred_spec",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "event = [eventType, address, phone, email, ssn]. A PII value is identified by (field, value), so equal strings in different fields are distinct; empty strings mean missing and are ignored; eventType is ignored. getDistinctPIICount returns the number of distinct PII values over all events processed so far."
+  },
+  "variantId": "6a5941a8665efda9311fa417",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a5941a8665efda9311fa417/variantLabel",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Variant 1 of the Hack2Hire group (inferred)"
+  },
+  "version": 1
+}

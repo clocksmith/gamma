@@ -1,0 +1,452 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/chooseWhen",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Moderate rule counts"
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/contract--contract_hack2hire_684baaa84023c4f502877df2_684bada44023c4f502877df5_authored-v1.json",
+    "sha256": "4c974143e102717fc4e12af5b2fb5fd1e8db6106163e80db2ecec358f71d1b0e",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/explanation",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Convert each rule to (mask, masked base, allow) 32-bit integers; a query converts the IP once and returns the action of the first rule with (ip & mask) == base."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/hints",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "An IP is a 32-bit integer.",
+      "A prefix of length k is a mask of k leading ones.",
+      "Compare masked values, scanning rules in order."
+    ]
+  },
+  "id": "approach:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/invariants",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Rules are kept in input order so the first match wins"
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:study-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_684baaa84023c4f502877df2_684bada44023c4f502877df5_study-native_v1.json",
+    "sha256": "f4e76bf58ca4c78c5226a0e84ac2ba52c0fd481b979313cf38413c4c3826647a",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach",
+      "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+    }
+  ],
+  "problemId": "hack2hire:684baaa84023c4f502877df2",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/reasoning/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Membership is (ip & mask) == (base & mask), with mask = k leading one bits."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/reasoning/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "An IP is a 32-bit integer.",
+          "A prefix of length k is a mask of k leading ones."
+        ]
+      },
+      "id": "approach:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:v1:stage:reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/reasoning/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Restate the inferred specification and its assumptions",
+          "Answer the stage question before writing code"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_684baaa84023c4f502877df2_684bada44023c4f502877df5_study-native_v1.json",
+        "sha256": "f4e76bf58ca4c78c5226a0e84ac2ba52c0fd481b979313cf38413c4c3826647a",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/reasoning/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you test CIDR membership with bit operations?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/reasoning/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Settling the invariant before coding keeps both language implementations aligned: Rules are kept in input order so the first match wins."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/reasoning/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Reason about the inferred contract"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_684baaa84023c4f502877df2_684bada44023c4f502877df5_python_v1.json",
+          "sha256": "ac2bf4636b3d2fc555796c1673454835bcf8b37788bb6c2b6e7e01edc82b5196",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_684baaa84023c4f502877df2_684bada44023c4f502877df5_javascript_v1.json",
+          "sha256": "605ad0148bc43d3e955042a1cc1a941c2e3707369621f78f81e9a0b13ddedc05",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/coding/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Convert each rule to (mask, masked base, allow) 32-bit integers; a query converts the IP once and returns the action of the first rule with (ip & mask) == base."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/coding/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare masked values, scanning rules in order."
+        ]
+      },
+      "id": "approach:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:v1:stage:coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/coding/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Parse dotted quads to integers",
+          "Build masks (k = 0 gives mask 0)",
+          "First-match scan",
+          "Do not mutate inputs; return fresh containers"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_684baaa84023c4f502877df2_684bada44023c4f502877df5_study-native_v1.json",
+        "sha256": "f4e76bf58ca4c78c5226a0e84ac2ba52c0fd481b979313cf38413c4c3826647a",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/coding/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement \"Pre-parsed masks with first-match scan\" identically in both languages?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/coding/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Target complexity O(R) per query/O(R) space. O(R) per query; a binary trie with rule priorities gives O(32)."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/coding/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Implement in Python and JavaScript"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/validation/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/validation/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Generate many small random cases and compare exactly with the reference."
+        ]
+      },
+      "id": "approach:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:v1:stage:validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/validation/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare with a binary-string prefix reference",
+          "Test /0, /32, host bits in bases and default deny"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:684baaa84023c4f502877df2:684bada44023c4f502877df5:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_684baaa84023c4f502877df2_684bada44023c4f502877df5_study-native_v1.json",
+        "sha256": "f4e76bf58ca4c78c5226a0e84ac2ba52c0fd481b979313cf38413c4c3826647a",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/validation/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you check the implementation against the inferred contract?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/validation/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "The specification is inferred, so validation is against the author's own reference, not an official judge."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/stages/validation/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Validate against an independent reference"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/title",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Pre-parsed masks with first-match scan"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:684bada44023c4f502877df5/approach/tradeoffs",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "O(R) per query; a binary trie with rule priorities gives O(32)"
+    ]
+  },
+  "version": 1
+}

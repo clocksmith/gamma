@@ -1,0 +1,294 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a18e226c81f779dc6a230e4/assumptions",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "A rectangle fits when its sides are <= the box sides (equality fits)",
+        "basis": "preview does not state strictness",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      },
+      {
+        "assumption": "An empty collection fits any box",
+        "basis": "vacuous truth",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a18e226c81f779dc6a230e4/clarifyingQuestions",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Does a rectangle exactly equal to the box fit?",
+      "What is the answer before any rectangle is saved?"
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/2/comparison",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a18e226c81f779dc6a230e4/constraints",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "0 <= len(operations) <= 100000",
+      "1 <= a, b <= 10^9"
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/2/effects",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh result containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a18e226c81f779dc6a230e4/examples",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "input": [
+          [
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              0,
+              2,
+              5
+            ],
+            [
+              1,
+              5,
+              2
+            ],
+            [
+              1,
+              2,
+              4
+            ],
+            [
+              0,
+              3,
+              3
+            ],
+            [
+              1,
+              5,
+              3
+            ]
+          ]
+        ],
+        "output": [
+          true,
+          true,
+          false,
+          true
+        ],
+        "outputSource": "computed by oracles.py reference over the inferred spec"
+      }
+    ]
+  },
+  "id": "contract:hack2hire:6a18e1ebc81f779dc6a230e2:6a18e226c81f779dc6a230e4:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/2/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": "class Solution:\n    def fitSavedRectangles(self, operations)  # -> list<boolean>"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/2/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "entrypoint": "solve",
+          "javascript_wrapper": "module.exports.fitSavedRectangles",
+          "kind": "function",
+          "name": "fitSavedRectangles",
+          "params": [
+            {
+              "name": "operations",
+              "type": "list<[integer type, integer a, integer b]>"
+            }
+          ],
+          "python_wrapper": "Solution().fitSavedRectangles",
+          "return": {
+            "type": "list<boolean>"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/2/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": "function fitSavedRectangles(operations)  // -> list<boolean>; module.exports.fitSavedRectangles"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/2/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "entrypoint": "solve",
+          "javascript_wrapper": "module.exports.fitSavedRectangles",
+          "kind": "function",
+          "name": "fitSavedRectangles",
+          "params": [
+            {
+              "name": "operations",
+              "type": "list<[integer type, integer a, integer b]>"
+            }
+          ],
+          "python_wrapper": "Solution().fitSavedRectangles",
+          "return": {
+            "type": "list<boolean>"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/2",
+      "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+    }
+  ],
+  "problemId": "hack2hire:6a18e1ebc81f779dc6a230e2",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a18e226c81f779dc6a230e4/requirements",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Process operations in order",
+      "Answer each query for rectangles saved before it",
+      "Allow 90-degree rotation of each rectangle independently"
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/2/inferred_spec",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "Process operations left to right. [0,a,b] saves an a x b rectangle. [1,a,b] appends to the output whether every rectangle saved before it fits, independently and axis-aligned with optional 90-degree rotation, inside an a x b box (equal sides fit). With no saved rectangles the answer is true. Output has one boolean per query, in order."
+  },
+  "variantId": "6a18e226c81f779dc6a230e4",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a18e226c81f779dc6a230e4/variantLabel",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Variant 1 of the Hack2Hire group (inferred)"
+  },
+  "version": 1
+}

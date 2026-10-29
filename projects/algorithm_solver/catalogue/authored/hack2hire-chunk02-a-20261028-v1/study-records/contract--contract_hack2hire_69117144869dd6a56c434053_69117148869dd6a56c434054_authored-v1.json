@@ -1,0 +1,399 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:69117148869dd6a56c434054/assumptions",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "Revocation is per grant id and applies from its timestamp onward",
+        "basis": "preview mentions revoking credits at a specified time",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      },
+      {
+        "assumption": "Revoking an unknown or already revoked id returns false",
+        "basis": "author choice",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      },
+      {
+        "assumption": "Validity windows are closed",
+        "basis": "author choice",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      },
+      {
+        "assumption": "Method names addCredit/revokeCredit/getBalance",
+        "basis": "author choice; preview shows only the class name",
+        "inferredBy": "claude-opus-5-5 subagent, 2026-10-28"
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:69117148869dd6a56c434054/clarifyingQuestions",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Is revocation by id or by amount?",
+      "Does a revocation that arrives before its grant take effect later?",
+      "Are windows inclusive at endTime?"
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/3/comparison",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:69117148869dd6a56c434054/constraints",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Trace length <= 2000",
+      "1 <= amount <= 10^6",
+      "0 <= startTime <= endTime <= 10^9",
+      "credit ids are unique per addCredit"
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/3/effects",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh result containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:69117148869dd6a56c434054/examples",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "input": [
+          [
+            "CreditSystem",
+            "addCredit",
+            "getBalance",
+            "revokeCredit",
+            "getBalance",
+            "getBalance"
+          ],
+          [
+            [],
+            [
+              "a",
+              5,
+              0,
+              10
+            ],
+            [
+              3
+            ],
+            [
+              "a",
+              4
+            ],
+            [
+              3
+            ],
+            [
+              4
+            ]
+          ]
+        ],
+        "output": [
+          null,
+          null,
+          5,
+          true,
+          5,
+          0
+        ],
+        "outputSource": "computed by oracles.py reference over the inferred spec"
+      }
+    ]
+  },
+  "id": "contract:hack2hire:69117144869dd6a56c434053:69117148869dd6a56c434054:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/3/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": "class CreditSystem:\n    def __init__(self)\n    def addCredit(self, creditId, amount, startTime, endTime)  # -> void\n    def revokeCredit(self, creditId, timestamp)  # -> boolean\n    def getBalance(self, timestamp)  # -> integer"
+      },
+      "kind": "class",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/3/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "CreditSystem",
+          "constructor": {
+            "params": []
+          },
+          "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+          "kind": "class",
+          "methods": [
+            {
+              "name": "addCredit",
+              "params": [
+                {
+                  "name": "creditId",
+                  "type": "string"
+                },
+                {
+                  "name": "amount",
+                  "type": "integer"
+                },
+                {
+                  "name": "startTime",
+                  "type": "integer"
+                },
+                {
+                  "name": "endTime",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "revokeCredit",
+              "params": [
+                {
+                  "name": "creditId",
+                  "type": "string"
+                },
+                {
+                  "name": "timestamp",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "getBalance",
+              "params": [
+                {
+                  "name": "timestamp",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/3/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": "class CreditSystem {\n  constructor()\n  addCredit(creditId, amount, startTime, endTime)  // -> void\n  revokeCredit(creditId, timestamp)  // -> boolean\n  getBalance(timestamp)  // -> integer\n}  // module.exports.CreditSystem"
+      },
+      "kind": "class",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/3/inferred_interface",
+            "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "CreditSystem",
+          "constructor": {
+            "params": []
+          },
+          "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+          "kind": "class",
+          "methods": [
+            {
+              "name": "addCredit",
+              "params": [
+                {
+                  "name": "creditId",
+                  "type": "string"
+                },
+                {
+                  "name": "amount",
+                  "type": "integer"
+                },
+                {
+                  "name": "startTime",
+                  "type": "integer"
+                },
+                {
+                  "name": "endTime",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "revokeCredit",
+              "params": [
+                {
+                  "name": "creditId",
+                  "type": "string"
+                },
+                {
+                  "name": "timestamp",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "getBalance",
+              "params": [
+                {
+                  "name": "timestamp",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/3",
+      "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+    }
+  ],
+  "problemId": "hack2hire:69117144869dd6a56c434053",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:69117148869dd6a56c434054/requirements",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Add grants with unique ids and closed validity windows",
+      "Revoke a grant from a given time onward",
+      "Report the balance at any timestamp from all events received so far"
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/3/inferred_spec",
+        "sha256": "57a687cc993dc46f017b52172c1e8080889cc748c9b8bb9460a6fcd71fe1a2c6"
+      }
+    ],
+    "status": "present",
+    "value": "Grants have unique ids and are valid on the closed window [startTime, endTime]. Events may arrive in any timestamp order; every query reflects all events received so far. revokeCredit(id, t) returns false if the id has not been added yet or was already revoked; otherwise it records that the grant stops counting from time t onward and returns true. getBalance(t) is the sum of amounts of grants with startTime <= t <= endTime that are not revoked at a time <= t."
+  },
+  "variantId": "69117148869dd6a56c434054",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:69117148869dd6a56c434054/variantLabel",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Variant 1 of the Hack2Hire group (inferred)"
+  },
+  "version": 1
+}

@@ -1,0 +1,452 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/chooseWhen",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Workers must not share writes"
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/contract--contract_hack2hire_6a2265c0981072682a6f2163_6a226625981072682a6f216b_authored-v1.json",
+    "sha256": "5c381243961937d296c5b4485ae77383b4811948032c3d82a0f1d755295c951a",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/explanation",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Split output rows into min(numThreads, n) balanced contiguous blocks; each worker writes only its block, so workers never conflict."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/hints",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Transpose is out[j][i] = in[i][j].",
+      "Give each worker disjoint output rows.",
+      "Balance blocks: the first n mod w workers get one extra row."
+    ]
+  },
+  "id": "approach:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/invariants",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Each output row is written by exactly one worker"
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:study-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a2265c0981072682a6f2163_6a226625981072682a6f216b_study-native_v1.json",
+    "sha256": "69ff5e11a23e7c92cfc8b01e462bd50f9695de72d3e0c13f1215b55a2c610657",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach",
+      "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+    }
+  ],
+  "problemId": "hack2hire:6a2265c0981072682a6f2163",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/reasoning/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Partitioning output rows gives disjoint writes and identical results under any schedule."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/reasoning/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Transpose is out[j][i] = in[i][j].",
+          "Give each worker disjoint output rows."
+        ]
+      },
+      "id": "approach:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:v1:stage:reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/reasoning/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Restate the inferred specification and its assumptions",
+          "Answer the stage question before writing code"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a2265c0981072682a6f2163_6a226625981072682a6f216b_study-native_v1.json",
+        "sha256": "69ff5e11a23e7c92cfc8b01e462bd50f9695de72d3e0c13f1215b55a2c610657",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/reasoning/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you split transpose work so workers never write the same cell?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/reasoning/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Settling the invariant before coding keeps both language implementations aligned: Each output row is written by exactly one worker."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/reasoning/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Reason about the inferred contract"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a2265c0981072682a6f2163_6a226625981072682a6f216b_python_v1.json",
+          "sha256": "d1cb6117d861173c7000c8c47d0b474449fe57867df8c8b0ab58518399d9be8f",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a2265c0981072682a6f2163_6a226625981072682a6f216b_javascript_v1.json",
+          "sha256": "0abe1683027642498fc7031d4e7015b64608bd6bc5f6d136dcfd563b576041cf",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/coding/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Split output rows into min(numThreads, n) balanced contiguous blocks; each worker writes only its block, so workers never conflict."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/coding/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Balance blocks: the first n mod w workers get one extra row."
+        ]
+      },
+      "id": "approach:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:v1:stage:coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/coding/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compute block sizes",
+          "Fill each block",
+          "Return the new matrix",
+          "Do not mutate inputs; return fresh containers"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a2265c0981072682a6f2163_6a226625981072682a6f216b_study-native_v1.json",
+        "sha256": "69ff5e11a23e7c92cfc8b01e462bd50f9695de72d3e0c13f1215b55a2c610657",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/coding/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement \"Contiguous row blocks per worker\" identically in both languages?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/coding/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Target complexity O(n^2) time/O(n^2) output. Row blocks avoid write conflicts; in-place swaps would need pairwise ownership."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/coding/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Implement in Python and JavaScript"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/validation/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/validation/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Generate many small random cases and compare exactly with the reference."
+        ]
+      },
+      "id": "approach:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:v1:stage:validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/validation/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare with zip-based transpose",
+          "Test numThreads > n and n = 1"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6a2265c0981072682a6f2163:6a226625981072682a6f216b:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a2265c0981072682a6f2163_6a226625981072682a6f216b_study-native_v1.json",
+        "sha256": "69ff5e11a23e7c92cfc8b01e462bd50f9695de72d3e0c13f1215b55a2c610657",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/validation/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you check the implementation against the inferred contract?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/validation/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "The specification is inferred, so validation is against the author's own reference, not an official judge."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/stages/validation/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Validate against an independent reference"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/title",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Contiguous row blocks per worker"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6a226625981072682a6f216b/approach/tradeoffs",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Row blocks avoid write conflicts; in-place swaps would need pairwise ownership"
+    ]
+  },
+  "version": 1
+}

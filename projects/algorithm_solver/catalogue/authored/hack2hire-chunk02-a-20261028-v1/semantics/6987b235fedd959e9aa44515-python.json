@@ -1,0 +1,56 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (bid fields, highest price allocated first)",
+      "algorithmTags GREEDY",
+      "companies TWOSIGMA, POINT72"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "medium: round-robin by timestamp within a price level and the unallotted-users output follow the widely reported version, not visible preview text."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.getUnallottedUsers",
+    "kind": "function",
+    "name": "getUnallottedUsers",
+    "params": [
+      {
+        "name": "bids",
+        "type": "list<[integer userId, integer shares, integer price, integer timestamp]>"
+      },
+      {
+        "name": "totalShares",
+        "type": "integer"
+      }
+    ],
+    "python_wrapper": "Solution().getUnallottedUsers",
+    "return": {
+      "type": "list<integer>"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "bids",
+    "totalShares"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "group by price descending; a partial level allots one share to the first `remaining` bidders by timestamp",
+    "complexity_target": "O(n log n) time/O(n) space",
+    "reference": "literal one-share-at-a-time round-robin simulation"
+  },
+  "source_sha256": "622dd3c2ea612c1a63831e1a27db5318a9aa57c9920b8175688ca5de3ccfe90c",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6987b235fedd959e9aa44515",
+  "variant_id": "6987b235fedd959e9aa44515"
+}

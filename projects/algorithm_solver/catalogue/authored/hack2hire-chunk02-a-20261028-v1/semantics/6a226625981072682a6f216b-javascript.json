@@ -1,0 +1,55 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (square matrix, numThreads, parallel workers, LeetCode 867 relation)",
+      "algorithmTags ARRAY, MATRIX"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "medium: real thread usage is not observable in a deterministic function; any thread-safety or worker-assignment output the original asks for is not modelled."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.transposeWithWorkers",
+    "kind": "function",
+    "name": "transposeWithWorkers",
+    "params": [
+      {
+        "name": "matrix",
+        "type": "list<list<integer>> n x n"
+      },
+      {
+        "name": "numThreads",
+        "type": "integer"
+      }
+    ],
+    "python_wrapper": "Solution().transposeWithWorkers",
+    "return": {
+      "type": "list<list<integer>>"
+    }
+  },
+  "language": "javascript",
+  "parameters": [
+    "matrix",
+    "numThreads"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "contiguous row blocks per simulated worker writing a preallocated output",
+    "complexity_target": "O(n^2) time/O(n^2) output",
+    "reference": "zip(*matrix)"
+  },
+  "source_sha256": "01dc54fc7eca8cf63988318e2b30b051091067f25a30b7fb46f77406953ca9cd",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a226625981072682a6f216b",
+  "variant_id": "6a226625981072682a6f216b"
+}

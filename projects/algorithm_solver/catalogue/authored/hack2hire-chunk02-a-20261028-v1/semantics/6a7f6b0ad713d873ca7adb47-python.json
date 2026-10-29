@@ -1,0 +1,65 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (timestamp field is a decimal string)",
+      "algorithmTags HEAP"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "the time-window follow-up is inferred solely from the presence of a timestamp field; inclusive bounds chosen."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.topKAdsInWindow",
+    "kind": "function",
+    "name": "topKAdsInWindow",
+    "params": [
+      {
+        "name": "impressions",
+        "type": "list<[string timestamp, string adId]>"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      },
+      {
+        "name": "startTime",
+        "type": "integer"
+      },
+      {
+        "name": "endTime",
+        "type": "integer"
+      }
+    ],
+    "python_wrapper": "Solution().topKAdsInWindow",
+    "return": {
+      "type": "list<string>"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "impressions",
+    "k",
+    "startTime",
+    "endTime"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "parse and filter, hash count, size-k min-heap",
+    "complexity_target": "O(n + d log k) time/O(d) space",
+    "reference": "filter by int(timestamp) then literal list.count sort"
+  },
+  "source_sha256": "96e0261acd973cbb4cc08a8dee12859c216bc23e98e096ebd4f0b6874ba5467c",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a7f6b0ad713d873ca7adb47",
+  "variant_id": "6a7f6b0ad713d873ca7adb47"
+}

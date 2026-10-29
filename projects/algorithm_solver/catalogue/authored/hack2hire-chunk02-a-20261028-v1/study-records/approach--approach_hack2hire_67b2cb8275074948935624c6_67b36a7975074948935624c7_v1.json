@@ -1,0 +1,452 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/chooseWhen",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Underlying reads are chunked (read4-style)"
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/contract--contract_hack2hire_67b2cb8275074948935624c6_67b36a7975074948935624c7_authored-v1.json",
+    "sha256": "8e904d1b147765f6aeaeb9d12e613c06a4fe364d78ac8bf282b40d40681b1ea9",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/explanation",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Serve pending characters first, then pull fixed-size chunks through Stream.read from the current stream, advancing to the next stream on an empty read and stashing any surplus."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/hints",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "This is read4 II across several streams.",
+      "An empty read means move to the next stream.",
+      "Keep leftovers from the last chunk for the next call."
+    ]
+  },
+  "id": "approach:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/invariants",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "pending holds exactly the characters read from streams but not yet returned"
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:study-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_67b2cb8275074948935624c6_67b36a7975074948935624c7_study-native_v1.json",
+    "sha256": "c5910ffbab59588feb1163193c19e8a5af2d7f116a1041b78d8dc76c9ea01ac1",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach",
+      "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+    }
+  ],
+  "problemId": "hack2hire:67b2cb8275074948935624c6",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/reasoning/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "A pending buffer absorbs over-reads; empty reads advance the stream index."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/reasoning/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "This is read4 II across several streams.",
+          "An empty read means move to the next stream."
+        ]
+      },
+      "id": "approach:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:v1:stage:reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/reasoning/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Restate the inferred specification and its assumptions",
+          "Answer the stage question before writing code"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_67b2cb8275074948935624c6_67b36a7975074948935624c7_study-native_v1.json",
+        "sha256": "c5910ffbab59588feb1163193c19e8a5af2d7f116a1041b78d8dc76c9ea01ac1",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/reasoning/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you return exactly n characters when underlying reads are chunked across several streams?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/reasoning/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Settling the invariant before coding keeps both language implementations aligned: pending holds exactly the characters read from streams but not yet returned."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/reasoning/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Reason about the inferred contract"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_67b2cb8275074948935624c6_67b36a7975074948935624c7_python_v1.json",
+          "sha256": "ac472a1c6c31b7616eb7249a51bbd94b1f49114b44d450fb5047d85281fcdf0e",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_67b2cb8275074948935624c6_67b36a7975074948935624c7_javascript_v1.json",
+          "sha256": "14b6990d32087a7b5127d430ae23c75786937ba6781f8189227c0e55a5269d50",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/coding/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Serve pending characters first, then pull fixed-size chunks through Stream.read from the current stream, advancing to the next stream on an empty read and stashing any surplus."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/coding/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Keep leftovers from the last chunk for the next call."
+        ]
+      },
+      "id": "approach:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:v1:stage:coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/coding/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Wrap strings as Stream objects",
+          "Serve pending first",
+          "Loop reads until n characters or all streams empty",
+          "Do not mutate inputs; return fresh containers"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_67b2cb8275074948935624c6_67b36a7975074948935624c7_study-native_v1.json",
+        "sha256": "c5910ffbab59588feb1163193c19e8a5af2d7f116a1041b78d8dc76c9ea01ac1",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/coding/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement \"Stream queue with a pending buffer\" identically in both languages?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/coding/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Target complexity O(n) per read amortized/O(chunk) buffer. Chunk size trades call count against buffer size."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/coding/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Implement in Python and JavaScript"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/validation/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/validation/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Generate many small random cases and compare exactly with the reference."
+        ]
+      },
+      "id": "approach:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:v1:stage:validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/validation/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare with slicing the concatenation",
+          "Test empty streams, n = 0 and reads past the end"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:67b2cb8275074948935624c6:67b36a7975074948935624c7:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_67b2cb8275074948935624c6_67b36a7975074948935624c7_study-native_v1.json",
+        "sha256": "c5910ffbab59588feb1163193c19e8a5af2d7f116a1041b78d8dc76c9ea01ac1",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/validation/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you check the implementation against the inferred contract?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/validation/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "The specification is inferred, so validation is against the author's own reference, not an official judge."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/stages/validation/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Validate against an independent reference"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/title",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Stream queue with a pending buffer"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:67b36a7975074948935624c7/approach/tradeoffs",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Chunk size trades call count against buffer size"
+    ]
+  },
+  "version": 1
+}

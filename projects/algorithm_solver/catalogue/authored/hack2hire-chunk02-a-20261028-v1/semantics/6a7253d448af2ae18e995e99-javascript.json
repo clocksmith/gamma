@@ -1,0 +1,50 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (operation definition)",
+      "algorithmTags ARRAY, GREEDY"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "medium: the return value (minimum x, -1 when impossible) is inferred from the title; the operation itself is from the preview."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.minNondecreasingIncrement",
+    "kind": "function",
+    "name": "minNondecreasingIncrement",
+    "params": [
+      {
+        "name": "arr",
+        "type": "list<integer>"
+      }
+    ],
+    "python_wrapper": "Solution().minNondecreasingIncrement",
+    "return": {
+      "type": "integer"
+    }
+  },
+  "language": "javascript",
+  "parameters": [
+    "arr"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "every descent i forces i+1 chosen and i unchosen; x = max descent; reject adjacent forced indices or a forced index overtaking its right neighbour",
+    "complexity_target": "O(n) time/O(1) auxiliary",
+    "reference": "enumerate every non-adjacent subset and x in [0, span]"
+  },
+  "source_sha256": "16bf5454d435a0b76b1113877af4c5778c93cafd9ae946178bb077204f253eeb",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a7253d448af2ae18e995e99",
+  "variant_id": "6a7253d448af2ae18e995e99"
+}

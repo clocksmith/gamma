@@ -1,0 +1,55 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (record format, LeetCode 347 relation)",
+      "algorithmTags HEAP"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "tie-break rule (adId ascending) and output order are guesses; preview names no k parameter."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.topKAds",
+    "kind": "function",
+    "name": "topKAds",
+    "params": [
+      {
+        "name": "impressions",
+        "type": "list<[string timestamp, string adId]>"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      }
+    ],
+    "python_wrapper": "Solution().topKAds",
+    "return": {
+      "type": "list<string>"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "impressions",
+    "k"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "hash count then bounded min-heap of size k keyed by (count, reverse adId), drained and reversed",
+    "complexity_target": "O(n + d log k) time/O(d) space",
+    "reference": "distinct ads sorted by literal list.count"
+  },
+  "source_sha256": "a6cc8288bd79fccc3acd3eedebf2c5bf3be0150a1d75b77da0c53af4e2f75f81",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a7f6aa4d713d873ca7adb44",
+  "variant_id": "6a7f6aa4d713d873ca7adb44"
+}

@@ -1,0 +1,452 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/chooseWhen",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Sessions are short"
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/contract--contract_hack2hire_6768bf0900d569e371e007eb_6768c33400d569e371e007ec_authored-v1.json",
+    "sha256": "728ddaaf14bcfdd4e2a81653d8eda51e8bff644d98f807ce67505268219c97b9",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/explanation",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Deduplicate each session, increment a nested hash count for every unordered pair (both directions), then per store take the maximum and collect ties."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/hints",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Co-occurrence is a pair count.",
+      "Deduplicate within a session before counting.",
+      "For each store, the associated list is the argmax set of its row."
+    ]
+  },
+  "id": "approach:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/invariants",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "pairs[a][b] equals the number of processed sessions containing both a and b"
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:study-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6768bf0900d569e371e007eb_6768c33400d569e371e007ec_study-native_v1.json",
+    "sha256": "0613261d99fdee6b228955d1f3c3409fbf468f6984245fa2307d772df4518838",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach",
+      "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+    }
+  ],
+  "problemId": "hack2hire:6768bf0900d569e371e007eb",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/reasoning/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Session co-occurrence counts computed per session pair; maximum per row defines association in this inferred spec."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/reasoning/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Co-occurrence is a pair count.",
+          "Deduplicate within a session before counting."
+        ]
+      },
+      "id": "approach:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:v1:stage:reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/reasoning/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Restate the inferred specification and its assumptions",
+          "Answer the stage question before writing code"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6768bf0900d569e371e007eb_6768c33400d569e371e007ec_study-native_v1.json",
+        "sha256": "0613261d99fdee6b228955d1f3c3409fbf468f6984245fa2307d772df4518838",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/reasoning/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "What statistic defines \"high correlation\", and how do you compute it for all pairs?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/reasoning/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Settling the invariant before coding keeps both language implementations aligned: pairs[a][b] equals the number of processed sessions containing both a and b."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/reasoning/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Reason about the inferred contract"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6768bf0900d569e371e007eb_6768c33400d569e371e007ec_python_v1.json",
+          "sha256": "ebe692f4c6e1c05c701d35d41510a654ee6ccfc293c236c18b02ae29ace453d1",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6768bf0900d569e371e007eb_6768c33400d569e371e007ec_javascript_v1.json",
+          "sha256": "1fc1b4493d804e3f9e00593a3b18b7048c7f1d11f5e07e8801019044693b94af",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/coding/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Deduplicate each session, increment a nested hash count for every unordered pair (both directions), then per store take the maximum and collect ties."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/coding/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "For each store, the associated list is the argmax set of its row."
+        ]
+      },
+      "id": "approach:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:v1:stage:coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/coding/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Dedupe and sort each session",
+          "Count pairs in both directions",
+          "Per store compute max and sorted ties",
+          "Do not mutate inputs; return fresh containers"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6768bf0900d569e371e007eb_6768c33400d569e371e007ec_study-native_v1.json",
+        "sha256": "0613261d99fdee6b228955d1f3c3409fbf468f6984245fa2307d772df4518838",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/coding/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement \"Pairwise co-occurrence counting\" identically in both languages?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/coding/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Target complexity O(sum s_i^2 + S log S) time/O(pairs) space. Quadratic in session size; very long sessions would need sampling or sparse methods."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/coding/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Implement in Python and JavaScript"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/validation/explanation",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with an independent brute-force or literal reference on small random and boundary cases, then time the largest inferred-domain cases."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/validation/hints",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Generate many small random cases and compare exactly with the reference."
+        ]
+      },
+      "id": "approach:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:v1:stage:validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/validation/instructions",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare with a reference counting each pair over all sessions",
+          "Test singleton sessions and repeated stores"
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6768bf0900d569e371e007eb:6768c33400d569e371e007ec:study-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-records/artifact--artifact_hack2hire_6768bf0900d569e371e007eb_6768c33400d569e371e007ec_study-native_v1.json",
+        "sha256": "0613261d99fdee6b228955d1f3c3409fbf468f6984245fa2307d772df4518838",
+        "version": 1
+      },
+      "observations": {
+        "reason": "coding study stage; no simulation observations",
+        "status": "not-applicable"
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/validation/question",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "How do you check the implementation against the inferred contract?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/validation/rationale",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "The specification is inferred, so validation is against the author's own reference, not an official judge."
+      },
+      "requirementIds": {
+        "reason": "requirements are an unnumbered list in the contract",
+        "status": "not-applicable"
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/stages/validation/title",
+            "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+          }
+        ],
+        "status": "present",
+        "value": "Validate against an independent reference"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/title",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": "Pairwise co-occurrence counting"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/hack2hire:6768c33400d569e371e007ec/approach/tradeoffs",
+        "sha256": "79e5997d4fba2a9ac0baa80480bbf2d6d2892754a3282e31c52206698e4ddd6e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Quadratic in session size; very long sessions would need sampling or sparse methods"
+    ]
+  },
+  "version": 1
+}

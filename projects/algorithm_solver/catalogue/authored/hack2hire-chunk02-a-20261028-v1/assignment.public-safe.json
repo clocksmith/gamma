@@ -1,0 +1,1214 @@
+{
+  "authorization": "Owner-delegated Hack2Hire chunk02-a worklist (18 groups, 24 variants); public group previews only, no locked/full-content or solution reads",
+  "problems": [
+    {
+      "uid": "hack2hire:6a7f6aa4d713d873ca7adb44",
+      "title": "Find the Most Common Ads",
+      "variant_ordinal": 1,
+      "group_post_id": "6a7f6a37d713d873ca7adb3a",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "topKAds",
+        "params": [
+          {
+            "name": "impressions",
+            "type": "list<[string timestamp, string adId]>"
+          },
+          {
+            "name": "k",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "list<string>"
+        },
+        "python_wrapper": "Solution().topKAds",
+        "javascript_wrapper": "module.exports.topKAds",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "distinct ads sorted by literal list.count",
+        "candidate_design": "hash count then bounded min-heap of size k keyed by (count, reverse adId), drained and reversed",
+        "complexity_target": "O(n + d log k) time/O(d) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "85d0c5f9db03529955c7a0b912d0114813aaf6a690aebd4a9cd622210e63340f"
+      }
+    },
+    {
+      "uid": "hack2hire:6a7f6b0ad713d873ca7adb47",
+      "title": "Find the Most Common Ads",
+      "variant_ordinal": 2,
+      "group_post_id": "6a7f6a37d713d873ca7adb3a",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "topKAdsInWindow",
+        "params": [
+          {
+            "name": "impressions",
+            "type": "list<[string timestamp, string adId]>"
+          },
+          {
+            "name": "k",
+            "type": "integer"
+          },
+          {
+            "name": "startTime",
+            "type": "integer"
+          },
+          {
+            "name": "endTime",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "list<string>"
+        },
+        "python_wrapper": "Solution().topKAdsInWindow",
+        "javascript_wrapper": "module.exports.topKAdsInWindow",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "filter by int(timestamp) then literal list.count sort",
+        "candidate_design": "parse and filter, hash count, size-k min-heap",
+        "complexity_target": "O(n + d log k) time/O(d) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "85d0c5f9db03529955c7a0b912d0114813aaf6a690aebd4a9cd622210e63340f"
+      }
+    },
+    {
+      "uid": "hack2hire:6a18e226c81f779dc6a230e4",
+      "title": "Fit Saved Rectangles in a Box",
+      "variant_ordinal": 1,
+      "group_post_id": "6a18e1ebc81f779dc6a230e2",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "fitSavedRectangles",
+        "params": [
+          {
+            "name": "operations",
+            "type": "list<[integer type, integer a, integer b]>"
+          }
+        ],
+        "return": {
+          "type": "list<boolean>"
+        },
+        "python_wrapper": "Solution().fitSavedRectangles",
+        "javascript_wrapper": "module.exports.fitSavedRectangles",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "re-check every saved rectangle in both orientations per query",
+        "candidate_design": "track max short side and max long side of saved rectangles; compare with sorted box sides",
+        "complexity_target": "O(n) time/O(1) auxiliary"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "6f97062c9d5500d297f3fc0381bd651b69fa338bc52bf85b6ecdb7c798cbb6a5"
+      }
+    },
+    {
+      "uid": "hack2hire:69117148869dd6a56c434054",
+      "title": "GPU Credits",
+      "variant_ordinal": 1,
+      "group_post_id": "69117144869dd6a56c434053",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "CreditSystem",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "addCredit",
+            "params": [
+              {
+                "name": "creditId",
+                "type": "string"
+              },
+              {
+                "name": "amount",
+                "type": "integer"
+              },
+              {
+                "name": "startTime",
+                "type": "integer"
+              },
+              {
+                "name": "endTime",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "revokeCredit",
+            "params": [
+              {
+                "name": "creditId",
+                "type": "string"
+              },
+              {
+                "name": "timestamp",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "getBalance",
+            "params": [
+              {
+                "name": "timestamp",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "scan every grant per query with explicit revocation map",
+        "candidate_design": "hash map id -> [amount,start,end,revokedAt]; balance scans grants",
+        "complexity_target": "O(1) add/revoke, O(g) balance; O(g) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "a50b5a6afe0be572691462955e73d97dff3737feaea6b618f85f987ffa811213"
+      }
+    },
+    {
+      "uid": "hack2hire:6913b4310ac116974ccedd13",
+      "title": "GPU Credits II",
+      "variant_ordinal": 1,
+      "group_post_id": "6913b4290ac116974ccedd12",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "CreditSystem",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "addCredit",
+            "params": [
+              {
+                "name": "creditId",
+                "type": "string"
+              },
+              {
+                "name": "amount",
+                "type": "integer"
+              },
+              {
+                "name": "startTime",
+                "type": "integer"
+              },
+              {
+                "name": "endTime",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "consumeCredit",
+            "params": [
+              {
+                "name": "amount",
+                "type": "integer"
+              },
+              {
+                "name": "timestamp",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "getBalance",
+            "params": [
+              {
+                "name": "timestamp",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "replay per query with unit-by-unit draws, linear min over active grants",
+        "candidate_design": "per query: sort events by time, sweep with a min-heap keyed (end,start,id) and a running active total with lazy expiry",
+        "complexity_target": "O(E log E) per consume/balance query; O(E) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "23103360cb4da28d63aba319c14a3e711c75bf0915944a177d607afc9bf8d095"
+      }
+    },
+    {
+      "uid": "hack2hire:6791b00b74ebe9de6650635c",
+      "title": "Generate Random NFT",
+      "variant_ordinal": 1,
+      "group_post_id": "6791aa8374ebe9de6650635b",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "generateNFTs",
+        "params": [
+          {
+            "name": "traits",
+            "type": "list<[string trait, list<string value>]>"
+          },
+          {
+            "name": "n",
+            "type": "integer"
+          },
+          {
+            "name": "randoms",
+            "type": "list<integer>"
+          }
+        ],
+        "return": {
+          "type": "list<list<string>>"
+        },
+        "python_wrapper": "Solution().generateNFTs",
+        "javascript_wrapper": "module.exports.generateNFTs",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "literal per-trait modulo selection",
+        "candidate_design": "direct modulo indexing",
+        "complexity_target": "O(n*t) time/O(n*t) output"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "c7567dc4619fa622d8e8e0b10347504b7f11d47f15c2a5f5328b06edb32950e0"
+      }
+    },
+    {
+      "uid": "hack2hire:6791b3fa74ebe9de6650635d",
+      "title": "Generate Random NFT",
+      "variant_ordinal": 2,
+      "group_post_id": "6791aa8374ebe9de6650635b",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "generateWeightedNFTs",
+        "params": [
+          {
+            "name": "traits",
+            "type": "list<[string trait, list<[string value, integer weight]>]>"
+          },
+          {
+            "name": "n",
+            "type": "integer"
+          },
+          {
+            "name": "randoms",
+            "type": "list<integer>"
+          }
+        ],
+        "return": {
+          "type": "list<list<string>>"
+        },
+        "python_wrapper": "Solution().generateWeightedNFTs",
+        "javascript_wrapper": "module.exports.generateWeightedNFTs",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "expanded weighted list (small totals) or linear cumulative scan",
+        "candidate_design": "prefix sums per trait plus binary search (bisect_right)",
+        "complexity_target": "O(sum values + n*t*log v) time"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "c7567dc4619fa622d8e8e0b10347504b7f11d47f15c2a5f5328b06edb32950e0"
+      }
+    },
+    {
+      "uid": "hack2hire:6791b5ff74ebe9de6650635e",
+      "title": "Generate Random NFT",
+      "variant_ordinal": 3,
+      "group_post_id": "6791aa8374ebe9de6650635b",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "generateUniqueNFTs",
+        "params": [
+          {
+            "name": "traits",
+            "type": "list<[string trait, list<string value>]>"
+          },
+          {
+            "name": "n",
+            "type": "integer"
+          },
+          {
+            "name": "randoms",
+            "type": "list<integer>"
+          }
+        ],
+        "return": {
+          "type": "list<list<string>>"
+        },
+        "python_wrapper": "Solution().generateUniqueNFTs",
+        "javascript_wrapper": "module.exports.generateUniqueNFTs",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "materialize all combinations with itertools.product and run a literal partial Fisher-Yates",
+        "candidate_design": "virtual Fisher-Yates with a hash map of displaced positions; mixed-radix decoding",
+        "complexity_target": "O(n*t) time/O(n) map"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "c7567dc4619fa622d8e8e0b10347504b7f11d47f15c2a5f5328b06edb32950e0"
+      }
+    },
+    {
+      "uid": "hack2hire:6a611985c16dcdf8ba4ff8a2",
+      "title": "Group Loans by Top-Level Company",
+      "variant_ordinal": 1,
+      "group_post_id": "6a61190bc16dcdf8ba4ff89d",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "groupLoansByTopCompany",
+        "params": [
+          {
+            "name": "parents",
+            "type": "list<[string company, string parentCompany]>"
+          },
+          {
+            "name": "loans",
+            "type": "list<[string loanId, string company]>"
+          }
+        ],
+        "return": {
+          "type": "list<[string topCompany, list<string loanId>]>"
+        },
+        "python_wrapper": "Solution().groupLoansByTopCompany",
+        "javascript_wrapper": "module.exports.groupLoansByTopCompany",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "walk the parent chain from a freshly built map per loan, sort groups",
+        "candidate_design": "iterative root find with memoized roots (path compression), hash grouping",
+        "complexity_target": "O((p + l) + l log l) time/O(p + l) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "0005b072a45057300e7e84e6d9301eb09c6945aadd817d2461dd3af3094422a0"
+      }
+    },
+    {
+      "uid": "hack2hire:6a7231c748af2ae18e995d8b",
+      "title": "Group Loans by Top-Level Company",
+      "variant_ordinal": 2,
+      "group_post_id": "6a61190bc16dcdf8ba4ff89d",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "totalLoansByTopCompany",
+        "params": [
+          {
+            "name": "parents",
+            "type": "list<[string company, string parentCompany]>"
+          },
+          {
+            "name": "loans",
+            "type": "list<[string loanId, string company, integer amount]>"
+          }
+        ],
+        "return": {
+          "type": "list<[string topCompany, integer total]>"
+        },
+        "python_wrapper": "Solution().totalLoansByTopCompany",
+        "javascript_wrapper": "module.exports.totalLoansByTopCompany",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "parent-chain walk per loan, dict totals, sort",
+        "candidate_design": "memoized iterative root find, hash totals, sort",
+        "complexity_target": "O(p + l + g log g) time/O(p + l) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "0005b072a45057300e7e84e6d9301eb09c6945aadd817d2461dd3af3094422a0"
+      }
+    },
+    {
+      "uid": "hack2hire:6768c33400d569e371e007ec",
+      "title": "High Correlation Seller",
+      "variant_ordinal": 1,
+      "group_post_id": "6768bf0900d569e371e007eb",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "highCorrelationSellers",
+        "params": [
+          {
+            "name": "records",
+            "type": "list<list<string store>>"
+          }
+        ],
+        "return": {
+          "type": "list<[string store, list<string>]>"
+        },
+        "python_wrapper": "Solution().highCorrelationSellers",
+        "javascript_wrapper": "module.exports.highCorrelationSellers",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "count each ordered store pair by scanning every record",
+        "candidate_design": "dedupe sessions, nested hash counts over session pairs, per-store max",
+        "complexity_target": "O(sum s_i^2 + S log S) time/O(pairs) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "57b485b3789c74de9d0ee1119c2c1951f9f86aa64445bd253367922cf8244c6d"
+      }
+    },
+    {
+      "uid": "hack2hire:6a91ef7ccddc54478ddf4a34",
+      "title": "Highest Average Score",
+      "variant_ordinal": 1,
+      "group_post_id": "6a91eef2cddc54478ddf4a30",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "highestAverageScore",
+        "params": [
+          {
+            "name": "scores",
+            "type": "list<[string studentName, string score]>"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        },
+        "python_wrapper": "Solution().highestAverageScore",
+        "javascript_wrapper": "module.exports.highestAverageScore",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "Fraction means per distinct name",
+        "candidate_design": "hash sum/count; compare means by integer cross-multiplication; exact floor division",
+        "complexity_target": "O(n) time/O(students) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "3ad7d9963bed09ace986de3d87bc6e37a15b6256e48224e0577c931a7a7b7ce9"
+      }
+    },
+    {
+      "uid": "hack2hire:684bada44023c4f502877df5",
+      "title": "IP CIDR Firewall",
+      "variant_ordinal": 1,
+      "group_post_id": "684baaa84023c4f502877df2",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "IpFirewall",
+        "constructor": {
+          "params": [
+            {
+              "name": "rules",
+              "type": "list<[string action, string target]>"
+            }
+          ]
+        },
+        "methods": [
+          {
+            "name": "isAllowed",
+            "params": [
+              {
+                "name": "ip",
+                "type": "string"
+              }
+            ],
+            "return": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "compare 32-character binary string prefixes per rule",
+        "candidate_design": "pre-parse rules into (mask, masked base, allow) 32-bit integers; first-match scan",
+        "complexity_target": "O(R) per query/O(R) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "27678706a99768c9163dd31cf3750f7bfe3a802a65b81449edd51105b514f522"
+      }
+    },
+    {
+      "uid": "hack2hire:6987b235fedd959e9aa44515",
+      "title": "IPO Share Allocation",
+      "variant_ordinal": 1,
+      "group_post_id": "6987b22efedd959e9aa44513",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "getUnallottedUsers",
+        "params": [
+          {
+            "name": "bids",
+            "type": "list<[integer userId, integer shares, integer price, integer timestamp]>"
+          },
+          {
+            "name": "totalShares",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "list<integer>"
+        },
+        "python_wrapper": "Solution().getUnallottedUsers",
+        "javascript_wrapper": "module.exports.getUnallottedUsers",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "literal one-share-at-a-time round-robin simulation",
+        "candidate_design": "group by price descending; a partial level allots one share to the first `remaining` bidders by timestamp",
+        "complexity_target": "O(n log n) time/O(n) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "d268cf589feeb976cc0fc06f050f49fecadbab07e63c12bfb4306e8968c5d2c1"
+      }
+    },
+    {
+      "uid": "hack2hire:6a90b63acddc54478ddf423a",
+      "title": "Largest Tree Root",
+      "variant_ordinal": 1,
+      "group_post_id": "6a90b62ccddc54478ddf4239",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "largestTreeRoot",
+        "params": [
+          {
+            "name": "relations",
+            "type": "list<[integer child, integer parent]>"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        },
+        "python_wrapper": "Solution().largestTreeRoot",
+        "javascript_wrapper": "module.exports.largestTreeRoot",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "walk each node up to its root and tally",
+        "candidate_design": "children adjacency, iterative DFS from each root",
+        "complexity_target": "O(n) time/O(n) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "46a96f9ffd3fc32fc916285a1b127dfb7f3f042677f3fe9b61637710fdfc22e4"
+      }
+    },
+    {
+      "uid": "hack2hire:6a5941a8665efda9311fa417",
+      "title": "Live Fraud Detector",
+      "variant_ordinal": 1,
+      "group_post_id": "6a594182665efda9311fa413",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "DistinctPIIValuesCounter",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "processEvent",
+            "params": [
+              {
+                "name": "event",
+                "type": "list<string>[5]"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "getDistinctPIICount",
+            "params": [],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "recount set of (field,value) over the stored event list per query",
+        "candidate_design": "hash set insert per field",
+        "complexity_target": "O(1) per event and query/O(distinct) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "9409189a97cebcd28709f00928d47a16b7784780b711ff76d7dcb9455a6a6413"
+      }
+    },
+    {
+      "uid": "hack2hire:6a5941f5665efda9311fa41e",
+      "title": "Live Fraud Detector",
+      "variant_ordinal": 2,
+      "group_post_id": "6a594182665efda9311fa413",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "DistinctPIIValuesCounter",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "processEvent",
+            "params": [
+              {
+                "name": "event",
+                "type": "list<string>[5]"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "getDistinctPIICount",
+            "params": [],
+            "return": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "getSharedPIICount",
+            "params": [],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "recount per query over the stored event list",
+        "candidate_design": "hash map value -> event count, running shared counter incremented on the 1 -> 2 transition",
+        "complexity_target": "O(1) per event and query/O(distinct) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "9409189a97cebcd28709f00928d47a16b7784780b711ff76d7dcb9455a6a6413"
+      }
+    },
+    {
+      "uid": "hack2hire:697699035ed12b33b05f0f4e",
+      "title": "Match Payment to Invoice",
+      "variant_ordinal": 1,
+      "group_post_id": "697697e35ed12b33b05f0f4b",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "matchPaymentsByMemo",
+        "params": [
+          {
+            "name": "payments",
+            "type": "list<string \"paymentId,amount,memo\">"
+          },
+          {
+            "name": "invoices",
+            "type": "list<string \"invoiceId,amount,dueDate\">"
+          }
+        ],
+        "return": {
+          "type": "list<[string paymentId, string|null invoiceId]>"
+        },
+        "python_wrapper": "Solution().matchPaymentsByMemo",
+        "javascript_wrapper": "module.exports.matchPaymentsByMemo",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "regex search and linear invoice scan",
+        "candidate_design": "hash map of invoice ids; manual substring search for the marker",
+        "complexity_target": "O(P*L + I) time/O(I) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "4a2fbd24952c9c1a9fd2e11db7f411567939b786ba7a98ded9f4eca826a69d86"
+      }
+    },
+    {
+      "uid": "hack2hire:6976e8995ed12b33b05f10f7",
+      "title": "Match Payment to Invoice",
+      "variant_ordinal": 2,
+      "group_post_id": "697697e35ed12b33b05f0f4b",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "matchPayments",
+        "params": [
+          {
+            "name": "payments",
+            "type": "list<string \"paymentId,amount,memo\">"
+          },
+          {
+            "name": "invoices",
+            "type": "list<string \"invoiceId,amount,dueDate\">"
+          }
+        ],
+        "return": {
+          "type": "list<[string paymentId, string|null invoiceId]>"
+        },
+        "python_wrapper": "Solution().matchPayments",
+        "javascript_wrapper": "module.exports.matchPayments",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "linear scan over all invoices per payment",
+        "candidate_design": "per-amount buckets sorted by (dueDate, id) with advancing pointers skipping matched ids",
+        "complexity_target": "O(P*L + I log I) time/O(I) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "4a2fbd24952c9c1a9fd2e11db7f411567939b786ba7a98ded9f4eca826a69d86"
+      }
+    },
+    {
+      "uid": "hack2hire:6a226625981072682a6f216b",
+      "title": "Matrix Transpose with Workers",
+      "variant_ordinal": 1,
+      "group_post_id": "6a2265c0981072682a6f2163",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "transposeWithWorkers",
+        "params": [
+          {
+            "name": "matrix",
+            "type": "list<list<integer>> n x n"
+          },
+          {
+            "name": "numThreads",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "list<list<integer>>"
+        },
+        "python_wrapper": "Solution().transposeWithWorkers",
+        "javascript_wrapper": "module.exports.transposeWithWorkers",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "zip(*matrix)",
+        "candidate_design": "contiguous row blocks per simulated worker writing a preallocated output",
+        "complexity_target": "O(n^2) time/O(n^2) output"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "6ea690b3d36c159335bc2673de92190e970c0db98389a94e35a2bcd4e497c2f1"
+      }
+    },
+    {
+      "uid": "hack2hire:69fa55d2661bab75bbca3b9d",
+      "title": "Maximize Hole in Prison Gate",
+      "variant_ordinal": 1,
+      "group_post_id": "69fa55bf661bab75bbca3b9c",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "maximizeHole",
+        "params": [
+          {
+            "name": "n",
+            "type": "integer"
+          },
+          {
+            "name": "m",
+            "type": "integer"
+          },
+          {
+            "name": "h",
+            "type": "list<integer>"
+          },
+          {
+            "name": "v",
+            "type": "list<integer>"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        },
+        "python_wrapper": "Solution().maximizeHole",
+        "javascript_wrapper": "module.exports.maximizeHole",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "list surviving bar positions with frame sentinels and take the widest gap",
+        "candidate_design": "sort removed bars, longest consecutive run",
+        "complexity_target": "O(h log h + v log v) time/O(h+v) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "ed1f23fca5f25df9c66e63d3c4cfb662388b384162b1a6205249425251299741"
+      }
+    },
+    {
+      "uid": "hack2hire:6933c5c85f306485cc5f07c0",
+      "title": "Maximum Island Perimeter",
+      "variant_ordinal": 1,
+      "group_post_id": "6933c5bb5f306485cc5f07bf",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "maxIslandPerimeter",
+        "params": [
+          {
+            "name": "grid",
+            "type": "list<list<'0'|'1'>>"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        },
+        "python_wrapper": "Solution().maxIslandPerimeter",
+        "javascript_wrapper": "module.exports.maxIslandPerimeter",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "union-find; perimeter = 4*cells - 2*internal adjacencies per component",
+        "candidate_design": "iterative DFS counting exposed edges per island",
+        "complexity_target": "O(rc) time/O(rc) space"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "08796e43b442f1203a2335afee0c050ff6debf5c1315c1bd9e37388ff3d560b5"
+      }
+    },
+    {
+      "uid": "hack2hire:6a7253d448af2ae18e995e99",
+      "title": "Minimum Nondecreasing Increment",
+      "variant_ordinal": 1,
+      "group_post_id": "6a7253cd48af2ae18e995e98",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "function",
+        "name": "minNondecreasingIncrement",
+        "params": [
+          {
+            "name": "arr",
+            "type": "list<integer>"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        },
+        "python_wrapper": "Solution().minNondecreasingIncrement",
+        "javascript_wrapper": "module.exports.minNondecreasingIncrement",
+        "entrypoint": "solve"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "enumerate every non-adjacent subset and x in [0, span]",
+        "candidate_design": "every descent i forces i+1 chosen and i unchosen; x = max descent; reject adjacent forced indices or a forced index overtaking its right neighbour",
+        "complexity_target": "O(n) time/O(1) auxiliary"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "316cb200d512dfab5471a128427443b81c18a715dfea5953d3070c2a6c02f4c5"
+      }
+    },
+    {
+      "uid": "hack2hire:67b36a7975074948935624c7",
+      "title": "MultiStream Reader",
+      "variant_ordinal": 1,
+      "group_post_id": "67b2cb8275074948935624c6",
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "inferred_interface": {
+        "kind": "class",
+        "classname": "MultiStreamReader",
+        "constructor": {
+          "params": [
+            {
+              "name": "streams",
+              "type": "list<string>"
+            }
+          ]
+        },
+        "methods": [
+          {
+            "name": "read",
+            "params": [
+              {
+                "name": "n",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "string"
+            }
+          }
+        ],
+        "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname"
+      },
+      "spec_basis": "inferred",
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "reference": "slice the literal concatenation",
+        "candidate_design": "queue of Stream objects plus a pending buffer; pulls fixed-size chunks through Stream.read",
+        "complexity_target": "O(n) per read amortized/O(chunk) buffer"
+      },
+      "qualification_status": "unknown",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; INFERRED bounds",
+        "full_text_location": "not held; public group preview only",
+        "preview_response_sha256": "07f3b5631fe6593f9f961430ebcb98f6a7f5fdf7d87d29464f950364f1f8fdd1"
+      }
+    }
+  ],
+  "schema": "gamma.authored-assignment-public-safe.v1",
+  "status": "inferred-spec development variants only; independent isolated qualification pending"
+}

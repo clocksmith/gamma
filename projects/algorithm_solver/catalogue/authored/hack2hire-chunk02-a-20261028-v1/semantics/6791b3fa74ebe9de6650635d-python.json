@@ -1,0 +1,60 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (trait configuration, one value per trait, duplicates permitted)",
+      "algorithmTags HASH_TABLE, BINARY_SEARCH"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "high: weighted traits are inferred from the BINARY_SEARCH tag only."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.generateWeightedNFTs",
+    "kind": "function",
+    "name": "generateWeightedNFTs",
+    "params": [
+      {
+        "name": "traits",
+        "type": "list<[string trait, list<[string value, integer weight]>]>"
+      },
+      {
+        "name": "n",
+        "type": "integer"
+      },
+      {
+        "name": "randoms",
+        "type": "list<integer>"
+      }
+    ],
+    "python_wrapper": "Solution().generateWeightedNFTs",
+    "return": {
+      "type": "list<list<string>>"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "traits",
+    "n",
+    "randoms"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "prefix sums per trait plus binary search (bisect_right)",
+    "complexity_target": "O(sum values + n*t*log v) time",
+    "reference": "expanded weighted list (small totals) or linear cumulative scan"
+  },
+  "source_sha256": "f5c6262636f37c9cfc34fbbc4dbf8e9fbf81188b4a7708744947fea587809d02",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6791b3fa74ebe9de6650635d",
+  "variant_id": "6791b3fa74ebe9de6650635d"
+}

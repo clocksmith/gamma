@@ -1,0 +1,55 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "algorithmTags HASH_TABLE",
+      "companies AFFIRM"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "highest: preview mismatch as in variant 1; the amount aggregation follow-up is invented from the title."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.totalLoansByTopCompany",
+    "kind": "function",
+    "name": "totalLoansByTopCompany",
+    "params": [
+      {
+        "name": "parents",
+        "type": "list<[string company, string parentCompany]>"
+      },
+      {
+        "name": "loans",
+        "type": "list<[string loanId, string company, integer amount]>"
+      }
+    ],
+    "python_wrapper": "Solution().totalLoansByTopCompany",
+    "return": {
+      "type": "list<[string topCompany, integer total]>"
+    }
+  },
+  "language": "javascript",
+  "parameters": [
+    "parents",
+    "loans"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "memoized iterative root find, hash totals, sort",
+    "complexity_target": "O(p + l + g log g) time/O(p + l) space",
+    "reference": "parent-chain walk per loan, dict totals, sort"
+  },
+  "source_sha256": "9a0f9fa162a5086130d6340e2497872645b485b605dbff1560ae0a2b91abebaa",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a7231c748af2ae18e995d8b",
+  "variant_id": "6a7231c748af2ae18e995d8b"
+}

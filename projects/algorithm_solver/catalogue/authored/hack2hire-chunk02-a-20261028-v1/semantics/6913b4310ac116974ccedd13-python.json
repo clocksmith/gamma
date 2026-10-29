@@ -1,0 +1,99 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (CreditSystem, out-of-order arrival, consume at a time)",
+      "algorithmTags HEAP, HASH_TABLE"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "high: expiring-first draw order, all-or-nothing consumption, tie-breaks and the replay definition are inferred."
+  },
+  "inferred_interface": {
+    "classname": "CreditSystem",
+    "constructor": {
+      "params": []
+    },
+    "entrypoint": "solve(operations, arguments) trace adapter; native class exported under classname",
+    "kind": "class",
+    "methods": [
+      {
+        "name": "addCredit",
+        "params": [
+          {
+            "name": "creditId",
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "type": "integer"
+          },
+          {
+            "name": "startTime",
+            "type": "integer"
+          },
+          {
+            "name": "endTime",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "consumeCredit",
+        "params": [
+          {
+            "name": "amount",
+            "type": "integer"
+          },
+          {
+            "name": "timestamp",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "getBalance",
+        "params": [
+          {
+            "name": "timestamp",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ]
+  },
+  "language": "python",
+  "native_class": "CreditSystem",
+  "native_route": "direct-class-v1",
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-native-class-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "per query: sort events by time, sweep with a min-heap keyed (end,start,id) and a running active total with lazy expiry",
+    "complexity_target": "O(E log E) per consume/balance query; O(E) space",
+    "reference": "replay per query with unit-by-unit draws, linear min over active grants"
+  },
+  "source_sha256": "d5617668ef3a605c3895af012c015e191cdd0b6ab1d0f63fb9f5813fa9c141c9",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6913b4310ac116974ccedd13",
+  "variant_id": "6913b4310ac116974ccedd13"
+}

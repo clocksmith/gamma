@@ -1,0 +1,50 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (grid, connectivity, perimeter edge rule; LeetCode 200 relation)",
+      "algorithmTags DEPTH_FIRST_SEARCH"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "low: preview fixes the definition."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.maxIslandPerimeter",
+    "kind": "function",
+    "name": "maxIslandPerimeter",
+    "params": [
+      {
+        "name": "grid",
+        "type": "list<list<'0'|'1'>>"
+      }
+    ],
+    "python_wrapper": "Solution().maxIslandPerimeter",
+    "return": {
+      "type": "integer"
+    }
+  },
+  "language": "python",
+  "parameters": [
+    "grid"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "iterative DFS counting exposed edges per island",
+    "complexity_target": "O(rc) time/O(rc) space",
+    "reference": "union-find; perimeter = 4*cells - 2*internal adjacencies per component"
+  },
+  "source_sha256": "86cc5def663b3287da206d09b54cc136797f54925a5850ccd2372789f48e93ad",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6933c5c85f306485cc5f07c0",
+  "variant_id": "6933c5c85f306485cc5f07c0"
+}

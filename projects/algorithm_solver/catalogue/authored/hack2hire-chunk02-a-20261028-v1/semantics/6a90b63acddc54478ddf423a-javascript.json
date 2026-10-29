@@ -1,0 +1,50 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "inference": {
+    "basis": [
+      "title",
+      "contentPreview (relation format, root and tree-size definitions)",
+      "algorithmTags DEPTH_FIRST_SEARCH"
+    ],
+    "by": "claude-opus-5-5 subagent",
+    "date": "2026-10-28",
+    "official_spec_seen": false,
+    "uncertainty": "low-medium: tie-break (smaller id) and empty -> -1 are inferred."
+  },
+  "inferred_interface": {
+    "entrypoint": "solve",
+    "javascript_wrapper": "module.exports.largestTreeRoot",
+    "kind": "function",
+    "name": "largestTreeRoot",
+    "params": [
+      {
+        "name": "relations",
+        "type": "list<[integer child, integer parent]>"
+      }
+    ],
+    "python_wrapper": "Solution().largestTreeRoot",
+    "return": {
+      "type": "integer"
+    }
+  },
+  "language": "javascript",
+  "parameters": [
+    "relations"
+  ],
+  "qualification": {
+    "reason": "Not qualified: inferred specification (not official), author-local runs only against author-written references; no isolated independent qualification.",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "children adjacency, iterative DFS from each root",
+    "complexity_target": "O(n) time/O(n) space",
+    "reference": "walk each node up to its root and tally"
+  },
+  "source_sha256": "d8169f5616c38d4498a2e7894e5ea782a9fec68455172d0e73654910b062e008",
+  "spec_basis": "inferred",
+  "uid": "hack2hire:6a90b63acddc54478ddf423a",
+  "variant_id": "6a90b63acddc54478ddf423a"
+}

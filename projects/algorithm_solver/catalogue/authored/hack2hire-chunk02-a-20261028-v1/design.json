@@ -1,0 +1,124 @@
+{
+  "problems": {
+    "hack2hire:6a7f6aa4d713d873ca7adb44": {
+      "reference": "distinct ads sorted by literal list.count",
+      "candidate_design": "hash count then bounded min-heap of size k keyed by (count, reverse adId), drained and reversed",
+      "complexity_target": "O(n + d log k) time/O(d) space"
+    },
+    "hack2hire:6a7f6b0ad713d873ca7adb47": {
+      "reference": "filter by int(timestamp) then literal list.count sort",
+      "candidate_design": "parse and filter, hash count, size-k min-heap",
+      "complexity_target": "O(n + d log k) time/O(d) space"
+    },
+    "hack2hire:6a18e226c81f779dc6a230e4": {
+      "reference": "re-check every saved rectangle in both orientations per query",
+      "candidate_design": "track max short side and max long side of saved rectangles; compare with sorted box sides",
+      "complexity_target": "O(n) time/O(1) auxiliary"
+    },
+    "hack2hire:69117148869dd6a56c434054": {
+      "reference": "scan every grant per query with explicit revocation map",
+      "candidate_design": "hash map id -> [amount,start,end,revokedAt]; balance scans grants",
+      "complexity_target": "O(1) add/revoke, O(g) balance; O(g) space"
+    },
+    "hack2hire:6913b4310ac116974ccedd13": {
+      "reference": "replay per query with unit-by-unit draws, linear min over active grants",
+      "candidate_design": "per query: sort events by time, sweep with a min-heap keyed (end,start,id) and a running active total with lazy expiry",
+      "complexity_target": "O(E log E) per consume/balance query; O(E) space"
+    },
+    "hack2hire:6791b00b74ebe9de6650635c": {
+      "reference": "literal per-trait modulo selection",
+      "candidate_design": "direct modulo indexing",
+      "complexity_target": "O(n*t) time/O(n*t) output"
+    },
+    "hack2hire:6791b3fa74ebe9de6650635d": {
+      "reference": "expanded weighted list (small totals) or linear cumulative scan",
+      "candidate_design": "prefix sums per trait plus binary search (bisect_right)",
+      "complexity_target": "O(sum values + n*t*log v) time"
+    },
+    "hack2hire:6791b5ff74ebe9de6650635e": {
+      "reference": "materialize all combinations with itertools.product and run a literal partial Fisher-Yates",
+      "candidate_design": "virtual Fisher-Yates with a hash map of displaced positions; mixed-radix decoding",
+      "complexity_target": "O(n*t) time/O(n) map"
+    },
+    "hack2hire:6a611985c16dcdf8ba4ff8a2": {
+      "reference": "walk the parent chain from a freshly built map per loan, sort groups",
+      "candidate_design": "iterative root find with memoized roots (path compression), hash grouping",
+      "complexity_target": "O((p + l) + l log l) time/O(p + l) space"
+    },
+    "hack2hire:6a7231c748af2ae18e995d8b": {
+      "reference": "parent-chain walk per loan, dict totals, sort",
+      "candidate_design": "memoized iterative root find, hash totals, sort",
+      "complexity_target": "O(p + l + g log g) time/O(p + l) space"
+    },
+    "hack2hire:6768c33400d569e371e007ec": {
+      "reference": "count each ordered store pair by scanning every record",
+      "candidate_design": "dedupe sessions, nested hash counts over session pairs, per-store max",
+      "complexity_target": "O(sum s_i^2 + S log S) time/O(pairs) space"
+    },
+    "hack2hire:6a91ef7ccddc54478ddf4a34": {
+      "reference": "Fraction means per distinct name",
+      "candidate_design": "hash sum/count; compare means by integer cross-multiplication; exact floor division",
+      "complexity_target": "O(n) time/O(students) space"
+    },
+    "hack2hire:684bada44023c4f502877df5": {
+      "reference": "compare 32-character binary string prefixes per rule",
+      "candidate_design": "pre-parse rules into (mask, masked base, allow) 32-bit integers; first-match scan",
+      "complexity_target": "O(R) per query/O(R) space"
+    },
+    "hack2hire:6987b235fedd959e9aa44515": {
+      "reference": "literal one-share-at-a-time round-robin simulation",
+      "candidate_design": "group by price descending; a partial level allots one share to the first `remaining` bidders by timestamp",
+      "complexity_target": "O(n log n) time/O(n) space"
+    },
+    "hack2hire:6a90b63acddc54478ddf423a": {
+      "reference": "walk each node up to its root and tally",
+      "candidate_design": "children adjacency, iterative DFS from each root",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "hack2hire:6a5941a8665efda9311fa417": {
+      "reference": "recount set of (field,value) over the stored event list per query",
+      "candidate_design": "hash set insert per field",
+      "complexity_target": "O(1) per event and query/O(distinct) space"
+    },
+    "hack2hire:6a5941f5665efda9311fa41e": {
+      "reference": "recount per query over the stored event list",
+      "candidate_design": "hash map value -> event count, running shared counter incremented on the 1 -> 2 transition",
+      "complexity_target": "O(1) per event and query/O(distinct) space"
+    },
+    "hack2hire:697699035ed12b33b05f0f4e": {
+      "reference": "regex search and linear invoice scan",
+      "candidate_design": "hash map of invoice ids; manual substring search for the marker",
+      "complexity_target": "O(P*L + I) time/O(I) space"
+    },
+    "hack2hire:6976e8995ed12b33b05f10f7": {
+      "reference": "linear scan over all invoices per payment",
+      "candidate_design": "per-amount buckets sorted by (dueDate, id) with advancing pointers skipping matched ids",
+      "complexity_target": "O(P*L + I log I) time/O(I) space"
+    },
+    "hack2hire:6a226625981072682a6f216b": {
+      "reference": "zip(*matrix)",
+      "candidate_design": "contiguous row blocks per simulated worker writing a preallocated output",
+      "complexity_target": "O(n^2) time/O(n^2) output"
+    },
+    "hack2hire:69fa55d2661bab75bbca3b9d": {
+      "reference": "list surviving bar positions with frame sentinels and take the widest gap",
+      "candidate_design": "sort removed bars, longest consecutive run",
+      "complexity_target": "O(h log h + v log v) time/O(h+v) space"
+    },
+    "hack2hire:6933c5c85f306485cc5f07c0": {
+      "reference": "union-find; perimeter = 4*cells - 2*internal adjacencies per component",
+      "candidate_design": "iterative DFS counting exposed edges per island",
+      "complexity_target": "O(rc) time/O(rc) space"
+    },
+    "hack2hire:6a7253d448af2ae18e995e99": {
+      "reference": "enumerate every non-adjacent subset and x in [0, span]",
+      "candidate_design": "every descent i forces i+1 chosen and i unchosen; x = max descent; reject adjacent forced indices or a forced index overtaking its right neighbour",
+      "complexity_target": "O(n) time/O(1) auxiliary"
+    },
+    "hack2hire:67b36a7975074948935624c7": {
+      "reference": "slice the literal concatenation",
+      "candidate_design": "queue of Stream objects plus a pending buffer; pulls fixed-size chunks through Stream.read",
+      "complexity_target": "O(n) per read amortized/O(chunk) buffer"
+    }
+  }
+}
