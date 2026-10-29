@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+   "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+   "selector": "/problems/hack2hire:68f82cd8d7ff180d0ab950c7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+   "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+   "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7"
+  }
+ ],
+ "problemId": "hack2hire:68f561de577eec16d6b9c926",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:authored-inferred-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/contract--contract_hack2hire_68f561de577eec16d6b9c926_68f82cd8d7ff180d0ab950c7_authored-inferred-v1.json",
+  "sha256": "e16478bc069367339d03b01b987f0e15fc3d3dccbf59819a0691550625bbeb2a"
+ },
+ "title": {
+  "status": "present",
+  "value": "with prefix sums P, segment l..r is stable when capacity[l] == capacity[r] and P[r] - P[l + 1] == capacity[r]; scan r from left to right, make left end l = r - 2 available by counting the key (capacity[l], P[l + 1]) in a hash map, and add the count of key (capacity[r], P[r] - capacity[r])",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+    "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+    "selector": "/problems/hack2hire:68f82cd8d7ff180d0ab950c7/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "with prefix sums P, segment l..r is stable when capacity[l] == capacity[r] and P[r] - P[l + 1] == capacity[r]; scan r from left to right, make left end l = r - 2 available by counting the key (capacity[l], P[l + 1]) in a hash map, and add the count of key (capacity[r], P[r] - capacity[r]). Complexity target: O(n) expected time/O(n) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+    "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+    "selector": "/problems/hack2hire:68f82cd8d7ff180d0ab950c7"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Counting subarrays defined by an equality on prefix sums"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "The hash map makes the count linear; the quadratic double loop is simpler and fine for small n"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "before processing r the map holds exactly the left ends 0..r - 2",
+   "every counted pair has at least one element between its ends"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Write the condition with prefix sums: the middle sum is P[r] - P[l + 1].",
+   "For a fixed right end r you need left ends l <= r - 2 with capacity[l] == capacity[r] and P[l + 1] == P[r] - capacity[r].",
+   "Keep a hash map of (capacity[l], P[l + 1]) for l <= r - 2, inserting l = r - 2 just before processing r, and add the matching count."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "with prefix sums P, segment l..r is stable when capacity[l] == capacity[r] and P[r] - P[l + 1] == capacity[r]; scan r from left to right, make left end l = r - 2 available by counting the key (capacity[l], P[l + 1]) in a hash map, and add the count of key (capacity[r], P[r] - capacity[r])",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+      "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+      "selector": "/problems/hack2hire:68f82cd8d7ff180d0ab950c7/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) expected time/O(n) space; the independent reference (for every left end, extend the right end while keeping a running sum of the strict middle and compare it with both ends) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+      "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+      "selector": "/problems/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Write the condition with prefix sums: the middle sum is P[r] - P[l + 1].",
+     "For a fixed right end r you need left ends l <= r - 2 with capacity[l] == capacity[r] and P[l + 1] == P[r] - capacity[r]."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_68f561de577eec16d6b9c926_68f82cd8d7ff180d0ab950c7_approach-native_v1.json",
+    "sha256": "cf91049e292377ae0e451ff2bf177d5279b5c743624057c6f412408602eff856"
+   }
+  },
+  {
+   "id": "approach:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper countStableSegments, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+      "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+      "selector": "/problems/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Keep a hash map of (capacity[l], P[l + 1]) for l <= r - 2, inserting l = r - 2 just before processing r, and add the matching count."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_68f561de577eec16d6b9c926_68f82cd8d7ff180d0ab950c7_python_v1.json",
+     "sha256": "b31218c0f7e6676a24aad1327f275905ac56b9421b6625d73b02fba67c85b338"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_68f561de577eec16d6b9c926_68f82cd8d7ff180d0ab950c7_javascript_v1.json",
+     "sha256": "40fb36f392ed98f7c7c90dffbc12a5f332fb699de6c4950c360a754401ceef63"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_68f561de577eec16d6b9c926_68f82cd8d7ff180d0ab950c7_approach-native_v1.json",
+    "sha256": "cf91049e292377ae0e451ff2bf177d5279b5c743624057c6f412408602eff856"
+   }
+  },
+  {
+   "id": "approach:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (for every left end, extend the right end while keeping a running sum of the strict middle and compare it with both ends) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+      "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+      "selector": "/problems/hack2hire:68f82cd8d7ff180d0ab950c7/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/0/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/test_oracles.py",
+      "sha256": "f2c4be72773fe8fd62e6dab57fa59d8b292f5e2071024728c76514a19df9a021",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+      "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+      "selector": "/variants/hack2hire:68f82cd8d7ff180d0ab950c7"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_68f561de577eec16d6b9c926_68f82cd8d7ff180d0ab950c7_approach-native_v1.json",
+    "sha256": "cf91049e292377ae0e451ff2bf177d5279b5c743624057c6f412408602eff856"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/artifact--artifact_hack2hire_68f561de577eec16d6b9c926_68f82cd8d7ff180d0ab950c7_approach-native_v1.json",
+  "sha256": "cf91049e292377ae0e451ff2bf177d5279b5c743624057c6f412408602eff856"
+ }
+}

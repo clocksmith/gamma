@@ -1,0 +1,70 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6784211bd0faf7ec64cc3ade",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "CardGame",
+  "constructor": {
+   "params": [
+    {
+     "name": "deck",
+     "type": "integer[]"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "playRound",
+    "params": [],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "getScore",
+    "params": [
+     {
+      "name": "player",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "getWinner",
+    "params": [],
+    "return": {
+     "type": "string"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview (blocked in hack2hire-chunk05-v1), not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "count the rounds played and replay every played round from the start of the deck on each query",
+  "candidate_design": "a draw pointer into the given order plus two running scores updated once per round",
+  "complexity_target": "O(1) per call/O(1) extra space beyond the deck"
+ },
+ "source_sha256": "50ea0bfb44ed01895ecb52e9b6812fa27baa9466a05dfcfaa41d068716fc6175",
+ "native_class": "CardGame",
+ "native_symbol": "module-global class CardGame",
+ "void_methods": []
+}

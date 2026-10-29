@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:688bd5423867670cfb894188",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "words",
+  "substitutions",
+  "comment"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "detectAbusiveWords",
+  "params": [
+   {
+    "name": "words",
+    "type": "string[]"
+   },
+   {
+    "name": "substitutions",
+    "type": "string[][]"
+   },
+   {
+    "name": "comment",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview (blocked in hack2hire-chunk05-v1), not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "compare every token with every abusive word of the same length, position by position",
+  "candidate_design": "build a trie of the abusive words; for each token keep the set of trie nodes reachable so far, advancing through the child equal to a letter or the children named by a symbol's substitutions, and report the token when a reached node ends a word",
+  "complexity_target": "O(total token length * reachable trie nodes) worst case, O(total word length) to build/O(total word length) space"
+ },
+ "source_sha256": "e3ae1bf82857ada119de72e9a1052b4576517ae866b9b5ab53d3ed70ba5070af",
+ "wrapper": "Solution.detectAbusiveWords"
+}

@@ -1,0 +1,641 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6946090c2c048134ada83558:694609632c048134ada83559:authored-inferred-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+   "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6946090c2c048134ada83558.json",
+   "sha256": "ff1cd8cb042cbaa45ecbd1ceba7b337bb9f525967962854e3e28f8d171885fd9",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+   "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+   "selector": "/variants/hack2hire:694609632c048134ada83559"
+  }
+ ],
+ "problemId": "hack2hire:6946090c2c048134ada83558",
+ "variantId": "694609632c048134ada83559",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: primary breaker with rerouting to a guarded secondary",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:694609632c048134ada83559/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "DualCircuitBreaker(failureThreshold, cooldown) guards a primary and a secondary server with one breaker each, both closed. A closed breaker allows attempts and counts consecutive failures; reaching failureThreshold opens it at that time and resets the count. An open breaker opened at time o allows an attempt at time t only when t - o >= cooldown; that attempt is a trial: success closes the breaker, failure reopens it at t. Any success of a closed breaker resets its count. request(timestamp, primaryOk, secondaryOk) gives the outcome each server would have: if the primary breaker allows, the primary is attempted and a success returns \"PRIMARY\"; otherwise (blocked or failed) the request is rerouted to the secondary if its breaker allows, returning \"SECONDARY\" on success and \"FAILED\" on failure; when the secondary is blocked it returns \"FAILED\" if the primary was attempted and \"BLOCKED\" if no server was attempted. Timestamps are non-decreasing. Every method call is answered in call order on one instance.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "DualCircuitBreaker(failureThreshold, cooldown) guards a primary and a secondary server with one breaker each, both closed.",
+   "A closed breaker allows attempts and counts consecutive failures; reaching failureThreshold opens it at that time and resets the count.",
+   "An open breaker opened at time o allows an attempt at time t only when t - o >= cooldown; that attempt is a trial: success closes the breaker, failure reopens it at t.",
+   "Any success of a closed breaker resets its count.",
+   "request(timestamp, primaryOk, secondaryOk) gives the outcome each server would have: if the primary breaker allows, the primary is attempted and a success returns \"PRIMARY\"; otherwise (blocked or failed) the request is rerouted to the secondary if its breaker allows, returning \"SECONDARY\" on success and \"FAILED\" on failure; when the secondary is blocked it returns \"FAILED\" if the primary was attempted and \"BLOCKED\" if no server was attempted.",
+   "Timestamps are non-decreasing.",
+   "Every method call is answered in call order on one instance."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= failureThreshold <= 100",
+   "1 <= cooldown <= 1e9",
+   "at most 1e5 calls",
+   "0 <= timestamp <= 1e9, non-decreasing"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:694609632c048134ada83559/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: a circuit breaker opens after several consecutive failures of a primary server, blocking or rerouting further requests, and after a cooldown tries to reset; the dual-breaker rules are cut off; algorithmTags: DESIGN; companies: DATABRICKS; stages SCREENING, ONSITE; the usual closed / open / half-open circuit-breaker pattern (general knowledge of the inferring model); preview response sha256 efd50c1326e5ad236208e4c2a5cf17fd9e34da276a2c0096e8b0da329e94a330"
+   },
+   {
+    "statement": "Uncertainty: very high: consecutive-failure opening, blocking or rerouting and the cooldown reset are in the preview; the second breaker on a secondary server, the single trial attempt after cooldown, reroute-on-failure, the outcome flags as inputs, the four result strings, the names and the bounds are invented",
+    "basis": "the public group preview is partial (438 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "hack2hire-chunk05-v1 blocked this variant: Only a single-breaker introduction is visible; the dual-breaker routing, thresholds, reset and cooldown semantics are absent.",
+    "basis": "owner direction 2026-10-28: infer blocked problems and label every inference; this row is an inference, not the accessible exact statement or owner-supplied rules that chunk05 asked for"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/7/variant_split_inference"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/7/prior_blocker"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does the second breaker guard: a secondary server, or a second failure measure on the same server?",
+   "After the cooldown, does one trial request decide, or several?",
+   "Is a request whose primary fails retried on the secondary?",
+   "What does a request return?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:694609632c048134ada83559/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "DualCircuitBreaker",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request"
+     ],
+     [
+      [
+       2,
+       5
+      ],
+      [
+       0,
+       false,
+       true
+      ],
+      [
+       1,
+       false,
+       true
+      ],
+      [
+       2,
+       true,
+       false
+      ],
+      [
+       3,
+       true,
+       false
+      ],
+      [
+       4,
+       true,
+       true
+      ],
+      [
+       6,
+       false,
+       true
+      ],
+      [
+       8,
+       true,
+       true
+      ],
+      [
+       11,
+       true,
+       true
+      ],
+      [
+       11,
+       false,
+       false
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     "SECONDARY",
+     "SECONDARY",
+     "FAILED",
+     "FAILED",
+     "BLOCKED",
+     "FAILED",
+     "SECONDARY",
+     "PRIMARY",
+     "FAILED"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "DualCircuitBreaker",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request",
+      "request"
+     ],
+     [
+      [
+       2,
+       5
+      ],
+      [
+       3,
+       false,
+       false
+      ],
+      [
+       5,
+       false,
+       false
+      ],
+      [
+       6,
+       false,
+       true
+      ],
+      [
+       7,
+       true,
+       true
+      ],
+      [
+       7,
+       false,
+       true
+      ],
+      [
+       9,
+       true,
+       false
+      ],
+      [
+       9,
+       true,
+       true
+      ],
+      [
+       9,
+       true,
+       false
+      ],
+      [
+       12,
+       true,
+       true
+      ],
+      [
+       12,
+       true,
+       true
+      ],
+      [
+       14,
+       false,
+       true
+      ],
+      [
+       16,
+       false,
+       false
+      ],
+      [
+       18,
+       false,
+       false
+      ],
+      [
+       18,
+       false,
+       true
+      ],
+      [
+       18,
+       false,
+       true
+      ],
+      [
+       19,
+       true,
+       false
+      ],
+      [
+       20,
+       false,
+       true
+      ],
+      [
+       20,
+       false,
+       true
+      ],
+      [
+       21,
+       false,
+       false
+      ],
+      [
+       22,
+       false,
+       false
+      ],
+      [
+       22,
+       false,
+       false
+      ],
+      [
+       24,
+       true,
+       false
+      ],
+      [
+       27,
+       false,
+       false
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     "FAILED",
+     "FAILED",
+     "BLOCKED",
+     "BLOCKED",
+     "BLOCKED",
+     "BLOCKED",
+     "BLOCKED",
+     "BLOCKED",
+     "PRIMARY",
+     "PRIMARY",
+     "SECONDARY",
+     "FAILED",
+     "FAILED",
+     "BLOCKED",
+     "BLOCKED",
+     "BLOCKED",
+     "BLOCKED",
+     "BLOCKED",
+     "FAILED",
+     "BLOCKED",
+     "BLOCKED",
+     "FAILED",
+     "FAILED"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:694609632c048134ada83559/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/oracles.py",
+    "sha256": "bde6928fb5631e62c797fd48ae0cc23e2966f2212522c8b63eb0056cdeb8ba1c",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class DualCircuitBreaker:\n    def __init__(self, failureThreshold, cooldown)\n    def request(self, timestamp, primaryOk, secondaryOk) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/694609632c048134ada83559-python.json",
+     "inferredInterface": {
+      "classname": "DualCircuitBreaker",
+      "constructor": {
+       "params": [
+        {
+         "name": "failureThreshold",
+         "type": "integer"
+        },
+        {
+         "name": "cooldown",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "request",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "primaryOk",
+          "type": "boolean"
+         },
+         {
+          "name": "secondaryOk",
+          "type": "boolean"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/694609632c048134ada83559-python.json",
+      "sha256": "284dd4a5b6db9814a84f84d8d59c0844af3fa8bae8dad988e40360167e35bd3d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class DualCircuitBreaker {\n  constructor(failureThreshold, cooldown)\n  request(timestamp, primaryOk, secondaryOk) /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/694609632c048134ada83559-javascript.json",
+     "inferredInterface": {
+      "classname": "DualCircuitBreaker",
+      "constructor": {
+       "params": [
+        {
+         "name": "failureThreshold",
+         "type": "integer"
+        },
+        {
+         "name": "cooldown",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "request",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "primaryOk",
+          "type": "boolean"
+         },
+         {
+          "name": "secondaryOk",
+          "type": "boolean"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/694609632c048134ada83559-javascript.json",
+      "sha256": "c63a879b1f1bf60de67b0a737a439a97b0664855a384cb6d6a4936f8dee79303",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

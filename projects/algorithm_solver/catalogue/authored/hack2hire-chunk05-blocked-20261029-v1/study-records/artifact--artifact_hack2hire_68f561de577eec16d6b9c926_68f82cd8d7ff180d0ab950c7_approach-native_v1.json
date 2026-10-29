@@ -1,0 +1,72 @@
+{
+ "kind": "artifact",
+ "id": "artifact:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:approach-native:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+   "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+   "selector": "/problems/hack2hire:68f82cd8d7ff180d0ab950c7"
+  }
+ ],
+ "type": "source-native",
+ "title": "Count of Stable Subarrays variant 1 design entry",
+ "problemId": "hack2hire:68f561de577eec16d6b9c926",
+ "approachId": "approach:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:v1",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:68f561de577eec16d6b9c926:68f82cd8d7ff180d0ab950c7:authored-inferred-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/contract--contract_hack2hire_68f561de577eec16d6b9c926_68f82cd8d7ff180d0ab950c7_authored-inferred-v1.json",
+  "sha256": "e16478bc069367339d03b01b987f0e15fc3d3dccbf59819a0691550625bbeb2a"
+ },
+ "file": {
+  "status": "present",
+  "value": {
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+   "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+   "bytes": 4153,
+   "mediaType": "application/json"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+    "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+    "selector": "/problems/hack2hire:68f82cd8d7ff180d0ab950c7"
+   }
+  ]
+ },
+ "externalLocator": {
+  "status": "not-applicable",
+  "reason": "Native design entry is in the referenced cohort file"
+ },
+ "language": null,
+ "documentSchema": null,
+ "executionKind": "reference-only",
+ "complexityClaims": {
+  "status": "not-applicable",
+  "reason": "Complexity claims live on the implementation artifacts"
+ },
+ "nativeMetadata": {
+  "status": "present",
+  "value": {
+   "reference": "for every left end, extend the right end while keeping a running sum of the strict middle and compare it with both ends",
+   "candidate_design": "with prefix sums P, segment l..r is stable when capacity[l] == capacity[r] and P[r] - P[l + 1] == capacity[r]; scan r from left to right, make left end l = r - 2 available by counting the key (capacity[l], P[l + 1]) in a hash map, and add the count of key (capacity[r], P[r] - capacity[r])",
+   "complexity_target": "O(n) expected time/O(n) space"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+    "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+    "selector": "/problems/hack2hire:68f82cd8d7ff180d0ab950c7"
+   }
+  ]
+ }
+}

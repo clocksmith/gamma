@@ -1,0 +1,349 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:678470750e1dbb6a09385780:678478d50e1dbb6a09385782:authored-inferred-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+   "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/678470750e1dbb6a09385780.json",
+   "sha256": "b3f9dec293472f58615445cb66b7fa736c00297918c3c8b7b0d8636fba2db5c2",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+   "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+   "selector": "/variants/hack2hire:678478d50e1dbb6a09385782"
+  }
+ ],
+ "problemId": "hack2hire:678470750e1dbb6a09385780",
+ "variantId": "678478d50e1dbb6a09385782",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 2: adds double pay in peak windows",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:678478d50e1dbb6a09385782/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "activities is a list of [time, orderId, event] rows for one dasher and one day, in non-decreasing time order; time is \"HH:MM\" (00:00 to 23:59). Each order is accepted exactly once and later finished exactly once by \"delivered\"; every accepted order is finished within the list. An order is ongoing during the minutes m with accept minute <= m < finish minute. Every minute pays 30 cents for each ongoing order (base rate times the number of concurrent deliveries). Minutes in the peak windows 11:00-14:00 and 17:00-20:00 (start inclusive, end exclusive) pay double. Return the total pay in integer cents.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "activities is a list of [time, orderId, event] rows for one dasher and one day, in non-decreasing time order; time is \"HH:MM\" (00:00 to 23:59).",
+   "Each order is accepted exactly once and later finished exactly once by \"delivered\"; every accepted order is finished within the list.",
+   "An order is ongoing during the minutes m with accept minute <= m < finish minute.",
+   "Every minute pays 30 cents for each ongoing order (base rate times the number of concurrent deliveries).",
+   "Minutes in the peak windows 11:00-14:00 and 17:00-20:00 (start inclusive, end exclusive) pay double.",
+   "Return the total pay in integer cents."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= len(activities) <= 2e4",
+   "times are \"HH:MM\" from 00:00 to 23:59, non-decreasing down the list",
+   "order ids are 1 to 10 letters or digits",
+   "every accepted order is finished later in the list"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:678478d50e1dbb6a09385782/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: a payment model for delivery dashers; pay depends on time spent on each order and on the number of concurrent deliveries; input is one dasher's order activities within one day; the pay rules themselves are cut off; algorithmTags: STRING, ARRAY; companies: DOORDASH; stage SCREENING; The inferring model recalls a commonly reported public version of this DoorDash screen: a per-minute base rate (about 0.3 dollars) multiplied by the number of ongoing orders, with follow-ups adding peak-hour multipliers; not verified against any source; preview response sha256 da33857c58a1849b3aa4cd69d283bbc3436c3af15884f2a65043770e3d621aef"
+   },
+   {
+    "statement": "Uncertainty: very high: the preview names only the two pay factors (time per order, concurrent deliveries); the 30-cent base rate, linear concurrency multiplier, row format, event names, minute granularity, integer-cent output, the peak windows and their double rate are invented; the split of rules across the three variants is invented",
+    "basis": "the public group preview is partial (271 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: three variants share one preview with no per-variant text; inferred as cumulative follow-ups: variant 1 base rate times concurrency, variant 2 adds peak-hour doubling, variant 3 adds unpaid cancellations (invented)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "hack2hire-chunk05-v1 blocked this variant: The preview ends before the pay rules. Base rate, concurrency multiplier and event/time semantics are unavailable for all three variants.",
+    "basis": "owner direction 2026-10-28: infer blocked problems and label every inference; this row is an inference, not the accessible exact statement or owner-supplied rules that chunk05 asked for"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/2/variant_split_inference"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/2/prior_blocker"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is the base pay rate and its unit?",
+   "Is the rate multiplied by the number of ongoing orders or by something else?",
+   "Are there peak hours, and which?",
+   "How are cancelled orders paid?",
+   "In what unit is the total returned?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:678478d50e1dbb6a09385782/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "10:50",
+       "a",
+       "accepted"
+      ],
+      [
+       "11:10",
+       "a",
+       "delivered"
+      ]
+     ]
+    ],
+    "output": 900,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "13:59",
+       "a",
+       "accepted"
+      ],
+      [
+       "17:01",
+       "a",
+       "delivered"
+      ]
+     ]
+    ],
+    "output": 5520,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:678478d50e1dbb6a09385782/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/oracles.py",
+    "sha256": "bde6928fb5631e62c797fd48ae0cc23e2966f2212522c8b63eb0056cdeb8ba1c",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def calculatePay(activities) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/678478d50e1dbb6a09385782-python.json",
+     "inferredInterface": {
+      "name": "calculatePay",
+      "params": [
+       {
+        "name": "activities",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/678478d50e1dbb6a09385782-python.json",
+      "sha256": "4c780d3da044311b82caf62313555b17cb8a7175d097a87a025b665006a37f82",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function calculatePay(activities) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/678478d50e1dbb6a09385782-javascript.json",
+     "inferredInterface": {
+      "name": "calculatePay",
+      "params": [
+       {
+        "name": "activities",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/678478d50e1dbb6a09385782-javascript.json",
+      "sha256": "9d2c6a51c0ca8efb6c2f7013bba7582672ce6fc19f69dca8869f0bd5d4ac389e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

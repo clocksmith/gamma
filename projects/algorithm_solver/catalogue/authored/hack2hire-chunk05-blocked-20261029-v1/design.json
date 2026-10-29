@@ -1,0 +1,49 @@
+{
+ "problems": {
+  "hack2hire:68f82cd8d7ff180d0ab950c7": {
+   "reference": "for every left end, extend the right end while keeping a running sum of the strict middle and compare it with both ends",
+   "candidate_design": "with prefix sums P, segment l..r is stable when capacity[l] == capacity[r] and P[r] - P[l + 1] == capacity[r]; scan r from left to right, make left end l = r - 2 available by counting the key (capacity[l], P[l + 1]) in a hash map, and add the count of key (capacity[r], P[r] - capacity[r])",
+   "complexity_target": "O(n) expected time/O(n) space"
+  },
+  "hack2hire:678472f60e1dbb6a09385781": {
+   "reference": "simulate every minute of the day, counting the paid orders ongoing in that minute and its weight",
+   "candidate_design": "sweep the rows once with a running count of ongoing paid orders; between consecutive row times add 30 * count * (W(t) - W(previous)), where W(t) is the closed-form weighted minute count before t",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:678478d50e1dbb6a09385782": {
+   "reference": "simulate every minute of the day, counting the paid orders ongoing in that minute and its weight",
+   "candidate_design": "sweep the rows once with a running count of ongoing paid orders; between consecutive row times add 30 * count * (W(t) - W(previous)), where W(t) is the closed-form weighted minute count before t with peak minutes weighted 2",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:6784b4640e1dbb6a09385784": {
+   "reference": "simulate every minute of the day, counting the paid orders ongoing in that minute and its weight",
+   "candidate_design": "sweep the rows once with a running count of ongoing paid orders; between consecutive row times add 30 * count * (W(t) - W(previous)), where W(t) is the closed-form weighted minute count before t with peak minutes weighted 2; a first pass marks cancelled orders, which never enter the count",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6a14a84c7b0582b352787d44": {
+   "reference": "keep every valid reading in arrival order and rescan all of them for each query",
+   "candidate_design": "sparse Fenwick trees (hash maps keyed by tree index over timestamps 0..1e6) holding the lux sum and the reading count, plus the latest (timestamp, lux) pair updated with >= so later arrivals win ties; a range query subtracts two prefix queries",
+   "complexity_target": "O(log T) per call, T = 1e6 + 1 timestamp slots/O(r log T) space, r = valid readings"
+  },
+  "hack2hire:67842117d0faf7ec64cc3add": {
+   "reference": "count the rounds played and replay every played round from the start of the deck on each query",
+   "candidate_design": "a draw pointer into the given order plus two running scores updated once per round",
+   "complexity_target": "O(1) per call/O(1) extra space beyond the deck"
+  },
+  "hack2hire:6784211bd0faf7ec64cc3ade": {
+   "reference": "count the rounds played and replay every played round from the start of the deck on each query",
+   "candidate_design": "a draw pointer into the given order plus two running scores updated once per round",
+   "complexity_target": "O(1) per call/O(1) extra space beyond the deck"
+  },
+  "hack2hire:694609632c048134ada83559": {
+   "reference": "store every attempt per server and, for each request, replay that server's whole attempt history to decide whether it is open",
+   "candidate_design": "two small state records (open flag, opened time, consecutive failures) updated in O(1) per attempt",
+   "complexity_target": "O(1) per request/O(1) space"
+  },
+  "hack2hire:688bd5423867670cfb894188": {
+   "reference": "compare every token with every abusive word of the same length, position by position",
+   "candidate_design": "build a trie of the abusive words; for each token keep the set of trie nodes reachable so far, advancing through the child equal to a letter or the children named by a symbol's substitutions, and report the token when a reached node ends a word",
+   "complexity_target": "O(total token length * reachable trie nodes) worst case, O(total word length) to build/O(total word length) space"
+  }
+ }
+}

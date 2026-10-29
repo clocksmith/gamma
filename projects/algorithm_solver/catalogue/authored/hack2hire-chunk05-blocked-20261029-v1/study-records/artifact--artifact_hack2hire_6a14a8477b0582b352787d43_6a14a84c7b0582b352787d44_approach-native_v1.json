@@ -1,0 +1,72 @@
+{
+ "kind": "artifact",
+ "id": "artifact:hack2hire:6a14a8477b0582b352787d43:6a14a84c7b0582b352787d44:approach-native:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+   "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+   "selector": "/problems/hack2hire:6a14a84c7b0582b352787d44"
+  }
+ ],
+ "type": "source-native",
+ "title": "Design Ambient Light Sensor System variant 1 design entry",
+ "problemId": "hack2hire:6a14a8477b0582b352787d43",
+ "approachId": "approach:hack2hire:6a14a8477b0582b352787d43:6a14a84c7b0582b352787d44:v1",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6a14a8477b0582b352787d43:6a14a84c7b0582b352787d44:authored-inferred-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-records/contract--contract_hack2hire_6a14a8477b0582b352787d43_6a14a84c7b0582b352787d44_authored-inferred-v1.json",
+  "sha256": "00f0cb972fb7897cb992fcfe7955ae48e2b760a3c6b600fd6a696662b6e673a2"
+ },
+ "file": {
+  "status": "present",
+  "value": {
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+   "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+   "bytes": 4153,
+   "mediaType": "application/json"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+    "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+    "selector": "/problems/hack2hire:6a14a84c7b0582b352787d44"
+   }
+  ]
+ },
+ "externalLocator": {
+  "status": "not-applicable",
+  "reason": "Native design entry is in the referenced cohort file"
+ },
+ "language": null,
+ "documentSchema": null,
+ "executionKind": "reference-only",
+ "complexityClaims": {
+  "status": "not-applicable",
+  "reason": "Complexity claims live on the implementation artifacts"
+ },
+ "nativeMetadata": {
+  "status": "present",
+  "value": {
+   "reference": "keep every valid reading in arrival order and rescan all of them for each query",
+   "candidate_design": "sparse Fenwick trees (hash maps keyed by tree index over timestamps 0..1e6) holding the lux sum and the reading count, plus the latest (timestamp, lux) pair updated with >= so later arrivals win ties; a range query subtracts two prefix queries",
+   "complexity_target": "O(log T) per call, T = 1e6 + 1 timestamp slots/O(r log T) space, r = valid readings"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/design.json",
+    "sha256": "26e20e4f60e5e9a6553d0c18d95c4889b38a68b344a5a99249c822820c042523",
+    "selector": "/problems/hack2hire:6a14a84c7b0582b352787d44"
+   }
+  ]
+ }
+}

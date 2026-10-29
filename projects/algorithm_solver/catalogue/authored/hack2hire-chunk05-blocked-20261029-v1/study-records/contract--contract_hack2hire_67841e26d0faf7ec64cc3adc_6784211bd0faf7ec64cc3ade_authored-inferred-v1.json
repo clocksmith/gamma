@@ -1,0 +1,682 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67841e26d0faf7ec64cc3adc:6784211bd0faf7ec64cc3ade:authored-inferred-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+   "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67841e26d0faf7ec64cc3adc.json",
+   "sha256": "60cc9d07896599f1dbd6bfc38b6444d5262cc9b072f66c076fe4788b3c6f2714",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+   "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+   "selector": "/variants/hack2hire:6784211bd0faf7ec64cc3ade"
+  }
+ ],
+ "problemId": "hack2hire:67841e26d0faf7ec64cc3adc",
+ "variantId": "6784211bd0faf7ec64cc3ade",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 2: higher rank wins both ranks as points, equal ranks tie",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6784211bd0faf7ec64cc3ade/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "CardGame(deck) receives a permutation of 0..51 that fixes the order of the random draws (deck[0] is drawn first). playRound() lets A draw the next card and then B draw the next card; ranks are card % 13; the higher rank wins the round and scores rankA + rankB + 2 points; equal ranks tie the round, nobody scores and playRound returns \"TIE\"; when fewer than two cards remain it does nothing and returns \"\". getScore(player) returns the points of \"A\" or \"B\". getWinner() returns \"\" while any card remains, otherwise \"A\" or \"B\" for the higher score, or \"TIE\" for equal scores. Every method call is answered in call order on one instance.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "CardGame(deck) receives a permutation of 0..51 that fixes the order of the random draws (deck[0] is drawn first).",
+   "playRound() lets A draw the next card and then B draw the next card; ranks are card % 13; the higher rank wins the round and scores rankA + rankB + 2 points; equal ranks tie the round, nobody scores and playRound returns \"TIE\"; when fewer than two cards remain it does nothing and returns \"\".",
+   "getScore(player) returns the points of \"A\" or \"B\".",
+   "getWinner() returns \"\" while any card remains, otherwise \"A\" or \"B\" for the higher score, or \"TIE\" for equal scores.",
+   "Every method call is answered in call order on one instance."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "deck is a permutation of 0..51",
+   "at most 1e4 calls",
+   "player is \"A\" or \"B\""
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6784211bd0faf7ec64cc3ade/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: simulate a card game for two players \"A\" and \"B\" over a deck of 52 unique cards numbered 0 to 51; the players take turns drawing cards at random; scoring, stopping, winning and output rules are cut off; algorithmTags: DESIGN; companies: AFFIRM, AMAZON; stage ONSITE; preview response sha256 fbcd4aed279e255ffdde4498b5e73c91a8ac687a2207c991ddb0b4afbc986976"
+   },
+   {
+    "statement": "Uncertainty: very high: the two players, the 52-card deck 0..51 and alternating random draws are in the preview; replacing randomness by a given draw order, the class and method names, round structure, scoring, rank and tie rules, end condition, winner rule and the split of rules across the two variants are invented",
+    "basis": "the public group preview is partial (276 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: two variants share one preview with no per-variant text; inferred as variant 1 highest-card rounds worth 1 point and variant 2 rank-based rounds with rank points and ties (invented)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "hack2hire-chunk05-v1 blocked this variant: The preview describes alternating random draws but gives no scoring, stopping, winning or requested output rules. Neither variant body is public here.",
+    "basis": "owner direction 2026-10-28: infer blocked problems and label every inference; this row is an inference, not the accessible exact statement or owner-supplied rules that chunk05 asked for"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/6/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/6/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/6/variant_split_inference"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/6/prior_blocker"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is randomness made reproducible for testing (seed, injected deck)?",
+   "How is a round scored, and can it tie?",
+   "When does the game end and what is returned?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6784211bd0faf7ec64cc3ade/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "CardGame",
+      "playRound",
+      "getScore",
+      "getScore",
+      "playRound",
+      "getWinner"
+     ],
+     [
+      [
+       [
+        12,
+        0,
+        13,
+        26,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+       ]
+      ],
+      [],
+      [
+       "A"
+      ],
+      [
+       "B"
+      ],
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     "A",
+     14,
+     0,
+     "TIE",
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "CardGame",
+      "getScore",
+      "playRound",
+      "getScore",
+      "playRound",
+      "playRound",
+      "playRound",
+      "getScore",
+      "playRound",
+      "playRound",
+      "getScore",
+      "playRound",
+      "playRound",
+      "playRound",
+      "playRound",
+      "getScore",
+      "getScore",
+      "getWinner",
+      "playRound",
+      "playRound",
+      "getScore",
+      "playRound",
+      "playRound",
+      "playRound",
+      "getWinner",
+      "playRound",
+      "playRound",
+      "getWinner",
+      "playRound",
+      "playRound",
+      "getScore",
+      "playRound",
+      "playRound",
+      "playRound",
+      "playRound",
+      "playRound",
+      "playRound",
+      "playRound",
+      "playRound",
+      "getWinner",
+      "playRound",
+      "getWinner",
+      "playRound"
+     ],
+     [
+      [
+       [
+        17,
+        18,
+        40,
+        5,
+        36,
+        43,
+        47,
+        22,
+        6,
+        39,
+        10,
+        45,
+        23,
+        8,
+        32,
+        28,
+        30,
+        48,
+        21,
+        1,
+        50,
+        2,
+        25,
+        9,
+        27,
+        19,
+        13,
+        12,
+        41,
+        37,
+        49,
+        26,
+        24,
+        33,
+        34,
+        46,
+        3,
+        0,
+        38,
+        15,
+        20,
+        4,
+        11,
+        16,
+        14,
+        42,
+        7,
+        44,
+        51,
+        31,
+        35,
+        29
+       ]
+      ],
+      [
+       "A"
+      ],
+      [],
+      [
+       "B"
+      ],
+      [],
+      [],
+      [],
+      [
+       "A"
+      ],
+      [],
+      [],
+      [
+       "B"
+      ],
+      [],
+      [],
+      [],
+      [],
+      [
+       "A"
+      ],
+      [
+       "B"
+      ],
+      [],
+      [],
+      [],
+      [
+       "B"
+      ],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [
+       "A"
+      ],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     0,
+     "B",
+     11,
+     "B",
+     "A",
+     "B",
+     16,
+     "A",
+     "A",
+     38,
+     "A",
+     "A",
+     "B",
+     "A",
+     83,
+     53,
+     "",
+     "A",
+     "A",
+     53,
+     "B",
+     "B",
+     "B",
+     "",
+     "A",
+     "A",
+     "",
+     "A",
+     "A",
+     175,
+     "A",
+     "A",
+     "A",
+     "B",
+     "A",
+     "A",
+     "A",
+     "",
+     "A",
+     "",
+     "A",
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/study-content.json",
+    "sha256": "c66f41e970e26cc25a37a8e9bf23bbdb75a3eb61a942e5789c469a23553b62a7",
+    "selector": "/variants/hack2hire:6784211bd0faf7ec64cc3ade/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/oracles.py",
+    "sha256": "bde6928fb5631e62c797fd48ae0cc23e2966f2212522c8b63eb0056cdeb8ba1c",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class CardGame:\n    def __init__(self, deck)\n    def playRound(self) -> string\n    def getScore(self, player) -> integer\n    def getWinner(self) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/6784211bd0faf7ec64cc3ade-python.json",
+     "inferredInterface": {
+      "classname": "CardGame",
+      "constructor": {
+       "params": [
+        {
+         "name": "deck",
+         "type": "integer[]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "playRound",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "getScore",
+        "params": [
+         {
+          "name": "player",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getWinner",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/6784211bd0faf7ec64cc3ade-python.json",
+      "sha256": "79fa0c6e3f2edb1c78302d8629ff807e28eb1fe6e099d36a76413825c410821c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class CardGame {\n  constructor(deck)\n  playRound() /* -> string */\n  getScore(player) /* -> integer */\n  getWinner() /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+      "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/6784211bd0faf7ec64cc3ade-javascript.json",
+     "inferredInterface": {
+      "classname": "CardGame",
+      "constructor": {
+       "params": [
+        {
+         "name": "deck",
+         "type": "integer[]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "playRound",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "getScore",
+        "params": [
+         {
+          "name": "player",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getWinner",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/semantics/6784211bd0faf7ec64cc3ade-javascript.json",
+      "sha256": "b0f905ccbf24d0e273b461230e01387ada5cd65a02fef054c05d3f477630e5a3",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/6/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk05-blocked-20261029-v1/contracts.json",
+    "sha256": "fb82ce37aea963905651fc24c98bbf60164f6fee973a0ea0aac95fb3a4b4bf90",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

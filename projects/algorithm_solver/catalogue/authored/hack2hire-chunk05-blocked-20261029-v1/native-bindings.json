@@ -1,0 +1,87 @@
+{
+ "candidate_filenames": {
+  "javascript": "program.cjs",
+  "python": "program.py"
+ },
+ "constructor_injection": false,
+ "constructor_arguments": "taken from the trace's first argument list (ALSWrapper: ; CardGame: deck; DualCircuitBreaker: failureThreshold, cooldown)",
+ "execution_status": "not executed by the isolated judge; runtime hashes and actual isolated source-bound evidence remain required",
+ "expected_outputs_in_sandbox": false,
+ "external_dependencies": {
+  "projects/algorithm_solver/algsolve/judge/sandbox.py": {
+   "copy_bytes_unchanged": true,
+   "sandbox_filename": null,
+   "sha256": "04fe78fcc41dac4c22430d0cacc1d2b40c40daafc2b609ebfe47246030c3fd74"
+  },
+  "projects/algorithm_solver/catalogue/public-domain-qualification-easy16-v1/harness.cjs": {
+   "copy_bytes_unchanged": true,
+   "sandbox_filename": "transport.cjs",
+   "sha256": "2956b35d09f0f58d436308411dbd400ee5a444784f8e2f5bc797ba7dcba29c7f"
+  },
+  "projects/algorithm_solver/catalogue/public-domain-qualification-easy16-v1/harness.py": {
+   "copy_bytes_unchanged": true,
+   "sandbox_filename": "transport.py",
+   "sha256": "a7d6d5c86ac58a05626573de789ad88390e299e4bd82a007590a8484162908f0"
+  }
+ },
+ "functional_routes": {
+  "javascript": "commonjs-function-solve-v1",
+  "python": "global-solve-v1"
+ },
+ "host_only_artifacts": [
+  "oracles.py",
+  "cases.py",
+  "native_protocol.py",
+  "contracts.json",
+  "test_oracles.py",
+  "test_native_observer.py",
+  "test_native_observer.cjs",
+  "expected values and qualification verdicts"
+ ],
+ "host_protocol": "native_protocol.py",
+ "input_packet_schema": "gamma.native-class-transport.v1",
+ "identity_key": "native_problem_id carries the string uid 'hack2hire:<variant id>', replacing the integer id of requested-22-a",
+ "limits_policy": "Reuse existing caller-frozen isolation/resource limits and runtime flags; missing runtime or oversized packet fails closed. No new cap or unsandboxed fallback.",
+ "native_class_by_uid": {
+  "hack2hire:6a14a84c7b0582b352787d44": "ALSWrapper",
+  "hack2hire:67842117d0faf7ec64cc3add": "CardGame",
+  "hack2hire:6784211bd0faf7ec64cc3ade": "CardGame",
+  "hack2hire:694609632c048134ada83559": "DualCircuitBreaker"
+ },
+ "void_methods_by_uid": {
+  "hack2hire:6a14a84c7b0582b352787d44": [
+   "record"
+  ],
+  "hack2hire:67842117d0faf7ec64cc3add": [],
+  "hack2hire:6784211bd0faf7ec64cc3ade": [],
+  "hack2hire:694609632c048134ada83559": []
+ },
+ "native_route": "direct-class-v1",
+ "observer_filenames": {
+  "javascript": "native_harness.cjs",
+  "python": "native_harness.py"
+ },
+ "sandbox_file_allowlist": {
+  "javascript": [
+   "program.cjs",
+   "native_harness.cjs",
+   "transport.cjs",
+   "inputs.json"
+  ],
+  "python": [
+   "program.py",
+   "native_harness.py",
+   "transport.py",
+   "inputs.json"
+  ]
+ },
+ "schema": "gamma.native-class-observer-bindings.v1",
+ "solve_fallback": false,
+ "void_return_policy": "Void methods must return None/undefined and are normalised to null in the trace; return kinds per method are taken from contracts.json inferred_interface and checked by native_protocol.check",
+ "interface_status": "inferred interfaces; no official class interface is available; ALSWrapper thread safety is not observed by this sequential transport",
+ "helper_sha256": {
+  "native_harness.cjs": "e706e4e1472cec3358a814834a1cb36c90b3820569d35a22523c1b5b59b8e58f",
+  "native_harness.py": "066cdd3b02df99df9d88c31da4f3fbb29df652d925f967203e29918c3c4b7d54",
+  "native_protocol.py": "8def3c1e7f03fc4ad98dfb7c0d539b976f1618a208b9ed2cdb3bafae54ee5ed3"
+ }
+}
