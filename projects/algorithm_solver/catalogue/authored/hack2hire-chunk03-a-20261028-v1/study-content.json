@@ -1,0 +1,976 @@
+{
+ "schema": "gamma.hack2hire-chunk03-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-28",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:69c87bbe21f6ab4226966de6": {
+   "constraints": [
+    "-2**31 <= value <= 2**31-1"
+   ],
+   "clarifyingQuestions": [
+    "Is a leading plus sign or zero padding ever expected?",
+    "How should -2**31 be handled in a 32-bit language?"
+   ],
+   "hints": [
+    "Handle zero separately or make the digit loop run at least once.",
+    "Work on the magnitude and remember the sign.",
+    "Collect digits least significant first with value % 10, then reverse."
+   ],
+   "invariants": [
+    "digits collected so far are the low-order digits of the magnitude",
+    "no leading zeros except for the value 0"
+   ],
+   "chooseWhen": [
+    "A built-in conversion is unavailable or disallowed"
+   ],
+   "tradeoffs": [
+    "Working on a negative accumulator avoids overflow in 32-bit languages; Python and JavaScript have no overflow so the magnitude is safe here"
+   ],
+   "variantLabel": "Inferred: integer to decimal string",
+   "examples": [
+    {
+     "input": [
+      0
+     ],
+     "output": "0",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      -1
+     ],
+     "output": "-1",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69e2411e95e80ae213e5d633": {
+   "constraints": [
+    "0 <= len(text) <= 1e5, lowercase letters",
+    "1 <= len(tokenAlphabet) <= 5000, distinct entries of 1..30 lowercase letters",
+    "single-character prefix covers every text character"
+   ],
+   "clarifyingQuestions": [
+    "When a token has several splits into earlier tokens, do all of them merge?",
+    "Is each token applied once, in alphabet order, or repeatedly until no change?",
+    "Do overlapping matches resolve left to right?"
+   ],
+   "hints": [
+    "Every id in the sequence when token j is processed is smaller than j.",
+    "A pair can only merge into j if its two strings concatenate to token j, so enumerate the splits of token j.",
+    "Index adjacent pairs by (left id, right id) and merge candidate positions in sequence order, skipping stale entries."
+   ],
+   "invariants": [
+    "the linked list always spells text",
+    "the pair index contains every live adjacent pair (possibly with stale extras)"
+   ],
+   "chooseWhen": [
+    "Many tokens and a long text, where rescanning per token is too slow"
+   ],
+   "tradeoffs": [
+    "The pair index uses memory proportional to the number of merges; a plain rescan is simpler for short inputs"
+   ],
+   "variantLabel": "Inferred: merge-pass tokenizer over an ordered token alphabet",
+   "examples": [
+    {
+     "input": [
+      "",
+      [
+       "a"
+      ]
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "a",
+      [
+       "a"
+      ]
+     ],
+     "output": [
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678d6982fa7ce9616e190fb3": {
+   "constraints": [
+    "0 <= number of arrays <= 1e4, total elements <= 1e5",
+    "|value| <= 1e9",
+    "up to 1e5 method calls"
+   ],
+   "clarifyingQuestions": [
+    "With cycle on, does each array wrap independently or does the whole sequence restart?",
+    "What should next() do when nothing remains?",
+    "Are empty arrays allowed?"
+   ],
+   "hints": [
+    "Only arrays that still have elements take part in a round.",
+    "A FIFO of cursors gives round-robin order for free.",
+    "When cycling, rebuild the cursor queue from the original arrays as soon as it empties."
+   ],
+   "invariants": [
+    "the queue holds one cursor per array with remaining elements, in round-robin order",
+    "cursors never move past the end of their array"
+   ],
+   "chooseWhen": [
+    "Arrays have very different lengths and values are consumed lazily"
+   ],
+   "tradeoffs": [
+    "Materialising the sequence is simpler but costs memory for the whole pass"
+   ],
+   "variantLabel": "Inferred: round-robin iterator with optional restart",
+   "examples": [
+    {
+     "input": [
+      [
+       "InterleaveIterator",
+       "hasNext",
+       "next"
+      ],
+      [
+       [
+        [],
+        false
+       ],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "InterleaveIterator",
+       "hasNext",
+       "next"
+      ],
+      [
+       [
+        [],
+        true
+       ],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69e931b2fbaf3da641828684": {
+   "constraints": [
+    "1 <= n <= 5000",
+    "|nums[i]| <= 1e4"
+   ],
+   "clarifyingQuestions": [
+    "Must the route end exactly at the last index?",
+    "Is the starting value counted?",
+    "What are the real limits on n?"
+   ],
+   "hints": [
+    "The best score at an index depends only on the best scores at the indices that can jump to it.",
+    "Those indices are i-1 and i-p for primes p ending in 3.",
+    "Precompute those primes with a sieve and take the maximum over the few predecessors."
+   ],
+   "invariants": [
+    "dp[i] is the best score of any route from 0 that ends at i"
+   ],
+   "chooseWhen": [
+    "n is moderate and the stride set is sparse"
+   ],
+   "tradeoffs": [
+    "The prime stride set rules out the deque trick of the referenced problem; cost grows with the number of primes"
+   ],
+   "variantLabel": "Inferred: max-score jump game with prime-3 strides",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -5
+      ]
+     ],
+     "output": -5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a04f7473141bbc31efdd6f1": {
+   "constraints": [
+    "1 <= k <= n <= 1e5",
+    "arr is a permutation of 1..n"
+   ],
+   "clarifyingQuestions": [
+    "Is the output indexed by prefix length starting at k?",
+    "Can values repeat?"
+   ],
+   "hints": [
+    "Only the k largest values seen so far can ever be the answer.",
+    "Keep them in a min-heap of size k.",
+    "Push each value; if the heap grows past k pop the smallest; report the top once i >= k."
+   ],
+   "invariants": [
+    "the heap holds exactly the min(i, k) largest values of the prefix"
+   ],
+   "chooseWhen": [
+    "Values stream in and k is small relative to n"
+   ],
+   "tradeoffs": [
+    "A Fenwick tree over values also works because arr is a permutation, at O(n log n)"
+   ],
+   "variantLabel": "Inferred: k-th greatest of each growing prefix",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       2
+      ],
+      2
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a73bf2fd713d873ca7a77c6": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "1 <= skills[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Can two students with the same skill both be on the team?",
+    "Is the answer the number of students or of distinct levels?"
+   ],
+   "hints": [
+    "Only the multiset of skills matters.",
+    "A team is a maximal run of consecutive levels.",
+    "Start runs only at levels whose predecessor is missing so each level is walked once."
+   ],
+   "invariants": [
+    "each level is visited by exactly one upward walk"
+   ],
+   "chooseWhen": [
+    "Values are large and sparse so counting sort is impossible"
+   ],
+   "tradeoffs": [
+    "Sorting is simpler and O(n log n); hashing is linear but has larger constants"
+   ],
+   "variantLabel": "Inferred: largest gap-free skill range, duplicates counted",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5,
+       5,
+       5
+      ]
+     ],
+     "output": 3,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a4fb090665efda9311f5615": {
+   "constraints": [
+    "2 <= n <= 1e5 clubs; target league has 2..1e4 clubs",
+    "1 <= capacity <= 1e5",
+    "0 <= trophies <= 100"
+   ],
+   "clarifyingQuestions": [
+    "What is the earnings formula for a match?",
+    "Does each pair meet home and away?",
+    "How should the average be rounded and formatted?"
+   ],
+   "hints": [
+    "Write the total as a double sum over home and away clubs.",
+    "Swap the order of summation: each home club meets every other club once.",
+    "Sum the away trophies with the league total S minus the home club own count."
+   ],
+   "invariants": [
+    "total and match count stay exact integers below 2**53"
+   ],
+   "chooseWhen": [
+    "The league is large and only aggregates are needed"
+   ],
+   "tradeoffs": [
+    "The closed form hides the per-match structure; the double loop is easier to audit"
+   ],
+   "variantLabel": "Inferred: double round-robin gate receipts",
+   "examples": [
+    {
+     "input": [
+      [
+       "A",
+       "A"
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       0,
+       0
+      ],
+      "A"
+     ],
+     "output": [
+      0,
+      "0.00"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "A",
+       "B",
+       "A"
+      ],
+      [
+       10,
+       99,
+       20
+      ],
+      [
+       1,
+       5,
+       2
+      ],
+      "A"
+     ],
+     "output": [
+      90,
+      "45.00"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69bc554c1cbff60a929be332": {
+   "constraints": [
+    "1 <= nodes <= 1e5, distinct ids 0..1e6",
+    "tree depth <= 99 levels",
+    "deletedIds are distinct non-root ids of the tree"
+   ],
+   "clarifyingQuestions": [
+    "Are deleted ids guaranteed to exist and exclude the root?",
+    "Is height counted in nodes or edges?"
+   ],
+   "hints": [
+    "Promotion never changes which kept nodes are ancestors of which.",
+    "The depth of a kept node is the number of kept nodes on its root path.",
+    "Carry that count down an explicit stack and take the maximum."
+   ],
+   "invariants": [
+    "the stack entry for a node holds the number of kept nodes from the root to it, inclusive"
+   ],
+   "chooseWhen": [
+    "Only the resulting height is needed, not the rebuilt tree"
+   ],
+   "tradeoffs": [
+    "Rebuilding the tree is easier to visualise but allocates a second tree"
+   ],
+   "variantLabel": "Inferred: height after deleting given nodes",
+   "examples": [
+    {
+     "input": [
+      {
+       "id": 0,
+       "children": []
+      },
+      []
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "id": 0,
+       "children": [
+        {
+         "id": 1,
+         "children": [
+          {
+           "id": 2,
+           "children": [
+            {
+             "id": 3,
+             "children": []
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": 9,
+         "children": []
+        }
+       ]
+      },
+      [
+       1,
+       2,
+       3
+      ]
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69bc55661cbff60a929be333": {
+   "constraints": [
+    "1 <= nodes <= 1e5, depth <= 99 levels",
+    "1 <= maxHeight <= 100"
+   ],
+   "clarifyingQuestions": [
+    "Can the root be deleted?",
+    "Is the limit inclusive?"
+   ],
+   "hints": [
+    "Think about which nodes you keep: below the root, no chain of kept nodes may exceed maxHeight-1.",
+    "Group nodes by subtree height (leaves are 1); each group is an antichain.",
+    "Keeping all nodes of height below maxHeight is optimal, so delete the non-root nodes of height at least maxHeight."
+   ],
+   "invariants": [
+    "subtree height of a parent exceeds every child height"
+   ],
+   "chooseWhen": [
+    "Deletions are unrestricted and only the count matters"
+   ],
+   "tradeoffs": [
+    "The layer argument needs a proof (long-path chain decomposition); a DP over depth budgets is slower but more obviously correct"
+   ],
+   "variantLabel": "Inferred: fewest deletions to meet a height limit",
+   "examples": [
+    {
+     "input": [
+      {
+       "id": 0,
+       "children": []
+      },
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "id": 0,
+       "children": [
+        {
+         "id": 1,
+         "children": [
+          {
+           "id": 2,
+           "children": [
+            {
+             "id": 3,
+             "children": []
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "id": 9,
+         "children": []
+        }
+       ]
+      },
+      1
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69bef92321f6ab4226963c6b": {
+   "constraints": [
+    "1 <= points <= 1e5, 0 <= queries <= 1e5",
+    "|x|, |y|, |q| <= 1e6, all integers"
+   ],
+   "clarifyingQuestions": [
+    "What happens outside the range of x?",
+    "How should non-integer results be represented?",
+    "Are queries integers?"
+   ],
+   "hints": [
+    "Only the highest and lowest y per distinct x matter.",
+    "Sort the distinct x values and binary search each query.",
+    "Keep the result as an exact fraction: numerator y1*(x2-x1)+(y2-y1)*(q-x1) over x2-x1, reduced by gcd."
+   ],
+   "invariants": [
+    "the function is right-continuous at duplicate x using the highest y and approaches it from the left at the lowest y"
+   ],
+   "chooseWhen": [
+    "Many queries over a fixed point set"
+   ],
+   "tradeoffs": [
+    "Exact fractions avoid floating-point disagreement between languages at the cost of a string format"
+   ],
+   "variantLabel": "Inferred: piecewise linear lookup with duplicate x",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0,
+        0
+       ]
+      ],
+      [
+       0,
+       -1,
+       1
+      ]
+     ],
+     "output": [
+      "0",
+      "0",
+      "0"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        0
+       ],
+       [
+        2,
+        1
+       ]
+      ],
+      [
+       1
+      ]
+     ],
+     "output": [
+      "1/2"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696c36906b040fa4d120bc68": {
+   "constraints": [
+    "1 <= interval <= 1e6",
+    "1 <= points <= 1e5, |x|, |y| <= 1e6",
+    "total output <= 1e5 points"
+   ],
+   "clarifyingQuestions": [
+    "How should fractional y be represented?",
+    "What if a gap is smaller than interval but not divisible?"
+   ],
+   "hints": [
+    "Each gap is handled independently.",
+    "Inserted x values step by interval from x1.",
+    "Compute y exactly as y1 + (y2-y1)*(x-x1)/(x2-x1) and reduce the fraction."
+   ],
+   "invariants": [
+    "output x values are strictly increasing"
+   ],
+   "chooseWhen": [
+    "Time series resampling with exact values"
+   ],
+   "tradeoffs": [
+    "Fraction strings are exact but heavier than floats"
+   ],
+   "variantLabel": "Inferred: fill gaps on a regular x grid",
+   "examples": [
+    {
+     "input": [
+      1,
+      [
+       [
+        0,
+        0
+       ]
+      ]
+     ],
+     "output": [
+      [
+       0,
+       "0"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      1,
+      [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        5
+       ]
+      ]
+     ],
+     "output": [
+      [
+       0,
+       "0"
+      ],
+      [
+       1,
+       "5"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a19022ac81f779dc6a231ab": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "|nums[i]| <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is \"descending\" strict or non-increasing?",
+    "Which t if several work?",
+    "What if none works?"
+   ],
+   "hints": [
+    "A non-increasing array read cyclically has at most one ascent, at the wrap point.",
+    "Count the cyclic ascents.",
+    "With exactly one ascent at i, the sequence must start at i+1, which fixes t."
+   ],
+   "invariants": [
+    "an all-equal array has zero cyclic ascents and every t works"
+   ],
+   "chooseWhen": [
+    "n is large and only one rotation can work"
+   ],
+   "tradeoffs": [
+    "The brute force is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred: rotation that makes the array non-increasing",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       2,
+       2,
+       2
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a96e45017965d66059a736": {
+   "constraints": [
+    "0 <= M, N <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Must every tile be used?",
+    "Is a 0 side allowed as the answer?"
+   ],
+   "hints": [
+    "An s x s square fits at most floor(s/2)^2 two-by-two tiles.",
+    "Use as many large tiles as fit; the rest must be one-by-one.",
+    "Feasibility is not monotone in s overall but is within even and within odd sides: binary search each."
+   ],
+   "invariants": [
+    "side*side stays below 2**53 (at most about 5e9)"
+   ],
+   "chooseWhen": [
+    "Huge tile counts where scanning sides is too slow"
+   ],
+   "tradeoffs": [
+    "A direct scan is O(sqrt(M+N)) and easier to trust"
+   ],
+   "variantLabel": "Inferred: largest exactly tiled square",
+   "examples": [
+    {
+     "input": [
+      0,
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      1,
+      0
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6769dd5b11bbd512d60ce762": {
+   "constraints": [
+    "1 <= nodes <= 1e5",
+    "|value| <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "What if there is only one leaf?",
+    "Can the path use the same leaf twice?",
+    "Is the root a leaf when it has one child?"
+   ],
+   "hints": [
+    "Every leaf-to-leaf path has a highest node with both children on the path.",
+    "For each node compute the best sum of a downward path ending at a leaf.",
+    "At nodes with two children combine left best + right best + value."
+   ],
+   "invariants": [
+    "down[v] is the best sum of a path from v down to a leaf in its subtree"
+   ],
+   "chooseWhen": [
+    "Deep trees where recursion would overflow"
+   ],
+   "tradeoffs": [
+    "Recursion is shorter but depth reaches 1e5"
+   ],
+   "variantLabel": "Inferred: best leaf-to-leaf path sum",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       2
+      ]
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a949604cddc54478ddf5f33": {
+   "constraints": [
+    "3 <= n <= 1e5",
+    "1 <= difficulty[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "What exactly is the score of an assignment?",
+    "Are the servers distinguishable?",
+    "Is the goal to maximise or minimise?"
+   ],
+   "hints": [
+    "Each absolute term is at most max - min.",
+    "Putting the global maximum in A lets A absorb every other module, leaving B and C free to be singletons; symmetrically the global minimum in C.",
+    "Compare the two resulting values using only the two smallest and two largest difficulties."
+   ],
+   "invariants": [
+    "only the extreme order statistics matter"
+   ],
+   "chooseWhen": [
+    "n is large; only extremes are needed"
+   ],
+   "tradeoffs": [
+    "The closed form relies on a case argument; brute force over assignments is the independent check"
+   ],
+   "variantLabel": "Inferred: maximise a three-server partition value",
+   "examples": [
+    {
+     "input": [
+      [
+       1,
+       1,
+       1
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       2,
+       3
+      ]
+     ],
+     "output": 3,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696336dcf731aa3969ef52a7": {
+   "constraints": [
+    "0 <= calls <= 1e5, unique callId",
+    "0 <= start < end <= start + 3 days, start <= 1e12 ms",
+    "1 <= customerId <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Which time zone defines a day?",
+    "Does a call that ends exactly at midnight touch the next day?",
+    "What output shape is expected?"
+   ],
+   "hints": [
+    "Concurrency only rises at call starts.",
+    "Sweep per customer with ends processed before starts at the same instant.",
+    "Between events the count is constant; credit it to every day the segment touches."
+   ],
+   "invariants": [
+    "the running count equals the number of calls with start <= t < end"
+   ],
+   "chooseWhen": [
+    "Many calls with long overlaps"
+   ],
+   "tradeoffs": [
+    "A per-day rescan is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred: daily peak concurrency per customer",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        "a",
+        0,
+        1
+       ]
+      ]
+     ],
+     "output": [
+      [
+       1,
+       0,
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a574f4b571d6ff0a4bd23a": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "0 <= availability <= 1e6",
+    "0 <= reliability <= 1e4"
+   ],
+   "clarifyingQuestions": [
+    "How is stability defined?",
+    "Is the answer taken modulo a prime?",
+    "Must the subset be non-empty?"
+   ],
+   "hints": [
+    "Fix the server with the minimum availability in the chosen set.",
+    "Given that minimum, take every server with at least that availability: reliabilities are non-negative.",
+    "Sort by availability descending and sweep with a running sum."
+   ],
+   "invariants": [
+    "the running sum covers exactly the servers whose availability is at least the current one"
+   ],
+   "chooseWhen": [
+    "n is large"
+   ],
+   "tradeoffs": [
+    "Products reach 1e15, still exact in a double; larger bounds would need BigInt"
+   ],
+   "variantLabel": "Inferred: maximise min availability times total reliability",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      [
+       0
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5
+      ],
+      [
+       3
+      ]
+     ],
+     "output": 15,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

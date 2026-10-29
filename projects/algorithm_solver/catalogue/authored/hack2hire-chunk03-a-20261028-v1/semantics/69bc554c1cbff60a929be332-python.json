@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69bc554c1cbff60a929be332",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "root",
+  "deletedIds"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxHeightAfterDeletion",
+  "params": [
+   {
+    "name": "root",
+    "type": "tree<{id,children}>"
+   },
+   {
+    "name": "deletedIds",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursively rebuild the promoted forest, then measure its height",
+  "candidate_design": "iterative DFS carrying the count of kept nodes on the path",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "241b564f0ab2c9dd650ebf199382e04a8e605f0eb805e6ba608b08e11a585acc",
+ "wrapper": "Solution.maxHeightAfterDeletion"
+}

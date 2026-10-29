@@ -1,0 +1,89 @@
+{
+ "problems": {
+  "hack2hire:69c87bbe21f6ab4226966de6": {
+   "reference": "language built-in decimal conversion (str)",
+   "candidate_design": "peel decimal digits from the magnitude into a buffer, reverse, prepend the sign",
+   "complexity_target": "O(d) time/O(d) space for d digits"
+  },
+  "hack2hire:69e2411e95e80ae213e5d633": {
+   "reference": "literal left-to-right pair scan of the whole sequence for every multi-character token",
+   "candidate_design": "doubly linked sequence plus a lazy index from adjacent id pair to positions; per token enumerate its splits into two earlier tokens, sort the candidate positions and merge left to right with validity checks",
+   "complexity_target": "O(n log n + sum of token lengths) time/O(n) space"
+  },
+  "hack2hire:678d6982fa7ce9616e190fb3": {
+   "reference": "materialise one pass by rounds, then index it (modulo its length when cycling)",
+   "candidate_design": "queue of (array index, position) cursors over non-empty arrays; pop, emit, re-append if more remain; when cycling refill the queue once it empties",
+   "complexity_target": "O(k) construction for k arrays; amortised O(1) per call"
+  },
+  "hack2hire:69e931b2fbaf3da641828684": {
+   "reference": "O(n^2) DP over every earlier index, with trial-division primality",
+   "candidate_design": "sieve the primes ending in 3 below n; dp[i] = nums[i] + max(dp[i-1], dp[i-p]) over those primes",
+   "complexity_target": "O(n * P) time for P such primes below n/O(n) space"
+  },
+  "hack2hire:6a04f7473141bbc31efdd6f1": {
+   "reference": "sort every prefix and index position k-1",
+   "candidate_design": "size-k min-heap of the largest values seen; its top is the answer",
+   "complexity_target": "O(n log k) time/O(k) space"
+  },
+  "hack2hire:6a73bf2fd713d873ca7a77c6": {
+   "reference": "sort and scan runs whose adjacent differences are at most 1",
+   "candidate_design": "count each skill; from every level whose predecessor is absent walk upward summing counts",
+   "complexity_target": "O(n) expected time/O(n) space"
+  },
+  "hack2hire:6a4fb090665efda9311f5615": {
+   "reference": "literal double loop over ordered pairs; exact Fraction average",
+   "candidate_design": "closed form: total = sum over clubs of capacity * ((c-1) * own trophies + (S - own trophies)); average from integer quotient and remainder",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:69bc554c1cbff60a929be332": {
+   "reference": "recursively rebuild the promoted forest, then measure its height",
+   "candidate_design": "iterative DFS carrying the count of kept nodes on the path",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:69bc55661cbff60a929be333": {
+   "reference": "exhaustive search over deletion sets of increasing size",
+   "candidate_design": "post-order subtree heights; count non-root nodes whose subtree height is at least maxHeight (kept sets are unions of maxHeight-1 height layers under the root)",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:69bef92321f6ab4226963c6b": {
+   "reference": "per-query full scan of the points with Fraction arithmetic",
+   "candidate_design": "group points by x keeping min and max y, sort distinct x, binary search each query, integer numerator and denominator reduced by gcd",
+   "complexity_target": "O((n + q) log n) time/O(n) space"
+  },
+  "hack2hire:696c36906b040fa4d120bc68": {
+   "reference": "Fraction evaluation for every inserted point",
+   "candidate_design": "integer numerator (y2-y1)*(x-x1) over the gap, reduced by gcd, added to y1",
+   "complexity_target": "O(output) time/O(output) space"
+  },
+  "hack2hire:6a19022ac81f779dc6a231ab": {
+   "reference": "try every t and check the shifted array",
+   "candidate_design": "count cyclic ascents nums[i] < nums[i+1 mod n]: none -> 0; exactly one at i -> t = (n - (i+1)) mod n; more -> -1",
+   "complexity_target": "O(n) time/O(1) space"
+  },
+  "hack2hire:67a96e45017965d66059a736": {
+   "reference": "scan s downward from isqrt(M + 4N)",
+   "candidate_design": "feasibility is monotone within each parity of s; binary search the largest even and the largest odd side and take the larger",
+   "complexity_target": "O(log(M+N)) time/O(1) space"
+  },
+  "hack2hire:6769dd5b11bbd512d60ce762": {
+   "reference": "enumerate every leaf pair and sum its path via parent chains",
+   "candidate_design": "iterative post-order: best downward leaf path per node; nodes with two children combine both sides",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6a949604cddc54478ddf5f33": {
+   "reference": "exhaustive enumeration of all 3^n labelled assignments",
+   "candidate_design": "with sorted order v1 <= ... <= vn the optimum is (vn - v1) + max(v(n-1) - v1, vn - v2); found from the two smallest and two largest values",
+   "complexity_target": "O(n) time/O(1) space"
+  },
+  "hack2hire:696336dcf731aa3969ef52a7": {
+   "reference": "per customer and day, count active calls at the day start and at every call start inside the day",
+   "candidate_design": "per customer sort +1/-1 events (ends before starts at equal times), sweep; each constant segment updates the maximum of every day it covers",
+   "complexity_target": "O(n log n + output) time/O(n) space"
+  },
+  "hack2hire:67a574f4b571d6ff0a4bd23a": {
+   "reference": "all subsets for n <= 12, otherwise for each availability threshold sum reliabilities of servers at or above it",
+   "candidate_design": "sort servers by availability descending and keep a running reliability sum; candidate = availability * running sum",
+   "complexity_target": "O(n log n) time/O(n) space"
+  }
+ }
+}

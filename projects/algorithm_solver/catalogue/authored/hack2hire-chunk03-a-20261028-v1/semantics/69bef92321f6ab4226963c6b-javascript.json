@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69bef92321f6ab4226963c6b",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "points",
+  "queries"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "interpolate",
+  "params": [
+   {
+    "name": "points",
+    "type": "list<[integer,integer]>"
+   },
+   {
+    "name": "queries",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per-query full scan of the points with Fraction arithmetic",
+  "candidate_design": "group points by x keeping min and max y, sort distinct x, binary search each query, integer numerator and denominator reduced by gcd",
+  "complexity_target": "O((n + q) log n) time/O(n) space"
+ },
+ "source_sha256": "6821712e79a5ea3dbb51ffd1ec4033dd4e8cd624b49681af94bd2b1f85082ed6",
+ "wrapper": "named export interpolate"
+}

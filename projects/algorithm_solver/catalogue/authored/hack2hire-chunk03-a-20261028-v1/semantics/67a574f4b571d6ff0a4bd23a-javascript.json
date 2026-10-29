@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67a574f4b571d6ff0a4bd23a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "availability",
+  "reliability"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxStability",
+  "params": [
+   {
+    "name": "availability",
+    "type": "integer[]"
+   },
+   {
+    "name": "reliability",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "all subsets for n <= 12, otherwise for each availability threshold sum reliabilities of servers at or above it",
+  "candidate_design": "sort servers by availability descending and keep a running reliability sum; candidate = availability * running sum",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "1979ef657ae5dcaa09944485b82dfbb8422dc223f93b2a769160fb8c7f8f25ec",
+ "wrapper": "named export maxStability"
+}

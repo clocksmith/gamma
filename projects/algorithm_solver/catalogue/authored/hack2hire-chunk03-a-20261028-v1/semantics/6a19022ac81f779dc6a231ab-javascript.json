@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a19022ac81f779dc6a231ab",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findDescendingShift",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every t and check the shifted array",
+  "candidate_design": "count cyclic ascents nums[i] < nums[i+1 mod n]: none -> 0; exactly one at i -> t = (n - (i+1)) mod n; more -> -1",
+  "complexity_target": "O(n) time/O(1) space"
+ },
+ "source_sha256": "b16d73cdfae4af258cf046f10284a7e7a9c2368e7e30b4f442b1ad44c7f7e1ea",
+ "wrapper": "named export findDescendingShift"
+}

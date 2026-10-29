@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a73bf2fd713d873ca7a77c6",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "skills"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "largestTeam",
+  "params": [
+   {
+    "name": "skills",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sort and scan runs whose adjacent differences are at most 1",
+  "candidate_design": "count each skill; from every level whose predecessor is absent walk upward summing counts",
+  "complexity_target": "O(n) expected time/O(n) space"
+ },
+ "source_sha256": "01db2ed508bdf9a71c41df424598329dd97393e7de60f01012b0f470289cdb56",
+ "wrapper": "Solution.largestTeam"
+}
