@@ -1,0 +1,460 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+   "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+   "selector": "/problems/hack2hire:6a95ede5cddc54478ddf6b5b"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+   "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+   "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b"
+  }
+ ],
+ "problemId": "hack2hire:6a95edcccddc54478ddf6b5a",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/contract--contract_hack2hire_6a95edcccddc54478ddf6b5a_6a95ede5cddc54478ddf6b5b_authored-v1.json",
+  "sha256": "91ab0541da9ffdba52348bf04084807b9593e2f5f08e3fc25906c69376e21307"
+ },
+ "title": {
+  "status": "present",
+  "value": "signs of the three edge cross products: inside or on the boundary when none is strictly negative and none strictly positive at the same time",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+    "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+    "selector": "/problems/hack2hire:6a95ede5cddc54478ddf6b5b/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "signs of the three edge cross products: inside or on the boundary when none is strictly negative and none strictly positive at the same time. Complexity target: O(1).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+    "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+    "selector": "/problems/hack2hire:6a95ede5cddc54478ddf6b5b"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Exact integer geometry with boundary cases"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "The area method is equally exact but needs absolute values and more products"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "membership is invariant under swapping the triangle vertices"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Collinearity of a, b, c is a zero cross product.",
+   "A point is in the closed triangle when it is never strictly on opposite sides of two edges.",
+   "Integer cross products are exact; keep coordinates small enough that products stay below 2^53."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "signs of the three edge cross products: inside or on the boundary when none is strictly negative and none strictly positive at the same time",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:6a95ede5cddc54478ddf6b5b/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(1); the independent reference (compare twice the triangle area with the sum of the three sub-triangle areas formed with the point) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Collinearity of a, b, c is a zero cross product.",
+     "A point is in the closed triangle when it is never strictly on opposite sides of two edges."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a95edcccddc54478ddf6b5a_6a95ede5cddc54478ddf6b5b_approach-native_v1.json",
+    "sha256": "c1c2cf986af46da0cf39e24bf77244d645cec62c4705c219bd8933b65f2d312f"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper pointsBelong, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/18/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer (or BigInt) arithmetic for every count and amount."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Integer cross products are exact; keep coordinates small enough that products stay below 2^53."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a95edcccddc54478ddf6b5a_6a95ede5cddc54478ddf6b5b_python_v1.json",
+     "sha256": "d30a06466ffbdaf33a385c217c133b08a5a7643bc29b80763dc06b2b4a85ea55"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a95edcccddc54478ddf6b5a_6a95ede5cddc54478ddf6b5b_javascript_v1.json",
+     "sha256": "b2261b5a8229c3169bc4bf286d8bb580b76862b0fbc86cb8126586927b27708e"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a95edcccddc54478ddf6b5a_6a95ede5cddc54478ddf6b5b_approach-native_v1.json",
+    "sha256": "c1c2cf986af46da0cf39e24bf77244d645cec62c4705c219bd8933b65f2d312f"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (compare twice the triangle area with the sum of the three sub-triangle areas formed with the point) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:6a95ede5cddc54478ddf6b5b/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/18/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare outputs exactly, including JSON types and list order; for classes, also run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/test_oracles.py",
+      "sha256": "40799712436abf689e2a66bbb8e254483db9832666a6c56ea8deb466e2b06c6d",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:6a95ede5cddc54478ddf6b5b"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a95edcccddc54478ddf6b5a_6a95ede5cddc54478ddf6b5b_approach-native_v1.json",
+    "sha256": "c1c2cf986af46da0cf39e24bf77244d645cec62c4705c219bd8933b65f2d312f"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6a95edcccddc54478ddf6b5a:6a95ede5cddc54478ddf6b5b:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a95edcccddc54478ddf6b5a_6a95ede5cddc54478ddf6b5b_approach-native_v1.json",
+  "sha256": "c1c2cf986af46da0cf39e24bf77244d645cec62c4705c219bd8933b65f2d312f"
+ }
+}

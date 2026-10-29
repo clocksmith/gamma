@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:677c8aba5cbaff553b53b06e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "subsetSumExists",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every subset of positions",
+  "candidate_design": "reachable-sum bitset (a big integer) limited to min(k, sum - k) bits, using the complement symmetry; shift-or per element with early exit",
+  "complexity_target": "O(n * min(k, S - k) / w) word operations"
+ },
+ "source_sha256": "154a4a03da10b416f346256dd0c5420c3cce91525e94958f89289cb3a59e1fe1",
+ "wrapper": "named export subsetSumExists"
+}

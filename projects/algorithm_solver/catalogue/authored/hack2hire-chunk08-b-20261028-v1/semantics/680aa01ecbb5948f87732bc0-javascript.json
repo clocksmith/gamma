@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:680aa01ecbb5948f87732bc0",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "edges",
+  "source",
+  "target"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "shortestPath",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "edges",
+    "type": "integer[][]"
+   },
+   {
+    "name": "source",
+    "type": "integer"
+   },
+   {
+    "name": "target",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "repeated relaxation sweeps over the edge list (unit-weight Bellman-Ford) until no distance changes",
+  "candidate_design": "adjacency arrays (CSR) and a breadth-first search from source that stops when target is dequeued",
+  "complexity_target": "O(n + |edges|)"
+ },
+ "source_sha256": "3434fb62ba1be1848f2914241f3f57b2c6a6612b1a79d5312ce199d1f090ca65",
+ "wrapper": "named export shortestPath"
+}

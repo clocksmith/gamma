@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69f3a12f42791c82ab992d99",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "flights",
+  "userId",
+  "time"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findUserLocation",
+  "params": [
+   {
+    "name": "flights",
+    "type": "string[][]"
+   },
+   {
+    "name": "userId",
+    "type": "string"
+   },
+   {
+    "name": "time",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "replay every flight of the user in departure order and track the location with explicit before/at/after comparisons",
+  "candidate_design": "filter the user's flights, sort by departure time, and binary search the last departure at or before the query time",
+  "complexity_target": "O(F log F)"
+ },
+ "source_sha256": "89c8bd41891d614b8c804e614ab62434aebb52952651e5918ddaf353610a6070",
+ "wrapper": "Solution.findUserLocation"
+}

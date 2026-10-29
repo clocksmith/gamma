@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68c48c55e558bc07a7541e31",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "SnakeGame",
+  "constructor": {
+   "params": [
+    {
+     "name": "rows",
+     "type": "integer"
+    },
+    {
+     "name": "cols",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "move",
+    "params": [
+     {
+      "name": "direction",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep the body as a Python list of cells and test membership by linear scan on every move",
+  "candidate_design": "deque of encoded cells (row * cols + col) plus a hash set of occupied cells; pop the tail before the self-collision test unless the move grows the snake",
+  "complexity_target": "O(1) expected per move"
+ },
+ "source_sha256": "e8c0355519726edb2d175e9b82aeef68995f9c95898d6f783632bf8c282fbe00",
+ "native_class": "SnakeGame",
+ "native_symbol": "module global SnakeGame",
+ "void_methods": []
+}

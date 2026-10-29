@@ -1,0 +1,349 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:684271e361bdd61d17676952:6842720b61bdd61d17676953:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+   "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+   "selector": "/problems/4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/684271e361bdd61d17676952.json",
+   "sha256": "a3f1b65cb967eb26a531c6512a2e8cb5d86af2ad98c03491fe83b65a0e265aa1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+   "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+   "selector": "/variants/hack2hire:6842720b61bdd61d17676953"
+  }
+ ],
+ "problemId": "hack2hire:684271e361bdd61d17676952",
+ "variantId": "6842720b61bdd61d17676953",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: per-caller count of matching pairs",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6842720b61bdd61d17676953/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "calls holds [caller, receiver, timestamp] and reports holds [receiver, timestamp], timestamps in the form \"YYYY-MM-DDTHH:MM:SS\". A report matches a call when the receivers are equal and the timestamps differ by at most window seconds. For each caller count the matching (call, report) pairs over all its calls. Return [caller, count] for every caller with a positive count, ordered by count descending and then caller ascending.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "calls holds [caller, receiver, timestamp] and reports holds [receiver, timestamp], timestamps in the form \"YYYY-MM-DDTHH:MM:SS\".",
+   "A report matches a call when the receivers are equal and the timestamps differ by at most window seconds.",
+   "For each caller count the matching (call, report) pairs over all its calls.",
+   "Return [caller, count] for every caller with a positive count, ordered by count descending and then caller ascending."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= |calls|, |reports| <= 100000",
+   "identifiers match [A-Za-z0-9+-]{1,15}",
+   "timestamps are valid dates in years 1970 to 2099",
+   "0 <= window <= 10^9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6842720b61bdd61d17676953/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: call triples with ISO 8601 timestamps, report pairs, a window in seconds, matching on equal receiver and absolute time difference at most window, per-caller counts; algorithmTags: HASH_TABLE; preview response sha256 c7be6dd9b1b08569c12db2bf97a6b8e0e26ba1e6043216b500c50ce3a63c5a8c"
+   },
+   {
+    "statement": "Uncertainty: high: the matching rule is in the preview; whether a count is per pair or per call, the output shape and its order are inferred",
+    "basis": "the public group preview is partial (825 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/4/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/4/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/4/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does one call matched by two reports count twice?",
+   "Are callers with zero matches listed?",
+   "How is the output ordered?",
+   "Can timestamps cross a day or year boundary?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6842720b61bdd61d17676953/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [],
+     0
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "a",
+       "r",
+       "2024-01-01T00:00:00"
+      ]
+     ],
+     [
+      [
+       "r",
+       "2024-01-01T00:00:05"
+      ]
+     ],
+     5
+    ],
+    "output": [
+     [
+      "a",
+      1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6842720b61bdd61d17676953/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/oracles.py",
+    "sha256": "baf083b476340a998455b60627423a9b6aaf62ef0f73cea0a05edeb68df1ce89",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def countSpamCalls(calls, reports, window) -> [string, integer][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6842720b61bdd61d17676953-python.json",
+     "inferredInterface": {
+      "name": "countSpamCalls",
+      "params": [
+       {
+        "name": "calls",
+        "type": "string[][]"
+       },
+       {
+        "name": "reports",
+        "type": "string[][]"
+       },
+       {
+        "name": "window",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "[string, integer][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6842720b61bdd61d17676953-python.json",
+      "sha256": "03ea506552acbc5326751430020d404d1c6642793fc3f4c7e2469368060b626d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function countSpamCalls(calls, reports, window) /* -> [string, integer][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6842720b61bdd61d17676953-javascript.json",
+     "inferredInterface": {
+      "name": "countSpamCalls",
+      "params": [
+       {
+        "name": "calls",
+        "type": "string[][]"
+       },
+       {
+        "name": "reports",
+        "type": "string[][]"
+       },
+       {
+        "name": "window",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "[string, integer][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6842720b61bdd61d17676953-javascript.json",
+      "sha256": "f2172cc0972f74365d5f764f15708cb6d47e1376c57b1df285cafbb592b4b73e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/4/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/4/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

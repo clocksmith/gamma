@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+   "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+   "selector": "/problems/hack2hire:67cf4b1faca6a2fa74a72cfd"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+   "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+   "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd"
+  }
+ ],
+ "problemId": "hack2hire:67cf48deaca6a2fa74a72cfc",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/contract--contract_hack2hire_67cf48deaca6a2fa74a72cfc_67cf4b1faca6a2fa74a72cfd_authored-v1.json",
+  "sha256": "aecea246bcf58bd5ca942fb188109a6936752f93161ee3f45fab1c75c961eef6"
+ },
+ "title": {
+  "status": "present",
+  "value": "fold the seven low bits with XOR shifts (x ^= x >> 4; x ^= x >> 2; x ^= x >> 1) to get their parity, then shift that parity into bit 7",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+    "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+    "selector": "/problems/hack2hire:67cf4b1faca6a2fa74a72cfd/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "fold the seven low bits with XOR shifts (x ^= x >> 4; x ^= x >> 2; x ^= x >> 1) to get their parity, then shift that parity into bit 7. Complexity target: O(1).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+    "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+    "selector": "/problems/hack2hire:67cf4b1faca6a2fa74a72cfd"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "A parity bit must be set on fixed-width data with bit operations only"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "A lookup table of 128 entries is equally fast but hides the reasoning"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "result & 127 == byte & 127",
+   "popcount(result) is even"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Only bit 7 is free; bits 0 to 6 are fixed.",
+   "The MSB must equal the parity of the seven low bits.",
+   "Fold the low bits with XOR shifts until bit 0 holds their parity."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "fold the seven low bits with XOR shifts (x ^= x >> 4; x ^= x >> 2; x ^= x >> 1) to get their parity, then shift that parity into bit 7",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:67cf4b1faca6a2fa74a72cfd/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(1); the independent reference (format the byte as an 8-character binary string, count the 1 characters among the last seven, and rebuild the integer with the chosen leading character) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Only bit 7 is free; bits 0 to 6 are fixed.",
+     "The MSB must equal the parity of the seven low bits."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67cf48deaca6a2fa74a72cfc_67cf4b1faca6a2fa74a72cfd_approach-native_v1.json",
+    "sha256": "3ac344b775af2533484c86c50f5026f278449ae98bcaf5705f78e2f0cb7ba0ff"
+   }
+  },
+  {
+   "id": "approach:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper setParityBit, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer (or BigInt) arithmetic for every count and amount."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Fold the low bits with XOR shifts until bit 0 holds their parity."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67cf48deaca6a2fa74a72cfc_67cf4b1faca6a2fa74a72cfd_python_v1.json",
+     "sha256": "32da4189bf76170ec97e0da5c238d0f5798d8eb3b4856631adaf7916c62d68fc"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67cf48deaca6a2fa74a72cfc_67cf4b1faca6a2fa74a72cfd_javascript_v1.json",
+     "sha256": "a7f558aa5e366440f41601f94e7c29176cbdda3b9e7cdcefb738b55c7acde852"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67cf48deaca6a2fa74a72cfc_67cf4b1faca6a2fa74a72cfd_approach-native_v1.json",
+    "sha256": "3ac344b775af2533484c86c50f5026f278449ae98bcaf5705f78e2f0cb7ba0ff"
+   }
+  },
+  {
+   "id": "approach:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (format the byte as an 8-character binary string, count the 1 characters among the last seven, and rebuild the integer with the chosen leading character) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/design.json",
+      "sha256": "1a14705af79a4157cab33a2dc762e0512d9591c03a331b93496c5f8610cf0490",
+      "selector": "/problems/hack2hire:67cf4b1faca6a2fa74a72cfd/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/0/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare outputs exactly, including JSON types and list order; for classes, also run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/test_oracles.py",
+      "sha256": "40799712436abf689e2a66bbb8e254483db9832666a6c56ea8deb466e2b06c6d",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+      "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+      "selector": "/variants/hack2hire:67cf4b1faca6a2fa74a72cfd"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67cf48deaca6a2fa74a72cfc_67cf4b1faca6a2fa74a72cfd_approach-native_v1.json",
+    "sha256": "3ac344b775af2533484c86c50f5026f278449ae98bcaf5705f78e2f0cb7ba0ff"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:67cf48deaca6a2fa74a72cfc:67cf4b1faca6a2fa74a72cfd:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-records/artifact--artifact_hack2hire_67cf48deaca6a2fa74a72cfc_67cf4b1faca6a2fa74a72cfd_approach-native_v1.json",
+  "sha256": "3ac344b775af2533484c86c50f5026f278449ae98bcaf5705f78e2f0cb7ba0ff"
+ }
+}

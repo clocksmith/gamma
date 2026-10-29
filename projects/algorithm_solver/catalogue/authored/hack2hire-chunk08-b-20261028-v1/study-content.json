@@ -1,0 +1,1157 @@
+{
+ "schema": "gamma.hack2hire-chunk08-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:67cf4b1faca6a2fa74a72cfd": {
+   "constraints": [
+    "0 <= byte <= 255"
+   ],
+   "clarifyingQuestions": [
+    "Is the byte passed as an integer or as a binary string?",
+    "Is the returned byte an integer?",
+    "Must the MSB be cleared when the low bits already have even parity?"
+   ],
+   "hints": [
+    "Only bit 7 is free; bits 0 to 6 are fixed.",
+    "The MSB must equal the parity of the seven low bits.",
+    "Fold the low bits with XOR shifts until bit 0 holds their parity."
+   ],
+   "invariants": [
+    "result & 127 == byte & 127",
+    "popcount(result) is even"
+   ],
+   "chooseWhen": [
+    "A parity bit must be set on fixed-width data with bit operations only"
+   ],
+   "tradeoffs": [
+    "A lookup table of 128 entries is equally fast but hides the reasoning"
+   ],
+   "variantLabel": "Inferred: integer byte in, integer byte out",
+   "examples": [
+    {
+     "input": [
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      1
+     ],
+     "output": 129,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:681aa38c0a6e86cbf10c58f9": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "0 = t[0] <= t[1] <= ... <= t[n-1] <= 10^9",
+    "0 <= k <= 100000"
+   ],
+   "clarifyingQuestions": [
+    "Is the objective the longest single day?",
+    "May fewer than k rests be used?",
+    "Can two stops share a distance?"
+   ],
+   "hints": [
+    "Using more rests never makes the longest day longer, so feasibility is monotone in D.",
+    "For a fixed D, walking as far as possible each day uses the fewest days.",
+    "Binary search D between the largest adjacent gap and t[n-1]; D is feasible when the greedy walk needs at most k + 1 days."
+   ],
+   "invariants": [
+    "the answer is at least max(t[i+1] - t[i])",
+    "the answer is at most t[n-1]"
+   ],
+   "chooseWhen": [
+    "A min-max partition of a line into a bounded number of pieces"
+   ],
+   "tradeoffs": [
+    "A DP is exact for any objective but quadratic; the binary search needs monotone feasibility"
+   ],
+   "variantLabel": "Inferred: minimise the longest day",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       0,
+       5
+      ],
+      0
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:680aa01ecbb5948f87732bc0": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "0 <= |edges| <= 200000",
+    "self-loops and repeated edges allowed (inferred)",
+    "0 <= source, target < n"
+   ],
+   "clarifyingQuestions": [
+    "What is returned when source equals target?",
+    "Can edges repeat or be self-loops?",
+    "Is the graph connected?"
+   ],
+   "hints": [
+    "Every edge has the same length, so breadth-first order is distance order.",
+    "Build adjacency lists once from the edge list.",
+    "Stop as soon as target is reached; return -1 when the queue empties first."
+   ],
+   "invariants": [
+    "nodes are dequeued in non-decreasing distance",
+    "each node is enqueued at most once"
+   ],
+   "chooseWhen": [
+    "All edges have equal weight"
+   ],
+   "tradeoffs": [
+    "Dijkstra also works but adds a heap for no benefit"
+   ],
+   "variantLabel": "Inferred: single-pair BFS distance",
+   "examples": [
+    {
+     "input": [
+      1,
+      [],
+      0,
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      2,
+      [],
+      0,
+      1
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c48c55e558bc07a7541e31": {
+   "constraints": [
+    "1 <= rows, cols <= 100000",
+    "rows * cols <= 10^9",
+    "at most 100000 moves per trace",
+    "direction in {\"U\", \"D\", \"L\", \"R\"}"
+   ],
+   "clarifyingQuestions": [
+    "What does move return?",
+    "Does the tail cell count as occupied on a non-growing move?",
+    "What happens to moves after the game ends?",
+    "Is growth on the fifth move or after it?"
+   ],
+   "hints": [
+    "The head and tail change at opposite ends: a deque fits.",
+    "Keep a set of occupied cells next to the deque so self-collision is a hash lookup.",
+    "On a non-growing move remove the tail from both structures before testing the new head cell."
+   ],
+   "invariants": [
+    "the deque and the set hold the same cells",
+    "length = 1 + floor(moves / 5) while the game runs"
+   ],
+   "chooseWhen": [
+    "A body moves by adding at one end and removing at the other"
+   ],
+   "tradeoffs": [
+    "A grid of booleans gives O(1) lookups but costs rows * cols memory"
+   ],
+   "variantLabel": "Inferred: boolean move, growth on every fifth move",
+   "examples": [
+    {
+     "input": [
+      [
+       "SnakeGame"
+      ],
+      [
+       [
+        1,
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SnakeGame",
+       "move"
+      ],
+      [
+       [
+        1,
+        1
+       ],
+       [
+        "R"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6842720b61bdd61d17676953": {
+   "constraints": [
+    "0 <= |calls|, |reports| <= 100000",
+    "identifiers match [A-Za-z0-9+-]{1,15}",
+    "timestamps are valid dates in years 1970 to 2099",
+    "0 <= window <= 10^9"
+   ],
+   "clarifyingQuestions": [
+    "Does one call matched by two reports count twice?",
+    "Are callers with zero matches listed?",
+    "How is the output ordered?",
+    "Can timestamps cross a day or year boundary?"
+   ],
+   "hints": [
+    "Group report times by receiver and sort each group.",
+    "For one call, the matching reports are a contiguous range of its receiver's sorted times.",
+    "Two binary searches give the range size; add it to the caller's total."
+   ],
+   "invariants": [
+    "each reported count equals the number of matching (call, report) pairs of that caller",
+    "output counts are positive"
+   ],
+   "chooseWhen": [
+    "Many calls and reports share a receiver and windows overlap"
+   ],
+   "tradeoffs": [
+    "Pair enumeration is simpler but quadratic per receiver"
+   ],
+   "variantLabel": "Inferred: per-caller count of matching pairs",
+   "examples": [
+    {
+     "input": [
+      [],
+      [],
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "a",
+        "r",
+        "2024-01-01T00:00:00"
+       ]
+      ],
+      [
+       [
+        "r",
+        "2024-01-01T00:00:05"
+       ]
+      ],
+      5
+     ],
+     "output": [
+      [
+       "a",
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68dc5d69dd5418be11109b00": {
+   "constraints": [
+    "requiredLetter is one lowercase letter",
+    "0 <= |optionalLetters| <= 26, each one lowercase letter",
+    "0 <= |dictionary| <= 100000",
+    "words match [a-z]{1,20}"
+   ],
+   "clarifyingQuestions": [
+    "In what order are words returned?",
+    "Are repeated dictionary words returned twice?",
+    "May optionalLetters contain the required letter?"
+   ],
+   "hints": [
+    "Precompute the allowed letters as a set or bit mask.",
+    "A word is valid when its letters are a subset of the allowed set and include the required letter.",
+    "Check the length first; it is the cheapest rule."
+   ],
+   "invariants": [
+    "returned words form a subsequence of dictionary"
+   ],
+   "chooseWhen": [
+    "A small fixed alphabet makes bit masks natural"
+   ],
+   "tradeoffs": [
+    "Sets are clearer; masks avoid allocation per word"
+   ],
+   "variantLabel": "Inferred: filter in dictionary order",
+   "examples": [
+    {
+     "input": [
+      "a",
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "x",
+      [
+       "x"
+      ],
+      [
+       "xxxx",
+       "xxxx"
+      ]
+     ],
+     "output": [
+      "xxxx",
+      "xxxx"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:688bd40e3867670cfb894186": {
+   "constraints": [
+    "0 <= |source| <= 100000",
+    "1 <= |target| <= 100000",
+    "0 <= |replacement| <= 1000",
+    "printable ASCII",
+    "|output| <= 2000000"
+   ],
+   "clarifyingQuestions": [
+    "Are overlapping occurrences replaced?",
+    "Can target be empty?",
+    "Can replacement be empty?"
+   ],
+   "hints": [
+    "Scan left to right; after a match, continue right after it so matches never overlap.",
+    "A naive comparison at every position is quadratic on inputs like \"aaaa...\".",
+    "KMP finds each match in linear time; reset the state to 0 after a match to forbid overlap."
+   ],
+   "invariants": [
+    "matches are disjoint and each is the leftmost one starting after the previous match"
+   ],
+   "chooseWhen": [
+    "Built-in search is unavailable and inputs may be adversarial"
+   ],
+   "tradeoffs": [
+    "A naive scan is simpler and often fast, but quadratic in the worst case"
+   ],
+   "variantLabel": "Inferred: leftmost non-overlapping replacement",
+   "examples": [
+    {
+     "input": [
+      "",
+      "a",
+      "b"
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "",
+      "c",
+      "y"
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67801e4c6fee41e51af73dda": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "1 <= pages[i] <= 10^9",
+    "1 <= days <= 10^9"
+   ],
+   "clarifyingQuestions": [
+    "What is the input day budget called and what is returned when it is too small?",
+    "Can a day span two chapters?",
+    "Is x an integer?"
+   ],
+   "hints": [
+    "A day never spans two chapters, so chapter i alone needs ceil(pages[i] / x) days.",
+    "The total day count only falls as x grows.",
+    "Binary search x between 1 and max(pages); at x = max(pages) the count is n."
+   ],
+   "invariants": [
+    "days(x) is non-increasing in x",
+    "days(max(pages)) = n"
+   ],
+   "chooseWhen": [
+    "The answer is the smallest parameter that satisfies a monotone budget"
+   ],
+   "tradeoffs": [
+    "A linear scan over x is simple but far too slow at large page counts"
+   ],
+   "variantLabel": "Inferred: smallest daily limit within a day budget",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5
+      ],
+      1
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677c8aba5cbaff553b53b06e": {
+   "constraints": [
+    "1 <= n <= 1000",
+    "1 <= nums[i] <= 10^6",
+    "1 <= k <= 10^9",
+    "author test cap: min(k, sum(nums) - k) <= 10^6 whenever k < sum(nums)"
+   ],
+   "clarifyingQuestions": [
+    "Can one position be used twice?",
+    "Do equal values at different positions count as different elements?",
+    "How large can k be in practice?"
+   ],
+   "hints": [
+    "A subset sums to k exactly when its complement sums to sum - k, so work with the smaller target.",
+    "Track every reachable sum up to the target as bits of one integer.",
+    "Adding value x maps the bit set B to B | (B << x); stop as soon as the target bit is set."
+   ],
+   "invariants": [
+    "bit s is set iff some subset of the processed prefix sums to s"
+   ],
+   "chooseWhen": [
+    "Targets are moderate and only feasibility is needed"
+   ],
+   "tradeoffs": [
+    "Memoised search is closer to the tags but can revisit exponentially many (index, remainder) states"
+   ],
+   "variantLabel": "Inferred level 1: existence",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       2,
+       2
+      ],
+      4
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677c90795cbaff553b53b06f": {
+   "constraints": [
+    "1 <= n <= 1000",
+    "1 <= nums[i] <= 10^6",
+    "1 <= k <= 10^9",
+    "author test cap: n * min(k, sum(nums) - k) <= 10^6 whenever k < sum(nums)"
+   ],
+   "clarifyingQuestions": [
+    "Are subsets with equal values at different positions different?",
+    "Is the count reduced modulo a prime?",
+    "Is the empty subset ever counted (k >= 1)?"
+   ],
+   "hints": [
+    "Count subsets reaching each sum, not just whether it is reachable.",
+    "Process elements one at a time; go through sums from high to low so each element is used once.",
+    "Counting subsets with sum k equals counting complements with sum S - k; use the smaller target and reduce modulo 1000000007."
+   ],
+   "invariants": [
+    "ways[s] counts subsets of the processed prefix with sum s, modulo 1000000007"
+   ],
+   "chooseWhen": [
+    "A number of subsets is wanted and the target is moderate"
+   ],
+   "tradeoffs": [
+    "Exact big counts would need big integers; the modulus keeps values below 2^31"
+   ],
+   "variantLabel": "Inferred level 2: count subsets modulo 10^9 + 7",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       2,
+       2
+      ],
+      4
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677c923c5cbaff553b53b070": {
+   "constraints": [
+    "1 <= n <= 100",
+    "1 <= nums[i] <= 10^6",
+    "1 <= k <= 10000",
+    "author test cap: at most 10000 combinations"
+   ],
+   "clarifyingQuestions": [
+    "Are combinations deduplicated by value?",
+    "What order is required inside and across combinations?",
+    "May a value be reused beyond its multiplicity?"
+   ],
+   "hints": [
+    "Group equal values; a combination is a choice of how many copies of each distinct value.",
+    "Plain backtracking can wander through huge dead-end regions; first compute which sums each suffix of distinct values can make.",
+    "Enumerate values in ascending order, taking 0..multiplicity copies, and enter a branch only when the remainder is reachable from the next suffix; this yields lexicographic order directly."
+   ],
+   "invariants": [
+    "every emitted combination sums to k",
+    "the enumeration never enters a branch with no completion"
+   ],
+   "chooseWhen": [
+    "All solutions must be listed and dead ends are common"
+   ],
+   "tradeoffs": [
+    "The reachability table costs O(D * k) bits but makes the enumeration output-sensitive"
+   ],
+   "variantLabel": "Inferred level 3: list unique combinations",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": [
+      [
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       2,
+       2
+      ],
+      4
+     ],
+     "output": [
+      [
+       2,
+       2
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67882811e20f8f324213c2a0": {
+   "constraints": [
+    "1 <= |s| <= 100000",
+    "s matches [a-z]+( [a-z]+)*",
+    "1 <= |elements| <= 1000",
+    "elements match [a-z]{1,20}"
+   ],
+   "clarifyingQuestions": [
+    "Is \"first\" the leftmost start or the first element in list order?",
+    "If several elements start at the same position, which wins?",
+    "Is more than one substring per word wrapped?"
+   ],
+   "hints": [
+    "Handle each word separately; at most one wrap per word.",
+    "Scanning start positions left to right finds the leftmost match first.",
+    "A trie lets one walk from a start position report every element beginning there; keep the deepest terminal."
+   ],
+   "invariants": [
+    "each output word without its brackets equals the input word",
+    "each output word has at most one bracket pair"
+   ],
+   "chooseWhen": [
+    "Many patterns must be found at the same start positions"
+   ],
+   "tradeoffs": [
+    "Checking every element at every position is simpler but multiplies by the element count"
+   ],
+   "variantLabel": "Inferred: leftmost start, then longest",
+   "examples": [
+    {
+     "input": [
+      "a",
+      [
+       "a"
+      ]
+     ],
+     "output": "[a]",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "a",
+      [
+       "b"
+      ]
+     ],
+     "output": "a",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d18c8717b72775cc49c0c2": {
+   "constraints": [
+    "0 <= |text| <= 100000",
+    "names match [A-Za-z0-9_]{1,20}; keys distinct",
+    "0 <= |values[i]| <= 1000, no braces",
+    "text characters are printable ASCII",
+    "|output| <= 2000000"
+   ],
+   "clarifyingQuestions": [
+    "Can a value contain braces?",
+    "Are keys distinct?",
+    "Can placeholders be adjacent?"
+   ],
+   "hints": [
+    "Build a map from name to value.",
+    "Scan once: copy ordinary characters; at \"{\" read up to the matching \"}\".",
+    "Collect pieces in a list and join once at the end."
+   ],
+   "invariants": [
+    "output = text with each {name} replaced by map[name]"
+   ],
+   "chooseWhen": [
+    "Placeholders are flat and well formed"
+   ],
+   "tradeoffs": [
+    "A regex is shorter; the manual scan makes the linear cost explicit"
+   ],
+   "variantLabel": "Inferred level 1: single-pass substitution",
+   "examples": [
+    {
+     "input": [
+      "",
+      [],
+      []
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "plain",
+      [],
+      []
+     ],
+     "output": "plain",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d18cdd17b72775cc49c0c6": {
+   "constraints": [
+    "0 <= |text| <= 100000",
+    "1 <= |keys| <= 2000; names match [A-Za-z0-9_]{1,20}; keys distinct",
+    "0 <= |values[i]| <= 1000",
+    "no cyclic references",
+    "|output| and every expanded value <= 2000000"
+   ],
+   "clarifyingQuestions": [
+    "Can values refer to other keys?",
+    "Can references form a cycle?",
+    "Is the expansion of a key reused when it appears many times?"
+   ],
+   "hints": [
+    "A value with placeholders must be expanded before it is substituted.",
+    "Expand each key once and cache it; reuse the cache for every later reference.",
+    "Chains of references can be long, so replace recursion with an explicit stack processed in dependency order."
+   ],
+   "invariants": [
+    "a cached expansion contains no braces",
+    "each key is expanded once"
+   ],
+   "chooseWhen": [
+    "Values reference each other and appear many times"
+   ],
+   "tradeoffs": [
+    "Caching expansions can store long strings; recomputation would repeat work exponentially in the worst case"
+   ],
+   "variantLabel": "Inferred level 2: recursive expansion of values",
+   "examples": [
+    {
+     "input": [
+      "",
+      [
+       "a"
+      ],
+      [
+       "x"
+      ]
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "",
+      [
+       "z9"
+      ],
+      [
+       "vw"
+      ]
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6aa861838c97c56cdbdc93e2": {
+   "constraints": [
+    "1 <= rows, cols <= 300",
+    "block is 1..10 x 1..10 with at least one 1",
+    "0 <= offset <= cols - block width",
+    "cells are 0 or 1",
+    "the landed block lies fully inside the grid (inferred precondition)"
+   ],
+   "clarifyingQuestions": [
+    "Where does the block start?",
+    "What is returned: the grid or the landing row?",
+    "What if the block cannot fully enter the grid?"
+   ],
+   "hints": [
+    "The block falls from above, so in each column its lowest 1-cell meets any obstacle first.",
+    "In each grid column under the block, only the highest occupied cell (or the floor) matters.",
+    "The landing shift is the minimum over block columns of (first obstacle row - 1 - lowest block row in that column)."
+   ],
+   "invariants": [
+    "landed block cells never overlap background 1s",
+    "one more row down would collide or leave the grid"
+   ],
+   "chooseWhen": [
+    "A rigid shape falls without rotation onto a static grid"
+   ],
+   "tradeoffs": [
+    "Simulation is easy to trust; the column profile is linear in the grid"
+   ],
+   "variantLabel": "Inferred level 1: place the landed block",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0
+       ]
+      ],
+      [
+       [
+        1
+       ]
+      ],
+      0
+     ],
+     "output": [
+      [
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        0
+       ]
+      ],
+      [
+       [
+        1
+       ]
+      ],
+      1
+     ],
+     "output": [
+      [
+       0,
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6aa8623b8c97c56cdbdc93eb": {
+   "constraints": [
+    "1 <= rows, cols <= 300",
+    "block is 1..10 x 1..10 with at least one 1",
+    "0 <= offset <= cols - block width",
+    "cells are 0 or 1",
+    "the landed block lies fully inside the grid (inferred precondition)"
+   ],
+   "clarifyingQuestions": [
+    "Are rows that were already full before the drop also cleared?",
+    "Do cleared rows cascade further?",
+    "Does the grid keep its height?"
+   ],
+   "hints": [
+    "Land the block exactly as in level 1.",
+    "A row is cleared when every cell is 1; clearing only shifts rows down, so no new row becomes full.",
+    "Copy non-full rows bottom-up into a fresh grid and fill the top with zero rows."
+   ],
+   "invariants": [
+    "the output has the same shape as background",
+    "no output row is full"
+   ],
+   "chooseWhen": [
+    "The Tetris clearing rule follows a placement"
+   ],
+   "tradeoffs": [
+    "One compaction pass avoids repeated row deletions"
+   ],
+   "variantLabel": "Inferred level 2: land and clear full rows",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0
+       ]
+      ],
+      [
+       [
+        1
+       ]
+      ],
+      0
+     ],
+     "output": [
+      [
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        0
+       ]
+      ],
+      [
+       [
+        1
+       ]
+      ],
+      1
+     ],
+     "output": [
+      [
+       0,
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67ff11d2a19f45c95d40567f": {
+   "constraints": [
+    "1 <= |locations| <= 20 (author bound)",
+    "names match [A-Za-z0-9_]{1,20} and are distinct",
+    "0 <= |adjacencies| <= 200",
+    "each pair names two different listed nodes; repeats allowed"
+   ],
+   "clarifyingQuestions": [
+    "Are adjacencies given by name or index?",
+    "Can a node be adjacent to itself?",
+    "Do nodes without edges matter?"
+   ],
+   "hints": [
+    "Map names to indices and build adjacency lists.",
+    "Colour the node with the fewest remaining colours first; dead ends show up early.",
+    "Colour components independently and fix the first node's colour to break symmetry."
+   ],
+   "invariants": [
+    "no two adjacent coloured nodes share a colour at any point of the search"
+   ],
+   "chooseWhen": [
+    "Small graphs with an NP-hard decision"
+   ],
+   "tradeoffs": [
+    "Exhaustive search is simplest; DSATUR ordering prunes most branches in practice"
+   ],
+   "variantLabel": "Inferred: 3-colourability decision",
+   "examples": [
+    {
+     "input": [
+      [
+       "a"
+      ],
+      []
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "n0"
+      ],
+      []
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:684cd590cab8e9bb7ea93b11": {
+   "constraints": [
+    "1 <= n, m <= 100000",
+    "n * m <= 10^10",
+    "1 <= k <= max(n, m)",
+    "at most 20000 moves per trace",
+    "player in {1, 2}; moves on empty cells; no move after a win"
+   ],
+   "clarifyingQuestions": [
+    "What does move return?",
+    "Do longer runs than k also win?",
+    "Are both diagonal directions counted?"
+   ],
+   "hints": [
+    "Only lines through the newest mark can become winning.",
+    "Count consecutive own marks in both directions along each of the four lines through the new cell.",
+    "A sparse map of occupied cells keeps memory proportional to the moves, not the board."
+   ],
+   "invariants": [
+    "a win is reported only on the move that creates it"
+   ],
+   "chooseWhen": [
+    "Large boards with few moves and arbitrary k"
+   ],
+   "tradeoffs": [
+    "Row/column counters (LeetCode 348) only work when k equals the line length"
+   ],
+   "variantLabel": "Inferred: TicTacToe(n, m, k) with move returning the winner",
+   "examples": [
+    {
+     "input": [
+      [
+       "TicTacToe"
+      ],
+      [
+       [
+        3,
+        3,
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TicTacToe",
+       "move"
+      ],
+      [
+       [
+        1,
+        1,
+        1
+       ],
+       [
+        0,
+        0,
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a95ede5cddc54478ddf6b5b": {
+   "constraints": [
+    "-10^7 <= every coordinate <= 10^7"
+   ],
+   "clarifyingQuestions": [
+    "What is returned for a degenerate triangle?",
+    "Is a point on an edge inside?",
+    "What codes are returned for the four membership cases?"
+   ],
+   "hints": [
+    "Collinearity of a, b, c is a zero cross product.",
+    "A point is in the closed triangle when it is never strictly on opposite sides of two edges.",
+    "Integer cross products are exact; keep coordinates small enough that products stay below 2^53."
+   ],
+   "invariants": [
+    "membership is invariant under swapping the triangle vertices"
+   ],
+   "chooseWhen": [
+    "Exact integer geometry with boundary cases"
+   ],
+   "tradeoffs": [
+    "The area method is equally exact but needs absolute values and more products"
+   ],
+   "variantLabel": "Inferred: result code 0 to 4",
+   "examples": [
+    {
+     "input": [
+      0,
+      0,
+      1,
+      1,
+      2,
+      2,
+      0,
+      0,
+      5,
+      5
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      0,
+      0,
+      4,
+      0,
+      0,
+      4,
+      1,
+      1,
+      5,
+      5
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f3a12f42791c82ab992d99": {
+   "constraints": [
+    "0 <= |flights| <= 100000",
+    "airports match [A-Z]{3}",
+    "times are valid \"YYYY-MM-DDTHH:MM\" strings",
+    "user ids match [A-Za-z0-9_]{1,20}",
+    "per user: departure < arrival <= next departure"
+   ],
+   "clarifyingQuestions": [
+    "What is returned while the user is in the air?",
+    "Where is the user before the first flight?",
+    "Which airport wins at an exact departure or arrival time?",
+    "What is returned for an unknown user?"
+   ],
+   "hints": [
+    "Only the queried user's flights matter.",
+    "Fixed-width ISO times compare correctly as strings.",
+    "Sort by departure time and binary search the last flight that departed at or before the query; then compare with its arrival time."
+   ],
+   "invariants": [
+    "a user's flights, sorted by departure, are also sorted by arrival"
+   ],
+   "chooseWhen": [
+    "One query over an unsorted log"
+   ],
+   "tradeoffs": [
+    "For many queries, pre-grouping and sorting per user would amortise the sort"
+   ],
+   "variantLabel": "Inferred: location at a time, empty while airborne",
+   "examples": [
+    {
+     "input": [
+      [],
+      "u",
+      "2024-01-01T00:00"
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "JFK",
+        "2024-01-01T10:00",
+        "SFO",
+        "2024-01-01T16:00",
+        "u"
+       ]
+      ],
+      "u",
+      "2024-01-01T09:59"
+     ],
+     "output": "JFK",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

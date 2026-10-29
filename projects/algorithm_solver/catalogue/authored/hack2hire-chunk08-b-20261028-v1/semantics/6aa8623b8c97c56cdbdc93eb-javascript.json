@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6aa8623b8c97c56cdbdc93eb",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "background",
+  "block",
+  "offset"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "dropBlockAndClear",
+  "params": [
+   {
+    "name": "background",
+    "type": "integer[][]"
+   },
+   {
+    "name": "block",
+    "type": "integer[][]"
+   },
+   {
+    "name": "offset",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate the fall row by row, then repeatedly delete the lowest full row and insert an empty row at the top",
+  "candidate_design": "column-profile landing as in level 1, then one bottom-up compaction pass that keeps non-full rows",
+  "complexity_target": "O(rows * cols + h * w)"
+ },
+ "source_sha256": "8442f8ab0ead3f1bc828f081e8dbba8ba68fdf1db984c67eb821b5d436d4f2c2",
+ "wrapper": "named export dropBlockAndClear"
+}

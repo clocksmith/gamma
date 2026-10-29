@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:677c90795cbaff553b53b06f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countSubsets",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every subset of positions and count those that sum to k",
+  "candidate_design": "counting knapsack over sums 0..min(k, sum - k) (complement symmetry), iterating sums downward for each element, modulo 1000000007",
+  "complexity_target": "O(n * min(k, S - k))"
+ },
+ "source_sha256": "1b73d1c301742bb47df6bb1221aea7c3300befed4bfde919c4cf85c4ab5539ea",
+ "wrapper": "Solution.countSubsets"
+}

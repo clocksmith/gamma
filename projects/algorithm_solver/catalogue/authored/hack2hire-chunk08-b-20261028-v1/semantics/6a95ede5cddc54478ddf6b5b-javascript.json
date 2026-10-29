@@ -1,0 +1,85 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a95ede5cddc54478ddf6b5b",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "x1",
+  "y1",
+  "x2",
+  "y2",
+  "x3",
+  "y3",
+  "xp",
+  "yp",
+  "xq",
+  "yq"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "pointsBelong",
+  "params": [
+   {
+    "name": "x1",
+    "type": "integer"
+   },
+   {
+    "name": "y1",
+    "type": "integer"
+   },
+   {
+    "name": "x2",
+    "type": "integer"
+   },
+   {
+    "name": "y2",
+    "type": "integer"
+   },
+   {
+    "name": "x3",
+    "type": "integer"
+   },
+   {
+    "name": "y3",
+    "type": "integer"
+   },
+   {
+    "name": "xp",
+    "type": "integer"
+   },
+   {
+    "name": "yp",
+    "type": "integer"
+   },
+   {
+    "name": "xq",
+    "type": "integer"
+   },
+   {
+    "name": "yq",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "compare twice the triangle area with the sum of the three sub-triangle areas formed with the point",
+  "candidate_design": "signs of the three edge cross products: inside or on the boundary when none is strictly negative and none strictly positive at the same time",
+  "complexity_target": "O(1)"
+ },
+ "source_sha256": "c585557d150a9352ad2043d622736d4acd515f72a0a49efbe25a061b91f75c19",
+ "wrapper": "named export pointsBelong"
+}

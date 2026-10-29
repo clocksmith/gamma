@@ -1,0 +1,358 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6aa861578c97c56cdbdc93df:6aa861838c97c56cdbdc93e2:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+   "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6aa861578c97c56cdbdc93df.json",
+   "sha256": "605d8bd554260cc8cf226773c7c7857fd143183d50453c7fcbf24f9d007b2709",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+   "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+   "selector": "/variants/hack2hire:6aa861838c97c56cdbdc93e2"
+  }
+ ],
+ "problemId": "hack2hire:6aa861578c97c56cdbdc93df",
+ "variantId": "6aa861838c97c56cdbdc93e2",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: place the landed block",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6aa861838c97c56cdbdc93e2/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "The block starts entirely above the grid with its left column at column offset and falls straight down one row at a time. It stops just before one of its 1-cells would leave the bottom of the grid or overlap a 1 in background. Return a new grid equal to background with the landed block's 1-cells set to 1.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "The block starts entirely above the grid with its left column at column offset and falls straight down one row at a time.",
+   "It stops just before one of its 1-cells would leave the bottom of the grid or overlap a 1 in background.",
+   "Return a new grid equal to background with the landed block's 1-cells set to 1."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= rows, cols <= 300",
+   "block is 1..10 x 1..10 with at least one 1",
+   "0 <= offset <= cols - block width",
+   "cells are 0 or 1",
+   "the landed block lies fully inside the grid (inferred precondition)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6aa861838c97c56cdbdc93e2/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: binary background grid, binary block mask whose zero cells do not collide, zero-indexed starting column offset; algorithmTags: MATRIX, SIMULATION; codingQuestions: two variant ids with no per-variant text; preview response sha256 5c0318ddffdd049b6426cfee22caa32edc6ae4011046aa7f5c7d771337181eb1"
+   },
+   {
+    "statement": "Uncertainty: medium: the inputs are in the preview; the start above the grid, the output grid and the in-grid landing precondition are inferred",
+    "basis": "the public group preview is partial (472 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred split: level 1 returns the grid after landing, level 2 also clears full rows",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Where does the block start?",
+   "What is returned: the grid or the landing row?",
+   "What if the block cannot fully enter the grid?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6aa861838c97c56cdbdc93e2/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       0
+      ]
+     ],
+     [
+      [
+       1
+      ]
+     ],
+     0
+    ],
+    "output": [
+     [
+      1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       1
+      ]
+     ],
+     1
+    ],
+    "output": [
+     [
+      0,
+      1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6aa861838c97c56cdbdc93e2/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/oracles.py",
+    "sha256": "baf083b476340a998455b60627423a9b6aaf62ef0f73cea0a05edeb68df1ce89",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def dropBlock(background, block, offset) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6aa861838c97c56cdbdc93e2-python.json",
+     "inferredInterface": {
+      "name": "dropBlock",
+      "params": [
+       {
+        "name": "background",
+        "type": "integer[][]"
+       },
+       {
+        "name": "block",
+        "type": "integer[][]"
+       },
+       {
+        "name": "offset",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6aa861838c97c56cdbdc93e2-python.json",
+      "sha256": "9dd2963cd42512aee466d358393f5c1a4dd9ed7205acc95ae88a54f49a8d9b0e",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function dropBlock(background, block, offset) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6aa861838c97c56cdbdc93e2-javascript.json",
+     "inferredInterface": {
+      "name": "dropBlock",
+      "params": [
+       {
+        "name": "background",
+        "type": "integer[][]"
+       },
+       {
+        "name": "block",
+        "type": "integer[][]"
+       },
+       {
+        "name": "offset",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6aa861838c97c56cdbdc93e2-javascript.json",
+      "sha256": "7db89884a54d7f2da608e87a99315050dafffe4f4603416c4f8cf6caa04823e2",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

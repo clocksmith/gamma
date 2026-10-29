@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69d18cdd17b72775cc49c0c6",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "text",
+  "keys",
+  "values"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "formatTemplate",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "keys",
+    "type": "string[]"
+   },
+   {
+    "name": "values",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "repeat whole-string substitution of every placeholder until the string contains no brace",
+  "candidate_design": "memoised expansion per key in dependency order with an explicit stack (no recursion depth limit), then one scan of text",
+  "complexity_target": "O(sum of expanded lengths)"
+ },
+ "source_sha256": "9ba2fe6941e5f6618e854361ee2774174eec29dfe38448f39da23c9fdcdeb427",
+ "wrapper": "Solution.formatTemplate"
+}

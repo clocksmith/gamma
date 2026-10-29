@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67cf4b1faca6a2fa74a72cfd",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "byte"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "setParityBit",
+  "params": [
+   {
+    "name": "byte",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "format the byte as an 8-character binary string, count the 1 characters among the last seven, and rebuild the integer with the chosen leading character",
+  "candidate_design": "fold the seven low bits with XOR shifts (x ^= x >> 4; x ^= x >> 2; x ^= x >> 1) to get their parity, then shift that parity into bit 7",
+  "complexity_target": "O(1)"
+ },
+ "source_sha256": "3253283f0938f13ad29ceb27e315f361d0b7ec78ec7ee938a2e519f3d0e6bbb0",
+ "wrapper": "Solution.setParityBit"
+}

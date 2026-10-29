@@ -1,0 +1,357 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6aa861578c97c56cdbdc93df:6aa8623b8c97c56cdbdc93eb:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+   "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+   "selector": "/problems/15"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6aa861578c97c56cdbdc93df.json",
+   "sha256": "605d8bd554260cc8cf226773c7c7857fd143183d50453c7fcbf24f9d007b2709",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+   "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+   "selector": "/variants/hack2hire:6aa8623b8c97c56cdbdc93eb"
+  }
+ ],
+ "problemId": "hack2hire:6aa861578c97c56cdbdc93df",
+ "variantId": "6aa8623b8c97c56cdbdc93eb",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: land and clear full rows",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6aa8623b8c97c56cdbdc93eb/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "As level 1, then remove every row that is completely filled; the remaining rows keep their order and drop to the bottom, and empty rows are added at the top so the grid keeps its size. Return the new grid.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "As level 1, then remove every row that is completely filled; the remaining rows keep their order and drop to the bottom, and empty rows are added at the top so the grid keeps its size.",
+   "Return the new grid."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= rows, cols <= 300",
+   "block is 1..10 x 1..10 with at least one 1",
+   "0 <= offset <= cols - block width",
+   "cells are 0 or 1",
+   "the landed block lies fully inside the grid (inferred precondition)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6aa8623b8c97c56cdbdc93eb/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: binary background grid, binary block mask whose zero cells do not collide, zero-indexed starting column offset; algorithmTags: MATRIX, SIMULATION; codingQuestions: two variant ids with no per-variant text; preview response sha256 5c0318ddffdd049b6426cfee22caa32edc6ae4011046aa7f5c7d771337181eb1"
+   },
+   {
+    "statement": "Uncertainty: high: row clearing as the second level is inferred from the Tetris theme; whether full rows already present before the drop also clear is inferred (they do)",
+    "basis": "the public group preview is partial (472 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred split: level 1 returns the grid after landing, level 2 also clears full rows",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/15/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/15/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/15/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are rows that were already full before the drop also cleared?",
+   "Do cleared rows cascade further?",
+   "Does the grid keep its height?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6aa8623b8c97c56cdbdc93eb/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       0
+      ]
+     ],
+     [
+      [
+       1
+      ]
+     ],
+     0
+    ],
+    "output": [
+     [
+      0
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       1
+      ]
+     ],
+     1
+    ],
+    "output": [
+     [
+      0,
+      1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/study-content.json",
+    "sha256": "90fc2768e86bee68acfdb24a2bb89fe32e07f3d3fb86c109ba06092ac76b9506",
+    "selector": "/variants/hack2hire:6aa8623b8c97c56cdbdc93eb/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/oracles.py",
+    "sha256": "baf083b476340a998455b60627423a9b6aaf62ef0f73cea0a05edeb68df1ce89",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def dropBlockAndClear(background, block, offset) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6aa8623b8c97c56cdbdc93eb-python.json",
+     "inferredInterface": {
+      "name": "dropBlockAndClear",
+      "params": [
+       {
+        "name": "background",
+        "type": "integer[][]"
+       },
+       {
+        "name": "block",
+        "type": "integer[][]"
+       },
+       {
+        "name": "offset",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6aa8623b8c97c56cdbdc93eb-python.json",
+      "sha256": "9ef4bb8b2ca6e24f396399173428015fe21c82a9cb1cec960d7d8508910ef584",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function dropBlockAndClear(background, block, offset) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+      "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6aa8623b8c97c56cdbdc93eb-javascript.json",
+     "inferredInterface": {
+      "name": "dropBlockAndClear",
+      "params": [
+       {
+        "name": "background",
+        "type": "integer[][]"
+       },
+       {
+        "name": "block",
+        "type": "integer[][]"
+       },
+       {
+        "name": "offset",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/semantics/6aa8623b8c97c56cdbdc93eb-javascript.json",
+      "sha256": "55fc0c3e5fb3d7aea6dca828f12a8cd693b8c6d3e0d34713fa1291ff0c28da59",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/15/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-b-20261028-v1/contracts.json",
+    "sha256": "ded2a4b62fe273bd4b263ae26cd5719dfeb5a73402c286a8e6077e41724a0739",
+    "selector": "/problems/15/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

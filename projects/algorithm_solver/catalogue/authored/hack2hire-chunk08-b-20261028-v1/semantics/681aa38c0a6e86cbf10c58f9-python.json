@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:681aa38c0a6e86cbf10c58f9",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "t",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minMaxDailyDistance",
+  "params": [
+   {
+    "name": "t",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "dynamic program over (stop, rests used) minimising the longest day so far, quadratic in n per rest count",
+  "candidate_design": "binary search on the longest day D in [largest adjacent gap, total length]; a greedy walk that goes as far as possible each day decides whether k rests suffice",
+  "complexity_target": "O(n log(t[n-1]))"
+ },
+ "source_sha256": "39c8c2aa6e7153829451a4ce3b0680e5188fdeb718020ad4f5abe49cf0d8816b",
+ "wrapper": "Solution.minMaxDailyDistance"
+}
