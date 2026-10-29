@@ -12,6 +12,7 @@ All 604 Hack2Hire coding question groups (805 variants) from [bank.json](../../.
 | chunk07.txt | 32 | Committed: `hack2hire-chunk07-a/-b` |
 | chunk08.txt | 32 | Committed: `hack2hire-chunk08-a/-b` |
 | chunk09.txt | 32 | Committed: `hack2hire-chunk09-a/-b` |
-| chunk10.txt to chunk18.txt | 276 | Unassigned (32 per file, 20 in the last) |
+| chunk10.txt | 32 | Being solved in `hack2hire-chunk10-a/-b` |
+| chunk11.txt to chunk18.txt | 244 | Unassigned (32 per file, 20 in the last) |
 
 Assignment status is not qualification. Progress links point to the cohort's actual checks and blockers; consult them for source and execution status. Specs for these groups are inferred from public previews, not official. See the question-bank [CATSCAN](../../../../question_bank/CATSCAN.md).
