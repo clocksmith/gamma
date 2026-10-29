@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67dcd82499f4f89b276f188a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "grid"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "shortestPath",
+  "params": [
+   {
+    "name": "grid",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "distances by repeated relaxation sweeps over the grid until stable",
+  "candidate_design": "breadth-first search with a flat array queue over 8 neighbours",
+  "complexity_target": "O(m * n) time/O(m * n) space"
+ },
+ "source_sha256": "0a3094c2a4ad107dada30577b9c49fde36ecfdeead0e89b50fde7d7d3afda65d",
+ "wrapper": "named export shortestPath"
+}

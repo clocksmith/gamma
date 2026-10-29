@@ -1,0 +1,413 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67e4a41750b60b77022f3847:67e4adbf50b60b77022f384b:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+   "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67e4a41750b60b77022f3847.json",
+   "sha256": "26edf4afc4a01f6b3507e4e4793c68d63811954bba8e4a59f44fa8420d8088d9",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+   "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+   "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b"
+  }
+ ],
+ "problemId": "hack2hire:67e4a41750b60b77022f3847",
+ "variantId": "67e4adbf50b60b77022f384b",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: middle courses of all start-to-end paths",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "pairs are distinct [prerequisite, course] edges of a directed acyclic graph; every course appears in at least one pair. Consider every path that starts at a course with no prerequisite and ends at a course that is no prerequisite of anything. The middle course of a path of L courses is the one at index (L-1)//2 (the left middle when L is even). Return the distinct middle courses of all such paths, sorted in code-point order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "pairs are distinct [prerequisite, course] edges of a directed acyclic graph.",
+   "every course appears in at least one pair.",
+   "Consider every path that starts at a course with no prerequisite and ends at a course that is no prerequisite of anything.",
+   "The middle course of a path of L courses is the one at index (L-1)//2 (the left middle when L is even).",
+   "Return the distinct middle courses of all such paths, sorted in code-point order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= pairs.length <= 5000",
+   "at most 1000 distinct courses",
+   "acyclic, no self loops, no duplicate pairs",
+   "course names match [A-Za-z0-9_]{1,20}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: [prerequisite, course] pairs forming one chain with an odd number of courses; algorithmTags: GRAPH, MEMOIZATION, DEPTH_FIRST_SEARCH; LeetCode 207 reference in the preview; codingQuestions (variant count/order); preview response sha256 a8cc592a33e9c5485ee3e039ab7ebb3b02d159a78fa1019c39a2ca3830e54d06"
+   },
+   {
+    "statement": "Uncertainty: very high: the unseen second variant is inferred to generalise the chain to all start-to-end paths (MEMOIZATION tag); the left-middle rule for even lengths and the sorted output are inferred",
+    "basis": "the public group preview is partial (728 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = single chain, 2 = middle courses of every start-to-end path in a DAG",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/11/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/11/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are courses named by strings or integers?",
+   "What is the middle of a path with an even number of courses?",
+   "In what order should several answers be returned?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "a",
+       "b"
+      ]
+     ]
+    ],
+    "output": [
+     "a"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "n8",
+       "n6"
+      ],
+      [
+       "n8",
+       "n1"
+      ],
+      [
+       "n8",
+       "n4"
+      ],
+      [
+       "n7",
+       "n5"
+      ],
+      [
+       "n7",
+       "n6"
+      ],
+      [
+       "n7",
+       "n3"
+      ],
+      [
+       "n7",
+       "n2"
+      ],
+      [
+       "n5",
+       "n0"
+      ],
+      [
+       "n5",
+       "n6"
+      ],
+      [
+       "n5",
+       "n1"
+      ],
+      [
+       "n5",
+       "n3"
+      ],
+      [
+       "n5",
+       "n2"
+      ],
+      [
+       "n0",
+       "n6"
+      ],
+      [
+       "n0",
+       "n1"
+      ],
+      [
+       "n0",
+       "n3"
+      ],
+      [
+       "n0",
+       "n4"
+      ],
+      [
+       "n6",
+       "n2"
+      ],
+      [
+       "n1",
+       "n3"
+      ],
+      [
+       "n1",
+       "n2"
+      ],
+      [
+       "n3",
+       "n4"
+      ],
+      [
+       "n3",
+       "n2"
+      ]
+     ]
+    ],
+    "output": [
+     "n0",
+     "n1",
+     "n3",
+     "n5",
+     "n6",
+     "n7",
+     "n8"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:67e4adbf50b60b77022f384b/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/oracles.py",
+    "sha256": "f88624d89226e15b0d938e3d9cf90720573eb824aa1aea3aae6b3ce6129622cc",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findMiddleCourses(pairs) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/67e4adbf50b60b77022f384b-python.json",
+     "inferredInterface": {
+      "name": "findMiddleCourses",
+      "params": [
+       {
+        "name": "pairs",
+        "type": "list<[string,string]>"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/67e4adbf50b60b77022f384b-python.json",
+      "sha256": "509df59aa3476750da946e3b625dc5e1abac7f2989d3c5f1e24567b5ecbcd5b6",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findMiddleCourses(pairs) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/67e4adbf50b60b77022f384b-javascript.json",
+     "inferredInterface": {
+      "name": "findMiddleCourses",
+      "params": [
+       {
+        "name": "pairs",
+        "type": "list<[string,string]>"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/67e4adbf50b60b77022f384b-javascript.json",
+      "sha256": "089f60aceb143fc68a507f3df300ce4fe0a81e1cfe28d2bfae14319ea44485f9",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

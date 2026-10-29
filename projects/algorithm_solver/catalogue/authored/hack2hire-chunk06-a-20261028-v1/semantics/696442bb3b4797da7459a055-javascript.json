@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:696442bb3b4797da7459a055",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "root",
+  "limit"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "sumDirectorySizes",
+  "params": [
+   {
+    "name": "root",
+    "type": "node (file {name,size} | directory {name,children})"
+   },
+   {
+    "name": "limit",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every directory, a separate full traversal of its subtree to compute its total",
+  "candidate_design": "one iterative post-order traversal computing each directory total once from its children",
+  "complexity_target": "O(n) time/O(depth) space"
+ },
+ "source_sha256": "a2992711e6d901872a221602e658617d15e34c92553c2bc8a7cdb7818e9c249a",
+ "wrapper": "named export sumDirectorySizes"
+}

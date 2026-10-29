@@ -1,0 +1,542 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68fbce56378ce2f46141f91f:68fbce5f378ce2f46141f920:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+   "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68fbce56378ce2f46141f91f.json",
+   "sha256": "cee069b4b75ecfc4c4feb2f05c979c46fe94fb0260a1b75311651fcbcd02f4d0",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+   "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+   "selector": "/variants/hack2hire:68fbce5f378ce2f46141f920"
+  }
+ ],
+ "problemId": "hack2hire:68fbce56378ce2f46141f91f",
+ "variantId": "68fbce5f378ce2f46141f920",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: file collection totals with a parent hierarchy",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:68fbce5f378ce2f46141f920/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "FileSystemStats(files) takes records \"<name>,<size>,<collectionId>...\" (size a positive integer, zero or more collection ids; a repeated id in one record counts once). getTotalSize() returns the sum of all file sizes. getCollectionSize(id) returns the direct total of that collection (0 for an unknown id). getTopCollections(k) returns the ids of the min(k, C) collections with the largest direct total among the C collections named in any record, ties to the smaller id in code-point order. setParent(childId, parentId) makes childId a sub-collection of parentId (ids need not appear in records; a child gets at most one parent and no cycle is formed). getHierarchySize(id) returns the direct total of id plus the direct totals of all its descendant collections (a file in two of them counts twice).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "FileSystemStats(files) takes records \"<name>,<size>,<collectionId>...\" (size a positive integer, zero or more collection ids.",
+   "a repeated id in one record counts once).",
+   "getTotalSize() returns the sum of all file sizes.",
+   "getCollectionSize(id) returns the direct total of that collection (0 for an unknown id).",
+   "getTopCollections(k) returns the ids of the min(k, C) collections with the largest direct total among the C collections named in any record, ties to the smaller id in code-point order.",
+   "setParent(childId, parentId) makes childId a sub-collection of parentId (ids need not appear in records.",
+   "a child gets at most one parent and no cycle is formed).",
+   "getHierarchySize(id) returns the direct total of id plus the direct totals of all its descendant collections (a file in two of them counts twice)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e4 file records with at most 5 collection ids each",
+   "size 1..1e6",
+   "at most 2000 distinct collection ids, up to 3000 calls, 1 <= k <= 100"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:68fbce5f378ce2f46141f920/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: record format, FileSystemStats(files) constructor, global and direct collection totals, possible collection hierarchy; algorithmTags: DESIGN, HASH_TABLE; preview response sha256 bb728bd6815098dd0b0974783ed93acd76852eeb156b6d72838ac38f15d0403c"
+   },
+   {
+    "statement": "Uncertainty: very high: the constructor, record format and the direct total are in the preview; every method name, the top-k query, the parent-link method and the hierarchy-sum rule are inferred",
+    "basis": "the public group preview is partial (898 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/6/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/6/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/6/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which methods does the class expose besides the constructor?",
+   "How is the hierarchy given?",
+   "Does a file in a parent and a child collection count once or twice in the hierarchy total?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:68fbce5f378ce2f46141f920/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "FileSystemStats",
+      "setParent"
+     ],
+     [
+      [
+       []
+      ],
+      [
+       "z",
+       "e"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "FileSystemStats",
+      "getCollectionSize",
+      "getTopCollections",
+      "getTopCollections",
+      "getHierarchySize",
+      "getTotalSize",
+      "setParent",
+      "getTopCollections",
+      "getTopCollections",
+      "getTotalSize"
+     ],
+     [
+      [
+       [
+        "f0,3,d,e,a",
+        "f1,12,a",
+        "f2,2",
+        "f3,7,c,a"
+       ]
+      ],
+      [
+       "e"
+      ],
+      [
+       5
+      ],
+      [
+       6
+      ],
+      [
+       "a"
+      ],
+      [],
+      [
+       "z",
+       "e"
+      ],
+      [
+       3
+      ],
+      [
+       1
+      ],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     3,
+     [
+      "a",
+      "c",
+      "d",
+      "e"
+     ],
+     [
+      "a",
+      "c",
+      "d",
+      "e"
+     ],
+     22,
+     24,
+     null,
+     [
+      "a",
+      "c",
+      "d"
+     ],
+     [
+      "a"
+     ],
+     24
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:68fbce5f378ce2f46141f920/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/oracles.py",
+    "sha256": "f88624d89226e15b0d938e3d9cf90720573eb824aa1aea3aae6b3ce6129622cc",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class FileSystemStats:\n    def __init__(self, files)\n    def getTotalSize(self) -> integer\n    def getCollectionSize(self, collectionId) -> integer\n    def getTopCollections(self, k) -> string[]\n    def setParent(self, childId, parentId) -> void\n    def getHierarchySize(self, collectionId) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/68fbce5f378ce2f46141f920-python.json",
+     "inferredInterface": {
+      "classname": "FileSystemStats",
+      "constructor": {
+       "params": [
+        {
+         "name": "files",
+         "type": "string[]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "getTotalSize",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getCollectionSize",
+        "params": [
+         {
+          "name": "collectionId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getTopCollections",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "setParent",
+        "params": [
+         {
+          "name": "childId",
+          "type": "string"
+         },
+         {
+          "name": "parentId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getHierarchySize",
+        "params": [
+         {
+          "name": "collectionId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/68fbce5f378ce2f46141f920-python.json",
+      "sha256": "bc9352ab749deee94933072ba005885fc4d7dcced99466b02774a930bec90b97",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class FileSystemStats {\n  constructor(files)\n  getTotalSize() /* -> integer */\n  getCollectionSize(collectionId) /* -> integer */\n  getTopCollections(k) /* -> string[] */\n  setParent(childId, parentId) /* -> void */\n  getHierarchySize(collectionId) /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/68fbce5f378ce2f46141f920-javascript.json",
+     "inferredInterface": {
+      "classname": "FileSystemStats",
+      "constructor": {
+       "params": [
+        {
+         "name": "files",
+         "type": "string[]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "getTotalSize",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getCollectionSize",
+        "params": [
+         {
+          "name": "collectionId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getTopCollections",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "setParent",
+        "params": [
+         {
+          "name": "childId",
+          "type": "string"
+         },
+         {
+          "name": "parentId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getHierarchySize",
+        "params": [
+         {
+          "name": "collectionId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/68fbce5f378ce2f46141f920-javascript.json",
+      "sha256": "c6d4d20df2135249d4d03c83b265f5685a10029ce74fda4796c83e30cee57641",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/6/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

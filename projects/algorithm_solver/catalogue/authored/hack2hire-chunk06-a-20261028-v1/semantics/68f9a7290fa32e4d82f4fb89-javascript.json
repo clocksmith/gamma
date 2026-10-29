@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68f9a7290fa32e4d82f4fb89",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "matrix",
+  "entrance"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "nearestExitCell",
+  "params": [
+   {
+    "name": "matrix",
+    "type": "integer[][]"
+   },
+   {
+    "name": "entrance",
+    "type": "integer[2]"
+   }
+  ],
+  "return": {
+   "type": "integer[2]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "distances by repeated relaxation sweeps, then the minimum (distance, row, col) over all exits",
+  "candidate_design": "level-by-level breadth-first search; at the first level that contains exits, return the smallest (row, col) among them",
+  "complexity_target": "O(rows * cols) time/O(rows * cols) space"
+ },
+ "source_sha256": "3bd02e380b01fec7786df3a8f2990204177ccf4ff6bbb2d3c3a6f817e6fcced1",
+ "wrapper": "named export nearestExitCell"
+}

@@ -1,0 +1,380 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a1a10d2c81f779dc6a23793:6a2b14eb97d3b4b32966cb00:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+   "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a1a10d2c81f779dc6a23793.json",
+   "sha256": "3549734e411b0fba8a3b60faac8393d6db122eb4c7618da1979e70188d2e08fe",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+   "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+   "selector": "/variants/hack2hire:6a2b14eb97d3b4b32966cb00"
+  }
+ ],
+ "problemId": "hack2hire:6a1a10d2c81f779dc6a23793",
+ "variantId": "6a2b14eb97d3b4b32966cb00",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 3: tree neighbours pick different option indices",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6a2b14eb97d3b4b32966cb00/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "costs[i][j] is the cost of option j for factory i (rows may have different lengths, each at least 1). Every factory picks exactly one option; the total cost is the sum of the picked costs. Level 3: edges is a list of [u, v] pairs that join the n = costs.length factories into one tree (n-1 edges); joined factories may not pick the same option index. Return the minimum total cost, or -1 when no valid assignment exists.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "costs[i][j] is the cost of option j for factory i (rows may have different lengths, each at least 1).",
+   "Every factory picks exactly one option.",
+   "the total cost is the sum of the picked costs.",
+   "Level 3: edges is a list of [u, v] pairs that join the n = costs.length factories into one tree (n-1 edges).",
+   "joined factories may not pick the same option index.",
+   "Return the minimum total cost, or -1 when no valid assignment exists."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= costs.length <= 1e5",
+   "1 <= costs[i].length, total options <= 2e5",
+   "0 <= costs[i][j] <= 1e6",
+   "edges form a tree over 0..n-1"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6a2b14eb97d3b4b32966cb00/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: one option per factory, costs[i][j], minimise the total build cost; algorithmTags: DEPTH_FIRST_SEARCH, MEMOIZATION; codingQuestions (variant count/order); preview response sha256 78843faf192e6c620bf3e546ca0c4e713d7999f8590b349e114eec77c12cd196"
+   },
+   {
+    "statement": "Uncertainty: very high: the unseen third variant is inferred to generalise the neighbour constraint to a tree network searched with DFS and memoisation; the tree guarantee keeps it polynomial; edges and -1 are inferred",
+    "basis": "the public group preview is partial (458 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as levels: 1 = independent choices, 2 = adjacent factories in index order may not pick the same option index, 3 = factories joined by tree edges may not pick the same option index",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Do factories interact, or is each choice independent?",
+   "Which factories count as neighbours?",
+   "What should be returned when no valid choice exists?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6a2b14eb97d3b4b32966cb00/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       5
+      ]
+     ],
+     []
+    ],
+    "output": 5,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       1,
+       7,
+       6
+      ],
+      [
+       0,
+       3,
+       6,
+       8
+      ],
+      [
+       5,
+       3
+      ],
+      [
+       7,
+       5
+      ],
+      [
+       4,
+       5,
+       7
+      ],
+      [
+       1,
+       8,
+       0,
+       1
+      ]
+     ],
+     [
+      [
+       1,
+       0
+      ],
+      [
+       1,
+       5
+      ],
+      [
+       2,
+       3
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       4,
+       3
+      ]
+     ]
+    ],
+    "output": 18,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6a2b14eb97d3b4b32966cb00/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/oracles.py",
+    "sha256": "f88624d89226e15b0d938e3d9cf90720573eb824aa1aea3aae6b3ce6129622cc",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def minimumCost(costs, edges) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6a2b14eb97d3b4b32966cb00-python.json",
+     "inferredInterface": {
+      "name": "minimumCost",
+      "params": [
+       {
+        "name": "costs",
+        "type": "integer[][]"
+       },
+       {
+        "name": "edges",
+        "type": "list<[integer,integer]>"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6a2b14eb97d3b4b32966cb00-python.json",
+      "sha256": "bb5a73fc0b56b12b56c0d9e525ced220011941301e000c32c97f26e1178a7ab5",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function minimumCost(costs, edges) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6a2b14eb97d3b4b32966cb00-javascript.json",
+     "inferredInterface": {
+      "name": "minimumCost",
+      "params": [
+       {
+        "name": "costs",
+        "type": "integer[][]"
+       },
+       {
+        "name": "edges",
+        "type": "list<[integer,integer]>"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6a2b14eb97d3b4b32966cb00-javascript.json",
+      "sha256": "42d643187c1a403d18cbaad934691c262346c4bc27b45091f17beac02dd89398",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

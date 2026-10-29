@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6962cbcef731aa3969ef5176",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "dirs",
+  "edges",
+  "files",
+  "path"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "deletePath",
+  "params": [
+   {
+    "name": "dirs",
+    "type": "string[]"
+   },
+   {
+    "name": "edges",
+    "type": "list<[string,string]>"
+   },
+   {
+    "name": "files",
+    "type": "string[]"
+   },
+   {
+    "name": "path",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "emulate the FileSystem API (delete refuses non-empty directories) and delete recursively on a small tree",
+  "candidate_design": "children lists from edges, then an iterative post-order traversal with an explicit stack of (directory, next child index)",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "99dae489f2acb204e4328376b9d79e406f0bbce7737a171ae268d296935e8f5b",
+ "wrapper": "named export deletePath"
+}

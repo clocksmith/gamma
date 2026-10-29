@@ -1,0 +1,404 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6962cbc7f731aa3969ef5175:6962cbcef731aa3969ef5176:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+   "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6962cbc7f731aa3969ef5175.json",
+   "sha256": "f8661aed97963dd4407b184179dc67dfa517874c4c0228853a8852d58a1acc61",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+   "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+   "selector": "/variants/hack2hire:6962cbcef731aa3969ef5176"
+  }
+ ],
+ "problemId": "hack2hire:6962cbc7f731aa3969ef5175",
+ "variantId": "6962cbcef731aa3969ef5176",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: recursive post-order deletion sequence",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6962cbcef731aa3969ef5176/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "dirs and files are disjoint lists of absolute paths; edges are [parent, child] pairs where parent is a directory and child = parent + \"/\" + name. Every file and every non-root directory has exactly one parent edge. getAllFiles(dir) lists a directory's children in the order their edges appear, and delete(p) only removes a file or an empty directory. Delete path and everything below it using only those operations: children first, in getAllFiles order, each subtree completely, then the directory itself. Return the paths in the order delete is called; return [] when path does not exist.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "dirs and files are disjoint lists of absolute paths.",
+   "edges are [parent, child] pairs where parent is a directory and child = parent + \"/\" + name.",
+   "Every file and every non-root directory has exactly one parent edge.",
+   "getAllFiles(dir) lists a directory's children in the order their edges appear, and delete(p) only removes a file or an empty directory.",
+   "Delete path and everything below it using only those operations: children first, in getAllFiles order, each subtree completely, then the directory itself.",
+   "Return the paths in the order delete is called.",
+   "return [] when path does not exist."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 paths",
+   "path segments match [A-Za-z0-9_.]{1,10}",
+   "directory depth up to 1000"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6962cbcef731aa3969ef5176/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: FileSystem(dirs, edges, files) with delete (file or empty directory), isDirectory and non-recursive getAllFiles; algorithmTags: DEPTH_FIRST_SEARCH; preview response sha256 65c6d05fbc2213d316733ca5ca10e03ad5999129e0f8a63f43a2973b73ab4629"
+   },
+   {
+    "statement": "Uncertainty: high: the API is in the preview, but the task statement is cut off; recursive deletion, the child order and returning the deletion sequence (instead of a boolean) are inferred",
+    "basis": "the public group preview is partial (950 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Should the function return success or the deleted paths?",
+   "In which order does getAllFiles list children?",
+   "What happens when the path does not exist?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6962cbcef731aa3969ef5176/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [],
+     [],
+     "/a"
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "/r",
+      "/r/d3",
+      "/r/d4",
+      "/r/d7",
+      "/r/d3/d8"
+     ],
+     [
+      [
+       "/r/d3",
+       "/r/d3/d8"
+      ],
+      [
+       "/r",
+       "/r/f1.t"
+      ],
+      [
+       "/r",
+       "/r/f0.t"
+      ],
+      [
+       "/r",
+       "/r/d4"
+      ],
+      [
+       "/r",
+       "/r/f2.t"
+      ],
+      [
+       "/r/d3",
+       "/r/d3/f5.t"
+      ],
+      [
+       "/r",
+       "/r/d7"
+      ],
+      [
+       "/r",
+       "/r/f6.t"
+      ],
+      [
+       "/r",
+       "/r/d3"
+      ]
+     ],
+     [
+      "/r/f0.t",
+      "/r/f1.t",
+      "/r/f2.t",
+      "/r/d3/f5.t",
+      "/r/f6.t"
+     ],
+     "/r"
+    ],
+    "output": [
+     "/r/f1.t",
+     "/r/f0.t",
+     "/r/d4",
+     "/r/f2.t",
+     "/r/d7",
+     "/r/f6.t",
+     "/r/d3/d8",
+     "/r/d3/f5.t",
+     "/r/d3",
+     "/r"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:6962cbcef731aa3969ef5176/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/oracles.py",
+    "sha256": "f88624d89226e15b0d938e3d9cf90720573eb824aa1aea3aae6b3ce6129622cc",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def deletePath(dirs, edges, files, path) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6962cbcef731aa3969ef5176-python.json",
+     "inferredInterface": {
+      "name": "deletePath",
+      "params": [
+       {
+        "name": "dirs",
+        "type": "string[]"
+       },
+       {
+        "name": "edges",
+        "type": "list<[string,string]>"
+       },
+       {
+        "name": "files",
+        "type": "string[]"
+       },
+       {
+        "name": "path",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6962cbcef731aa3969ef5176-python.json",
+      "sha256": "755f606cc36c9c34e543fef930afe234d8d2f687f20d57f44cfabe6e15f95c56",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function deletePath(dirs, edges, files, path) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6962cbcef731aa3969ef5176-javascript.json",
+     "inferredInterface": {
+      "name": "deletePath",
+      "params": [
+       {
+        "name": "dirs",
+        "type": "string[]"
+       },
+       {
+        "name": "edges",
+        "type": "list<[string,string]>"
+       },
+       {
+        "name": "files",
+        "type": "string[]"
+       },
+       {
+        "name": "path",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/6962cbcef731aa3969ef5176-javascript.json",
+      "sha256": "40acc34c627acf2d44cfaa110bbce37daf13dc9149dad623b8e18c5bc20ee2e3",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

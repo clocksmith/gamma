@@ -1,0 +1,389 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68f7fb6786f7cb4953d41094:68f9a7290fa32e4d82f4fb89:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+   "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68f7fb6786f7cb4953d41094.json",
+   "sha256": "25e5c460480369f3a82186ba50c7868ccb569a5dd537024c37862375f16053de",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+   "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+   "selector": "/variants/hack2hire:68f9a7290fa32e4d82f4fb89"
+  }
+ ],
+ "problemId": "hack2hire:68f7fb6786f7cb4953d41094",
+ "variantId": "68f9a7290fa32e4d82f4fb89",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: coordinates of the nearest exit",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:68f9a7290fa32e4d82f4fb89/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "matrix is a grid of 0 (wall) and 1 (open); entrance [r, c] is open. Moves go up, down, left or right between open cells. An exit is an open cell in the first or last row or column, other than the entrance. Level 2: return [row, col] of the nearest reachable exit; among equally near exits choose the smallest row, then the smallest column. Return [-1, -1] if none is reachable.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "matrix is a grid of 0 (wall) and 1 (open).",
+   "entrance [r, c] is open.",
+   "Moves go up, down, left or right between open cells.",
+   "An exit is an open cell in the first or last row or column, other than the entrance.",
+   "Level 2: return [row, col] of the nearest reachable exit.",
+   "among equally near exits choose the smallest row, then the smallest column.",
+   "Return [-1, -1] if none is reachable."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= rows * cols <= 1e5",
+   "matrix[r][c] in {0, 1}",
+   "entrance is an open cell"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:68f9a7290fa32e4d82f4fb89/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: binary matrix (1 open, 0 wall), entrance, 4-directional moves, exit on the border, entrance excluded; algorithmTags: BREADTH_FIRST_SEARCH; LeetCode 1926 reference in the preview; codingQuestions (variant count/order); preview response sha256 c1e4e1d6bf926d2b986e641054ef4e7031c8e8bd024c49185117e959af19a118"
+   },
+   {
+    "statement": "Uncertainty: very high: the second variant is unseen; returning the exit coordinates with a row-then-column tie rule is inferred",
+    "basis": "the public group preview is partial (780 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = distance to nearest exit, 2 = coordinates of the nearest exit with a tie rule",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the entrance an exit if it is on the border?",
+   "What is returned when no exit is reachable?",
+   "Which exit wins when several are equally near?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:68f9a7290fa32e4d82f4fb89/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       1
+      ]
+     ],
+     [
+      0,
+      0
+     ]
+    ],
+    "output": [
+     -1,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       0,
+       1,
+       0,
+       1,
+       0,
+       1
+      ],
+      [
+       1,
+       1,
+       0,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       1,
+       0,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       1,
+       1,
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       1,
+       1,
+       0,
+       0,
+       1
+      ]
+     ],
+     [
+      2,
+      1
+     ]
+    ],
+    "output": [
+     2,
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:68f9a7290fa32e4d82f4fb89/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/oracles.py",
+    "sha256": "f88624d89226e15b0d938e3d9cf90720573eb824aa1aea3aae6b3ce6129622cc",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def nearestExitCell(matrix, entrance) -> integer[2]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/68f9a7290fa32e4d82f4fb89-python.json",
+     "inferredInterface": {
+      "name": "nearestExitCell",
+      "params": [
+       {
+        "name": "matrix",
+        "type": "integer[][]"
+       },
+       {
+        "name": "entrance",
+        "type": "integer[2]"
+       }
+      ],
+      "return": {
+       "type": "integer[2]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/68f9a7290fa32e4d82f4fb89-python.json",
+      "sha256": "979f5d250ef21036705929b2d0a2c585ec467120ddc7ebad1c81c9fcd70ba505",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function nearestExitCell(matrix, entrance) /* -> integer[2] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/68f9a7290fa32e4d82f4fb89-javascript.json",
+     "inferredInterface": {
+      "name": "nearestExitCell",
+      "params": [
+       {
+        "name": "matrix",
+        "type": "integer[][]"
+       },
+       {
+        "name": "entrance",
+        "type": "integer[2]"
+       }
+      ],
+      "return": {
+       "type": "integer[2]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/semantics/68f9a7290fa32e4d82f4fb89-javascript.json",
+      "sha256": "a40a14bc2c35fcda0722f6e0b4374faa4bc336410f08241d031f2b748b4ae734",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+    "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

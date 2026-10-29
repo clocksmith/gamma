@@ -1,0 +1,460 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+   "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+   "selector": "/problems/hack2hire:696442bb3b4797da7459a055"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+   "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+   "selector": "/variants/hack2hire:696442bb3b4797da7459a055"
+  }
+ ],
+ "problemId": "hack2hire:696442b33b4797da7459a054",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/contract--contract_hack2hire_696442b33b4797da7459a054_696442bb3b4797da7459a055_authored-v1.json",
+  "sha256": "1531c6eaa57b3db6b22d9e2ce7129fcd8bc49ca3de38e2c8ec0c8395c85ad739"
+ },
+ "title": {
+  "status": "present",
+  "value": "one iterative post-order traversal computing each directory total once from its children",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+    "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+    "selector": "/problems/hack2hire:696442bb3b4797da7459a055/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "one iterative post-order traversal computing each directory total once from its children. Complexity target: O(n) time/O(depth) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+    "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+    "selector": "/problems/hack2hire:696442bb3b4797da7459a055"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Every directory total is needed"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:696442bb3b4797da7459a055/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Recomputing each directory separately is O(n * depth); one post-order pass is O(n)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:696442bb3b4797da7459a055/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "a directory total is final once all its children are processed"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:696442bb3b4797da7459a055/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "A directory total is the sum of its children's totals, where a file's total is its size.",
+   "Compute totals bottom-up so each entry is visited once.",
+   "Walk with an explicit stack and add a directory total to the answer when it is at most limit."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+    "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+    "selector": "/variants/hack2hire:696442bb3b4797da7459a055/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "one iterative post-order traversal computing each directory total once from its children",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+      "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+      "selector": "/problems/hack2hire:696442bb3b4797da7459a055/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) time/O(depth) space; the independent reference (for every directory, a separate full traversal of its subtree to compute its total) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+      "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+      "selector": "/problems/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "A directory total is the sum of its children's totals, where a file's total is its size.",
+     "Compute totals bottom-up so each entry is visited once."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_696442b33b4797da7459a054_696442bb3b4797da7459a055_approach-native_v1.json",
+    "sha256": "a13bf2bec91ca7231fee73a21daa788bb3843a8505be8d9d987ada8dc7c81fc4"
+   }
+  },
+  {
+   "id": "approach:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper sumDirectorySizes, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+      "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+      "selector": "/problems/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use iterative traversal where depth may be large."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Walk with an explicit stack and add a directory total to the answer when it is at most limit."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_696442b33b4797da7459a054_696442bb3b4797da7459a055_python_v1.json",
+     "sha256": "22f723535c6d8a20f706ded98f2f4471bc2d3ff446c5ea11992127a76514cd67"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_696442b33b4797da7459a054_696442bb3b4797da7459a055_javascript_v1.json",
+     "sha256": "a31d528009246078104a3b03c60363802e55b3223595cfe623afc901ca48d684"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_696442b33b4797da7459a054_696442bb3b4797da7459a055_approach-native_v1.json",
+    "sha256": "a13bf2bec91ca7231fee73a21daa788bb3843a8505be8d9d987ada8dc7c81fc4"
+   }
+  },
+  {
+   "id": "approach:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (for every directory, a separate full traversal of its subtree to compute its total) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/design.json",
+      "sha256": "fa59455df889b7dd94ebec0a813e49659e7ef25657338863e942fd3f13b01c29",
+      "selector": "/problems/hack2hire:696442bb3b4797da7459a055/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/contracts.json",
+      "sha256": "db8630e5de3a39e7aab4f39cb1d4afc5fc7843bcc287637348481d5feb2ee7c1",
+      "selector": "/problems/8/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/test_oracles.py",
+      "sha256": "61a8dc56a1130c74a3673758c87492bacd668b6f315e0593fff71ace369a1265",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-content.json",
+      "sha256": "b6739aca1dc944da94e01312b0e6f9401aed53828127b8554412a30e10c506f1",
+      "selector": "/variants/hack2hire:696442bb3b4797da7459a055"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_696442b33b4797da7459a054_696442bb3b4797da7459a055_approach-native_v1.json",
+    "sha256": "a13bf2bec91ca7231fee73a21daa788bb3843a8505be8d9d987ada8dc7c81fc4"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:696442b33b4797da7459a054:696442bb3b4797da7459a055:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk06-a-20261028-v1/study-records/artifact--artifact_hack2hire_696442b33b4797da7459a054_696442bb3b4797da7459a055_approach-native_v1.json",
+  "sha256": "a13bf2bec91ca7231fee73a21daa788bb3843a8505be8d9d987ada8dc7c81fc4"
+ }
+}

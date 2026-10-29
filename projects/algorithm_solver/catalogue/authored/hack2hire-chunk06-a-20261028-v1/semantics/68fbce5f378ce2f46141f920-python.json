@@ -1,0 +1,105 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68fbce5f378ce2f46141f920",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "FileSystemStats",
+  "constructor": {
+   "params": [
+    {
+     "name": "files",
+     "type": "string[]"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "getTotalSize",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "getCollectionSize",
+    "params": [
+     {
+      "name": "collectionId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "getTopCollections",
+    "params": [
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "setParent",
+    "params": [
+     {
+      "name": "childId",
+      "type": "string"
+     },
+     {
+      "name": "parentId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getHierarchySize",
+    "params": [
+     {
+      "name": "collectionId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal file list and parent map; every query rescans all files or walks the ancestor chain of every collection",
+  "candidate_design": "direct totals in a hash map, top-k order precomputed once (totals never change), hierarchy totals maintained incrementally by adding a child's hierarchy total to every ancestor on setParent",
+  "complexity_target": "O(F + C log C) construction, O(k) top-k, O(depth) setParent, O(1) other queries"
+ },
+ "source_sha256": "3e765771a151181e10f35c09d8f086ea636513e72d1127cbd01d7a878d1801ae",
+ "native_class": "FileSystemStats",
+ "native_symbol": "module global FileSystemStats",
+ "void_methods": [
+  "setParent"
+ ]
+}

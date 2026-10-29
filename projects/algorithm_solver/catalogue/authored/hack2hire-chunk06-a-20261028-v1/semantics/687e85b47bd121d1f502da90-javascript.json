@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:687e85b47bd121d1f502da90",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "capacities",
+  "intervals",
+  "requiredCapacity",
+  "taskInterval"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findSmallestHub",
+  "params": [
+   {
+    "name": "capacities",
+    "type": "integer[]"
+   },
+   {
+    "name": "intervals",
+    "type": "string[][]"
+   },
+   {
+    "name": "requiredCapacity",
+    "type": "integer"
+   },
+   {
+    "name": "taskInterval",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "expand every interval into its overlap test against the task literally, then a full scan for the best hub",
+  "candidate_design": "one pass over hubs; skip hubs with too little capacity before parsing their intervals; keep the best (capacity, index)",
+  "complexity_target": "O(n + total intervals) time/O(1) extra space"
+ },
+ "source_sha256": "e98c052e5b2a3b48bdce9a5bca33c182fae60e4a890a2ed734a45e7d24931495",
+ "wrapper": "named export findSmallestHub"
+}

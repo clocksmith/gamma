@@ -1,0 +1,1017 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk06-a (16 Hack2Hire groups, 21 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:677b5ef978175fce2ecdfc12",
+   "title": "End Of Day Balance",
+   "variant_ordinal": 1,
+   "group_post_id": "6769d68d11bbd512d60ce761",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "endOfDayBalance",
+     "params": [
+      {
+       "name": "transactions",
+       "type": "list<[string,string,integer]>"
+      }
+     ],
+     "return": {
+      "type": "list<[string,integer]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per party, scan the whole transaction list and add or subtract each matching row",
+    "candidate_design": "one pass into a hash map of running balances, then sort the party names",
+    "complexity_target": "O(t + p log p) time/O(p) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "13db8e6cfc56b77691a4fd40718655628d9a9f7160a8fc1c17a66459985fb34b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:677b5f4078175fce2ecdfc13",
+   "title": "End Of Day Balance",
+   "variant_ordinal": 2,
+   "group_post_id": "6769d68d11bbd512d60ce761",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "settleBalances",
+     "params": [
+      {
+       "name": "transactions",
+       "type": "list<[string,string,integer]>"
+      }
+     ],
+     "return": {
+      "type": "list<[string,string,integer]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "net balances, then repeatedly scan every party for the current largest creditor and debtor",
+    "candidate_design": "net balances into a hash map, then a max-heap of creditors and a max-heap of debtors keyed by (amount, name); pop both, transfer, push back the remainder",
+    "complexity_target": "O(t + p log p) time/O(p) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "13db8e6cfc56b77691a4fd40718655628d9a9f7160a8fc1c17a66459985fb34b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67872240e20f8f324213c297",
+   "title": "Evaluate String Expression",
+   "variant_ordinal": 1,
+   "group_post_id": "67872156e20f8f324213c296",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "evaluate",
+     "params": [
+      {
+       "name": "expression",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "strip spaces, then repeatedly replace the innermost add(...)/sub(...) call by its value with a regular expression",
+    "candidate_design": "single left-to-right scan with an explicit stack of open calls (name plus collected argument values)",
+    "complexity_target": "O(L) time/O(depth) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a80c69f5dd3680e6a497159592c46507db12cd66b6f2d9726391cb00ce36145f",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1a10e2c81f779dc6a23794",
+   "title": "Factory Network Cost Minimization",
+   "variant_ordinal": 1,
+   "group_post_id": "6a1a10d2c81f779dc6a23793",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minimumCost",
+     "params": [
+      {
+       "name": "costs",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every combination for tiny inputs",
+    "candidate_design": "sum of row minima",
+    "complexity_target": "O(total options) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "78843faf192e6c620bf3e546ca0c4e713d7999f8590b349e114eec77c12cd196",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1a1112c81f779dc6a23797",
+   "title": "Factory Network Cost Minimization",
+   "variant_ordinal": 2,
+   "group_post_id": "6a1a10d2c81f779dc6a23793",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minimumCost",
+     "params": [
+      {
+       "name": "costs",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every combination for tiny inputs and keep the cheapest valid one",
+    "candidate_design": "DP over factories keeping the best and second-best (cost, option index) of the previous row",
+    "complexity_target": "O(total options) time/O(max row) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "78843faf192e6c620bf3e546ca0c4e713d7999f8590b349e114eec77c12cd196",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a2b14eb97d3b4b32966cb00",
+   "title": "Factory Network Cost Minimization",
+   "variant_ordinal": 3,
+   "group_post_id": "6a1a10d2c81f779dc6a23793",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minimumCost",
+     "params": [
+      {
+       "name": "costs",
+       "type": "integer[][]"
+      },
+      {
+       "name": "edges",
+       "type": "list<[integer,integer]>"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every combination for tiny trees and keep the cheapest valid one",
+    "candidate_design": "tree DP in iterative post-order from root 0: dp[v][j] = costs[v][j] + sum over children of the best child value with a different index, using each child's best and second-best",
+    "complexity_target": "O(n + total options) time/O(n + total options) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "78843faf192e6c620bf3e546ca0c4e713d7999f8590b349e114eec77c12cd196",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68fbce5f378ce2f46141f920",
+   "title": "File System Collection",
+   "variant_ordinal": 1,
+   "group_post_id": "68fbce56378ce2f46141f91f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "FileSystemStats",
+     "constructor": {
+      "params": [
+       {
+        "name": "files",
+        "type": "string[]"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "getTotalSize",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getCollectionSize",
+       "params": [
+        {
+         "name": "collectionId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getTopCollections",
+       "params": [
+        {
+         "name": "k",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      },
+      {
+       "name": "setParent",
+       "params": [
+        {
+         "name": "childId",
+         "type": "string"
+        },
+        {
+         "name": "parentId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getHierarchySize",
+       "params": [
+        {
+         "name": "collectionId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "FileSystemStats"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal file list and parent map; every query rescans all files or walks the ancestor chain of every collection",
+    "candidate_design": "direct totals in a hash map, top-k order precomputed once (totals never change), hierarchy totals maintained incrementally by adding a child's hierarchy total to every ancestor on setParent",
+    "complexity_target": "O(F + C log C) construction, O(k) top-k, O(depth) setParent, O(1) other queries"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "bb728bd6815098dd0b0974783ed93acd76852eeb156b6d72838ac38f15d0403c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6962cbcef731aa3969ef5176",
+   "title": "File System Deletion",
+   "variant_ordinal": 1,
+   "group_post_id": "6962cbc7f731aa3969ef5175",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "deletePath",
+     "params": [
+      {
+       "name": "dirs",
+       "type": "string[]"
+      },
+      {
+       "name": "edges",
+       "type": "list<[string,string]>"
+      },
+      {
+       "name": "files",
+       "type": "string[]"
+      },
+      {
+       "name": "path",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "emulate the FileSystem API (delete refuses non-empty directories) and delete recursively on a small tree",
+    "candidate_design": "children lists from edges, then an iterative post-order traversal with an explicit stack of (directory, next child index)",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "65c6d05fbc2213d316733ca5ca10e03ad5999129e0f8a63f43a2973b73ab4629",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:696442bb3b4797da7459a055",
+   "title": "File System Directory Size Sum",
+   "variant_ordinal": 1,
+   "group_post_id": "696442b33b4797da7459a054",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "sumDirectorySizes",
+     "params": [
+      {
+       "name": "root",
+       "type": "node (file {name,size} | directory {name,children})"
+      },
+      {
+       "name": "limit",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every directory, a separate full traversal of its subtree to compute its total",
+    "candidate_design": "one iterative post-order traversal computing each directory total once from its children",
+    "complexity_target": "O(n) time/O(depth) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a905f05b505ff7a5484b98d206573ee43d2ab8db21bceb9c8cd775877d7d6b67",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:684ba2bf4023c4f502877de9",
+   "title": "Find Defendency Bottleneck",
+   "variant_ordinal": 1,
+   "group_post_id": "684b54b44023c4f502877db8",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findBottlenecks",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "edges",
+       "type": "list<[integer,integer]>"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "longest-path levels by repeated relaxation over all edges until stable, then count nodes per level",
+    "candidate_design": "Kahn topological sort processed frontier by frontier; a frontier of size 1 is a bottleneck",
+    "complexity_target": "O(n + e) time/O(n + e) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5974261d56005daaf65d024387a5341d63c0e6429df289ba32e23f9df042608a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67e4a80550b60b77022f3848",
+   "title": "Find Middle Course",
+   "variant_ordinal": 1,
+   "group_post_id": "67e4a41750b60b77022f3847",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findMiddleCourse",
+     "params": [
+      {
+       "name": "pairs",
+       "type": "list<[string,string]>"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rebuild the chain by repeatedly searching the pair list for the edge leaving the current course",
+    "candidate_design": "hash map next[prerequisite]; the start is the only prerequisite that is never a course; walk pairs.length/2 steps",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a8cc592a33e9c5485ee3e039ab7ebb3b02d159a78fa1019c39a2ca3830e54d06",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67e4adbf50b60b77022f384b",
+   "title": "Find Middle Course",
+   "variant_ordinal": 2,
+   "group_post_id": "67e4a41750b60b77022f3847",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findMiddleCourses",
+     "params": [
+      {
+       "name": "pairs",
+       "type": "list<[string,string]>"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every start-to-end path explicitly (tiny graphs) and collect index (L-1)//2",
+    "candidate_design": "topological order; for each course a bitset of possible distances from a start (forward) and to an end (backward); a course is a middle when some up-distance a and down-distance b satisfy b == a or b == a + 1",
+    "complexity_target": "O(e * n / w) time/O(n^2 / w) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a8cc592a33e9c5485ee3e039ab7ebb3b02d159a78fa1019c39a2ca3830e54d06",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68f93bebd7ff180d0ab95208",
+   "title": "Find Nearest Exit in Maze",
+   "variant_ordinal": 1,
+   "group_post_id": "68f7fb6786f7cb4953d41094",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "nearestExit",
+     "params": [
+      {
+       "name": "matrix",
+       "type": "integer[][]"
+      },
+      {
+       "name": "entrance",
+       "type": "integer[2]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "distances by repeated relaxation sweeps over the grid until nothing changes",
+    "candidate_design": "breadth-first search from the entrance with a flat array queue; stop at the first exit dequeued",
+    "complexity_target": "O(rows * cols) time/O(rows * cols) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c1e4e1d6bf926d2b986e641054ef4e7031c8e8bd024c49185117e959af19a118",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68f9a7290fa32e4d82f4fb89",
+   "title": "Find Nearest Exit in Maze",
+   "variant_ordinal": 2,
+   "group_post_id": "68f7fb6786f7cb4953d41094",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "nearestExitCell",
+     "params": [
+      {
+       "name": "matrix",
+       "type": "integer[][]"
+      },
+      {
+       "name": "entrance",
+       "type": "integer[2]"
+      }
+     ],
+     "return": {
+      "type": "integer[2]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "distances by repeated relaxation sweeps, then the minimum (distance, row, col) over all exits",
+    "candidate_design": "level-by-level breadth-first search; at the first level that contains exits, return the smallest (row, col) among them",
+    "complexity_target": "O(rows * cols) time/O(rows * cols) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c1e4e1d6bf926d2b986e641054ef4e7031c8e8bd024c49185117e959af19a118",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a5e8727bd09995a83107ec3",
+   "title": "Find Redeemable Offers",
+   "variant_ordinal": 1,
+   "group_post_id": "6a5e8723bd09995a83107ec2",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "redeemableOffers",
+     "params": [
+      {
+       "name": "offers",
+       "type": "list<[string,string,string,string]>"
+      },
+      {
+       "name": "events",
+       "type": "list<[string,string,string,string]>"
+      },
+      {
+       "name": "processingTime",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "list<[string,string[]]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every (user, offer) pair, replay the whole event list from the start",
+    "candidate_design": "one pass over events with a hash map keyed by (user, offer); then one row per sorted user over the active offers",
+    "complexity_target": "O(E + U log U + U * O) time/O(E) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "62b1fcccf208eb4b474f56ff0e8741748ca853a2989badebae4c461b1a3a990a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67e4ab3b50b60b77022f384a",
+   "title": "Find Shortest Unique Prefix",
+   "variant_ordinal": 1,
+   "group_post_id": "67e4aa9a50b60b77022f3849",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "shortestUniquePrefix",
+     "params": [
+      {
+       "name": "words",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each word, try every prefix length and test it against every other word",
+    "candidate_design": "sort word indices; the answer length is 1 + the longer common prefix with the sorted neighbours",
+    "complexity_target": "O(S log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0bdae9e14764a7e5c970a2f995bb521afb0de744013193a14165cd1785663461",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:687e85b47bd121d1f502da90",
+   "title": "Find Smallest Hub",
+   "variant_ordinal": 1,
+   "group_post_id": "687e85af7bd121d1f502da8f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findSmallestHub",
+     "params": [
+      {
+       "name": "capacities",
+       "type": "integer[]"
+      },
+      {
+       "name": "intervals",
+       "type": "string[][]"
+      },
+      {
+       "name": "requiredCapacity",
+       "type": "integer"
+      },
+      {
+       "name": "taskInterval",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "expand every interval into its overlap test against the task literally, then a full scan for the best hub",
+    "candidate_design": "one pass over hubs; skip hubs with too little capacity before parsing their intervals; keep the best (capacity, index)",
+    "complexity_target": "O(n + total intervals) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "51c1bab394357e48df9d2dc56d0dd47a4fe358da446aa065d1b273e31f8f5030",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67707837366afdc1233e4ff7",
+   "title": "Find Special Sequence Pairs",
+   "variant_ordinal": 1,
+   "group_post_id": "67707582366afdc1233e4ff6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countSpecialPairs",
+     "params": [
+      {
+       "name": "sequences",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "compare every pair (i, j) directly",
+    "candidate_design": "hash map of counts of earlier sequences; for each j add the count of its reverse complement, then record it",
+    "complexity_target": "O(S) time/O(S) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6187637af34b29e32fc99ac644b366b90fbf8a8849c6c50210cfc5d47d57e2e1",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68acfc391bf7d2097f647f71",
+   "title": "Find Users with Valid Login Sessions",
+   "variant_ordinal": 1,
+   "group_post_id": "68acfb6c1bf7d2097f647f6f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findValidUsers",
+     "params": [
+      {
+       "name": "logs",
+       "type": "string[]"
+      },
+      {
+       "name": "maxTime",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per user, filter that user's logs from the full list and replay them",
+    "candidate_design": "one pass with a hash map of open signin times and a set of valid users, then sort",
+    "complexity_target": "O(n + u log u) time/O(u) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "f015bdcc0cbcac6aeb3cbd3cd8462f376ed0c24e52bd9437aabc6549d52a6ca4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6781dbee3cd890ccd3798fc0",
+   "title": "Find the Nearest City",
+   "variant_ordinal": 1,
+   "group_post_id": "6781bdae3cd890ccd3798fbf",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "nearestCities",
+     "params": [
+      {
+       "name": "cities",
+       "type": "string[]"
+      },
+      {
+       "name": "xs",
+       "type": "integer[]"
+      },
+      {
+       "name": "ys",
+       "type": "integer[]"
+      },
+      {
+       "name": "queries",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each query, scan every city",
+    "candidate_design": "group cities by x (sorted by y) and by y (sorted by x); a query only needs the adjacent entries in its two groups",
+    "complexity_target": "O((n + q) log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ab6a516258c80424e04ce45a0e303bbf9088fcf3840ec7dd7157d2530144fbcc",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67dcd82499f4f89b276f188a",
+   "title": "Find Shortest Path in Matrix",
+   "variant_ordinal": 1,
+   "group_post_id": "67dcd81b99f4f89b276f1889",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "shortestPath",
+     "params": [
+      {
+       "name": "grid",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "distances by repeated relaxation sweeps over the grid until stable",
+    "candidate_design": "breadth-first search with a flat array queue over 8 neighbours",
+    "complexity_target": "O(m * n) time/O(m * n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "79de4d72d26fa288275f6f24701f9168cf1c93f7903d957489cfe5744019820d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}
