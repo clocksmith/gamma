@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-case-design-summary.v1",
+ "domain_basis": "INFERRED bounds from the spec inference, not official constraints",
+ "include_maximum_counts": {
+  "hack2hire:68b996c98c4a0a9996afdd81": 257,
+  "hack2hire:6a330e686849fecc81440a3c": 261,
+  "hack2hire:67f5703f83ba2e5f057e6dfb": 257,
+  "hack2hire:67f8222b1d70a71460925c53": 257,
+  "hack2hire:699f70796e73e4abccc9b539": 257,
+  "hack2hire:67a2d68216a8465483dca727": 260,
+  "hack2hire:68b975348c4a0a9996afdd79": 256,
+  "hack2hire:67fa9534ba41b3368f4e5851": 258,
+  "hack2hire:67fa954aba41b3368f4e5852": 258,
+  "hack2hire:678d7c57fa7ce9616e190fb5": 258,
+  "hack2hire:69a3a0426e73e4abccc9c0e9": 263,
+  "hack2hire:68ad7692cdaebe9459ce9a78": 255,
+  "hack2hire:67a43f105141b0ac3b8be4df": 258,
+  "hack2hire:69499ed489ec36a1b1e2c13f": 253,
+  "hack2hire:6949a92289ec36a1b1e2c15c": 257,
+  "hack2hire:6949b64a89ec36a1b1e2c16d": 255,
+  "hack2hire:6a373b356849fecc81442862": 260,
+  "hack2hire:6a373b366849fecc81442863": 259,
+  "hack2hire:69ff8062574d87bc49006e92": 263,
+  "hack2hire:69d17a8817b72775cc49bfe0": 255
+ },
+ "total_rows_per_language": 5157,
+ "all_generated_arguments_domain_valid": true,
+ "unique_import_loader_collision_control": "file-local spec_from_file_location names prefixed gamma_h2h08a_",
+ "runtime_transport_assessment": "pending coordinator; unchanged resource limits; maximum JSON nesting of any argument is 5 (BookingSystem traces), below the 200 cap",
+ "resource_note": "author-local peak RSS: 311 MB for the whole python3 candidate run including case generation; 135 MB for node --jitless on the heaviest single rows; largest argument JSON 5.4 MB",
+ "post_freeze_amendments": [
+  {
+   "file": "cases.py",
+   "from_sha256": "84d3a1a9a5d4e208ce08b0500969d11d65ec833a2aca6ffdd3a72b3f39a9c973",
+   "to_sha256": "61a01e1ed220d9463cfd668d4a2231da506160f3dbf8e77668cf20928ae8ef3d",
+   "reason": "Analytic-maximum DetectionSystem row \"every IP twice, window 1e9\": the frozen construction built the second-half IP from i % 256 instead of (i % 50000) % 256, so the IPs did not repeat as the stated expectation assumed. Both the Python candidate and oracles.ref_bot (called directly; each IP has at most two requests) gave the same output on the frozen row, and both match the stated expectation on the corrected construction. Only that construction line changed; no reference, validator, contract, design or expected value changed.",
+   "found_by": "first python candidate run"
+  }
+ ]
+}

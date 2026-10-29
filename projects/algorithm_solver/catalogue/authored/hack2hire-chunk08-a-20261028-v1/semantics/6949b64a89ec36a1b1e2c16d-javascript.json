@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6949b64a89ec36a1b1e2c16d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "transactions"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "billingHistory",
+  "params": [
+   {
+    "name": "transactions",
+    "type": "list<string[5]>"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per user, collect its rows, sort them with the full key and replay with running maximum",
+  "candidate_design": "one global sort of all rows by (timestamp, transactionId), then a single replay keeping running balance and peak per user in hash maps",
+  "complexity_target": "O(t log t) time/O(t) space"
+ },
+ "source_sha256": "b5d63c0abbe90bd6204392481c24c0b96782a7afa6d954971c187e221d9a1059",
+ "wrapper": "named export billingHistory"
+}

@@ -1,0 +1,330 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a373b2b6849fecc81442861:6a373b366849fecc81442863:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/17"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a373b2b6849fecc81442861.json",
+   "sha256": "eba6e4be2a84d9e090a65f757e6081e689c2d270d80a226a0df8b6f76b9377c0",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:6a373b366849fecc81442863"
+  }
+ ],
+ "problemId": "hack2hire:6a373b2b6849fecc81442861",
+ "variantId": "6a373b366849fecc81442863",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: one-instruction repair",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:6a373b366849fecc81442863/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "instructions is a list of strings \"<op> <value>\" with op in plus, next, jump and value a signed decimal integer. Execution starts at index 0 with accumulator 0. plus x adds x to the accumulator and moves to the next index; next x moves to the next index (x ignored); jump x moves to index + x. Level 2: the program as given does not terminate (it repeats an instruction, or leaves the range at an index other than len). Switch exactly one instruction, jump to next or next to jump (keeping its value), so that execution reaches index len exactly without repeating an instruction. Return [switched index, accumulator at termination] for the smallest index that works, or [-1, 0] if none does.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "instructions is a list of strings \"<op> <value>\" with op in plus, next, jump and value a signed decimal integer.",
+   "Execution starts at index 0 with accumulator 0.",
+   "plus x adds x to the accumulator and moves to the next index; next x moves to the next index (x ignored); jump x moves to index + x.",
+   "Level 2: the program as given does not terminate (it repeats an instruction, or leaves the range at an index other than len).",
+   "Switch exactly one instruction, jump to next or next to jump (keeping its value), so that execution reaches index len exactly without repeating an instruction.",
+   "Return [switched index, accumulator at termination] for the smallest index that works, or [-1, 0] if none does."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= instructions.length <= 1e5",
+   "same instruction format as level 1",
+   "the unmodified program does not reach index len"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:6a373b366849fecc81442863/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: instructions \"<operation> <value>\" with plus/next/jump semantics and a global accumulator; find where execution first starts repeating; algorithmTags: SIMULATION; codingQuestions (variant count/order); preview response sha256 c87b798788f7afaddbbbcd2182a093587fae17ad18665825817dbcdc41f25717"
+   },
+   {
+    "statement": "Uncertainty: high: the bootloader setting and the \"repair\" title suggest switching one jump/next; the termination condition (reaching exactly len), the smallest-index tie rule and the [-1, 0] failure value are inferred",
+    "basis": "the public group preview is partial (693 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = detect the first repeated instruction, 2 = repair the program by switching one jump/next so it terminates",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/17/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/17/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/17/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which instructions may be switched?",
+   "If several switches work, which is reported?",
+   "Does leaving the range at any index other than len count as terminating?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:6a373b366849fecc81442863/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "jump 0"
+     ]
+    ],
+    "output": [
+     0,
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "jump +1000000",
+      "jump 4",
+      "jump 4",
+      "jump -1000000",
+      "next 0",
+      "jump 4",
+      "next 4",
+      "jump -1000000"
+     ]
+    ],
+    "output": [
+     -1,
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:6a373b366849fecc81442863/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def repairProgram(instructions) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/6a373b366849fecc81442863-python.json",
+     "inferredInterface": {
+      "name": "repairProgram",
+      "params": [
+       {
+        "name": "instructions",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/6a373b366849fecc81442863-python.json",
+      "sha256": "e60899e9be338342d06dfd77f4cd5f4bfe4042b1cf799cdae13f7cc4c0c5e39a",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function repairProgram(instructions) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/6a373b366849fecc81442863-javascript.json",
+     "inferredInterface": {
+      "name": "repairProgram",
+      "params": [
+       {
+        "name": "instructions",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/6a373b366849fecc81442863-javascript.json",
+      "sha256": "d2823659cd779581c110f5f6fa4f86ee7210cf640b5b74a5877a824c156b42f2",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/17/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/17/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

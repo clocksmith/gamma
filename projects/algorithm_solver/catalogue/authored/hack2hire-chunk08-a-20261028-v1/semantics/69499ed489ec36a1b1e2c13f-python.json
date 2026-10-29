@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69499ed489ec36a1b1e2c13f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "transactions"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "reconstructBilling",
+  "params": [
+   {
+    "name": "transactions",
+    "type": "list<string[5]>"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per user, rescan every row and add or subtract its amounts",
+  "candidate_design": "one pass into a hash map of balances, then sort the user ids",
+  "complexity_target": "O(t + u log u) time/O(u) space"
+ },
+ "source_sha256": "e8b1b23ae44b3d85a97fe2218f1800554d97dee2a62906f0d765e064926fa37e",
+ "wrapper": "Solution.reconstructBilling"
+}

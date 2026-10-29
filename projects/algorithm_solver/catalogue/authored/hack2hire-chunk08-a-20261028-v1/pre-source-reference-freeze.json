@@ -1,0 +1,32 @@
+{
+  "schema": "gamma.hack2hire-chunk08-a-pre-source-freeze.v1",
+  "at": "2026-10-29T04:49:37.359653+00:00",
+  "files": {
+    "oracles.py": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "test_oracles.py": "60984cb2d31fb49e82b74e42250664b8825c6f7ff3f5aa736194fb26605a761e",
+    "cases.py": "84d3a1a9a5d4e208ce08b0500969d11d65ec833a2aca6ffdd3a72b3f39a9c973",
+    "contracts.json": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "design.json": "f37f477e0bad9428d6ed500482f9276cef2c5f07c4560807fcf4668f0719ef07"
+  },
+  "candidate_sources_exist": false,
+  "candidate_executions": 0,
+  "source_free_tests_passed": 18,
+  "note": "References, inferred contracts, case generator and designs frozen before any candidate source was written.",
+  "spec_basis": "inferred (claude-opus-5-5 subagent, 2026-10-29)",
+  "amendments": [
+    {
+      "file": "cases.py",
+      "from_sha256": "84d3a1a9a5d4e208ce08b0500969d11d65ec833a2aca6ffdd3a72b3f39a9c973",
+      "to_sha256": "61a01e1ed220d9463cfd668d4a2231da506160f3dbf8e77668cf20928ae8ef3d",
+      "reason": "Analytic-maximum DetectionSystem row \"every IP twice, window 1e9\": the frozen construction built the second-half IP from i % 256 instead of (i % 50000) % 256, so the IPs did not repeat as the stated expectation assumed. Both the Python candidate and oracles.ref_bot (called directly; each IP has at most two requests) gave the same output on the frozen row, and both match the stated expectation on the corrected construction. Only that construction line changed; no reference, validator, contract, design or expected value changed.",
+      "found_by": "first python candidate run"
+    }
+  ],
+  "current_sha256": {
+    "oracles.py": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "test_oracles.py": "60984cb2d31fb49e82b74e42250664b8825c6f7ff3f5aa736194fb26605a761e",
+    "cases.py": "61a01e1ed220d9463cfd668d4a2231da506160f3dbf8e77668cf20928ae8ef3d",
+    "contracts.json": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "design.json": "f37f477e0bad9428d6ed500482f9276cef2c5f07c4560807fcf4668f0719ef07"
+  }
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68b996c98c4a0a9996afdd81",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "transactions",
+  "refundAmount"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "allocateRefund",
+  "params": [
+   {
+    "name": "transactions",
+    "type": "list<string[6]>"
+   },
+   {
+    "name": "refundAmount",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "net each payment by rescanning all refund rows, sort payments by the full key, allocate greedily",
+  "candidate_design": "one pass summing refunds per linked payment in a hash map, one sort of the payments by (type rank, -timestamp, id), greedy allocation that stops once nothing remains",
+  "complexity_target": "O(t log t) time/O(t) space"
+ },
+ "source_sha256": "b690f64c015effe6aac3f22a4e4684258f41bd5975f7376317735f5ecc1b9b57",
+ "wrapper": "named export allocateRefund"
+}

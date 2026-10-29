@@ -1,0 +1,1061 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk08-a (16 Hack2Hire groups, 20 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:68b996c98c4a0a9996afdd81",
+   "title": "Payment Refund Allocation",
+   "variant_ordinal": 1,
+   "group_post_id": "68b996908c4a0a9996afdd80",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "allocateRefund",
+     "params": [
+      {
+       "name": "transactions",
+       "type": "list<string[6]>"
+      },
+      {
+       "name": "refundAmount",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "list<[string,integer]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "net each payment by rescanning all refund rows, sort payments by the full key, allocate greedily",
+    "candidate_design": "one pass summing refunds per linked payment in a hash map, one sort of the payments by (type rank, -timestamp, id), greedy allocation that stops once nothing remains",
+    "complexity_target": "O(t log t) time/O(t) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "caad3b5c8395e59182a5ed681eb5ccc0f1a183564f2b63d4499fb434988b7faa",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a330e686849fecc81440a3c",
+   "title": "Prefix Frequency Partition",
+   "variant_ordinal": 1,
+   "group_post_id": "6a330e616849fecc81440a3b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "validPrefixLengths",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every divisor L, sort each block and compare it with the sorted prefix",
+    "candidate_design": "per-letter prefix counts; for every divisor L compare each block's 26 counts with the prefix counts, stopping at the first mismatch",
+    "complexity_target": "O(26 * n * d(n)/L summed over divisors) <= O(26 * sigma(n)) time/O(26n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c76df7fd8fa0de0e405cb43a6607ba28c426c03e676d2d520adbfd382d8dd966",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67f5703f83ba2e5f057e6dfb",
+   "title": "Prefix Search I",
+   "variant_ordinal": 1,
+   "group_post_id": "67f56cb283ba2e5f057e6df8",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "topKBusinessNames",
+     "params": [
+      {
+       "name": "bizNames",
+       "type": "string[]"
+      },
+      {
+       "name": "prefix",
+       "type": "string"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "lower-case every word, collect all matches with their keys and sort the whole list",
+    "candidate_design": "scan each name once for its first matching word, keep the best k (position, name) keys with heapq.nsmallest / a bounded selection, then order them",
+    "complexity_target": "O(total characters + m log k) time/O(m) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "991ffcb8c572ea7fa5291a8ecbff2bc1c874f4e05379c71596b83fc2c8811319",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67f8222b1d70a71460925c53",
+   "title": "Prefix Search II",
+   "variant_ordinal": 1,
+   "group_post_id": "67f8221d1d70a71460925c52",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "searchSuggestions",
+     "params": [
+      {
+       "name": "bizNames",
+       "type": "string[]"
+      },
+      {
+       "name": "searchWord",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "list<string[]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every prefix, lower-case and test every word of every name with startswith, then sort",
+    "candidate_design": "a trie over the lower-cased words storing (name, word index) at each node; walk searchWord down the trie and, per node, keep the smallest word index per name, then sort",
+    "complexity_target": "O(total characters + sum over queries of matches log matches) time/O(total characters) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "47e2093ab0874fdfef31ba2060bf63fa1732a379080b6ef704ca86a8fa9ec08a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:699f70796e73e4abccc9b539",
+   "title": "Priority Expiry LRU Cache",
+   "variant_ordinal": 1,
+   "group_post_id": "699f70716e73e4abccc9b537",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "PriorityExpiryLRUCache",
+     "constructor": {
+      "params": [
+       {
+        "name": "capacity",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "get",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "currentTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "set",
+       "params": [
+        {
+         "name": "key",
+         "type": "string"
+        },
+        {
+         "name": "value",
+         "type": "integer"
+        },
+        {
+         "name": "priority",
+         "type": "integer"
+        },
+        {
+         "name": "expiryTime",
+         "type": "integer"
+        },
+        {
+         "name": "currentTime",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      }
+     ]
+    },
+    "native_class": "PriorityExpiryLRUCache"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "a plain dict of items with an access counter; eviction scans every item for the minimum key",
+    "candidate_design": "hash map of items plus two lazy min-heaps keyed by (expiryTime, access stamp) and (priority, access stamp); stale heap entries are skipped by comparing the stored stamp",
+    "complexity_target": "O(log n) amortised per operation/O(n + operations) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "341cb37ecaa5c04b574d921d7a79b439bc4e8f405542e44b87701adb491fb215",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67a2d68216a8465483dca727",
+   "title": "Process Queue",
+   "variant_ordinal": 1,
+   "group_post_id": "67a2d49816a8465483dca726",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processQueue",
+     "params": [
+      {
+       "name": "wait",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal list simulation: pop the front, then filter the list by wait > t, once per second",
+    "candidate_design": "count processes by wait value (capped at n), keep a front pointer that skips processed or expired entries, and update the alive count in O(1) amortised per second",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "d33e15b86ebe82fa44e4d1a7a81a317440e9fdc3c9bbc2ae5b3aac2140671c36",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68b975348c4a0a9996afdd79",
+   "title": "Property Booking System",
+   "variant_ordinal": 1,
+   "group_post_id": "68b975288c4a0a9996afdd78",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "BookingSystem",
+     "constructor": {
+      "params": [
+       {
+        "name": "properties",
+        "type": "list<string[3]>"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "book",
+       "params": [
+        {
+         "name": "neighborhood",
+         "type": "string"
+        },
+        {
+         "name": "groupSize",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "BookingSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every subset of the neighborhood's free properties as a bitmask and take the minimum of (size, total, sorted ids)",
+    "candidate_design": "free properties per neighborhood sorted by id; the smallest feasible size comes from the largest capacities; backtracking over combinations of that size in id order keeps the first one with the smallest total",
+    "complexity_target": "O(C(m, s) * s) per booking for m free properties in the neighborhood/O(p) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ea43bcfbe018338eb7e99ae62d7d62418c1cfe4991ce89542069ba878cafe755",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67fa9534ba41b3368f4e5851",
+   "title": "Random User Pairing",
+   "variant_ordinal": 1,
+   "group_post_id": "67fa952bba41b3368f4e5850",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "pairUsers",
+     "params": [
+      {
+       "name": "users",
+       "type": "string[]"
+      },
+      {
+       "name": "randomInts",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "list<string[]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal list pool: list assignment from the end and pop for every draw",
+    "candidate_design": "index array pool with swap-with-last removal; each draw is O(1)",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c03b34e1a515ebb65efdaab32604539a19d75bed5ba8c60508c9381c6f9887b4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67fa954aba41b3368f4e5852",
+   "title": "Random User Pairing",
+   "variant_ordinal": 2,
+   "group_post_id": "67fa952bba41b3368f4e5850",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "pairAcrossGroups",
+     "params": [
+      {
+       "name": "users",
+       "type": "list<[string,string]>"
+      }
+     ],
+     "return": {
+      "type": "list<string[]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per pair, scan every group for the two with the most unpaired users",
+    "candidate_design": "queue of members per group in input order and a max-heap keyed by (-unpaired count, group name); pop two, pair, push back non-empty groups",
+    "complexity_target": "O(n log g) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c03b34e1a515ebb65efdaab32604539a19d75bed5ba8c60508c9381c6f9887b4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:678d7c57fa7ce9616e190fb5",
+   "title": "Range Iterator",
+   "variant_ordinal": 1,
+   "group_post_id": "678d75bafa7ce9616e190fb4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "RangeIterator",
+     "constructor": {
+      "params": [
+       {
+        "name": "start",
+        "type": "integer"
+       },
+       {
+        "name": "end",
+        "type": "integer"
+       },
+       {
+        "name": "step",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "hasNext",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "next",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "RangeIterator"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "materialise the whole range into a list up front (bounded by the reference budget) and walk an index",
+    "candidate_design": "keep only the current value; hasNext compares it with end in the direction of step",
+    "complexity_target": "O(1) per call/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "06b886d98425a1592420ff7c5bbbeabc4e5b61d98fbf56e884cac88b2078e989",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69a3a0426e73e4abccc9c0e9",
+   "title": "Reach End in Grid With Teleports",
+   "variant_ordinal": 1,
+   "group_post_id": "69a39f116e73e4abccc9c0e6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "reachEnd",
+     "params": [
+      {
+       "name": "grid",
+       "type": "integer[][]"
+      },
+      {
+       "name": "teleports",
+       "type": "list<integer[4]>"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal walk with a step budget of n*m + 1 and a list search for teleport entrances",
+    "candidate_design": "hash map from entrance cell index to exit cell index, a visited byte array, and a single walk that stops on the destination, a block, or a revisit",
+    "complexity_target": "O(n*m + t) time/O(n*m + t) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "1c0e5c7ff3aa75a4e03cc4cce014b577fec89c4ac5e831c28c9437afbda3a33b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68ad7692cdaebe9459ce9a78",
+   "title": "Realtime Bot IP Detection",
+   "variant_ordinal": 1,
+   "group_post_id": "68ad766bcdaebe9459ce9a77",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "DetectionSystem",
+     "constructor": {
+      "params": [
+       {
+        "name": "maxRequests",
+        "type": "integer"
+       },
+       {
+        "name": "windowSeconds",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "isBot",
+       "params": [
+        {
+         "name": "ip",
+         "type": "string"
+        },
+        {
+         "name": "timestamp",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "DetectionSystem"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "store every timestamp per IP and count the window by scanning that IP's whole list",
+    "candidate_design": "per-IP queue of timestamps; drop entries older than timestamp - windowSeconds + 1 from the front, then compare the queue length with maxRequests",
+    "complexity_target": "O(1) amortised per request/O(requests) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "2f2739de21df8655360cc5f2c3a404368713069d03729e402d0ea60377b82c5c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67a43f105141b0ac3b8be4df",
+   "title": "Recipes From Ingredients",
+   "variant_ordinal": 1,
+   "group_post_id": "67a43ebb5141b0ac3b8be4de",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countRecipes",
+     "params": [
+      {
+       "name": "recipes",
+       "type": "string[]"
+      },
+      {
+       "name": "ingredients",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per recipe, per distinct character, count occurrences in both strings with str.count",
+    "candidate_design": "one 26-entry supply count; per recipe a 26-entry need count compared against it",
+    "complexity_target": "O(total characters) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "728ce5106b6887fe5ecc978591bb46de2279614d37a96f08123265306550b446",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69499ed489ec36a1b1e2c13f",
+   "title": "Reconstruct Billing Status",
+   "variant_ordinal": 1,
+   "group_post_id": "69499eb489ec36a1b1e2c13e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "reconstructBilling",
+     "params": [
+      {
+       "name": "transactions",
+       "type": "list<string[5]>"
+      }
+     ],
+     "return": {
+      "type": "list<[string,integer]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per user, rescan every row and add or subtract its amounts",
+    "candidate_design": "one pass into a hash map of balances, then sort the user ids",
+    "complexity_target": "O(t + u log u) time/O(u) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4dbe50c2386c0f53aefa4a656eb2e8c92e8c0ed62fd24eba5c5fbf7f0c8d024a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6949a92289ec36a1b1e2c15c",
+   "title": "Reconstruct Billing Status",
+   "variant_ordinal": 2,
+   "group_post_id": "69499eb489ec36a1b1e2c13e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "billingStatusAt",
+     "params": [
+      {
+       "name": "transactions",
+       "type": "list<string[5]>"
+      },
+      {
+       "name": "timestamp",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "list<[string,integer]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "filter the rows, then per user rescan the filtered rows",
+    "candidate_design": "one pass that skips rows after the timestamp and accumulates into a hash map, then sort the user ids",
+    "complexity_target": "O(t + u log u) time/O(u) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4dbe50c2386c0f53aefa4a656eb2e8c92e8c0ed62fd24eba5c5fbf7f0c8d024a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6949b64a89ec36a1b1e2c16d",
+   "title": "Reconstruct Billing Status",
+   "variant_ordinal": 3,
+   "group_post_id": "69499eb489ec36a1b1e2c13e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "billingHistory",
+     "params": [
+      {
+       "name": "transactions",
+       "type": "list<string[5]>"
+      }
+     ],
+     "return": {
+      "type": "list<[string,integer,integer]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per user, collect its rows, sort them with the full key and replay with running maximum",
+    "candidate_design": "one global sort of all rows by (timestamp, transactionId), then a single replay keeping running balance and peak per user in hash maps",
+    "complexity_target": "O(t log t) time/O(t) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4dbe50c2386c0f53aefa4a656eb2e8c92e8c0ed62fd24eba5c5fbf7f0c8d024a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a373b356849fecc81442862",
+   "title": "Repair Bootloader Program",
+   "variant_ordinal": 1,
+   "group_post_id": "6a373b2b6849fecc81442861",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findLoop",
+     "params": [
+      {
+       "name": "instructions",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "parse every instruction anew at each step and keep a list of executed indices searched linearly",
+    "candidate_design": "parse once into opcode and value arrays; walk with a visited byte array",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c87b798788f7afaddbbbcd2182a093587fae17ad18665825817dbcdc41f25717",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a373b366849fecc81442863",
+   "title": "Repair Bootloader Program",
+   "variant_ordinal": 2,
+   "group_post_id": "6a373b2b6849fecc81442861",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "repairProgram",
+     "params": [
+      {
+       "name": "instructions",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every switchable index, simulate the modified program with a visited set, keep the smallest that terminates",
+    "candidate_design": "reverse-edge search from index len marks every index that already terminates; along the original path, a switch at i works exactly when its new successor is marked (or is len); take the smallest such i and replay once",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c87b798788f7afaddbbbcd2182a093587fae17ad18665825817dbcdc41f25717",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69ff8062574d87bc49006e92",
+   "title": "Restore String with Target Digit Sum",
+   "variant_ordinal": 1,
+   "group_post_id": "69ff805d574d87bc49006e91",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "restoreString",
+     "params": [
+      {
+       "name": "pattern",
+       "type": "string"
+      },
+      {
+       "name": "targetSum",
+       "type": "integer"
+      },
+      {
+       "name": "maxVal",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "depth-first backtracking over the ? positions in order, digits tried from 0 upward, with no pruning beyond the bounded input size",
+    "candidate_design": "greedy left to right: give each ? the smallest digit that still leaves a reachable remainder (0 <= rest <= remaining ? count * maxVal)",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6a838ddb33f8f6905b5485594a3578e49eb7e9ce28df7103b9992ab7b565f67f",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69d17a8817b72775cc49bfe0",
+   "title": "Select Table and Set Color",
+   "variant_ordinal": 1,
+   "group_post_id": "69d17a8217b72775cc49bfdf",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "Table",
+     "constructor": {
+      "params": [
+       {
+        "name": "numRows",
+        "type": "integer"
+       },
+       {
+        "name": "numColumns",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "selectTable",
+       "params": [],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "selectRow",
+       "params": [
+        {
+         "name": "row",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "selectCell",
+       "params": [
+        {
+         "name": "row",
+         "type": "integer"
+        },
+        {
+         "name": "col",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "setColor",
+       "params": [
+        {
+         "name": "color",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getColor",
+       "params": [
+        {
+         "name": "row",
+         "type": "integer"
+        },
+        {
+         "name": "col",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      }
+     ]
+    },
+    "native_class": "Table"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal two-dimensional grid; setColor paints every selected cell",
+    "candidate_design": "lazy paint: a stamped table color, stamped row colors and stamped cell colors in hash maps; getColor returns the color with the latest stamp",
+    "complexity_target": "O(1) per operation/O(operations) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a41f1165c07c61a5a24163b87b2e11231ff58c7685a0abd0a52317a069179898",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

@@ -1,0 +1,558 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69d17a8217b72775cc49bfdf:69d17a8817b72775cc49bfe0:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/19"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69d17a8217b72775cc49bfdf.json",
+   "sha256": "bee042dfbdb848640d61b0e112dbab6a4b274b466cf578dfc64f9a4670fb14fc",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:69d17a8817b72775cc49bfe0"
+  }
+ ],
+ "problemId": "hack2hire:69d17a8217b72775cc49bfdf",
+ "variantId": "69d17a8817b72775cc49bfe0",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: lazy table/row/cell coloring",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:69d17a8817b72775cc49bfe0/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Table(numRows, numColumns) starts with every cell colored \"\". selectTable(), selectRow(row) and selectCell(row, col) each replace the current selection (the whole table, one row, or one cell). setColor(color) colors every cell of the current selection (the selection stays active; with no selection yet it does nothing). getColor(row, col) returns the cell's current color.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Table(numRows, numColumns) starts with every cell colored \"\".",
+   "selectTable(), selectRow(row) and selectCell(row, col) each replace the current selection (the whole table, one row, or one cell).",
+   "setColor(color) colors every cell of the current selection (the selection stays active; with no selection yet it does nothing).",
+   "getColor(row, col) returns the cell's current color."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= numRows, numColumns <= 1e5",
+   "up to 1e5 calls",
+   "0 <= row < numRows, 0 <= col < numColumns",
+   "colors match [a-z0-9#]{1,10}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:69d17a8817b72775cc49bfe0/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: Table(numRows, numColumns), selectTable(), select a row or a cell, one active selection replaced by each select call, set color on the selection, query a cell color, initial color \"\"; algorithmTags: DESIGN, HASH_TABLE; preview response sha256 a41f1165c07c61a5a24163b87b2e11231ff58c7685a0abd0a52317a069179898"
+   },
+   {
+    "statement": "Uncertainty: medium: the class, selectTable, the selection kinds, replacement and the initial \"\" are in the preview; the method names selectRow/selectCell/setColor/getColor, 0-based indices and setColor without a selection being a no-op are inferred",
+    "basis": "the public group preview is partial (799 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/19/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/19/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/19/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does setColor do before anything is selected?",
+   "Does setColor clear the selection?",
+   "Are indices 0-based?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:69d17a8817b72775cc49bfe0/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "Table",
+      "setColor"
+     ],
+     [
+      [
+       3,
+       3
+      ],
+      [
+       "z"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "Table",
+      "getColor",
+      "setColor",
+      "selectTable",
+      "setColor",
+      "selectTable",
+      "getColor",
+      "getColor",
+      "getColor",
+      "selectTable",
+      "setColor",
+      "setColor",
+      "getColor",
+      "selectCell"
+     ],
+     [
+      [
+       3,
+       3
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       "blue"
+      ],
+      [],
+      [
+       "#00ff00"
+      ],
+      [],
+      [
+       1,
+       0
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       2,
+       2
+      ],
+      [],
+      [
+       "red"
+      ],
+      [
+       "red"
+      ],
+      [
+       2,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     "",
+     null,
+     null,
+     null,
+     null,
+     "#00ff00",
+     "#00ff00",
+     "#00ff00",
+     null,
+     null,
+     null,
+     "red",
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:69d17a8817b72775cc49bfe0/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Table:\n    def __init__(self, numRows, numColumns)\n    def selectTable(self) -> void\n    def selectRow(self, row) -> void\n    def selectCell(self, row, col) -> void\n    def setColor(self, color) -> void\n    def getColor(self, row, col) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/69d17a8817b72775cc49bfe0-python.json",
+     "inferredInterface": {
+      "classname": "Table",
+      "constructor": {
+       "params": [
+        {
+         "name": "numRows",
+         "type": "integer"
+        },
+        {
+         "name": "numColumns",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "selectTable",
+        "params": [],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "selectRow",
+        "params": [
+         {
+          "name": "row",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "selectCell",
+        "params": [
+         {
+          "name": "row",
+          "type": "integer"
+         },
+         {
+          "name": "col",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "setColor",
+        "params": [
+         {
+          "name": "color",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getColor",
+        "params": [
+         {
+          "name": "row",
+          "type": "integer"
+         },
+         {
+          "name": "col",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/69d17a8817b72775cc49bfe0-python.json",
+      "sha256": "ff56c980ce73d7a8c1588276b1f50227dd4218131b9435247ba4b1dee1b98996",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Table {\n  constructor(numRows, numColumns)\n  selectTable() /* -> void */\n  selectRow(row) /* -> void */\n  selectCell(row, col) /* -> void */\n  setColor(color) /* -> void */\n  getColor(row, col) /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/69d17a8817b72775cc49bfe0-javascript.json",
+     "inferredInterface": {
+      "classname": "Table",
+      "constructor": {
+       "params": [
+        {
+         "name": "numRows",
+         "type": "integer"
+        },
+        {
+         "name": "numColumns",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "selectTable",
+        "params": [],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "selectRow",
+        "params": [
+         {
+          "name": "row",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "selectCell",
+        "params": [
+         {
+          "name": "row",
+          "type": "integer"
+         },
+         {
+          "name": "col",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "setColor",
+        "params": [
+         {
+          "name": "color",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getColor",
+        "params": [
+         {
+          "name": "row",
+          "type": "integer"
+         },
+         {
+          "name": "col",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/69d17a8817b72775cc49bfe0-javascript.json",
+      "sha256": "0f2de3478f272b749d9435b00d310953d9cd9a500e783f84d4126a0056ea5446",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/19/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/19/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

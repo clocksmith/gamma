@@ -1,0 +1,104 @@
+{
+ "problems": {
+  "hack2hire:68b996c98c4a0a9996afdd81": {
+   "reference": "net each payment by rescanning all refund rows, sort payments by the full key, allocate greedily",
+   "candidate_design": "one pass summing refunds per linked payment in a hash map, one sort of the payments by (type rank, -timestamp, id), greedy allocation that stops once nothing remains",
+   "complexity_target": "O(t log t) time/O(t) space"
+  },
+  "hack2hire:6a330e686849fecc81440a3c": {
+   "reference": "for every divisor L, sort each block and compare it with the sorted prefix",
+   "candidate_design": "per-letter prefix counts; for every divisor L compare each block's 26 counts with the prefix counts, stopping at the first mismatch",
+   "complexity_target": "O(26 * n * d(n)/L summed over divisors) <= O(26 * sigma(n)) time/O(26n) space"
+  },
+  "hack2hire:67f5703f83ba2e5f057e6dfb": {
+   "reference": "lower-case every word, collect all matches with their keys and sort the whole list",
+   "candidate_design": "scan each name once for its first matching word, keep the best k (position, name) keys with heapq.nsmallest / a bounded selection, then order them",
+   "complexity_target": "O(total characters + m log k) time/O(m) space"
+  },
+  "hack2hire:67f8222b1d70a71460925c53": {
+   "reference": "for every prefix, lower-case and test every word of every name with startswith, then sort",
+   "candidate_design": "a trie over the lower-cased words storing (name, word index) at each node; walk searchWord down the trie and, per node, keep the smallest word index per name, then sort",
+   "complexity_target": "O(total characters + sum over queries of matches log matches) time/O(total characters) space"
+  },
+  "hack2hire:699f70796e73e4abccc9b539": {
+   "reference": "a plain dict of items with an access counter; eviction scans every item for the minimum key",
+   "candidate_design": "hash map of items plus two lazy min-heaps keyed by (expiryTime, access stamp) and (priority, access stamp); stale heap entries are skipped by comparing the stored stamp",
+   "complexity_target": "O(log n) amortised per operation/O(n + operations) space"
+  },
+  "hack2hire:67a2d68216a8465483dca727": {
+   "reference": "literal list simulation: pop the front, then filter the list by wait > t, once per second",
+   "candidate_design": "count processes by wait value (capped at n), keep a front pointer that skips processed or expired entries, and update the alive count in O(1) amortised per second",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:68b975348c4a0a9996afdd79": {
+   "reference": "enumerate every subset of the neighborhood's free properties as a bitmask and take the minimum of (size, total, sorted ids)",
+   "candidate_design": "free properties per neighborhood sorted by id; the smallest feasible size comes from the largest capacities; backtracking over combinations of that size in id order keeps the first one with the smallest total",
+   "complexity_target": "O(C(m, s) * s) per booking for m free properties in the neighborhood/O(p) space"
+  },
+  "hack2hire:67fa9534ba41b3368f4e5851": {
+   "reference": "literal list pool: list assignment from the end and pop for every draw",
+   "candidate_design": "index array pool with swap-with-last removal; each draw is O(1)",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:67fa954aba41b3368f4e5852": {
+   "reference": "per pair, scan every group for the two with the most unpaired users",
+   "candidate_design": "queue of members per group in input order and a max-heap keyed by (-unpaired count, group name); pop two, pair, push back non-empty groups",
+   "complexity_target": "O(n log g) time/O(n) space"
+  },
+  "hack2hire:678d7c57fa7ce9616e190fb5": {
+   "reference": "materialise the whole range into a list up front (bounded by the reference budget) and walk an index",
+   "candidate_design": "keep only the current value; hasNext compares it with end in the direction of step",
+   "complexity_target": "O(1) per call/O(1) space"
+  },
+  "hack2hire:69a3a0426e73e4abccc9c0e9": {
+   "reference": "literal walk with a step budget of n*m + 1 and a list search for teleport entrances",
+   "candidate_design": "hash map from entrance cell index to exit cell index, a visited byte array, and a single walk that stops on the destination, a block, or a revisit",
+   "complexity_target": "O(n*m + t) time/O(n*m + t) space"
+  },
+  "hack2hire:68ad7692cdaebe9459ce9a78": {
+   "reference": "store every timestamp per IP and count the window by scanning that IP's whole list",
+   "candidate_design": "per-IP queue of timestamps; drop entries older than timestamp - windowSeconds + 1 from the front, then compare the queue length with maxRequests",
+   "complexity_target": "O(1) amortised per request/O(requests) space"
+  },
+  "hack2hire:67a43f105141b0ac3b8be4df": {
+   "reference": "per recipe, per distinct character, count occurrences in both strings with str.count",
+   "candidate_design": "one 26-entry supply count; per recipe a 26-entry need count compared against it",
+   "complexity_target": "O(total characters) time/O(1) extra space"
+  },
+  "hack2hire:69499ed489ec36a1b1e2c13f": {
+   "reference": "per user, rescan every row and add or subtract its amounts",
+   "candidate_design": "one pass into a hash map of balances, then sort the user ids",
+   "complexity_target": "O(t + u log u) time/O(u) space"
+  },
+  "hack2hire:6949a92289ec36a1b1e2c15c": {
+   "reference": "filter the rows, then per user rescan the filtered rows",
+   "candidate_design": "one pass that skips rows after the timestamp and accumulates into a hash map, then sort the user ids",
+   "complexity_target": "O(t + u log u) time/O(u) space"
+  },
+  "hack2hire:6949b64a89ec36a1b1e2c16d": {
+   "reference": "per user, collect its rows, sort them with the full key and replay with running maximum",
+   "candidate_design": "one global sort of all rows by (timestamp, transactionId), then a single replay keeping running balance and peak per user in hash maps",
+   "complexity_target": "O(t log t) time/O(t) space"
+  },
+  "hack2hire:6a373b356849fecc81442862": {
+   "reference": "parse every instruction anew at each step and keep a list of executed indices searched linearly",
+   "candidate_design": "parse once into opcode and value arrays; walk with a visited byte array",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6a373b366849fecc81442863": {
+   "reference": "try every switchable index, simulate the modified program with a visited set, keep the smallest that terminates",
+   "candidate_design": "reverse-edge search from index len marks every index that already terminates; along the original path, a switch at i works exactly when its new successor is marked (or is len); take the smallest such i and replay once",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:69ff8062574d87bc49006e92": {
+   "reference": "depth-first backtracking over the ? positions in order, digits tried from 0 upward, with no pruning beyond the bounded input size",
+   "candidate_design": "greedy left to right: give each ? the smallest digit that still leaves a reachable remainder (0 <= rest <= remaining ? count * maxVal)",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:69d17a8817b72775cc49bfe0": {
+   "reference": "literal two-dimensional grid; setColor paints every selected cell",
+   "candidate_design": "lazy paint: a stamped table color, stamped row colors and stamped cell colors in hash maps; getColor returns the color with the latest stamp",
+   "complexity_target": "O(1) per operation/O(operations) space"
+  }
+ }
+}

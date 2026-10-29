@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/design.json",
+   "sha256": "f37f477e0bad9428d6ed500482f9276cef2c5f07c4560807fcf4668f0719ef07",
+   "selector": "/problems/hack2hire:68b975348c4a0a9996afdd79"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+  }
+ ],
+ "problemId": "hack2hire:68b975288c4a0a9996afdd78",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-records/contract--contract_hack2hire_68b975288c4a0a9996afdd78_68b975348c4a0a9996afdd79_authored-v1.json",
+  "sha256": "eaf26e7b9c8205721c188508691fbaed141d71ff63382d1130cb8ca201f0da97"
+ },
+ "title": {
+  "status": "present",
+  "value": "free properties per neighborhood sorted by id; the smallest feasible size comes from the largest capacities; backtracking over combinations of that size in id order keeps the first one with the smallest total",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/design.json",
+    "sha256": "f37f477e0bad9428d6ed500482f9276cef2c5f07c4560807fcf4668f0719ef07",
+    "selector": "/problems/hack2hire:68b975348c4a0a9996afdd79/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "free properties per neighborhood sorted by id; the smallest feasible size comes from the largest capacities; backtracking over combinations of that size in id order keeps the first one with the smallest total. Complexity target: O(C(m, s) * s) per booking for m free properties in the neighborhood/O(p) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/design.json",
+    "sha256": "f37f477e0bad9428d6ed500482f9276cef2c5f07c4560807fcf4668f0719ef07",
+    "selector": "/problems/hack2hire:68b975348c4a0a9996afdd79"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Few properties per neighborhood, exact optimal choice needed"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Exponential in the neighborhood size; a capacity-indexed DP would scale further but makes the id tie rule harder"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "booked properties are never offered again",
+   "the returned set has total capacity >= groupSize"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "The smallest possible number of properties is found by adding the largest capacities first.",
+   "Only sets of exactly that size can win, so enumerate just those combinations.",
+   "Enumerating combinations in id order means the first set with the smallest total is also the lexicographically smallest."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "free properties per neighborhood sorted by id; the smallest feasible size comes from the largest capacities; backtracking over combinations of that size in id order keeps the first one with the smallest total",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/design.json",
+      "sha256": "f37f477e0bad9428d6ed500482f9276cef2c5f07c4560807fcf4668f0719ef07",
+      "selector": "/problems/hack2hire:68b975348c4a0a9996afdd79/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(C(m, s) * s) per booking for m free properties in the neighborhood/O(p) space; the independent reference (enumerate every subset of the neighborhood's free properties as a bitmask and take the minimum of (size, total, sorted ids)) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/design.json",
+      "sha256": "f37f477e0bad9428d6ed500482f9276cef2c5f07c4560807fcf4668f0719ef07",
+      "selector": "/problems/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "The smallest possible number of properties is found by adding the largest capacities first.",
+     "Only sets of exactly that size can win, so enumerate just those combinations."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-records/artifact--artifact_hack2hire_68b975288c4a0a9996afdd78_68b975348c4a0a9996afdd79_approach-native_v1.json",
+    "sha256": "0221a7911c81ce96ffc3097f89ef52d8481c4ffb680eea87681009b35d2c6b5d"
+   }
+  },
+  {
+   "id": "approach:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred native class BookingSystem, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/design.json",
+      "sha256": "f37f477e0bad9428d6ed500482f9276cef2c5f07c4560807fcf4668f0719ef07",
+      "selector": "/problems/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Enumerating combinations in id order means the first set with the smallest total is also the lexicographically smallest."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-records/artifact--artifact_hack2hire_68b975288c4a0a9996afdd78_68b975348c4a0a9996afdd79_python_v1.json",
+     "sha256": "f3b7179dfad7f7f154441a33525d9bd26e49b9d43f477eb13a5b82b6dac6431d"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-records/artifact--artifact_hack2hire_68b975288c4a0a9996afdd78_68b975348c4a0a9996afdd79_javascript_v1.json",
+     "sha256": "ef7678f155c310bddf93e63022ab0a029e830e72be40fd431b3a005092130b81"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-records/artifact--artifact_hack2hire_68b975288c4a0a9996afdd78_68b975348c4a0a9996afdd79_approach-native_v1.json",
+    "sha256": "0221a7911c81ce96ffc3097f89ef52d8481c4ffb680eea87681009b35d2c6b5d"
+   }
+  },
+  {
+   "id": "approach:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (enumerate every subset of the neighborhood's free properties as a bitmask and take the minimum of (size, total, sorted ids)) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/design.json",
+      "sha256": "f37f477e0bad9428d6ed500482f9276cef2c5f07c4560807fcf4668f0719ef07",
+      "selector": "/problems/hack2hire:68b975348c4a0a9996afdd79/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/6/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/test_oracles.py",
+      "sha256": "60984cb2d31fb49e82b74e42250664b8825c6f7ff3f5aa736194fb26605a761e",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+      "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+      "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-records/artifact--artifact_hack2hire_68b975288c4a0a9996afdd78_68b975348c4a0a9996afdd79_approach-native_v1.json",
+    "sha256": "0221a7911c81ce96ffc3097f89ef52d8481c4ffb680eea87681009b35d2c6b5d"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-records/artifact--artifact_hack2hire_68b975288c4a0a9996afdd78_68b975348c4a0a9996afdd79_approach-native_v1.json",
+  "sha256": "0221a7911c81ce96ffc3097f89ef52d8481c4ffb680eea87681009b35d2c6b5d"
+ }
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67f8222b1d70a71460925c53",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "bizNames",
+  "searchWord"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "searchSuggestions",
+  "params": [
+   {
+    "name": "bizNames",
+    "type": "string[]"
+   },
+   {
+    "name": "searchWord",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "list<string[]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every prefix, lower-case and test every word of every name with startswith, then sort",
+  "candidate_design": "a trie over the lower-cased words storing (name, word index) at each node; walk searchWord down the trie and, per node, keep the smallest word index per name, then sort",
+  "complexity_target": "O(total characters + sum over queries of matches log matches) time/O(total characters) space"
+ },
+ "source_sha256": "cf47d28d8e3d151dac22f796d1fc69ad687d2f4c168aacdcc690f297c61acbf8",
+ "wrapper": "Solution.searchSuggestions"
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a373b366849fecc81442863",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "instructions"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "repairProgram",
+  "params": [
+   {
+    "name": "instructions",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every switchable index, simulate the modified program with a visited set, keep the smallest that terminates",
+  "candidate_design": "reverse-edge search from index len marks every index that already terminates; along the original path, a switch at i works exactly when its new successor is marked (or is len); take the smallest such i and replay once",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "65048b7f3ac78e89c63ed791467bbc9935d56a2313ca5f76eb320237c47c9837",
+ "wrapper": "named export repairProgram"
+}

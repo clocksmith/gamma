@@ -1,0 +1,1973 @@
+{
+ "schema": "gamma.hack2hire-chunk08-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:68b996c98c4a0a9996afdd81": {
+   "constraints": [
+    "0 <= transactions.length <= 1e5",
+    "ids match [A-Za-z0-9_]{1,20} and are unique across rows",
+    "payment types match [A-Z_]{1,20}",
+    "0 <= timestamp <= 1e9, 1 <= amount <= 1e9 (decimal strings)",
+    "0 <= refundAmount <= 1e14"
+   ],
+   "clarifyingQuestions": [
+    "Which payment types are refunded first, and in what order?",
+    "Within a type, is the most recent payment refunded first?",
+    "What happens when the refundable total is smaller than refundAmount?",
+    "Should payments that receive nothing be listed?"
+   ],
+   "hints": [
+    "A payment can only give back what has not already been refunded from it.",
+    "Sum the existing refunds per linked payment id once, in a hash map.",
+    "Sort the payments by (type rank, larger timestamp first, id) and hand out the amount greedily until it is used up."
+   ],
+   "invariants": [
+    "each allocation is at most the payment's refundable balance",
+    "the allocations sum to min(refundAmount, total refundable)"
+   ],
+   "chooseWhen": [
+    "A fixed priority order decides who is refunded first"
+   ],
+   "tradeoffs": [
+    "Sorting all payments costs O(p log p) even when the first payment already covers the refund; a heap would stop earlier but is more code"
+   ],
+   "variantLabel": "Inferred single variant: greedy refund allocation by type priority and recency",
+   "examples": [
+    {
+     "input": [
+      [],
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "r1",
+        "REFUND",
+        "",
+        "p1",
+        "2",
+        "1"
+       ],
+       [
+        "p0",
+        "PAYMENT",
+        "CREDIT",
+        "",
+        "0",
+        "1"
+       ],
+       [
+        "r2",
+        "REFUND",
+        "",
+        "p2",
+        "8",
+        "1"
+       ],
+       [
+        "p2",
+        "PAYMENT",
+        "PAYPAL",
+        "",
+        "1",
+        "1"
+       ],
+       [
+        "p1",
+        "PAYMENT",
+        "CREDIT",
+        "",
+        "1",
+        "100"
+       ],
+       [
+        "p3",
+        "PAYMENT",
+        "CREDIT",
+        "",
+        "0",
+        "5"
+       ],
+       [
+        "r0",
+        "REFUND",
+        "",
+        "p0",
+        "6",
+        "1"
+       ]
+      ],
+      50
+     ],
+     "output": [
+      [
+       "p1",
+       50
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a330e686849fecc81440a3c": {
+   "constraints": [
+    "1 <= s.length <= 1e5",
+    "s contains only A-Z"
+   ],
+   "clarifyingQuestions": [
+    "Should the answer be the list of valid lengths, their count, or the smallest one?",
+    "Is the whole string (one block) always counted?"
+   ],
+   "hints": [
+    "Only divisors of len(s) can be valid.",
+    "Prefix counts per letter give the letter counts of any block in O(26).",
+    "For each divisor L compare the counts of every block against the first block; stop at the first mismatch."
+   ],
+   "invariants": [
+    "len(s) is always valid",
+    "a valid L divides len(s)"
+   ],
+   "chooseWhen": [
+    "Long strings with many divisors"
+   ],
+   "tradeoffs": [
+    "26 prefix-count arrays use O(26n) memory; a rolling count per divisor uses O(26) memory but O(n) time per divisor anyway"
+   ],
+   "variantLabel": "Inferred single variant: all valid prefix lengths",
+   "examples": [
+    {
+     "input": [
+      "A"
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "ACCBCCABABCCCBCAACBCCBCA"
+     ],
+     "output": [
+      4,
+      8,
+      12,
+      24
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67f5703f83ba2e5f057e6dfb": {
+   "constraints": [
+    "0 <= bizNames.length <= 1e5",
+    "each name has 1..10 words of [A-Za-z0-9]{1,15}",
+    "1 <= prefix.length <= 15",
+    "1 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Is alphabetical order case-sensitive?",
+    "Is the word position 0-based, and does only the first matching word count?",
+    "Are duplicate names listed once or every time?"
+   ],
+   "hints": [
+    "Lower-case the prefix once and each word as you scan it.",
+    "For each name only the first matching word position matters.",
+    "Keep only the k smallest (position, name) keys; a bounded heap or a partial sort avoids sorting every match."
+   ],
+   "invariants": [
+    "every returned name has a word starting with prefix (ignoring case)",
+    "returned keys are non-decreasing"
+   ],
+   "chooseWhen": [
+    "k is much smaller than the number of matches"
+   ],
+   "tradeoffs": [
+    "A bounded heap is O(m log k) but more code than one full sort, which is fine when k is close to m"
+   ],
+   "variantLabel": "Inferred single variant: top k prefix matches by word position, then name",
+   "examples": [
+    {
+     "input": [
+      [],
+      "q",
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "xx 1",
+       "bb a cc",
+       "cc x 11",
+       "aa AA cc",
+       "b",
+       "BB 11 c",
+       "a cc"
+      ],
+      "B",
+      3
+     ],
+     "output": [
+      "BB 11 c",
+      "b",
+      "bb a cc"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67f8222b1d70a71460925c53": {
+   "constraints": [
+    "0 <= bizNames.length <= 3000",
+    "each name has 1..5 words of [A-Za-z0-9]{1,12}",
+    "1 <= searchWord.length <= 20"
+   ],
+   "clarifyingQuestions": [
+    "Are queries every prefix of one typed word, or an independent list?",
+    "Is the result capped (like the top 3 of LeetCode 1268)?",
+    "Is the alphabetical tie rule case-sensitive?"
+   ],
+   "hints": [
+    "Each query is the previous one plus one character, so the matching set only shrinks along the trie path.",
+    "Insert every lower-cased word into a trie, remembering which name and word position reached each node.",
+    "At each node on the searchWord path take the smallest word position per name and sort by (position, name)."
+   ],
+   "invariants": [
+    "a name matching searchWord[0:i+1] also matches searchWord[0:i]",
+    "within each list keys are non-decreasing"
+   ],
+   "chooseWhen": [
+    "Many names, a short typed word, all matches needed"
+   ],
+   "tradeoffs": [
+    "Storing (name, position) lists at every trie node costs memory proportional to total characters"
+   ],
+   "variantLabel": "Inferred single variant: all matches for every typed prefix",
+   "examples": [
+    {
+     "input": [
+      [],
+      "q"
+     ],
+     "output": [
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "aa aa A",
+       "x x",
+       "A bb",
+       "11 x",
+       "A bb",
+       "xx 11 AA",
+       "x cc B"
+      ],
+      "BB"
+     ],
+     "output": [
+      [
+       "A bb",
+       "A bb",
+       "x cc B"
+      ],
+      [
+       "A bb",
+       "A bb"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:699f70796e73e4abccc9b539": {
+   "constraints": [
+    "1 <= capacity <= 1e5",
+    "up to 1e5 calls",
+    "keys match [a-z0-9]{1,10}",
+    "0 <= value, priority <= 1e9",
+    "0 <= expiryTime, currentTime <= 2e9; currentTime never decreases"
+   ],
+   "clarifyingQuestions": [
+    "Does an item expire when currentTime equals expiryTime?",
+    "When the cache is full, are all expired items removed or only one?",
+    "Does set on an existing key count as an access, and can it evict?",
+    "What does get return for a miss?"
+   ],
+   "hints": [
+    "Eviction needs the minimum of two different orders, so keep two heaps.",
+    "Recency only breaks ties: an increasing access stamp gives a total order.",
+    "Push a fresh heap entry on every access or update and skip entries whose stamp no longer matches the live item."
+   ],
+   "invariants": [
+    "size never exceeds capacity",
+    "every live item has exactly one current entry in each heap"
+   ],
+   "chooseWhen": [
+    "Many operations with frequent evictions"
+   ],
+   "tradeoffs": [
+    "Lazy heaps can hold O(operations) stale entries; an indexed heap avoids that at the cost of more code"
+   ],
+   "variantLabel": "Inferred single variant: cache with expiry, priority and LRU eviction",
+   "examples": [
+    {
+     "input": [
+      [
+       "PriorityExpiryLRUCache",
+       "get"
+      ],
+      [
+       [
+        1
+       ],
+       [
+        "a",
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "PriorityExpiryLRUCache",
+       "get",
+       "set",
+       "set",
+       "set",
+       "set",
+       "set",
+       "set",
+       "get",
+       "set",
+       "get",
+       "get"
+      ],
+      [
+       [
+        3
+       ],
+       [
+        "a",
+        0
+       ],
+       [
+        "e",
+        14,
+        2,
+        1,
+        2
+       ],
+       [
+        "a",
+        14,
+        2,
+        2,
+        2
+       ],
+       [
+        "f",
+        3,
+        0,
+        3,
+        2
+       ],
+       [
+        "b",
+        12,
+        1,
+        3,
+        4
+       ],
+       [
+        "b",
+        10,
+        1,
+        7,
+        6
+       ],
+       [
+        "d",
+        44,
+        3,
+        10,
+        8
+       ],
+       [
+        "f",
+        10
+       ],
+       [
+        "d",
+        15,
+        2,
+        25,
+        15
+       ],
+       [
+        "e",
+        15
+       ],
+       [
+        "c",
+        16
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      -1,
+      null,
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a2d68216a8465483dca727": {
+   "constraints": [
+    "0 <= wait.length <= 1e5",
+    "1 <= wait[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "What exactly should be returned: sizes per second, the empty time, or the processing order?",
+    "Is the front process removed before or together with the expired ones?",
+    "Is time 0 included in the output?"
+   ],
+   "hints": [
+    "The simulation lasts at most n seconds because each second removes at least the front.",
+    "A process still present at time t has not been processed and has wait > t, so only waits up to n matter.",
+    "Count waits in buckets and move a front pointer past processes that are already gone."
+   ],
+   "invariants": [
+    "sizes strictly decrease each second",
+    "the last size is 0"
+   ],
+   "chooseWhen": [
+    "Long queues where a literal re-filter each second would be quadratic"
+   ],
+   "tradeoffs": [
+    "Buckets need O(n) extra memory; sorting the waits instead would cost O(n log n)"
+   ],
+   "variantLabel": "Inferred single variant: queue size after every second",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       4,
+       1000000000,
+       1000000000,
+       4,
+       8,
+       1,
+       1,
+       1000000000,
+       1000000000,
+       8
+      ]
+     ],
+     "output": [
+      11,
+      8,
+      7,
+      6,
+      4,
+      3,
+      2,
+      1,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68b975348c4a0a9996afdd79": {
+   "constraints": [
+    "0 <= properties.length <= 300",
+    "ids are unique and match [A-Za-z0-9_]{1,10}; neighborhoods match [A-Za-z0-9_]{1,10}",
+    "at most 12 properties per neighborhood",
+    "1 <= capacity <= 1000",
+    "1 <= groupSize <= 20000",
+    "up to 300 book calls"
+   ],
+   "clarifyingQuestions": [
+    "In what order are the selection rules applied?",
+    "Is a booked property unavailable forever?",
+    "What is returned when the group cannot be housed?",
+    "How are ties between equally good sets broken?"
+   ],
+   "hints": [
+    "The smallest possible number of properties is found by adding the largest capacities first.",
+    "Only sets of exactly that size can win, so enumerate just those combinations.",
+    "Enumerating combinations in id order means the first set with the smallest total is also the lexicographically smallest."
+   ],
+   "invariants": [
+    "booked properties are never offered again",
+    "the returned set has total capacity >= groupSize"
+   ],
+   "chooseWhen": [
+    "Few properties per neighborhood, exact optimal choice needed"
+   ],
+   "tradeoffs": [
+    "Exponential in the neighborhood size; a capacity-indexed DP would scale further but makes the id tie rule harder"
+   ],
+   "variantLabel": "Inferred single variant: fewest, then tightest, then smallest-id group booking",
+   "examples": [
+    {
+     "input": [
+      [
+       "BookingSystem",
+       "book"
+      ],
+      [
+       [
+        []
+       ],
+       [
+        "a",
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "BookingSystem",
+       "book",
+       "book",
+       "book",
+       "book",
+       "book"
+      ],
+      [
+       [
+        [
+         [
+          "b8",
+          "n2",
+          "1"
+         ],
+         [
+          "a2",
+          "n2",
+          "8"
+         ],
+         [
+          "a0",
+          "Up",
+          "1"
+         ],
+         [
+          "z1",
+          "n2",
+          "5"
+         ],
+         [
+          "x5",
+          "Up",
+          "1000"
+         ],
+         [
+          "c7",
+          "n2",
+          "1000"
+         ],
+         [
+          "z3",
+          "n1",
+          "2"
+         ],
+         [
+          "y6",
+          "n2",
+          "10"
+         ],
+         [
+          "y4",
+          "n1",
+          "4"
+         ]
+        ]
+       ],
+       [
+        "n2",
+        5
+       ],
+       [
+        "n1",
+        7
+       ],
+       [
+        "n2",
+        1
+       ],
+       [
+        "Up",
+        20
+       ],
+       [
+        "n2",
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       "z1"
+      ],
+      [],
+      [
+       "b8"
+      ],
+      [
+       "x5"
+      ],
+      [
+       "a2"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67fa9534ba41b3368f4e5851": {
+   "constraints": [
+    "0 <= users.length <= 1e5",
+    "names match [A-Za-z0-9_]{1,20}",
+    "randomInts.length == 2 * floor(users.length / 2)",
+    "0 <= randomInts[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "How is randomness made testable: a seed, a supplied generator, or a list of draws?",
+    "Is the unmatched user reported, and how?",
+    "Must every pairing be equally likely, and how would you argue it?"
+   ],
+   "hints": [
+    "Drawing two distinct users uniformly at a time is a partial Fisher-Yates shuffle.",
+    "Removing a chosen user by moving the last one into its slot keeps the pool contiguous in O(1).",
+    "Use the draws strictly in order: first user, then second user of each pair."
+   ],
+   "invariants": [
+    "each user appears in exactly one entry",
+    "the pool shrinks by exactly two per pair"
+   ],
+   "chooseWhen": [
+    "Large user lists where removing from the middle of a list would be quadratic"
+   ],
+   "tradeoffs": [
+    "Swap-with-last changes pool order, which is fine for uniformity but makes the result depend on the exact removal rule"
+   ],
+   "variantLabel": "Inferred level 1: reproducible uniform pairing",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "u2",
+       "u7",
+       "u11",
+       "u17",
+       "u16",
+       "u9",
+       "u19",
+       "u14",
+       "u18",
+       "u17"
+      ],
+      [
+       353117911,
+       7,
+       3,
+       167542901,
+       1,
+       983865461,
+       3,
+       1,
+       3,
+       1
+      ]
+     ],
+     "output": [
+      [
+       "u7",
+       "u14"
+      ],
+      [
+       "u17",
+       "u17"
+      ],
+      [
+       "u19",
+       "u9"
+      ],
+      [
+       "u18",
+       "u16"
+      ],
+      [
+       "u11",
+       "u2"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67fa954aba41b3368f4e5852": {
+   "constraints": [
+    "0 <= users.length <= 1e5",
+    "names and groups match [A-Za-z0-9_]{1,20}"
+   ],
+   "clarifyingQuestions": [
+    "Must paired users come from different groups?",
+    "Which groups are paired first when several have the same size?",
+    "Are unpaired users reported?"
+   ],
+   "hints": [
+    "Always pairing from the two largest groups maximises the number of pairs.",
+    "Keep each group's members in a queue in input order.",
+    "A max-heap of (count, name) gives the two largest groups; push a group back only while it still has members."
+   ],
+   "invariants": [
+    "the two users of a pair are in different groups",
+    "at most one group has unpaired users at the end"
+   ],
+   "chooseWhen": [
+    "Many groups of uneven size"
+   ],
+   "tradeoffs": [
+    "The heap costs O(log g) per pair; with few groups a linear scan is as fast"
+   ],
+   "variantLabel": "Inferred level 2: greedy cross-group pairing",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "u0",
+        "g2"
+       ],
+       [
+        "u1",
+        "g2"
+       ],
+       [
+        "u2",
+        "g3"
+       ],
+       [
+        "u3",
+        "g1"
+       ],
+       [
+        "u4",
+        "g2"
+       ],
+       [
+        "u5",
+        "g2"
+       ],
+       [
+        "u6",
+        "g1"
+       ],
+       [
+        "u7",
+        "g2"
+       ],
+       [
+        "u8",
+        "g1"
+       ],
+       [
+        "u9",
+        "g3"
+       ],
+       [
+        "u10",
+        "g1"
+       ],
+       [
+        "u11",
+        "g3"
+       ],
+       [
+        "u12",
+        "g2"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "u0",
+       "u3"
+      ],
+      [
+       "u1",
+       "u6"
+      ],
+      [
+       "u4",
+       "u2"
+      ],
+      [
+       "u5",
+       "u8"
+      ],
+      [
+       "u7",
+       "u9"
+      ],
+      [
+       "u10",
+       "u12"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678d7c57fa7ce9616e190fb5": {
+   "constraints": [
+    "-1e9 <= start, end <= 1e9",
+    "1 <= |step| <= 1e9",
+    "up to 1e5 calls",
+    "next is only called when a value remains"
+   ],
+   "clarifyingQuestions": [
+    "What should next return, or throw, when the range is exhausted?",
+    "Is step 0 allowed?",
+    "Is end ever included?"
+   ],
+   "hints": [
+    "Store only the current value, not the whole range.",
+    "The direction of the comparison with end depends on the sign of step.",
+    "An empty range (start already at or past end) has no values at all."
+   ],
+   "invariants": [
+    "current = start + (number of next calls) * step",
+    "hasNext never changes without a next call"
+   ],
+   "chooseWhen": [
+    "Huge ranges that must not be materialised"
+   ],
+   "tradeoffs": [
+    "None worth noting beyond handling the step sign"
+   ],
+   "variantLabel": "Inferred single variant: start/end/step iterator",
+   "examples": [
+    {
+     "input": [
+      [
+       "RangeIterator"
+      ],
+      [
+       [
+        -1,
+        1,
+        -2
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RangeIterator",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext",
+       "hasNext"
+      ],
+      [
+       [
+        -8,
+        -19,
+        1000000000
+       ],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a3a0426e73e4abccc9c0e9": {
+   "constraints": [
+    "1 <= n * m <= 1e5",
+    "0 <= teleports.length <= 1e4",
+    "grid values are 0 or 1"
+   ],
+   "clarifyingQuestions": [
+    "What is the result: reachability, the move count, or a number of paths?",
+    "Does a teleport count as a move?",
+    "Can teleports form loops, and what then?",
+    "Can an exit itself be an entrance?"
+   ],
+   "hints": [
+    "Because the robot only moves right, its path is completely determined; there is nothing to search.",
+    "Index teleports by entrance cell in a hash map.",
+    "Mark visited positions so a teleport cycle is detected instead of looping forever."
+   ],
+   "invariants": [
+    "each position is occupied at most once on a successful walk",
+    "the move count never exceeds n*m"
+   ],
+   "chooseWhen": [
+    "Large grids with many teleports"
+   ],
+   "tradeoffs": [
+    "A visited array costs O(n*m) memory; counting steps against n*m would avoid it"
+   ],
+   "variantLabel": "Inferred single variant: move count along the forced right-moving path",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0
+       ]
+      ],
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      ],
+      [
+       [
+        0,
+        5,
+        1,
+        4
+       ],
+       [
+        1,
+        5,
+        2,
+        4
+       ],
+       [
+        2,
+        5,
+        3,
+        4
+       ],
+       [
+        3,
+        5,
+        4,
+        3
+       ]
+      ]
+     ],
+     "output": 10,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68ad7692cdaebe9459ce9a78": {
+   "constraints": [
+    "1 <= maxRequests <= 1e5",
+    "1 <= windowSeconds <= 1e9",
+    "0 <= timestamp <= 1e9, non-decreasing",
+    "ips match [0-9.]{1,15}",
+    "up to 1e5 calls"
+   ],
+   "clarifyingQuestions": [
+    "Is the window [t - W + 1, t] or (t - W, t]?",
+    "Do flagged requests count toward later windows?",
+    "Can timestamps arrive out of order?"
+   ],
+   "hints": [
+    "Only requests from the same IP inside the window matter.",
+    "Because timestamps never decrease, old requests can be dropped from the front of a per-IP queue for good.",
+    "After dropping, the queue length is the window count including the current request."
+   ],
+   "invariants": [
+    "each per-IP queue holds exactly the requests inside the current window",
+    "every request is pushed once and popped at most once"
+   ],
+   "chooseWhen": [
+    "A real-time stream with many requests per IP"
+   ],
+   "tradeoffs": [
+    "Queues keep every in-window timestamp; a per-second bucket count would bound memory by the window size instead"
+   ],
+   "variantLabel": "Inferred single variant: sliding-window request counter per IP",
+   "examples": [
+    {
+     "input": [
+      [
+       "DetectionSystem",
+       "isBot"
+      ],
+      [
+       [
+        3,
+        5
+       ],
+       [
+        "8",
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "DetectionSystem",
+       "isBot",
+       "isBot",
+       "isBot",
+       "isBot",
+       "isBot",
+       "isBot",
+       "isBot",
+       "isBot",
+       "isBot",
+       "isBot",
+       "isBot",
+       "isBot"
+      ],
+      [
+       [
+        1,
+        5
+       ],
+       [
+        "10.0.0.1",
+        0
+       ],
+       [
+        "1.2.3.4",
+        0
+       ],
+       [
+        "1.2.3.4",
+        0
+       ],
+       [
+        "8",
+        4
+       ],
+       [
+        "8",
+        4
+       ],
+       [
+        "8",
+        5
+       ],
+       [
+        "1.2.3.4",
+        5
+       ],
+       [
+        "8",
+        7
+       ],
+       [
+        "8",
+        8
+       ],
+       [
+        "10.0.0.1",
+        9
+       ],
+       [
+        "8",
+        10
+       ],
+       [
+        "8",
+        12
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a43f105141b0ac3b8be4df": {
+   "constraints": [
+    "0 <= recipes.length <= 1e5",
+    "1 <= recipe length <= 100, total recipe characters <= 1e6",
+    "0 <= ingredients.length <= 1e5",
+    "only lowercase a-z"
+   ],
+   "clarifyingQuestions": [
+    "Is the supply consumed by earlier recipes, or is each recipe checked alone?",
+    "Which characters can appear?"
+   ],
+   "hints": [
+    "Count the supply once.",
+    "For each recipe count its needs per character.",
+    "A recipe fails as soon as one character needs more than the supply holds."
+   ],
+   "invariants": [
+    "the supply counts never change",
+    "the answer is at most recipes.length"
+   ],
+   "chooseWhen": [
+    "Many short recipes against one supply"
+   ],
+   "tradeoffs": [
+    "Fixed 26-entry arrays assume lowercase letters; a hash map handles any alphabet"
+   ],
+   "variantLabel": "Inferred single variant: count independently preparable recipes",
+   "examples": [
+    {
+     "input": [
+      [],
+      ""
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "cczz",
+       "cabbz",
+       "cab",
+       "zacc",
+       "b",
+       "ca",
+       "azc"
+      ],
+      "aazbzcdbcbzaaccddczcab"
+     ],
+     "output": 7,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69499ed489ec36a1b1e2c13f": {
+   "constraints": [
+    "0 <= transactions.length <= 1e5",
+    "transaction ids are unique and match [A-Za-z0-9_]{1,20}; user ids match [A-Za-z0-9_]{1,20}",
+    "amounts are \"\" or decimal 0..1e9",
+    "0 <= timestamp <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "What does billing status mean: a balance, a label, or more?",
+    "Is a positive balance money owed by the user?",
+    "How are users ordered in the result?"
+   ],
+   "hints": [
+    "Treat an empty amount field as 0.",
+    "Each row changes one user's balance by charge minus payment.",
+    "Accumulate in a hash map and sort the user ids at the end."
+   ],
+   "invariants": [
+    "row order does not change the final balance",
+    "every user with a row is reported"
+   ],
+   "chooseWhen": [
+    "Large unordered logs"
+   ],
+   "tradeoffs": [
+    "Sorting users costs O(u log u); the result order is fixed by the inferred spec"
+   ],
+   "variantLabel": "Inferred level 1: final balance per user",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "t260x5",
+        "U",
+        "5",
+        "",
+        "9"
+       ],
+       [
+        "t17x6",
+        "U",
+        "5",
+        "",
+        "0"
+       ],
+       [
+        "t65x1",
+        "w_9",
+        "0",
+        "1000000000",
+        "1"
+       ],
+       [
+        "t278x7",
+        "w_9",
+        "5",
+        "",
+        "1"
+       ],
+       [
+        "t20x0",
+        "U",
+        "5",
+        "0",
+        "9"
+       ],
+       [
+        "t507x3",
+        "w_9",
+        "5",
+        "",
+        "9"
+       ],
+       [
+        "t253x4",
+        "w_9",
+        "1000000000",
+        "1000000000",
+        "1"
+       ],
+       [
+        "t188x2",
+        "w_9",
+        "",
+        "100",
+        "5"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "U",
+       15
+      ],
+      [
+       "w_9",
+       -1000000090
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6949a92289ec36a1b1e2c15c": {
+   "constraints": [
+    "0 <= transactions.length <= 1e5",
+    "transaction ids are unique and match [A-Za-z0-9_]{1,20}; user ids match [A-Za-z0-9_]{1,20}",
+    "amounts are \"\" or decimal 0..1e9",
+    "0 <= timestamp <= 1e9",
+    "0 <= timestamp argument <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "What does billing status mean: a balance, a label, or more?",
+    "Is a positive balance money owed by the user?",
+    "How are users ordered in the result?",
+    "Is a row at exactly the query timestamp included?"
+   ],
+   "hints": [
+    "Rows are unordered, so filter by timestamp instead of stopping early.",
+    "A user with rows only after the timestamp is not reported.",
+    "Accumulate charge minus payment per user and sort the ids."
+   ],
+   "invariants": [
+    "only rows with timestamp <= the query count",
+    "increasing the query timestamp never removes a user"
+   ],
+   "chooseWhen": [
+    "One-off historical queries over an unordered log"
+   ],
+   "tradeoffs": [
+    "Many queries over the same log would favour sorting once and keeping prefix sums"
+   ],
+   "variantLabel": "Inferred level 2: balances as of a timestamp",
+   "examples": [
+    {
+     "input": [
+      [],
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "t73x3",
+        "u1",
+        "",
+        "7",
+        "0"
+       ],
+       [
+        "t619x6",
+        "u2",
+        "0",
+        "0",
+        "5"
+       ],
+       [
+        "t929x5",
+        "u1",
+        "5",
+        "7",
+        "2"
+       ],
+       [
+        "t719x7",
+        "U",
+        "1000000000",
+        "0",
+        "1"
+       ],
+       [
+        "t49x4",
+        "U",
+        "1000000000",
+        "",
+        "9"
+       ],
+       [
+        "t305x1",
+        "U",
+        "1000000000",
+        "1000000000",
+        "2"
+       ],
+       [
+        "t514x0",
+        "u2",
+        "5",
+        "7",
+        "2"
+       ],
+       [
+        "t208x2",
+        "w_9",
+        "",
+        "0",
+        "0"
+       ]
+      ],
+      2
+     ],
+     "output": [
+      [
+       "U",
+       1000000000
+      ],
+      [
+       "u1",
+       -9
+      ],
+      [
+       "u2",
+       -2
+      ],
+      [
+       "w_9",
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6949b64a89ec36a1b1e2c16d": {
+   "constraints": [
+    "0 <= transactions.length <= 1e5",
+    "transaction ids are unique and match [A-Za-z0-9_]{1,20}; user ids match [A-Za-z0-9_]{1,20}",
+    "amounts are \"\" or decimal 0..1e9",
+    "0 <= timestamp <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "What does billing status mean: a balance, a label, or more?",
+    "Is a positive balance money owed by the user?",
+    "How are users ordered in the result?",
+    "Which order is used for rows with the same timestamp?",
+    "Does the peak start at 0?"
+   ],
+   "hints": [
+    "The peak depends on order, so the rows must be replayed chronologically.",
+    "Sort all rows once by (timestamp, transactionId) instead of sorting per user.",
+    "Keep a running balance and a running maximum (starting at 0) per user."
+   ],
+   "invariants": [
+    "peakBalance >= max(0, finalBalance)",
+    "finalBalance does not depend on row order"
+   ],
+   "chooseWhen": [
+    "Audit of outstanding exposure over time"
+   ],
+   "tradeoffs": [
+    "One global sort is O(t log t); bucketing by user first would sort smaller lists but needs more bookkeeping"
+   ],
+   "variantLabel": "Inferred level 3: final and peak balance per user",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "t670x4",
+        "u2",
+        "",
+        "1000000000",
+        "1"
+       ],
+       [
+        "t378x5",
+        "w_9",
+        "100",
+        "",
+        "0"
+       ],
+       [
+        "t495x7",
+        "u2",
+        "5",
+        "1000000000",
+        "2"
+       ],
+       [
+        "t730x3",
+        "w_9",
+        "0",
+        "100",
+        "1"
+       ],
+       [
+        "t637x0",
+        "u2",
+        "0",
+        "0",
+        "1"
+       ],
+       [
+        "t395x6",
+        "u2",
+        "1000000000",
+        "",
+        "9"
+       ],
+       [
+        "t75x2",
+        "u1",
+        "5",
+        "7",
+        "1"
+       ],
+       [
+        "t365x1",
+        "U",
+        "100",
+        "",
+        "2"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "U",
+       100,
+       100
+      ],
+      [
+       "u1",
+       -2,
+       0
+      ],
+      [
+       "u2",
+       -999999995,
+       0
+      ],
+      [
+       "w_9",
+       0,
+       100
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a373b356849fecc81442862": {
+   "constraints": [
+    "1 <= instructions.length <= 1e5",
+    "op is plus, next or jump; value matches [+-]?(0|[1-9][0-9]{0,5}) with |value| <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Should the result be the index, the accumulator, or both?",
+    "What if the program leaves the instruction range instead of repeating?",
+    "Is a \"+\" sign allowed on values?"
+   ],
+   "hints": [
+    "Each instruction has exactly one successor, so the run is a path that either leaves the range or enters a cycle.",
+    "Mark executed indices; the first index found marked is the repeat point.",
+    "Report the accumulator before executing the repeated instruction."
+   ],
+   "invariants": [
+    "each instruction executes at most once before the stop",
+    "the accumulator only changes on plus"
+   ],
+   "chooseWhen": [
+    "Long programs"
+   ],
+   "tradeoffs": [
+    "A visited array costs O(n) memory; Floyd cycle detection would avoid it but returns a different index"
+   ],
+   "variantLabel": "Inferred level 1: first repeated instruction and accumulator",
+   "examples": [
+    {
+     "input": [
+      [
+       "jump 0"
+      ]
+     ],
+     "output": [
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "jump +1000000",
+       "jump -1000000",
+       "jump 4",
+       "plus +2",
+       "jump -1",
+       "plus +1000000",
+       "jump 4",
+       "next -1000000"
+      ]
+     ],
+     "output": [
+      -1,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a373b366849fecc81442863": {
+   "constraints": [
+    "1 <= instructions.length <= 1e5",
+    "same instruction format as level 1",
+    "the unmodified program does not reach index len"
+   ],
+   "clarifyingQuestions": [
+    "Which instructions may be switched?",
+    "If several switches work, which is reported?",
+    "Does leaving the range at any index other than len count as terminating?"
+   ],
+   "hints": [
+    "Only instructions on the original execution path matter: switching any other one leaves the run unchanged.",
+    "Compute, on the unmodified program, which indices reach len (walk the reverse edges from len).",
+    "A switch at i works exactly when its new successor reaches len; pick the smallest such i and replay to get the accumulator."
+   ],
+   "invariants": [
+    "a working switch is on the original path",
+    "the repaired run executes each instruction at most once"
+   ],
+   "chooseWhen": [
+    "Long programs where trying every switch would be quadratic"
+   ],
+   "tradeoffs": [
+    "The reverse-edge pass needs an adjacency list of O(n) size"
+   ],
+   "variantLabel": "Inferred level 2: one-instruction repair",
+   "examples": [
+    {
+     "input": [
+      [
+       "jump 0"
+      ]
+     ],
+     "output": [
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "jump +1000000",
+       "jump 4",
+       "jump 4",
+       "jump -1000000",
+       "next 0",
+       "jump 4",
+       "next 4",
+       "jump -1000000"
+      ]
+     ],
+     "output": [
+      -1,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69ff8062574d87bc49006e92": {
+   "constraints": [
+    "1 <= pattern.length <= 1e5",
+    "0 <= maxVal <= 9",
+    "0 <= targetSum <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Should all valid strings, their count or one of them be returned?",
+    "If one, which one?",
+    "What is returned when none exists?"
+   ],
+   "hints": [
+    "The ? positions must supply exactly targetSum minus the fixed digits.",
+    "k remaining ? can supply any total from 0 to k * maxVal.",
+    "Going left to right, give each ? the smallest digit that keeps the remaining total reachable."
+   ],
+   "invariants": [
+    "the remaining requirement stays within [0, remaining ? count * maxVal]",
+    "fixed digits are never changed"
+   ],
+   "chooseWhen": [
+    "Long patterns where backtracking would be exponential"
+   ],
+   "tradeoffs": [
+    "The greedy answer is one string; listing all solutions would need real backtracking"
+   ],
+   "variantLabel": "Inferred single variant: lexicographically smallest restoration",
+   "examples": [
+    {
+     "input": [
+      "?",
+      0,
+      0
+     ],
+     "output": "0",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "3661568",
+      35,
+      0
+     ],
+     "output": "3661568",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d17a8817b72775cc49bfe0": {
+   "constraints": [
+    "1 <= numRows, numColumns <= 1e5",
+    "up to 1e5 calls",
+    "0 <= row < numRows, 0 <= col < numColumns",
+    "colors match [a-z0-9#]{1,10}"
+   ],
+   "clarifyingQuestions": [
+    "What does setColor do before anything is selected?",
+    "Does setColor clear the selection?",
+    "Are indices 0-based?"
+   ],
+   "hints": [
+    "Painting a whole table or row cell by cell is too slow for large tables.",
+    "Remember each paint at the level it was applied (table, row or cell) with an increasing stamp.",
+    "A cell's color is the newest of its table, row and own paint."
+   ],
+   "invariants": [
+    "a later paint always has a larger stamp",
+    "getColor never changes state"
+   ],
+   "chooseWhen": [
+    "Large tables with few operations"
+   ],
+   "tradeoffs": [
+    "Lazy stamps use memory per painted row and cell instead of per table cell"
+   ],
+   "variantLabel": "Inferred single variant: lazy table/row/cell coloring",
+   "examples": [
+    {
+     "input": [
+      [
+       "Table",
+       "setColor"
+      ],
+      [
+       [
+        3,
+        3
+       ],
+       [
+        "z"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Table",
+       "getColor",
+       "setColor",
+       "selectTable",
+       "setColor",
+       "selectTable",
+       "getColor",
+       "getColor",
+       "getColor",
+       "selectTable",
+       "setColor",
+       "setColor",
+       "getColor",
+       "selectCell"
+      ],
+      [
+       [
+        3,
+        3
+       ],
+       [
+        1,
+        1
+       ],
+       [
+        "blue"
+       ],
+       [],
+       [
+        "#00ff00"
+       ],
+       [],
+       [
+        1,
+        0
+       ],
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        2
+       ],
+       [],
+       [
+        "red"
+       ],
+       [
+        "red"
+       ],
+       [
+        2,
+        0
+       ],
+       [
+        2,
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "",
+      null,
+      null,
+      null,
+      null,
+      "#00ff00",
+      "#00ff00",
+      "#00ff00",
+      null,
+      null,
+      null,
+      "red",
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

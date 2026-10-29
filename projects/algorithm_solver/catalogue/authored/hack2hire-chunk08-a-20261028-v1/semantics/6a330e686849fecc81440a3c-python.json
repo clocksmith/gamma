@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a330e686849fecc81440a3c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "validPrefixLengths",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every divisor L, sort each block and compare it with the sorted prefix",
+  "candidate_design": "per-letter prefix counts; for every divisor L compare each block's 26 counts with the prefix counts, stopping at the first mismatch",
+  "complexity_target": "O(26 * n * d(n)/L summed over divisors) <= O(26 * sigma(n)) time/O(26n) space"
+ },
+ "source_sha256": "8efbda6c9df35ca4129bace151d878a27e9ff99b28d9f004c56743721a1feca8",
+ "wrapper": "Solution.validPrefixLengths"
+}

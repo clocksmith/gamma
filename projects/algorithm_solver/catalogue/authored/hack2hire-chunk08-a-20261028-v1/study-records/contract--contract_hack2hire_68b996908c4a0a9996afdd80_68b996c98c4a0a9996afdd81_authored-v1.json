@@ -1,0 +1,392 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68b996908c4a0a9996afdd80:68b996c98c4a0a9996afdd81:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68b996908c4a0a9996afdd80.json",
+   "sha256": "32a1296a1dbce1c89dd097f49889763659b12f0d948e0dee92e1c6e9d5c7426a",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:68b996c98c4a0a9996afdd81"
+  }
+ ],
+ "problemId": "hack2hire:68b996908c4a0a9996afdd80",
+ "variantId": "68b996c98c4a0a9996afdd81",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: greedy refund allocation by type priority and recency",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b996c98c4a0a9996afdd81/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "transactions is a list of six-string rows. A payment row is [paymentId, \"PAYMENT\", paymentType, \"\", timestamp, amount]; a refund row is [refundId, \"REFUND\", \"\", linkedPaymentId, timestamp, amount]. Timestamps and amounts are decimal integer strings. Every refund links to a payment in the list, and the refunds of one payment never exceed its amount. The refundable balance of a payment is its amount minus the amounts of the refunds linked to it. refundAmount is a non-negative integer. Visit payments in this order: paymentType CREDIT first, then CREDIT_CARD, then PAYPAL, then every other type in code-point order of the type name; within one type, larger timestamp first; then smaller paymentId in code-point order. Give each visited payment min(its refundable balance, the amount still to allocate). Return [paymentId, allocated] for every payment that receives a positive amount, in visiting order. If the refundable balances do not cover refundAmount, everything refundable is allocated and the rest is left unallocated.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "transactions is a list of six-string rows.",
+   "A payment row is [paymentId, \"PAYMENT\", paymentType, \"\", timestamp, amount]; a refund row is [refundId, \"REFUND\", \"\", linkedPaymentId, timestamp, amount].",
+   "Timestamps and amounts are decimal integer strings.",
+   "Every refund links to a payment in the list, and the refunds of one payment never exceed its amount.",
+   "The refundable balance of a payment is its amount minus the amounts of the refunds linked to it.",
+   "refundAmount is a non-negative integer.",
+   "Visit payments in this order: paymentType CREDIT first, then CREDIT_CARD, then PAYPAL, then every other type in code-point order of the type name; within one type, larger timestamp first; then smaller paymentId in code-point order.",
+   "Give each visited payment min(its refundable balance, the amount still to allocate).",
+   "Return [paymentId, allocated] for every payment that receives a positive amount, in visiting order.",
+   "If the refundable balances do not cover refundAmount, everything refundable is allocated and the rest is left unallocated."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= transactions.length <= 1e5",
+   "ids match [A-Za-z0-9_]{1,20} and are unique across rows",
+   "payment types match [A-Z_]{1,20}",
+   "0 <= timestamp <= 1e9, 1 <= amount <= 1e9 (decimal strings)",
+   "0 <= refundAmount <= 1e14"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b996c98c4a0a9996afdd81/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: payment and refund row formats, refundAmount input, allocation by business rules (rules themselves not visible); algorithmTags: GREEDY; preview response sha256 caad3b5c8395e59182a5ed681eb5ccc0f1a183564f2b63d4499fb434988b7faa"
+   },
+   {
+    "statement": "Uncertainty: very high: the row formats and the refundAmount input are in the preview; the allocation rules are not visible, so the type priority (CREDIT, CREDIT_CARD, PAYPAL, others), most-recent-first order, partial allocation and output shape are inferred",
+    "basis": "the public group preview is partial (842 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which payment types are refunded first, and in what order?",
+   "Within a type, is the most recent payment refunded first?",
+   "What happens when the refundable total is smaller than refundAmount?",
+   "Should payments that receive nothing be listed?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b996c98c4a0a9996afdd81/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     0
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "r1",
+       "REFUND",
+       "",
+       "p1",
+       "2",
+       "1"
+      ],
+      [
+       "p0",
+       "PAYMENT",
+       "CREDIT",
+       "",
+       "0",
+       "1"
+      ],
+      [
+       "r2",
+       "REFUND",
+       "",
+       "p2",
+       "8",
+       "1"
+      ],
+      [
+       "p2",
+       "PAYMENT",
+       "PAYPAL",
+       "",
+       "1",
+       "1"
+      ],
+      [
+       "p1",
+       "PAYMENT",
+       "CREDIT",
+       "",
+       "1",
+       "100"
+      ],
+      [
+       "p3",
+       "PAYMENT",
+       "CREDIT",
+       "",
+       "0",
+       "5"
+      ],
+      [
+       "r0",
+       "REFUND",
+       "",
+       "p0",
+       "6",
+       "1"
+      ]
+     ],
+     50
+    ],
+    "output": [
+     [
+      "p1",
+      50
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b996c98c4a0a9996afdd81/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def allocateRefund(transactions, refundAmount) -> list<[string,integer]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68b996c98c4a0a9996afdd81-python.json",
+     "inferredInterface": {
+      "name": "allocateRefund",
+      "params": [
+       {
+        "name": "transactions",
+        "type": "list<string[6]>"
+       },
+       {
+        "name": "refundAmount",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "list<[string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68b996c98c4a0a9996afdd81-python.json",
+      "sha256": "19b1c38ba2175315ca4b0e6af566dc93be37e5f73fbda489ce7e6b6a332ce165",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function allocateRefund(transactions, refundAmount) /* -> list<[string,integer]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68b996c98c4a0a9996afdd81-javascript.json",
+     "inferredInterface": {
+      "name": "allocateRefund",
+      "params": [
+       {
+        "name": "transactions",
+        "type": "list<string[6]>"
+       },
+       {
+        "name": "refundAmount",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "list<[string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68b996c98c4a0a9996afdd81-javascript.json",
+      "sha256": "33edcf2168d2a39e4f11b2fc8e1b127ef7295b757298492cca8a23389c445724",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

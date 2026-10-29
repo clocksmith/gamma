@@ -1,0 +1,90 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:699f70796e73e4abccc9b539",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "PriorityExpiryLRUCache",
+  "constructor": {
+   "params": [
+    {
+     "name": "capacity",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "get",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "currentTime",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "set",
+    "params": [
+     {
+      "name": "key",
+      "type": "string"
+     },
+     {
+      "name": "value",
+      "type": "integer"
+     },
+     {
+      "name": "priority",
+      "type": "integer"
+     },
+     {
+      "name": "expiryTime",
+      "type": "integer"
+     },
+     {
+      "name": "currentTime",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "a plain dict of items with an access counter; eviction scans every item for the minimum key",
+  "candidate_design": "hash map of items plus two lazy min-heaps keyed by (expiryTime, access stamp) and (priority, access stamp); stale heap entries are skipped by comparing the stored stamp",
+  "complexity_target": "O(log n) amortised per operation/O(n + operations) space"
+ },
+ "source_sha256": "47c3ba2623dc3527f0b860e59cfcf1871058ae313ab66099abb2db2365344b7a",
+ "native_class": "PriorityExpiryLRUCache",
+ "native_symbol": "module global PriorityExpiryLRUCache",
+ "void_methods": [
+  "set"
+ ]
+}

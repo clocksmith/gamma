@@ -1,0 +1,472 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68ad766bcdaebe9459ce9a77:68ad7692cdaebe9459ce9a78:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68ad766bcdaebe9459ce9a77.json",
+   "sha256": "d82534d9793ba5e7b4bfcd91f20bda4bc5383450d039080b0c3fca755425c32b",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:68ad7692cdaebe9459ce9a78"
+  }
+ ],
+ "problemId": "hack2hire:68ad766bcdaebe9459ce9a77",
+ "variantId": "68ad7692cdaebe9459ce9a78",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: sliding-window request counter per IP",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68ad7692cdaebe9459ce9a78/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "DetectionSystem(maxRequests, windowSeconds) receives requests in non-decreasing timestamp order. isBot(ip, timestamp) records the request and returns true when the number of requests from ip with timestamp in [timestamp - windowSeconds + 1, timestamp], counting this one, is greater than maxRequests. Flagged requests still count toward later windows.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "DetectionSystem(maxRequests, windowSeconds) receives requests in non-decreasing timestamp order.",
+   "isBot(ip, timestamp) records the request and returns true when the number of requests from ip with timestamp in [timestamp - windowSeconds + 1, timestamp], counting this one, is greater than maxRequests.",
+   "Flagged requests still count toward later windows."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= maxRequests <= 1e5",
+   "1 <= windowSeconds <= 1e9",
+   "0 <= timestamp <= 1e9, non-decreasing",
+   "ips match [0-9.]{1,15}",
+   "up to 1e5 calls"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68ad7692cdaebe9459ce9a78/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: per-IP request counting, flag a request when the IP exceeds a maximum number of requests within a window of consecutive seconds, class DetectionSystem; algorithmTags: SLIDING_WINDOW, QUEUE; preview response sha256 2f2739de21df8655360cc5f2c3a404368713069d03729e402d0ea60377b82c5c"
+   },
+   {
+    "statement": "Uncertainty: high: the class name and the per-request flag are in the preview; the method name, the inclusive window [t - W + 1, t], counting flagged requests and the non-decreasing timestamps are inferred",
+    "basis": "the public group preview is partial (385 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/11/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/11/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the window [t - W + 1, t] or (t - W, t]?",
+   "Do flagged requests count toward later windows?",
+   "Can timestamps arrive out of order?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68ad7692cdaebe9459ce9a78/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "DetectionSystem",
+      "isBot"
+     ],
+     [
+      [
+       3,
+       5
+      ],
+      [
+       "8",
+       0
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "DetectionSystem",
+      "isBot",
+      "isBot",
+      "isBot",
+      "isBot",
+      "isBot",
+      "isBot",
+      "isBot",
+      "isBot",
+      "isBot",
+      "isBot",
+      "isBot",
+      "isBot"
+     ],
+     [
+      [
+       1,
+       5
+      ],
+      [
+       "10.0.0.1",
+       0
+      ],
+      [
+       "1.2.3.4",
+       0
+      ],
+      [
+       "1.2.3.4",
+       0
+      ],
+      [
+       "8",
+       4
+      ],
+      [
+       "8",
+       4
+      ],
+      [
+       "8",
+       5
+      ],
+      [
+       "1.2.3.4",
+       5
+      ],
+      [
+       "8",
+       7
+      ],
+      [
+       "8",
+       8
+      ],
+      [
+       "10.0.0.1",
+       9
+      ],
+      [
+       "8",
+       10
+      ],
+      [
+       "8",
+       12
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false,
+     false,
+     true,
+     false,
+     true,
+     true,
+     false,
+     true,
+     true,
+     false,
+     true,
+     true
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68ad7692cdaebe9459ce9a78/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class DetectionSystem:\n    def __init__(self, maxRequests, windowSeconds)\n    def isBot(self, ip, timestamp) -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68ad7692cdaebe9459ce9a78-python.json",
+     "inferredInterface": {
+      "classname": "DetectionSystem",
+      "constructor": {
+       "params": [
+        {
+         "name": "maxRequests",
+         "type": "integer"
+        },
+        {
+         "name": "windowSeconds",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "isBot",
+        "params": [
+         {
+          "name": "ip",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68ad7692cdaebe9459ce9a78-python.json",
+      "sha256": "25fd15a37b4d920a90df0b9c754f617045c9ed5a1edfeec35abebe6798704c1f",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class DetectionSystem {\n  constructor(maxRequests, windowSeconds)\n  isBot(ip, timestamp) /* -> boolean */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68ad7692cdaebe9459ce9a78-javascript.json",
+     "inferredInterface": {
+      "classname": "DetectionSystem",
+      "constructor": {
+       "params": [
+        {
+         "name": "maxRequests",
+         "type": "integer"
+        },
+        {
+         "name": "windowSeconds",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "isBot",
+        "params": [
+         {
+          "name": "ip",
+          "type": "string"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68ad7692cdaebe9459ce9a78-javascript.json",
+      "sha256": "22b49fe9ecb05941ac443dbec5386055661956e8fd14ea51568add937b0be069",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
