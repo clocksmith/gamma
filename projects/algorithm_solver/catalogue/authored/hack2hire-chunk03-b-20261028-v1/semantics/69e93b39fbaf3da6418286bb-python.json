@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69e93b39fbaf3da6418286bb",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "prices",
+  "pos",
+  "amount"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxItems",
+  "params": [
+   {
+    "name": "prices",
+    "type": "integer[]"
+   },
+   {
+    "name": "pos",
+    "type": "integer[]"
+   },
+   {
+    "name": "amount",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "walk from pos buying while the budget allows",
+  "candidate_design": "prefix sums; upper-bound binary search for prefix[pos-1]+amount",
+  "complexity_target": "O((n + q) log n) time/O(n) space"
+ },
+ "source_sha256": "792abd2354c7aeeedab8825a3e49e4ff1c3b4bb1ce6f11d0825dd5439580b48f",
+ "wrapper": "Solution.maxItems"
+}

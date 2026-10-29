@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69e939d0fbaf3da6418286b1",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "balls",
+  "d"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minTriggers",
+  "params": [
+   {
+    "name": "balls",
+    "type": "integer[][]"
+   },
+   {
+    "name": "d",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "quadratic adjacency scan plus DFS",
+  "candidate_design": "sort by (x, y) and by (y, x); union consecutive balls on the same line within d; count roots",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "a6e526e1e89467e11800c5bf44ef4fb8983c1852404147cccfe1d9800ef9d570",
+ "wrapper": "Solution.minTriggers"
+}

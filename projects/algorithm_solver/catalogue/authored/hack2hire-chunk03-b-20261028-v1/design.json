@@ -1,0 +1,109 @@
+{
+ "problems": {
+  "hack2hire:69bef61921f6ab4226963c5a": {
+   "reference": "exhaustive enumeration of every affordable upgrade-count vector",
+   "candidate_design": "binary search on the target T; upgrades needed for service i are ceil(T/throughput[i])-1; sum costs with early exit",
+   "complexity_target": "O(n log(maxT)) time/O(1) extra space"
+  },
+  "hack2hire:6907bf40e1919109b6df11ab": {
+   "reference": "flatten all events, sort by timestamp, group and accumulate",
+   "candidate_design": "k-way merge with a min-heap of (timestamp, stream, index); aggregate equal timestamps",
+   "complexity_target": "O(E log k) time/O(k) heap"
+  },
+  "hack2hire:698793abfedd959e9aa444b7": {
+   "reference": "memoised recurrence (even: 1+f(n/2); odd: 1+min(f(n-1), f(n+1))), cross-checked against plain BFS for n < 400",
+   "candidate_design": "greedy on the low bits: halve when even; for odd n, decrement when n is 1 or 3 or n % 4 == 1, else increment",
+   "complexity_target": "O(log n) time/O(1) space"
+  },
+  "hack2hire:6a32d62c65569fa70cc7eba3": {
+   "reference": "BFS over whole array tuples",
+   "candidate_design": "BFS over the 2n dihedral states (offset, flipped) without materialising arrays; goal states read from the position of the minimum",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:69fff432574d87bc4900732f": {
+   "reference": "BFS over whole permutations",
+   "candidate_design": "n minus the longest prefix of current whose desired positions are strictly increasing (untouched elements form such a prefix)",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:69e939d0fbaf3da6418286b1": {
+   "reference": "quadratic adjacency scan plus DFS",
+   "candidate_design": "sort by (x, y) and by (y, x); union consecutive balls on the same line within d; count roots",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:6a330b986849fecc81440a21": {
+   "reference": "exact minimum over every removal order and window choice (memoised over remaining-ones sets)",
+   "candidate_design": "closed form c + m(m-1)/2, where c counts ones and m is the smallest positive k-window sum (clear that window first, then every other 1 costs 1)",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:68ac0aa71bf7d2097f647ee2": {
+   "reference": "literal tuple of the stack counted in a dictionary",
+   "candidate_design": "trie of chains: each call moves to the child node (parent, name), counts per node, best tracked online",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:691e23ea08ad7861624b569b": {
+   "reference": "literal replay of the raw play log, recomputing distinct users per query",
+   "candidate_design": "per-song set of users; sort songs by (-count, id) per analytics call",
+   "complexity_target": "O(1) add/play; O(S log S) getAnalytics"
+  },
+  "hack2hire:691e30e108ad7861624b56aa": {
+   "reference": "literal replay of the raw play log, scanning it backwards for recent songs",
+   "candidate_design": "per-user recency list (linked by song id, move-to-front on play); per-song user sets",
+   "complexity_target": "O(1) play; O(1) getLastThreeSongs; O(S log S) getAnalytics"
+  },
+  "hack2hire:691e30e408ad7861624b56ab": {
+   "reference": "literal replay of the raw play log with a removed set",
+   "candidate_design": "per-user recency list with lazy unlinking of removed songs; removed flag per song",
+   "complexity_target": "O(1) play/remove; amortised O(1) getLastThreeSongs; O(S log S) getAnalytics"
+  },
+  "hack2hire:67fad958ba41b3368f4e586c": {
+   "reference": "scan comparing word slices with every dictionary entry",
+   "candidate_design": "hash set of bigram strings; one left-to-right pass",
+   "complexity_target": "O(total characters) time/O(dictionary) space"
+  },
+  "hack2hire:67faf48fba41b3368f4e5879": {
+   "reference": "scan comparing word slices with every dictionary entry",
+   "candidate_design": "word trie of the dictionary; walk forward up to 5 words and keep the longest terminal",
+   "complexity_target": "O(words * 5) time/O(dictionary) space"
+  },
+  "hack2hire:695743551e6311b59b803d6a": {
+   "reference": "repeated pairwise merging until a fixpoint",
+   "candidate_design": "group by neighborhood, sort windows by start, single merge pass",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:69609171bb250997304ac843": {
+   "reference": "for every window start, count windows covering it",
+   "candidate_design": "per neighborhood sweep over sorted start/end events (ends before starts at equal hours)",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:68fd382047bea664c0bba31e": {
+   "reference": "exhaustive enumeration for tiny inputs, otherwise a slot-by-slot DP",
+   "candidate_design": "closed form k*(k-1)^(n-1) by modular square-and-multiply (BigInt in JavaScript)",
+   "complexity_target": "O(log n) time/O(1) space"
+  },
+  "hack2hire:688bc3a43867670cfb89417c": {
+   "reference": "per word, check each letter against the keypad string of its digit",
+   "candidate_design": "letter-to-digit table; compare the word's digit string with phoneNumber",
+   "complexity_target": "O(total letters) time/O(1) extra space"
+  },
+  "hack2hire:695d6a6a68e2c0dd046c4b00": {
+   "reference": "explicit pattern predicates over parsed cards",
+   "candidate_design": "rank-count signature plus flush/straight flags",
+   "complexity_target": "O(1) per hand"
+  },
+  "hack2hire:695ec22e9c1c1f40daea759e": {
+   "reference": "pattern predicates producing comparable tuples; all-pairs dominance check",
+   "candidate_design": "one strength tuple per hand from the rank-count signature; single max scan",
+   "complexity_target": "O(h) time/O(h) space"
+  },
+  "hack2hire:6a973a3a0ca9cc4e1c789e48": {
+   "reference": "count dictionary with max()/min() over keys after every step",
+   "candidate_design": "min-heap and max-heap with lazy deletion against occurrence counts",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:69e93b39fbaf3da6418286bb": {
+   "reference": "walk from pos buying while the budget allows",
+   "candidate_design": "prefix sums; upper-bound binary search for prefix[pos-1]+amount",
+   "complexity_target": "O((n + q) log n) time/O(n) space"
+  }
+ }
+}

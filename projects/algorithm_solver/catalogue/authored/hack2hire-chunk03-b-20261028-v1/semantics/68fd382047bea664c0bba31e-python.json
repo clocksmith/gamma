@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68fd382047bea664c0bba31e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "nProcesses",
+  "nIntervals"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "countSchedules",
+  "params": [
+   {
+    "name": "nProcesses",
+    "type": "integer"
+   },
+   {
+    "name": "nIntervals",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exhaustive enumeration for tiny inputs, otherwise a slot-by-slot DP",
+  "candidate_design": "closed form k*(k-1)^(n-1) by modular square-and-multiply (BigInt in JavaScript)",
+  "complexity_target": "O(log n) time/O(1) space"
+ },
+ "source_sha256": "7551402bdcea7d49f2453a8046c9e49a230d173ec7d6d23181ca096ce8e6b0e0",
+ "wrapper": "Solution.countSchedules"
+}

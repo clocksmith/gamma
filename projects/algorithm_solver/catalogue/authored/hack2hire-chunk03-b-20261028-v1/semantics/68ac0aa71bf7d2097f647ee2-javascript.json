@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68ac0aa71bf7d2097f647ee2",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "traces"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "mostFrequentCallChain",
+  "params": [
+   {
+    "name": "traces",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal tuple of the stack counted in a dictionary",
+  "candidate_design": "trie of chains: each call moves to the child node (parent, name), counts per node, best tracked online",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "bd3173de4fba49e695197f6ac6f493b9b128ace662fda09c767e25ec1e920722",
+ "wrapper": "named export mostFrequentCallChain"
+}

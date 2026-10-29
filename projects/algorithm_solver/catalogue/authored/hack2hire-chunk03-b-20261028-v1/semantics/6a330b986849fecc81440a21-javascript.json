@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a330b986849fecc81440a21",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "product",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minimumConversionCost",
+  "params": [
+   {
+    "name": "product",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exact minimum over every removal order and window choice (memoised over remaining-ones sets)",
+  "candidate_design": "closed form c + m(m-1)/2, where c counts ones and m is the smallest positive k-window sum (clear that window first, then every other 1 costs 1)",
+  "complexity_target": "O(n) time/O(1) extra space"
+ },
+ "source_sha256": "3534013276677a6d6b46f943060b3269d54cd2eb998a673b1000c92bda51e6cf",
+ "wrapper": "named export minimumConversionCost"
+}

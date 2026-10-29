@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69bef61921f6ab4226963c5a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "throughput",
+  "scalingCost",
+  "budget"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maximumThroughput",
+  "params": [
+   {
+    "name": "throughput",
+    "type": "integer[]"
+   },
+   {
+    "name": "scalingCost",
+    "type": "integer[]"
+   },
+   {
+    "name": "budget",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exhaustive enumeration of every affordable upgrade-count vector",
+  "candidate_design": "binary search on the target T; upgrades needed for service i are ceil(T/throughput[i])-1; sum costs with early exit",
+  "complexity_target": "O(n log(maxT)) time/O(1) extra space"
+ },
+ "source_sha256": "615337a015e3170587cb5ed0fdaddfbb4f089ae4e172d94302561589e1840599",
+ "wrapper": "named export maximumThroughput"
+}

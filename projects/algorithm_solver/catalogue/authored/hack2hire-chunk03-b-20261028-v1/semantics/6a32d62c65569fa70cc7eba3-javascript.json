@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a32d62c65569fa70cc7eba3",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minOperations",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "BFS over whole array tuples",
+  "candidate_design": "BFS over the 2n dihedral states (offset, flipped) without materialising arrays; goal states read from the position of the minimum",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "5b6b4f766123e57f17d031e5af397245c552ff0ed6069877c95ca5da7c372764",
+ "wrapper": "named export minOperations"
+}

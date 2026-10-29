@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6907bf40e1919109b6df11ab",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "streams"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "mergePriceStreams",
+  "params": [
+   {
+    "name": "streams",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "flatten all events, sort by timestamp, group and accumulate",
+  "candidate_design": "k-way merge with a min-heap of (timestamp, stream, index); aggregate equal timestamps",
+  "complexity_target": "O(E log k) time/O(k) heap"
+ },
+ "source_sha256": "cf9aecb0f0b3752c17151f99b3d6984907cb623646a9ac8b3f7d722f10c0222e",
+ "wrapper": "named export mergePriceStreams"
+}
