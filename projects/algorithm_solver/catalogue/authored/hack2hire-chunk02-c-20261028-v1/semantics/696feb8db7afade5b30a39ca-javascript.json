@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:696feb8db7afade5b30a39ca",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "data",
+  "forbiddenWords",
+  "ignoreWords"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "validateRows",
+  "params": [
+   {
+    "name": "data",
+    "type": "string[]"
+   },
+   {
+    "name": "forbiddenWords",
+    "type": "string[]"
+   },
+   {
+    "name": "ignoreWords",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per-row checks with datetime.date and str methods",
+  "candidate_design": "single pass, manual tokenizer, leap-year arithmetic, hash sets",
+  "complexity_target": "O(total characters) time/O(rows) space"
+ },
+ "source_sha256": "ed83a93adaa7a756718c9a00618cfc261644ee4bb33515bedebe396596193626",
+ "wrapper": "named export validateRows"
+}

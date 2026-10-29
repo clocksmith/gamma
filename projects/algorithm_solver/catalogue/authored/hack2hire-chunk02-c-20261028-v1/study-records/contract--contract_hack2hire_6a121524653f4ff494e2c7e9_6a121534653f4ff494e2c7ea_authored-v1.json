@@ -1,0 +1,512 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a121524653f4ff494e2c7e9:6a121534653f4ff494e2c7ea:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+   "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+   "selector": "/problems/12"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a121524653f4ff494e2c7e9.json",
+   "sha256": "06da58eb692674162695d3fa14820fd963a1ddbc4976cc37039f27db2272f84e",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+   "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+   "selector": "/variants/hack2hire:6a121534653f4ff494e2c7ea"
+  }
+ ],
+ "problemId": "hack2hire:6a121524653f4ff494e2c7e9",
+ "variantId": "6a121534653f4ff494e2c7ea",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 1: relay queues",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6a121534653f4ff494e2c7ea/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "CameraLogServer(): requestLog(cameraId,timestamp) queues a command; pollCommand(cameraId) removes and returns the oldest pending timestamp for that camera or -1 (non-blocking); sendLog(cameraId,timestamp,log) appends to the log queue; pollLog() removes and returns the oldest log as [cameraId,timestamp,log] or null. Concurrency is modelled as one deterministic linearized sequence of calls; thread safety is out of scope for this exact-trace contract.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "CameraLogServer(): requestLog(cameraId,timestamp) queues a command; pollCommand(cameraId) removes and returns the oldest pending timestamp for that camera or -1 (non-blocking); sendLog(cameraId,timestamp,log) appends to the log queue; pollLog() removes and returns the oldest log as [cameraId,timestamp,log] or null.",
+   "Concurrency is modelled as one deterministic linearized sequence of calls; thread safety is out of scope for this exact-trace contract."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 2e4 operations",
+   "ids and timestamps 0..1e9, logs up to 30 printable chars"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6a121534653f4ff494e2c7ea/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview users request logs, cameras poll commands and send logs; empty command and log queues; preview response sha256 156e9c0c4ae3c9a71703385ffba8e5c109be33b18cbfb153496b890b224ecf45"
+   },
+   {
+    "statement": "Uncertainty: high: method names, per-camera command routing and the log retrieval API are inferred; real thread-safety cannot be observed by a sequential trace",
+    "basis": "the public group preview is partial (513 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/12/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/12/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does a camera only see its own commands?",
+   "How do users receive logs?",
+   "Should polling block?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6a121534653f4ff494e2c7ea/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "CameraLogServer",
+      "pollLog",
+      "pollCommand",
+      "requestLog",
+      "requestLog",
+      "requestLog",
+      "pollCommand",
+      "sendLog",
+      "pollLog",
+      "pollCommand",
+      "pollCommand"
+     ],
+     [
+      [],
+      [],
+      [
+       1
+      ],
+      [
+       1,
+       5
+      ],
+      [
+       2,
+       6
+      ],
+      [
+       1,
+       7
+      ],
+      [
+       1
+      ],
+      [
+       1,
+       5,
+       "x"
+      ],
+      [],
+      [
+       1
+      ],
+      [
+       1
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     -1,
+     null,
+     null,
+     null,
+     5,
+     null,
+     [
+      1,
+      5,
+      "x"
+     ],
+     7,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "CameraLogServer",
+      "pollLog",
+      "sendLog",
+      "pollLog",
+      "sendLog"
+     ],
+     [
+      [],
+      [],
+      [
+       0,
+       33,
+       "motion at door"
+      ],
+      [],
+      [
+       2,
+       41,
+       "motion at door"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     [
+      0,
+      33,
+      "motion at door"
+     ],
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6a121534653f4ff494e2c7ea/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/oracles.py",
+    "sha256": "27fc5c6843f3a2f2bf3b18ade93951a7ea37070a90841f16291f71c163fa53e0",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class CameraLogServer: __init__(self); requestLog(cameraId, timestamp) -> void; pollCommand(cameraId) -> integer; sendLog(cameraId, timestamp, log) -> void; pollLog() -> [integer,integer,string]|null",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6a121534653f4ff494e2c7ea-python.json",
+     "inferredInterface": {
+      "classname": "CameraLogServer",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "requestLog",
+        "params": [
+         {
+          "name": "cameraId",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "pollCommand",
+        "params": [
+         {
+          "name": "cameraId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "sendLog",
+        "params": [
+         {
+          "name": "cameraId",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "log",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "pollLog",
+        "params": [],
+        "return": {
+         "type": "[integer,integer,string]|null"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6a121534653f4ff494e2c7ea-python.json",
+      "sha256": "9e053b3aedcab761b8b4a1cbc71df41bc2ed354369f0479c42161fd5f35b1b5c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class CameraLogServer { constructor(); requestLog(cameraId, timestamp) -> void; pollCommand(cameraId) -> integer; sendLog(cameraId, timestamp, log) -> void; pollLog() -> [integer,integer,string]|null }",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6a121534653f4ff494e2c7ea-javascript.json",
+     "inferredInterface": {
+      "classname": "CameraLogServer",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "requestLog",
+        "params": [
+         {
+          "name": "cameraId",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "pollCommand",
+        "params": [
+         {
+          "name": "cameraId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "sendLog",
+        "params": [
+         {
+          "name": "cameraId",
+          "type": "integer"
+         },
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "log",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "pollLog",
+        "params": [],
+        "return": {
+         "type": "[integer,integer,string]|null"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6a121534653f4ff494e2c7ea-javascript.json",
+      "sha256": "989c06f3145d73836b1d6a439a3ec189a521d0f851465011892c7581df5c4263",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/12/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/12/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

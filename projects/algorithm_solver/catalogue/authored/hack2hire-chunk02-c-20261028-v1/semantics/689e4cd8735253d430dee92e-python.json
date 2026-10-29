@@ -1,0 +1,150 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:689e4cd8735253d430dee92e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "CloudStorage",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addFile",
+    "params": [
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "size",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "copyFile",
+    "params": [
+     {
+      "name": "nameFrom",
+      "type": "string"
+     },
+     {
+      "name": "nameTo",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getFilesize",
+    "params": [
+     {
+      "name": "name",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "findFile",
+    "params": [
+     {
+      "name": "prefix",
+      "type": "string"
+     },
+     {
+      "name": "suffix",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "addUser",
+    "params": [
+     {
+      "name": "userId",
+      "type": "string"
+     },
+     {
+      "name": "capacity",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "addFileBy",
+    "params": [
+     {
+      "name": "userId",
+      "type": "string"
+     },
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "size",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "mergeUser",
+    "params": [
+     {
+      "name": "userId1",
+      "type": "string"
+     },
+     {
+      "name": "userId2",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recompute used capacity by scanning files",
+  "candidate_design": "files map name->(size,owner), per-user capacity, used total and owned-name set",
+  "complexity_target": "O(log F + R + h log h) per find (R names in prefix range, h hits), O(F) per insert/restore"
+ },
+ "source_sha256": "1ea9a69a16995c4da0e62a4d74e544938c74f53149ac88ac6743c3c1f036a107",
+ "native_class": "CloudStorage",
+ "native_symbol": "module global CloudStorage"
+}

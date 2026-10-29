@@ -1,0 +1,317 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67895195402dc47b67a14950:678951e8402dc47b67a14951:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+   "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+   "selector": "/problems/26"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67895195402dc47b67a14950.json",
+   "sha256": "e328afd39c97544b5b6acece2c78657ca2c6d97af0e072e445f679be7253bdb9",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+   "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+   "selector": "/variants/hack2hire:678951e8402dc47b67a14951"
+  }
+ ],
+ "problemId": "hack2hire:67895195402dc47b67a14950",
+ "variantId": "678951e8402dc47b67a14951",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 1: best rate",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:678951e8402dc47b67a14951/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "rates [[from,to,rate]] are directed conversions with decimal-string rates (up to 4 decimals, > 0) and no arbitrage (every cycle multiplies to at most 1). Return the maximum product of rates along any path from fromCurrency to toCurrency as an exact shortest decimal string; \"1\" when they are equal; \"-1\" when unreachable.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/26/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "rates [[from,to,rate]] are directed conversions with decimal-string rates (up to 4 decimals, > 0) and no arbitrage (every cycle multiplies to at most 1).",
+   "Return the maximum product of rates along any path from fromCurrency to toCurrency as an exact shortest decimal string; \"1\" when they are equal; \"-1\" when unreachable."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/26/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 120 edges, 30 currencies",
+   "rates (0, 9999.9999]"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:678951e8402dc47b67a14951/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview currency relationships with exchange values and best exchange rate query; preview response sha256 b608c9b12a2e8695eab77e75f157dd4259ded5ef273423c1f3df8dc06439ce9e"
+   },
+   {
+    "statement": "Uncertainty: high: the preview stops before the assumptions; directed edges, no-arbitrage and exact decimal output are inferred",
+    "basis": "the public group preview is partial (185 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/26/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/26/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are reverse rates implied (1/r)?",
+   "Can there be arbitrage cycles?",
+   "What precision is expected?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:678951e8402dc47b67a14951/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     "USD",
+     "USD"
+    ],
+    "output": "1",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [],
+     "USD",
+     "EUR"
+    ],
+    "output": "-1",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:678951e8402dc47b67a14951/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/oracles.py",
+    "sha256": "27fc5c6843f3a2f2bf3b18ade93951a7ea37070a90841f16291f71c163fa53e0",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def bestExchangeRate(rates, fromCurrency, toCurrency) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/26/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/678951e8402dc47b67a14951-python.json",
+     "inferredInterface": {
+      "name": "bestExchangeRate",
+      "params": [
+       {
+        "name": "rates",
+        "type": "list<[string,string,string]>"
+       },
+       {
+        "name": "fromCurrency",
+        "type": "string"
+       },
+       {
+        "name": "toCurrency",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/678951e8402dc47b67a14951-python.json",
+      "sha256": "61d60329ebfeaf310e312c58abc69866841804509265d813d0d58d9165e5ef32",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function bestExchangeRate(rates, fromCurrency, toCurrency) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/26/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/678951e8402dc47b67a14951-javascript.json",
+     "inferredInterface": {
+      "name": "bestExchangeRate",
+      "params": [
+       {
+        "name": "rates",
+        "type": "list<[string,string,string]>"
+       },
+       {
+        "name": "fromCurrency",
+        "type": "string"
+       },
+       {
+        "name": "toCurrency",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/678951e8402dc47b67a14951-javascript.json",
+      "sha256": "70ae937defed51efb4b802f26b8d40a2a04e97242365f92f68b9402a55a8bba9",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/26/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/26/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

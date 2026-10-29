@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a4fae98665efda9311f5607",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "items"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "frequencySort",
+  "params": [
+   {
+    "name": "items",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "Counter then sort by (count,value)",
+  "candidate_design": "count map, sort distinct values by (count,value), expand",
+  "complexity_target": "O(n + d log d) time/O(n) space"
+ },
+ "source_sha256": "6300decb3770252e63298425d10e02c55547b7c02c0355a104af1900cc63afee",
+ "wrapper": "Solution.frequencySort"
+}

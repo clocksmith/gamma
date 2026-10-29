@@ -1,0 +1,83 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6778936c775a4a31045ead0e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "WindowedKeyValueStore",
+  "constructor": {
+   "params": [
+    {
+     "name": "capacity",
+     "type": "integer"
+    },
+    {
+     "name": "windowSize",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "put",
+    "params": [
+     {
+      "name": "key",
+      "type": "integer"
+     },
+     {
+      "name": "val",
+      "type": "integer"
+     },
+     {
+      "name": "time",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "get",
+    "params": [
+     {
+      "name": "key",
+      "type": "integer"
+     },
+     {
+      "name": "time",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rebuild a recency list per operation",
+  "candidate_design": "insertion-ordered hash map (OrderedDict / Map) delete-and-reinsert for recency; evict first key",
+  "complexity_target": "O(1) amortized per operation/O(capacity) space"
+ },
+ "source_sha256": "76efe502f83083d2dba17473fa53cd9d469310dd22cfb89411f6705d9a5e69dd",
+ "native_class": "WindowedKeyValueStore",
+ "native_symbol": "property of the CommonJS solve export WindowedKeyValueStore"
+}

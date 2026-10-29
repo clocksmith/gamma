@@ -1,0 +1,326 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6973cad1a0697bac5fdca793:6973d4f9a0697bac5fdca7ad:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+   "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+   "selector": "/problems/15"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6973cad1a0697bac5fdca793.json",
+   "sha256": "ceda5987d817fdc26260cc0ecf77fefa98bc3943b3ad0bc00e0d1979548be180",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+   "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+   "selector": "/variants/hack2hire:6973d4f9a0697bac5fdca7ad"
+  }
+ ],
+ "problemId": "hack2hire:6973cad1a0697bac5fdca793",
+ "variantId": "6973d4f9a0697bac5fdca7ad",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 1: flat hourly rates",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6973d4f9a0697bac5fdca7ad/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "usageReport {region, services:[{service,hours}]} and pricingTable {region:{service:rate}} with rates as decimal strings (up to 4 decimals) and integer hours. Total = sum over report rows of rate*hours for services priced in the report region; unpriced services or an unknown region contribute 0. Return the exact total rounded half-up to cents as \"<dollars>.<cc>\".",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "usageReport {region, services:[{service,hours}]} and pricingTable {region:{service:rate}} with rates as decimal strings (up to 4 decimals) and integer hours.",
+   "Total = sum over report rows of rate*hours for services priced in the report region; unpriced services or an unknown region contribute 0.",
+   "Return the exact total rounded half-up to cents as \"<dollars>.<cc>\"."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0..2000 usage rows, hours 0..1e6",
+   "rates up to 999999.9999 with <= 4 decimals"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6973d4f9a0697bac5fdca7ad/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview usage_report region/services/hours and regional hourly pricing_table; preview response sha256 ce1396ede94281a91d489da0fb645e7ccb95d0b1095b00479ddeb9038bf57cdf"
+   },
+   {
+    "statement": "Uncertainty: medium: decimal-string rates, unpriced-service handling and half-up cents are inferred",
+    "basis": "the public group preview is partial (422 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/15/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/15/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How should unpriced services be handled?",
+   "What precision and rounding does the total use?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6973d4f9a0697bac5fdca7ad/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     {
+      "region": "us-east-1",
+      "services": []
+     },
+     {}
+    ],
+    "output": "0.00",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     {
+      "region": "us-east-1",
+      "services": [
+       {
+        "service": "db.t3",
+        "hours": 20
+       },
+       {
+        "service": "x",
+        "hours": 5
+       }
+      ]
+     },
+     {
+      "us-east-1": {
+       "db.t3": "0.017"
+      }
+     }
+    ],
+    "output": "0.34",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6973d4f9a0697bac5fdca7ad/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/oracles.py",
+    "sha256": "27fc5c6843f3a2f2bf3b18ade93951a7ea37070a90841f16291f71c163fa53e0",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def calculateCost(usageReport, pricingTable) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6973d4f9a0697bac5fdca7ad-python.json",
+     "inferredInterface": {
+      "name": "calculateCost",
+      "params": [
+       {
+        "name": "usageReport",
+        "type": "object"
+       },
+       {
+        "name": "pricingTable",
+        "type": "object"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6973d4f9a0697bac5fdca7ad-python.json",
+      "sha256": "bf5af4a3abceadab0b01ca6297835541bebfc9d0988e3f36f6c3c3fa273a544b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function calculateCost(usageReport, pricingTable) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6973d4f9a0697bac5fdca7ad-javascript.json",
+     "inferredInterface": {
+      "name": "calculateCost",
+      "params": [
+       {
+        "name": "usageReport",
+        "type": "object"
+       },
+       {
+        "name": "pricingTable",
+        "type": "object"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6973d4f9a0697bac5fdca7ad-javascript.json",
+      "sha256": "6d509f4ad0b2cc1c23c953ec7c6208aed26f0ee1a28d0369d4890a688738b05b",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/15/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/15/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,476 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6793090c6828628f54397d9a:67957d70010c9ed2f849b1f9:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+   "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6793090c6828628f54397d9a.json",
+   "sha256": "058ff52e20f5c0ce7283d89d9e57cc81c9a83e19e4905a5859c9d73f367bbb42",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+   "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+   "selector": "/variants/hack2hire:67957d70010c9ed2f849b1f9"
+  }
+ ],
+ "problemId": "hack2hire:6793090c6828628f54397d9a",
+ "variantId": "67957d70010c9ed2f849b1f9",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 1: final balances",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:67957d70010c9ed2f849b1f9/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "TransactionSystem(accounts, transactions): accounts [[name,balance]] with integer balances; transactions [[from,to,percent]] applied in order, each moving floor(balance(from)*percent/100) from from to to. getBalance(name) returns the final balance or -1 for an unknown name; getBalances() returns [[name,balance]] in account input order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "TransactionSystem(accounts, transactions): accounts [[name,balance]] with integer balances; transactions [[from,to,percent]] applied in order, each moving floor(balance(from)*percent/100) from from to to. getBalance(name) returns the final balance or -1 for an unknown name; getBalances() returns [[name,balance]] in account input order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1..1000 accounts, balances 0..1e9",
+   "0..5000 transactions, percent 0..100, from != to",
+   "up to 5000 queries"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:67957d70010c9ed2f849b1f9/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview transactions move a percentage of current from-balance; accounts with initial balance; preview response sha256 2c83dcc3e97b429b80a33ddbd7c0d61917f8921dc9ae97dd145ad3622ca59712"
+   },
+   {
+    "statement": "Uncertainty: high: the preview stops at the class header; integer floor of the percentage, method names and the -1 sentinel are inferred",
+    "basis": "the public group preview is partial (295 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/5/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the transferred amount rounded, and how?",
+   "Can a transaction mention an unknown account?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:67957d70010c9ed2f849b1f9/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "TransactionSystem",
+      "getBalances",
+      "getBalance"
+     ],
+     [
+      [
+       [
+        [
+         "a",
+         100
+        ],
+        [
+         "b",
+         0
+        ]
+       ],
+       [
+        [
+         "a",
+         "b",
+         50
+        ],
+        [
+         "b",
+         "a",
+         33
+        ]
+       ]
+      ],
+      [],
+      [
+       "b"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [
+      [
+       "a",
+       66
+      ],
+      [
+       "b",
+       34
+      ]
+     ],
+     34
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "TransactionSystem",
+      "getBalance",
+      "getBalances",
+      "getBalance"
+     ],
+     [
+      [
+       [
+        [
+         "a",
+         7
+        ],
+        [
+         "b",
+         691517503
+        ],
+        [
+         "c",
+         100
+        ],
+        [
+         "d",
+         1
+        ],
+        [
+         "e",
+         7
+        ]
+       ],
+       []
+      ],
+      [
+       "a"
+      ],
+      [],
+      [
+       "b"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     7,
+     [
+      [
+       "a",
+       7
+      ],
+      [
+       "b",
+       691517503
+      ],
+      [
+       "c",
+       100
+      ],
+      [
+       "d",
+       1
+      ],
+      [
+       "e",
+       7
+      ]
+     ],
+     691517503
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:67957d70010c9ed2f849b1f9/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/oracles.py",
+    "sha256": "27fc5c6843f3a2f2bf3b18ade93951a7ea37070a90841f16291f71c163fa53e0",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TransactionSystem: __init__(self, accounts, transactions); getBalance(name) -> integer; getBalances() -> list<[string,integer]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/67957d70010c9ed2f849b1f9-python.json",
+     "inferredInterface": {
+      "classname": "TransactionSystem",
+      "constructor": {
+       "params": [
+        {
+         "name": "accounts",
+         "type": "list<[string,integer]>"
+        },
+        {
+         "name": "transactions",
+         "type": "list<[string,string,integer]>"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "getBalance",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getBalances",
+        "params": [],
+        "return": {
+         "type": "list<[string,integer]>"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/67957d70010c9ed2f849b1f9-python.json",
+      "sha256": "af40d3ab787f4d548007b341b0954b16d1818bb2feba37fbac14554c9f366f3b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TransactionSystem { constructor(accounts, transactions); getBalance(name) -> integer; getBalances() -> list<[string,integer]> }",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/67957d70010c9ed2f849b1f9-javascript.json",
+     "inferredInterface": {
+      "classname": "TransactionSystem",
+      "constructor": {
+       "params": [
+        {
+         "name": "accounts",
+         "type": "list<[string,integer]>"
+        },
+        {
+         "name": "transactions",
+         "type": "list<[string,string,integer]>"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "getBalance",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getBalances",
+        "params": [],
+        "return": {
+         "type": "list<[string,integer]>"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/67957d70010c9ed2f849b1f9-javascript.json",
+      "sha256": "930a97e3b988463204405828b63a3bfc14f2fe64e5847dc8b7d48e40e4b3316b",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

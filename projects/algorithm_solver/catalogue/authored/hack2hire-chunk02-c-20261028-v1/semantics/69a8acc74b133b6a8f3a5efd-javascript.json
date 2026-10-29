@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a8acc74b133b6a8f3a5efd",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "transactions",
+  "blockSize"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "selectTransactions",
+  "params": [
+   {
+    "name": "transactions",
+    "type": "list<[string,integer,integer]>"
+   },
+   {
+    "name": "blockSize",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate subsets with (fee,-size,indices) key",
+  "candidate_design": "suffix DP table of (fee,-size); forward greedy reconstruction preferring inclusion",
+  "complexity_target": "O(n*B) time/O(n*B) space"
+ },
+ "source_sha256": "fa96cc78f00a2d432609bc1c4935a1a92a2a8ac1a2357d4f1a45cef4c1cfd503",
+ "wrapper": "named export selectTransactions"
+}

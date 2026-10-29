@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:678951e8402dc47b67a14951",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "rates",
+  "fromCurrency",
+  "toCurrency"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "bestExchangeRate",
+  "params": [
+   {
+    "name": "rates",
+    "type": "list<[string,string,string]>"
+   },
+   {
+    "name": "fromCurrency",
+    "type": "string"
+   },
+   {
+    "name": "toCurrency",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "DFS over all simple paths with Fractions",
+  "candidate_design": "Bellman-Ford max-product relaxation on scaled big integers",
+  "complexity_target": "O(V*E) relaxations/O(V) space"
+ },
+ "source_sha256": "0c11092533395f063b50e7017dc02803fa781c92c94d33579786ac4eb619ba66",
+ "wrapper": "Solution.bestExchangeRate"
+}

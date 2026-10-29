@@ -1,0 +1,484 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6854486ad887027976facf61:6855e42cc201117d348a2630:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+   "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+   "selector": "/problems/27"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6854486ad887027976facf61.json",
+   "sha256": "1dcf0176f23fdfb8038f57a1edcde0d73ddcb2ecfbea0e4d4823945968c13272",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+   "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+   "selector": "/variants/hack2hire:6855e42cc201117d348a2630"
+  }
+ ],
+ "problemId": "hack2hire:6854486ad887027976facf61",
+ "variantId": "6855e42cc201117d348a2630",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 1: direct referrals",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6855e42cc201117d348a2630/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "CustomerRevenueSystem(): insert(revenue) and insertWithReferrer(revenue, referrerId) create customers with sequential ids from 0 and return the id. A customer's total = own revenue + own revenue of customers they directly referred. getLowestK(k, minTotal) returns up to k ids with total >= minTotal, ordered by total ascending then id ascending.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/27/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "CustomerRevenueSystem(): insert(revenue) and insertWithReferrer(revenue, referrerId) create customers with sequential ids from 0 and return the id.",
+   "A customer's total = own revenue + own revenue of customers they directly referred. getLowestK(k, minTotal) returns up to k ids with total >= minTotal, ordered by total ascending then id ascending."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/27/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 3000 operations",
+   "revenue 0..1e6, k 0..100"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6855e42cc201117d348a2630/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview revenue credited to referrer and referred; total = own + direct referrals; preview response sha256 faf38df806cb8b63d36095e1bd33602dd3d3ffef8da03dbcde0772e83deb3ad4"
+   },
+   {
+    "statement": "Uncertainty: medium: totals follow the preview; method names, >= threshold and tie order are inferred",
+    "basis": "the public group preview is partial (482 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/27/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/27/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the threshold inclusive?",
+   "How are ties ordered?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6855e42cc201117d348a2630/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "CustomerRevenueSystem",
+      "insert",
+      "insertWithReferrer",
+      "insertWithReferrer",
+      "getLowestK",
+      "getLowestK",
+      "getLowestK"
+     ],
+     [
+      [],
+      [
+       10
+      ],
+      [
+       5,
+       0
+      ],
+      [
+       7,
+       1
+      ],
+      [
+       3,
+       0
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       5,
+       13
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     0,
+     1,
+     2,
+     [
+      2,
+      1,
+      0
+     ],
+     [],
+     [
+      0
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "CustomerRevenueSystem",
+      "insert",
+      "insertWithReferrer",
+      "insert",
+      "insertWithReferrer",
+      "insert",
+      "getLowestK"
+     ],
+     [
+      [],
+      [
+       7
+      ],
+      [
+       4,
+       0
+      ],
+      [
+       18
+      ],
+      [
+       4,
+       0
+      ],
+      [
+       17
+      ],
+      [
+       0,
+       10
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     0,
+     1,
+     2,
+     3,
+     4,
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:6855e42cc201117d348a2630/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/oracles.py",
+    "sha256": "27fc5c6843f3a2f2bf3b18ade93951a7ea37070a90841f16291f71c163fa53e0",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class CustomerRevenueSystem: __init__(self); insert(revenue) -> integer; insertWithReferrer(revenue, referrerId) -> integer; getLowestK(k, minTotal) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/27/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6855e42cc201117d348a2630-python.json",
+     "inferredInterface": {
+      "classname": "CustomerRevenueSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "insert",
+        "params": [
+         {
+          "name": "revenue",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "insertWithReferrer",
+        "params": [
+         {
+          "name": "revenue",
+          "type": "integer"
+         },
+         {
+          "name": "referrerId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getLowestK",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         },
+         {
+          "name": "minTotal",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6855e42cc201117d348a2630-python.json",
+      "sha256": "77e11158c223d8eaa6e7cf89a8b640f56b94a0ff342286aac00d27d02847eab5",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class CustomerRevenueSystem { constructor(); insert(revenue) -> integer; insertWithReferrer(revenue, referrerId) -> integer; getLowestK(k, minTotal) -> integer[] }",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/27/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6855e42cc201117d348a2630-javascript.json",
+     "inferredInterface": {
+      "classname": "CustomerRevenueSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "insert",
+        "params": [
+         {
+          "name": "revenue",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "insertWithReferrer",
+        "params": [
+         {
+          "name": "revenue",
+          "type": "integer"
+         },
+         {
+          "name": "referrerId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getLowestK",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         },
+         {
+          "name": "minTotal",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/6855e42cc201117d348a2630-javascript.json",
+      "sha256": "8dfa421a657841968b49a4aac42b6767ec5b7331d086d76124b7e60636a48c32",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/27/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/27/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,164 @@
+{
+ "problems": {
+  "hack2hire:6778936c775a4a31045ead0e": {
+   "reference": "rebuild a recency list per operation",
+   "candidate_design": "insertion-ordered hash map (OrderedDict / Map) delete-and-reinsert for recency; evict first key",
+   "complexity_target": "O(1) amortized per operation/O(capacity) space"
+  },
+  "hack2hire:697c2d6c9731315964cfb048": {
+   "reference": "per token scan the whole supported list",
+   "candidate_design": "hash set of supported tags plus emitted set",
+   "complexity_target": "O(H+S) time/O(S) space"
+  },
+  "hack2hire:697c2f499731315964cfb056": {
+   "reference": "per token scan the whole supported list",
+   "candidate_design": "index supported tags by language prefix; emitted set",
+   "complexity_target": "O(H+S) time/O(S) space"
+  },
+  "hack2hire:697c325b9731315964cfb05c": {
+   "reference": "per token scan the whole supported list",
+   "candidate_design": "language index plus a cursor over supported order for *",
+   "complexity_target": "O(H+S) time/O(S) space"
+  },
+  "hack2hire:697c341a9731315964cfb061": {
+   "reference": "per supported tag scan all tokens, Fraction qualities, sort",
+   "candidate_design": "per tag look up first exact/language/* token from maps; integer thousandths; sort by key",
+   "complexity_target": "O(H+S log S) time/O(H+S) space"
+  },
+  "hack2hire:67957d70010c9ed2f849b1f9": {
+   "reference": "replay all transactions per query",
+   "candidate_design": "replay once in the constructor into a hash map",
+   "complexity_target": "O(A+T) build, O(1)/O(A) query"
+  },
+  "hack2hire:67957d75010c9ed2f849b1fa": {
+   "reference": "replay the first k transactions per query",
+   "candidate_design": "per-account change history (step, balance) with binary search",
+   "complexity_target": "O(A+T) build, O(log T) per historical query"
+  },
+  "hack2hire:6a4fae98665efda9311f5607": {
+   "reference": "Counter then sort by (count,value)",
+   "candidate_design": "count map, sort distinct values by (count,value), expand",
+   "complexity_target": "O(n + d log d) time/O(n) space"
+  },
+  "hack2hire:6a7f873dd713d873ca7adc2f": {
+   "reference": "generic min-scan over columns",
+   "candidate_design": "two running totals compared directly",
+   "complexity_target": "O(n) time/O(n) output"
+  },
+  "hack2hire:6a7f88b6d713d873ca7adc47": {
+   "reference": "linear min-scan over k columns per ad",
+   "candidate_design": "binary min-heap of (total, column)",
+   "complexity_target": "O(n log k) time/O(n+k) space"
+  },
+  "hack2hire:696feb8db7afade5b30a39ca": {
+   "reference": "per-row checks with datetime.date and str methods",
+   "candidate_design": "single pass, manual tokenizer, leap-year arithmetic, hash sets",
+   "complexity_target": "O(total characters) time/O(rows) space"
+  },
+  "hack2hire:678314d4d0faf7ec64cc3ad6": {
+   "reference": "minute-by-minute sweep counting active delivered orders",
+   "candidate_design": "per-order accepted/delivered maps, sum of durations",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6a121534653f4ff494e2c7ea": {
+   "reference": "single command list scanned per poll",
+   "candidate_design": "per-camera FIFO queues plus a global log FIFO with head indices",
+   "complexity_target": "O(1) per operation/O(n) space"
+  },
+  "hack2hire:6945c50a2c048134ada834f9": {
+   "reference": "mark coverage per message index",
+   "candidate_design": "id->index map, index intervals sorted and merged",
+   "complexity_target": "O(n + q log q) time/O(n+q) space"
+  },
+  "hack2hire:6945c7632c048134ada834fb": {
+   "reference": "collect into a dict, sort keys",
+   "candidate_design": "k-way merge with a min-heap of page heads, skip equal last id",
+   "complexity_target": "O(N log k) time/O(k) extra space"
+  },
+  "hack2hire:6973d4f9a0697bac5fdca7ad": {
+   "reference": "Fraction sum and Fraction rounding",
+   "candidate_design": "scaled integer (1e-4 dollars) arithmetic; BigInt in JavaScript",
+   "complexity_target": "O(rows) time/O(1) space"
+  },
+  "hack2hire:69791ddab6043fbfd6027f47": {
+   "reference": "per-hour literal tier lookup with Fractions",
+   "candidate_design": "aggregate hours per service, charge each tier slice min(limit,h)-prev",
+   "complexity_target": "O(rows + services*tiers) time/O(services) space"
+  },
+  "hack2hire:697921bbb6043fbfd6027f52": {
+   "reference": "per-hour Fractions then sort",
+   "candidate_design": "scaled-integer tier slices, sort by (-exact cost, name)",
+   "complexity_target": "O(rows + s log s) time/O(s) space"
+  },
+  "hack2hire:689cf810aee746eb1c84ba38": {
+   "reference": "list of files scanned per operation",
+   "candidate_design": "hash map name -> size",
+   "complexity_target": "O(1) per operation/O(files) space"
+  },
+  "hack2hire:689e4cd5735253d430dee92d": {
+   "reference": "filter list then two stable sorts",
+   "candidate_design": "hash map plus sorted name index (insertion-sorted, lazily rebuilt after restore); findFile scans only the prefix range, filters by endswith, sort by (-size,name)",
+   "complexity_target": "O(log F + R + h log h) per find (R names in prefix range, h hits), O(F) per insert/restore"
+  },
+  "hack2hire:689e4cd8735253d430dee92e": {
+   "reference": "recompute used capacity by scanning files",
+   "candidate_design": "files map name->(size,owner), per-user capacity, used total and owned-name set",
+   "complexity_target": "O(log F + R + h log h) per find (R names in prefix range, h hits), O(F) per insert/restore"
+  },
+  "hack2hire:689e4cd9735253d430dee92f": {
+   "reference": "list scans with snapshot lists",
+   "candidate_design": "level-3 structures plus per-user snapshot arrays",
+   "complexity_target": "O(log F + R + h log h) per find, O(owned files) per backup/restore"
+  },
+  "hack2hire:69e926affbaf3da641828639": {
+   "reference": "character loop with str.isalnum classification",
+   "candidate_design": "hand-written scanner over identifier runs with char-code tests",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:69a8a9fe4b133b6a8f3a5ef3": {
+   "reference": "enumerate all subsets (n <= 16)",
+   "candidate_design": "1-D 0/1 knapsack DP over capacity",
+   "complexity_target": "O(n*B) time/O(B) space"
+  },
+  "hack2hire:69a8acc74b133b6a8f3a5efd": {
+   "reference": "enumerate subsets with (fee,-size,indices) key",
+   "candidate_design": "suffix DP table of (fee,-size); forward greedy reconstruction preferring inclusion",
+   "complexity_target": "O(n*B) time/O(n*B) space"
+  },
+  "hack2hire:69ab56434b133b6a8f3a68a2": {
+   "reference": "enumerate subsets closed under parents",
+   "candidate_design": "tree knapsack over DFS preorder: take node then continue, or skip whole subtree",
+   "complexity_target": "O(n*B) time/O(n*B) space"
+  },
+  "hack2hire:678951e8402dc47b67a14951": {
+   "reference": "DFS over all simple paths with Fractions",
+   "candidate_design": "Bellman-Ford max-product relaxation on scaled big integers",
+   "complexity_target": "O(V*E) relaxations/O(V) space"
+  },
+  "hack2hire:6855e42cc201117d348a2630": {
+   "reference": "recompute all totals and sort per query",
+   "candidate_design": "sorted array of (total,id) with binary-search insert/remove; scan from lower bound",
+   "complexity_target": "O(n) per update, O(log n + k) per query"
+  },
+  "hack2hire:69445eb8867a3f9f539ff53d": {
+   "reference": "walk every customer's ancestor chain",
+   "candidate_design": "children lists; level-by-level BFS up to maxDepth",
+   "complexity_target": "O(subtree) per nested query"
+  },
+  "hack2hire:68b93d5483188776facc8ff6": {
+   "reference": "rescan the whole board after every move",
+   "candidate_design": "count runs through the last disc in four directions",
+   "complexity_target": "O(1) per move/O(42) space"
+  },
+  "hack2hire:67a19e53b41c4108d8ccb3d4": {
+   "reference": "stack of full dictionary snapshots",
+   "candidate_design": "live map + value counts + stack of undo logs (key, previous value)",
+   "complexity_target": "O(1) per write/count, O(changes) per rollback"
+  },
+  "hack2hire:677ae48578175fce2ecdfc0a": {
+   "reference": "tokenize every document per query and slide",
+   "candidate_design": "positional inverted index word -> doc -> positions; verify with position sets",
+   "complexity_target": "O(postings of first word * phrase length) per query"
+  }
+ }
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a8a9fe4b133b6a8f3a5ef3",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "transactions",
+  "blockSize"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxFees",
+  "params": [
+   {
+    "name": "transactions",
+    "type": "list<[string,integer,integer]>"
+   },
+   {
+    "name": "blockSize",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate all subsets (n <= 16)",
+  "candidate_design": "1-D 0/1 knapsack DP over capacity",
+  "complexity_target": "O(n*B) time/O(B) space"
+ },
+ "source_sha256": "834d640c949a89448a49a0da4279f88df0e0d994f549bd8cc17b931b893b6f88",
+ "wrapper": "Solution.maxFees"
+}
