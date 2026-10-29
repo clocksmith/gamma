@@ -1,0 +1,570 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:689505de3a1d9e6d6042d519:68961c873a1d9e6d6042d57a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+   "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/689505de3a1d9e6d6042d519.json",
+   "sha256": "f1c607f16864cd7973a5ef07cf8d528e939c22487a543ac3823a112e19114a6f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+   "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+   "selector": "/variants/hack2hire:68961c873a1d9e6d6042d57a"
+  }
+ ],
+ "problemId": "hack2hire:689505de3a1d9e6d6042d519",
+ "variantId": "68961c873a1d9e6d6042d57a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: sorted scans by record and prefix",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:68961c873a1d9e6d6042d57a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "InMemoryDB() starts empty. Records are addressed by key and hold field-value pairs (all strings). setData(key, field, value) stores value in the field, replacing an existing value and creating the record when needed. getData(key, field) returns the stored value, or \"\" when the record or field is absent. deleteData(key, field) removes the field and returns true, or returns false when the record or field is absent. scanData(key) returns every field of the record as the string \"field(value)\", ordered by field name (code point order); an absent or empty record gives an empty list. scanDataByPrefix(key, prefix) returns the same strings restricted to fields that start with prefix (the empty prefix matches every field). Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "InMemoryDB() starts empty.",
+   "Records are addressed by key and hold field-value pairs (all strings).",
+   "setData(key, field, value) stores value in the field, replacing an existing value and creating the record when needed.",
+   "getData(key, field) returns the stored value, or \"\" when the record or field is absent.",
+   "deleteData(key, field) removes the field and returns true, or returns false when the record or field is absent.",
+   "scanData(key) returns every field of the record as the string \"field(value)\", ordered by field name (code point order); an absent or empty record gives an empty list.",
+   "scanDataByPrefix(key, prefix) returns the same strings restricted to fields that start with prefix (the empty prefix matches every field).",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "keys are 1 to 4 characters, fields 1 to 8 characters, from lowercase letters and digits",
+   "values are 0 to 8 lowercase letters or digits; prefixes 0 to 8 such characters",
+   "at most 1e5 calls per trace"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:68961c873a1d9e6d6042d57a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title (mentions backup); contentPreview: InMemoryDB stores records by string key, each record holds string field-value pairs; setData(key, field, value) inserts or replaces and creates missing records; getData(key, field) returns the value or \"\" when the record or field is missing; deleteData(key, field) returns true when it removed a field and false when the key or field is absent (later levels are cut off); algorithmTags: DESIGN; four variant ids under one group; preview response sha256 5a0dd3c445d6a4a137aaedc18a37ebe73a0f98d67dd834299f9b408a07eaf438"
+   },
+   {
+    "statement": "Uncertainty: very high: the preview stops after level 1; the scan methods, their names, the \"field(value)\" format and field ordering are inferred from the common multi-level version of this exercise",
+    "basis": "the public group preview is partial (985 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 2 of 4 adds sorted scans of one record (whole and by field prefix), following the common four-level in-memory database exercise",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are later levels cumulative, and are earlier methods still called once timestamps are introduced?",
+   "How are scan results formatted and ordered?",
+   "Is a TTL interval half-open, so a field set at t with ttl d expires exactly at t + d?",
+   "Which backup does restore use, and how are remaining TTLs carried over?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:68961c873a1d9e6d6042d57a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "InMemoryDB"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "InMemoryDB",
+      "setData",
+      "deleteData",
+      "setData",
+      "deleteData",
+      "setData",
+      "scanDataByPrefix",
+      "getData",
+      "setData",
+      "getData",
+      "deleteData"
+     ],
+     [
+      [],
+      [
+       "b",
+       "g",
+       "x"
+      ],
+      [
+       "b",
+       "h1"
+      ],
+      [
+       "b",
+       "fb",
+       "x"
+      ],
+      [
+       "c",
+       "g"
+      ],
+      [
+       "b",
+       "fa",
+       ""
+      ],
+      [
+       "b",
+       ""
+      ],
+      [
+       "c",
+       "g"
+      ],
+      [
+       "a",
+       "f",
+       "x"
+      ],
+      [
+       "b",
+       "fb"
+      ],
+      [
+       "a",
+       "h1"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     false,
+     null,
+     false,
+     null,
+     [
+      "fa()",
+      "fb(x)",
+      "g(x)"
+     ],
+     "",
+     null,
+     "x",
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:68961c873a1d9e6d6042d57a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/oracles.py",
+    "sha256": "91ac545e76e3dc0c0ecd12646904fa2075cfd3386905038f7253a8004f74a0de",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class InMemoryDB:\n    def __init__(self)\n    def setData(self, key, field, value) -> void\n    def getData(self, key, field) -> string\n    def deleteData(self, key, field) -> boolean\n    def scanData(self, key) -> string[]\n    def scanDataByPrefix(self, key, prefix) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/68961c873a1d9e6d6042d57a-python.json",
+     "inferredInterface": {
+      "classname": "InMemoryDB",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "setData",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getData",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "deleteData",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "scanData",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "scanDataByPrefix",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "prefix",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/68961c873a1d9e6d6042d57a-python.json",
+      "sha256": "6df7b8700a55f5ba1345603760a4cb13eac27a15ae4bc2067996f1e33db2e111",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class InMemoryDB {\n  constructor()\n  setData(key, field, value) /* -> void */\n  getData(key, field) /* -> string */\n  deleteData(key, field) /* -> boolean */\n  scanData(key) /* -> string[] */\n  scanDataByPrefix(key, prefix) /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/68961c873a1d9e6d6042d57a-javascript.json",
+     "inferredInterface": {
+      "classname": "InMemoryDB",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "setData",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getData",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "deleteData",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "field",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "scanData",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "scanDataByPrefix",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "prefix",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/68961c873a1d9e6d6042d57a-javascript.json",
+      "sha256": "cb8e9e93fb9befb268a7b3e25eb63167043c65b076d2a85f05ed3715c0c9861d",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

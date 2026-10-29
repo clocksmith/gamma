@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6782d18f3cd890ccd3798fc5",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "start",
+  "end"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "fiveMinuteIntervals",
+  "params": [
+   {
+    "name": "start",
+    "type": "string"
+   },
+   {
+    "name": "end",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "walk minute by minute from start to end around the week and keep minutes divisible by 5",
+  "candidate_design": "convert both ends to minutes of the week, round start up to a multiple of 5, and step by 5 minutes, formatting each value",
+  "complexity_target": "O(number of output times) time/O(output) space"
+ },
+ "source_sha256": "6c646e56c4d4d241a23a5a02a258b829331fd307bc34edc4a7a5900131f5b3d4",
+ "wrapper": "named export fiveMinuteIntervals"
+}

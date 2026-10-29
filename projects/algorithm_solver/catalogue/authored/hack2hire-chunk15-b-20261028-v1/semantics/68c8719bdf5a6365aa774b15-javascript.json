@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68c8719bdf5a6365aa774b15",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "words",
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "firstAnagramWord",
+  "params": [
+   {
+    "name": "words",
+    "type": "string[]"
+   },
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each word in order, compare its sorted letters with the sorted letters of every window of s",
+  "candidate_design": "group words by length; for each length slide one window over s keeping an exact count signature (four base-51 numbers over the 26 counts) and look it up in a map from word signatures to word indices; answer the smallest index found",
+  "complexity_target": "O(D |s| + total word length) time for D distinct word lengths/O(number of words) space"
+ },
+ "source_sha256": "d6cbf8ddeeee2de749d71d180d05f944329ba79abdc9b32535c439fd9df852f5",
+ "wrapper": "named export firstAnagramWord"
+}

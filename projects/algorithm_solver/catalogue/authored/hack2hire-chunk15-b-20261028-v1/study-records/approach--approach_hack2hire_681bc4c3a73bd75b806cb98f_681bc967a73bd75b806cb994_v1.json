@@ -1,0 +1,462 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+   "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+   "selector": "/problems/hack2hire:681bc967a73bd75b806cb994"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+   "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+   "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+  }
+ ],
+ "problemId": "hack2hire:681bc4c3a73bd75b806cb98f",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/contract--contract_hack2hire_681bc4c3a73bd75b806cb98f_681bc967a73bd75b806cb994_authored-v1.json",
+  "sha256": "c836fa318c275a7d96b14ca3a34feedb59a7294f0dfe34230d5aa0cb2d9fe3da"
+ },
+ "title": {
+  "status": "present",
+  "value": "per-room counts; per-room doubly linked lists in entry order; a sorted doubly linked list of non-empty rooms (a move from r to r + 1 inserts r + 1 right after r and unlinks r when it empties); topPlayers walks rooms from the highest",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+    "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+    "selector": "/problems/hack2hire:681bc967a73bd75b806cb994/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "per-room counts; per-room doubly linked lists in entry order; a sorted doubly linked list of non-empty rooms (a move from r to r + 1 inserts r + 1 right after r and unlinks r when it empties); topPlayers walks rooms from the highest. Complexity target: O(1) per advance and countInRoom, O(k) per topPlayers/O(n + m) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+    "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+    "selector": "/problems/hack2hire:681bc967a73bd75b806cb994"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Leaderboards where scores only increase by one step"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:681bc967a73bd75b806cb994/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Linked lists give O(k) queries; a heap or balanced tree handles arbitrary score jumps at O(log m) per update"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:681bc967a73bd75b806cb994/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "the per-room counts sum to m",
+   "each room list is ordered by entry time",
+   "the non-empty room list is sorted and contains exactly the rooms with count > 0"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:681bc967a73bd75b806cb994/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Players only move up by one room, so the set of occupied rooms changes locally.",
+   "Keep each room's players in entry order; a move appends to the next room's list.",
+   "Link the non-empty rooms in decreasing order and walk them from the top until k players are collected."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:681bc967a73bd75b806cb994/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "per-room counts; per-room doubly linked lists in entry order; a sorted doubly linked list of non-empty rooms (a move from r to r + 1 inserts r + 1 right after r and unlinks r when it empties); topPlayers walks rooms from the highest",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+      "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+      "selector": "/problems/hack2hire:681bc967a73bd75b806cb994/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(1) per advance and countInRoom, O(k) per topPlayers/O(n + m) space; the independent reference (sort all players by (room descending, entry time) on every topPlayers call) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+      "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+      "selector": "/problems/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Players only move up by one room, so the set of occupied rooms changes locally.",
+     "Keep each room's players in entry order; a move appends to the next room's list."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_681bc4c3a73bd75b806cb98f_681bc967a73bd75b806cb994_approach-native_v1.json",
+    "sha256": "8082d33fab69e6d17eed02451dec81bf71ba229d2a74530912303ef9892c1c2b"
+   }
+  },
+  {
+   "id": "approach:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred native class EscapeRoom, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+      "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+      "selector": "/problems/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Link the non-empty rooms in decreasing order and walk them from the top until k players are collected."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_681bc4c3a73bd75b806cb98f_681bc967a73bd75b806cb994_python_v1.json",
+     "sha256": "c9d33f792415114cafab137ac0eddc481c75d88afb6c1401e47a80172c8f06a4"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_681bc4c3a73bd75b806cb98f_681bc967a73bd75b806cb994_javascript_v1.json",
+     "sha256": "dc383b642104b8816bf96319835cf2123b3e90e183f57e15b9fcf53b780480d8"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_681bc4c3a73bd75b806cb98f_681bc967a73bd75b806cb994_approach-native_v1.json",
+    "sha256": "8082d33fab69e6d17eed02451dec81bf71ba229d2a74530912303ef9892c1c2b"
+   }
+  },
+  {
+   "id": "approach:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (sort all players by (room descending, entry time) on every topPlayers call) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+      "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+      "selector": "/problems/hack2hire:681bc967a73bd75b806cb994/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/8/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/test_oracles.py",
+      "sha256": "07266b32f76e63ba0e3228e2bc98d5bed7b74c092638ae74f39c04322377d39f",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:681bc967a73bd75b806cb994"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_681bc4c3a73bd75b806cb98f_681bc967a73bd75b806cb994_approach-native_v1.json",
+    "sha256": "8082d33fab69e6d17eed02451dec81bf71ba229d2a74530912303ef9892c1c2b"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:681bc4c3a73bd75b806cb98f:681bc967a73bd75b806cb994:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_681bc4c3a73bd75b806cb98f_681bc967a73bd75b806cb994_approach-native_v1.json",
+  "sha256": "8082d33fab69e6d17eed02451dec81bf71ba229d2a74530912303ef9892c1c2b"
+ }
+}

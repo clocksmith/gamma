@@ -1,0 +1,398 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+   "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+   "selector": "/problems/16"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6833ebf4c7e9643eccb00bf3.json",
+   "sha256": "b8014cad8d0f9adfcdf46b9df0ce53a146ab893dd12804b5ac1f93d37f484ec1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+   "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+   "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+  }
+ ],
+ "problemId": "hack2hire:6833ebf4c7e9643eccb00bf3",
+ "variantId": "6833f407c7e9643eccb00bf5",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: free-seat intervals for a party",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Times are integers. A reservation [start, end, seats] holds seats during [start, end) and lies inside [open, close]; reservations are sorted by start and never exceed capacity in total at any time. Return the maximal intervals [a, b] (a < b) inside [open, close) during which at least partySize seats are free at every moment, sorted by start; adjacent qualifying stretches are merged.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Times are integers.",
+   "A reservation [start, end, seats] holds seats during [start, end) and lies inside [open, close]; reservations are sorted by start and never exceed capacity in total at any time.",
+   "Return the maximal intervals [a, b] (a < b) inside [open, close) during which at least partySize seats are free at every moment, sorted by start; adjacent qualifying stretches are merged."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= open < close <= 1e9",
+   "1 <= capacity <= 1e9",
+   "0 <= reservations.length <= 1e5",
+   "open <= start < end <= close",
+   "1 <= seats",
+   "reserved seats never exceed capacity",
+   "1 <= partySize <= capacity"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a restaurant opens at open, closes at close and has a fixed seating capacity; existing reservations [start, end, seats] are sorted by start (the requested output is cut off); algorithmTags: ARRAY; preview response sha256 5226e1fb879699981860a17755cdd3545c775a246a86049aa87a66d52631b876"
+   },
+   {
+    "statement": "Uncertainty: very high: the restaurant model and the sorted reservation triples are in the preview; the question itself (free intervals for a party of partySize), half-open reservation times and merging are inferred",
+    "basis": "the public group preview is partial (381 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/16/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/16/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/16/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is the question: free intervals, fully booked intervals, or whether a party fits?",
+   "Are reservation intervals half-open?",
+   "Should touching intervals be merged?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     0,
+     10,
+     2,
+     [],
+     1
+    ],
+    "output": [
+     [
+      0,
+      10
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     1,
+     22,
+     3,
+     [
+      [
+       4,
+       9,
+       1
+      ],
+      [
+       6,
+       12,
+       1
+      ],
+      [
+       7,
+       22,
+       1
+      ],
+      [
+       17,
+       18,
+       2
+      ],
+      [
+       21,
+       22,
+       1
+      ]
+     ],
+     2
+    ],
+    "output": [
+     [
+      1,
+      6
+     ],
+     [
+      12,
+      17
+     ],
+     [
+      18,
+      21
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/oracles.py",
+    "sha256": "91ac545e76e3dc0c0ecd12646904fa2075cfd3386905038f7253a8004f74a0de",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def availableIntervals(open, close, capacity, reservations, partySize) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/6833f407c7e9643eccb00bf5-python.json",
+     "inferredInterface": {
+      "name": "availableIntervals",
+      "params": [
+       {
+        "name": "open",
+        "type": "integer"
+       },
+       {
+        "name": "close",
+        "type": "integer"
+       },
+       {
+        "name": "capacity",
+        "type": "integer"
+       },
+       {
+        "name": "reservations",
+        "type": "integer[][]"
+       },
+       {
+        "name": "partySize",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/6833f407c7e9643eccb00bf5-python.json",
+      "sha256": "a1bbcc9d8590a696d706308b151eb22b91e23f6ab74b183ccfd9e2a5ef7a4cd9",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function availableIntervals(open, close, capacity, reservations, partySize) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/6833f407c7e9643eccb00bf5-javascript.json",
+     "inferredInterface": {
+      "name": "availableIntervals",
+      "params": [
+       {
+        "name": "open",
+        "type": "integer"
+       },
+       {
+        "name": "close",
+        "type": "integer"
+       },
+       {
+        "name": "capacity",
+        "type": "integer"
+       },
+       {
+        "name": "reservations",
+        "type": "integer[][]"
+       },
+       {
+        "name": "partySize",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/6833f407c7e9643eccb00bf5-javascript.json",
+      "sha256": "cfed3fe9117313760bf2d64cdbb7f259794baec90ead1f79ced9308e4a0fa130",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/16/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/16/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

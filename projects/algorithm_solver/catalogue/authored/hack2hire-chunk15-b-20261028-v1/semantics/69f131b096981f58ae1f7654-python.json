@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69f131b096981f58ae1f7654",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "shortestGoodSubarray",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every start, extend to the right with a set until k distinct values are seen",
+  "candidate_design": "sliding window: extend right, and while the window still has k distinct values record its length and shrink from the left",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "bef1b16627e437a042ec40ba891e83e737a6bb652e2558b213c1bed92a6a2fec",
+ "wrapper": "Solution.shortestGoodSubarray"
+}

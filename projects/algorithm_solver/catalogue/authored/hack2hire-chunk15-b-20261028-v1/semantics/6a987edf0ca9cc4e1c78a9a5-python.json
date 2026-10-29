@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a987edf0ca9cc4e1c78a9a5",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "sources"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "finalValues",
+  "params": [
+   {
+    "name": "sources",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan sources from highest to lowest preference and entries right to left, keeping the first value seen per key",
+  "candidate_design": "one forward pass overwriting a hash map, then sort the keys",
+  "complexity_target": "O(E + K log K) time/O(K) space for E entries and K keys"
+ },
+ "source_sha256": "d175ab748f906bd3fdb59c11d26d5b1f950b66746740a7bc4570480d3a62d987",
+ "wrapper": "Solution.finalValues"
+}

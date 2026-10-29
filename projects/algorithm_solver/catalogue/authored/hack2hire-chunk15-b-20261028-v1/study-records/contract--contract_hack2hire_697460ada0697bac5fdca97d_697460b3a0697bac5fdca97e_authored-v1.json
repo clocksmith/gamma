@@ -1,0 +1,354 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:697460ada0697bac5fdca97d:697460b3a0697bac5fdca97e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+   "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/697460ada0697bac5fdca97d.json",
+   "sha256": "e87df719d553cb4d4e0c1bd4fe1b4802095c79fa947ab38d8ba8fe8c9ed77c3f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+   "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+   "selector": "/variants/hack2hire:697460b3a0697bac5fdca97e"
+  }
+ ],
+ "problemId": "hack2hire:697460ada0697bac5fdca97d",
+ "variantId": "697460b3a0697bac5fdca97e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: maximize distinct walls with a one-turn route",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:697460b3a0697bac5fdca97e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "energy is the starting energy E; positions[i] and costs[i] describe wall i (positions are distinct and non-zero). Moving costs nothing; every crossing of a wall costs its cost, including crossing the same wall again. Return the largest number of distinct walls that can be crossed with total cost at most E. Any route crosses the nearest i walls on one side and the nearest j on the other; going right first costs 2 R(i) + L(j) and going left first costs R(i) + 2 L(j), where R and L are the summed costs of those walls.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "energy is the starting energy E; positions[i] and costs[i] describe wall i (positions are distinct and non-zero).",
+   "Moving costs nothing; every crossing of a wall costs its cost, including crossing the same wall again.",
+   "Return the largest number of distinct walls that can be crossed with total cost at most E.",
+   "Any route crosses the nearest i walls on one side and the nearest j on the other; going right first costs 2 R(i) + L(j) and going left first costs R(i) + 2 L(j), where R and L are the summed costs of those walls."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= positions.length = costs.length <= 1e5",
+   "positions are distinct, non-zero, |position| <= 1e9",
+   "1 <= costs[i] <= 1e9",
+   "0 <= energy <= 1e15"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:697460b3a0697bac5fdca97e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: start at position 0 with energy E on an infinite line, moving one unit left or right per move; walls sit at distinct positions and each has an energy cost to cross; maximize the number of distinct walls crossed with at most E energy (the cost model for moves and repeated crossings is cut off); algorithmTags: PREFIX_SUM; preview response sha256 0b4cf3a563a6d448b96f25a3a2e6c0a885aa3a67603df394af86c748d07d0398"
+   },
+   {
+    "statement": "Uncertainty: high: the start, energy, distinct wall positions and costs are in the preview; free movement, paying again on every re-crossing and the input encoding as two parallel lists are inferred",
+    "basis": "the public group preview is partial (457 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does each move cost energy, or only wall crossings?",
+   "Does re-crossing a wall cost again?",
+   "Is a wall at position 0 possible?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:697460b3a0697bac5fdca97e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     0,
+     [],
+     []
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     43,
+     [
+      20,
+      -6,
+      18,
+      -20,
+      5,
+      7,
+      -10,
+      -17,
+      -14,
+      -7
+     ],
+     [
+      4,
+      2,
+      9,
+      2,
+      9,
+      3,
+      9,
+      7,
+      2,
+      1
+     ]
+    ],
+    "output": 7,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:697460b3a0697bac5fdca97e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/oracles.py",
+    "sha256": "91ac545e76e3dc0c0ecd12646904fa2075cfd3386905038f7253a8004f74a0de",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def maxDistinctWalls(energy, positions, costs) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/697460b3a0697bac5fdca97e-python.json",
+     "inferredInterface": {
+      "name": "maxDistinctWalls",
+      "params": [
+       {
+        "name": "energy",
+        "type": "integer"
+       },
+       {
+        "name": "positions",
+        "type": "integer[]"
+       },
+       {
+        "name": "costs",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/697460b3a0697bac5fdca97e-python.json",
+      "sha256": "e22195ae1f4c8490e3ec22e27dbdb36b054fc7b0cfecb569c779c41a600c0312",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function maxDistinctWalls(energy, positions, costs) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/697460b3a0697bac5fdca97e-javascript.json",
+     "inferredInterface": {
+      "name": "maxDistinctWalls",
+      "params": [
+       {
+        "name": "energy",
+        "type": "integer"
+       },
+       {
+        "name": "positions",
+        "type": "integer[]"
+       },
+       {
+        "name": "costs",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/697460b3a0697bac5fdca97e-javascript.json",
+      "sha256": "f2e9e3d8e8d9e64f2bbab84d1aa6d028963def1ae51863d130fb08f807647a31",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,384 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:688e61fe8cf2da976a9c6902:688e62068cf2da976a9c6903:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+   "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+   "selector": "/problems/17"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/688e61fe8cf2da976a9c6902.json",
+   "sha256": "9f35941895960a740ed99f9fd1589aa566eb0c81819a49d037736237911ed3fd",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+   "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+   "selector": "/variants/hack2hire:688e62068cf2da976a9c6903"
+  }
+ ],
+ "problemId": "hack2hire:688e61fe8cf2da976a9c6902",
+ "variantId": "688e62068cf2da976a9c6903",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: k-th largest positive net debt",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:688e62068cf2da976a9c6903/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "loans lists [borrower, lender, amount] with amount a decimal string. A person's net debt is the sum of amounts they borrowed minus the sum they lent. Among people with positive net debt, rank by net debt (larger first) and then by name (code point order). Return the name ranked k (1-based), or \"\" when fewer than k people have positive net debt.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "loans lists [borrower, lender, amount] with amount a decimal string.",
+   "A person's net debt is the sum of amounts they borrowed minus the sum they lent.",
+   "Among people with positive net debt, rank by net debt (larger first) and then by name (code point order).",
+   "Return the name ranked k (1-based), or \"\" when fewer than k people have positive net debt."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= loans.length <= 1e5",
+   "names are 1 to 10 lowercase letters; borrower != lender",
+   "amount is a decimal string without leading zeros, 0 <= amount < 1e9",
+   "1 <= k <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:688e62068cf2da976a9c6903/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: loans are triplets [borrower, lender, amount] with non-empty names and amount a string holding a non-negative integer; a person's net debt is total borrowed minus total lent, positive meaning they owe overall (what to report is cut off); algorithmTags: HASH_TABLE; preview response sha256 3014750a4d15b0ca244d1807aada7a474220881020258fc00c7e6c6241b89e8a"
+   },
+   {
+    "statement": "Uncertainty: very high: the loan format and net debt are in the preview; what is returned (the k-th debtor's name), ranking only positive debts, the name tie-break and the \"\" result are inferred",
+    "basis": "the public group preview is partial (442 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/17/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/17/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/17/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does the answer report a name, an amount, or both?",
+   "Are people with zero or negative net debt ranked?",
+   "How are equal debts ordered?",
+   "How large can amounts be?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:688e62068cf2da976a9c6903/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     1
+    ],
+    "output": "",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "dan",
+       "eve",
+       "14"
+      ],
+      [
+       "amy",
+       "cat",
+       "9"
+      ],
+      [
+       "bob",
+       "amy",
+       "12"
+      ],
+      [
+       "eve",
+       "amy",
+       "13"
+      ],
+      [
+       "amy",
+       "bob",
+       "12"
+      ],
+      [
+       "amy",
+       "eve",
+       "17"
+      ],
+      [
+       "cat",
+       "amy",
+       "13"
+      ],
+      [
+       "amy",
+       "cat",
+       "3"
+      ],
+      [
+       "eve",
+       "bob",
+       "11"
+      ],
+      [
+       "amy",
+       "eve",
+       "12"
+      ],
+      [
+       "cat",
+       "dan",
+       "2"
+      ],
+      [
+       "eve",
+       "cat",
+       "9"
+      ]
+     ],
+     3
+    ],
+    "output": "",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:688e62068cf2da976a9c6903/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/oracles.py",
+    "sha256": "91ac545e76e3dc0c0ecd12646904fa2075cfd3386905038f7253a8004f74a0de",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def kthHighestDebtor(loans, k) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/688e62068cf2da976a9c6903-python.json",
+     "inferredInterface": {
+      "name": "kthHighestDebtor",
+      "params": [
+       {
+        "name": "loans",
+        "type": "string[][]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/688e62068cf2da976a9c6903-python.json",
+      "sha256": "d00354f84cec3ce36f13bdde653ec43162558044566df5e06cab1ee79390af2e",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function kthHighestDebtor(loans, k) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/688e62068cf2da976a9c6903-javascript.json",
+     "inferredInterface": {
+      "name": "kthHighestDebtor",
+      "params": [
+       {
+        "name": "loans",
+        "type": "string[][]"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/semantics/688e62068cf2da976a9c6903-javascript.json",
+      "sha256": "51af25a55dd107f1f257c233d5f1e364f3f5346243c9afc4d07c13c7a8d54791",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/17/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+    "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+    "selector": "/problems/17/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

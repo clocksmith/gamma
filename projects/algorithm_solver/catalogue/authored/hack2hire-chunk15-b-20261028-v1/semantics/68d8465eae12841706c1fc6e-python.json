@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68d8465eae12841706c1fc6e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "files",
+  "word"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "searchFiles",
+  "params": [
+   {
+    "name": "files",
+    "type": "(string|string[])[][]"
+   },
+   {
+    "name": "word",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "split every line on non-alphanumeric characters with a regular expression and compare lowercased tokens",
+  "candidate_design": "single left-to-right scan per line that collects alphanumeric runs, lowercases them and compares with the lowercased word",
+  "complexity_target": "O(total characters) time/O(longest line + output) space"
+ },
+ "source_sha256": "aab7a04ea8f1a2f9af6b35ed89b7acd5cdfffbcdca0d92cec90a69177b618aed",
+ "wrapper": "Solution.searchFiles"
+}

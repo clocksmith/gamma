@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+   "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+   "selector": "/problems/hack2hire:6833f407c7e9643eccb00bf5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+   "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+   "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+  }
+ ],
+ "problemId": "hack2hire:6833ebf4c7e9643eccb00bf3",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/contract--contract_hack2hire_6833ebf4c7e9643eccb00bf3_6833f407c7e9643eccb00bf5_authored-v1.json",
+  "sha256": "42ed50f3869eb1538803e332b4bdb6c371664827787502b35dc50db9b24b001d"
+ },
+ "title": {
+  "status": "present",
+  "value": "sweep: turn reservations into +seats/-seats events, sort them, walk times keeping the reserved total, and open/close output intervals when free seats cross partySize",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+    "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+    "selector": "/problems/hack2hire:6833f407c7e9643eccb00bf5/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "sweep: turn reservations into +seats/-seats events, sort them, walk times keeping the reserved total, and open/close output intervals when free seats cross partySize. Complexity target: O(n log n) time/O(n) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+    "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+    "selector": "/problems/hack2hire:6833f407c7e9643eccb00bf5"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Capacity timelines from interval bookings"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "A sweep is O(n log n); a difference array over minutes is simpler but needs bounded time ranges"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "between consecutive event times the reserved total is constant",
+   "emitted intervals are disjoint, sorted and non-adjacent"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Free seats only change at reservation starts and ends.",
+   "Sort +seats and -seats events by time and process all events at one time together.",
+   "Track where the current qualifying stretch began and close it when free seats drop below partySize or the day ends."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+    "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+    "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "sweep: turn reservations into +seats/-seats events, sort them, walk times keeping the reserved total, and open/close output intervals when free seats cross partySize",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+      "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+      "selector": "/problems/hack2hire:6833f407c7e9643eccb00bf5/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n log n) time/O(n) space; the independent reference (cut the day at every reservation boundary and sum overlapping seats for each piece) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+      "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+      "selector": "/problems/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Free seats only change at reservation starts and ends.",
+     "Sort +seats and -seats events by time and process all events at one time together."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_6833ebf4c7e9643eccb00bf3_6833f407c7e9643eccb00bf5_approach-native_v1.json",
+    "sha256": "58c267d2e92e5bdf71948df041677da6ba7304dce5161b5c6e0dc62f1344b0dc"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper availableIntervals, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+      "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+      "selector": "/problems/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Track where the current qualifying stretch began and close it when free seats drop below partySize or the day ends."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_6833ebf4c7e9643eccb00bf3_6833f407c7e9643eccb00bf5_python_v1.json",
+     "sha256": "0c00b989aab93f90afef510600c95ded9c73dd58c46fb948184fa9ff2a875056"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_6833ebf4c7e9643eccb00bf3_6833f407c7e9643eccb00bf5_javascript_v1.json",
+     "sha256": "5e89a76f5898fa3f7cdddd30fd76997a165928cb7b498f5b8160f0f39f8d7dd7"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_6833ebf4c7e9643eccb00bf3_6833f407c7e9643eccb00bf5_approach-native_v1.json",
+    "sha256": "58c267d2e92e5bdf71948df041677da6ba7304dce5161b5c6e0dc62f1344b0dc"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (cut the day at every reservation boundary and sum overlapping seats for each piece) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/design.json",
+      "sha256": "e6cdb430498dfad0430aca52b14d51d428925f4acd0760612c798b4f45368733",
+      "selector": "/problems/hack2hire:6833f407c7e9643eccb00bf5/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/contracts.json",
+      "sha256": "6641b4b8d894c3fd04e948ca6b1c52d13b094a9f7b1f3de845797387210ad762",
+      "selector": "/problems/16/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/test_oracles.py",
+      "sha256": "07266b32f76e63ba0e3228e2bc98d5bed7b74c092638ae74f39c04322377d39f",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-content.json",
+      "sha256": "a0078f59501aed64842e5c33de46e77a21b1ebdb3ee1337626cf2ed292c8f1bd",
+      "selector": "/variants/hack2hire:6833f407c7e9643eccb00bf5"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_6833ebf4c7e9643eccb00bf3_6833f407c7e9643eccb00bf5_approach-native_v1.json",
+    "sha256": "58c267d2e92e5bdf71948df041677da6ba7304dce5161b5c6e0dc62f1344b0dc"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6833ebf4c7e9643eccb00bf3:6833f407c7e9643eccb00bf5:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-b-20261028-v1/study-records/artifact--artifact_hack2hire_6833ebf4c7e9643eccb00bf3_6833f407c7e9643eccb00bf5_approach-native_v1.json",
+  "sha256": "58c267d2e92e5bdf71948df041677da6ba7304dce5161b5c6e0dc62f1344b0dc"
+ }
+}

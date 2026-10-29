@@ -1,0 +1,74 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68539b6bd3dbd4fb8b026e9f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "LazyArray",
+  "constructor": {
+   "params": [
+    {
+     "name": "arr",
+     "type": "integer[]"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "map",
+    "params": [
+     {
+      "name": "operation",
+      "type": "string"
+     },
+     {
+      "name": "operand",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "indexOf",
+    "params": [
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "apply each transformation eagerly to a copied array and search it linearly",
+  "candidate_design": "compose all transformations into one affine map a x + b; indexOf inverts it ((target - b) / a when divisible) and looks the preimage up in a first-index hash map; a = 0 means every element maps to b",
+  "complexity_target": "O(n) construction, O(1) per map and indexOf/O(n) space"
+ },
+ "source_sha256": "f6ac6f1000d7a9e9f3127d1dbec93679f43397fbd21b47d7adabdece8bf34bbe",
+ "native_class": "LazyArray",
+ "native_symbol": "property LazyArray of the CommonJS solve export",
+ "void_methods": [
+  "map"
+ ]
+}
