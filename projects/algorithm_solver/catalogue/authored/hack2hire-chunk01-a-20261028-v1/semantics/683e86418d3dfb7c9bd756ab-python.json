@@ -1,0 +1,70 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:683e86418d3dfb7c9bd756ab",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "FileSystem",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addFile",
+    "params": [
+     {
+      "name": "path",
+      "type": "string"
+     },
+     {
+      "name": "size",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "find",
+    "params": [
+     {
+      "name": "directory",
+      "type": "string"
+     },
+     {
+      "name": "filters",
+      "type": "list<filter>"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "linear scan with string prefix test",
+  "candidate_design": "directory trie; DFS of the target subtree then filter and sort",
+  "complexity_target": "O(subtree + r log r) per find"
+ },
+ "source_sha256": "9100a6845ac39371f9a6137901dc76e5a8a43ecbf60844f75ca00481359e23a2",
+ "native_class": "FileSystem",
+ "native_symbol": "module global FileSystem"
+}

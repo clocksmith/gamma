@@ -1,0 +1,98 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:687c3a5eaa2b26b0b64b39e5",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "BankingSystem",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "createAccount",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "accountId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "deposit",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "accountId",
+      "type": "string"
+     },
+     {
+      "name": "amount",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "transfer",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "sourceAccountId",
+      "type": "string"
+     },
+     {
+      "name": "targetAccountId",
+      "type": "string"
+     },
+     {
+      "name": "amount",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "event-sourced replay of every successful operation for each answer",
+  "candidate_design": "hash maps of balances",
+  "complexity_target": "O(1) per operation/O(A) space"
+ },
+ "source_sha256": "278500c6ccd5cb4d23ab80dc4a0a2c5427a227a085f338f724fd33f812b9f5b1",
+ "native_class": "BankingSystem",
+ "native_symbol": "module global BankingSystem"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6986db08fedd959e9aa443ca",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "shuffledDeck",
+  "players"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "dealAndSortHands",
+  "params": [
+   {
+    "name": "shuffledDeck",
+    "type": "list<[string,string]>"
+   },
+   {
+    "name": "players",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "list<list<[string,string]>>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "stride slicing plus sort",
+  "candidate_design": "counting placement by canonical index",
+  "complexity_target": "O(52) time/O(52) space"
+ },
+ "source_sha256": "3d8e44f92424cfa3f165153257b69fb67de22eb82d61d31a1a1031503a6550f5",
+ "wrapper": "named export dealAndSortHands"
+}

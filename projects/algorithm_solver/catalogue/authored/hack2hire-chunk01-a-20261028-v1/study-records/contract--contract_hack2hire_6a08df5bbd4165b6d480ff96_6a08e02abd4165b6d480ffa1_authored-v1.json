@@ -1,0 +1,392 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a08df5bbd4165b6d480ff96:6a08e02abd4165b6d480ffa1:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+   "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a08df5bbd4165b6d480ff96.json",
+   "sha256": "b74b609d2b028f3a7516072f88b53248e4923dff15893577a9790812d4c40a6d",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+   "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+   "selector": "/variants/hack2hire:6a08e02abd4165b6d480ffa1"
+  }
+ ],
+ "problemId": "hack2hire:6a08df5bbd4165b6d480ff96",
+ "variantId": "6a08e02abd4165b6d480ffa1",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 2: intersect two cameras",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a08e02abd4165b6d480ffa1/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Compute each camera's motion periods as in variant 1 with the shared threshold, then return all nonempty inclusive intersections [max start, min end] between a period of camera A and a period of camera B, sorted by start.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Compute each camera's motion periods as in variant 1 with the shared threshold, then return all nonempty inclusive intersections [max start, min end] between a period of camera A and a period of camera B, sorted by start."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "each camera 0..1e5 readings, times strictly increasing",
+   "values and threshold 0..1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a08e02abd4165b6d480ffa1/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview reference to interval-list intersection; variant count; preview response sha256 749631b7275a805702e491db917645b20f2f1fcd2a7b4a515a7407a7a11842c0"
+   },
+   {
+    "statement": "Uncertainty: medium-high: the two-camera follow-up and the single shared threshold are inferred from the cited interval-intersection relationship",
+    "basis": "the public group preview is partial (1030 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   },
+   {
+    "statement": "variant 2 inferred as the interval-intersection follow-up the preview cites",
+    "basis": "group lists 2 variants with no per-variant text; ordinal 2"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/2/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the second variant really an intersection of two cameras, and do they share one threshold?",
+   "Should touching periods [a,b] and [b,c] intersect at [b,b]?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a08e02abd4165b6d480ffa1/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      4,
+      24,
+      26,
+      33,
+      34,
+      37
+     ],
+     [
+      3,
+      4,
+      5,
+      3,
+      2,
+      0
+     ],
+     [
+      9,
+      11,
+      16,
+      20,
+      24,
+      29,
+      31,
+      34
+     ],
+     [
+      4,
+      4,
+      2,
+      1,
+      1,
+      0,
+      0,
+      1
+     ],
+     2
+    ],
+    "output": [
+     [
+      9,
+      16
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      4,
+      8,
+      30,
+      33
+     ],
+     [
+      0,
+      2,
+      5,
+      0
+     ],
+     [
+      2,
+      14
+     ],
+     [
+      3,
+      3
+     ],
+     4
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a08e02abd4165b6d480ffa1/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/oracles.py",
+    "sha256": "6a83180c2958f73c61479798fc30b43fb574ebf69cf0d2efdf714028d5f4a414",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def overlappingMotion(timesA, intensitiesA, timesB, intensitiesB, threshold) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a08e02abd4165b6d480ffa1-python.json",
+     "inferredInterface": {
+      "name": "overlappingMotion",
+      "params": [
+       {
+        "name": "timesA",
+        "type": "integer[]"
+       },
+       {
+        "name": "intensitiesA",
+        "type": "integer[]"
+       },
+       {
+        "name": "timesB",
+        "type": "integer[]"
+       },
+       {
+        "name": "intensitiesB",
+        "type": "integer[]"
+       },
+       {
+        "name": "threshold",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a08e02abd4165b6d480ffa1-python.json",
+      "sha256": "434c9e69deb3f6924cf9e4ee01975e73f0dce61d085fb69320424bccec8f9667",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function overlappingMotion(timesA, intensitiesA, timesB, intensitiesB, threshold) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a08e02abd4165b6d480ffa1-javascript.json",
+     "inferredInterface": {
+      "name": "overlappingMotion",
+      "params": [
+       {
+        "name": "timesA",
+        "type": "integer[]"
+       },
+       {
+        "name": "intensitiesA",
+        "type": "integer[]"
+       },
+       {
+        "name": "timesB",
+        "type": "integer[]"
+       },
+       {
+        "name": "intensitiesB",
+        "type": "integer[]"
+       },
+       {
+        "name": "threshold",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/6a08e02abd4165b6d480ffa1-javascript.json",
+      "sha256": "73034e7ad7d4f9c3bd089e61981f275bd65201d65feb68e20c282ef2b2a3b85e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

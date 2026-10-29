@@ -1,0 +1,71 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6941be52b9d646bec48c68cc",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "TennisGame",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "pointTo",
+    "params": [
+     {
+      "name": "player",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getPoints",
+    "params": [],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   {
+    "name": "getScore",
+    "params": [],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "getWinner",
+    "params": [],
+    "return": {
+     "type": "string"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recount from the literal point log",
+  "candidate_design": "two counters and a winner field",
+  "complexity_target": "O(1) per operation"
+ },
+ "source_sha256": "89db1b021e710f9b3403da61d05bf87f0ba8f6f3065444a1783486081f555b8b",
+ "native_class": "TennisGame",
+ "native_symbol": "module global TennisGame"
+}

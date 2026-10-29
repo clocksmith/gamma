@@ -1,0 +1,113 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6917944f10632c00111ca218",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "DeliverySystem",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addDriver",
+    "params": [
+     {
+      "name": "driverId",
+      "type": "integer"
+     },
+     {
+      "name": "hourlyRateCents",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "addDelivery",
+    "params": [
+     {
+      "name": "driverId",
+      "type": "integer"
+     },
+     {
+      "name": "startTime",
+      "type": "integer"
+     },
+     {
+      "name": "endTime",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getTotalCost",
+    "params": [],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "payUpTo",
+    "params": [
+     {
+      "name": "upToTime",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getTotalCostUnpaid",
+    "params": [],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "getMaxActiveDriversInLast24Hours",
+    "params": [
+     {
+      "name": "currentTime",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "evaluate distinct active drivers at the window start and every start inside the window",
+  "candidate_design": "clip and union intervals per driver, then sweep events",
+  "complexity_target": "O(D log D) per query/O(D) space",
+  "numeric": "integer cent-seconds below 2**53"
+ },
+ "source_sha256": "a010c6d16076bb97ab057eb4e03740783522c6669d0ef925a487ef1afdf72b16",
+ "native_class": "DeliverySystem",
+ "native_symbol": "module global DeliverySystem"
+}

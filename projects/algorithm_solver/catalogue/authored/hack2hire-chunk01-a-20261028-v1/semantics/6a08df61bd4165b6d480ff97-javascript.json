@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a08df61bd4165b6d480ff97",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "times",
+  "intensities",
+  "threshold"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "motionPeriods",
+  "params": [
+   {
+    "name": "times",
+    "type": "integer[]"
+   },
+   {
+    "name": "intensities",
+    "type": "integer[]"
+   },
+   {
+    "name": "threshold",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "run-start labelling then grouping",
+  "candidate_design": "single linear scan",
+  "complexity_target": "O(n) time/O(1) auxiliary"
+ },
+ "source_sha256": "cf0ef74f697efea2473cbcf8eebb97ae4934d01908befe25be4471092c3c1980",
+ "wrapper": "named export motionPeriods"
+}

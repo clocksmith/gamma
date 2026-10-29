@@ -1,0 +1,460 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+   "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+   "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+   "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+   "selector": "/variants/hack2hire:6a7ceda7d713d873ca7ac7f8"
+  }
+ ],
+ "problemId": "hack2hire:6a7ce047d713d873ca7ac767",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-records/contract--contract_hack2hire_6a7ce047d713d873ca7ac767_6a7ceda7d713d873ca7ac7f8_authored-v1.json",
+  "sha256": "cc9ed583a6e18ccccf071d1b2f1992933acdb2cce382f2bde27feb3afd4d2c57"
+ },
+ "title": {
+  "status": "present",
+  "value": "one adjacency build; DFS that never re-enters deleted nodes",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+    "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+    "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "one adjacency build; DFS that never re-enters deleted nodes. Complexity target: O(n+q) time/O(n) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+    "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+    "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Many deletions on one forest"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a7ceda7d713d873ca7ac7f8/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Requires O(n) adjacency memory up front"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a7ceda7d713d873ca7ac7f8/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "each node is marked deleted at most once"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a7ceda7d713d873ca7ac7f8/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Build child lists once and reuse them for every deletion.",
+   "Skip a deletion whose node is already gone.",
+   "During traversal never re-enter a deleted node, so total work stays linear."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:6a7ceda7d713d873ca7ac7f8/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "one adjacency build; DFS that never re-enters deleted nodes",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n+q) time/O(n) space; the independent reference (ancestor walk per deletion) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Build child lists once and reuse them for every deletion.",
+     "Skip a deletion whose node is already gone."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+      "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+      "selector": "/variants/hack2hire:6a7ceda7d713d873ca7ac7f8/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a7ce047d713d873ca7ac767_6a7ceda7d713d873ca7ac7f8_approach-native_v1.json",
+    "sha256": "f8d87efdc8a2ade29915eb9f28fbe6727f1650895ba1636357b73b7716713570"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/candidate_design"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/candidate_design"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper deleteSubtrees, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/candidate_design"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use iterative traversal where depth may be large."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/candidate_design"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "During traversal never re-enter a deleted node, so total work stays linear."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+      "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+      "selector": "/variants/hack2hire:6a7ceda7d713d873ca7ac7f8/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a7ce047d713d873ca7ac767_6a7ceda7d713d873ca7ac7f8_python_v1.json",
+     "sha256": "1549958909af238932426f78f0c759f8f0a7010d79eab0e34bda582d1a24f83e"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a7ce047d713d873ca7ac767_6a7ceda7d713d873ca7ac7f8_javascript_v1.json",
+     "sha256": "01d8d693f42dbe662de583bced57ab6f58c41496d2d2ab34b6416cc8d7650104"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a7ce047d713d873ca7ac767_6a7ceda7d713d873ca7ac7f8_approach-native_v1.json",
+    "sha256": "f8d87efdc8a2ade29915eb9f28fbe6727f1650895ba1636357b73b7716713570"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/reference"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/reference"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (ancestor walk per deletion) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/reference"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/design.json",
+      "sha256": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c",
+      "selector": "/problems/hack2hire:6a7ceda7d713d873ca7ac7f8/reference"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+      "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+      "selector": "/variants/hack2hire:6a7ceda7d713d873ca7ac7f8/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a7ce047d713d873ca7ac767_6a7ceda7d713d873ca7ac7f8_approach-native_v1.json",
+    "sha256": "f8d87efdc8a2ade29915eb9f28fbe6727f1650895ba1636357b73b7716713570"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6a7ce047d713d873ca7ac767:6a7ceda7d713d873ca7ac7f8:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-records/artifact--artifact_hack2hire_6a7ce047d713d873ca7ac767_6a7ceda7d713d873ca7ac7f8_approach-native_v1.json",
+  "sha256": "f8d87efdc8a2ade29915eb9f28fbe6727f1650895ba1636357b73b7716713570"
+ }
+}

@@ -1,0 +1,2338 @@
+{
+ "schema": "gamma.hack2hire-chunk01-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-28",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:6a19fed3c81f779dc6a2370d": {
+   "constraints": [
+    "0 <= positions <= 2000, unique names",
+    "0 <= candidate ads <= 2000, unique adIds",
+    "0 <= maxDisplay, display counts <= 1e9",
+    "randomIndices has one entry per position, 0..2^31-1"
+   ],
+   "clarifyingQuestions": [
+    "May one ad fill several positions in a single call?",
+    "How is randomness supplied or seeded, and is a uniform choice required?",
+    "What is returned for a position with no eligible ad?"
+   ],
+   "hints": [
+    "An ad becomes ineligible either from its history or from being used earlier in this call.",
+    "Picking the r-th remaining eligible ad repeatedly is an order-statistic query on a shrinking list.",
+    "Keep a Fenwick tree of 1s over the eligible ads; descend it to find the (r+1)-th one, then clear it."
+   ],
+   "invariants": [
+    "remaining equals the number of 1s in the Fenwick tree",
+    "eligible order is candidateAds order, fixed before assignment"
+   ],
+   "chooseWhen": [
+    "Many positions and many ads, where an O(P*A) refilter would be too slow"
+   ],
+   "tradeoffs": [
+    "Fenwick descent adds code over a plain list removal, which is O(A) per pick but simpler"
+   ],
+   "variantLabel": "Inferred variant 1: injected random index per position",
+   "examples": [
+    {
+     "input": [
+      [],
+      [],
+      {},
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "top"
+      ],
+      [
+       {
+        "adId": "x",
+        "maxDisplay": 0
+       }
+      ],
+      {},
+      [
+       5
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a08df61bd4165b6d480ff97": {
+   "constraints": [
+    "0 <= n <= 1e5",
+    "times strictly increasing, 0..1e9",
+    "intensities and threshold 0..1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are times guaranteed strictly increasing?",
+    "Is an empty reading list possible?"
+   ],
+   "hints": [
+    "A period is a maximal run of consecutive qualifying readings.",
+    "Gaps between timestamps do not break a run; only a below-threshold reading does.",
+    "Scan once, remember the start time when a run opens, close it when the next reading fails or the array ends."
+   ],
+   "invariants": [
+    "start is set exactly while inside a qualifying run"
+   ],
+   "chooseWhen": [
+    "Single pass over readings suffices"
+   ],
+   "tradeoffs": [
+    "None material; linear and constant extra space"
+   ],
+   "variantLabel": "Variant 1: one camera",
+   "examples": [
+    {
+     "input": [
+      [
+       5,
+       10,
+       20,
+       35
+      ],
+      [
+       3,
+       1,
+       0,
+       4
+      ],
+      3
+     ],
+     "output": [
+      [
+       5,
+       5
+      ],
+      [
+       35,
+       35
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [],
+      [],
+      2
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a08e02abd4165b6d480ffa1": {
+   "constraints": [
+    "each camera 0..1e5 readings, times strictly increasing",
+    "values and threshold 0..1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is the second variant really an intersection of two cameras, and do they share one threshold?",
+    "Should touching periods [a,b] and [b,c] intersect at [b,b]?"
+   ],
+   "hints": [
+    "First reduce each camera to its sorted, disjoint motion periods.",
+    "Two sorted disjoint interval lists intersect like merging sorted lists.",
+    "Advance the pointer whose current period ends first; record [max start, min end] when it is nonempty."
+   ],
+   "invariants": [
+    "periods of each camera are sorted and disjoint",
+    "every intersection pair is visited once"
+   ],
+   "chooseWhen": [
+    "Both inputs are sorted interval lists"
+   ],
+   "tradeoffs": [
+    "All-pairs checking is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred variant 2: intersect two cameras",
+   "examples": [
+    {
+     "input": [
+      [
+       4,
+       24,
+       26,
+       33,
+       34,
+       37
+      ],
+      [
+       3,
+       4,
+       5,
+       3,
+       2,
+       0
+      ],
+      [
+       9,
+       11,
+       16,
+       20,
+       24,
+       29,
+       31,
+       34
+      ],
+      [
+       4,
+       4,
+       2,
+       1,
+       1,
+       0,
+       0,
+       1
+      ],
+      2
+     ],
+     "output": [
+      [
+       9,
+       16
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       4,
+       8,
+       30,
+       33
+      ],
+      [
+       0,
+       2,
+       5,
+       0
+      ],
+      [
+       2,
+       14
+      ],
+      [
+       3,
+       3
+      ],
+      4
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69ff9cd5574d87bc49006f98": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "0 <= cardTypes[i] <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Can a card type have zero cards?",
+    "Are only additions allowed (no removals)?",
+    "Is p bounded above?"
+   ],
+   "hints": [
+    "Each count must be raised to the next multiple of p; the cost for p is the sum of those gaps.",
+    "If q divides p, the next multiple of q is never farther than the next multiple of p, so only primes matter.",
+    "For a prime p, values in ((j-1)p, jp] all round to jp; prefix counts and sums give each block cost in O(1)."
+   ],
+   "invariants": [
+    "only primes up to max(2, max count) are candidates",
+    "zero counts cost nothing"
+   ],
+   "chooseWhen": [
+    "Large value range where per-element per-prime work is too slow"
+   ],
+   "tradeoffs": [
+    "Needs O(V) memory for prefix arrays"
+   ],
+   "variantLabel": "Variant 1",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:692f515ecd79766b0b310123": {
+   "constraints": [
+    "up to 5000 pages with outgoing links, 50000 links total",
+    "URLs are http:// with a lowercase host and optional path"
+   ],
+   "clarifyingQuestions": [
+    "How should concurrency be represented in a deterministic test?",
+    "Is the output order significant?",
+    "Does a port or https count as part of the hostname?"
+   ],
+   "hints": [
+    "Model the parser as a lookup table so the result does not depend on thread scheduling.",
+    "Only URLs on the start host are recorded or expanded.",
+    "Breadth-first search with a visited set; sort the visited set at the end."
+   ],
+   "invariants": [
+    "every URL in the visited set has the start hostname",
+    "each URL is expanded at most once"
+   ],
+   "chooseWhen": [
+    "Any graph traversal over an injected adjacency map"
+   ],
+   "tradeoffs": [
+    "A real thread pool needs a shared visited set and termination detection; the deterministic model drops that"
+   ],
+   "variantLabel": "Deterministic model of the concurrent crawler",
+   "examples": [
+    {
+     "input": [
+      "http://b.com/",
+      {
+       "http://b.com": [
+        "http://b.com/",
+        "http://b.com/"
+       ],
+       "http://b.com/": [
+        "http://b.com"
+       ]
+      }
+     ],
+     "output": [
+      "http://b.com",
+      "http://b.com/"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "http://a.com",
+      {
+       "http://a.com": [
+        "http://a.com",
+        "http://a.com",
+        "http://a.com"
+       ]
+      }
+     ],
+     "output": [
+      "http://a.com"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6782bd403cd890ccd3798fc3": {
+   "constraints": [
+    "up to 20000 nodes",
+    "keys 1..20 chars, values 0..20 chars"
+   ],
+   "clarifyingQuestions": [
+    "Is the task filtering one menu, or reconciling yesterday's and today's menus?",
+    "Should a category with no remaining active items be dropped?",
+    "What is returned when the root is inactive?"
+   ],
+   "hints": [
+    "An inactive node hides everything beneath it.",
+    "Copy only active children, preserving order.",
+    "Use an explicit stack of (source, copy) pairs so deep trees do not overflow recursion."
+   ],
+   "invariants": [
+    "every copied node is active and has an active ancestor chain",
+    "the input tree is never modified"
+   ],
+   "chooseWhen": [
+    "Very deep trees where recursion is risky"
+   ],
+   "tradeoffs": [
+    "Recursive filtering is shorter but limited by recursion depth"
+   ],
+   "variantLabel": "Inferred: active-only daily menu",
+   "examples": [
+    {
+     "input": [
+      {
+       "key": "root",
+       "value": "",
+       "active": false,
+       "children": []
+      }
+     ],
+     "output": null,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "key": "root",
+       "value": "",
+       "active": true,
+       "children": []
+      }
+     ],
+     "output": {
+      "key": "root",
+      "value": "",
+      "active": true,
+      "children": []
+     },
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6933ae8be8ebbb1c53caf339": {
+   "constraints": [
+    "1 <= m, n <= 300",
+    "cells are \"0\" or \"1\""
+   ],
+   "clarifyingQuestions": [
+    "Is water boundary measured in shared edges or in distinct water cells?",
+    "Do grid borders count as boundary?",
+    "In what order should islands be reported?"
+   ],
+   "hints": [
+    "Flood-fill each unvisited land cell to find its island.",
+    "While visiting a land cell, every in-grid neighbour that is water adds one boundary side.",
+    "Report [area, boundary] in the row-major order in which islands are first met."
+   ],
+   "invariants": [
+    "each land cell is visited exactly once",
+    "each land-water side is counted once from its land cell"
+   ],
+   "chooseWhen": [
+    "Grid connectivity with per-component aggregates"
+   ],
+   "tradeoffs": [
+    "Union-find works too but needs a second pass for aggregates"
+   ],
+   "variantLabel": "Variant 1",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "0"
+       ]
+      ]
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "1"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       1,
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a18ebdbc81f779dc6a23112": {
+   "constraints": [
+    "1 <= length <= 1e5",
+    "up to 1e5 requests",
+    "0 <= index < length"
+   ],
+   "clarifyingQuestions": [
+    "Is the count inclusive of the given index?",
+    "What should be returned: only count results or one entry per request?"
+   ],
+   "hints": [
+    "A flip of the whole string only toggles a global state.",
+    "Precompute prefix counts of ones in the original string.",
+    "With an odd number of flips, ones in [0,i] equal (i+1) minus the original count."
+   ],
+   "invariants": [
+    "flipped parity equals the number of flips mod 2",
+    "prefix array is built once"
+   ],
+   "chooseWhen": [
+    "Whole-string flips only"
+   ],
+   "tradeoffs": [
+    "Range flips would need a segment tree instead"
+   ],
+   "variantLabel": "Variant 1",
+   "examples": [
+    {
+     "input": [
+      "0",
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "1",
+      [
+       "count:0",
+       "flip",
+       "count:0"
+      ]
+     ],
+     "output": [
+      1,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a7ce081d713d873ca7ac76a": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "parentIndex forms a valid forest; roots are self-parents"
+   ],
+   "clarifyingQuestions": [
+    "How should deleted nodes be represented in the result?",
+    "Can a parent index be larger than the child index?"
+   ],
+   "hints": [
+    "Deleting a node removes exactly its descendants.",
+    "Build child lists from parent pointers.",
+    "Traverse from the deleted node with an explicit stack and mark each visited node -1."
+   ],
+   "invariants": [
+    "deleted set is closed under descendants",
+    "surviving nodes keep their parent"
+   ],
+   "chooseWhen": [
+    "Single deletion on a parent-pointer forest"
+   ],
+   "tradeoffs": [
+    "Walking ancestors of every node avoids the child lists but is O(n * depth)"
+   ],
+   "variantLabel": "Variant 1: one deletion",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      0
+     ],
+     "output": [
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       1
+      ],
+      1
+     ],
+     "output": [
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a7ceda7d713d873ca7ac7f8": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "up to 1e5 deletions",
+    "valid initial forest"
+   ],
+   "clarifyingQuestions": [
+    "Are deletions applied in sequence on the same forest?",
+    "Is deleting an already deleted node an error or a no-op?"
+   ],
+   "hints": [
+    "Build child lists once and reuse them for every deletion.",
+    "Skip a deletion whose node is already gone.",
+    "During traversal never re-enter a deleted node, so total work stays linear."
+   ],
+   "invariants": [
+    "each node is marked deleted at most once"
+   ],
+   "chooseWhen": [
+    "Many deletions on one forest"
+   ],
+   "tradeoffs": [
+    "Requires O(n) adjacency memory up front"
+   ],
+   "variantLabel": "Inferred variant 2: repeated deletions",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      [
+       0,
+       0
+      ]
+     ],
+     "output": [
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       1
+      ],
+      []
+     ],
+     "output": [
+      1,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69178d9a10632c00111ca20d": {
+   "constraints": [
+    "driver ids 0..1e9, added once before use",
+    "rates 1..1e5 cents per hour",
+    "times 0..1e9 seconds, 0 < duration <= 86400",
+    "up to 5000 operations"
+   ],
+   "clarifyingQuestions": [
+    "What units are rates and times in, and how should the total be rounded?",
+    "Can a delivery reference an unknown driver?"
+   ],
+   "hints": [
+    "Avoid floating point: keep rate in cents per hour and time in seconds.",
+    "Each delivery adds rate * seconds; the total in cents is that sum / 3600.",
+    "Round once at the end, half-up, using integer arithmetic."
+   ],
+   "invariants": [
+    "total equals the sum over deliveries of rate * duration"
+   ],
+   "chooseWhen": [
+    "Money totals that must be exact"
+   ],
+   "tradeoffs": [
+    "Formatting as a string loses numeric convenience for callers"
+   ],
+   "variantLabel": "Variant 1: total cost",
+   "examples": [
+    {
+     "input": [
+      [
+       "DeliverySystem",
+       "getTotalCost"
+      ],
+      [
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      "0.00"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "DeliverySystem",
+       "addDriver",
+       "addDelivery",
+       "getTotalCost"
+      ],
+      [
+       [],
+       [
+        1,
+        1000
+       ],
+       [
+        1,
+        0,
+        5400
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      "15.00"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6917944e10632c00111ca217": {
+   "constraints": [
+    "driver ids 0..1e9, added once before use",
+    "rates 1..1e5 cents per hour",
+    "times 0..1e9 seconds, 0 < duration <= 86400",
+    "up to 5000 operations",
+    "payUpTo times 0..1e9, not necessarily increasing"
+   ],
+   "clarifyingQuestions": [
+    "Does payUpTo pay deliveries by end time or by start time?",
+    "Are later-added deliveries that ended before a past payUpTo paid automatically?"
+   ],
+   "hints": [
+    "Keep a separate unpaid running sum.",
+    "Paying up to t removes every unpaid delivery whose end time is at most t.",
+    "A min-heap keyed by end time lets each delivery be paid exactly once."
+   ],
+   "invariants": [
+    "unpaid sum equals the sum over deliveries still in the heap"
+   ],
+   "chooseWhen": [
+    "Repeated payouts over a growing ledger"
+   ],
+   "tradeoffs": [
+    "Heap adds O(log D) per insertion"
+   ],
+   "variantLabel": "Inferred variant 2: payouts",
+   "examples": [
+    {
+     "input": [
+      [
+       "DeliverySystem",
+       "getTotalCost"
+      ],
+      [
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      "0.00"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "DeliverySystem",
+       "addDriver",
+       "addDelivery",
+       "getTotalCost"
+      ],
+      [
+       [],
+       [
+        1,
+        1000
+       ],
+       [
+        1,
+        0,
+        5400
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      "15.00"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6917944f10632c00111ca218": {
+   "constraints": [
+    "driver ids 0..1e9, added once before use",
+    "rates 1..1e5 cents per hour",
+    "times 0..1e9 seconds, 0 < duration <= 86400",
+    "up to 5000 operations",
+    "query times 0..1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is \"active\" measured in drivers or in deliveries?",
+    "Are delivery intervals half-open?",
+    "Is the 24-hour window inclusive at both ends?"
+   ],
+   "hints": [
+    "Only deliveries overlapping [now-86400, now] matter; clip them to that window.",
+    "Merge each driver's clipped intervals so a driver counts once.",
+    "Sweep start (+1) and end (-1) events, ends first at equal times, and track the maximum."
+   ],
+   "invariants": [
+    "each driver contributes at most 1 at any instant",
+    "max is attained at the window start or at some delivery start"
+   ],
+   "chooseWhen": [
+    "Peak concurrency queries over interval data"
+   ],
+   "tradeoffs": [
+    "Per-query cost is O(D log D); many queries over large ledgers are slow"
+   ],
+   "variantLabel": "Inferred variant 3: 24-hour peak activity",
+   "examples": [
+    {
+     "input": [
+      [
+       "DeliverySystem",
+       "getTotalCost"
+      ],
+      [
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      "0.00"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "DeliverySystem",
+       "addDriver",
+       "addDelivery",
+       "getTotalCost"
+      ],
+      [
+       [],
+       [
+        1,
+        1000
+       ],
+       [
+        1,
+        0,
+        5400
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      "15.00"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6acd79422e3a0349b3a8d5be": {
+   "constraints": [
+    "0..20000 records",
+    "records \"<start>,<end>,<type>\" with 0 <= start < end <= 10080"
+   ],
+   "clarifyingQuestions": [
+    "Does a freeze override an allowed window?",
+    "What should malformed records do?",
+    "Is the answer a minute count or a list of windows?"
+   ],
+   "hints": [
+    "The week has only 10080 minutes, so per-minute coverage is affordable.",
+    "Use difference arrays for allowed and freeze coverage.",
+    "A minute counts when allowed coverage > 0 and freeze coverage == 0."
+   ],
+   "invariants": [
+    "prefix sums give the exact coverage count of each minute"
+   ],
+   "chooseWhen": [
+    "Small fixed time domain"
+   ],
+   "tradeoffs": [
+    "Interval algebra would avoid the O(W) scan for huge domains"
+   ],
+   "variantLabel": "Inferred variant 1: deployable minute count",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "0,10080,allowed"
+      ]
+     ],
+     "output": 10080,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6acd79662e3a0349b3a8d5c0": {
+   "constraints": [
+    "0..20000 records",
+    "records \"<start>,<end>,<type>\" with 0 <= start < end <= 10080"
+   ],
+   "clarifyingQuestions": [
+    "Should windows wrap from Sunday night into Monday morning?",
+    "Are adjacent deployable windows merged?"
+   ],
+   "hints": [
+    "Reuse the per-minute coverage from variant 1.",
+    "Scan minutes and open a window when a deployable run starts.",
+    "Close it at the first non-deployable minute or the week end."
+   ],
+   "invariants": [
+    "emitted windows are maximal, disjoint and increasing"
+   ],
+   "chooseWhen": [
+    "Small fixed time domain"
+   ],
+   "tradeoffs": [
+    "No wrap-around merging is performed"
+   ],
+   "variantLabel": "Inferred variant 2: deployable windows",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "0,10080,allowed"
+      ]
+     ],
+     "output": [
+      [
+       0,
+       10080
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:687c3a5eaa2b26b0b64b39e5": {
+   "constraints": [
+    "timestamps strictly increasing, 1..1e12",
+    "account ids 1..8 lowercase letters or digits",
+    "amounts 1..1e6",
+    "up to 5000 operations"
+   ],
+   "clarifyingQuestions": [
+    "What does transfer return on failure, and is a self-transfer allowed?"
+   ],
+   "hints": [
+    "A map from account id to balance is enough.",
+    "Validate existence and funds before changing anything.",
+    "Return the source balance after a successful transfer."
+   ],
+   "invariants": [
+    "failed operations change no state"
+   ],
+   "chooseWhen": [
+    "Simple keyed ledger"
+   ],
+   "tradeoffs": [
+    "No history is kept"
+   ],
+   "variantLabel": "Inferred level 1",
+   "examples": [
+    {
+     "input": [
+      [
+       "BankingSystem",
+       "createAccount",
+       "createAccount",
+       "deposit",
+       "deposit",
+       "transfer"
+      ],
+      [
+       [],
+       [
+        1,
+        "a"
+       ],
+       [
+        2,
+        "a"
+       ],
+       [
+        3,
+        "a",
+        100
+       ],
+       [
+        4,
+        "z",
+        5
+       ],
+       [
+        5,
+        "a",
+        "a",
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false,
+      100,
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "BankingSystem",
+       "createAccount",
+       "transfer",
+       "deposit",
+       "createAccount",
+       "deposit"
+      ],
+      [
+       [],
+       [
+        86400000,
+        "c"
+       ],
+       [
+        86401000,
+        "a",
+        "a",
+        21
+       ],
+       [
+        86401001,
+        "d",
+        287
+       ],
+       [
+        86401003,
+        "d"
+       ],
+       [
+        86401004,
+        "b",
+        267
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      -1,
+      -1,
+      true,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:687c4741aa2b26b0b64b39ee": {
+   "constraints": [
+    "timestamps strictly increasing, 1..1e12",
+    "account ids 1..8 lowercase letters or digits",
+    "amounts 1..1e6",
+    "up to 5000 operations",
+    "1 <= n <= 1000"
+   ],
+   "clarifyingQuestions": [
+    "What counts as outgoing?",
+    "How are ties ranked and how is each entry formatted?"
+   ],
+   "hints": [
+    "Track outgoing totals alongside balances.",
+    "Sort accounts by outgoing descending, then id ascending.",
+    "Format each as id(total) and take the first n."
+   ],
+   "invariants": [
+    "outgoing only grows"
+   ],
+   "chooseWhen": [
+    "Rankings queried far less often than updates"
+   ],
+   "tradeoffs": [
+    "Sorting on each query costs O(A log A)"
+   ],
+   "variantLabel": "Inferred level 2: top spenders",
+   "examples": [
+    {
+     "input": [
+      [
+       "BankingSystem",
+       "createAccount",
+       "createAccount",
+       "deposit",
+       "deposit",
+       "transfer"
+      ],
+      [
+       [],
+       [
+        1,
+        "a"
+       ],
+       [
+        2,
+        "a"
+       ],
+       [
+        3,
+        "a",
+        100
+       ],
+       [
+        4,
+        "z",
+        5
+       ],
+       [
+        5,
+        "a",
+        "a",
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false,
+      100,
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "BankingSystem",
+       "createAccount",
+       "deposit",
+       "topSpenders",
+       "deposit",
+       "transfer",
+       "deposit"
+      ],
+      [
+       [],
+       [
+        1,
+        "d"
+       ],
+       [
+        1001,
+        "c",
+        87
+       ],
+       [
+        1002,
+        1
+       ],
+       [
+        1004,
+        "d",
+        201
+       ],
+       [
+        86401004,
+        "c",
+        "d",
+        44
+       ],
+       [
+        172801004,
+        "d",
+        192
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      -1,
+      [
+       "d(0)"
+      ],
+      201,
+      -1,
+      393
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:687c4e56024483ac76db8c9b": {
+   "constraints": [
+    "timestamps strictly increasing, 1..1e12",
+    "account ids 1..8 lowercase letters or digits",
+    "amounts 1..1e6",
+    "up to 5000 operations",
+    "payment ids payment<N>"
+   ],
+   "clarifyingQuestions": [
+    "What is the cashback rate and delay?",
+    "At which moment does the cashback become visible?",
+    "Is the payment id global or per account?"
+   ],
+   "hints": [
+    "Payments behave like withdrawals that also schedule a cashback.",
+    "Because timestamps increase, scheduled cashbacks are already in due order: a FIFO queue works.",
+    "Before every operation, apply all cashbacks due at or before its timestamp."
+   ],
+   "invariants": [
+    "cashback queue is ordered by due time",
+    "each cashback is applied exactly once"
+   ],
+   "chooseWhen": [
+    "Delayed effects with monotone time"
+   ],
+   "tradeoffs": [
+    "A heap would be needed if due delays varied"
+   ],
+   "variantLabel": "Inferred level 3: payments with cashback",
+   "examples": [
+    {
+     "input": [
+      [
+       "BankingSystem",
+       "createAccount",
+       "createAccount",
+       "deposit",
+       "deposit",
+       "transfer"
+      ],
+      [
+       [],
+       [
+        1,
+        "a"
+       ],
+       [
+        2,
+        "a"
+       ],
+       [
+        3,
+        "a",
+        100
+       ],
+       [
+        4,
+        "z",
+        5
+       ],
+       [
+        5,
+        "a",
+        "a",
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false,
+      100,
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "BankingSystem",
+       "getPaymentStatus",
+       "transfer",
+       "pay",
+       "topSpenders",
+       "topSpenders",
+       "topSpenders"
+      ],
+      [
+       [],
+       [
+        1,
+        "c",
+        "payment1"
+       ],
+       [
+        2,
+        "a",
+        "a",
+        120
+       ],
+       [
+        4,
+        "d",
+        162
+       ],
+       [
+        86400004,
+        2
+       ],
+       [
+        129600004,
+        4
+       ],
+       [
+        172800004,
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      -1,
+      null,
+      [],
+      [],
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:687c5c0b024483ac76db8ca2": {
+   "constraints": [
+    "timestamps strictly increasing, 1..1e12",
+    "account ids 1..8 lowercase letters or digits",
+    "amounts 1..1e6",
+    "up to 5000 operations",
+    "1 <= timeAt <= timestamp"
+   ],
+   "clarifyingQuestions": [
+    "What happens to the merged-away account's pending cashbacks and payment statuses?",
+    "Can a merged-away id be reused?",
+    "What should getBalance return for a time when the account did not exist?"
+   ],
+   "hints": [
+    "Merging moves balance, outgoing totals, payment ownership and pending cashbacks.",
+    "Record each account's balance after every change, with the time of the change.",
+    "Answer a historical balance with binary search over that account's change times; record an \"absent\" marker at merge time."
+   ],
+   "invariants": [
+    "history times per id are nondecreasing",
+    "cashbacks are recorded at their due time, which precedes the operation that triggers them"
+   ],
+   "chooseWhen": [
+    "Point-in-time queries over append-only history"
+   ],
+   "tradeoffs": [
+    "History grows with every change"
+   ],
+   "variantLabel": "Inferred level 4: merge and historical balance",
+   "examples": [
+    {
+     "input": [
+      [
+       "BankingSystem",
+       "createAccount",
+       "createAccount",
+       "deposit",
+       "deposit",
+       "transfer"
+      ],
+      [
+       [],
+       [
+        1,
+        "a"
+       ],
+       [
+        2,
+        "a"
+       ],
+       [
+        3,
+        "a",
+        100
+       ],
+       [
+        4,
+        "z",
+        5
+       ],
+       [
+        5,
+        "a",
+        "a",
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false,
+      100,
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "BankingSystem",
+       "topSpenders",
+       "mergeAccounts",
+       "transfer",
+       "getBalance",
+       "transfer",
+       "topSpenders"
+      ],
+      [
+       [],
+       [
+        1,
+        5
+       ],
+       [
+        3,
+        "c",
+        "a"
+       ],
+       [
+        86400003,
+        "c",
+        "c",
+        104
+       ],
+       [
+        129600003,
+        "a",
+        85682299
+       ],
+       [
+        129601003,
+        "d",
+        "c",
+        159
+       ],
+       [
+        129601004,
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      false,
+      -1,
+      -1,
+      -1,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697d94b4b8c468a441586147": {
+   "constraints": [
+    "shuffledDeck is a permutation of the 52 [suit, rank] cards"
+   ],
+   "clarifyingQuestions": [
+    "Is dealing round-robin or in contiguous blocks?",
+    "How should shuffling be made testable?",
+    "Is the ace low or high in the sort order?"
+   ],
+   "hints": [
+    "Inject the shuffled deck instead of calling a random generator.",
+    "Deal card i to player i mod 4.",
+    "There are only 52 cards: mark each player's cards by canonical index and read them back in order."
+   ],
+   "invariants": [
+    "each card goes to exactly one player"
+   ],
+   "chooseWhen": [
+    "Small fixed universe"
+   ],
+   "tradeoffs": [
+    "Comparison sorting is equally fine at this size"
+   ],
+   "variantLabel": "Variant 1: four players",
+   "examples": []
+  },
+  "hack2hire:6986db08fedd959e9aa443ca": {
+   "constraints": [
+    "shuffledDeck is a permutation of the 52 [suit, rank] cards",
+    "1 <= players <= 52"
+   ],
+   "clarifyingQuestions": [
+    "What happens to cards that cannot be dealt evenly?"
+   ],
+   "hints": [
+    "Each player gets floor(52 / players) cards.",
+    "Deal only the first players * floor(52 / players) cards round-robin.",
+    "Sort each hand by canonical index."
+   ],
+   "invariants": [
+    "all hands have equal size"
+   ],
+   "chooseWhen": [
+    "Variable player counts"
+   ],
+   "tradeoffs": [
+    "Leftover cards are silently undealt"
+   ],
+   "variantLabel": "Inferred variant 2: variable player count",
+   "examples": []
+  },
+  "hack2hire:6986df8bfedd959e9aa443d6": {
+   "constraints": [
+    "shuffledDeck is a permutation of the 52 [suit, rank] cards",
+    "1 <= players <= 52"
+   ],
+   "clarifyingQuestions": [
+    "What are the round rules, and how is card strength ordered?",
+    "Should the result be the winner or per-player round counts?"
+   ],
+   "hints": [
+    "If every player always plays their strongest remaining card, round r compares each player's r-th strongest card.",
+    "Encode strength as rank * 4 + suit.",
+    "Sort each hand descending once, then compare column by column."
+   ],
+   "invariants": [
+    "cards are distinct, so every round has a unique winner"
+   ],
+   "chooseWhen": [
+    "Greedy play where order is fixed by sorting"
+   ],
+   "tradeoffs": [
+    "Rules are fully inferred"
+   ],
+   "variantLabel": "Inferred variant 3: round play",
+   "examples": []
+  },
+  "hack2hire:69c19a8521f6ab4226964bf7": {
+   "constraints": [
+    "1 <= k <= 20",
+    "columns -1e9..1e9",
+    "up to 400 placements"
+   ],
+   "clarifyingQuestions": [
+    "What does a placement return?",
+    "Should lines created for the opponent by the shift count?",
+    "Does play stop after a win?"
+   ],
+   "hints": [
+    "Bottom insertion shifts every piece in that column, so only lines through that column can change.",
+    "Store each column as a list appended at the bottom end.",
+    "For every height in the column, count runs of the mover in four directions, capped at k."
+   ],
+   "invariants": [
+    "other columns are unchanged by a placement"
+   ],
+   "chooseWhen": [
+    "Sparse unbounded boards"
+   ],
+   "tradeoffs": [
+    "Checking every height costs O(h * k) per move"
+   ],
+   "variantLabel": "Variant 1",
+   "examples": [
+    {
+     "input": [
+      [
+       "ConnectKGame",
+       "placePiece"
+      ],
+      [
+       [
+        1
+       ],
+       [
+        "B",
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ConnectKGame",
+       "placePiece"
+      ],
+      [
+       [
+        20
+       ],
+       [
+        "R",
+        -1000000000
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d16c5617b72775cc49bf93": {
+   "constraints": [
+    "layer ids 0..1e9",
+    "keys 1..10 lowercase letters",
+    "values 0..10 characters",
+    "up to 5000 operations"
+   ],
+   "clarifyingQuestions": [
+    "Does setting a property to its current value create an undo entry?",
+    "What does undo return when there is nothing to undo?"
+   ],
+   "hints": [
+    "Store, for each change, the value before and after.",
+    "Undo restores the before value, deleting the key if it was absent.",
+    "A stack gives the most recent change first."
+   ],
+   "invariants": [
+    "state equals applying all changes left on the undo stack in order"
+   ],
+   "chooseWhen": [
+    "Linear undo history"
+   ],
+   "tradeoffs": [
+    "Memory grows with the number of changes"
+   ],
+   "variantLabel": "Variant 1: set/get/undo",
+   "examples": [
+    {
+     "input": [
+      [
+       "Document",
+       "undo",
+       "getProperty"
+      ],
+      [
+       [],
+       [],
+       [
+        0,
+        "color"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Document",
+       "getProperty",
+       "setProperty",
+       "getProperty",
+       "getProperty",
+       "setProperty",
+       "setProperty",
+       "setProperty"
+      ],
+      [
+       [],
+       [
+        2,
+        "size"
+       ],
+       [
+        0,
+        "size",
+        "red"
+       ],
+       [
+        1,
+        "shape"
+       ],
+       [
+        1,
+        "size"
+       ],
+       [
+        2,
+        "size",
+        ""
+       ],
+       [
+        0,
+        "shape",
+        "blue"
+       ],
+       [
+        0,
+        "shape",
+        "#fff"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d1730e17b72775cc49bfc6": {
+   "constraints": [
+    "layer ids 0..1e9",
+    "keys 1..10 lowercase letters",
+    "values 0..10 characters",
+    "up to 5000 operations"
+   ],
+   "clarifyingQuestions": [
+    "Does a new change discard the redo history?"
+   ],
+   "hints": [
+    "Undone changes move to a redo stack.",
+    "Redo re-applies the after value and moves the change back.",
+    "Any new change clears the redo stack."
+   ],
+   "invariants": [
+    "undo stack + redo stack is the full linear history"
+   ],
+   "chooseWhen": [
+    "Linear undo/redo"
+   ],
+   "tradeoffs": [
+    "Branching histories are not kept"
+   ],
+   "variantLabel": "Inferred variant 2: redo",
+   "examples": [
+    {
+     "input": [
+      [
+       "Document",
+       "undo",
+       "getProperty"
+      ],
+      [
+       [],
+       [],
+       [
+        0,
+        "color"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Document",
+       "getProperty",
+       "getProperty",
+       "setProperty",
+       "getProperty",
+       "getProperty",
+       "redo"
+      ],
+      [
+       [],
+       [
+        0,
+        "size"
+       ],
+       [
+        2,
+        "color"
+       ],
+       [
+        0,
+        "size",
+        "10"
+       ],
+       [
+        2,
+        "shape"
+       ],
+       [
+        0,
+        "size"
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      "10",
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d1735f17b72775cc49bfc7": {
+   "constraints": [
+    "layer ids 0..1e9",
+    "keys 1..10 lowercase letters",
+    "values 0..10 characters",
+    "up to 5000 operations"
+   ],
+   "clarifyingQuestions": [
+    "Is removing an absent key an undoable change?",
+    "How should listed properties be ordered?"
+   ],
+   "hints": [
+    "Treat removal as a change whose after value is \"absent\".",
+    "A failed removal records nothing.",
+    "List a layer's properties sorted by key."
+   ],
+   "invariants": [
+    "absent is distinct from the empty string"
+   ],
+   "chooseWhen": [
+    "Undoable deletions"
+   ],
+   "tradeoffs": [
+    "Listing sorts on each call"
+   ],
+   "variantLabel": "Inferred variant 3: remove and list",
+   "examples": [
+    {
+     "input": [
+      [
+       "Document",
+       "undo",
+       "getProperty"
+      ],
+      [
+       [],
+       [],
+       [
+        0,
+        "color"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Document",
+       "setProperty",
+       "removeProperty",
+       "undo",
+       "getProperties",
+       "redo",
+       "setProperty"
+      ],
+      [
+       [],
+       [
+        1,
+        "size",
+        ""
+       ],
+       [
+        1,
+        "size"
+       ],
+       [],
+       [
+        1
+       ],
+       [],
+       [
+        0,
+        "shape",
+        "blue"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      true,
+      true,
+      [
+       [
+        "size",
+        ""
+       ]
+      ],
+      true,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6941be52b9d646bec48c68cc": {
+   "constraints": [
+    "players \"A\" and \"B\"",
+    "up to 5000 operations"
+   ],
+   "clarifyingQuestions": [
+    "What exact strings represent scores?",
+    "What is the numeric view?"
+   ],
+   "hints": [
+    "Keep two point counters and a winner.",
+    "A game is won at 4+ points with a 2-point lead.",
+    "Map points to Love/15/30/40 unless both reach 3: then Deuce or Advantage."
+   ],
+   "invariants": [
+    "no points change after a winner exists"
+   ],
+   "chooseWhen": [
+    "Single game scoring"
+   ],
+   "tradeoffs": [
+    "String formats are inferred"
+   ],
+   "variantLabel": "Variant 1: single game",
+   "examples": [
+    {
+     "input": [
+      [
+       "TennisGame",
+       "getScore",
+       "getWinner",
+       "getPoints"
+      ],
+      [
+       [],
+       [],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      "Love-Love",
+      "",
+      [
+       0,
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TennisGame",
+       "pointTo",
+       "getWinner",
+       "getPoints",
+       "getPoints",
+       "pointTo",
+       "getPoints",
+       "pointTo",
+       "getWinner",
+       "getPoints",
+       "pointTo",
+       "pointTo"
+      ],
+      [
+       [],
+       [
+        "B"
+       ],
+       [],
+       [],
+       [],
+       [
+        "B"
+       ],
+       [],
+       [
+        "B"
+       ],
+       [],
+       [],
+       [
+        "B"
+       ],
+       [
+        "B"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      "",
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      null,
+      [
+       0,
+       2
+      ],
+      null,
+      "",
+      [
+       0,
+       3
+      ],
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6941c912e79fe20cf9ff4435": {
+   "constraints": [
+    "players \"A\" and \"B\"",
+    "up to 5000 operations"
+   ],
+   "clarifyingQuestions": [
+    "Does the follow-up extend to a set or a match?",
+    "Is a tiebreak played at 6-6?"
+   ],
+   "hints": [
+    "Reuse game scoring and count games.",
+    "A set ends at 6+ games with a 2-game lead.",
+    "At 6-6 switch to a tiebreak won at 7+ points with a 2-point lead."
+   ],
+   "invariants": [
+    "points reset after each game",
+    "nothing changes after the set winner exists"
+   ],
+   "chooseWhen": [
+    "Hierarchical scoring"
+   ],
+   "tradeoffs": [
+    "Rules are inferred from standard tennis"
+   ],
+   "variantLabel": "Inferred variant 2: set scoring",
+   "examples": [
+    {
+     "input": [
+      [
+       "TennisSet",
+       "getGameScore",
+       "getWinner",
+       "getGames"
+      ],
+      [
+       [],
+       [],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      "Love-Love",
+      "",
+      [
+       0,
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TennisSet",
+       "pointTo",
+       "pointTo",
+       "getWinner",
+       "getWinner",
+       "getGames",
+       "pointTo",
+       "getWinner",
+       "pointTo",
+       "pointTo"
+      ],
+      [
+       [],
+       [
+        "A"
+       ],
+       [
+        "B"
+       ],
+       [],
+       [],
+       [],
+       [
+        "B"
+       ],
+       [],
+       [
+        "B"
+       ],
+       [
+        "B"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      "",
+      "",
+      [
+       0,
+       0
+      ],
+      null,
+      "",
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:683e86418d3dfb7c9bd756ab": {
+   "constraints": [
+    "paths \"/c1/.../name\" with components [a-z0-9_.]",
+    "sizes 0..1e9",
+    "up to 3000 operations"
+   ],
+   "clarifyingQuestions": [
+    "Is the size filter strict and in which direction?",
+    "Should results be names or full paths, and in what order?"
+   ],
+   "hints": [
+    "Store files in a directory trie.",
+    "Walk to the requested directory and collect every file below it.",
+    "Apply all filters (AND) and sort the matching paths."
+   ],
+   "invariants": [
+    "find never visits files outside the directory subtree"
+   ],
+   "chooseWhen": [
+    "Many directories with localized queries"
+   ],
+   "tradeoffs": [
+    "A flat path map is simpler when queries usually cover everything"
+   ],
+   "variantLabel": "Variant 1: AND of filters",
+   "examples": [
+    {
+     "input": [
+      [
+       "FileSystem",
+       "find"
+      ],
+      [
+       [],
+       [
+        "/",
+        []
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "FileSystem",
+       "addFile",
+       "addFile",
+       "addFile",
+       "find"
+      ],
+      [
+       [],
+       [
+        "/a/bc/x_1.md",
+        99
+       ],
+       [
+        "/x/readme",
+        10
+       ],
+       [
+        "/a/x_1.md",
+        50
+       ],
+       [
+        "/a/b/c",
+        []
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:683f1dc68d3dfb7c9bd756da": {
+   "constraints": [
+    "paths \"/c1/.../name\" with components [a-z0-9_.]",
+    "sizes 0..1e9",
+    "up to 3000 operations",
+    "filter nesting depth <= 20"
+   ],
+   "clarifyingQuestions": [
+    "Which combinators are needed for extensibility?",
+    "What do empty AND/OR mean?"
+   ],
+   "hints": [
+    "Treat filters as an expression tree.",
+    "Compile it once per query into a predicate.",
+    "Leaves stay the same as variant 1; AND/OR/NOT combine them."
+   ],
+   "invariants": [
+    "empty AND is true, empty OR is false"
+   ],
+   "chooseWhen": [
+    "Extensible filter composition"
+   ],
+   "tradeoffs": [
+    "Closures add call overhead per file"
+   ],
+   "variantLabel": "Inferred variant 2: composable filters",
+   "examples": [
+    {
+     "input": [
+      [
+       "FileSystem",
+       "find"
+      ],
+      [
+       [],
+       [
+        "/",
+        [
+         "and",
+         []
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "FileSystem",
+       "addFile",
+       "find"
+      ],
+      [
+       [],
+       [
+        "/a/b/c/g.py",
+        10
+       ],
+       [
+        "/a/b/c",
+        [
+         "extension",
+         ""
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

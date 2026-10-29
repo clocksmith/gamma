@@ -1,0 +1,638 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:687c23f9aa2b26b0b64b39d4:687c4e56024483ac76db8c9b:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+   "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+   "selector": "/problems/17"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/687c23f9aa2b26b0b64b39d4.json",
+   "sha256": "34e3d2bcb405080ea2ed469a63b60ada5a670ad07d795738f9715bed880309f3",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+   "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+   "selector": "/variants/hack2hire:687c4e56024483ac76db8c9b"
+  }
+ ],
+ "problemId": "hack2hire:687c23f9aa2b26b0b64b39d4",
+ "variantId": "687c4e56024483ac76db8c9b",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 3: payments with cashback",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:687c4e56024483ac76db8c9b/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Timestamps strictly increase across calls. Amounts are positive integers. Levels 1-2 as variant 2. pay(ts,id,amount) withdraws amount if the account exists and holds at least amount, counts it as outgoing, and returns a global sequential id \"payment<N>\" (N counts successful payments from 1), else null. A cashback of floor(2% of amount) is credited to the account at exactly ts+86400000; due cashbacks are applied before any operation whose timestamp is at or after the due time. getPaymentStatus returns \"IN_PROGRESS\" or \"CASHBACK_RECEIVED\", or null if the account is missing or the payment does not exist or does not belong to that account. ",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Timestamps strictly increase across calls.",
+   "Amounts are positive integers.",
+   "Levels 1-2 as variant 2. pay(ts,id,amount) withdraws amount if the account exists and holds at least amount, counts it as outgoing, and returns a global sequential id \"payment<N>\" (N counts successful payments from 1), else null.",
+   "A cashback of floor(2% of amount) is credited to the account at exactly ts+86400000; due cashbacks are applied before any operation whose timestamp is at or after the due time. getPaymentStatus returns \"IN_PROGRESS\" or \"CASHBACK_RECEIVED\", or null if the account is missing or the payment does not exist or does not belong to that account."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "timestamps strictly increasing, 1..1e12",
+   "account ids 1..8 lowercase letters or digits",
+   "amounts 1..1e6",
+   "up to 5000 operations",
+   "payment ids payment<N>"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:687c4e56024483ac76db8c9b/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview; variant count; companies; preview response sha256 0649bcc2a0619d68f1c46dd265479a563f5db24f3d1d1352b478254153f5512d"
+   },
+   {
+    "statement": "Uncertainty: high: payments, cashback rate/delay and status strings are inferred",
+    "basis": "the public group preview is partial (833 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   },
+   {
+    "statement": "variants inferred as cumulative levels 1-4",
+    "basis": "group lists 4 variants with no per-variant text; ordinal 3"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/17/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/17/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is the cashback rate and delay?",
+   "At which moment does the cashback become visible?",
+   "Is the payment id global or per account?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:687c4e56024483ac76db8c9b/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "BankingSystem",
+      "createAccount",
+      "createAccount",
+      "deposit",
+      "deposit",
+      "transfer"
+     ],
+     [
+      [],
+      [
+       1,
+       "a"
+      ],
+      [
+       2,
+       "a"
+      ],
+      [
+       3,
+       "a",
+       100
+      ],
+      [
+       4,
+       "z",
+       5
+      ],
+      [
+       5,
+       "a",
+       "a",
+       1
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     true,
+     false,
+     100,
+     -1,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "BankingSystem",
+      "getPaymentStatus",
+      "transfer",
+      "pay",
+      "topSpenders",
+      "topSpenders",
+      "topSpenders"
+     ],
+     [
+      [],
+      [
+       1,
+       "c",
+       "payment1"
+      ],
+      [
+       2,
+       "a",
+       "a",
+       120
+      ],
+      [
+       4,
+       "d",
+       162
+      ],
+      [
+       86400004,
+       2
+      ],
+      [
+       129600004,
+       4
+      ],
+      [
+       172800004,
+       1
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     -1,
+     null,
+     [],
+     [],
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/study-content.json",
+    "sha256": "28dd60dc47aec6688dd5733d97a8dac03f8f8705abd42f8ff6d580d0128d9ed9",
+    "selector": "/variants/hack2hire:687c4e56024483ac76db8c9b/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/oracles.py",
+    "sha256": "6a83180c2958f73c61479798fc30b43fb574ebf69cf0d2efdf714028d5f4a414",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class BankingSystem: __init__(self); createAccount(timestamp, accountId) -> boolean; deposit(timestamp, accountId, amount) -> integer; transfer(timestamp, sourceAccountId, targetAccountId, amount) -> integer; topSpenders(timestamp, n) -> string[]; pay(timestamp, accountId, amount) -> string|null; getPaymentStatus(timestamp, accountId, payment) -> string|null",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/687c4e56024483ac76db8c9b-python.json",
+     "inferredInterface": {
+      "classname": "BankingSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "createAccount",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "accountId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "deposit",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "accountId",
+          "type": "string"
+         },
+         {
+          "name": "amount",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "transfer",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "sourceAccountId",
+          "type": "string"
+         },
+         {
+          "name": "targetAccountId",
+          "type": "string"
+         },
+         {
+          "name": "amount",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "topSpenders",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "n",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "pay",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "accountId",
+          "type": "string"
+         },
+         {
+          "name": "amount",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string|null"
+        }
+       },
+       {
+        "name": "getPaymentStatus",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "accountId",
+          "type": "string"
+         },
+         {
+          "name": "payment",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string|null"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/687c4e56024483ac76db8c9b-python.json",
+      "sha256": "439f64e2351ae8a25ea93fc6f3419e65aa51a58db2f57fe05a3b256bd515b44c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class BankingSystem { constructor(); createAccount(timestamp, accountId) -> boolean; deposit(timestamp, accountId, amount) -> integer; transfer(timestamp, sourceAccountId, targetAccountId, amount) -> integer; topSpenders(timestamp, n) -> string[]; pay(timestamp, accountId, amount) -> string|null; getPaymentStatus(timestamp, accountId, payment) -> string|null }",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+      "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/687c4e56024483ac76db8c9b-javascript.json",
+     "inferredInterface": {
+      "classname": "BankingSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "createAccount",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "accountId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "deposit",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "accountId",
+          "type": "string"
+         },
+         {
+          "name": "amount",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "transfer",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "sourceAccountId",
+          "type": "string"
+         },
+         {
+          "name": "targetAccountId",
+          "type": "string"
+         },
+         {
+          "name": "amount",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "topSpenders",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "n",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "pay",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "accountId",
+          "type": "string"
+         },
+         {
+          "name": "amount",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string|null"
+        }
+       },
+       {
+        "name": "getPaymentStatus",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "accountId",
+          "type": "string"
+         },
+         {
+          "name": "payment",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string|null"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/semantics/687c4e56024483ac76db8c9b-javascript.json",
+      "sha256": "977562b556560a11bfe0b3204778709241937b71eb6fb8b032a69a4ddebd319f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/17/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-a-20261028-v1/contracts.json",
+    "sha256": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "selector": "/problems/17/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

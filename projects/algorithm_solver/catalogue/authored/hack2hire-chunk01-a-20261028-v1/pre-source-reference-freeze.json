@@ -1,0 +1,42 @@
+{
+  "schema": "gamma.hack2hire-chunk01-a-pre-source-freeze.v1",
+  "at": "2026-10-29T01:29:15.630069+00:00",
+  "files": {
+    "oracles.py": "6a83180c2958f73c61479798fc30b43fb574ebf69cf0d2efdf714028d5f4a414",
+    "test_oracles.py": "c76ffb1458a2f4b92c164a362ff64ec4507a80f195b0840594adea418c760f6e",
+    "cases.py": "33ee8815134b0cb06e51175e85415bec0ef83f1490a3b2a76bc75476f32ccaad",
+    "contracts.json": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "design.json": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c"
+  },
+  "candidate_sources_exist": false,
+  "candidate_executions": 0,
+  "source_free_tests_passed": 19,
+  "spec_basis": "inferred (claude-opus-5-5 subagent, 2026-10-28)",
+  "amendments": [
+    {
+      "file": "cases.py",
+      "after_candidates_existed": true,
+      "change": "menu (hack2hire:6782bd403cd890ccd3798fc3) analytic-maximum chain depth 499 -> 199, sibling leaves 19500 -> 19800",
+      "reason": "test-harness/transport recursion limit (deepcopy and easy16 encode), not a candidate result; no expected value or reference changed"
+    },
+    {
+      "file": "cases.py",
+      "after_candidates_existed": true,
+      "change": "FileSystem analytic-maximum row 1500 -> 500 find operations",
+      "reason": "per-case CPU budget (~1 s under node --jitless); subtree scan per find is inherent for arbitrary filters; no reference or expected-value rule changed"
+    },
+    {
+      "file": "test_oracles.py",
+      "after_candidates_existed": true,
+      "change": "timing records the slower of the two executions per case instead of their sum",
+      "reason": "report single-execution CPU as the sandbox runs each case once; no assertion changed"
+    }
+  ],
+  "current_sha256": {
+    "oracles.py": "6a83180c2958f73c61479798fc30b43fb574ebf69cf0d2efdf714028d5f4a414",
+    "test_oracles.py": "5faa86bc7ca41c298ed685f13ccdee1f12e402725a387f356f6a3f4133e4617e",
+    "cases.py": "81b23f8a077d29c3ebb0706ef106e04bbf1616b5a5bee549db64c235b0212478",
+    "contracts.json": "889ebf785d2f98a69335b8a7b4711e75e912e66fa663e6558fbf6f7700aff691",
+    "design.json": "99c08f04c84a27b932ea6d51b72acac5f6b5604b0315e826c42e556346d6981c"
+  }
+}

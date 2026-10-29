@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6acd79422e3a0349b3a8d5be",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "inputCsv"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "deployableMinutes",
+  "params": [
+   {
+    "name": "inputCsv",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per-minute sets",
+  "candidate_design": "two difference arrays and a prefix scan",
+  "complexity_target": "O(R + W) time/O(W) space, W=10080"
+ },
+ "source_sha256": "c691e86a4eac6e929d942718f151e583aa5459728208529e1a4be67bff683905",
+ "wrapper": "named export deployableMinutes"
+}

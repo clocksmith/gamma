@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6782bd403cd890ccd3798fc3",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "menu"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "buildDailyMenu",
+  "params": [
+   {
+    "name": "menu",
+    "type": "{key,value,active,children}"
+   }
+  ],
+  "return": {
+   "type": "{key,value,active,children}|null"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive filter",
+  "candidate_design": "iterative explicit-stack copy that skips inactive subtrees",
+  "complexity_target": "O(N) time/O(N) space"
+ },
+ "source_sha256": "b42e8739b562fee7e73a44e947520657fd8a897474a785cc641bb1dc2b044cdc",
+ "wrapper": "Solution.buildDailyMenu"
+}

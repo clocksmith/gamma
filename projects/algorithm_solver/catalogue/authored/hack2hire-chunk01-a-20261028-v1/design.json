@@ -1,0 +1,159 @@
+{
+ "problems": {
+  "hack2hire:6a19fed3c81f779dc6a2370d": {
+   "reference": "refilter whole candidate list per position",
+   "candidate_design": "Fenwick tree over still-eligible candidate slots; k-th order statistic per position",
+   "complexity_target": "O((P+A) log A) time/O(A) space"
+  },
+  "hack2hire:6a08df61bd4165b6d480ff97": {
+   "reference": "run-start labelling then grouping",
+   "candidate_design": "single linear scan",
+   "complexity_target": "O(n) time/O(1) auxiliary"
+  },
+  "hack2hire:6a08e02abd4165b6d480ffa1": {
+   "reference": "all-pairs period intersections then sort",
+   "candidate_design": "linear period extraction plus two-pointer intersection",
+   "complexity_target": "O(n+m) time/O(n+m) space"
+  },
+  "hack2hire:69ff9cd5574d87bc49006f98": {
+   "reference": "try every p from 2 to max+1 directly",
+   "candidate_design": "only primes need checking; per prime, bucket costs from prefix counts/sums over multiples",
+   "complexity_target": "O(n + V log log V) time/O(V) space, V = max count"
+  },
+  "hack2hire:692f515ecd79766b0b310123": {
+   "reference": "fixed-point set expansion",
+   "candidate_design": "BFS with visited set (thread pool scheduling modelled away)",
+   "complexity_target": "O(U + L) time/O(U) space"
+  },
+  "hack2hire:6782bd403cd890ccd3798fc3": {
+   "reference": "recursive filter",
+   "candidate_design": "iterative explicit-stack copy that skips inactive subtrees",
+   "complexity_target": "O(N) time/O(N) space"
+  },
+  "hack2hire:6933ae8be8ebbb1c53caf339": {
+   "reference": "union-find then per-cell side counting",
+   "candidate_design": "iterative BFS flood fill counting water sides",
+   "complexity_target": "O(mn) time/O(mn) space"
+  },
+  "hack2hire:6a18ebdbc81f779dc6a23112": {
+   "reference": "literal string flipping and counting",
+   "candidate_design": "prefix counts once plus a flip parity bit",
+   "complexity_target": "O(n+q) time/O(n) space"
+  },
+  "hack2hire:6a7ce081d713d873ca7ac76a": {
+   "reference": "ancestor walk from every node",
+   "candidate_design": "children adjacency and iterative DFS from node",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6a7ceda7d713d873ca7ac7f8": {
+   "reference": "ancestor walk per deletion",
+   "candidate_design": "one adjacency build; DFS that never re-enters deleted nodes",
+   "complexity_target": "O(n+q) time/O(n) space"
+  },
+  "hack2hire:69178d9a10632c00111ca20d": {
+   "reference": "Fraction sum over all deliveries",
+   "candidate_design": "running integer cent-seconds sum",
+   "complexity_target": "O(1) per operation/O(D) space",
+   "numeric": "integer cent-seconds below 2**53; JS Number exact; half-up via integer remainder"
+  },
+  "hack2hire:6917944e10632c00111ca217": {
+   "reference": "per-delivery paid flags and full recomputation",
+   "candidate_design": "min-heap by endTime of unpaid deliveries with running sums",
+   "complexity_target": "O(log D) amortized per operation/O(D) space",
+   "numeric": "integer cent-seconds below 2**53"
+  },
+  "hack2hire:6917944f10632c00111ca218": {
+   "reference": "evaluate distinct active drivers at the window start and every start inside the window",
+   "candidate_design": "clip and union intervals per driver, then sweep events",
+   "complexity_target": "O(D log D) per query/O(D) space",
+   "numeric": "integer cent-seconds below 2**53"
+  },
+  "hack2hire:6acd79422e3a0349b3a8d5be": {
+   "reference": "per-minute sets",
+   "candidate_design": "two difference arrays and a prefix scan",
+   "complexity_target": "O(R + W) time/O(W) space, W=10080"
+  },
+  "hack2hire:6acd79662e3a0349b3a8d5c0": {
+   "reference": "interval merge and subtraction algebra",
+   "candidate_design": "difference arrays and run extraction",
+   "complexity_target": "O(R + W) time/O(W) space"
+  },
+  "hack2hire:687c3a5eaa2b26b0b64b39e5": {
+   "reference": "event-sourced replay of every successful operation for each answer",
+   "candidate_design": "hash maps of balances",
+   "complexity_target": "O(1) per operation/O(A) space"
+  },
+  "hack2hire:687c4741aa2b26b0b64b39ee": {
+   "reference": "event-sourced replay",
+   "candidate_design": "hash maps plus sort on query",
+   "complexity_target": "O(A log A) per ranking/O(1) otherwise"
+  },
+  "hack2hire:687c4e56024483ac76db8c9b": {
+   "reference": "event-sourced replay",
+   "candidate_design": "cashback FIFO queue (due times increase with timestamps) applied lazily",
+   "complexity_target": "O(1) amortized per operation plus ranking sort"
+  },
+  "hack2hire:687c5c0b024483ac76db8ca2": {
+   "reference": "event-sourced replay up to timeAt",
+   "candidate_design": "per-id balance history (time, balance or absent) with binary search",
+   "complexity_target": "O(log H) per history query"
+  },
+  "hack2hire:697d94b4b8c468a441586147": {
+   "reference": "stride slicing plus sort by canonical deck index",
+   "candidate_design": "counting placement by canonical index per player",
+   "complexity_target": "O(52) time/O(52) space"
+  },
+  "hack2hire:6986db08fedd959e9aa443ca": {
+   "reference": "stride slicing plus sort",
+   "candidate_design": "counting placement by canonical index",
+   "complexity_target": "O(52) time/O(52) space"
+  },
+  "hack2hire:6986df8bfedd959e9aa443d6": {
+   "reference": "literal max-remove per player per round",
+   "candidate_design": "sort hands by strength descending and compare round-wise",
+   "complexity_target": "O(52 log 52) time/O(52) space"
+  },
+  "hack2hire:69c19a8521f6ab4226964bf7": {
+   "reference": "enumerate every k-segment on the whole board",
+   "candidate_design": "per height in the column, bounded runs in four directions",
+   "complexity_target": "O(h*k) per move/O(pieces) space"
+  },
+  "hack2hire:69d16c5617b72775cc49bf93": {
+   "reference": "replay change log prefix for every query",
+   "candidate_design": "undo stack of (layer,key,previous) entries",
+   "complexity_target": "O(1) per operation/O(changes) space"
+  },
+  "hack2hire:69d1730e17b72775cc49bfc6": {
+   "reference": "replay change log prefix",
+   "candidate_design": "undo and redo stacks storing before/after values",
+   "complexity_target": "O(1) per operation"
+  },
+  "hack2hire:69d1735f17b72775cc49bfc7": {
+   "reference": "replay change log prefix",
+   "candidate_design": "undo/redo stacks with absent-sentinel values; sort on listing",
+   "complexity_target": "O(1) per change, O(p log p) per listing"
+  },
+  "hack2hire:6941be52b9d646bec48c68cc": {
+   "reference": "recount from the literal point log",
+   "candidate_design": "two counters and a winner field",
+   "complexity_target": "O(1) per operation"
+  },
+  "hack2hire:6941c912e79fe20cf9ff4435": {
+   "reference": "replay the full point log for every query",
+   "candidate_design": "incremental game/tiebreak state machine",
+   "complexity_target": "O(1) per operation"
+  },
+  "hack2hire:683e86418d3dfb7c9bd756ab": {
+   "reference": "linear scan with string prefix test",
+   "candidate_design": "directory trie; DFS of the target subtree then filter and sort",
+   "complexity_target": "O(subtree + r log r) per find"
+  },
+  "hack2hire:683f1dc68d3dfb7c9bd756da": {
+   "reference": "linear scan with recursive filter evaluation",
+   "candidate_design": "directory trie plus compiled filter closures",
+   "complexity_target": "O(subtree*|filter| + r log r) per find"
+  }
+ },
+ "numeric": "all integer results below 2**53; delivery costs are exact rationals rounded half-up to cents by integer arithmetic",
+ "effects": "inputs and nested containers unchanged; fresh outputs"
+}
