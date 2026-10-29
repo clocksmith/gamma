@@ -1,0 +1,1128 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:6a02333a2608e589a944a29d",
+   "variant_id": "6a02333a2608e589a944a29d",
+   "variant_ordinal": 1,
+   "title": "Calculate Board Score",
+   "source": {
+    "post_id": "6a0233312608e589a944a29c",
+    "group_title": "Calculate Board Score",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a0233312608e589a944a29c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a0233312608e589a944a29c/practice?questionId=6a02333a2608e589a944a29d",
+    "preview_response_sha256": "03b09663f56cfc58ee9523bf430999e4d930601f6d2e9ee3400bddcf37f90610",
+    "preview_content_sha256": "429a0a951ab2a91990e66ca5f28c478f3c752cf05b3ed04c1e6a3ac8acee2ba6",
+    "preview_characters": 301,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a0233312608e589a944a29c.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "AIRBNB",
+     "WAYMO"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: board is a 2D array of two-character tiles, an uppercase terrain letter followed by a crown digit (the scoring rule is not visible)",
+    "algorithmTags: BREADTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "board is a non-empty rectangular 2D array of tiles; every tile is a two-character string whose first character is an uppercase letter (its terrain) and whose second is a digit 0-9 (its crowns). A region is a maximal group of tiles with the same terrain letter connected through horizontal or vertical neighbours. The score of a region is its number of tiles times the total crowns on its tiles. Return the sum of all region scores.",
+   "inference_uncertainty": "high: the tile encoding is in the preview; the scoring rule (Kingdomino-style tiles x crowns per 4-connected same-terrain region, summed) is inferred from the title, the tag and the tile encoding",
+   "inferred_interface": {
+    "name": "calculateScore",
+    "params": [
+     {
+      "name": "board",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CBS"
+  },
+  {
+   "uid": "hack2hire:6a94a962cddc54478ddf6084",
+   "variant_id": "6a94a962cddc54478ddf6084",
+   "variant_ordinal": 1,
+   "title": "Calculate Process Starvation",
+   "source": {
+    "post_id": "6a94a95dcddc54478ddf6082",
+    "group_title": "Calculate Process Starvation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a94a95dcddc54478ddf6082",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a94a95dcddc54478ddf6082/practice?questionId=6a94a962cddc54478ddf6084",
+    "preview_response_sha256": "c9b1dbc443a6b7e22b70d0b2766e0a0caafce3a18602f899b63b6907973a20f4",
+    "preview_content_sha256": "db40f599f44cb047a24fd6f22522b555d889e7471f37cf6e4bb14823d7ab53af",
+    "preview_characters": 653,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a94a95dcddc54478ddf6082.json",
+    "algorithm_tags": [
+     "SORTING",
+     "ARRAY"
+    ],
+    "companies": [
+     "GOLDMAN_SACHS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: priorities array, execution from index n-1 down to 0, starvation of i defined by the largest j > i with a smaller priority and a starvation time of j - i (the return value is not visible)",
+    "algorithmTags: SORTING, ARRAY"
+   ],
+   "inferred_spec": "priorities is a list of n integers. For each index i, let j be the largest index with j > i and priorities[j] < priorities[i]; the starvation time of i is j - i, or 0 when no such j exists. Return the list of the n starvation times in index order.",
+   "inference_uncertainty": "medium: the starvation definition is in the preview; returning the whole per-process list (rather than a total, a maximum or only starved processes) is inferred",
+   "inferred_interface": {
+    "name": "starvationTimes",
+    "params": [
+     {
+      "name": "priorities",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CPS"
+  },
+  {
+   "uid": "hack2hire:67eb0d624c9bb801bfd0ef6b",
+   "variant_id": "67eb0d624c9bb801bfd0ef6b",
+   "variant_ordinal": 1,
+   "title": "Candlestick Data Generator",
+   "source": {
+    "post_id": "67eb0bdd4c9bb801bfd0ef6a",
+    "group_title": "Candlestick Data Generator",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67eb0bdd4c9bb801bfd0ef6a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67eb0bdd4c9bb801bfd0ef6a/practice?questionId=67eb0d624c9bb801bfd0ef6b",
+    "preview_response_sha256": "79012b182dd3df70ae2281924df0f1586bf808face75ab576ff8ef977bbca2dc",
+    "preview_content_sha256": "9bbf6c24b238437b49892236ebb1dcb40d7627e0ba6316874968038e0c1b9351",
+    "preview_characters": 647,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67eb0bdd4c9bb801bfd0ef6a.json",
+    "algorithm_tags": [
+     "SORTING"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: [time, price] pairs, 10-unit intervals starting at time rounded down to a multiple of 10, five fields per candlestick (start, max, min, open, close)",
+    "algorithmTags: SORTING"
+   ],
+   "inferred_spec": "prices is a list of [time, price] pairs in any order; times are distinct non-negative integers and prices are positive integers. Each pair falls in the interval starting at time - time mod 10. For every interval that contains at least one pair, produce [start, highest price, lowest price, price at the earliest time, price at the latest time]. Return the candlesticks ordered by start.",
+   "inference_uncertainty": "medium: the interval width and the five fields are in the preview; the field order inside a row, skipping empty intervals, unsorted input, distinct times and integer prices are inferred",
+   "inferred_interface": {
+    "name": "generateCandlesticks",
+    "params": [
+     {
+      "name": "prices",
+      "type": "list<[integer,integer]>"
+     }
+    ],
+    "return": {
+     "type": "list<integer[5]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CDG"
+  },
+  {
+   "uid": "hack2hire:69bf10b121f6ab4226963d68",
+   "variant_id": "69bf10b121f6ab4226963d68",
+   "variant_ordinal": 1,
+   "title": "Chunk a List of Lists",
+   "source": {
+    "post_id": "69bf10aa21f6ab4226963d67",
+    "group_title": "Chunk a List of Lists",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69bf10aa21f6ab4226963d67",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69bf10aa21f6ab4226963d67/practice?questionId=69bf10b121f6ab4226963d68",
+    "preview_response_sha256": "4243ee5737f5b5c4e028c6009baa7b42dd868865d95a5063a818698bf0a202bf",
+    "preview_content_sha256": "1e124b7ece8dbe0f6564588b0737399ad94b59a1ea6a8b19330a97cec69f9a37",
+    "preview_characters": 286,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69bf10aa21f6ab4226963d67.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "SQUAREPOINT"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: data is a list of integer lists read as one continuous stream in order (the chunking rule and any size parameter are not visible)",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "data is a list of integer lists (inner lists may be empty) read as one continuous stream: the first inner list left to right, then the second, and so on. size is a positive integer. Cut the stream into consecutive chunks of exactly size values; the last chunk holds the remaining values when fewer than size are left. Return the chunks in order; an empty stream gives an empty list.",
+   "inference_uncertainty": "very high: only the continuous-stream reading is in the preview; the size parameter, fixed-size re-chunking with a shorter last chunk and the empty-stream result are inferred from the title",
+   "inferred_interface": {
+    "name": "rechunk",
+    "params": [
+     {
+      "name": "data",
+      "type": "integer[][]"
+     },
+     {
+      "name": "size",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CLL"
+  },
+  {
+   "uid": "hack2hire:696294968742114304441df4",
+   "variant_id": "696294968742114304441df4",
+   "variant_ordinal": 1,
+   "title": "Company Role Assignment",
+   "source": {
+    "post_id": "696294908742114304441df1",
+    "group_title": "Company Role Assignment",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696294908742114304441df1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696294908742114304441df1/practice?questionId=696294968742114304441df4",
+    "preview_response_sha256": "d323cfeb7eeaf6b8312653cf00521d763cee141acd06bd656426b678880fb7ef",
+    "preview_content_sha256": "2d15019ca48c4f0dea5d2a25eefbcd26c1b4c8d137bda40b0454aff64fb08652",
+    "preview_characters": 597,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/696294908742114304441df1.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "HUBSPOT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: (companyId, contactId, role) associations, existing and new lists, in-order validation, first rule duplicate association with reason ALREADY_EXISTS (later rules not visible)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "existingAssociations and newAssociations are lists of [companyId, contactId, role] triples. Validate the new associations in order against the current set, which starts as the existing associations. Rule 1: if the same triple is in the current set, the result is \"ALREADY_EXISTS\". Rule 2: otherwise, if some association in the current set has the same companyId and role (necessarily with another contact), the result is \"ROLE_TAKEN\". Otherwise the result is \"VALID\" and the triple is added to the current set, so later new associations see it. Return the list of results.",
+   "inference_uncertainty": "very high: the inputs, in-order validation and the ALREADY_EXISTS rule are in the preview; the ROLE_TAKEN rule (one contact per role and company), the VALID result string and adding valid associations before checking later ones are inferred",
+   "inferred_interface": {
+    "name": "validateAssociations",
+    "params": [
+     {
+      "name": "existingAssociations",
+      "type": "list<string[3]>"
+     },
+     {
+      "name": "newAssociations",
+      "type": "list<string[3]>"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CRA"
+  },
+  {
+   "uid": "hack2hire:67e4db7050b60b77022f386f",
+   "variant_id": "67e4db7050b60b77022f386f",
+   "variant_ordinal": 1,
+   "title": "Compress N-ary Tree",
+   "source": {
+    "post_id": "67e4be5650b60b77022f3860",
+    "group_title": "Compress N-ary Tree",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4be5650b60b77022f3860",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e4be5650b60b77022f3860/practice?questionId=67e4db7050b60b77022f386f",
+    "preview_response_sha256": "3892585169c5c155083885ab9654511ae9997dc0e59530c14d56772d70fc40a5",
+    "preview_content_sha256": "a3ec9410e88144e3b74d404cc09ca48092493edde6149ef6bbfec3fa05718685",
+    "preview_characters": 326,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67e4be5650b60b77022f3860.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "AMAZON",
+     "META",
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n-ary tree with unique values, compressedNodes list, children of a compressed node promoted to its parent, root never compressed, return the modified tree",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "The tree is given as a list of rows [value, childValues] in preorder: the first row is the root and each node's children are listed in order. Values are unique. compressedNodes lists values to compress; values not in the tree and the root are ignored, and repeats do not matter. Compressing a node removes it and puts its children, in order, where it stood in its parent's child list; this applies recursively, so a compressed child of a compressed node is replaced by its own children. Return the resulting tree in the same preorder row format.",
+   "inference_uncertainty": "medium: the compression rule and the never-compressed root are in the preview; the preorder [value, childValues] row encoding for input and output, keeping child order and ignoring unknown values are inferred",
+   "inferred_interface": {
+    "name": "compressTree",
+    "params": [
+     {
+      "name": "tree",
+      "type": "list<[integer,integer[]]>"
+     },
+     {
+      "name": "compressedNodes",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "list<[integer,integer[]]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CNT"
+  },
+  {
+   "uid": "hack2hire:677595ec0d31dc201f712037",
+   "variant_id": "677595ec0d31dc201f712037",
+   "variant_ordinal": 1,
+   "title": "Connect Points in 2D Matrix",
+   "source": {
+    "post_id": "677593f60d31dc201f712036",
+    "group_title": "Connect Points in 2D Matrix",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677593f60d31dc201f712036",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677593f60d31dc201f712036/practice?questionId=677595ec0d31dc201f712037",
+    "preview_response_sha256": "b0de3bc54bb31ca1986c0b9b6bf0b2a94828d477e726c105af0931c3a1fec3b8",
+    "preview_content_sha256": "d17f62ab3d242de88e1c79f262f0eb9d76d8779f2634d5346b45671b7e4f1db5",
+    "preview_characters": 602,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677593f60d31dc201f712036.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: unbounded matrix of points, addPoint(row, col), isConnected(point1, point2), getMinSteps(start, end), a move joins two points in the same row or column at one step, -1 when unreachable (class name not visible)",
+    "algorithmTags: BREADTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "PointMatrix() starts with no points. addPoint(row, col) places a point (adding an existing point changes nothing). A move goes from one point to any other point in the same row or the same column and costs one step. isConnected(point1, point2) returns true when both are placed points and point2 can be reached from point1 by moves (a point reaches itself). getMinSteps(start, end) returns the fewest moves from start to end, 0 when they are the same placed point, and -1 when either is not a placed point or end is unreachable. Points are [row, col] pairs.",
+   "inference_uncertainty": "medium: the three methods, the move rule and -1 are in the preview; the class name, idempotent addPoint, the result for unplaced points and for start == end are inferred",
+   "inferred_interface": {
+    "classname": "PointMatrix",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addPoint",
+      "params": [
+       {
+        "name": "row",
+        "type": "integer"
+       },
+       {
+        "name": "col",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "isConnected",
+      "params": [
+       {
+        "name": "point1",
+        "type": "integer[2]"
+       },
+       {
+        "name": "point2",
+        "type": "integer[2]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getMinSteps",
+      "params": [
+       {
+        "name": "start",
+        "type": "integer[2]"
+       },
+       {
+        "name": "end",
+        "type": "integer[2]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CPM",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68001116c48db1937ce88f45",
+   "variant_id": "68001116c48db1937ce88f45",
+   "variant_ordinal": 1,
+   "title": "Count Alert Triggers",
+   "source": {
+    "post_id": "67ff3b3ca19f45c95d405689",
+    "group_title": "Count Alert Triggers",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ff3b3ca19f45c95d405689",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ff3b3ca19f45c95d405689/practice?questionId=68001116c48db1937ce88f45",
+    "preview_response_sha256": "bec364c564699253277cc23a518666ede43445a85531906e68c955075b6e443d",
+    "preview_content_sha256": "ad440392cd34ae8981f13a4fb5933c43225a025d7be11591c83a928a82b52877",
+    "preview_characters": 623,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67ff3b3ca19f45c95d405689.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "YELP"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: hourly errors list and an SLO configuration of threshold, duration (consecutive hours) and percent (minimum share of hours above threshold) (the return value and window semantics are not visible)",
+    "algorithmTags: SLIDING_WINDOW"
+   ],
+   "inferred_spec": "errors[h] is the error count of hour h. An hour is bad when errors[h] > threshold. A window is every run of duration consecutive hours inside the list. A window triggers an alert when its number of bad hours times 100 is at least percent times duration. Return the number of windows that trigger; when duration exceeds the number of hours there are no windows.",
+   "inference_uncertainty": "high: the three configuration fields and their meaning are in the preview; counting every sliding window, the inclusive percentage test (bad * 100 >= percent * duration) and the strict > threshold test are inferred",
+   "inferred_interface": {
+    "name": "countAlerts",
+    "params": [
+     {
+      "name": "errors",
+      "type": "integer[]"
+     },
+     {
+      "name": "threshold",
+      "type": "integer"
+     },
+     {
+      "name": "duration",
+      "type": "integer"
+     },
+     {
+      "name": "percent",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CAT"
+  },
+  {
+   "uid": "hack2hire:67e08fffa59c3d249d3625e0",
+   "variant_id": "67e08fffa59c3d249d3625e0",
+   "variant_ordinal": 1,
+   "title": "Count Distinct Elements in Window",
+   "source": {
+    "post_id": "67e08f3ea59c3d249d3625df",
+    "group_title": "Count Distinct Elements in Window",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e08f3ea59c3d249d3625df",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e08f3ea59c3d249d3625df/practice?questionId=67e08fffa59c3d249d3625e0",
+    "preview_response_sha256": "7e808d3677763ca942ab46bde04985aaaaf5b8d928e4ecf1653c82d3d13af8ec",
+    "preview_content_sha256": "f027636b34a0e02529b86b1666e00c05a10212807a6b8fce7eb6a2d21d491adc",
+    "preview_characters": 358,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67e08f3ea59c3d249d3625df.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "GOOGLE",
+     "META",
+     "MICROSOFT"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: nums and k, number of distinct values in every contiguous window of size k returned as an array, 1 <= k <= nums.length, any integers",
+    "algorithmTags: SLIDING_WINDOW"
+   ],
+   "inferred_spec": "nums is a non-empty list of integers and 1 <= k <= len(nums). Return, for every window nums[i:i+k] in order of i, the number of distinct values it contains (len(nums) - k + 1 counts).",
+   "inference_uncertainty": "low: the task and the k bounds are in the preview; only the numeric value range is inferred",
+   "inferred_interface": {
+    "name": "countDistinct",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CDE"
+  },
+  {
+   "uid": "hack2hire:69fa8ff5661bab75bbca3e10",
+   "variant_id": "69fa8ff5661bab75bbca3e10",
+   "variant_ordinal": 1,
+   "title": "Count Dropped Requests",
+   "source": {
+    "post_id": "69fa8fa8661bab75bbca3e0b",
+    "group_title": "Count Dropped Requests",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69fa8fa8661bab75bbca3e0b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69fa8fa8661bab75bbca3e0b/practice?questionId=69fa8ff5661bab75bbca3e10",
+    "preview_response_sha256": "238de8784501fd2b30a04ec5c72dbbd878f5f4814ba21243a2667a5d9ed2d6eb",
+    "preview_content_sha256": "189c1b1c1509c3eb2ed38c2e67366f52a693095a52de6b2f497e7315b5568eed",
+    "preview_characters": 412,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69fa8fa8661bab75bbca3e0b.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "EXPEDIA"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: throttling gateway with three rate limits on arrival time, a request violating any limit is dropped, dropped requests still count toward later windows, counted once (the three limits are not visible)",
+    "algorithmTags: ARRAY, SLIDING_WINDOW"
+   ],
+   "inferred_spec": "requestTime lists arrival times in seconds, sorted non-decreasingly; request i arrives at requestTime[i]. Request i is dropped when any limit is already used up by earlier requests (dropped or not): at least 3 earlier requests arrived in the same second; or at least 20 earlier requests arrived less than 10 seconds before it (requestTime[i] - requestTime[j] < 10); or at least 60 earlier requests arrived less than 60 seconds before it. Return the number of dropped requests (each counted once).",
+   "inference_uncertainty": "high: three limits, drop-on-any and counting dropped requests in later windows are in the preview; the limits themselves (3 per second, 20 per 10 seconds, 60 per minute) come from the well-known throttling-gateway exercise, not from the preview",
+   "inferred_interface": {
+    "name": "droppedRequests",
+    "params": [
+     {
+      "name": "requestTime",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CDR"
+  },
+  {
+   "uid": "hack2hire:6a77ef3cd713d873ca7a9ab3",
+   "variant_id": "6a77ef3cd713d873ca7a9ab3",
+   "variant_ordinal": 1,
+   "title": "Count Incorrect Sale Prices",
+   "source": {
+    "post_id": "6a77ef33d713d873ca7a9ab2",
+    "group_title": "Count Incorrect Sale Prices",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a77ef33d713d873ca7a9ab2",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a77ef33d713d873ca7a9ab2/practice?questionId=6a77ef3cd713d873ca7a9ab3",
+    "preview_response_sha256": "e45e950ca641d36271e39ef523d166f025a053d30675a2514c7839a138bcf6ab",
+    "preview_content_sha256": "4e689ddfd719d325aa118461df09992b3be0a0a38e1f9dcd505692ee5d68a7c2",
+    "preview_characters": 499,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a77ef33d713d873ca7a9ab2.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "IBM"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: distinct catalog products with correct prices, sold products with entered prices, every sold product is in the catalog, each sale has a correct price (the return value is not visible)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "products lists distinct product names and productPrices[i] is the correct price of products[i]. productSold[j] is a product from products and soldPrice[j] is the price entered for that sale. Prices are non-negative numbers (integers or decimals). Return the number of sales j whose entered price is not numerically equal to the correct price of productSold[j].",
+   "inference_uncertainty": "medium: the four inputs and the meaning of each sale are in the preview; returning the count of mismatches and exact numeric equality are inferred from the title",
+   "inferred_interface": {
+    "name": "countIncorrect",
+    "params": [
+     {
+      "name": "products",
+      "type": "string[]"
+     },
+     {
+      "name": "productPrices",
+      "type": "number[]"
+     },
+     {
+      "name": "productSold",
+      "type": "string[]"
+     },
+     {
+      "name": "soldPrice",
+      "type": "number[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CIP"
+  },
+  {
+   "uid": "hack2hire:6a4fe73a665efda9311f575d",
+   "variant_id": "6a4fe73a665efda9311f575d",
+   "variant_ordinal": 1,
+   "title": "Count Maximum Borrowing Days",
+   "source": {
+    "post_id": "6a4fe695665efda9311f5752",
+    "group_title": "Count Maximum Borrowing Days",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a4fe695665efda9311f5752",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a4fe695665efda9311f5752/practice?questionId=6a4fe73a665efda9311f575d",
+    "preview_response_sha256": "e04b9b3c38a511ed5dacda67c2296877c9d55cde0aed737d98acf428e3e6b2c2",
+    "preview_content_sha256": "40c32308acce66811eaaaf2379dcdc8d4805263548241ec55f0b8c26b2261edc",
+    "preview_characters": 626,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a4fe695665efda9311f5752.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "POINT72"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n lenders with lend[i] and payback[i], each used at most once, one lender per day, lend must cover the previous day's payback, day 1 has no debt (the requested output and limits are not visible)",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "lend and payback have the same length n. A plan is a sequence of distinct lenders, one per day; on every day after the first, the lender's lend value must be at least the previous day's lender's payback value. Return the largest number of days of any plan (0 when n is 0).",
+   "inference_uncertainty": "high: the borrowing rule is in the preview; returning the maximum number of days is inferred from the title; the author could not derive the greedy rule the GREEDY tag suggests and bounds n <= 16 so an exact subset search is used",
+   "inferred_interface": {
+    "name": "maxBorrowingDays",
+    "params": [
+     {
+      "name": "lend",
+      "type": "integer[]"
+     },
+     {
+      "name": "payback",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CBD"
+  },
+  {
+   "uid": "hack2hire:681bafaba73bd75b806cb981",
+   "variant_id": "681bafaba73bd75b806cb981",
+   "variant_ordinal": 1,
+   "title": "Count Objects in Pin",
+   "source": {
+    "post_id": "681babe1a73bd75b806cb97a",
+    "group_title": "Count Objects in Pin",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/681babe1a73bd75b806cb97a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/681babe1a73bd75b806cb97a/practice?questionId=681bafaba73bd75b806cb981",
+    "preview_response_sha256": "5dfeb10d34bc9f1b039d9ee5006c01b220acabd8cecf89444471e782919a9bd2",
+    "preview_content_sha256": "c19d67b8a73b3a147e566a221510e51a43c53be55dd73658b437bddc3535011d",
+    "preview_characters": 535,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/681babe1a73bd75b806cb97a.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: pin grid of '*' object pixels and '_' background, objects are connected groups of pixels, object membership only through a black-box isSameObject(p1, p2) (connectivity and return not fully visible)",
+    "algorithmTags: BREADTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "grid is a list of equal-length strings of '*' (object pixel) and '_' (background). The black box is modelled by objectIds, a same-shaped integer grid: objectIds[r][c] >= 1 for an object pixel and 0 for background; isSameObject(p, q) is true when both are object pixels with the same id. Two horizontally or vertically adjacent object pixels are in the same object when isSameObject is true for them. Return the number of objects, i.e. connected groups formed by those links.",
+   "inference_uncertainty": "high: the pixel alphabet, the black box and objects as connected pixel groups are in the preview; modelling the black box as an id grid, 4-neighbour adjacency and counting groups of linked neighbours are inferred",
+   "inferred_interface": {
+    "name": "countObjects",
+    "params": [
+     {
+      "name": "grid",
+      "type": "string[]"
+     },
+     {
+      "name": "objectIds",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "COP"
+  },
+  {
+   "uid": "hack2hire:6a21d6fcd5c5b3e5f9c345f1",
+   "variant_id": "6a21d6fcd5c5b3e5f9c345f1",
+   "variant_ordinal": 1,
+   "title": "Count Singler Role Co-occurrences",
+   "source": {
+    "post_id": "6a21d6f7d5c5b3e5f9c345f0",
+    "group_title": "Count Singler Role Co-occurrences",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a21d6f7d5c5b3e5f9c345f0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a21d6f7d5c5b3e5f9c345f0/practice?questionId=6a21d6fcd5c5b3e5f9c345f1",
+    "preview_response_sha256": "87a7f7b8fffb08a6b49c60b4b949d75ad9ac1976e597be1aff0f1f4368e53524",
+    "preview_content_sha256": "331802e485a5e19bdc0b86053977256e2b043c5a6d9f8c5abcf48d97f4d9aee6",
+    "preview_characters": 960,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a21d6f7d5c5b3e5f9c345f0.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "ATLASSIAN",
+     "WHATNOT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: performances of [singer, role, yearString], period, two different roles co-occur when the same singer performed both within period years (inclusive), counted per singer in both directions, rows [role, otherRole, countString]",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "performances is a list of [singer, role, year] string triples (year is a decimal integer string); period >= 0. For each singer and each unordered pair of different roles A and B, the pair co-occurs for that singer when the singer has a performance of A and a performance of B whose years differ by at most period. Each singer for which a pair co-occurs adds 1 to the count of (A, B) and 1 to the count of (B, A). Return [A, B, count as a decimal string] for every ordered pair with a positive count, ordered by A then B in code-point order.",
+   "inference_uncertainty": "medium: the co-occurrence rule, the per-singer counting and the row format are in the preview; counting a singer once per role pair (not once per pair of performances) and the output order are inferred",
+   "inferred_interface": {
+    "name": "roleCooccurrences",
+    "params": [
+     {
+      "name": "performances",
+      "type": "list<string[3]>"
+     },
+     {
+      "name": "period",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "list<string[3]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CRC"
+  },
+  {
+   "uid": "hack2hire:69beec3021f6ab4226963c1d",
+   "variant_id": "69beec3021f6ab4226963c1d",
+   "variant_ordinal": 1,
+   "title": "Counting Words in a Text",
+   "source": {
+    "post_id": "69beea4721f6ab4226963c0f",
+    "group_title": "Counting Words in a Text",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69beea4721f6ab4226963c0f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69beea4721f6ab4226963c0f/practice?questionId=69beec3021f6ab4226963c1d",
+    "preview_response_sha256": "ad67ac710efcca99d99b8774cc2fd8ce85bf4383bb9cc97e7da6573d2fa59843",
+    "preview_content_sha256": "06bda2392a4260cc13e13d32ac6ac2e9f61f23e8ec50d61b982424e1792af7e5",
+    "preview_characters": 391,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69beea4721f6ab4226963c0f.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "SQUAREPOINT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: text of English letters and spaces, case-insensitive word counts, return the words of the highest-frequency groups with their frequency (the grouping rules are not visible)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "text contains ASCII letters and spaces; words are maximal runs of letters. Count words case-insensitively (as lower-case). Take the k largest distinct frequencies (all of them when there are fewer than k). Return [word, frequency] for every word whose frequency is one of them, ordered by frequency descending, then word ascending in code-point order. Text with no words gives an empty list.",
+   "inference_uncertainty": "very high: case-insensitive counting and returning words with their frequency from the highest-frequency groups are in the preview; the k parameter, grouping by distinct frequency, lower-case output and the ordering are inferred",
+   "inferred_interface": {
+    "name": "topFrequencyWords",
+    "params": [
+     {
+      "name": "text",
+      "type": "string"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "list<[string,integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CWT"
+  },
+  {
+   "uid": "hack2hire:6a1a0a50c81f779dc6a23753",
+   "variant_id": "6a1a0a50c81f779dc6a23753",
+   "variant_ordinal": 1,
+   "title": "Credit Card Fraud Detection",
+   "source": {
+    "post_id": "6a1a0a12c81f779dc6a23752",
+    "group_title": "Credit Card Fraud Detection",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0a12c81f779dc6a23752",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0a12c81f779dc6a23752/practice?questionId=6a1a0a50c81f779dc6a23753",
+    "preview_response_sha256": "367c8711f58b3a93ee136bf77cb2187e39c9359253be14ef2b2c8eb8efb35ec8",
+    "preview_content_sha256": "d4834b89831e625ddca81afbd757f587391e4272af140b07f0df8eb4483fa3dd",
+    "preview_characters": 537,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1a0a12c81f779dc6a23752.json",
+    "algorithm_tags": [
+     "SIMULATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: CSV authorization requests \"<timestamp_seconds>,<unique_id>,<amount>,<card_number>,<merchant>\", pre-validated, part-1 policy approve every request (later parts and the output format not visible)",
+    "algorithmTags: SIMULATION"
+   ],
+   "inferred_spec": "requests is a list of CSV strings \"timestamp,unique_id,amount,card_number,merchant\". Process the requests in increasing timestamp order (ties keep input order) and approve every one. Return [unique_id, \"APPROVE\"] per request in processing order.",
+   "inference_uncertainty": "medium: the CSV format and approving everything are in the preview; processing in timestamp order and the [unique_id, decision] output rows are inferred",
+   "inferred_interface": {
+    "name": "processRequests",
+    "params": [
+     {
+      "name": "requests",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 1 of 3: part 1 (approve every request) is the part the preview describes; the author infers that parts 2 and 3 add rules and fraud reports",
+   "oracle_constant": "CCF1"
+  },
+  {
+   "uid": "hack2hire:6a1a0a79c81f779dc6a23756",
+   "variant_id": "6a1a0a79c81f779dc6a23756",
+   "variant_ordinal": 2,
+   "title": "Credit Card Fraud Detection",
+   "source": {
+    "post_id": "6a1a0a12c81f779dc6a23752",
+    "group_title": "Credit Card Fraud Detection",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0a12c81f779dc6a23752",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0a12c81f779dc6a23752/practice?questionId=6a1a0a79c81f779dc6a23756",
+    "preview_response_sha256": "367c8711f58b3a93ee136bf77cb2187e39c9359253be14ef2b2c8eb8efb35ec8",
+    "preview_content_sha256": "d4834b89831e625ddca81afbd757f587391e4272af140b07f0df8eb4483fa3dd",
+    "preview_characters": 537,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1a0a12c81f779dc6a23752.json",
+    "algorithm_tags": [
+     "SIMULATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: CSV authorization requests \"<timestamp_seconds>,<unique_id>,<amount>,<card_number>,<merchant>\", pre-validated, part-1 policy approve every request (later parts and the output format not visible)",
+    "algorithmTags: SIMULATION"
+   ],
+   "inferred_spec": "As in part 1, plus rules: a list of strings \"field,value\" where field is card_number, merchant or max_amount. A request is declined when its card_number equals the value of a card_number rule, its merchant equals the value of a merchant rule, or its amount is greater than the value of a max_amount rule; otherwise it is approved. Return [unique_id, \"APPROVE\" or \"DECLINE\"] per request in timestamp order (ties keep input order).",
+   "inference_uncertainty": "very high: only part 1 is visible; the rule list, its three fields and the DECLINE decision are inferred as a plausible part 2",
+   "inferred_interface": {
+    "name": "processRequests",
+    "params": [
+     {
+      "name": "requests",
+      "type": "string[]"
+     },
+     {
+      "name": "rules",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 2 of 3: inferred part 2 adds static blocking rules; no per-variant text is public",
+   "oracle_constant": "CCF2"
+  },
+  {
+   "uid": "hack2hire:6a1a0a7ac81f779dc6a23757",
+   "variant_id": "6a1a0a7ac81f779dc6a23757",
+   "variant_ordinal": 3,
+   "title": "Credit Card Fraud Detection",
+   "source": {
+    "post_id": "6a1a0a12c81f779dc6a23752",
+    "group_title": "Credit Card Fraud Detection",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0a12c81f779dc6a23752",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0a12c81f779dc6a23752/practice?questionId=6a1a0a7ac81f779dc6a23757",
+    "preview_response_sha256": "367c8711f58b3a93ee136bf77cb2187e39c9359253be14ef2b2c8eb8efb35ec8",
+    "preview_content_sha256": "d4834b89831e625ddca81afbd757f587391e4272af140b07f0df8eb4483fa3dd",
+    "preview_characters": 537,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1a0a12c81f779dc6a23752.json",
+    "algorithm_tags": [
+     "SIMULATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: CSV authorization requests \"<timestamp_seconds>,<unique_id>,<amount>,<card_number>,<merchant>\", pre-validated, part-1 policy approve every request (later parts and the output format not visible)",
+    "algorithmTags: SIMULATION"
+   ],
+   "inferred_spec": "As in part 2, plus fraudReports: a list of strings \"timestamp,unique_id\" each reporting an earlier request as fraud at that time (the report time is at least the reported request's timestamp). A request is also declined when its card number is the card of a reported request whose report time is strictly smaller than the request's timestamp. Return [unique_id, \"APPROVE\" or \"DECLINE\"] per request in timestamp order (ties keep input order).",
+   "inference_uncertainty": "very high: only part 1 is visible; fraud reports, card-level blocking after the report time, the strict time comparison and keeping part 2 rules are inferred",
+   "inferred_interface": {
+    "name": "processRequests",
+    "params": [
+     {
+      "name": "requests",
+      "type": "string[]"
+     },
+     {
+      "name": "rules",
+      "type": "string[]"
+     },
+     {
+      "name": "fraudReports",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 3 of 3: inferred part 3 adds time-dependent card blocking from fraud reports; no per-variant text is public",
+   "oracle_constant": "CCF3"
+  }
+ ]
+}

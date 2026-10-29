@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+   "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+   "selector": "/problems/hack2hire:6a02333a2608e589a944a29d"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+  }
+ ],
+ "problemId": "hack2hire:6a0233312608e589a944a29c",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/contract--contract_hack2hire_6a0233312608e589a944a29c_6a02333a2608e589a944a29d_authored-v1.json",
+  "sha256": "19ca89b7f8a2f7bfcd2fb7dc19f27b9823ff748da41a4db415e0a9c0ee3e4530"
+ },
+ "title": {
+  "status": "present",
+  "value": "one BFS per unvisited tile with an explicit queue over the flattened grid, accumulating size and crowns per region",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+    "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+    "selector": "/problems/hack2hire:6a02333a2608e589a944a29d/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "one BFS per unvisited tile with an explicit queue over the flattened grid, accumulating size and crowns per region. Complexity target: O(R * C) time/O(R * C) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+    "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+    "selector": "/problems/hack2hire:6a02333a2608e589a944a29d"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Grid connectivity with a per-component aggregate"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a02333a2608e589a944a29d/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "BFS and union-find are both linear here; BFS is simpler, union-find suits incremental boards"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a02333a2608e589a944a29d/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "every tile belongs to exactly one region",
+   "the result is the sum over regions of size x crowns"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a02333a2608e589a944a29d/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Group tiles into same-terrain regions with BFS or DFS.",
+   "While exploring one region, count its tiles and add up its crowns.",
+   "Use an explicit queue over row-major indices so a 1e5-tile region needs no recursion."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a02333a2608e589a944a29d/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "one BFS per unvisited tile with an explicit queue over the flattened grid, accumulating size and crowns per region",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+      "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+      "selector": "/problems/hack2hire:6a02333a2608e589a944a29d/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(R * C) time/O(R * C) space; the independent reference (label propagation: every tile repeatedly takes the smallest label of its same-terrain neighbours until nothing changes, then sum size x crowns per label) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+      "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+      "selector": "/problems/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Group tiles into same-terrain regions with BFS or DFS.",
+     "While exploring one region, count its tiles and add up its crowns."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a0233312608e589a944a29c_6a02333a2608e589a944a29d_approach-native_v1.json",
+    "sha256": "b24ec9322f54c553ea9dc21c597ae384224ee881388ad6b2d0a1ed1cdc1db229"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper calculateScore, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+      "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+      "selector": "/problems/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Use an explicit queue over row-major indices so a 1e5-tile region needs no recursion."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a0233312608e589a944a29c_6a02333a2608e589a944a29d_python_v1.json",
+     "sha256": "025f9850e831f1fb70a1e7bf6cc3f54166254b3cf6fce126f6a6b19d29479e25"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a0233312608e589a944a29c_6a02333a2608e589a944a29d_javascript_v1.json",
+     "sha256": "bb32dded92ff921fce135f5bdaea5fc408f79ff765f9f8b1e20d342c3869c1b8"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a0233312608e589a944a29c_6a02333a2608e589a944a29d_approach-native_v1.json",
+    "sha256": "b24ec9322f54c553ea9dc21c597ae384224ee881388ad6b2d0a1ed1cdc1db229"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (label propagation: every tile repeatedly takes the smallest label of its same-terrain neighbours until nothing changes, then sum size x crowns per label) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+      "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+      "selector": "/problems/hack2hire:6a02333a2608e589a944a29d/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/0/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/test_oracles.py",
+      "sha256": "b889ca42f55bfe23eb4455581321321838f23940da11f80c31adec4f5c1edf45",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a0233312608e589a944a29c_6a02333a2608e589a944a29d_approach-native_v1.json",
+    "sha256": "b24ec9322f54c553ea9dc21c597ae384224ee881388ad6b2d0a1ed1cdc1db229"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a0233312608e589a944a29c_6a02333a2608e589a944a29d_approach-native_v1.json",
+  "sha256": "b24ec9322f54c553ea9dc21c597ae384224ee881388ad6b2d0a1ed1cdc1db229"
+ }
+}

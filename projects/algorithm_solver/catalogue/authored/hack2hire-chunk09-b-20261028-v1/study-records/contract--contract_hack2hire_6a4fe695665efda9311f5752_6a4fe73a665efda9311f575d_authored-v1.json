@@ -1,0 +1,337 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a4fe695665efda9311f5752:6a4fe73a665efda9311f575d:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a4fe695665efda9311f5752.json",
+   "sha256": "7a8ab3feb5882968e9fafb6c2ec5e9e2ac678cf119232bbda23e451e9d7c456a",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:6a4fe73a665efda9311f575d"
+  }
+ ],
+ "problemId": "hack2hire:6a4fe695665efda9311f5752",
+ "variantId": "6a4fe73a665efda9311f575d",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: longest valid borrowing sequence",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a4fe73a665efda9311f575d/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "lend and payback have the same length n. A plan is a sequence of distinct lenders, one per day; on every day after the first, the lender's lend value must be at least the previous day's lender's payback value. Return the largest number of days of any plan (0 when n is 0).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "lend and payback have the same length n.",
+   "A plan is a sequence of distinct lenders, one per day; on every day after the first, the lender's lend value must be at least the previous day's lender's payback value.",
+   "Return the largest number of days of any plan (0 when n is 0)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= n <= 16 (author bound for an exact search)",
+   "0 <= lend[i], payback[i] <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a4fe73a665efda9311f575d/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: n lenders with lend[i] and payback[i], each used at most once, one lender per day, lend must cover the previous day's payback, day 1 has no debt (the requested output and limits are not visible); algorithmTags: GREEDY; preview response sha256 e04b9b3c38a511ed5dacda67c2296877c9d55cde0aed737d98acf428e3e6b2c2"
+   },
+   {
+    "statement": "Uncertainty: high: the borrowing rule is in the preview; returning the maximum number of days is inferred from the title; the author could not derive the greedy rule the GREEDY tag suggests and bounds n <= 16 so an exact subset search is used",
+    "basis": "the public group preview is partial (626 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/11/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/11/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the answer the maximum number of days?",
+   "Can the borrower stop early, and does the last payback need covering?",
+   "How large can n be?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a4fe73a665efda9311f575d/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      5,
+      0,
+      5,
+      5,
+      5,
+      1000000000,
+      1000000000,
+      1000000000
+     ],
+     [
+      0,
+      1000000000,
+      5,
+      5,
+      1000000000,
+      1000000000,
+      1000000000,
+      0
+     ]
+    ],
+    "output": 8,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a4fe73a665efda9311f575d/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def maxBorrowingDays(lend, payback) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a4fe73a665efda9311f575d-python.json",
+     "inferredInterface": {
+      "name": "maxBorrowingDays",
+      "params": [
+       {
+        "name": "lend",
+        "type": "integer[]"
+       },
+       {
+        "name": "payback",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a4fe73a665efda9311f575d-python.json",
+      "sha256": "fa1023f417624b707bb710972955e2b8981a42ffc9237e1eed725a16f9f70492",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function maxBorrowingDays(lend, payback) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a4fe73a665efda9311f575d-javascript.json",
+     "inferredInterface": {
+      "name": "maxBorrowingDays",
+      "params": [
+       {
+        "name": "lend",
+        "type": "integer[]"
+       },
+       {
+        "name": "payback",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a4fe73a665efda9311f575d-javascript.json",
+      "sha256": "1f353d00995c7a4c7068d95b23be4b36e9c50eb537872d47d73921d05175fe45",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

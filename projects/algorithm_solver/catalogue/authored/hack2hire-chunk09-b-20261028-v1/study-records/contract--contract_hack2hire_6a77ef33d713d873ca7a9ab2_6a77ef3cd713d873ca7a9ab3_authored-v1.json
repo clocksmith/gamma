@@ -1,0 +1,379 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a77ef33d713d873ca7a9ab2:6a77ef3cd713d873ca7a9ab3:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a77ef33d713d873ca7a9ab2.json",
+   "sha256": "ede174f2ce9ba549e09623620e28e1c6358ddefcdfad1f71787b53f9ce8fda88",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:6a77ef3cd713d873ca7a9ab3"
+  }
+ ],
+ "problemId": "hack2hire:6a77ef33d713d873ca7a9ab2",
+ "variantId": "6a77ef3cd713d873ca7a9ab3",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: number of mis-priced sales",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a77ef3cd713d873ca7a9ab3/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "products lists distinct product names and productPrices[i] is the correct price of products[i]. productSold[j] is a product from products and soldPrice[j] is the price entered for that sale. Prices are non-negative numbers (integers or decimals). Return the number of sales j whose entered price is not numerically equal to the correct price of productSold[j].",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "products lists distinct product names and productPrices[i] is the correct price of products[i].",
+   "productSold[j] is a product from products and soldPrice[j] is the price entered for that sale.",
+   "Prices are non-negative numbers (integers or decimals).",
+   "Return the number of sales j whose entered price is not numerically equal to the correct price of productSold[j]."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= products.length = productPrices.length <= 1e5",
+   "0 <= productSold.length = soldPrice.length <= 1e5",
+   "names match [A-Za-z0-9]{1,20}",
+   "prices are finite numbers in [0, 1e9]"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a77ef3cd713d873ca7a9ab3/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: distinct catalog products with correct prices, sold products with entered prices, every sold product is in the catalog, each sale has a correct price (the return value is not visible); algorithmTags: HASH_TABLE; preview response sha256 e45e950ca641d36271e39ef523d166f025a053d30675a2514c7839a138bcf6ab"
+   },
+   {
+    "statement": "Uncertainty: medium: the four inputs and the meaning of each sale are in the preview; returning the count of mismatches and exact numeric equality are inferred from the title",
+    "basis": "the public group preview is partial (499 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Should the answer be the count of wrong sales or the list of them?",
+   "Are prices compared exactly or with a tolerance?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a77ef3cd713d873ca7a9ab3/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "a"
+     ],
+     [
+      1
+     ],
+     [],
+     []
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "b",
+      "C",
+      "Ee",
+      "f",
+      "a",
+      "d1"
+     ],
+     [
+      0,
+      0,
+      10,
+      1,
+      9.99,
+      0
+     ],
+     [
+      "d1",
+      "b",
+      "C",
+      "Ee",
+      "f",
+      "Ee",
+      "a",
+      "b",
+      "d1"
+     ],
+     [
+      0,
+      2.5,
+      0,
+      9.99,
+      2.5,
+      10,
+      2.5,
+      2.5,
+      0
+     ]
+    ],
+    "output": 5,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a77ef3cd713d873ca7a9ab3/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def countIncorrect(products, productPrices, productSold, soldPrice) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a77ef3cd713d873ca7a9ab3-python.json",
+     "inferredInterface": {
+      "name": "countIncorrect",
+      "params": [
+       {
+        "name": "products",
+        "type": "string[]"
+       },
+       {
+        "name": "productPrices",
+        "type": "number[]"
+       },
+       {
+        "name": "productSold",
+        "type": "string[]"
+       },
+       {
+        "name": "soldPrice",
+        "type": "number[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a77ef3cd713d873ca7a9ab3-python.json",
+      "sha256": "7321ccd879b5e04674cdae2cd920db96dc84f5d940099000e28f6519eed0db11",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function countIncorrect(products, productPrices, productSold, soldPrice) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a77ef3cd713d873ca7a9ab3-javascript.json",
+     "inferredInterface": {
+      "name": "countIncorrect",
+      "params": [
+       {
+        "name": "products",
+        "type": "string[]"
+       },
+       {
+        "name": "productPrices",
+        "type": "number[]"
+       },
+       {
+        "name": "productSold",
+        "type": "string[]"
+       },
+       {
+        "name": "soldPrice",
+        "type": "number[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a77ef3cd713d873ca7a9ab3-javascript.json",
+      "sha256": "561e16d2a24233392d353c11b735d65bb66aa1cc9f5ab16f0910caaee9a4e9d2",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

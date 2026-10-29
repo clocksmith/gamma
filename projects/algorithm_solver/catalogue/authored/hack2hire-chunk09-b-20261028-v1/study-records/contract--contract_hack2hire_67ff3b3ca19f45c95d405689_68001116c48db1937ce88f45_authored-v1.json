@@ -1,0 +1,357 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67ff3b3ca19f45c95d405689:68001116c48db1937ce88f45:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67ff3b3ca19f45c95d405689.json",
+   "sha256": "856da9b5c1ea4c4ec08f896cbe6f8c7a81d0b98c34af67937bb69fd8ea2964aa",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:68001116c48db1937ce88f45"
+  }
+ ],
+ "problemId": "hack2hire:67ff3b3ca19f45c95d405689",
+ "variantId": "68001116c48db1937ce88f45",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: number of sliding windows that trigger",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:68001116c48db1937ce88f45/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "errors[h] is the error count of hour h. An hour is bad when errors[h] > threshold. A window is every run of duration consecutive hours inside the list. A window triggers an alert when its number of bad hours times 100 is at least percent times duration. Return the number of windows that trigger; when duration exceeds the number of hours there are no windows.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "errors[h] is the error count of hour h.",
+   "An hour is bad when errors[h] > threshold.",
+   "A window is every run of duration consecutive hours inside the list.",
+   "A window triggers an alert when its number of bad hours times 100 is at least percent times duration.",
+   "Return the number of windows that trigger; when duration exceeds the number of hours there are no windows."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= errors.length <= 1e5",
+   "0 <= errors[h], threshold <= 1e9",
+   "1 <= duration <= 1e5",
+   "0 <= percent <= 100"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:68001116c48db1937ce88f45/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: hourly errors list and an SLO configuration of threshold, duration (consecutive hours) and percent (minimum share of hours above threshold) (the return value and window semantics are not visible); algorithmTags: SLIDING_WINDOW; preview response sha256 bec364c564699253277cc23a518666ede43445a85531906e68c955075b6e443d"
+   },
+   {
+    "statement": "Uncertainty: high: the three configuration fields and their meaning are in the preview; counting every sliding window, the inclusive percentage test (bad * 100 >= percent * duration) and the strict > threshold test are inferred",
+    "basis": "the public group preview is partial (623 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is every sliding window counted, or do alerts reset after triggering?",
+   "Is the percentage test inclusive?",
+   "Is an hour bad when errors equal the threshold?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:68001116c48db1937ce88f45/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     4,
+     2,
+     1
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      0,
+      0,
+      7,
+      1000000000,
+      3,
+      0,
+      5,
+      1000000000,
+      7,
+      3,
+      1000000000,
+      1000000000,
+      0
+     ],
+     6,
+     1,
+     34
+    ],
+    "output": 6,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:68001116c48db1937ce88f45/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def countAlerts(errors, threshold, duration, percent) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/68001116c48db1937ce88f45-python.json",
+     "inferredInterface": {
+      "name": "countAlerts",
+      "params": [
+       {
+        "name": "errors",
+        "type": "integer[]"
+       },
+       {
+        "name": "threshold",
+        "type": "integer"
+       },
+       {
+        "name": "duration",
+        "type": "integer"
+       },
+       {
+        "name": "percent",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/68001116c48db1937ce88f45-python.json",
+      "sha256": "fbbb899f413f62929a4c5919c337e4bb6cf7e267f0e2bc2ffd89a1a098a2098b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function countAlerts(errors, threshold, duration, percent) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/68001116c48db1937ce88f45-javascript.json",
+     "inferredInterface": {
+      "name": "countAlerts",
+      "params": [
+       {
+        "name": "errors",
+        "type": "integer[]"
+       },
+       {
+        "name": "threshold",
+        "type": "integer"
+       },
+       {
+        "name": "duration",
+        "type": "integer"
+       },
+       {
+        "name": "percent",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/68001116c48db1937ce88f45-javascript.json",
+      "sha256": "346963d57747fd9a15875e51d266913cab47b799a2e679429374be9b924257c4",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

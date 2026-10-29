@@ -1,0 +1,358 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a0233312608e589a944a29c:6a02333a2608e589a944a29d:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a0233312608e589a944a29c.json",
+   "sha256": "63b7c23c900fb30779d968f36be4cede3ba74110ee4fd25c92274d9597139254",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:6a02333a2608e589a944a29d"
+  }
+ ],
+ "problemId": "hack2hire:6a0233312608e589a944a29c",
+ "variantId": "6a02333a2608e589a944a29d",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: sum of region size x region crowns",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a02333a2608e589a944a29d/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "board is a non-empty rectangular 2D array of tiles; every tile is a two-character string whose first character is an uppercase letter (its terrain) and whose second is a digit 0-9 (its crowns). A region is a maximal group of tiles with the same terrain letter connected through horizontal or vertical neighbours. The score of a region is its number of tiles times the total crowns on its tiles. Return the sum of all region scores.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "board is a non-empty rectangular 2D array of tiles; every tile is a two-character string whose first character is an uppercase letter (its terrain) and whose second is a digit 0-9 (its crowns).",
+   "A region is a maximal group of tiles with the same terrain letter connected through horizontal or vertical neighbours.",
+   "The score of a region is its number of tiles times the total crowns on its tiles.",
+   "Return the sum of all region scores."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= rows, columns; rows * columns <= 1e5",
+   "every row has the same length",
+   "each tile matches [A-Z][0-9]"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a02333a2608e589a944a29d/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: board is a 2D array of two-character tiles, an uppercase terrain letter followed by a crown digit (the scoring rule is not visible); algorithmTags: BREADTH_FIRST_SEARCH; preview response sha256 03b09663f56cfc58ee9523bf430999e4d930601f6d2e9ee3400bddcf37f90610"
+   },
+   {
+    "statement": "Uncertainty: high: the tile encoding is in the preview; the scoring rule (Kingdomino-style tiles x crowns per 4-connected same-terrain region, summed) is inferred from the title, the tag and the tile encoding",
+    "basis": "the public group preview is partial (301 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are regions connected horizontally and vertically only, or diagonally too?",
+   "Is a region score its size times its crowns, and does a region with no crowns score 0?",
+   "Can the board contain empty tiles or a castle tile?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a02333a2608e589a944a29d/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "A0"
+      ]
+     ]
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "A0",
+       "A9",
+       "A0",
+       "A1",
+       "B0"
+      ],
+      [
+       "B0",
+       "B1",
+       "A0",
+       "A1",
+       "B0"
+      ],
+      [
+       "A2",
+       "B1",
+       "B2",
+       "B9",
+       "B0"
+      ],
+      [
+       "A1",
+       "B0",
+       "A2",
+       "A0",
+       "A0"
+      ],
+      [
+       "A0",
+       "B0",
+       "A9",
+       "B2",
+       "A9"
+      ],
+      [
+       "A1",
+       "A2",
+       "B9",
+       "B0",
+       "B9"
+      ]
+     ]
+    ],
+    "output": 406,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a02333a2608e589a944a29d/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def calculateScore(board) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a02333a2608e589a944a29d-python.json",
+     "inferredInterface": {
+      "name": "calculateScore",
+      "params": [
+       {
+        "name": "board",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a02333a2608e589a944a29d-python.json",
+      "sha256": "6773e04a8a439a60006ac84e4dcbbe58153c64fbdaac21b15ed7d82041d6197d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function calculateScore(board) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a02333a2608e589a944a29d-javascript.json",
+     "inferredInterface": {
+      "name": "calculateScore",
+      "params": [
+       {
+        "name": "board",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a02333a2608e589a944a29d-javascript.json",
+      "sha256": "5c94b21f59459fc9e2c9deacf5758b54fe18c8d2c53306ef2bdd2c0d0609bc95",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

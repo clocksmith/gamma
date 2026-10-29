@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+   "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+   "selector": "/problems/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+  }
+ ],
+ "problemId": "hack2hire:6a21d6f7d5c5b3e5f9c345f0",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/contract--contract_hack2hire_6a21d6f7d5c5b3e5f9c345f0_6a21d6fcd5c5b3e5f9c345f1_authored-v1.json",
+  "sha256": "ec846c7d5dd3966dde57d048cec28ba057ffd7d4b26823a7c8fa2c4285b90916"
+ },
+ "title": {
+  "status": "present",
+  "value": "per singer, sorted distinct years per role; for each pair of roles a two-pointer merge finds whether the closest years are within period",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+    "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+    "selector": "/problems/hack2hire:6a21d6fcd5c5b3e5f9c345f1/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "per singer, sorted distinct years per role; for each pair of roles a two-pointer merge finds whether the closest years are within period. Complexity target: O(sum over singers of R_s * P_s + p log p) time/O(p) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+    "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+    "selector": "/problems/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Pairwise relations within groups"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Pairwise role checks are quadratic in roles per singer; a year sweep is better when singers have many roles but few years"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "each (singer, role pair) contributes at most 1 in each direction",
+   "counts are symmetric: count(A, B) = count(B, A)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Group performances by singer, then by role.",
+   "Two roles co-occur for a singer when their closest years are within period.",
+   "Sort each role's years and merge two sorted lists with two pointers to find the closest pair."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "per singer, sorted distinct years per role; for each pair of roles a two-pointer merge finds whether the closest years are within period",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+      "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+      "selector": "/problems/hack2hire:6a21d6fcd5c5b3e5f9c345f1/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(sum over singers of R_s * P_s + p log p) time/O(p) space; the independent reference (for every singer compare every pair of their performances and collect the co-occurring role pairs in a set) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+      "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+      "selector": "/problems/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Group performances by singer, then by role.",
+     "Two roles co-occur for a singer when their closest years are within period."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a21d6f7d5c5b3e5f9c345f0_6a21d6fcd5c5b3e5f9c345f1_approach-native_v1.json",
+    "sha256": "d6e0ee8612bee0a0199274a6f57765540ea7437c886aac6a3da9eddf1997c3c3"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper roleCooccurrences, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+      "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+      "selector": "/problems/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Sort each role's years and merge two sorted lists with two pointers to find the closest pair."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a21d6f7d5c5b3e5f9c345f0_6a21d6fcd5c5b3e5f9c345f1_python_v1.json",
+     "sha256": "9785f538aaec84f55339e01ab4bafe93764911c3506e8ffeab6bcb4fa7ac1565"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a21d6f7d5c5b3e5f9c345f0_6a21d6fcd5c5b3e5f9c345f1_javascript_v1.json",
+     "sha256": "be32cf977c2020d8d40935e8efd03cd03040d936106a4952300c29e14bc28db8"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a21d6f7d5c5b3e5f9c345f0_6a21d6fcd5c5b3e5f9c345f1_approach-native_v1.json",
+    "sha256": "d6e0ee8612bee0a0199274a6f57765540ea7437c886aac6a3da9eddf1997c3c3"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (for every singer compare every pair of their performances and collect the co-occurring role pairs in a set) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/design.json",
+      "sha256": "30eb15615be0deac42cb3f63bf3cc9b76c95b2e7c961d18f62545625f368a9bc",
+      "selector": "/problems/hack2hire:6a21d6fcd5c5b3e5f9c345f1/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/13/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/test_oracles.py",
+      "sha256": "b889ca42f55bfe23eb4455581321321838f23940da11f80c31adec4f5c1edf45",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+      "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+      "selector": "/variants/hack2hire:6a21d6fcd5c5b3e5f9c345f1"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a21d6f7d5c5b3e5f9c345f0_6a21d6fcd5c5b3e5f9c345f1_approach-native_v1.json",
+    "sha256": "d6e0ee8612bee0a0199274a6f57765540ea7437c886aac6a3da9eddf1997c3c3"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6a21d6f7d5c5b3e5f9c345f0:6a21d6fcd5c5b3e5f9c345f1:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-records/artifact--artifact_hack2hire_6a21d6f7d5c5b3e5f9c345f0_6a21d6fcd5c5b3e5f9c345f1_approach-native_v1.json",
+  "sha256": "d6e0ee8612bee0a0199274a6f57765540ea7437c886aac6a3da9eddf1997c3c3"
+ }
+}

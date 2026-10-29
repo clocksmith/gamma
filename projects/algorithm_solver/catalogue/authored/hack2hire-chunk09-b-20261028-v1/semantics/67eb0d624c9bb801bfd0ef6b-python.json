@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67eb0d624c9bb801bfd0ef6b",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "prices"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "generateCandlesticks",
+  "params": [
+   {
+    "name": "prices",
+    "type": "list<[integer,integer]>"
+   }
+  ],
+  "return": {
+   "type": "list<integer[5]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every distinct interval start, scan all pairs again and keep those inside it",
+  "candidate_design": "sort the pairs by time once, then sweep and close a candlestick whenever the interval start changes",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "4f68670ceb13bd10632bb5e74db9723cd2b7cf2ca8155c8bb64e3e789c2305f3",
+ "wrapper": "Solution.generateCandlesticks"
+}

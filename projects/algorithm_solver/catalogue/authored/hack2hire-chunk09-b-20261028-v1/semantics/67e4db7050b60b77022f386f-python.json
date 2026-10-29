@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67e4db7050b60b77022f386f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "tree",
+  "compressedNodes"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "compressTree",
+  "params": [
+   {
+    "name": "tree",
+    "type": "list<[integer,integer[]]>"
+   },
+   {
+    "name": "compressedNodes",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "list<[integer,integer[]]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "build a child map and recursively expand every compressed child into its promoted children, then emit preorder recursively",
+  "candidate_design": "walk the preorder rows once with a stack of (node, remaining children, nearest kept ancestor); every kept node is appended to its nearest kept ancestor's child list, and kept nodes keep their original preorder",
+  "complexity_target": "O(n + |compressedNodes|) time/O(n) space"
+ },
+ "source_sha256": "357be5ebf29b56c26fc23219f10bc2a73598643cbf5ab200cde745049b704390",
+ "wrapper": "Solution.compressTree"
+}

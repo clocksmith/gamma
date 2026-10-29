@@ -1,0 +1,386 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69bf10aa21f6ab4226963d67:69bf10b121f6ab4226963d68:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69bf10aa21f6ab4226963d67.json",
+   "sha256": "3864f26778866edc6188defa91a8e235b8958c472ef96964f50c33f6466db857",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:69bf10b121f6ab4226963d68"
+  }
+ ],
+ "problemId": "hack2hire:69bf10aa21f6ab4226963d67",
+ "variantId": "69bf10b121f6ab4226963d68",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: fixed-size re-chunking of a stream of lists",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:69bf10b121f6ab4226963d68/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "data is a list of integer lists (inner lists may be empty) read as one continuous stream: the first inner list left to right, then the second, and so on. size is a positive integer. Cut the stream into consecutive chunks of exactly size values; the last chunk holds the remaining values when fewer than size are left. Return the chunks in order; an empty stream gives an empty list.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "data is a list of integer lists (inner lists may be empty) read as one continuous stream: the first inner list left to right, then the second, and so on.",
+   "size is a positive integer.",
+   "Cut the stream into consecutive chunks of exactly size values; the last chunk holds the remaining values when fewer than size are left.",
+   "Return the chunks in order; an empty stream gives an empty list."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= data.length <= 1e5",
+   "0 <= total values <= 1e5",
+   "-1e9 <= value <= 1e9",
+   "1 <= size <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:69bf10b121f6ab4226963d68/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: data is a list of integer lists read as one continuous stream in order (the chunking rule and any size parameter are not visible); algorithmTags: ARRAY; preview response sha256 4243ee5737f5b5c4e028c6009baa7b42dd868865d95a5063a818698bf0a202bf"
+   },
+   {
+    "statement": "Uncertainty: very high: only the continuous-stream reading is in the preview; the size parameter, fixed-size re-chunking with a shorter last chunk and the empty-stream result are inferred from the title",
+    "basis": "the public group preview is partial (286 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/3/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/3/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/3/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is there a chunk size, and what happens to the last partial chunk?",
+   "Can inner lists be empty?",
+   "Should an empty stream return [] or [[]]?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:69bf10b121f6ab4226963d68/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     1
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       -1,
+       -4,
+       -4,
+       2
+      ],
+      [
+       -5,
+       -2,
+       -4
+      ],
+      [
+       2,
+       0,
+       4
+      ],
+      [
+       0,
+       -3,
+       -2,
+       1
+      ],
+      [
+       -2,
+       4,
+       3
+      ]
+     ],
+     2
+    ],
+    "output": [
+     [
+      -1,
+      -4
+     ],
+     [
+      -4,
+      2
+     ],
+     [
+      -5,
+      -2
+     ],
+     [
+      -4,
+      2
+     ],
+     [
+      0,
+      4
+     ],
+     [
+      0,
+      -3
+     ],
+     [
+      -2,
+      1
+     ],
+     [
+      -2,
+      4
+     ],
+     [
+      3
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:69bf10b121f6ab4226963d68/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def rechunk(data, size) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/69bf10b121f6ab4226963d68-python.json",
+     "inferredInterface": {
+      "name": "rechunk",
+      "params": [
+       {
+        "name": "data",
+        "type": "integer[][]"
+       },
+       {
+        "name": "size",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/69bf10b121f6ab4226963d68-python.json",
+      "sha256": "53cf443f626e625b110973488017c13e644ae6f2ccd1ff798713634fbb031dcd",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function rechunk(data, size) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/69bf10b121f6ab4226963d68-javascript.json",
+     "inferredInterface": {
+      "name": "rechunk",
+      "params": [
+       {
+        "name": "data",
+        "type": "integer[][]"
+       },
+       {
+        "name": "size",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/69bf10b121f6ab4226963d68-javascript.json",
+      "sha256": "12ce1ac447eb6e3f8aad1d9c1328e5fcc8f412fe3893c4221247c02374f1cb58",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/3/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/3/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

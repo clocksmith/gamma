@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:696294968742114304441df4",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "existingAssociations",
+  "newAssociations"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "validateAssociations",
+  "params": [
+   {
+    "name": "existingAssociations",
+    "type": "list<string[3]>"
+   },
+   {
+    "name": "newAssociations",
+    "type": "list<string[3]>"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep the current associations in a plain list and scan it for every new triple",
+  "candidate_design": "a set of (company, contact, role) keys and a set of (company, role) keys, both updated when an association is accepted",
+  "complexity_target": "O(e + n) expected time/O(e + n) space"
+ },
+ "source_sha256": "e86e7ff419ef10493b967e1b218362175ea05d3443b2caba2d04f4a00eae4583",
+ "wrapper": "Solution.validateAssociations"
+}

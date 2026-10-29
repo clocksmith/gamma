@@ -1,0 +1,400 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67eb0bdd4c9bb801bfd0ef6a:67eb0d624c9bb801bfd0ef6b:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67eb0bdd4c9bb801bfd0ef6a.json",
+   "sha256": "c9b235502186332f2ebe476cc595b6159e1ca4d7c5e53b5853234d091997e2e7",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:67eb0d624c9bb801bfd0ef6b"
+  }
+ ],
+ "problemId": "hack2hire:67eb0bdd4c9bb801bfd0ef6a",
+ "variantId": "67eb0d624c9bb801bfd0ef6b",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: 10-unit candlesticks over non-empty intervals",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:67eb0d624c9bb801bfd0ef6b/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "prices is a list of [time, price] pairs in any order; times are distinct non-negative integers and prices are positive integers. Each pair falls in the interval starting at time - time mod 10. For every interval that contains at least one pair, produce [start, highest price, lowest price, price at the earliest time, price at the latest time]. Return the candlesticks ordered by start.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "prices is a list of [time, price] pairs in any order; times are distinct non-negative integers and prices are positive integers.",
+   "Each pair falls in the interval starting at time - time mod 10.",
+   "For every interval that contains at least one pair, produce [start, highest price, lowest price, price at the earliest time, price at the latest time].",
+   "Return the candlesticks ordered by start."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= prices.length <= 1e5",
+   "0 <= time <= 1e9, times distinct",
+   "1 <= price <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:67eb0d624c9bb801bfd0ef6b/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: [time, price] pairs, 10-unit intervals starting at time rounded down to a multiple of 10, five fields per candlestick (start, max, min, open, close); algorithmTags: SORTING; preview response sha256 79012b182dd3df70ae2281924df0f1586bf808face75ab576ff8ef977bbca2dc"
+   },
+   {
+    "statement": "Uncertainty: medium: the interval width and the five fields are in the preview; the field order inside a row, skipping empty intervals, unsorted input, distinct times and integer prices are inferred",
+    "basis": "the public group preview is partial (647 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Should intervals with no prices produce a candlestick (for example carrying the previous close)?",
+   "Is the input sorted by time?",
+   "Can two pairs share a time?",
+   "In what order are the five fields returned?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:67eb0d624c9bb801bfd0ef6b/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       14,
+       5
+      ],
+      [
+       0,
+       1000000000
+      ],
+      [
+       69,
+       5
+      ],
+      [
+       11,
+       1000000000
+      ],
+      [
+       62,
+       1000000000
+      ],
+      [
+       90,
+       1000000000
+      ],
+      [
+       64,
+       1000000000
+      ],
+      [
+       32,
+       1000000000
+      ],
+      [
+       75,
+       1
+      ],
+      [
+       96,
+       2
+      ],
+      [
+       12,
+       5
+      ]
+     ]
+    ],
+    "output": [
+     [
+      0,
+      1000000000,
+      1000000000,
+      1000000000,
+      1000000000
+     ],
+     [
+      10,
+      1000000000,
+      5,
+      1000000000,
+      5
+     ],
+     [
+      30,
+      1000000000,
+      1000000000,
+      1000000000,
+      1000000000
+     ],
+     [
+      60,
+      1000000000,
+      5,
+      1000000000,
+      5
+     ],
+     [
+      70,
+      1,
+      1,
+      1,
+      1
+     ],
+     [
+      90,
+      1000000000,
+      2,
+      1000000000,
+      2
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:67eb0d624c9bb801bfd0ef6b/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def generateCandlesticks(prices) -> list<integer[5]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/67eb0d624c9bb801bfd0ef6b-python.json",
+     "inferredInterface": {
+      "name": "generateCandlesticks",
+      "params": [
+       {
+        "name": "prices",
+        "type": "list<[integer,integer]>"
+       }
+      ],
+      "return": {
+       "type": "list<integer[5]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/67eb0d624c9bb801bfd0ef6b-python.json",
+      "sha256": "e40f16d0fe194baa176969cbd24fd7a0ec8d3193ae20c2902958ed775812f7d2",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function generateCandlesticks(prices) /* -> list<integer[5]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/67eb0d624c9bb801bfd0ef6b-javascript.json",
+     "inferredInterface": {
+      "name": "generateCandlesticks",
+      "params": [
+       {
+        "name": "prices",
+        "type": "list<[integer,integer]>"
+       }
+      ],
+      "return": {
+       "type": "list<integer[5]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/67eb0d624c9bb801bfd0ef6b-javascript.json",
+      "sha256": "63a09f0a5003c9373cf5bebc9232283a0928f9a32e113f54e3c63d9a5c38e1bb",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

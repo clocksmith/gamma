@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a4fe73a665efda9311f575d",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "lend",
+  "payback"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxBorrowingDays",
+  "params": [
+   {
+    "name": "lend",
+    "type": "integer[]"
+   },
+   {
+    "name": "payback",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "depth-first search over every order of lenders, extending a plan while the next lend covers the current payback",
+  "candidate_design": "subset dynamic programming: reach[mask] is the bitmask of lenders that can end a plan using exactly mask; extend by every unused lender whose lend covers the payback of some possible last lender",
+  "complexity_target": "O(2^n * n) time/O(2^n) space"
+ },
+ "source_sha256": "03b2217c0b61a214e9854c48556b1abdd09b4d94de217350324c3f432a366f98",
+ "wrapper": "Solution.maxBorrowingDays"
+}

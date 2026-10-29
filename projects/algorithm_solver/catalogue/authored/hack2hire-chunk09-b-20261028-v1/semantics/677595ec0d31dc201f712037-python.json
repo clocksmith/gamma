@@ -1,0 +1,89 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:677595ec0d31dc201f712037",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "PointMatrix",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addPoint",
+    "params": [
+     {
+      "name": "row",
+      "type": "integer"
+     },
+     {
+      "name": "col",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "isConnected",
+    "params": [
+     {
+      "name": "point1",
+      "type": "integer[2]"
+     },
+     {
+      "name": "point2",
+      "type": "integer[2]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getMinSteps",
+    "params": [
+     {
+      "name": "start",
+      "type": "integer[2]"
+     },
+     {
+      "name": "end",
+      "type": "integer[2]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "BFS directly over points, finding neighbours by scanning every placed point",
+  "candidate_design": "union-find over row and column lines (a point unites its row and its column) answers isConnected; getMinSteps checks the union-find first, then runs a BFS over lines where each row or column is expanded once",
+  "complexity_target": "O(alpha) per addPoint and isConnected; O(points in the component) per getMinSteps"
+ },
+ "source_sha256": "d783e3319b3eeef06a90642357504f92a9d887db6ce6955b9723350b2c76c85b",
+ "native_class": "PointMatrix",
+ "native_symbol": "module global PointMatrix",
+ "void_methods": [
+  "addPoint"
+ ]
+}

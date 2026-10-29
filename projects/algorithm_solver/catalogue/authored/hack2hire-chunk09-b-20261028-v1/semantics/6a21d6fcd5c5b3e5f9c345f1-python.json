@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a21d6fcd5c5b3e5f9c345f1",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "performances",
+  "period"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "roleCooccurrences",
+  "params": [
+   {
+    "name": "performances",
+    "type": "list<string[3]>"
+   },
+   {
+    "name": "period",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "list<string[3]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every singer compare every pair of their performances and collect the co-occurring role pairs in a set",
+  "candidate_design": "per singer, sorted distinct years per role; for each pair of roles a two-pointer merge finds whether the closest years are within period",
+  "complexity_target": "O(sum over singers of R_s * P_s + p log p) time/O(p) space"
+ },
+ "source_sha256": "d6619bdd24399a3ad6b07936564ea4f58280bc20dd5d5b5dc4514afbeb4fc6b5",
+ "wrapper": "Solution.roleCooccurrences"
+}

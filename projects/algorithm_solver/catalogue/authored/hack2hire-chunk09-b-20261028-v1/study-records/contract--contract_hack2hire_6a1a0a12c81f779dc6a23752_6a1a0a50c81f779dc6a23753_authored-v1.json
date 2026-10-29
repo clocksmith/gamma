@@ -1,0 +1,358 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a1a0a12c81f779dc6a23752:6a1a0a50c81f779dc6a23753:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/15"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a1a0a12c81f779dc6a23752.json",
+   "sha256": "c644d8352996ed52d08395c0c24e69d3cf12de5d7bbdacce149d35034bac656c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:6a1a0a50c81f779dc6a23753"
+  }
+ ],
+ "problemId": "hack2hire:6a1a0a12c81f779dc6a23752",
+ "variantId": "6a1a0a50c81f779dc6a23753",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred part 1: approve every request",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a50c81f779dc6a23753/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "requests is a list of CSV strings \"timestamp,unique_id,amount,card_number,merchant\". Process the requests in increasing timestamp order (ties keep input order) and approve every one. Return [unique_id, \"APPROVE\"] per request in processing order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "requests is a list of CSV strings \"timestamp,unique_id,amount,card_number,merchant\".",
+   "Process the requests in increasing timestamp order (ties keep input order) and approve every one.",
+   "Return [unique_id, \"APPROVE\"] per request in processing order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= requests.length <= 1e5",
+   "timestamp and amount are decimal integers in [0, 1e9]",
+   "unique_id matches [A-Za-z0-9_]{1,20} and is unique",
+   "card_number matches [0-9]{4,19}",
+   "merchant matches [a-z0-9_]{1,20}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a50c81f779dc6a23753/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: CSV authorization requests \"<timestamp_seconds>,<unique_id>,<amount>,<card_number>,<merchant>\", pre-validated, part-1 policy approve every request (later parts and the output format not visible); algorithmTags: SIMULATION; preview response sha256 367c8711f58b3a93ee136bf77cb2187e39c9359253be14ef2b2c8eb8efb35ec8"
+   },
+   {
+    "statement": "Uncertainty: medium: the CSV format and approving everything are in the preview; processing in timestamp order and the [unique_id, decision] output rows are inferred",
+    "basis": "the public group preview is partial (537 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 1 of 3: part 1 (approve every request) is the part the preview describes; the author infers that parts 2 and 3 add rules and fraud reports",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/15/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/15/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/15/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does the output look like: rows, strings or a count?",
+   "Are requests processed in input order or timestamp order?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a50c81f779dc6a23753/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "9,id43,999,4111,shop",
+      "1,id10,1000000000,4222,cafe",
+      "5,id76,1000000000,4111,shop",
+      "0,id71,999,5555000011112222,cafe",
+      "5,id72,1000000000,4222,cafe",
+      "5,id90,1000000000,5555000011112222,shop",
+      "0,id80,999,5555000011112222,shop",
+      "1,id17,5,4222,shop",
+      "1,id7,999,4222,m_1"
+     ]
+    ],
+    "output": [
+     [
+      "id71",
+      "APPROVE"
+     ],
+     [
+      "id80",
+      "APPROVE"
+     ],
+     [
+      "id10",
+      "APPROVE"
+     ],
+     [
+      "id17",
+      "APPROVE"
+     ],
+     [
+      "id7",
+      "APPROVE"
+     ],
+     [
+      "id76",
+      "APPROVE"
+     ],
+     [
+      "id72",
+      "APPROVE"
+     ],
+     [
+      "id90",
+      "APPROVE"
+     ],
+     [
+      "id43",
+      "APPROVE"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a50c81f779dc6a23753/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def processRequests(requests) -> list<[string,string]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a50c81f779dc6a23753-python.json",
+     "inferredInterface": {
+      "name": "processRequests",
+      "params": [
+       {
+        "name": "requests",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a50c81f779dc6a23753-python.json",
+      "sha256": "6c242a8b229a57541a6ccda5dc59627a0db236a512539c11b92160e34ffd3883",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function processRequests(requests) /* -> list<[string,string]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a50c81f779dc6a23753-javascript.json",
+     "inferredInterface": {
+      "name": "processRequests",
+      "params": [
+       {
+        "name": "requests",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a50c81f779dc6a23753-javascript.json",
+      "sha256": "ab93ca8753c28315f511a664544933ebdd7ed70f67bc4fc1cb61751d8ab6e322",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/15/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/15/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

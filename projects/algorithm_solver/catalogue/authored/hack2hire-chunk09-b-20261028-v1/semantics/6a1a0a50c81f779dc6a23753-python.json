@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1a0a50c81f779dc6a23753",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "requests"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "processRequests",
+  "params": [
+   {
+    "name": "requests",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string,string]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "parse every row, repeatedly pick the unprocessed request with the smallest (timestamp, input index)",
+  "candidate_design": "parse once, stable sort by timestamp, emit APPROVE rows",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "bdfdd8f2dfd01e3e075b32c1c7c8348e41ba3075ff542932cd60a9e4305fc959",
+ "wrapper": "Solution.processRequests"
+}

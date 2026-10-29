@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69beec3021f6ab4226963c1d",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "text",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "topFrequencyWords",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "split the lower-cased text and count each distinct word with list.count, then sort",
+  "candidate_design": "one hash-map count, sort the distinct frequencies, keep words whose frequency is at least the k-th largest, sort by (-frequency, word)",
+  "complexity_target": "O(n + W log W) time/O(W) space"
+ },
+ "source_sha256": "5017d55adf739dd598e04738b7af1cfedc3553dc8a389a5447a40a4404da0055",
+ "wrapper": "Solution.topFrequencyWords"
+}

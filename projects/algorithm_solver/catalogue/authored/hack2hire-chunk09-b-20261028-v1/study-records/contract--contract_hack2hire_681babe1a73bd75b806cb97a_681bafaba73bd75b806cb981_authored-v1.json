@@ -1,0 +1,384 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:681babe1a73bd75b806cb97a:681bafaba73bd75b806cb981:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/12"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/681babe1a73bd75b806cb97a.json",
+   "sha256": "eeb8b12ee6a780463d13aacc847e3d62580074edca926f4ecb3d6ef0600dddee",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:681bafaba73bd75b806cb981"
+  }
+ ],
+ "problemId": "hack2hire:681babe1a73bd75b806cb97a",
+ "variantId": "681bafaba73bd75b806cb981",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: count objects with a black-box pixel comparison",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:681bafaba73bd75b806cb981/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "grid is a list of equal-length strings of '*' (object pixel) and '_' (background). The black box is modelled by objectIds, a same-shaped integer grid: objectIds[r][c] >= 1 for an object pixel and 0 for background; isSameObject(p, q) is true when both are object pixels with the same id. Two horizontally or vertically adjacent object pixels are in the same object when isSameObject is true for them. Return the number of objects, i.e. connected groups formed by those links.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "grid is a list of equal-length strings of '*' (object pixel) and '_' (background).",
+   "The black box is modelled by objectIds, a same-shaped integer grid: objectIds[r][c] >= 1 for an object pixel and 0 for background; isSameObject(p, q) is true when both are object pixels with the same id.",
+   "Two horizontally or vertically adjacent object pixels are in the same object when isSameObject is true for them.",
+   "Return the number of objects, i.e.",
+   "connected groups formed by those links."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= rows, columns; rows * columns <= 1e5",
+   "grid characters are '*' or '_'",
+   "objectIds[r][c] in [1, 1e9] for '*' and 0 for '_'"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:681bafaba73bd75b806cb981/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: pin grid of '*' object pixels and '_' background, objects are connected groups of pixels, object membership only through a black-box isSameObject(p1, p2) (connectivity and return not fully visible); algorithmTags: BREADTH_FIRST_SEARCH; preview response sha256 5dfeb10d34bc9f1b039d9ee5006c01b220acabd8cecf89444471e782919a9bd2"
+   },
+   {
+    "statement": "Uncertainty: high: the pixel alphabet, the black box and objects as connected pixel groups are in the preview; modelling the black box as an id grid, 4-neighbour adjacency and counting groups of linked neighbours are inferred",
+    "basis": "the public group preview is partial (535 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/12/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/12/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/12/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are pixels connected through diagonal neighbours too?",
+   "Can two touching pixels belong to different objects?",
+   "Is the black box expensive, so calls should be minimised?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:681bafaba73bd75b806cb981/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "_"
+     ],
+     [
+      [
+       0
+      ]
+     ]
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "***__*",
+      "**_***",
+      "__***_",
+      "_**_**",
+      "****__",
+      "*_****"
+     ],
+     [
+      [
+       1,
+       1,
+       1000000000,
+       0,
+       0,
+       2
+      ],
+      [
+       1000000000,
+       1,
+       0,
+       1000000000,
+       1000000000,
+       1000000000
+      ],
+      [
+       0,
+       0,
+       1,
+       2,
+       2,
+       0
+      ],
+      [
+       0,
+       1000000000,
+       1000000000,
+       0,
+       1,
+       1
+      ],
+      [
+       2,
+       2,
+       1,
+       1000000000,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       1000000000,
+       1,
+       1,
+       2
+      ]
+     ]
+    ],
+    "output": 16,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:681bafaba73bd75b806cb981/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def countObjects(grid, objectIds) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/681bafaba73bd75b806cb981-python.json",
+     "inferredInterface": {
+      "name": "countObjects",
+      "params": [
+       {
+        "name": "grid",
+        "type": "string[]"
+       },
+       {
+        "name": "objectIds",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/681bafaba73bd75b806cb981-python.json",
+      "sha256": "256702b3219eec308662d1dfaefda0a82ca3c675d39c8f41c793baa4099960d5",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function countObjects(grid, objectIds) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/681bafaba73bd75b806cb981-javascript.json",
+     "inferredInterface": {
+      "name": "countObjects",
+      "params": [
+       {
+        "name": "grid",
+        "type": "string[]"
+       },
+       {
+        "name": "objectIds",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/681bafaba73bd75b806cb981-javascript.json",
+      "sha256": "f6cdd9322041b6c64e9570f92c47c213a5f55d78379cd7424e1f40eb441d0e94",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/12/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/12/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

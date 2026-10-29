@@ -1,0 +1,394 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:696294908742114304441df1:696294968742114304441df4:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/696294908742114304441df1.json",
+   "sha256": "be2ff2cd5aa521bc4f245e7583977d678a4a482cbd98a06cd87d6b96f0253fec",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:696294968742114304441df4"
+  }
+ ],
+ "problemId": "hack2hire:696294908742114304441df1",
+ "variantId": "696294968742114304441df4",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: duplicate and role-conflict validation",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:696294968742114304441df4/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "existingAssociations and newAssociations are lists of [companyId, contactId, role] triples. Validate the new associations in order against the current set, which starts as the existing associations. Rule 1: if the same triple is in the current set, the result is \"ALREADY_EXISTS\". Rule 2: otherwise, if some association in the current set has the same companyId and role (necessarily with another contact), the result is \"ROLE_TAKEN\". Otherwise the result is \"VALID\" and the triple is added to the current set, so later new associations see it. Return the list of results.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "existingAssociations and newAssociations are lists of [companyId, contactId, role] triples.",
+   "Validate the new associations in order against the current set, which starts as the existing associations.",
+   "Rule 1: if the same triple is in the current set, the result is \"ALREADY_EXISTS\".",
+   "Rule 2: otherwise, if some association in the current set has the same companyId and role (necessarily with another contact), the result is \"ROLE_TAKEN\".",
+   "Otherwise the result is \"VALID\" and the triple is added to the current set, so later new associations see it.",
+   "Return the list of results."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= existingAssociations.length, newAssociations.length <= 1e5",
+   "companyId and contactId match [A-Za-z0-9_]{1,20}",
+   "role matches [A-Z_]{1,20}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:696294968742114304441df4/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: (companyId, contactId, role) associations, existing and new lists, in-order validation, first rule duplicate association with reason ALREADY_EXISTS (later rules not visible); algorithmTags: HASH_TABLE; preview response sha256 d323cfeb7eeaf6b8312653cf00521d763cee141acd06bd656426b678880fb7ef"
+   },
+   {
+    "statement": "Uncertainty: very high: the inputs, in-order validation and the ALREADY_EXISTS rule are in the preview; the ROLE_TAKEN rule (one contact per role and company), the VALID result string and adding valid associations before checking later ones are inferred",
+    "basis": "the public group preview is partial (597 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/4/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/4/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/4/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which rules follow the duplicate check, and what are their failure reasons?",
+   "Does a valid new association become visible to later ones in the same batch?",
+   "What string marks a valid association?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:696294968742114304441df4/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "C",
+       "p2",
+       "R"
+      ],
+      [
+       "c1",
+       "p3",
+       "S"
+      ],
+      [
+       "c2",
+       "p2",
+       "S"
+      ],
+      [
+       "c1",
+       "p3",
+       "S"
+      ]
+     ],
+     [
+      [
+       "C",
+       "p3",
+       "A_B"
+      ],
+      [
+       "c2",
+       "p2",
+       "R"
+      ],
+      [
+       "C",
+       "p1",
+       "A_B"
+      ],
+      [
+       "c2",
+       "p3",
+       "A_B"
+      ],
+      [
+       "c2",
+       "p3",
+       "S"
+      ],
+      [
+       "c2",
+       "p3",
+       "R"
+      ],
+      [
+       "C",
+       "p1",
+       "R"
+      ],
+      [
+       "C",
+       "p3",
+       "S"
+      ]
+     ]
+    ],
+    "output": [
+     "VALID",
+     "VALID",
+     "ROLE_TAKEN",
+     "VALID",
+     "ROLE_TAKEN",
+     "ROLE_TAKEN",
+     "ROLE_TAKEN",
+     "VALID"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:696294968742114304441df4/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def validateAssociations(existingAssociations, newAssociations) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/696294968742114304441df4-python.json",
+     "inferredInterface": {
+      "name": "validateAssociations",
+      "params": [
+       {
+        "name": "existingAssociations",
+        "type": "list<string[3]>"
+       },
+       {
+        "name": "newAssociations",
+        "type": "list<string[3]>"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/696294968742114304441df4-python.json",
+      "sha256": "0625a66a30c68e9761fab9504c1f7991d60942888da8394713f44637b2568e4a",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function validateAssociations(existingAssociations, newAssociations) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/696294968742114304441df4-javascript.json",
+     "inferredInterface": {
+      "name": "validateAssociations",
+      "params": [
+       {
+        "name": "existingAssociations",
+        "type": "list<string[3]>"
+       },
+       {
+        "name": "newAssociations",
+        "type": "list<string[3]>"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/696294968742114304441df4-javascript.json",
+      "sha256": "690cf09959d571322457a54cead3a8059880edf4c761b52d1ac667b47a3711d7",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/4/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/4/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

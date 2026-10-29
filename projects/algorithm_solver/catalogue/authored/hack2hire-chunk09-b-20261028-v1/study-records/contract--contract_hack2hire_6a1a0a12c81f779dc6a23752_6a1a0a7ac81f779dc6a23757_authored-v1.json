@@ -1,0 +1,377 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a1a0a12c81f779dc6a23752:6a1a0a7ac81f779dc6a23757:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+   "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+   "selector": "/problems/17"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a1a0a12c81f779dc6a23752.json",
+   "sha256": "c644d8352996ed52d08395c0c24e69d3cf12de5d7bbdacce149d35034bac656c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+   "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+   "selector": "/variants/hack2hire:6a1a0a7ac81f779dc6a23757"
+  }
+ ],
+ "problemId": "hack2hire:6a1a0a12c81f779dc6a23752",
+ "variantId": "6a1a0a7ac81f779dc6a23757",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred part 3: block a card after a fraud report",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a7ac81f779dc6a23757/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "As in part 2, plus fraudReports: a list of strings \"timestamp,unique_id\" each reporting an earlier request as fraud at that time (the report time is at least the reported request's timestamp). A request is also declined when its card number is the card of a reported request whose report time is strictly smaller than the request's timestamp. Return [unique_id, \"APPROVE\" or \"DECLINE\"] per request in timestamp order (ties keep input order).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "As in part 2, plus fraudReports: a list of strings \"timestamp,unique_id\" each reporting an earlier request as fraud at that time (the report time is at least the reported request's timestamp).",
+   "A request is also declined when its card number is the card of a reported request whose report time is strictly smaller than the request's timestamp.",
+   "Return [unique_id, \"APPROVE\" or \"DECLINE\"] per request in timestamp order (ties keep input order)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= requests.length <= 1e5",
+   "timestamp and amount are decimal integers in [0, 1e9]",
+   "unique_id matches [A-Za-z0-9_]{1,20} and is unique",
+   "card_number matches [0-9]{4,19}",
+   "merchant matches [a-z0-9_]{1,20}",
+   "0 <= rules.length, fraudReports.length <= 1e5",
+   "every report names an existing request and its time is >= that request's timestamp"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a7ac81f779dc6a23757/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: CSV authorization requests \"<timestamp_seconds>,<unique_id>,<amount>,<card_number>,<merchant>\", pre-validated, part-1 policy approve every request (later parts and the output format not visible); algorithmTags: SIMULATION; preview response sha256 367c8711f58b3a93ee136bf77cb2187e39c9359253be14ef2b2c8eb8efb35ec8"
+   },
+   {
+    "statement": "Uncertainty: very high: only part 1 is visible; fraud reports, card-level blocking after the report time, the strict time comparison and keeping part 2 rules are inferred",
+    "basis": "the public group preview is partial (537 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 3 of 3: inferred part 3 adds time-dependent card blocking from fraud reports; no per-variant text is public",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/17/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/17/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/17/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does a report block the card, the merchant, or both?",
+   "Does the block start at the report time or just after it?",
+   "Do part 2 rules still apply?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a7ac81f779dc6a23757/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "0,id56,1000000000,4111,shop",
+      "5,id34,999,5555000011112222,shop",
+      "2,id97,100,4111,m_1",
+      "5,id61,5,4222,cafe",
+      "1,id55,0,5555000011112222,shop",
+      "1,id89,100,5555000011112222,shop",
+      "2,id48,999,5555000011112222,shop"
+     ],
+     [
+      "max_amount,100",
+      "max_amount,100",
+      "card_number,9999"
+     ],
+     [
+      "1,id89"
+     ]
+    ],
+    "output": [
+     [
+      "id56",
+      "DECLINE"
+     ],
+     [
+      "id55",
+      "APPROVE"
+     ],
+     [
+      "id89",
+      "APPROVE"
+     ],
+     [
+      "id97",
+      "APPROVE"
+     ],
+     [
+      "id48",
+      "DECLINE"
+     ],
+     [
+      "id34",
+      "DECLINE"
+     ],
+     [
+      "id61",
+      "APPROVE"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/study-content.json",
+    "sha256": "d017e85ee3a82ea13d3a987a6e0ba206890cd69f579136b619f2e7b5a63a8ea2",
+    "selector": "/variants/hack2hire:6a1a0a7ac81f779dc6a23757/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/oracles.py",
+    "sha256": "0f6e245aed81a432b699f08a164441bc4c1839dd4edfe2e7f97d014ca65aff72",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def processRequests(requests, rules, fraudReports) -> list<[string,string]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a7ac81f779dc6a23757-python.json",
+     "inferredInterface": {
+      "name": "processRequests",
+      "params": [
+       {
+        "name": "requests",
+        "type": "string[]"
+       },
+       {
+        "name": "rules",
+        "type": "string[]"
+       },
+       {
+        "name": "fraudReports",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a7ac81f779dc6a23757-python.json",
+      "sha256": "72e759a5a95db94cdeacc3a68cf645224621a1a522ee088764710c58fc641ccc",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function processRequests(requests, rules, fraudReports) /* -> list<[string,string]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+      "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a7ac81f779dc6a23757-javascript.json",
+     "inferredInterface": {
+      "name": "processRequests",
+      "params": [
+       {
+        "name": "requests",
+        "type": "string[]"
+       },
+       {
+        "name": "rules",
+        "type": "string[]"
+       },
+       {
+        "name": "fraudReports",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/semantics/6a1a0a7ac81f779dc6a23757-javascript.json",
+      "sha256": "aec9ac58af26b27a825bbe967d0421b781ad61f53a1a9f4ccaa1ec86b918af47",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/17/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-b-20261028-v1/contracts.json",
+    "sha256": "09dfe0c077b6540aebec7c2459edd5808cd2bae0b07bc7ebeaf3acb5e2edd038",
+    "selector": "/problems/17/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,1782 @@
+{
+ "schema": "gamma.hack2hire-chunk09-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:6a02333a2608e589a944a29d": {
+   "constraints": [
+    "1 <= rows, columns; rows * columns <= 1e5",
+    "every row has the same length",
+    "each tile matches [A-Z][0-9]"
+   ],
+   "clarifyingQuestions": [
+    "Are regions connected horizontally and vertically only, or diagonally too?",
+    "Is a region score its size times its crowns, and does a region with no crowns score 0?",
+    "Can the board contain empty tiles or a castle tile?"
+   ],
+   "hints": [
+    "Group tiles into same-terrain regions with BFS or DFS.",
+    "While exploring one region, count its tiles and add up its crowns.",
+    "Use an explicit queue over row-major indices so a 1e5-tile region needs no recursion."
+   ],
+   "invariants": [
+    "every tile belongs to exactly one region",
+    "the result is the sum over regions of size x crowns"
+   ],
+   "chooseWhen": [
+    "Grid connectivity with a per-component aggregate"
+   ],
+   "tradeoffs": [
+    "BFS and union-find are both linear here; BFS is simpler, union-find suits incremental boards"
+   ],
+   "variantLabel": "Inferred single variant: sum of region size x region crowns",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "A0"
+       ]
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "A0",
+        "A9",
+        "A0",
+        "A1",
+        "B0"
+       ],
+       [
+        "B0",
+        "B1",
+        "A0",
+        "A1",
+        "B0"
+       ],
+       [
+        "A2",
+        "B1",
+        "B2",
+        "B9",
+        "B0"
+       ],
+       [
+        "A1",
+        "B0",
+        "A2",
+        "A0",
+        "A0"
+       ],
+       [
+        "A0",
+        "B0",
+        "A9",
+        "B2",
+        "A9"
+       ],
+       [
+        "A1",
+        "A2",
+        "B9",
+        "B0",
+        "B9"
+       ]
+      ]
+     ],
+     "output": 406,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a94a962cddc54478ddf6084": {
+   "constraints": [
+    "0 <= n <= 1e5",
+    "-1e9 <= priorities[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Should the answer list every process, or only a total or the maximum?",
+    "Is a process with no later smaller priority reported as 0?",
+    "Is the comparison strict (smaller, not smaller or equal)?"
+   ],
+   "hints": [
+    "Only the farthest smaller priority to the right matters.",
+    "The minimum of priorities[j..n-1] can only grow as j moves right.",
+    "Binary-search that suffix-minimum array for the last position whose minimum is still below priorities[i]."
+   ],
+   "invariants": [
+    "result[i] = 0 or result[i] = j - i with priorities[j] < priorities[i] and no larger index qualifies",
+    "suffixMin is non-decreasing"
+   ],
+   "chooseWhen": [
+    "Farthest (not nearest) smaller element to the right"
+   ],
+   "tradeoffs": [
+    "A monotonic stack finds nearest smaller elements, not the farthest; the suffix-minimum search is O(n log n) and simple"
+   ],
+   "variantLabel": "Inferred single variant: starvation time of every process",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -3,
+       1000000000,
+       1000000000,
+       1000000000,
+       2,
+       0,
+       2,
+       0,
+       2,
+       0,
+       1000000000
+      ]
+     ],
+     "output": [
+      0,
+      8,
+      7,
+      6,
+      5,
+      0,
+      3,
+      0,
+      1,
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67eb0d624c9bb801bfd0ef6b": {
+   "constraints": [
+    "0 <= prices.length <= 1e5",
+    "0 <= time <= 1e9, times distinct",
+    "1 <= price <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Should intervals with no prices produce a candlestick (for example carrying the previous close)?",
+    "Is the input sorted by time?",
+    "Can two pairs share a time?",
+    "In what order are the five fields returned?"
+   ],
+   "hints": [
+    "The interval of a time t starts at t - t mod 10.",
+    "Sorting by time makes the open the first pair and the close the last pair of each interval.",
+    "Sweep the sorted pairs, keep a running max and min, and emit a row when the interval start changes."
+   ],
+   "invariants": [
+    "rows are strictly increasing by start",
+    "min <= open, close <= max in every row"
+   ],
+   "chooseWhen": [
+    "Bucketing a time series into fixed windows"
+   ],
+   "tradeoffs": [
+    "A hash map of buckets avoids sorting all pairs but then needs the bucket keys sorted and per-bucket earliest/latest tracking"
+   ],
+   "variantLabel": "Inferred single variant: 10-unit candlesticks over non-empty intervals",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        14,
+        5
+       ],
+       [
+        0,
+        1000000000
+       ],
+       [
+        69,
+        5
+       ],
+       [
+        11,
+        1000000000
+       ],
+       [
+        62,
+        1000000000
+       ],
+       [
+        90,
+        1000000000
+       ],
+       [
+        64,
+        1000000000
+       ],
+       [
+        32,
+        1000000000
+       ],
+       [
+        75,
+        1
+       ],
+       [
+        96,
+        2
+       ],
+       [
+        12,
+        5
+       ]
+      ]
+     ],
+     "output": [
+      [
+       0,
+       1000000000,
+       1000000000,
+       1000000000,
+       1000000000
+      ],
+      [
+       10,
+       1000000000,
+       5,
+       1000000000,
+       5
+      ],
+      [
+       30,
+       1000000000,
+       1000000000,
+       1000000000,
+       1000000000
+      ],
+      [
+       60,
+       1000000000,
+       5,
+       1000000000,
+       5
+      ],
+      [
+       70,
+       1,
+       1,
+       1,
+       1
+      ],
+      [
+       90,
+       1000000000,
+       2,
+       1000000000,
+       2
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69bf10b121f6ab4226963d68": {
+   "constraints": [
+    "0 <= data.length <= 1e5",
+    "0 <= total values <= 1e5",
+    "-1e9 <= value <= 1e9",
+    "1 <= size <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Is there a chunk size, and what happens to the last partial chunk?",
+    "Can inner lists be empty?",
+    "Should an empty stream return [] or [[]]?"
+   ],
+   "hints": [
+    "Ignore the inner-list boundaries: only the order of values matters.",
+    "Keep one buffer and push values until it holds size of them.",
+    "After the stream ends, emit the buffer if it is not empty."
+   ],
+   "invariants": [
+    "every chunk except the last has exactly size values",
+    "concatenating the chunks gives the stream"
+   ],
+   "chooseWhen": [
+    "Batching a stream whose producer used different batch sizes"
+   ],
+   "tradeoffs": [
+    "Flattening first is simpler but holds an extra copy; streaming builds the chunks directly"
+   ],
+   "variantLabel": "Inferred single variant: fixed-size re-chunking of a stream of lists",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        -1,
+        -4,
+        -4,
+        2
+       ],
+       [
+        -5,
+        -2,
+        -4
+       ],
+       [
+        2,
+        0,
+        4
+       ],
+       [
+        0,
+        -3,
+        -2,
+        1
+       ],
+       [
+        -2,
+        4,
+        3
+       ]
+      ],
+      2
+     ],
+     "output": [
+      [
+       -1,
+       -4
+      ],
+      [
+       -4,
+       2
+      ],
+      [
+       -5,
+       -2
+      ],
+      [
+       -4,
+       2
+      ],
+      [
+       0,
+       4
+      ],
+      [
+       0,
+       -3
+      ],
+      [
+       -2,
+       1
+      ],
+      [
+       -2,
+       4
+      ],
+      [
+       3
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696294968742114304441df4": {
+   "constraints": [
+    "0 <= existingAssociations.length, newAssociations.length <= 1e5",
+    "companyId and contactId match [A-Za-z0-9_]{1,20}",
+    "role matches [A-Z_]{1,20}"
+   ],
+   "clarifyingQuestions": [
+    "Which rules follow the duplicate check, and what are their failure reasons?",
+    "Does a valid new association become visible to later ones in the same batch?",
+    "What string marks a valid association?"
+   ],
+   "hints": [
+    "Build constant-time lookups from the existing associations first.",
+    "A triple key answers rule 1; a (company, role) key answers rule 2.",
+    "Insert both keys when an association is accepted so later items in the batch see it."
+   ],
+   "invariants": [
+    "a triple accepted once is reported ALREADY_EXISTS if repeated",
+    "at most one accepted new association per (company, role) not already present"
+   ],
+   "chooseWhen": [
+    "Batch validation against a growing set"
+   ],
+   "tradeoffs": [
+    "Two hash sets cost memory proportional to the input; a sorted structure would allow range queries that are not needed here"
+   ],
+   "variantLabel": "Inferred single variant: duplicate and role-conflict validation",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "C",
+        "p2",
+        "R"
+       ],
+       [
+        "c1",
+        "p3",
+        "S"
+       ],
+       [
+        "c2",
+        "p2",
+        "S"
+       ],
+       [
+        "c1",
+        "p3",
+        "S"
+       ]
+      ],
+      [
+       [
+        "C",
+        "p3",
+        "A_B"
+       ],
+       [
+        "c2",
+        "p2",
+        "R"
+       ],
+       [
+        "C",
+        "p1",
+        "A_B"
+       ],
+       [
+        "c2",
+        "p3",
+        "A_B"
+       ],
+       [
+        "c2",
+        "p3",
+        "S"
+       ],
+       [
+        "c2",
+        "p3",
+        "R"
+       ],
+       [
+        "C",
+        "p1",
+        "R"
+       ],
+       [
+        "C",
+        "p3",
+        "S"
+       ]
+      ]
+     ],
+     "output": [
+      "VALID",
+      "VALID",
+      "ROLE_TAKEN",
+      "VALID",
+      "ROLE_TAKEN",
+      "ROLE_TAKEN",
+      "ROLE_TAKEN",
+      "VALID"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67e4db7050b60b77022f386f": {
+   "constraints": [
+    "1 <= number of nodes <= 1e5",
+    "0 <= value <= 1e9, values unique",
+    "rows are in preorder and every non-root value is the child of exactly one row",
+    "0 <= compressedNodes.length <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "How is the tree passed in and returned?",
+    "Are promoted children inserted where the compressed node was, or appended?",
+    "What happens if compressedNodes contains the root or an unknown value?"
+   ],
+   "hints": [
+    "Promotion in place does not change the preorder of the nodes that stay.",
+    "A kept node's new parent is its nearest kept ancestor.",
+    "Process the preorder rows with an explicit stack so a 1e5-deep path needs no recursion."
+   ],
+   "invariants": [
+    "the output preorder is the input preorder without compressed nodes",
+    "each kept node keeps its nearest kept ancestor as parent"
+   ],
+   "chooseWhen": [
+    "Removing internal nodes from a tree while keeping order"
+   ],
+   "tradeoffs": [
+    "Rebuilding from a flat preorder is linear but tied to that encoding; a pointer-based tree would splice child lists instead"
+   ],
+   "variantLabel": "Inferred single variant: remove compressed nodes and promote their children",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        1,
+        []
+       ]
+      ],
+      []
+     ],
+     "output": [
+      [
+       1,
+       []
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        [
+         3,
+         2
+        ]
+       ],
+       [
+        3,
+        []
+       ],
+       [
+        2,
+        [
+         21,
+         28
+        ]
+       ],
+       [
+        21,
+        [
+         29,
+         12,
+         36
+        ]
+       ],
+       [
+        29,
+        [
+         25
+        ]
+       ],
+       [
+        25,
+        [
+         35
+        ]
+       ],
+       [
+        35,
+        []
+       ],
+       [
+        12,
+        [
+         5
+        ]
+       ],
+       [
+        5,
+        [
+         8
+        ]
+       ],
+       [
+        8,
+        []
+       ],
+       [
+        36,
+        [
+         13
+        ]
+       ],
+       [
+        13,
+        []
+       ],
+       [
+        28,
+        []
+       ]
+      ],
+      [
+       41,
+       8,
+       2,
+       8,
+       0,
+       8,
+       36,
+       42,
+       25,
+       29,
+       35,
+       13
+      ]
+     ],
+     "output": [
+      [
+       0,
+       [
+        3,
+        21,
+        28
+       ]
+      ],
+      [
+       3,
+       []
+      ],
+      [
+       21,
+       [
+        12
+       ]
+      ],
+      [
+       12,
+       [
+        5
+       ]
+      ],
+      [
+       5,
+       []
+      ],
+      [
+       28,
+       []
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677595ec0d31dc201f712037": {
+   "constraints": [
+    "up to 1e5 calls",
+    "-1e9 <= row, col <= 1e9",
+    "the sum over getMinSteps calls of the number of placed points is at most 2e6 (author testing bound)"
+   ],
+   "clarifyingQuestions": [
+    "What is the class called, and does adding an existing point do anything?",
+    "What do the queries return when a point was never added?",
+    "Does a move have to stop at the nearest point, or can it jump to any point on the line?"
+   ],
+   "hints": [
+    "Two points are connected exactly when their rows and columns are linked through other points: union-find over lines.",
+    "For distances, think of rows and columns as nodes: a point is an edge between its row and its column.",
+    "BFS from the start point's row and column; reaching a line at distance d lets every point on it be reached in d + 1 moves."
+   ],
+   "invariants": [
+    "each row and column key is expanded at most once per BFS",
+    "two placed points are connected iff their rows share a union-find root"
+   ],
+   "chooseWhen": [
+    "Rook-move connectivity on sparse points"
+   ],
+   "tradeoffs": [
+    "BFS per query is linear in the component; precomputing all distances would cost quadratic memory"
+   ],
+   "variantLabel": "Inferred single variant: point connectivity and shortest move count",
+   "examples": [
+    {
+     "input": [
+      [
+       "PointMatrix",
+       "addPoint"
+      ],
+      [
+       [],
+       [
+        1,
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "PointMatrix",
+       "addPoint",
+       "getMinSteps",
+       "getMinSteps",
+       "getMinSteps",
+       "getMinSteps",
+       "getMinSteps",
+       "isConnected",
+       "getMinSteps"
+      ],
+      [
+       [],
+       [
+        1,
+        -1
+       ],
+       [
+        [
+         1,
+         -1
+        ],
+        [
+         1,
+         -1
+        ]
+       ],
+       [
+        [
+         9,
+         9
+        ],
+        [
+         1,
+         -1
+        ]
+       ],
+       [
+        [
+         1,
+         -1
+        ],
+        [
+         1,
+         -1
+        ]
+       ],
+       [
+        [
+         1,
+         -1
+        ],
+        [
+         1,
+         -1
+        ]
+       ],
+       [
+        [
+         9,
+         9
+        ],
+        [
+         1,
+         -1
+        ]
+       ],
+       [
+        [
+         1,
+         -1
+        ],
+        [
+         1,
+         -1
+        ]
+       ],
+       [
+        [
+         1,
+         -1
+        ],
+        [
+         -3,
+         -2
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      0,
+      -1,
+      0,
+      0,
+      -1,
+      true,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68001116c48db1937ce88f45": {
+   "constraints": [
+    "0 <= errors.length <= 1e5",
+    "0 <= errors[h], threshold <= 1e9",
+    "1 <= duration <= 1e5",
+    "0 <= percent <= 100"
+   ],
+   "clarifyingQuestions": [
+    "Is every sliding window counted, or do alerts reset after triggering?",
+    "Is the percentage test inclusive?",
+    "Is an hour bad when errors equal the threshold?"
+   ],
+   "hints": [
+    "Turn each hour into 0 or 1 (bad or not).",
+    "Slide a window of duration hours and keep its bad-hour count.",
+    "Compare bad * 100 with percent * duration to avoid fractions."
+   ],
+   "invariants": [
+    "the window count equals the number of bad hours inside the current window",
+    "all comparisons are exact integers"
+   ],
+   "chooseWhen": [
+    "Fixed-size window predicates"
+   ],
+   "tradeoffs": [
+    "A prefix-sum array allows random window queries at the cost of O(n) memory"
+   ],
+   "variantLabel": "Inferred single variant: number of sliding windows that trigger",
+   "examples": [
+    {
+     "input": [
+      [],
+      4,
+      2,
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       0,
+       0,
+       7,
+       1000000000,
+       3,
+       0,
+       5,
+       1000000000,
+       7,
+       3,
+       1000000000,
+       1000000000,
+       0
+      ],
+      6,
+      1,
+      34
+     ],
+     "output": 6,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67e08fffa59c3d249d3625e0": {
+   "constraints": [
+    "1 <= k <= nums.length <= 1e5",
+    "-1e9 <= nums[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are the counts returned in window order?",
+    "Can values be negative or repeated?"
+   ],
+   "hints": [
+    "Track how many times each value occurs in the window.",
+    "A value adds to the distinct count when its count goes from 0 to 1.",
+    "When the window slides, decrement the leaving value and drop it from the count when it reaches 0."
+   ],
+   "invariants": [
+    "distinct equals the number of map keys with a positive count",
+    "the map holds only values of the current window"
+   ],
+   "chooseWhen": [
+    "Sliding windows over a stream of values"
+   ],
+   "tradeoffs": [
+    "A hash map is O(n) expected; sorting with coordinate compression gives a deterministic array-based variant"
+   ],
+   "variantLabel": "Inferred single variant: distinct count per window",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       -3,
+       -2,
+       -3,
+       3,
+       1,
+       -1,
+       -1,
+       2,
+       3,
+       2,
+       -2,
+       -1,
+       0
+      ],
+      14
+     ],
+     "output": [
+      7
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69fa8ff5661bab75bbca3e10": {
+   "constraints": [
+    "0 <= requestTime.length <= 1e5",
+    "1 <= requestTime[i] <= 1e9, sorted non-decreasingly"
+   ],
+   "clarifyingQuestions": [
+    "What are the three limits and their window lengths?",
+    "Do dropped requests count toward later windows?",
+    "Is the input sorted?"
+   ],
+   "hints": [
+    "Because the times are sorted, the k-th earlier request bounds a whole window.",
+    "Request i breaks the 20-per-10-seconds limit exactly when i >= 20 and requestTime[i] - requestTime[i - 20] < 10.",
+    "Check the three limits with i-3, i-20 and i-60 and count i once if any fails."
+   ],
+   "invariants": [
+    "every request is counted at most once",
+    "dropped requests stay in the windows of later requests"
+   ],
+   "chooseWhen": [
+    "Rate limiting over sorted timestamps"
+   ],
+   "tradeoffs": [
+    "Index lookback needs sorted input; a deque per window would also work on a stream"
+   ],
+   "variantLabel": "Inferred single variant: throttling gateway with 3/1 s, 20/10 s, 60/60 s limits",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       4,
+       11,
+       18,
+       18,
+       19,
+       26,
+       26,
+       27,
+       27,
+       28,
+       29,
+       29,
+       36,
+       36,
+       36,
+       36,
+       36,
+       36,
+       36,
+       37,
+       38,
+       38,
+       39,
+       40,
+       40,
+       40,
+       42,
+       43,
+       43,
+       43
+      ]
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a77ef3cd713d873ca7a9ab3": {
+   "constraints": [
+    "1 <= products.length = productPrices.length <= 1e5",
+    "0 <= productSold.length = soldPrice.length <= 1e5",
+    "names match [A-Za-z0-9]{1,20}",
+    "prices are finite numbers in [0, 1e9]"
+   ],
+   "clarifyingQuestions": [
+    "Should the answer be the count of wrong sales or the list of them?",
+    "Are prices compared exactly or with a tolerance?"
+   ],
+   "hints": [
+    "Look up each sold product's correct price by name.",
+    "A hash map makes each lookup constant time.",
+    "Count the sales whose entered price differs from the looked-up price."
+   ],
+   "invariants": [
+    "the count is between 0 and the number of sales"
+   ],
+   "chooseWhen": [
+    "Joining two lists on a key"
+   ],
+   "tradeoffs": [
+    "Exact comparison treats 2 and 2.0 as equal; a tolerance would be needed for computed prices"
+   ],
+   "variantLabel": "Inferred single variant: number of mis-priced sales",
+   "examples": [
+    {
+     "input": [
+      [
+       "a"
+      ],
+      [
+       1
+      ],
+      [],
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "b",
+       "C",
+       "Ee",
+       "f",
+       "a",
+       "d1"
+      ],
+      [
+       0,
+       0,
+       10,
+       1,
+       9.99,
+       0
+      ],
+      [
+       "d1",
+       "b",
+       "C",
+       "Ee",
+       "f",
+       "Ee",
+       "a",
+       "b",
+       "d1"
+      ],
+      [
+       0,
+       2.5,
+       0,
+       9.99,
+       2.5,
+       10,
+       2.5,
+       2.5,
+       0
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a4fe73a665efda9311f575d": {
+   "constraints": [
+    "0 <= n <= 16 (author bound for an exact search)",
+    "0 <= lend[i], payback[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is the answer the maximum number of days?",
+    "Can the borrower stop early, and does the last payback need covering?",
+    "How large can n be?"
+   ],
+   "hints": [
+    "Only the last lender of a plan and the set of used lenders matter for extending it.",
+    "For each subset, store which lenders can be last as a bitmask.",
+    "From a subset, every unused lender whose lend covers the payback of a possible last lender can be appended; the answer is the largest subset that is reachable."
+   ],
+   "invariants": [
+    "reach[mask] is non-zero exactly when mask can be ordered into a valid plan",
+    "payback of the last day is never checked"
+   ],
+   "chooseWhen": [
+    "Small n with an order-dependent feasibility rule"
+   ],
+   "tradeoffs": [
+    "Exact subset search is exponential; a polynomial greedy would need a proof the author did not find"
+   ],
+   "variantLabel": "Inferred single variant: longest valid borrowing sequence",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5,
+       0,
+       5,
+       5,
+       5,
+       1000000000,
+       1000000000,
+       1000000000
+      ],
+      [
+       0,
+       1000000000,
+       5,
+       5,
+       1000000000,
+       1000000000,
+       1000000000,
+       0
+      ]
+     ],
+     "output": 8,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:681bafaba73bd75b806cb981": {
+   "constraints": [
+    "1 <= rows, columns; rows * columns <= 1e5",
+    "grid characters are '*' or '_'",
+    "objectIds[r][c] in [1, 1e9] for '*' and 0 for '_'"
+   ],
+   "clarifyingQuestions": [
+    "Are pixels connected through diagonal neighbours too?",
+    "Can two touching pixels belong to different objects?",
+    "Is the black box expensive, so calls should be minimised?"
+   ],
+   "hints": [
+    "Only neighbouring pixels need to be compared.",
+    "BFS from each unvisited object pixel, following neighbours the black box says are the same object.",
+    "Each BFS start is one new object; mark pixels visited when enqueued."
+   ],
+   "invariants": [
+    "each object pixel is enqueued once",
+    "the black box is only called on adjacent object pixels"
+   ],
+   "chooseWhen": [
+    "Counting components when the equivalence is only available through a comparison oracle"
+   ],
+   "tradeoffs": [
+    "Comparing only neighbours is linear; comparing against one representative per object would be quadratic"
+   ],
+   "variantLabel": "Inferred single variant: count objects with a black-box pixel comparison",
+   "examples": [
+    {
+     "input": [
+      [
+       "_"
+      ],
+      [
+       [
+        0
+       ]
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "***__*",
+       "**_***",
+       "__***_",
+       "_**_**",
+       "****__",
+       "*_****"
+      ],
+      [
+       [
+        1,
+        1,
+        1000000000,
+        0,
+        0,
+        2
+       ],
+       [
+        1000000000,
+        1,
+        0,
+        1000000000,
+        1000000000,
+        1000000000
+       ],
+       [
+        0,
+        0,
+        1,
+        2,
+        2,
+        0
+       ],
+       [
+        0,
+        1000000000,
+        1000000000,
+        0,
+        1,
+        1
+       ],
+       [
+        2,
+        2,
+        1,
+        1000000000,
+        0,
+        0
+       ],
+       [
+        1,
+        0,
+        1000000000,
+        1,
+        1,
+        2
+       ]
+      ]
+     ],
+     "output": 16,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a21d6fcd5c5b3e5f9c345f1": {
+   "constraints": [
+    "0 <= performances.length <= 1e4",
+    "at most 200 distinct roles",
+    "names match [A-Za-z0-9_]{1,20}",
+    "years are decimal strings in [0, 9999]",
+    "0 <= period <= 10000"
+   ],
+   "clarifyingQuestions": [
+    "Does a singer count once per role pair or once per pair of performances?",
+    "How are the rows ordered?",
+    "Are performances of the same role by the same singer paired with each other?"
+   ],
+   "hints": [
+    "Group performances by singer, then by role.",
+    "Two roles co-occur for a singer when their closest years are within period.",
+    "Sort each role's years and merge two sorted lists with two pointers to find the closest pair."
+   ],
+   "invariants": [
+    "each (singer, role pair) contributes at most 1 in each direction",
+    "counts are symmetric: count(A, B) = count(B, A)"
+   ],
+   "chooseWhen": [
+    "Pairwise relations within groups"
+   ],
+   "tradeoffs": [
+    "Pairwise role checks are quadratic in roles per singer; a year sweep is better when singers have many roles but few years"
+   ],
+   "variantLabel": "Inferred single variant: per-singer role co-occurrence counts",
+   "examples": [
+    {
+     "input": [
+      [],
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "s2",
+        "B",
+        "0"
+       ],
+       [
+        "s1",
+        "B",
+        "2001"
+       ],
+       [
+        "s1",
+        "A",
+        "9999"
+       ],
+       [
+        "s1",
+        "B",
+        "2001"
+       ],
+       [
+        "s2",
+        "A",
+        "1999"
+       ],
+       [
+        "s2",
+        "A",
+        "2003"
+       ],
+       [
+        "s1",
+        "B",
+        "1999"
+       ],
+       [
+        "s2",
+        "A",
+        "2000"
+       ],
+       [
+        "s1",
+        "A",
+        "9999"
+       ],
+       [
+        "s2",
+        "A",
+        "2003"
+       ],
+       [
+        "s1",
+        "B",
+        "2001"
+       ]
+      ],
+      10000
+     ],
+     "output": [
+      [
+       "A",
+       "B",
+       "2"
+      ],
+      [
+       "B",
+       "A",
+       "2"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69beec3021f6ab4226963c1d": {
+   "constraints": [
+    "0 <= text.length <= 1e5",
+    "text matches [A-Za-z ]*",
+    "1 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "How many frequency groups are returned, and is that a parameter?",
+    "Are words returned in lower case?",
+    "How are words within one group ordered?"
+   ],
+   "hints": [
+    "Lower-case the text and split on spaces, skipping empty pieces.",
+    "Count words in a hash map and collect the distinct frequencies.",
+    "The cutoff is the k-th largest distinct frequency; keep every word at or above it and sort."
+   ],
+   "invariants": [
+    "every returned word has a frequency among the top k distinct frequencies",
+    "rows are sorted by (-frequency, word)"
+   ],
+   "chooseWhen": [
+    "Top-k by groups of equal frequency"
+   ],
+   "tradeoffs": [
+    "Bucket sort by frequency avoids the final sort when frequencies are small"
+   ],
+   "variantLabel": "Inferred single variant: words of the k highest frequency groups",
+   "examples": [
+    {
+     "input": [
+      "",
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "Bb  Bb  Bb bB  c  A  Dog bB bB a  dog Bb bB",
+      3
+     ],
+     "output": [
+      [
+       "bb",
+       8
+      ],
+      [
+       "a",
+       2
+      ],
+      [
+       "dog",
+       2
+      ],
+      [
+       "c",
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1a0a50c81f779dc6a23753": {
+   "constraints": [
+    "0 <= requests.length <= 1e5",
+    "timestamp and amount are decimal integers in [0, 1e9]",
+    "unique_id matches [A-Za-z0-9_]{1,20} and is unique",
+    "card_number matches [0-9]{4,19}",
+    "merchant matches [a-z0-9_]{1,20}"
+   ],
+   "clarifyingQuestions": [
+    "What does the output look like: rows, strings or a count?",
+    "Are requests processed in input order or timestamp order?"
+   ],
+   "hints": [
+    "Split each CSV string on commas.",
+    "Sort the requests by timestamp with a stable sort so ties keep input order.",
+    "Emit one [id, \"APPROVE\"] row per request."
+   ],
+   "invariants": [
+    "one output row per request",
+    "rows are in non-decreasing timestamp order"
+   ],
+   "chooseWhen": [
+    "Setting up the parsing and ordering that later parts reuse"
+   ],
+   "tradeoffs": [
+    "Sorting costs O(n log n); input already in time order would need no sort"
+   ],
+   "variantLabel": "Inferred part 1: approve every request",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "9,id43,999,4111,shop",
+       "1,id10,1000000000,4222,cafe",
+       "5,id76,1000000000,4111,shop",
+       "0,id71,999,5555000011112222,cafe",
+       "5,id72,1000000000,4222,cafe",
+       "5,id90,1000000000,5555000011112222,shop",
+       "0,id80,999,5555000011112222,shop",
+       "1,id17,5,4222,shop",
+       "1,id7,999,4222,m_1"
+      ]
+     ],
+     "output": [
+      [
+       "id71",
+       "APPROVE"
+      ],
+      [
+       "id80",
+       "APPROVE"
+      ],
+      [
+       "id10",
+       "APPROVE"
+      ],
+      [
+       "id17",
+       "APPROVE"
+      ],
+      [
+       "id7",
+       "APPROVE"
+      ],
+      [
+       "id76",
+       "APPROVE"
+      ],
+      [
+       "id72",
+       "APPROVE"
+      ],
+      [
+       "id90",
+       "APPROVE"
+      ],
+      [
+       "id43",
+       "APPROVE"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1a0a79c81f779dc6a23756": {
+   "constraints": [
+    "0 <= requests.length <= 1e5",
+    "timestamp and amount are decimal integers in [0, 1e9]",
+    "unique_id matches [A-Za-z0-9_]{1,20} and is unique",
+    "card_number matches [0-9]{4,19}",
+    "merchant matches [a-z0-9_]{1,20}",
+    "0 <= rules.length <= 1e5",
+    "rule values follow the matching field format; max_amount values are decimal integers in [0, 1e9]"
+   ],
+   "clarifyingQuestions": [
+    "Which rule fields exist and how are they encoded?",
+    "Is the amount rule strict (greater than) or inclusive?",
+    "If several max_amount rules exist, which applies?"
+   ],
+   "hints": [
+    "Parse the rules into a blocked-card set, a blocked-merchant set and the smallest amount limit.",
+    "Several max_amount rules combine into their minimum.",
+    "Check each sorted request against the three lookups."
+   ],
+   "invariants": [
+    "a request is declined iff some rule matches it",
+    "output order equals part 1 order"
+   ],
+   "chooseWhen": [
+    "Static blocklists"
+   ],
+   "tradeoffs": [
+    "Precomputing sets is O(r) memory; scanning rules per request is O(n * r)"
+   ],
+   "variantLabel": "Inferred part 2: static card, merchant and amount rules",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "9,id51,0,5555000011112222,cafe",
+       "1,id61,1000000000,4222,shop",
+       "5,id87,100,5555000011112222,m_1",
+       "1,id24,100,4111,cafe",
+       "9,id37,999,5555000011112222,shop",
+       "9,id74,1000000000,4111,m_1",
+       "9,id12,999,5555000011112222,m_1",
+       "5,id1,0,4222,cafe",
+       "0,id53,1000000000,4111,m_1"
+      ],
+      [
+       "merchant,zzz"
+      ]
+     ],
+     "output": [
+      [
+       "id53",
+       "APPROVE"
+      ],
+      [
+       "id61",
+       "APPROVE"
+      ],
+      [
+       "id24",
+       "APPROVE"
+      ],
+      [
+       "id87",
+       "APPROVE"
+      ],
+      [
+       "id1",
+       "APPROVE"
+      ],
+      [
+       "id51",
+       "APPROVE"
+      ],
+      [
+       "id37",
+       "APPROVE"
+      ],
+      [
+       "id74",
+       "APPROVE"
+      ],
+      [
+       "id12",
+       "APPROVE"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1a0a7ac81f779dc6a23757": {
+   "constraints": [
+    "0 <= requests.length <= 1e5",
+    "timestamp and amount are decimal integers in [0, 1e9]",
+    "unique_id matches [A-Za-z0-9_]{1,20} and is unique",
+    "card_number matches [0-9]{4,19}",
+    "merchant matches [a-z0-9_]{1,20}",
+    "0 <= rules.length, fraudReports.length <= 1e5",
+    "every report names an existing request and its time is >= that request's timestamp"
+   ],
+   "clarifyingQuestions": [
+    "Does a report block the card, the merchant, or both?",
+    "Does the block start at the report time or just after it?",
+    "Do part 2 rules still apply?"
+   ],
+   "hints": [
+    "Only the earliest report per card matters.",
+    "Map each reported request id to its card, then keep the minimum report time per card.",
+    "A request is declined if a rule matches or its timestamp is greater than its card's earliest report time."
+   ],
+   "invariants": [
+    "a card stays blocked for every later request once reported",
+    "decisions never depend on reports with later or equal times"
+   ],
+   "chooseWhen": [
+    "Time-dependent blocking"
+   ],
+   "tradeoffs": [
+    "A per-card minimum is O(1) per request; tracking full report histories is unnecessary for a monotone block"
+   ],
+   "variantLabel": "Inferred part 3: block a card after a fraud report",
+   "examples": [
+    {
+     "input": [
+      [],
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "0,id56,1000000000,4111,shop",
+       "5,id34,999,5555000011112222,shop",
+       "2,id97,100,4111,m_1",
+       "5,id61,5,4222,cafe",
+       "1,id55,0,5555000011112222,shop",
+       "1,id89,100,5555000011112222,shop",
+       "2,id48,999,5555000011112222,shop"
+      ],
+      [
+       "max_amount,100",
+       "max_amount,100",
+       "card_number,9999"
+      ],
+      [
+       "1,id89"
+      ]
+     ],
+     "output": [
+      [
+       "id56",
+       "DECLINE"
+      ],
+      [
+       "id55",
+       "APPROVE"
+      ],
+      [
+       "id89",
+       "APPROVE"
+      ],
+      [
+       "id97",
+       "APPROVE"
+      ],
+      [
+       "id48",
+       "DECLINE"
+      ],
+      [
+       "id34",
+       "DECLINE"
+      ],
+      [
+       "id61",
+       "APPROVE"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}
