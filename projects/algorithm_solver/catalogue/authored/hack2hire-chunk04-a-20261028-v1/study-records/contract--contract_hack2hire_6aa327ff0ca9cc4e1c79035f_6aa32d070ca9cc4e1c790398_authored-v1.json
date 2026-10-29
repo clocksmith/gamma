@@ -1,0 +1,425 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32d070ca9cc4e1c790398:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+   "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+   "selector": "/problems/0"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6aa327ff0ca9cc4e1c79035f.json",
+   "sha256": "6dbce548e100b0b214277382ad01977c57c4ee0f35eed948d1f67f5fa5183799",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+   "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+   "selector": "/variants/hack2hire:6aa32d070ca9cc4e1c790398"
+  }
+ ],
+ "problemId": "hack2hire:6aa327ff0ca9cc4e1c79035f",
+ "variantId": "6aa32d070ca9cc4e1c790398",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: account totals with direct referral credit",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6aa32d070ca9cc4e1c790398/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Accounts get ids 0,1,2,... in creation order. addAccount(credit) creates an account whose total credit starts at credit. addAccountWithReferral(credit, referrerId) does the same and also adds credit to the total of its direct referrer only (no further ancestors). getTotalCredit(accountId) returns that total. Inference narrows the preview's double credit to a non-negative integer (0..10^6) so both languages are exact; referrerId and accountId always name existing accounts.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Accounts get ids 0,1,2,..",
+   "in creation order.",
+   "addAccount(credit) creates an account whose total credit starts at credit.",
+   "addAccountWithReferral(credit, referrerId) does the same and also adds credit to the total of its direct referrer only (no further ancestors).",
+   "getTotalCredit(accountId) returns that total.",
+   "Inference narrows the preview's double credit to a non-negative integer (0..10^6) so both languages are exact.",
+   "referrerId and accountId always name existing accounts."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/0/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 20000 calls",
+   "credit 0..10^6 (integer narrowing of double)",
+   "ids passed to methods always exist"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6aa32d070ca9cc4e1c790398/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview (class header and first methods); algorithmTags; codingQuestions (variant count/order); preview response sha256 4201d7f0491926ee8f215965629be8ffeec36e8f4e9e693269a6b21e9b38afb1"
+   },
+   {
+    "statement": "Uncertainty: medium: three methods are visible in the preview; the getter name, integer narrowing and existing-id domain are inferred",
+    "basis": "the public group preview is partial (544 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as cumulative levels 1-2",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/0/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/0/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/0/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does referral credit propagate beyond the direct referrer?",
+   "What happens with an unknown referrer id?",
+   "Are credits fractional?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6aa32d070ca9cc4e1c790398/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "AccountCreditTracker"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "AccountCreditTracker",
+      "addAccount"
+     ],
+     [
+      [],
+      [
+       5
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6aa32d070ca9cc4e1c790398/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/oracles.py",
+    "sha256": "2231f1855da9445d8eb5ceda7e1fb4dd3a24c72c62a2dee00808a47585c00dc6",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class AccountCreditTracker:\n    def __init__(self)\n    def addAccount(self, credit) -> integer\n    def addAccountWithReferral(self, credit, referrerId) -> integer\n    def getTotalCredit(self, accountId) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6aa32d070ca9cc4e1c790398-python.json",
+     "inferredInterface": {
+      "classname": "AccountCreditTracker",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addAccount",
+        "params": [
+         {
+          "name": "credit",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "addAccountWithReferral",
+        "params": [
+         {
+          "name": "credit",
+          "type": "integer"
+         },
+         {
+          "name": "referrerId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getTotalCredit",
+        "params": [
+         {
+          "name": "accountId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6aa32d070ca9cc4e1c790398-python.json",
+      "sha256": "93f625361078d22a44ae8a786a7e3261fc2f8b136f2fb8092c82808d3f8921a6",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class AccountCreditTracker {\n  constructor()\n  addAccount(credit) /* -> integer */\n  addAccountWithReferral(credit, referrerId) /* -> integer */\n  getTotalCredit(accountId) /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/0/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6aa32d070ca9cc4e1c790398-javascript.json",
+     "inferredInterface": {
+      "classname": "AccountCreditTracker",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addAccount",
+        "params": [
+         {
+          "name": "credit",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "addAccountWithReferral",
+        "params": [
+         {
+          "name": "credit",
+          "type": "integer"
+         },
+         {
+          "name": "referrerId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getTotalCredit",
+        "params": [
+         {
+          "name": "accountId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6aa32d070ca9cc4e1c790398-javascript.json",
+      "sha256": "7918d098ae9f599a63c8bbed4e3023ecd14aa991b8fb331db35e43c9b5539b44",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/0/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/0/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,88 @@
+{
+ "active_adoption": 0,
+ "independent_qualification": 0,
+ "spec_basis": "inferred by claude-opus-5-5 subagent 2026-10-28 from partial public previews; no official statement, interface or constraints",
+ "author_local_candidate_runs": {
+  "scope": "Author ran own candidates locally after the pre-source freeze against own generated cases for INFERRED specs; this is not isolated or independent qualification and cannot establish correctness against the official problems",
+  "python_cases_passed": 6707,
+  "javascript_cases_passed": 6707,
+  "cases_total_per_language": 6707,
+  "inferred_wrappers_and_native_classes_checked": true,
+  "inputs_unchanged_all_cases": true,
+  "extra_python_reference_fuzz_rows_passed": 53257,
+  "native_observer_self_check": "9 native-class variants: python and javascript candidates passed native_harness.observe + native_protocol.check on all 2276 of their cases each with the unchanged easy16 transport (javascript under node --jitless)",
+  "heaviest_case_cpu_seconds": {
+   "python3": {
+    "hack2hire:6aa32d070ca9cc4e1c790398": 0.0047,
+    "hack2hire:6aa32de80ca9cc4e1c7903a3": 0.1424,
+    "hack2hire:6ace8e7e2e3a0349b3a8e1d0": 0.1551,
+    "hack2hire:6ace8eea2e3a0349b3a8e1d4": 0.1454,
+    "hack2hire:6ace8f102e3a0349b3a8e1d5": 0.1466,
+    "hack2hire:69b191c3a4e93c007df4004d": 0.0063,
+    "hack2hire:69b192f6a4e93c007df40052": 0.0423,
+    "hack2hire:69b1936ca4e93c007df40055": 0.1038,
+    "hack2hire:68baf390b5314dcd938cba02": 0.0158,
+    "hack2hire:677bf4df5cbaff553b53b068": 0.051,
+    "hack2hire:6961f1ef8742114304441d28": 0.0248,
+    "hack2hire:67f9969355e478de52401ddd": 0.0087,
+    "hack2hire:6acd8f922e3a0349b3a8d6fc": 0.0472,
+    "hack2hire:6acd8fb12e3a0349b3a8d701": 0.0431,
+    "hack2hire:6acd8fd52e3a0349b3a8d706": 0.0451,
+    "hack2hire:6aa882a68c97c56cdbdc954f": 0.0009,
+    "hack2hire:6796ba03b10bc587828f27b0": 0.0,
+    "hack2hire:67fc7863216af53465a7221c": 0.0051,
+    "hack2hire:69bf17cc21f6ab4226963dc2": 0.0162,
+    "hack2hire:69810d3cf8f2604d5eecfff4": 0.0336,
+    "hack2hire:69811c44f8f2604d5eed0020": 0.0311,
+    "hack2hire:6981207ff8f2604d5eed002c": 0.0389,
+    "hack2hire:6862ed30eb0810914237aaf3": 0.0,
+    "hack2hire:6a629dc8190ed618c6e6b223": 0.0268,
+    "hack2hire:6a516506665efda9311f618d": 0.0241
+   },
+   "node_jitless": {
+    "hack2hire:6aa32d070ca9cc4e1c790398": 0.0046,
+    "hack2hire:6aa32de80ca9cc4e1c7903a3": 0.2916,
+    "hack2hire:6ace8e7e2e3a0349b3a8e1d0": 0.0844,
+    "hack2hire:6ace8eea2e3a0349b3a8e1d4": 0.0782,
+    "hack2hire:6ace8f102e3a0349b3a8e1d5": 0.0777,
+    "hack2hire:69b191c3a4e93c007df4004d": 0.0095,
+    "hack2hire:69b192f6a4e93c007df40052": 0.0534,
+    "hack2hire:69b1936ca4e93c007df40055": 0.1234,
+    "hack2hire:68baf390b5314dcd938cba02": 0.017,
+    "hack2hire:677bf4df5cbaff553b53b068": 0.0399,
+    "hack2hire:6961f1ef8742114304441d28": 0.0118,
+    "hack2hire:67f9969355e478de52401ddd": 0.0198,
+    "hack2hire:6acd8f922e3a0349b3a8d6fc": 0.0538,
+    "hack2hire:6acd8fb12e3a0349b3a8d701": 0.0494,
+    "hack2hire:6acd8fd52e3a0349b3a8d706": 0.055,
+    "hack2hire:6aa882a68c97c56cdbdc954f": 0.002,
+    "hack2hire:6796ba03b10bc587828f27b0": 0.0002,
+    "hack2hire:67fc7863216af53465a7221c": 0.0041,
+    "hack2hire:69bf17cc21f6ab4226963dc2": 0.0087,
+    "hack2hire:69810d3cf8f2604d5eecfff4": 0.066,
+    "hack2hire:69811c44f8f2604d5eed0020": 0.062,
+    "hack2hire:6981207ff8f2604d5eed002c": 0.0682,
+    "hack2hire:6862ed30eb0810914237aaf3": 0.0,
+    "hack2hire:6a629dc8190ed618c6e6b223": 0.046,
+    "hack2hire:6a516506665efda9311f618d": 0.0329
+   }
+  },
+  "timing_note": "per case, (trace adapter + inferred wrapper/direct-class execution)/2 CPU seconds, python3 time.process_time and node --jitless process.cpuUsage; not resource qualification",
+  "timing_revision": {
+   "reason": "keep every case well under 1 CPU s under node --jitless",
+   "previous_heaviest_node_jitless": {
+    "hack2hire:6aa32de80ca9cc4e1c7903a3": 1.0454
+   },
+   "algorithm_changes": {
+    "AccountCreditTracker v2 (javascript)": "lazy max-heap keyed by one packed number (-total*32768+id) with hole-based sifting instead of [total, id] pairs with a comparator closure and destructuring swaps (same lazy-deletion algorithm)"
+   }
+  }
+ },
+ "javascript_candidate_syntax_checks": 25,
+ "python_candidate_ast_parses": 25,
+ "ruff_fatal_subset": "E9,F63,F7,F82 passed",
+ "source_free_reference_contract_tests": 22,
+ "native_observer_toy_controls": 4,
+ "study_record_tests": 6,
+ "study_records": 125
+}

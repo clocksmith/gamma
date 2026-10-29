@@ -1,0 +1,338 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a5164ea665efda9311f618b:6a516506665efda9311f618d:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+   "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+   "selector": "/problems/24"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a5164ea665efda9311f618b.json",
+   "sha256": "aa23115a681b13d642bd22bc1434aec2aaa60153b2740bedbd6bd0048e2571d9",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+   "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+   "selector": "/variants/hack2hire:6a516506665efda9311f618d"
+  }
+ ],
+ "problemId": "hack2hire:6a5164ea665efda9311f618b",
+ "variantId": "6a516506665efda9311f618d",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: apply valid transfers and rank balances",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6a516506665efda9311f618d/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Apply transfers in order; a transfer succeeds iff both accounts exist, they differ and the source balance is at least the amount; failed transfers change nothing. Return [accountNumber, finalBalance] rows (decimal strings) sorted by final balance descending, then account number ascending (code point).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/24/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Apply transfers in order.",
+   "a transfer succeeds iff both accounts exist, they differ and the source balance is at least the amount.",
+   "failed transfers change nothing.",
+   "Return [accountNumber, finalBalance] rows (decimal strings) sorted by final balance descending, then account number ascending (code point)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/24/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 10^4 accounts and 10^5 transactions",
+   "balances and amounts 0..10^9 as canonical decimal strings"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6a516506665efda9311f618d/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: dataset row formats; algorithmTags: HASH_TABLE, SORTING; preview response sha256 3bc7682c2df9fb98e1880224bb665cdae6453af628e7935c9189b1e936627cbe"
+   },
+   {
+    "statement": "Uncertainty: very high: the preview shows only the input datasets; the validity rules and ranked output are inferred",
+    "basis": "the public group preview is partial (362 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/24/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/24/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/24/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What makes a transaction invalid?",
+   "What is the mined result?",
+   "How are ties in the ranking broken?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6a516506665efda9311f618d/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "10",
+       "15"
+      ],
+      [
+       "3",
+       "1"
+      ]
+     ],
+     []
+    ],
+    "output": [
+     [
+      "10",
+      "15"
+     ],
+     [
+      "3",
+      "1"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6a516506665efda9311f618d/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/oracles.py",
+    "sha256": "2231f1855da9445d8eb5ceda7e1fb4dd3a24c72c62a2dee00808a47585c00dc6",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def mineTransactions(accounts, transactions) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/24/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6a516506665efda9311f618d-python.json",
+     "inferredInterface": {
+      "name": "mineTransactions",
+      "params": [
+       {
+        "name": "accounts",
+        "type": "string[][]"
+       },
+       {
+        "name": "transactions",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6a516506665efda9311f618d-python.json",
+      "sha256": "df5df5be1352d5efbf8b666e2bce14b91fc2b3d17cd51a1d89e2f641fac8063d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function mineTransactions(accounts, transactions) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/24/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6a516506665efda9311f618d-javascript.json",
+     "inferredInterface": {
+      "name": "mineTransactions",
+      "params": [
+       {
+        "name": "accounts",
+        "type": "string[][]"
+       },
+       {
+        "name": "transactions",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6a516506665efda9311f618d-javascript.json",
+      "sha256": "beaa9bbe0a1f590d34fe3320bfbaf0c6883ae1c716f3b3be320608da01633ad0",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/24/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/24/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

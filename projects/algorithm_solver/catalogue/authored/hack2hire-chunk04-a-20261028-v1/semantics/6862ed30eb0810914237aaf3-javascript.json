@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6862ed30eb0810914237aaf3",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "a",
+  "b"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "addSignedArrays",
+  "params": [
+   {
+    "name": "a",
+    "type": "string[]"
+   },
+   {
+    "name": "b",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "join and int()",
+  "candidate_design": "manual digit-by-digit parse with sign handling",
+  "complexity_target": "O(length) time"
+ },
+ "source_sha256": "133b40dc28bfb80c7798ebb53e857de82e5e4ed868919f32c73ac0af0976f718",
+ "wrapper": "named export addSignedArrays"
+}

@@ -1,0 +1,338 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68baf382b5314dcd938cba01:68baf390b5314dcd938cba02:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+   "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+   "selector": "/problems/8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68baf382b5314dcd938cba01.json",
+   "sha256": "47ea486e19195863c55c80e6ddee3c3cc6664d5b5d0fae7dba1cb4e93e74ad59",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+   "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+   "selector": "/variants/hack2hire:68baf390b5314dcd938cba02"
+  }
+ ],
+ "problemId": "hack2hire:68baf382b5314dcd938cba01",
+ "variantId": "68baf390b5314dcd938cba02",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: single and two-listing split stays",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:68baf390b5314dcd938cba02/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "availability[i] lists the days listing i is available (any order, duplicates allowed). Return every way to cover every day start..end: first all single listings [i] covering the whole range in ascending i, then all ordered pairs [i, j] with i != j such that for some split day k (start <= k < end) listing i covers start..k and listing j covers k+1..end, in ascending (i, j) order. Pairs are listed even when one of the two listings could cover the range alone (inference).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "availability[i] lists the days listing i is available (any order, duplicates allowed).",
+   "Return every way to cover every day start..end: first all single listings [i] covering the whole range in ascending i, then all ordered pairs [i, j] with i != j such that for some split day k (start <= k < end) listing i covers start..k and listing j covers k+1..end, in ascending (i, j) order.",
+   "Pairs are listed even when one of the two listings could cover the range alone (inference)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 300 listings, at most 60000 listed days in total",
+   "days 0..10^6",
+   "start <= end"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:68baf390b5314dcd938cba02/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: single-listing option and consecutive inclusive range; algorithmTags: GREEDY; title; preview response sha256 6a24f1966b13fd5af835e18c25faab76bcbb8de76f7f7e0d1f5a59c551e0fa3c"
+   },
+   {
+    "statement": "Uncertainty: high: the preview shows the single-listing option; the two-listing rule, pair ordering and output layout are inferred",
+    "basis": "the public group preview is partial (435 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/8/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/8/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/8/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Can a split use more than two listings?",
+   "Is [i, j] different from [j, i]?",
+   "Should pairs be listed when one listing alone suffices?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:68baf390b5314dcd938cba02/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     0,
+     0
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       0
+      ]
+     ],
+     0,
+     0
+    ],
+    "output": [
+     [
+      0
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:68baf390b5314dcd938cba02/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/oracles.py",
+    "sha256": "2231f1855da9445d8eb5ceda7e1fb4dd3a24c72c62a2dee00808a47585c00dc6",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findSplitStays(availability, start, end) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/68baf390b5314dcd938cba02-python.json",
+     "inferredInterface": {
+      "name": "findSplitStays",
+      "params": [
+       {
+        "name": "availability",
+        "type": "integer[][]"
+       },
+       {
+        "name": "start",
+        "type": "integer"
+       },
+       {
+        "name": "end",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/68baf390b5314dcd938cba02-python.json",
+      "sha256": "fce8af61602a323ebd9cf8af731d84afdde7944191d29828a2a22872948281b1",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findSplitStays(availability, start, end) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/68baf390b5314dcd938cba02-javascript.json",
+     "inferredInterface": {
+      "name": "findSplitStays",
+      "params": [
+       {
+        "name": "availability",
+        "type": "integer[][]"
+       },
+       {
+        "name": "start",
+        "type": "integer"
+       },
+       {
+        "name": "end",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/68baf390b5314dcd938cba02-javascript.json",
+      "sha256": "f853887d6d3e7273de3eca7b6165bf564d005f8590502aab309a5742e79a54a4",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/8/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/8/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

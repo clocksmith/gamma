@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69811c44f8f2604d5eed0020",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "logs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "processLogs",
+  "params": [
+   {
+    "name": "logs",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "quadratic earlier-id scan, then replay",
+  "candidate_design": "hash set of seen ids during one pass",
+  "complexity_target": "O(n + a log a) time"
+ },
+ "source_sha256": "2cad2bede8e9a89eb07961064719264a87b68827c7862a409eb8ceb9b177a3ae",
+ "wrapper": "Solution.processLogs"
+}

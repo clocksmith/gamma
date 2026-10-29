@@ -1,0 +1,137 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69b1936ca4e93c007df40055",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "SocialNetwork",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "follow",
+    "params": [
+     {
+      "name": "followerId",
+      "type": "integer"
+     },
+     {
+      "name": "followeeId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "unfollow",
+    "params": [
+     {
+      "name": "followerId",
+      "type": "integer"
+     },
+     {
+      "name": "followeeId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "snapshot",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "isFollowing",
+    "params": [
+     {
+      "name": "followerId",
+      "type": "integer"
+     },
+     {
+      "name": "followeeId",
+      "type": "integer"
+     },
+     {
+      "name": "snapshotId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getFollowees",
+    "params": [
+     {
+      "name": "userId",
+      "type": "integer"
+     },
+     {
+      "name": "snapshotId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   {
+    "name": "recommend",
+    "params": [
+     {
+      "name": "userId",
+      "type": "integer"
+     },
+     {
+      "name": "snapshotId",
+      "type": "integer"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "full frozen copy of the edge set per snapshot; score by scanning all edges",
+  "candidate_design": "followees via touched sets and histories; count second-hop followees in a hash map; sort candidates",
+  "complexity_target": "O(sum of touched degrees of followees * log h + c log c) per recommend"
+ },
+ "source_sha256": "ed630ad6541b8cf2badf6bccf12378c521c172b1ccccc7485b873dd016278f41",
+ "native_class": "SocialNetwork",
+ "native_symbol": "module global SocialNetwork",
+ "void_methods": [
+  "follow",
+  "unfollow"
+ ]
+}

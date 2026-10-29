@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6acd8fb12e3a0349b3a8d701",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "logs",
+  "windowSize",
+  "minCount",
+  "percent"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "detectIncidents",
+  "params": [
+   {
+    "name": "logs",
+    "type": "string[]"
+   },
+   {
+    "name": "windowSize",
+    "type": "integer"
+   },
+   {
+    "name": "minCount",
+    "type": "integer"
+   },
+   {
+    "name": "percent",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per evaluation point, rescan all records of the merchant inside the window",
+  "candidate_design": "per-merchant deque window with per-code sums and a total; check every code in the window",
+  "complexity_target": "O(n log n + evaluations * codes in window)"
+ },
+ "source_sha256": "aad5cec01551bc37d0e929a1eab1a9c1908710feabcec46f5ee67ba891b29ed9",
+ "wrapper": "Solution.detectIncidents"
+}

@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/design.json",
+   "sha256": "7b276519f0645682a538f7c82a62d95d58b7277944332fb1c97b489deb9376be",
+   "selector": "/problems/hack2hire:6aa32de80ca9cc4e1c7903a3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+   "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+   "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3"
+  }
+ ],
+ "problemId": "hack2hire:6aa327ff0ca9cc4e1c79035f",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-records/contract--contract_hack2hire_6aa327ff0ca9cc4e1c79035f_6aa32de80ca9cc4e1c7903a3_authored-v1.json",
+  "sha256": "710ac32e67234f7f0cb56012ef23f84cf291cbb715fe8d99b939082b8647ebdb"
+ },
+ "title": {
+  "status": "present",
+  "value": "running totals plus a lazy max-heap of (total, id) entries; stale entries discarded on pop; popped valid entries pushed back",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/design.json",
+    "sha256": "7b276519f0645682a538f7c82a62d95d58b7277944332fb1c97b489deb9376be",
+    "selector": "/problems/hack2hire:6aa32de80ca9cc4e1c7903a3/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "running totals plus a lazy max-heap of (total, id) entries; stale entries discarded on pop; popped valid entries pushed back. Complexity target: O(log n) amortized per update; O(k log n) per top-k query.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/design.json",
+    "sha256": "7b276519f0645682a538f7c82a62d95d58b7277944332fb1c97b489deb9376be",
+    "selector": "/problems/hack2hire:6aa32de80ca9cc4e1c7903a3"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Many updates interleaved with small-k ranking queries"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Lazy deletion grows the heap by one entry per update; a balanced tree would avoid stale entries"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "every account has at least one heap entry holding its current total",
+   "stale entries are never returned"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Totals only grow, but several accounts can change between queries.",
+   "A heap keyed by (-total, id) gives the ranking; old entries go stale when a total changes.",
+   "Skip entries whose stored total differs from the current total, and push the k winners back after the query."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "running totals plus a lazy max-heap of (total, id) entries; stale entries discarded on pop; popped valid entries pushed back",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/design.json",
+      "sha256": "7b276519f0645682a538f7c82a62d95d58b7277944332fb1c97b489deb9376be",
+      "selector": "/problems/hack2hire:6aa32de80ca9cc4e1c7903a3/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(log n) amortized per update; O(k log n) per top-k query; the independent reference (literal totals by scanning; full sort for each top-k query) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/design.json",
+      "sha256": "7b276519f0645682a538f7c82a62d95d58b7277944332fb1c97b489deb9376be",
+      "selector": "/problems/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Totals only grow, but several accounts can change between queries.",
+     "A heap keyed by (-total, id) gives the ranking; old entries go stale when a total changes."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-records/artifact--artifact_hack2hire_6aa327ff0ca9cc4e1c79035f_6aa32de80ca9cc4e1c7903a3_approach-native_v1.json",
+    "sha256": "a31362d2589a28640b1bc0ced4a1509e8d12537031aed8e5c0ff851c4975dcf8"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred native class AccountCreditTracker, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/design.json",
+      "sha256": "7b276519f0645682a538f7c82a62d95d58b7277944332fb1c97b489deb9376be",
+      "selector": "/problems/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer (or BigInt) arithmetic for every count and amount."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Skip entries whose stored total differs from the current total, and push the k winners back after the query."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-records/artifact--artifact_hack2hire_6aa327ff0ca9cc4e1c79035f_6aa32de80ca9cc4e1c7903a3_python_v1.json",
+     "sha256": "669bb268c5c453d6da05617f730cdd461e935c6ef154f3da6384ad7c08e81fc4"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-records/artifact--artifact_hack2hire_6aa327ff0ca9cc4e1c79035f_6aa32de80ca9cc4e1c7903a3_javascript_v1.json",
+     "sha256": "b6fb1b13b5b6172d2f5272b31408783a8011edbba2c0a825833f0c56cfd038de"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-records/artifact--artifact_hack2hire_6aa327ff0ca9cc4e1c79035f_6aa32de80ca9cc4e1c7903a3_approach-native_v1.json",
+    "sha256": "a31362d2589a28640b1bc0ced4a1509e8d12537031aed8e5c0ff851c4975dcf8"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (literal totals by scanning; full sort for each top-k query) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/design.json",
+      "sha256": "7b276519f0645682a538f7c82a62d95d58b7277944332fb1c97b489deb9376be",
+      "selector": "/problems/hack2hire:6aa32de80ca9cc4e1c7903a3/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/1/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/test_oracles.py",
+      "sha256": "504466829364faccbd9a632148d6598555f0f6b615245d32dfefaa0df96316c6",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+      "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+      "selector": "/variants/hack2hire:6aa32de80ca9cc4e1c7903a3"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-records/artifact--artifact_hack2hire_6aa327ff0ca9cc4e1c79035f_6aa32de80ca9cc4e1c7903a3_approach-native_v1.json",
+    "sha256": "a31362d2589a28640b1bc0ced4a1509e8d12537031aed8e5c0ff851c4975dcf8"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6aa327ff0ca9cc4e1c79035f:6aa32de80ca9cc4e1c7903a3:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-records/artifact--artifact_hack2hire_6aa327ff0ca9cc4e1c79035f_6aa32de80ca9cc4e1c7903a3_approach-native_v1.json",
+  "sha256": "a31362d2589a28640b1bc0ced4a1509e8d12537031aed8e5c0ff851c4975dcf8"
+ }
+}

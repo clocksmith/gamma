@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69810d3cf8f2604d5eecfff4",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "logs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "processLogs",
+  "params": [
+   {
+    "name": "logs",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal replay into a dictionary, then sort",
+  "candidate_design": "one pass into a hash map of balances; sort keys",
+  "complexity_target": "O(n + a log a) time"
+ },
+ "source_sha256": "e50ea24e426240742c2e47082fa9d07d50b0b2ffd8cd8f6a231274c2e37d3c57",
+ "wrapper": "Solution.processLogs"
+}

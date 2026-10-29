@@ -1,0 +1,336 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a629dc3190ed618c6e6b221:6a629dc8190ed618c6e6b223:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+   "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+   "selector": "/problems/23"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a629dc3190ed618c6e6b221.json",
+   "sha256": "b22417fa5d6b9bb6ff0804478bff521a1613e2a87790735c94616c63566d3d2a",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+   "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+   "selector": "/variants/hack2hire:6a629dc8190ed618c6e6b223"
+  }
+ ],
+ "problemId": "hack2hire:6a629dc3190ed618c6e6b221",
+ "variantId": "6a629dc8190ed618c6e6b223",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: per-merchant recent completed summary",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6a629dc8190ed618c6e6b223/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Rows [amount, merchantId, status, userId, startTime]. Inferred time model: startTime and currentTime are integer epoch seconds and hoursBetween = floor((currentTime - startTime) / 3600). A transaction is recent iff status is COMPLETED and 0 <= hoursBetween < 24. Return [merchantId, total amount with exactly two decimals, count] per merchant with recent transactions, sorted by merchantId. Amounts are exact decimals with at most two fractional digits.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/23/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Rows [amount, merchantId, status, userId, startTime].",
+   "Inferred time model: startTime and currentTime are integer epoch seconds and hoursBetween = floor((currentTime - startTime) / 3600).",
+   "A transaction is recent iff status is COMPLETED and 0 <= hoursBetween < 24.",
+   "Return [merchantId, total amount with exactly two decimals, count] per merchant with recent transactions, sorted by merchantId.",
+   "Amounts are exact decimals with at most two fractional digits."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/23/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 10^5 transactions",
+   "amounts < 10^9 with at most 2 decimals",
+   "times are integer seconds as strings"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6a629dc8190ed618c6e6b223/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: row fields, statuses and hoursBetween helper; algorithmTags: HASH_TABLE; preview response sha256 00784bbe2af0a92150612c294195dd74849425e0da5d395502e7cb28110c9e22"
+   },
+   {
+    "statement": "Uncertainty: very high: the recency window (24 hours), time format, grouping key and output format are inferred",
+    "basis": "the public group preview is partial (774 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/23/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/23/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/23/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How many hours count as recent?",
+   "Is the summary grouped by merchant or by user?",
+   "How should totals be formatted?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6a629dc8190ed618c6e6b223/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     "0"
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "0",
+       "shop",
+       "COMPLETED",
+       "u1",
+       "1000000000"
+      ]
+     ],
+     "1000000000"
+    ],
+    "output": [
+     [
+      "shop",
+      "0.00",
+      1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/study-content.json",
+    "sha256": "a19dd0bf666e8def3545b077514084b19c3bbce8e8a2fb2a71769f409a43c78f",
+    "selector": "/variants/hack2hire:6a629dc8190ed618c6e6b223/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/oracles.py",
+    "sha256": "2231f1855da9445d8eb5ceda7e1fb4dd3a24c72c62a2dee00808a47585c00dc6",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def aggregateRecent(transactions, currentTime) -> list<[string,string,integer]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/23/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6a629dc8190ed618c6e6b223-python.json",
+     "inferredInterface": {
+      "name": "aggregateRecent",
+      "params": [
+       {
+        "name": "transactions",
+        "type": "string[][]"
+       },
+       {
+        "name": "currentTime",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6a629dc8190ed618c6e6b223-python.json",
+      "sha256": "37a2fa31d6afa9b07f4ebe6e080a9350f82556668b61d179681130f0a523c8e2",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function aggregateRecent(transactions, currentTime) /* -> list<[string,string,integer]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+      "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+      "selector": "/problems/23/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6a629dc8190ed618c6e6b223-javascript.json",
+     "inferredInterface": {
+      "name": "aggregateRecent",
+      "params": [
+       {
+        "name": "transactions",
+        "type": "string[][]"
+       },
+       {
+        "name": "currentTime",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/semantics/6a629dc8190ed618c6e6b223-javascript.json",
+      "sha256": "be1f889fd49f80f9803921cf28bb943c73e623c1b25368fbb22989bcaeb9f302",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/23/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-a-20261028-v1/contracts.json",
+    "sha256": "a89e24047c803759797d87567f7e8fa71933dcdd2366d6a943dcde4c2d1b37a9",
+    "selector": "/problems/23/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
