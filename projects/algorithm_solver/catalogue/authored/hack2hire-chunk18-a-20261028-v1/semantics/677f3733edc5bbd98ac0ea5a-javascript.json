@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:677f3733edc5bbd98ac0ea5a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "records"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "calculateTolls",
+  "params": [
+   {
+    "name": "records",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "(string|integer)[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each distinct plate, rescan the whole record list and add the fee between each pass and the previous pass of that plate",
+  "candidate_design": "one pass with a dictionary from plate to (last position, total); extract the number from each name by skipping its letters; sort the plates at the end",
+  "complexity_target": "O(n log n) time for the final sort/O(n) space"
+ },
+ "source_sha256": "945b4e4dfa1be10da4e64286420df373f814ed8b20a3b75c8bd9b5eb046df66e",
+ "wrapper": "named export calculateTolls"
+}

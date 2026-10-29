@@ -1,0 +1,381 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:677f36a9edc5bbd98ac0ea59:677f3733edc5bbd98ac0ea5a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+   "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/677f36a9edc5bbd98ac0ea59.json",
+   "sha256": "46de632d9a0a5ea299477a8bfc76a3faffe8d5e35469c6e1c52587fd2d17c188",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+   "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+   "selector": "/variants/hack2hire:677f3733edc5bbd98ac0ea5a"
+  }
+ ],
+ "problemId": "hack2hire:677f36a9edc5bbd98ac0ea59",
+ "variantId": "677f3733edc5bbd98ac0ea5a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: total toll per vehicle over consecutive passes",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:677f3733edc5bbd98ac0ea5a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "records is a list of [plate, checkpoint] pairs in the order the passes happened. A checkpoint name is upper-case letters followed by a decimal number; its position is that number. Each vehicle pays, for every two consecutive passes of that vehicle, 10 times the absolute difference of the two positions; a vehicle with one pass pays 0. Return [plate, total fee] for every plate that appears, sorted by plate in ascending character order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "records is a list of [plate, checkpoint] pairs in the order the passes happened.",
+   "A checkpoint name is upper-case letters followed by a decimal number; its position is that number.",
+   "Each vehicle pays, for every two consecutive passes of that vehicle, 10 times the absolute difference of the two positions; a vehicle with one pass pays 0.",
+   "Return [plate, total fee] for every plate that appears, sorted by plate in ascending character order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= records.length <= 1e5",
+   "a plate is 1 to 10 characters from A-Z and 0-9",
+   "a checkpoint is 1 to 3 letters A-Z followed by a number without leading zeros, at most 999999999"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:677f3733edc5bbd98ac0ea5a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: vehicles pass toll checkpoints; each pass records a licence plate and a checkpoint name; the fee between two checkpoints is 10 times the absolute difference of their positions, where a position is the checkpoint name with its letters removed (A1 and A5 give 40); the rest of the question is not in the preview; algorithmTags: HASH_TABLE, STRING; preview response sha256 a97b3ffb87052ff6c927a7ea426ea166661115a52312a5bd9440d962112d3c82"
+   },
+   {
+    "statement": "Uncertainty: high: the fee rule and the position rule are in the preview; the record shape, charging every consecutive pair of passes of one vehicle, reporting every plate with its total (including 0), the plate order, the function name and the bounds are inferred because the preview stops after the fee example",
+    "basis": "the public group preview is partial (440 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is a vehicle charged between every two consecutive passes, or only between paired entry and exit passes?",
+   "Should vehicles seen once be reported with 0?",
+   "In which order are the plates returned?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:677f3733edc5bbd98ac0ea5a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "A1",
+       "XY12"
+      ],
+      [
+       "7",
+       "XY12"
+      ],
+      [
+       "B2",
+       "B0"
+      ],
+      [
+       "7",
+       "Q3"
+      ],
+      [
+       "7",
+       "A1"
+      ],
+      [
+       "7",
+       "XY12"
+      ],
+      [
+       "C",
+       "Z100"
+      ],
+      [
+       "C",
+       "XY12"
+      ],
+      [
+       "7",
+       "Z100"
+      ],
+      [
+       "B2",
+       "XY12"
+      ],
+      [
+       "C",
+       "XY12"
+      ],
+      [
+       "A1",
+       "XY12"
+      ],
+      [
+       "C",
+       "A1"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "7",
+      1100
+     ],
+     [
+      "A1",
+      0
+     ],
+     [
+      "B2",
+      120
+     ],
+     [
+      "C",
+      990
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:677f3733edc5bbd98ac0ea5a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/oracles.py",
+    "sha256": "27eec77be3897b1b39845d98790d308219285bbb24c1b6b602441df5d37dcf85",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def calculateTolls(records) -> (string|integer)[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/677f3733edc5bbd98ac0ea5a-python.json",
+     "inferredInterface": {
+      "name": "calculateTolls",
+      "params": [
+       {
+        "name": "records",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "(string|integer)[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/677f3733edc5bbd98ac0ea5a-python.json",
+      "sha256": "1eab8abc2ff39a2c65d9b7f7e62837c90786f1603ee6da0b4c0940c54cd3be04",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function calculateTolls(records) /* -> (string|integer)[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/677f3733edc5bbd98ac0ea5a-javascript.json",
+     "inferredInterface": {
+      "name": "calculateTolls",
+      "params": [
+       {
+        "name": "records",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "(string|integer)[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/677f3733edc5bbd98ac0ea5a-javascript.json",
+      "sha256": "666d06ebd19b6549e0d0fc5ae3510db4cf7aa7634387e60eb6ab12eecee35559",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

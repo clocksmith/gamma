@@ -1,0 +1,69 @@
+{
+ "problems": {
+  "hack2hire:68f5af31a269f53ea0eff8a0": {
+   "reference": "per group, copy the scores, sort them in decreasing order and add the first k",
+   "candidate_design": "per group, keep a size-k min-heap of scores (push, pop the smallest when larger than k) and sum the heap; compare totals with a strict greater-than so the first best index wins",
+   "complexity_target": "O(G log k) time/O(k) extra space, G = total group size"
+  },
+  "hack2hire:677f3733edc5bbd98ac0ea5a": {
+   "reference": "for each distinct plate, rescan the whole record list and add the fee between each pass and the previous pass of that plate",
+   "candidate_design": "one pass with a dictionary from plate to (last position, total); extract the number from each name by skipping its letters; sort the plates at the end",
+   "complexity_target": "O(n log n) time for the final sort/O(n) space"
+  },
+  "hack2hire:677de134052a260e01657068": {
+   "reference": "for every peak position, try every peak height from the largest that fits the array ends downwards and check every block cell directly",
+   "candidate_design": "the largest peak at c is min(c + 1, n - c, min over i of arr[i] + |i - c|); compute the inner minimum with one left-to-right and one right-to-left pass and subtract the best k * k from sum(arr)",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:67873a44e20f8f324213c29a": {
+   "reference": "enumerate every non-decreasing target array between power and max(power), price the increments d by sum of max(0, d[i] - d[i - 1]) and keep the cheapest",
+   "candidate_design": "every drop power[i - 1] > power[i] needs operations starting at i worth at least the drop, and raising suffixes achieves exactly that; sum the drops",
+   "complexity_target": "O(n) time/O(1) space"
+  },
+  "hack2hire:69a357a36e73e4abccc9bf9c": {
+   "reference": "copy the matrix and apply every command directly: slice-reverse a row or exchange two rows",
+   "candidate_design": "keep a row order permutation and one reversed flag per original row; a swap exchanges two permutation entries and a reversal flips a flag, then build the result once at the end",
+   "complexity_target": "O(n * m + commands) time/O(n * m) space for the output"
+  },
+  "hack2hire:67a4d4ca2a9ed767fa215433": {
+   "reference": "try every sign assignment (a[0] must be plus) and keep the largest number of minus signs whose prefix sums all stay positive",
+   "candidate_design": "scan left to right, tentatively negate every element and push it on a max-heap; while the running sum is not positive, flip the largest negated value back to plus; the heap size at the end is the answer",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:67735a0732f9cd104fc349d4": {
+   "reference": "sort the durations and simulate min(n * m, number of tasks) slot end times in a plain list, scanning the list for the earliest-free slot for every task",
+   "candidate_design": "sort the durations and keep the slot end times in a min-heap of size min(n * m, number of tasks); pop the earliest, stop when it plus the duration exceeds 60, otherwise push the new end time",
+   "complexity_target": "O(t log t) time/O(t) space, t = number of tasks"
+  },
+  "hack2hire:6a57ce72665efda9311f94c4": {
+   "reference": "enumerate every path from (0, p) depth first and keep the largest sum",
+   "candidate_design": "row-by-row dynamic programme of the best sum reaching each cell from (0, p), with unreachable cells marked, then the maximum over the bottom row",
+   "complexity_target": "O(N * M) time/O(M) space"
+  },
+  "hack2hire:6a57d29e665efda9311f950a": {
+   "reference": "enumerate every path from (0, p) depth first with the remaining jump count and keep the largest sum",
+   "candidate_design": "dynamic programme over (row, column, jumps used): best sum reaching each state, filled row by row from the one-row moves of row i - 1 and the jumps of row i - 2",
+   "complexity_target": "O(N * M * (k + 1)) time and space"
+  },
+  "hack2hire:6a57d9ca665efda9311f954c": {
+   "reference": "enumerate every path from (0, p) depth first with its cell list and keep the largest sum, then the smallest list on equal sums",
+   "candidate_design": "backward dynamic programme of the best sum from (i, j) with r jumps left to the bottom row; then walk forward from (0, p), at each step taking the first move in cell order (down-left, down, down-right, jump) whose state keeps the optimum",
+   "complexity_target": "O(N * M * (k + 1)) time and space"
+  },
+  "hack2hire:6a57dafb665efda9311f9556": {
+   "reference": "enumerate every path from (0, p) depth first, keep the largest sum and count the paths that reach it",
+   "candidate_design": "forward dynamic programme over (row, column, jumps used) storing (best sum, number of paths with that sum mod 1000000007); merge predecessors by keeping the larger sum and adding counts on equal sums, then merge the bottom-row states the same way",
+   "complexity_target": "O(N * M * (k + 1)) time and space"
+  },
+  "hack2hire:67874b97e20f8f324213c29c": {
+   "reference": "quadratic dynamic programme over prefix lengths, trying every last-shipment start and computing its maximum directly",
+   "candidate_design": "a shipment ending at i is balanced exactly when it starts at or before g(i), the nearest earlier index with a larger weight (monotonic stack); best[i + 1] = 1 + max(best[0..g(i)]), using a running prefix maximum of best",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:68c4484970268e95f5f43d5e": {
+   "reference": "compute every reachable set by breadth-first search; a server is needed in a source class when every server reaching it is reachable from it; count those mutual-reachability classes",
+   "candidate_design": "iterative Tarjan strongly connected components, then count components with no incoming edge from another component",
+   "complexity_target": "O(n + e) time/O(n + e) space"
+  }
+ }
+}

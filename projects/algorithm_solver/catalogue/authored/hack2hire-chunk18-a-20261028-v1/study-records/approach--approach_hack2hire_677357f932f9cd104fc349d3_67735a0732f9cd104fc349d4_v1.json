@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+   "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+   "selector": "/problems/hack2hire:67735a0732f9cd104fc349d4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+   "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+   "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4"
+  }
+ ],
+ "problemId": "hack2hire:677357f932f9cd104fc349d3",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/contract--contract_hack2hire_677357f932f9cd104fc349d3_67735a0732f9cd104fc349d4_authored-v1.json",
+  "sha256": "eaf0896bd0f2d542bd5eb1126dd77e9c55df469600246773eaa5efc9e14e609e"
+ },
+ "title": {
+  "status": "present",
+  "value": "sort the durations and keep the slot end times in a min-heap of size min(n * m, number of tasks); pop the earliest, stop when it plus the duration exceeds 60, otherwise push the new end time",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+    "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+    "selector": "/problems/hack2hire:67735a0732f9cd104fc349d4/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "sort the durations and keep the slot end times in a min-heap of size min(n * m, number of tasks); pop the earliest, stop when it plus the duration exceeds 60, otherwise push the new end time. Complexity target: O(t log t) time/O(t) space, t = number of tasks.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+    "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+    "selector": "/problems/hack2hire:67735a0732f9cd104fc349d4"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Greedy assignment to identical parallel workers with a deadline"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "A heap gives O(log s) per task; scanning slots is O(s) per task; neither solves the general bin-packing maximum, which the inferred rule does not require"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "slot end times never exceed 60",
+   "tasks are started in non-decreasing duration order, so the earliest free time never decreases"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Count the parallel capacity: n machines times m tasks each gives n * m slots.",
+   "Shorter tasks leave more time, so try them first.",
+   "Keep the slot end times in a min-heap; give each task to the earliest-free slot and stop at the first task that would end after minute 60."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "sort the durations and keep the slot end times in a min-heap of size min(n * m, number of tasks); pop the earliest, stop when it plus the duration exceeds 60, otherwise push the new end time",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:67735a0732f9cd104fc349d4/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(t log t) time/O(t) space, t = number of tasks; the independent reference (sort the durations and simulate min(n * m, number of tasks) slot end times in a plain list, scanning the list for the earliest-free slot for every task) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Count the parallel capacity: n machines times m tasks each gives n * m slots.",
+     "Shorter tasks leave more time, so try them first."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677357f932f9cd104fc349d3_67735a0732f9cd104fc349d4_approach-native_v1.json",
+    "sha256": "d0ff815ad4291d029ce81c712ecb4057dfaee7b365c5d909ccde69c89dbe06ae"
+   }
+  },
+  {
+   "id": "approach:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper maxTasksWithinLimit, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Keep the slot end times in a min-heap; give each task to the earliest-free slot and stop at the first task that would end after minute 60."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677357f932f9cd104fc349d3_67735a0732f9cd104fc349d4_python_v1.json",
+     "sha256": "85530109db84b77f22b159fffea6124f6d3bfa9378e27c1a36d3bc166d02214a"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677357f932f9cd104fc349d3_67735a0732f9cd104fc349d4_javascript_v1.json",
+     "sha256": "b743066361e30242cfa3468a62d1afec82510cc6d5688e3724d21439e627af59"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677357f932f9cd104fc349d3_67735a0732f9cd104fc349d4_approach-native_v1.json",
+    "sha256": "d0ff815ad4291d029ce81c712ecb4057dfaee7b365c5d909ccde69c89dbe06ae"
+   }
+  },
+  {
+   "id": "approach:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (sort the durations and simulate min(n * m, number of tasks) slot end times in a plain list, scanning the list for the earliest-free slot for every task) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/design.json",
+      "sha256": "58acef561b7a5182c2a6afe3664044578c8f40e0121c2bdf2154aafeeb2c7626",
+      "selector": "/problems/hack2hire:67735a0732f9cd104fc349d4/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/6/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare the inferred wrapper with solve on every case.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/test_oracles.py",
+      "sha256": "01524d795d31eeeb79dcab2e66b1bcaca727d03c7be98b13fe1a78b81e4a16dc",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+      "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+      "selector": "/variants/hack2hire:67735a0732f9cd104fc349d4"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677357f932f9cd104fc349d3_67735a0732f9cd104fc349d4_approach-native_v1.json",
+    "sha256": "d0ff815ad4291d029ce81c712ecb4057dfaee7b365c5d909ccde69c89dbe06ae"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:677357f932f9cd104fc349d3:67735a0732f9cd104fc349d4:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-records/artifact--artifact_hack2hire_677357f932f9cd104fc349d3_67735a0732f9cd104fc349d4_approach-native_v1.json",
+  "sha256": "d0ff815ad4291d029ce81c712ecb4057dfaee7b365c5d909ccde69c89dbe06ae"
+ }
+}

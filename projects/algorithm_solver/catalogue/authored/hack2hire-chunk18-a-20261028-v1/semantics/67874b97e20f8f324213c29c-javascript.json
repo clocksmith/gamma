@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67874b97e20f8f324213c29c",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "weights"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxBalancedShipments",
+  "params": [
+   {
+    "name": "weights",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "quadratic dynamic programme over prefix lengths, trying every last-shipment start and computing its maximum directly",
+  "candidate_design": "a shipment ending at i is balanced exactly when it starts at or before g(i), the nearest earlier index with a larger weight (monotonic stack); best[i + 1] = 1 + max(best[0..g(i)]), using a running prefix maximum of best",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "6e633882093f97f4acddc87431d1c23d81c5b908c264c18b33ace89f1a3e287e",
+ "wrapper": "named export maxBalancedShipments"
+}

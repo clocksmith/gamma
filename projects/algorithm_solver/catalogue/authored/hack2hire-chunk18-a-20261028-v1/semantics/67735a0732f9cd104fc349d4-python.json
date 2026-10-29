@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67735a0732f9cd104fc349d4",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "m",
+  "tasks"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxTasksWithinLimit",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "m",
+    "type": "integer"
+   },
+   {
+    "name": "tasks",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sort the durations and simulate min(n * m, number of tasks) slot end times in a plain list, scanning the list for the earliest-free slot for every task",
+  "candidate_design": "sort the durations and keep the slot end times in a min-heap of size min(n * m, number of tasks); pop the earliest, stop when it plus the duration exceeds 60, otherwise push the new end time",
+  "complexity_target": "O(t log t) time/O(t) space, t = number of tasks"
+ },
+ "source_sha256": "59a4bade5ee3bc5922d0a115515fbce0efe03e304c475a533f33566c79cc3fdf",
+ "wrapper": "Solution.maxTasksWithinLimit"
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a57d9ca665efda9311f954c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "board",
+  "p",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "bestPathWithJumps",
+  "params": [
+   {
+    "name": "board",
+    "type": "integer[][]"
+   },
+   {
+    "name": "p",
+    "type": "integer"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every path from (0, p) depth first with its cell list and keep the largest sum, then the smallest list on equal sums",
+  "candidate_design": "backward dynamic programme of the best sum from (i, j) with r jumps left to the bottom row; then walk forward from (0, p), at each step taking the first move in cell order (down-left, down, down-right, jump) whose state keeps the optimum",
+  "complexity_target": "O(N * M * (k + 1)) time and space"
+ },
+ "source_sha256": "c38f20bbc17b973d59c8bde39737ac97f2c95575163e4479eba23058f5d876a9",
+ "wrapper": "Solution.bestPathWithJumps"
+}

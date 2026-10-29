@@ -1,0 +1,379 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a57ce6c665efda9311f94c3:6a57dafb665efda9311f9556:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+   "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a57ce6c665efda9311f94c3.json",
+   "sha256": "2197edc8f7a7e95b58ce0b5b4895a7fba266a6f3b846567d3a90e5563c1c83dd",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+   "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+   "selector": "/variants/hack2hire:6a57dafb665efda9311f9556"
+  }
+ ],
+ "problemId": "hack2hire:6a57ce6c665efda9311f94c3",
+ "variantId": "6a57dafb665efda9311f9556",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 4: count the best paths with at most k jumps",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:6a57dafb665efda9311f9556/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Variant 4 (inferred follow-up): board is a non-empty rectangular list of integer rows (N rows, M columns) and 0 <= p < M. A path starts at (0, p), every move stays inside the grid, and the path ends as soon as it enters row N - 1 (when N = 1 the path is just the start cell). The score of a path is the sum of the board values of the cells it visits, including the start and the final cell. From (i, j) a move goes to (i + 1, j - 1), (i + 1, j), (i + 1, j + 1) or, as a special jump, to (i + 2, j); the jumped-over cell (i + 1, j) is not visited. At most k special jumps are used on one path (k >= 0). Two paths differ when their visited cell lists differ. Return the number of paths whose score equals the maximum score, modulo 1000000007.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Variant 4 (inferred follow-up): board is a non-empty rectangular list of integer rows (N rows, M columns) and 0 <= p < M.",
+   "A path starts at (0, p), every move stays inside the grid, and the path ends as soon as it enters row N - 1 (when N = 1 the path is just the start cell).",
+   "The score of a path is the sum of the board values of the cells it visits, including the start and the final cell.",
+   "From (i, j) a move goes to (i + 1, j - 1), (i + 1, j), (i + 1, j + 1) or, as a special jump, to (i + 2, j); the jumped-over cell (i + 1, j) is not visited.",
+   "At most k special jumps are used on one path (k >= 0).",
+   "Two paths differ when their visited cell lists differ.",
+   "Return the number of paths whose score equals the maximum score, modulo 1000000007."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= N, 1 <= M, N * M <= 2e4",
+   "-1e4 <= board[i][j] <= 1e4",
+   "0 <= p < M",
+   "0 <= k <= N",
+   "N * M * (k + 1) <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:6a57dafb665efda9311f9556/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: an N x M grid board of scores; the player starts at top-row cell (0, p) and must reach any bottom-row cell; moves go to (i + 1, j - 1), (i + 1, j), (i + 1, j + 1) or the special jump (i + 2, j), usable at most K times, whose skipped cell is not visited and does not score (the objective and output are cut off); algorithmTags: DYNAMIC_PROGRAMMING, DEPTH_FIRST_SEARCH; four variant ids under one group; no per-variant text is public; preview response sha256 a6c177c0a2443f093bb8dd13ab510f283b580dc759eb7f3a7f71fbadbb17cc5b"
+   },
+   {
+    "statement": "Uncertainty: high: the board, start column, the four moves, the at-most-K jump and the unscored skipped cell are in the preview; maximising the visited sum, the end on first entering the bottom row, the per-variant split, counting maximum-score paths, the modulus, the function name and the bounds are inferred because the preview stops before the objective and no per-variant text is public",
+    "basis": "the public group preview is partial (631 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as four levels: 1 = maximum score with the three one-row moves only, 2 = adds the special jump used at most k times, 3 = returns one maximum-score path (lexicographically smallest cell list) under the variant 2 rules, 4 = counts the maximum-score paths modulo 1000000007 under the variant 2 rules",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the objective the maximum sum of visited cells?",
+   "Does the path end on first entering the bottom row?",
+   "Do negative scores occur?",
+   "Are two paths with the same cells but different jump counts the same path?",
+   "Is the count reported modulo 1000000007?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:6a57dafb665efda9311f9556/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       4
+      ]
+     ],
+     0,
+     0
+    ],
+    "output": 1,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       1,
+       -1,
+       1,
+       3
+      ],
+      [
+       -1,
+       -3,
+       2,
+       -1
+      ],
+      [
+       1,
+       -1,
+       1,
+       -3
+      ],
+      [
+       0,
+       -1,
+       -2,
+       3
+      ],
+      [
+       -3,
+       -3,
+       1,
+       2
+      ],
+      [
+       -3,
+       -1,
+       -1,
+       -1
+      ]
+     ],
+     2,
+     2
+    ],
+    "output": 2,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/study-content.json",
+    "sha256": "40c293c8c400c9674a6b04d863aa9530435f682e8cd9f747eb825057e19599d6",
+    "selector": "/variants/hack2hire:6a57dafb665efda9311f9556/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/oracles.py",
+    "sha256": "27eec77be3897b1b39845d98790d308219285bbb24c1b6b602441df5d37dcf85",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def countBestPaths(board, p, k) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/6a57dafb665efda9311f9556-python.json",
+     "inferredInterface": {
+      "name": "countBestPaths",
+      "params": [
+       {
+        "name": "board",
+        "type": "integer[][]"
+       },
+       {
+        "name": "p",
+        "type": "integer"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/6a57dafb665efda9311f9556-python.json",
+      "sha256": "05699117f91b7458ddbbe21a0029b078724ccf58437ce9b27d85151d571a15b3",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function countBestPaths(board, p, k) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+      "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/6a57dafb665efda9311f9556-javascript.json",
+     "inferredInterface": {
+      "name": "countBestPaths",
+      "params": [
+       {
+        "name": "board",
+        "type": "integer[][]"
+       },
+       {
+        "name": "p",
+        "type": "integer"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/semantics/6a57dafb665efda9311f9556-javascript.json",
+      "sha256": "f974b4c67fb1dcc5865ffd034a796f47761e59a0ef1eba6642b836f2c80f531f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-a-20261028-v1/contracts.json",
+    "sha256": "48a01d59668e893327fa2fb3005e25e2ee23cc808551ae9631b19fc5cf1e5e99",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

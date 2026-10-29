@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a57dafb665efda9311f9556",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "board",
+  "p",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countBestPaths",
+  "params": [
+   {
+    "name": "board",
+    "type": "integer[][]"
+   },
+   {
+    "name": "p",
+    "type": "integer"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every path from (0, p) depth first, keep the largest sum and count the paths that reach it",
+  "candidate_design": "forward dynamic programme over (row, column, jumps used) storing (best sum, number of paths with that sum mod 1000000007); merge predecessors by keeping the larger sum and adding counts on equal sums, then merge the bottom-row states the same way",
+  "complexity_target": "O(N * M * (k + 1)) time and space"
+ },
+ "source_sha256": "d655f66aca44f8ce721ae961694f2a1a549ae73dbf1260348665dd33425b4988",
+ "wrapper": "Solution.countBestPaths"
+}

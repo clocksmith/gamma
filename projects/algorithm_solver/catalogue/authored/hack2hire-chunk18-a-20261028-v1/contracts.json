@@ -1,0 +1,773 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:68f5af31a269f53ea0eff8a0",
+   "variant_id": "68f5af31a269f53ea0eff8a0",
+   "variant_ordinal": 1,
+   "title": "Highest Scoring Movie Group",
+   "source": {
+    "post_id": "68f5af2ca269f53ea0eff89f",
+    "group_title": "Highest Scoring Movie Group",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f5af2ca269f53ea0eff89f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f5af2ca269f53ea0eff89f/practice?questionId=68f5af31a269f53ea0eff8a0",
+    "preview_response_sha256": "b128da8bf52f23933351688c351a688d38d732406f6c7fb53e7e748d17162555",
+    "preview_content_sha256": "70492009daf6ab4ebf2b632bde293a85c588b1b3f593922f514a60962ad776d3",
+    "preview_characters": 400,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f5af2ca269f53ea0eff89f.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "NETFLIX"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a recommender has a liked source movie, a similarity score per target movie (index i), a list of groups of target movie ids and an integer k saying how many top movies of each group to consider (the preview stops before the scoring rule and the output)",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "similarityScores is a non-empty list of non-negative integers; similarityScores[i] is the similarity of target movie i. groups is a non-empty list of non-empty lists of distinct movie ids in range. k is a positive integer. The score of a group is the sum of its k highest similarity scores (all of them when the group has fewer than k movies). Return the index of the group with the highest score; on equal scores return the smallest index.",
+   "inference_uncertainty": "high: the inputs are in the preview; the group score as the sum of the top k scores, returning a group index, the smallest-index tie rule, integer scores, the function name and the bounds are inferred because the preview stops before the rule and the output",
+   "inferred_interface": {
+    "name": "findHighestScoringGroup",
+    "params": [
+     {
+      "name": "similarityScores",
+      "type": "integer[]"
+     },
+     {
+      "name": "groups",
+      "type": "integer[][]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "HSM"
+  },
+  {
+   "uid": "hack2hire:677f3733edc5bbd98ac0ea5a",
+   "variant_id": "677f3733edc5bbd98ac0ea5a",
+   "variant_ordinal": 1,
+   "title": "Highway Checkpoint",
+   "source": {
+    "post_id": "677f36a9edc5bbd98ac0ea59",
+    "group_title": "Highway Checkpoint",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677f36a9edc5bbd98ac0ea59",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677f36a9edc5bbd98ac0ea59/practice?questionId=677f3733edc5bbd98ac0ea5a",
+    "preview_response_sha256": "a97b3ffb87052ff6c927a7ea426ea166661115a52312a5bd9440d962112d3c82",
+    "preview_content_sha256": "e4f9a8ad6a2c233935ee0af1038d0b048fe6cc0f2dd55d1408088d7484608616",
+    "preview_characters": 440,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677f36a9edc5bbd98ac0ea59.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "STRING"
+    ],
+    "companies": [
+     "GOOGLE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: vehicles pass toll checkpoints; each pass records a licence plate and a checkpoint name; the fee between two checkpoints is 10 times the absolute difference of their positions, where a position is the checkpoint name with its letters removed (A1 and A5 give 40); the rest of the question is not in the preview",
+    "algorithmTags: HASH_TABLE, STRING"
+   ],
+   "inferred_spec": "records is a list of [plate, checkpoint] pairs in the order the passes happened. A checkpoint name is upper-case letters followed by a decimal number; its position is that number. Each vehicle pays, for every two consecutive passes of that vehicle, 10 times the absolute difference of the two positions; a vehicle with one pass pays 0. Return [plate, total fee] for every plate that appears, sorted by plate in ascending character order.",
+   "inference_uncertainty": "high: the fee rule and the position rule are in the preview; the record shape, charging every consecutive pair of passes of one vehicle, reporting every plate with its total (including 0), the plate order, the function name and the bounds are inferred because the preview stops after the fee example",
+   "inferred_interface": {
+    "name": "calculateTolls",
+    "params": [
+     {
+      "name": "records",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "(string|integer)[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "HWC"
+  },
+  {
+   "uid": "hack2hire:677de134052a260e01657068",
+   "variant_id": "677de134052a260e01657068",
+   "variant_ordinal": 1,
+   "title": "Make Array Bitonic",
+   "source": {
+    "post_id": "677de038052a260e01657067",
+    "group_title": "Make Array Bitonic",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677de038052a260e01657067",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677de038052a260e01657067/practice?questionId=677de134052a260e01657068",
+    "preview_response_sha256": "2fa964513a858be955f2bc14d702e12b9f085f993ad921a7ba11d107df02d7f3",
+    "preview_content_sha256": "cc69c55bf9591688f49b8561d466b48a1a2ac31c753ad29d6163c7171624f196",
+    "preview_characters": 448,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677de038052a260e01657067.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: given an integer array, one operation lowers one element by 1; find the minimum number of operations that turn the array into a bitonic array: zeros may form a prefix and/or suffix, and the non-zero part strictly increases from 1 to a peak k and then decreases back to 1",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "arr is a non-empty list of non-negative integers with at least one positive element. One operation lowers one element by 1. A target array is bitonic when it is zero outside one contiguous block and that block reads 1, 2, ..., k - 1, k, k - 1, ..., 2, 1 for some k >= 1 (adjacent block values differ by exactly 1). Return the minimum number of operations that turn arr into a bitonic array, which is sum(arr) minus the largest k * k over all blocks that fit under arr.",
+   "inference_uncertainty": "medium: the operation and the shape are in the preview; steps of exactly 1 (read from \"from 1 to k and back to 1\"), a non-empty block, non-negative input with at least one positive element, the function name and the bounds are inferred",
+   "inferred_interface": {
+    "name": "minOperationsToBitonic",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MAB"
+  },
+  {
+   "uid": "hack2hire:67873a44e20f8f324213c29a",
+   "variant_id": "67873a44e20f8f324213c29a",
+   "variant_ordinal": 1,
+   "title": "Make Power Non-decreasing",
+   "source": {
+    "post_id": "678738d8e20f8f324213c299",
+    "group_title": "Make Power Non-decreasing",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678738d8e20f8f324213c299",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678738d8e20f8f324213c299/practice?questionId=67873a44e20f8f324213c29a",
+    "preview_response_sha256": "275bf9d1dea447e5e1fb9e8096f79206e20128b5b1585f3a436b981bb6854315",
+    "preview_content_sha256": "66dce91e6253032197a1a5e9ad73121470a996ce46ca4432bff2d4f6ce7691e4",
+    "preview_characters": 461,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/678738d8e20f8f324213c299.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: n servers have computational powers; an operation picks a contiguous range of servers and raises each by some amount x; make the powers non-decreasing while minimising the total of all x used, and return that minimal total",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "power is a non-empty list of positive integers. One operation chooses a contiguous range and a positive integer x and adds x to every power in the range. Return the minimum possible sum of the x values over a sequence of operations after which power is non-decreasing.",
+   "inference_uncertainty": "low: the task is fully stated in the preview; x as a positive integer, the function name and the bounds are inferred",
+   "inferred_interface": {
+    "name": "minimalIncreaseSum",
+    "params": [
+     {
+      "name": "power",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MPN"
+  },
+  {
+   "uid": "hack2hire:69a357a36e73e4abccc9bf9c",
+   "variant_id": "69a357a36e73e4abccc9bf9c",
+   "variant_ordinal": 1,
+   "title": "Matrix Transformation with Commands",
+   "source": {
+    "post_id": "69a3579d6e73e4abccc9bf9b",
+    "group_title": "Matrix Transformation with Commands",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a3579d6e73e4abccc9bf9b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a3579d6e73e4abccc9bf9b/practice?questionId=69a357a36e73e4abccc9bf9c",
+    "preview_response_sha256": "45fdfad6555aae60dceb9126ac0c7c4778e75b16c9523e29bf1e534291ae8546",
+    "preview_content_sha256": "08fc1d26cf416f7260963c03d6ebbee6557788b7fcf78b100760bbea71eb4230",
+    "preview_characters": 456,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a3579d6e73e4abccc9bf9b.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "STRING"
+    ],
+    "companies": [
+     "CAPITAL_ONE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a matrix engine applies a list of string commands to an n x m integer matrix; the visible commands are \"reverseRow r\" (reverse row r) and \"swap r1 r2\" (swap two rows), both 0-indexed; the command list is cut off after these two",
+    "algorithmTags: ARRAY, STRING"
+   ],
+   "inferred_spec": "matrix is a non-empty rectangular list of integer rows and commands a list of strings. \"reverseRow r\" reverses the order of the values in row r; \"swap r1 r2\" exchanges rows r1 and r2 (r1 may equal r2). Indices are 0-based and valid. Apply the commands in order and return the resulting matrix as a new list of rows.",
+   "inference_uncertainty": "high: the two commands are in the preview, but the list is cut off and any further commands are not modelled; returning the final matrix, the exact single-space command syntax, valid indices, the function name and the bounds are inferred",
+   "inferred_interface": {
+    "name": "transformMatrix",
+    "params": [
+     {
+      "name": "matrix",
+      "type": "integer[][]"
+     },
+     {
+      "name": "commands",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MTC"
+  },
+  {
+   "uid": "hack2hire:67a4d4ca2a9ed767fa215433",
+   "variant_id": "67a4d4ca2a9ed767fa215433",
+   "variant_ordinal": 1,
+   "title": "Maximize Negative Signs",
+   "source": {
+    "post_id": "67a4d3262a9ed767fa215432",
+    "group_title": "Maximize Negative Signs",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a4d3262a9ed767fa215432",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a4d3262a9ed767fa215432/practice?questionId=67a4d4ca2a9ed767fa215433",
+    "preview_response_sha256": "f7933eaf340f9ad2e2341b836ad4ed5434a45f11c0a506626090d04ea4bcf300",
+    "preview_content_sha256": "28a64a81698a574de457625ecd20c79d45974d10d8769712da793fc790371237",
+    "preview_characters": 355,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67a4d3262a9ed767fa215432.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: given n natural numbers, give each a plus or minus sign so that every prefix of the signed sum stays positive, and maximise the number of minus signs",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "a is a non-empty list of positive integers. Choose a sign for every a[i] so that for every i the signed sum of a[0..i] is strictly positive. Return the maximum possible number of minus signs.",
+   "inference_uncertainty": "low: the task is fully stated in the preview; returning the count rather than the signs, the function name and the bounds are inferred",
+   "inferred_interface": {
+    "name": "maximizeNegativeSigns",
+    "params": [
+     {
+      "name": "a",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MNS"
+  },
+  {
+   "uid": "hack2hire:67735a0732f9cd104fc349d4",
+   "variant_id": "67735a0732f9cd104fc349d4",
+   "variant_ordinal": 1,
+   "title": "Maximize Task Scheduling Within Time Limit",
+   "source": {
+    "post_id": "677357f932f9cd104fc349d3",
+    "group_title": "Maximize Task Scheduling Within Time Limit",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677357f932f9cd104fc349d3",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/677357f932f9cd104fc349d3/practice?questionId=67735a0732f9cd104fc349d4",
+    "preview_response_sha256": "ae11d61a5d4dea22054d9c070eb33c441981eca3b999d86a871d9848d8d7b815",
+    "preview_content_sha256": "c080b59a0dbedd0cd8d3d69105e8ccd762e69e9a48cf0ebf935aab0e6af72708",
+    "preview_characters": 406,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/677357f932f9cd104fc349d3.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "HEAP"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: n machines with ids 0..n-1, each handling up to m tasks at the same time; a list of task durations; maximise the number of tasks finished within the next 60 minutes",
+    "algorithmTags: GREEDY, HEAP"
+   ],
+   "inferred_spec": "n and m are positive integers and tasks a list of positive integer durations in minutes. The machines offer n * m slots that each run one task at a time, starting at minute 0. Tasks are started shortest first (equal durations in any order); each task goes to a slot that becomes free earliest and finishes at that free time plus its duration. A task is started only when it would finish at or before minute 60; once one task cannot fit, no longer task can. Return the number of tasks started.",
+   "inference_uncertainty": "high: the machines, the m simultaneous tasks per machine, the durations and the 60-minute limit are in the preview; modelling capacity as n * m sequential slots, the shortest-first earliest-free-slot rule (a greedy rule suggested by the GREEDY and HEAP tags, which is not an exact maximum in every packing case), finishing exactly at 60 counting, the function name and the bounds are inferred",
+   "inferred_interface": {
+    "name": "maxTasksWithinLimit",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "m",
+      "type": "integer"
+     },
+     {
+      "name": "tasks",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MTS"
+  },
+  {
+   "uid": "hack2hire:6a57ce72665efda9311f94c4",
+   "variant_id": "6a57ce72665efda9311f94c4",
+   "variant_ordinal": 1,
+   "title": "Maximum Grid Jumping Path",
+   "source": {
+    "post_id": "6a57ce6c665efda9311f94c3",
+    "group_title": "Maximum Grid Jumping Path",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a57ce6c665efda9311f94c3",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a57ce6c665efda9311f94c3/practice?questionId=6a57ce72665efda9311f94c4",
+    "preview_response_sha256": "a6c177c0a2443f093bb8dd13ab510f283b580dc759eb7f3a7f71fbadbb17cc5b",
+    "preview_content_sha256": "7454449819399f4e7e63ac523589d07aa88428cac2ded749614b2fceeb9096af",
+    "preview_characters": 631,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a57ce6c665efda9311f94c3.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: an N x M grid board of scores; the player starts at top-row cell (0, p) and must reach any bottom-row cell; moves go to (i + 1, j - 1), (i + 1, j), (i + 1, j + 1) or the special jump (i + 2, j), usable at most K times, whose skipped cell is not visited and does not score (the objective and output are cut off)",
+    "algorithmTags: DYNAMIC_PROGRAMMING, DEPTH_FIRST_SEARCH",
+    "four variant ids under one group; no per-variant text is public"
+   ],
+   "inferred_spec": "Variant 1: board is a non-empty rectangular list of integer rows (N rows, M columns) and 0 <= p < M. A path starts at (0, p), every move stays inside the grid, and the path ends as soon as it enters row N - 1 (when N = 1 the path is just the start cell). The score of a path is the sum of the board values of the cells it visits, including the start and the final cell. From (i, j) a move goes to (i + 1, j - 1), (i + 1, j) or (i + 1, j + 1); there is no special jump. Return the maximum score.",
+   "inference_uncertainty": "high: the board, start column, the four moves, the at-most-K jump and the unscored skipped cell are in the preview; maximising the visited sum, the end on first entering the bottom row, the per-variant split, dropping the special jump in this first level, the function name and the bounds are inferred because the preview stops before the objective and no per-variant text is public",
+   "inferred_interface": {
+    "name": "maxPathScore",
+    "params": [
+     {
+      "name": "board",
+      "type": "integer[][]"
+     },
+     {
+      "name": "p",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four levels: 1 = maximum score with the three one-row moves only, 2 = adds the special jump used at most k times, 3 = returns one maximum-score path (lexicographically smallest cell list) under the variant 2 rules, 4 = counts the maximum-score paths modulo 1000000007 under the variant 2 rules",
+   "oracle_constant": "MGJ1"
+  },
+  {
+   "uid": "hack2hire:6a57d29e665efda9311f950a",
+   "variant_id": "6a57d29e665efda9311f950a",
+   "variant_ordinal": 2,
+   "title": "Maximum Grid Jumping Path",
+   "source": {
+    "post_id": "6a57ce6c665efda9311f94c3",
+    "group_title": "Maximum Grid Jumping Path",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a57ce6c665efda9311f94c3",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a57ce6c665efda9311f94c3/practice?questionId=6a57d29e665efda9311f950a",
+    "preview_response_sha256": "a6c177c0a2443f093bb8dd13ab510f283b580dc759eb7f3a7f71fbadbb17cc5b",
+    "preview_content_sha256": "7454449819399f4e7e63ac523589d07aa88428cac2ded749614b2fceeb9096af",
+    "preview_characters": 631,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a57ce6c665efda9311f94c3.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: an N x M grid board of scores; the player starts at top-row cell (0, p) and must reach any bottom-row cell; moves go to (i + 1, j - 1), (i + 1, j), (i + 1, j + 1) or the special jump (i + 2, j), usable at most K times, whose skipped cell is not visited and does not score (the objective and output are cut off)",
+    "algorithmTags: DYNAMIC_PROGRAMMING, DEPTH_FIRST_SEARCH",
+    "four variant ids under one group; no per-variant text is public"
+   ],
+   "inferred_spec": "Variant 2 (inferred follow-up): board is a non-empty rectangular list of integer rows (N rows, M columns) and 0 <= p < M. A path starts at (0, p), every move stays inside the grid, and the path ends as soon as it enters row N - 1 (when N = 1 the path is just the start cell). The score of a path is the sum of the board values of the cells it visits, including the start and the final cell. From (i, j) a move goes to (i + 1, j - 1), (i + 1, j), (i + 1, j + 1) or, as a special jump, to (i + 2, j); the jumped-over cell (i + 1, j) is not visited. At most k special jumps are used on one path (k >= 0). Return the maximum score.",
+   "inference_uncertainty": "medium: the board, start column, the four moves, the at-most-K jump and the unscored skipped cell are in the preview; maximising the visited sum, the end on first entering the bottom row, the per-variant split, the function name and the bounds are inferred because the preview stops before the objective and no per-variant text is public",
+   "inferred_interface": {
+    "name": "maxPathScoreWithJumps",
+    "params": [
+     {
+      "name": "board",
+      "type": "integer[][]"
+     },
+     {
+      "name": "p",
+      "type": "integer"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four levels: 1 = maximum score with the three one-row moves only, 2 = adds the special jump used at most k times, 3 = returns one maximum-score path (lexicographically smallest cell list) under the variant 2 rules, 4 = counts the maximum-score paths modulo 1000000007 under the variant 2 rules",
+   "oracle_constant": "MGJ2"
+  },
+  {
+   "uid": "hack2hire:6a57d9ca665efda9311f954c",
+   "variant_id": "6a57d9ca665efda9311f954c",
+   "variant_ordinal": 3,
+   "title": "Maximum Grid Jumping Path",
+   "source": {
+    "post_id": "6a57ce6c665efda9311f94c3",
+    "group_title": "Maximum Grid Jumping Path",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a57ce6c665efda9311f94c3",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a57ce6c665efda9311f94c3/practice?questionId=6a57d9ca665efda9311f954c",
+    "preview_response_sha256": "a6c177c0a2443f093bb8dd13ab510f283b580dc759eb7f3a7f71fbadbb17cc5b",
+    "preview_content_sha256": "7454449819399f4e7e63ac523589d07aa88428cac2ded749614b2fceeb9096af",
+    "preview_characters": 631,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a57ce6c665efda9311f94c3.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: an N x M grid board of scores; the player starts at top-row cell (0, p) and must reach any bottom-row cell; moves go to (i + 1, j - 1), (i + 1, j), (i + 1, j + 1) or the special jump (i + 2, j), usable at most K times, whose skipped cell is not visited and does not score (the objective and output are cut off)",
+    "algorithmTags: DYNAMIC_PROGRAMMING, DEPTH_FIRST_SEARCH",
+    "four variant ids under one group; no per-variant text is public"
+   ],
+   "inferred_spec": "Variant 3 (inferred follow-up): board is a non-empty rectangular list of integer rows (N rows, M columns) and 0 <= p < M. A path starts at (0, p), every move stays inside the grid, and the path ends as soon as it enters row N - 1 (when N = 1 the path is just the start cell). The score of a path is the sum of the board values of the cells it visits, including the start and the final cell. From (i, j) a move goes to (i + 1, j - 1), (i + 1, j), (i + 1, j + 1) or, as a special jump, to (i + 2, j); the jumped-over cell (i + 1, j) is not visited. At most k special jumps are used on one path (k >= 0). Return one maximum-score path as the list of its visited cells [row, column], from the start to the bottom-row cell; among maximum-score paths return the lexicographically smallest list (cells compared by row, then column).",
+   "inference_uncertainty": "high: the board, start column, the four moves, the at-most-K jump and the unscored skipped cell are in the preview; maximising the visited sum, the end on first entering the bottom row, the per-variant split, returning the path, the lexicographic tie rule, the function name and the bounds are inferred because the preview stops before the objective and no per-variant text is public",
+   "inferred_interface": {
+    "name": "bestPathWithJumps",
+    "params": [
+     {
+      "name": "board",
+      "type": "integer[][]"
+     },
+     {
+      "name": "p",
+      "type": "integer"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four levels: 1 = maximum score with the three one-row moves only, 2 = adds the special jump used at most k times, 3 = returns one maximum-score path (lexicographically smallest cell list) under the variant 2 rules, 4 = counts the maximum-score paths modulo 1000000007 under the variant 2 rules",
+   "oracle_constant": "MGJ3"
+  },
+  {
+   "uid": "hack2hire:6a57dafb665efda9311f9556",
+   "variant_id": "6a57dafb665efda9311f9556",
+   "variant_ordinal": 4,
+   "title": "Maximum Grid Jumping Path",
+   "source": {
+    "post_id": "6a57ce6c665efda9311f94c3",
+    "group_title": "Maximum Grid Jumping Path",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a57ce6c665efda9311f94c3",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a57ce6c665efda9311f94c3/practice?questionId=6a57dafb665efda9311f9556",
+    "preview_response_sha256": "a6c177c0a2443f093bb8dd13ab510f283b580dc759eb7f3a7f71fbadbb17cc5b",
+    "preview_content_sha256": "7454449819399f4e7e63ac523589d07aa88428cac2ded749614b2fceeb9096af",
+    "preview_characters": 631,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a57ce6c665efda9311f94c3.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: an N x M grid board of scores; the player starts at top-row cell (0, p) and must reach any bottom-row cell; moves go to (i + 1, j - 1), (i + 1, j), (i + 1, j + 1) or the special jump (i + 2, j), usable at most K times, whose skipped cell is not visited and does not score (the objective and output are cut off)",
+    "algorithmTags: DYNAMIC_PROGRAMMING, DEPTH_FIRST_SEARCH",
+    "four variant ids under one group; no per-variant text is public"
+   ],
+   "inferred_spec": "Variant 4 (inferred follow-up): board is a non-empty rectangular list of integer rows (N rows, M columns) and 0 <= p < M. A path starts at (0, p), every move stays inside the grid, and the path ends as soon as it enters row N - 1 (when N = 1 the path is just the start cell). The score of a path is the sum of the board values of the cells it visits, including the start and the final cell. From (i, j) a move goes to (i + 1, j - 1), (i + 1, j), (i + 1, j + 1) or, as a special jump, to (i + 2, j); the jumped-over cell (i + 1, j) is not visited. At most k special jumps are used on one path (k >= 0). Two paths differ when their visited cell lists differ. Return the number of paths whose score equals the maximum score, modulo 1000000007.",
+   "inference_uncertainty": "high: the board, start column, the four moves, the at-most-K jump and the unscored skipped cell are in the preview; maximising the visited sum, the end on first entering the bottom row, the per-variant split, counting maximum-score paths, the modulus, the function name and the bounds are inferred because the preview stops before the objective and no per-variant text is public",
+   "inferred_interface": {
+    "name": "countBestPaths",
+    "params": [
+     {
+      "name": "board",
+      "type": "integer[][]"
+     },
+     {
+      "name": "p",
+      "type": "integer"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four levels: 1 = maximum score with the three one-row moves only, 2 = adds the special jump used at most k times, 3 = returns one maximum-score path (lexicographically smallest cell list) under the variant 2 rules, 4 = counts the maximum-score paths modulo 1000000007 under the variant 2 rules",
+   "oracle_constant": "MGJ4"
+  },
+  {
+   "uid": "hack2hire:67874b97e20f8f324213c29c",
+   "variant_id": "67874b97e20f8f324213c29c",
+   "variant_ordinal": 1,
+   "title": "Maximum Number of Balanced Shipments",
+   "source": {
+    "post_id": "67874971e20f8f324213c29b",
+    "group_title": "Maximum Number of Balanced Shipments",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67874971e20f8f324213c29b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67874971e20f8f324213c29b/practice?questionId=67874b97e20f8f324213c29c",
+    "preview_response_sha256": "65a6c3c23bc3ddd0d3446fc8fe2a24a5e10cf9f47c8feb3484eddb7869c35714",
+    "preview_content_sha256": "ab48821790c98f6c13faad72a4b7557635bba3174050cb34a9b2db2393cc97b5",
+    "preview_characters": 378,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67874971e20f8f324213c29b.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: parcels in a row by weight; a shipment is a contiguous run of parcels and is balanced when its last parcel weighs less than the heaviest parcel in it; determine the maximum number of balanced shipments (the conditions after \"such that\" are cut off)",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "weights is a non-empty list of positive integers. Split the whole list into contiguous shipments so that every parcel is in exactly one shipment and every shipment is balanced: its last weight is strictly less than its maximum weight. Return the largest possible number of shipments, or 0 when no such split exists.",
+   "inference_uncertainty": "medium: the balance rule and the maximisation are in the preview; requiring every parcel to be shipped (the cut-off conditions), returning 0 when impossible, the function name and the bounds are inferred",
+   "inferred_interface": {
+    "name": "maxBalancedShipments",
+    "params": [
+     {
+      "name": "weights",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MBS"
+  },
+  {
+   "uid": "hack2hire:68c4484970268e95f5f43d5e",
+   "variant_id": "68c4484970268e95f5f43d5e",
+   "variant_ordinal": 1,
+   "title": "Minimum Vertices to Traverse Directed Graph",
+   "source": {
+    "post_id": "68c4483f70268e95f5f43d5d",
+    "group_title": "Minimum Vertices to Traverse Directed Graph",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c4483f70268e95f5f43d5d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c4483f70268e95f5f43d5d/practice?questionId=68c4484970268e95f5f43d5e",
+    "preview_response_sha256": "404cba1cb72d450b483ff39d904651d9c426e9549279639b203759b1b3ed0214",
+    "preview_content_sha256": "f0f3ef6ff5556c02b453a4f995decb20517b15ad58247087552bec5b116d9114",
+    "preview_characters": 846,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68c4483f70268e95f5f43d5d.json",
+    "algorithm_tags": [
+     "GRAPH",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "AIRBNB"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a variation of LeetCode 1557; n servers 0..n-1 with directed edges [u, v] that pass a signal from u to v; find the minimum number of servers to activate at the start so that every server eventually receives the signal, directly or through a chain of edges",
+    "algorithmTags: GRAPH, DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "n is a positive integer and edges a list of [u, v] pairs with 0 <= u, v < n; the graph may contain cycles, self-loops and repeated edges. Return the minimum number of servers to activate so that every server is reachable from some activated server, which is the number of strongly connected components that no edge enters from another component.",
+   "inference_uncertainty": "low: the task is in the preview; allowing cycles (the stated difference from LeetCode 1557, which is acyclic), self-loops and repeated edges, returning the count, the function name and the bounds are inferred",
+   "inferred_interface": {
+    "name": "minActivatedServers",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "edges",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MVT"
+  }
+ ]
+}
