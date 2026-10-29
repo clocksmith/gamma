@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+   "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+   "selector": "/problems/hack2hire:69fc0ee4574d87bc49005a3d"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+   "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+   "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d"
+  }
+ ],
+ "problemId": "hack2hire:69fc0e7f574d87bc49005a3c",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/contract--contract_hack2hire_69fc0e7f574d87bc49005a3c_69fc0ee4574d87bc49005a3d_authored-v1.json",
+  "sha256": "1b49e77bf9b81280a510e8fe615d0f972dbdbed754404820f079969cc8492186"
+ },
+ "title": {
+  "status": "present",
+  "value": "the greedy is round robin: assignment number q (counting from 0 over the whole schedule) gets human q mod totalHuman and model q mod totalModel, so each triple is written directly",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+    "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+    "selector": "/problems/hack2hire:69fc0ee4574d87bc49005a3d/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "the greedy is round robin: assignment number q (counting from 0 over the whole schedule) gets human q mod totalHuman and model q mod totalModel, so each triple is written directly. Complexity target: O(totalTask * k) time/O(totalTask * k) space for the output.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+    "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+    "selector": "/problems/hack2hire:69fc0ee4574d87bc49005a3d"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Balanced assignment of resources to repeated jobs"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "The closed form is O(1) per assignment; the literal greedy is easier to trust but scans every human and model"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "after q assignments, human loads differ by at most one and the first q mod totalHuman humans carry the extra one",
+   "the k assignments of a task use k consecutive indices"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "A task needs k different humans and k different models, so k must not exceed either count.",
+   "Choosing the least loaded human with the smallest index keeps loads within one of each other.",
+   "Prove that this choice is round robin: the q-th assignment overall goes to human q mod totalHuman and model q mod totalModel, and k consecutive values are distinct."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "the greedy is round robin: assignment number q (counting from 0 over the whole schedule) gets human q mod totalHuman and model q mod totalModel, so each triple is written directly",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+      "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+      "selector": "/problems/hack2hire:69fc0ee4574d87bc49005a3d/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(totalTask * k) time/O(totalTask * k) space for the output; the independent reference (simulate the greedy literally: per assignment, scan every human and every model for the least loaded one not yet on the current task) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+      "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+      "selector": "/problems/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "A task needs k different humans and k different models, so k must not exceed either count.",
+     "Choosing the least loaded human with the smallest index keeps loads within one of each other."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_69fc0e7f574d87bc49005a3c_69fc0ee4574d87bc49005a3d_approach-native_v1.json",
+    "sha256": "83b7dce3bb2166fb7213d87f4e5ce7993a5788aef9d4a7264617c0554686e5d3"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper scheduleTasks, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+      "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+      "selector": "/problems/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Prove that this choice is round robin: the q-th assignment overall goes to human q mod totalHuman and model q mod totalModel, and k consecutive values are distinct."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_69fc0e7f574d87bc49005a3c_69fc0ee4574d87bc49005a3d_python_v1.json",
+     "sha256": "e241c2767cfcf2c66c27ba55b12a320aeb7e6a2af195955ffc4065594fa0cb90"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_69fc0e7f574d87bc49005a3c_69fc0ee4574d87bc49005a3d_javascript_v1.json",
+     "sha256": "939e691f9aacc117911953b36b3c07d680f3ffa06e851fcd24de6f0df552a694"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_69fc0e7f574d87bc49005a3c_69fc0ee4574d87bc49005a3d_approach-native_v1.json",
+    "sha256": "83b7dce3bb2166fb7213d87f4e5ce7993a5788aef9d4a7264617c0554686e5d3"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (simulate the greedy literally: per assignment, scan every human and every model for the least loaded one not yet on the current task) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+      "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+      "selector": "/problems/hack2hire:69fc0ee4574d87bc49005a3d/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/5/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/test_oracles.py",
+      "sha256": "c5f90d068c0f9902684fb86e3dcc870cca7ebfa922d9a008f75a349d7b5a8b0f",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+      "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+      "selector": "/variants/hack2hire:69fc0ee4574d87bc49005a3d"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_69fc0e7f574d87bc49005a3c_69fc0ee4574d87bc49005a3d_approach-native_v1.json",
+    "sha256": "83b7dce3bb2166fb7213d87f4e5ce7993a5788aef9d4a7264617c0554686e5d3"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:69fc0e7f574d87bc49005a3c:69fc0ee4574d87bc49005a3d:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/artifact--artifact_hack2hire_69fc0e7f574d87bc49005a3c_69fc0ee4574d87bc49005a3d_approach-native_v1.json",
+  "sha256": "83b7dce3bb2166fb7213d87f4e5ce7993a5788aef9d4a7264617c0554686e5d3"
+ }
+}

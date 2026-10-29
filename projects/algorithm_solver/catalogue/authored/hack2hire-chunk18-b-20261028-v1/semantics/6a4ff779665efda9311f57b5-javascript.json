@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a4ff779665efda9311f57b5",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "grid",
+  "threshold"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "infectionDays",
+  "params": [
+   {
+    "name": "grid",
+    "type": "integer[][]"
+   },
+   {
+    "name": "threshold",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate day by day on a copy of the grid, counting the 8 neighbours of every healthy plant each day, until a day infects nothing, recording the day each plant changes",
+  "candidate_design": "multi-source breadth-first search by days: keep for every healthy plant the number of infected neighbours; when a plant is infected on day d, add one to each healthy neighbour and put a neighbour that reaches threshold into the day d + 1 frontier; write each plant's day when it is infected",
+  "complexity_target": "O(m * n) time/O(m * n) space"
+ },
+ "source_sha256": "ca96a0f436e62c411efae3fd1dcccea4b482460415fcf6872d9f325ef05638fa",
+ "wrapper": "named export infectionDays"
+}

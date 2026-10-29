@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67a23c6bc5f86173882e3d8d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "text",
+  "pattern"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "isMatch",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "pattern",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "translate the pattern into a Python regular expression (\".\" to [a-z], \"(\" to a non-capturing group) and call re.fullmatch",
+  "candidate_design": "parse the pattern into units (contents, starred); fill a boolean table dp[i][u] = text[i:] matches units u.. from the end, where a starred unit either is skipped or matches its contents at i and stays at the same unit",
+  "complexity_target": "O(|text| * |pattern|) time/O(|text| * units) space"
+ },
+ "source_sha256": "55b74b26f917b790cbcc21b6bdce259495edf8f32d3ccdb069685f895dd0b8e2",
+ "wrapper": "named export isMatch"
+}

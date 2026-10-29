@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a367fe6e73e4abccc9bfe1",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "transformString",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each consonant, step forward through the alphabet with wrap-around until a non-vowel letter is found",
+  "candidate_design": "precompute a 26-entry table (vowels map to themselves, each consonant to the next consonant cyclically) and map every character through it, joining once",
+  "complexity_target": "O(n) time/O(n) space for the output"
+ },
+ "source_sha256": "151c72fa4bcf99a7e8c77569f2a7c0fc4acfd236de5f3c9fde0ad7ef23940cbe",
+ "wrapper": "Solution.transformString"
+}

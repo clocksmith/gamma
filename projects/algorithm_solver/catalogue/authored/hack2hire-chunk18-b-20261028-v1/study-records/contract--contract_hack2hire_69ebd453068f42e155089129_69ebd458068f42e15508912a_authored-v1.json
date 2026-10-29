@@ -1,0 +1,353 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69ebd453068f42e155089129:69ebd458068f42e15508912a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+   "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69ebd453068f42e155089129.json",
+   "sha256": "71cc0f479da08ae3a58e1226e7edc5c5c47cde7e79a0cbb4d7288887ccef1a2f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+   "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+   "selector": "/variants/hack2hire:69ebd458068f42e15508912a"
+  }
+ ],
+ "problemId": "hack2hire:69ebd453068f42e155089129",
+ "variantId": "69ebd458068f42e15508912a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: best switch from elevator to stairs",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69ebd458068f42e15508912a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "n, e1, t1, e2 and c are positive integers. Choose k with 0 <= k <= n. Energy starts at 0; after the elevator it is k * e1 and the time is k * t1. Then each of the n - k stair floors, in turn, requires the current energy E to be positive, adds ceil(c / E) to the time and lowers E by e2. A choice of k is feasible when the energy is positive before every stair floor. Return the minimum total time over all feasible k.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "n, e1, t1, e2 and c are positive integers.",
+   "Choose k with 0 <= k <= n.",
+   "Energy starts at 0; after the elevator it is k * e1 and the time is k * t1.",
+   "Then each of the n - k stair floors, in turn, requires the current energy E to be positive, adds ceil(c / E) to the time and lowers E by e2.",
+   "A choice of k is feasible when the energy is positive before every stair floor.",
+   "Return the minimum total time over all feasible k."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n <= 1000",
+   "1 <= e1, t1, e2 <= 1e6",
+   "1 <= c <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69ebd458068f42e15508912a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: n floors from floor 0; the elevator covers the first k floors, adding k * e1 energy and k * t1 time; each later stair floor takes ceil(c / currEnergy) time and uses e2 energy, and the energy at the start of each stair floor must stay strictly positive (the question is cut off); algorithmTags: BINARY_SEARCH; preview response sha256 d42eae6e2e80382eeeace6fe9d4a465cd0ab2aac8a72471f1ac305b2c0816e87"
+   },
+   {
+    "statement": "Uncertainty: high: the cost model is in the preview; the question (minimum total time over the switch floor k, rather than the best k or a time limit), the starting energy of 0 and the bounds are inferred",
+    "basis": "the public group preview is partial (586 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is the energy before the elevator?",
+   "Is the answer the time or the floor k?",
+   "Can k be 0 or n?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69ebd458068f42e15508912a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "output": 1,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     5,
+     1,
+     10,
+     3,
+     100
+    ],
+    "output": 50,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-content.json",
+    "sha256": "a32cd56ac4b648213e20c612d141eed750849b0caa92648e57c31645299621f3",
+    "selector": "/variants/hack2hire:69ebd458068f42e15508912a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/oracles.py",
+    "sha256": "bcb9402fb9a425489d98abb859edefeeebaf6b53831e620b9984f7fed502811f",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def minimumTotalTime(n, e1, t1, e2, c) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/69ebd458068f42e15508912a-python.json",
+     "inferredInterface": {
+      "name": "minimumTotalTime",
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       },
+       {
+        "name": "e1",
+        "type": "integer"
+       },
+       {
+        "name": "t1",
+        "type": "integer"
+       },
+       {
+        "name": "e2",
+        "type": "integer"
+       },
+       {
+        "name": "c",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/69ebd458068f42e15508912a-python.json",
+      "sha256": "3c21cd9d7f18234a55a4a86da01cd2f14403f4bcd417c97546f54186ea442b44",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function minimumTotalTime(n, e1, t1, e2, c) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+      "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/69ebd458068f42e15508912a-javascript.json",
+     "inferredInterface": {
+      "name": "minimumTotalTime",
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       },
+       {
+        "name": "e1",
+        "type": "integer"
+       },
+       {
+        "name": "t1",
+        "type": "integer"
+       },
+       {
+        "name": "e2",
+        "type": "integer"
+       },
+       {
+        "name": "c",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/semantics/69ebd458068f42e15508912a-javascript.json",
+      "sha256": "1cb1a563f8f39690456b8b571cb1b5b3242a32ede9df3d07ba9a5d419cc78bb7",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/contracts.json",
+    "sha256": "1226464fcb88c3d5292660f20c9d1edaa5286e5245428ecd72a3cc8c1bb6a9fe",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

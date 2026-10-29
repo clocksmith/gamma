@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69ebd458068f42e15508912a",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "e1",
+  "t1",
+  "e2",
+  "c"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minimumTotalTime",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "e1",
+    "type": "integer"
+   },
+   {
+    "name": "t1",
+    "type": "integer"
+   },
+   {
+    "name": "e2",
+    "type": "integer"
+   },
+   {
+    "name": "c",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every k from 0 to n and walk the stairs floor by floor with the energy rule",
+  "candidate_design": "feasibility is monotone in k, so binary search the smallest feasible k (k * e1 - (n - k - 1) * e2 > 0, or k = n); scan k upward from there, cutting a stair walk off once it reaches the best time and stopping when k * t1 + (n - k) alone reaches the best, since every stair floor costs at least 1",
+  "complexity_target": "O(log n + n^2) worst case time/O(1) space"
+ },
+ "source_sha256": "dc67203ba25087d0b0d81e1b3e0b416c1d6749931202256b6a82d756601edb33",
+ "wrapper": "Solution.minimumTotalTime"
+}

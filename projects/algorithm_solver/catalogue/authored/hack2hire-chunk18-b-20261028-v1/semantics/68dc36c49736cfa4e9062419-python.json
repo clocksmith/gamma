@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68dc36c49736cfa4e9062419",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "equivalentPairs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "partitionByEquivalence",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "equivalentPairs",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "label propagation: give every value its own label and repeatedly set both values of each pair to the smaller label until nothing changes, then group nums by label",
+  "candidate_design": "union-find keyed by value with path halving and union by size; one pass over nums assigns group indices to roots in first-seen order",
+  "complexity_target": "O((n + p) alpha(n + p)) time/O(n + p) space, p = pairs"
+ },
+ "source_sha256": "7e7594f76edc2d4a855fb5969f95fb1f13967fc7fdb349976714833eae1c6d75",
+ "wrapper": "Solution.partitionByEquivalence"
+}

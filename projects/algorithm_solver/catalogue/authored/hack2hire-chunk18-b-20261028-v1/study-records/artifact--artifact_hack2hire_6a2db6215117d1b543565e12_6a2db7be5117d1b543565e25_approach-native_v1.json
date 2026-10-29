@@ -1,0 +1,72 @@
+{
+ "kind": "artifact",
+ "id": "artifact:hack2hire:6a2db6215117d1b543565e12:6a2db7be5117d1b543565e25:approach-native:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+   "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+   "selector": "/problems/hack2hire:6a2db7be5117d1b543565e25"
+  }
+ ],
+ "type": "source-native",
+ "title": "Design Durable Function Call Cache variant 2 design entry",
+ "problemId": "hack2hire:6a2db6215117d1b543565e12",
+ "approachId": "approach:hack2hire:6a2db6215117d1b543565e12:6a2db7be5117d1b543565e25:v1",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6a2db6215117d1b543565e12:6a2db7be5117d1b543565e25:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/study-records/contract--contract_hack2hire_6a2db6215117d1b543565e12_6a2db7be5117d1b543565e25_authored-v1.json",
+  "sha256": "b5719687d102a2470486fa535911eb1e0decf41885a4374a1e3c3079019359a1"
+ },
+ "file": {
+  "status": "present",
+  "value": {
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+   "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+   "bytes": 8347,
+   "mediaType": "application/json"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+    "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+    "selector": "/problems/hack2hire:6a2db7be5117d1b543565e25"
+   }
+  ]
+ },
+ "externalLocator": {
+  "status": "not-applicable",
+  "reason": "Native design entry is in the referenced cohort file"
+ },
+ "language": null,
+ "documentSchema": null,
+ "executionKind": "reference-only",
+ "complexityClaims": {
+  "status": "not-applicable",
+  "reason": "Complexity claims live on the implementation artifacts"
+ },
+ "nativeMetadata": {
+  "status": "present",
+  "value": {
+   "reference": "bind each call to an object of parameter name to value (defaults filled), keep a list of (name, bound object) entries in recency order and compare with a recursive type-aware equality",
+   "candidate_design": "create_cache_key: bind arguments to the parameter list, then serialise the name and the bound values in parameter order to one canonical string with type tags and sorted object keys; LRU over an insertion-ordered map",
+   "complexity_target": "O(size of the call + parameters) per call/O(capacity * key size) space"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk18-b-20261028-v1/design.json",
+    "sha256": "8087be2c29e97ef872d60d161b154eb4ff06ba39cb2ac9537038fd20405d707e",
+    "selector": "/problems/hack2hire:6a2db7be5117d1b543565e25"
+   }
+  ]
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67806bd26fee41e51af73dde",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "expression"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "prefixToPostfix",
+  "params": [
+   {
+    "name": "expression",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive descent: read an operator, convert its first and second operand recursively, then append the operator",
+  "candidate_design": "scan left to right with a stack of pending operators and a count of finished operands for each; emit operands immediately and emit an operator when its second operand finishes, cascading upward; output collected in a list and joined once",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "39ee233dc380139d6eeb459bbed61fcbd87b47bd2eeaeb58f4d55835bbb1772b",
+ "wrapper": "named export prefixToPostfix"
+}

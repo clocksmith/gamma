@@ -1,0 +1,801 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk18-b (10 Hack2Hire groups, 16 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:69a367fe6e73e4abccc9bfe1",
+   "title": "Next Consonant Transformation",
+   "variant_ordinal": 1,
+   "group_post_id": "69a367836e73e4abccc9bfe0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "transformString",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each consonant, step forward through the alphabet with wrap-around until a non-vowel letter is found",
+    "candidate_design": "precompute a 26-entry table (vowels map to themselves, each consonant to the next consonant cyclically) and map every character through it, joining once",
+    "complexity_target": "O(n) time/O(n) space for the output"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "df407f2569acc315da8bc2485a0aa4c54e4183c3406ce6d814f1050951583854",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68f599dba269f53ea0eff890",
+   "title": "One-Hot Encoding of An Array",
+   "variant_ordinal": 1,
+   "group_post_id": "68f599cda269f53ea0eff88f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "oneHotEncode",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "sort the distinct values and compare every element with every column value",
+    "candidate_design": "sort the distinct values once, map each value to its column index with a hash map, then build each row as zeros with a single 1",
+    "complexity_target": "O(n log n + n * d) time/O(n * d) space for the output, d = distinct values"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "d1a32eedaaed505a126d635765e8f998d42d56d713332ac9886bf788039808f4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67806bd26fee41e51af73dde",
+   "title": "Prefix to Postfix",
+   "variant_ordinal": 1,
+   "group_post_id": "678069276fee41e51af73ddd",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "prefixToPostfix",
+     "params": [
+      {
+       "name": "expression",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recursive descent: read an operator, convert its first and second operand recursively, then append the operator",
+    "candidate_design": "scan left to right with a stack of pending operators and a count of finished operands for each; emit operands immediately and emit an operator when its second operand finishes, cascading upward; output collected in a list and joined once",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "812e7bfba4685a596b91679432fec0880bb2ffa228b4a936d0678bb5f390c19d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67a23c6bc5f86173882e3d8d",
+   "title": "Regex Pattern Matching",
+   "variant_ordinal": 1,
+   "group_post_id": "67a23a54c5f86173882e3d8c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "isMatch",
+     "params": [
+      {
+       "name": "text",
+       "type": "string"
+      },
+      {
+       "name": "pattern",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "translate the pattern into a Python regular expression (\".\" to [a-z], \"(\" to a non-capturing group) and call re.fullmatch",
+    "candidate_design": "parse the pattern into units (contents, starred); fill a boolean table dp[i][u] = text[i:] matches units u.. from the end, where a starred unit either is skipped or matches its contents at i and stays at the same unit",
+    "complexity_target": "O(|text| * |pattern|) time/O(|text| * units) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a97eac10a0fad05ee5dec7d9827e8bb9c8efaa1cc6990b9c3ff37e0890ebb77b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:678dd668fa7ce9616e190fba",
+   "title": "Sum of Islands Max",
+   "variant_ordinal": 1,
+   "group_post_id": "678dd2dffa7ce9616e190fb9",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxIslandSum",
+     "params": [
+      {
+       "name": "grid",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "union-find over all land cells, joining each land cell with its right and lower land neighbours, then summing per root",
+    "candidate_design": "iterative depth-first search with an explicit stack and a visited matrix, summing each island as it is flooded and keeping the maximum",
+    "complexity_target": "O(m * n) time/O(m * n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "fcb682680a567ae41445f77c26051e476a48a7192877b22fba115f6c1746651f",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69fc0ee4574d87bc49005a3d",
+   "title": "Data Labeling Task Scheduler",
+   "variant_ordinal": 1,
+   "group_post_id": "69fc0e7f574d87bc49005a3c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "scheduleTasks",
+     "params": [
+      {
+       "name": "totalTask",
+       "type": "integer"
+      },
+      {
+       "name": "totalModel",
+       "type": "integer"
+      },
+      {
+       "name": "totalHuman",
+       "type": "integer"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate the greedy literally: per assignment, scan every human and every model for the least loaded one not yet on the current task",
+    "candidate_design": "the greedy is round robin: assignment number q (counting from 0 over the whole schedule) gets human q mod totalHuman and model q mod totalModel, so each triple is written directly",
+    "complexity_target": "O(totalTask * k) time/O(totalTask * k) space for the output"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "f3cea8acbc97a6564b80d047823570ad7cb178e53a8a2735fcac79503b266a48",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69fc131a574d87bc49005a6c",
+   "title": "Data Labeling Task Scheduler",
+   "variant_ordinal": 2,
+   "group_post_id": "69fc0e7f574d87bc49005a3c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "isValidSchedule",
+     "params": [
+      {
+       "name": "totalTask",
+       "type": "integer"
+      },
+      {
+       "name": "totalModel",
+       "type": "integer"
+      },
+      {
+       "name": "totalHuman",
+       "type": "integer"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      },
+      {
+       "name": "schedule",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "parse every label with a regular expression, group triples by task and compare every pair of triples of a task",
+    "candidate_design": "one pass: parse each label by hand, count triples per task, and keep one hash set of (task, human) and one of (task, model); fail on the first duplicate or malformed label, then check every count equals k",
+    "complexity_target": "O(len(schedule) + totalTask) time/O(len(schedule)) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "f3cea8acbc97a6564b80d047823570ad7cb178e53a8a2735fcac79503b266a48",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a2db7bc5117d1b543565e24",
+   "title": "Design Durable Function Call Cache",
+   "variant_ordinal": 1,
+   "group_post_id": "6a2db6215117d1b543565e12",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "FunctionCallCache",
+     "constructor": {
+      "params": [
+       {
+        "name": "capacity",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "call",
+       "params": [
+        {
+         "name": "functionName",
+         "type": "string"
+        },
+        {
+         "name": "args",
+         "type": "any[]"
+        },
+        {
+         "name": "kwargs",
+         "type": "object"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "FunctionCallCache"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep a list of (name, args, kwargs) entries in recency order and find a call by comparing it with every entry using a recursive type-aware equality",
+    "candidate_design": "create_cache_key: serialise the call to one canonical string (type tags, objects with sorted keys), so equal calls give equal strings; an insertion-ordered map (OrderedDict / Map) gives O(1) LRU moves and evictions",
+    "complexity_target": "O(size of the call) per call/O(capacity * key size) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5ddeeee8b3a0c003f1ad1d244adea837d25fdb16754264811a1d13e6c6794531",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a2db7be5117d1b543565e25",
+   "title": "Design Durable Function Call Cache",
+   "variant_ordinal": 2,
+   "group_post_id": "6a2db6215117d1b543565e12",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "FunctionCallCache",
+     "constructor": {
+      "params": [
+       {
+        "name": "capacity",
+        "type": "integer"
+       },
+       {
+        "name": "signatures",
+        "type": "object"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "call",
+       "params": [
+        {
+         "name": "functionName",
+         "type": "string"
+        },
+        {
+         "name": "args",
+         "type": "any[]"
+        },
+        {
+         "name": "kwargs",
+         "type": "object"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "FunctionCallCache"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "bind each call to an object of parameter name to value (defaults filled), keep a list of (name, bound object) entries in recency order and compare with a recursive type-aware equality",
+    "candidate_design": "create_cache_key: bind arguments to the parameter list, then serialise the name and the bound values in parameter order to one canonical string with type tags and sorted object keys; LRU over an insertion-ordered map",
+    "complexity_target": "O(size of the call + parameters) per call/O(capacity * key size) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "5ddeeee8b3a0c003f1ad1d244adea837d25fdb16754264811a1d13e6c6794531",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69d414a179bf03c0074bcec1",
+   "title": "Cellular Infection Spreading",
+   "variant_ordinal": 1,
+   "group_post_id": "69d4147079bf03c0074bcec0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "spreadDays",
+     "params": [
+      {
+       "name": "grid",
+       "type": "integer[][]"
+      },
+      {
+       "name": "threshold",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate day by day on a copy of the grid, counting the 8 neighbours of every healthy plant each day, until a day infects nothing",
+    "candidate_design": "multi-source breadth-first search by days: keep for every healthy plant the number of infected neighbours; when a plant is infected on day d, add one to each healthy neighbour and put a neighbour that reaches threshold into the day d + 1 frontier; the answer is the last day with a non-empty frontier",
+    "complexity_target": "O(m * n) time/O(m * n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "42f65105a8ec3494485b9ef507762a35e361347a9b35cc71c68db1784c8a7a68",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69d414a379bf03c0074bcec2",
+   "title": "Cellular Infection Spreading",
+   "variant_ordinal": 2,
+   "group_post_id": "69d4147079bf03c0074bcec0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "daysToInfectAll",
+     "params": [
+      {
+       "name": "grid",
+       "type": "integer[][]"
+      },
+      {
+       "name": "threshold",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate day by day on a copy of the grid, counting the 8 neighbours of every healthy plant each day, until a day infects nothing",
+    "candidate_design": "multi-source breadth-first search by days: keep for every healthy plant the number of infected neighbours; when a plant is infected on day d, add one to each healthy neighbour and put a neighbour that reaches threshold into the day d + 1 frontier; the answer is the last infection day if every plant was reached, else -1",
+    "complexity_target": "O(m * n) time/O(m * n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "42f65105a8ec3494485b9ef507762a35e361347a9b35cc71c68db1784c8a7a68",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69d414a479bf03c0074bcec5",
+   "title": "Cellular Infection Spreading",
+   "variant_ordinal": 3,
+   "group_post_id": "69d4147079bf03c0074bcec0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "finalState",
+     "params": [
+      {
+       "name": "grid",
+       "type": "integer[][]"
+      },
+      {
+       "name": "threshold",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate day by day on a copy of the grid, counting the 8 neighbours of every healthy plant each day, until a day infects nothing",
+    "candidate_design": "multi-source breadth-first search by days: keep for every healthy plant the number of infected neighbours; when a plant is infected on day d, add one to each healthy neighbour and put a neighbour that reaches threshold into the day d + 1 frontier; mark every plant that is ever reached",
+    "complexity_target": "O(m * n) time/O(m * n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "42f65105a8ec3494485b9ef507762a35e361347a9b35cc71c68db1784c8a7a68",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a4ff2eb665efda9311f57a7",
+   "title": "Cellular Infection Spreading",
+   "variant_ordinal": 4,
+   "group_post_id": "69d4147079bf03c0074bcec0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "stateAfterDays",
+     "params": [
+      {
+       "name": "grid",
+       "type": "integer[][]"
+      },
+      {
+       "name": "threshold",
+       "type": "integer"
+      },
+      {
+       "name": "days",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate day by day on a copy of the grid, counting the 8 neighbours of every healthy plant each day, until a day infects nothing, stopping after days days",
+    "candidate_design": "multi-source breadth-first search by days: keep for every healthy plant the number of infected neighbours; when a plant is infected on day d, add one to each healthy neighbour and put a neighbour that reaches threshold into the day d + 1 frontier; a plant is infected after days days exactly when its infection day is at most days",
+    "complexity_target": "O(m * n) time/O(m * n) space, independent of days"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "42f65105a8ec3494485b9ef507762a35e361347a9b35cc71c68db1784c8a7a68",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a4ff779665efda9311f57b5",
+   "title": "Cellular Infection Spreading",
+   "variant_ordinal": 5,
+   "group_post_id": "69d4147079bf03c0074bcec0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "infectionDays",
+     "params": [
+      {
+       "name": "grid",
+       "type": "integer[][]"
+      },
+      {
+       "name": "threshold",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate day by day on a copy of the grid, counting the 8 neighbours of every healthy plant each day, until a day infects nothing, recording the day each plant changes",
+    "candidate_design": "multi-source breadth-first search by days: keep for every healthy plant the number of infected neighbours; when a plant is infected on day d, add one to each healthy neighbour and put a neighbour that reaches threshold into the day d + 1 frontier; write each plant's day when it is infected",
+    "complexity_target": "O(m * n) time/O(m * n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "42f65105a8ec3494485b9ef507762a35e361347a9b35cc71c68db1784c8a7a68",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69ebd458068f42e15508912a",
+   "title": "Optimize Transition from Elevator to Stairs",
+   "variant_ordinal": 1,
+   "group_post_id": "69ebd453068f42e155089129",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minimumTotalTime",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "e1",
+       "type": "integer"
+      },
+      {
+       "name": "t1",
+       "type": "integer"
+      },
+      {
+       "name": "e2",
+       "type": "integer"
+      },
+      {
+       "name": "c",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every k from 0 to n and walk the stairs floor by floor with the energy rule",
+    "candidate_design": "feasibility is monotone in k, so binary search the smallest feasible k (k * e1 - (n - k - 1) * e2 > 0, or k = n); scan k upward from there, cutting a stair walk off once it reaches the best time and stopping when k * t1 + (n - k) alone reaches the best, since every stair floor costs at least 1",
+    "complexity_target": "O(log n + n^2) worst case time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "d42eae6e2e80382eeeace6fe9d4a465cd0ab2aac8a72471f1ac305b2c0816e87",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68dc36c49736cfa4e9062419",
+   "title": "Partition Array by Equivalence Function",
+   "variant_ordinal": 1,
+   "group_post_id": "68dc08499736cfa4e90623e4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "partitionByEquivalence",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      },
+      {
+       "name": "equivalentPairs",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "label propagation: give every value its own label and repeatedly set both values of each pair to the smaller label until nothing changes, then group nums by label",
+    "candidate_design": "union-find keyed by value with path halving and union by size; one pass over nums assigns group indices to roots in first-seen order",
+    "complexity_target": "O((n + p) alpha(n + p)) time/O(n + p) space, p = pairs"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "e8acfe63e8ba2eeace7cf6eb6845780ce749a79f1454066a262f6166e81f8e1c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

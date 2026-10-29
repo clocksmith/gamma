@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68f599dba269f53ea0eff890",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "oneHotEncode",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sort the distinct values and compare every element with every column value",
+  "candidate_design": "sort the distinct values once, map each value to its column index with a hash map, then build each row as zeros with a single 1",
+  "complexity_target": "O(n log n + n * d) time/O(n * d) space for the output, d = distinct values"
+ },
+ "source_sha256": "e0a6c5c0838fb9737c0e2b2119d6049caece00981c5c7ee2879e0b95b9b96d03",
+ "wrapper": "Solution.oneHotEncode"
+}
