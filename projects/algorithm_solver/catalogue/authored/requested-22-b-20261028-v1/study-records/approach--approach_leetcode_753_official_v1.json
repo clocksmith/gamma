@@ -1,0 +1,1102 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/753/approach/chooseWhen",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/753",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "You need a shortest string containing every length-n word over an alphabet (a de Bruijn sequence).",
+      "The state space k^(n-1) nodes with k edges each is small enough to traverse fully.",
+      "Recursion depth k^n could be large, so an iterative traversal is preferred."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:753:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/contract--contract_leetcode_753_official_authored-v1.json",
+    "sha256": "e62efe98648292910312151f9b855cb6ff67cfedc2778ecd82f15c8dc219772d",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/753/approach/explanation",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/753",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+      }
+    ],
+    "status": "present",
+    "value": "Model each (n-1)-digit string as a node. Appending digit d to node u gives an n-digit password and moves to the node made of the last n-1 digits. Each password is exactly one edge, every node has k outgoing and k incoming edges, so an Eulerian circuit exists and visits every edge once. Writing the starting node (n-1 zeros) followed by the edge digits in circuit order gives a string of length k^n + n - 1 containing every password. The candidate runs Hierholzer's algorithm with an explicit stack, using a per-node counter of used outgoing edges, and emits digits when edges are popped."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/753/approach/hints",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/753",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "How many windows can a string of length L have, and how many must it cover?",
+      "Consecutive windows share n-1 digits. Think of those shared digits as a state.",
+      "Make (n-1)-digit strings nodes and passwords edges; you need a path that uses every edge once.",
+      "Every node has equal in- and out-degree k, so Hierholzer's algorithm finds an Eulerian circuit; prefix n-1 zeros to the reversed edge digits."
+    ]
+  },
+  "id": "approach:leetcode:753:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/753/approach/invariants",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/753",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Node values are (n-1)-digit numbers in base k, i.e. integers below k^(n-1).",
+      "used[u] counts outgoing edges of u already traversed; each edge is traversed exactly once.",
+      "Digits appended on pop, read in reverse, form an Eulerian circuit starting and ending at node 0."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:753:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_753_official_approach-native_v1.json",
+    "sha256": "17ac14a5be2320f439b469a75eb5754efa4bfce1b549305ad5da5fa8b7db4a98",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/753",
+      "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+    }
+  ],
+  "problemId": "leetcode:753",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/0/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "Sliding the window by one digit keeps n-1 digits. If those n-1 digits are a node, each password is an edge between overlapping nodes, and a shortest covering string corresponds to a walk using each edge exactly once."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/0/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Count windows versus string length.",
+          "Eulerian circuits exist when degrees balance."
+        ]
+      },
+      "id": "approach:leetcode:753:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/0/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Draw the graph for n=2, k=2: nodes 0 and 1, edges 00, 01, 10, 11.",
+          "Check in- and out-degrees."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:753:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_753_official_approach-native_v1.json",
+        "sha256": "17ac14a5be2320f439b469a75eb5754efa4bfce1b549305ad5da5fa8b7db4a98",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/0/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Every node has in-degree k and out-degree k, and the graph is strongly connected.",
+          "With n=1 there is a single node with k self-loops."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/0/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "What structure links one password window to the next one in the typed string?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/0/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "Recognising the de Bruijn graph turns a search problem into a classic Eulerian circuit."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/0/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/0/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "Turn coverage into an edge tour"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:753:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_753_official_python_v1.json",
+          "sha256": "4e6186ac7c7ede01febfe1eabe38000ff34777d1a42fa82708291f3ab5e34ef2",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:753:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_753_official_javascript_v1.json",
+          "sha256": "49351765d67ab4b82fc64ed97fe35877d062a832a9c560c64849f062d2140eba",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/1/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "Let modulus = k^(n-1). Stack holds (node, digit-that-led-here) starting with (0, -1). While the stack is non-empty: if the top node has an unused edge e, increment used[node] and push ((node*k + e) % modulus, e); otherwise pop and, if its digit is not -1, append it. Reverse the collected digits and prefix n-1 zeros."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/1/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Popping, not pushing, yields digits in valid circuit order.",
+          "The start node 0 corresponds to n-1 zeros."
+        ]
+      },
+      "id": "approach:leetcode:753:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/1/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compute modulus = k^(n-1) (1 when n = 1).",
+          "Keep used[] per node.",
+          "Emit digits on pop, then reverse.",
+          "Return '0'*(n-1) + digits."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:753:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_753_official_approach-native_v1.json",
+        "sha256": "17ac14a5be2320f439b469a75eb5754efa4bfce1b549305ad5da5fa8b7db4a98",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/1/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "When n = 1, modulus is 1 and all edges are self-loops on node 0.",
+          "JavaScript uses Int32Array for used counts."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/1/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "How do you traverse every edge once without recursion and recover the digit string?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/1/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "Edges are consumed in a fixed order and each is pushed and popped once, giving O(k^n) time."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/1/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/1/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "Iterative Hierholzer over base-k nodes"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/2/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "Check length k^n + n - 1, that every character is a digit below k, and that the set of all length-n windows has size k^n. Enumerate every allowed (n, k) pair, since the domain is small."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/2/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Do not compare with a fixed expected string."
+        ]
+      },
+      "id": "approach:leetcode:753:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/2/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Write a checker that collects windows into a set.",
+          "Run it on all (n, k) with k^n <= 4096.",
+          "Include n = 1 and k = 1."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:753:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_753_official_approach-native_v1.json",
+        "sha256": "17ac14a5be2320f439b469a75eb5754efa4bfce1b549305ad5da5fa8b7db4a98",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/2/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "k = 1 gives a string of n zeros."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/2/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "How do you test a function whose correct output is not unique?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/2/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "A validity checker accepts every correct answer and rejects near misses such as a missing window."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/2/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/753/approach/stages/2/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/753",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+          }
+        ],
+        "status": "present",
+        "value": "Check validity, not equality"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/753/approach/title",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/753",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+      }
+    ],
+    "status": "present",
+    "value": "De Bruijn sequence via an Eulerian circuit (iterative Hierholzer)"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/753/approach/tradeoffs",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/753",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/753.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "de431b03f3f0a1f45be54dac6b11e6979643fb792c5db06f5684fe8dc9a8c277"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/753.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ca93764863109599eea380e09bcae48b8be10832b724afb0bc4fc59b7286796d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A greedy DFS over passwords that backtracks also works but its correctness argument is less direct.",
+      "The Lyndon-word (FKM) construction produces the lexicographically smallest de Bruijn sequence without a graph, but is harder to derive.",
+      "Hierholzer emits digits in reverse, so the result must be reversed before prefixing the start node."
+    ]
+  },
+  "version": 1
+}

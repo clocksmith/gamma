@@ -1,0 +1,1099 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/761/approach/chooseWhen",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/761",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The string has a balanced-parentheses structure and allowed moves permute siblings.",
+      "Lexicographic maximisation over arbitrary permutations of independent parts reduces to sorting them.",
+      "Input length is small, so quadratic recursion with string copies is fine."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:761:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/contract--contract_leetcode_761_official_authored-v1.json",
+    "sha256": "1ddb9f2ad2bef0cbd6fbf523459807883b7b34f08d98c45c8f41ebb3177318ab",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/761/approach/explanation",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/761",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+      }
+    ],
+    "status": "present",
+    "value": "Read 1 as '(' and 0 as ')': a special string is a balanced parenthesis string. Split it into primitive blocks where the running balance returns to zero. Each primitive block is '1' + inner + '0' where inner is itself special. Swapping adjacent special substrings lets you reorder blocks at any nesting level freely, so the best string is obtained by first making each block's interior as large as possible (recursively), then sorting the blocks at that level in descending order and concatenating."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/761/approach/hints",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/761",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Replace 1 with '(' and 0 with ')'. What does a special string look like?",
+      "Split the string where the running balance returns to zero; these blocks can be reordered.",
+      "Each block is 1 + special interior + 0, and its interior can be improved independently.",
+      "Recursively maximise each interior, then sort the blocks in descending order and join them."
+    ]
+  },
+  "id": "approach:leetcode:761:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/761/approach/invariants",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/761",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Every block passed to the recursion is special.",
+      "After processing, each block's interior is the largest reachable arrangement of that interior.",
+      "Concatenating blocks in descending order yields the largest arrangement at that level."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:761:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_761_official_approach-native_v1.json",
+    "sha256": "cb9f787e15118789f69f1315c5a042f040f45903aa6173100956f3eabb47574b",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/761",
+      "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+    }
+  ],
+  "problemId": "leetcode:761",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/0/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "Viewed as parentheses, a special string is a forest of nested blocks. Adjacent special substrings at the same level are sibling blocks (or runs of siblings), so swaps permute siblings, at any depth. The optimum makes every level as large as possible from the inside out."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/0/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Where does the balance hit zero?",
+          "Can a swap mix two levels?"
+        ]
+      },
+      "id": "approach:leetcode:761:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/0/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Draw the tree for 11011000.",
+          "List which swaps are possible at the top and inside."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:761:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_761_official_approach-native_v1.json",
+        "sha256": "cb9f787e15118789f69f1315c5a042f040f45903aa6173100956f3eabb47574b",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/0/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The outer '1' and '0' of a block never move relative to its interior."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/0/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "What does a swap of adjacent special substrings do in terms of the tree of balanced blocks?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/0/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "Reducing moves to sibling permutations turns the search into a sort."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/0/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/0/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "See the parenthesis structure"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:761:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_761_official_python_v1.json",
+          "sha256": "7cf6e5037962974a7c16d9f4467b72d93b7a360742b5c96984d0451d4a8f47dc",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:761:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_761_official_javascript_v1.json",
+          "sha256": "4442737e5f62bea60e15fd94d58c35a874ea05be0f3220f80174790ba758a62c",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/1/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "largest(text): scan with a balance counter; when it returns to 0 at index i, the block from start to i is '1' + text[start+1:i] + '0', so append '1' + largest(text[start+1:i]) + '0' and set start = i+1. Sort the collected blocks in reverse order and join. solve(s) returns largest(s)."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/1/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Recurse before sorting so blocks are compared in their best form."
+        ]
+      },
+      "id": "approach:leetcode:761:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/1/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Track balance (+1 for '1', -1 for '0').",
+          "Recurse on each block's interior.",
+          "Sort descending (Python sort(reverse=True); JavaScript sort().reverse()).",
+          "Join and return."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:761:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_761_official_approach-native_v1.json",
+        "sha256": "cb9f787e15118789f69f1315c5a042f040f45903aa6173100956f3eabb47574b",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/1/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The empty interior of '10' returns an empty string.",
+          "Plain string comparison is the needed lexicographic order."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/1/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement the decomposition in one pass per level?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/1/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "Each level works on independent blocks, matching the tree structure."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/1/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/1/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "Recursive split, sort and join"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/2/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "For short strings, BFS over all strings reachable by swapping adjacent special substrings and take the maximum. Compare with the recursive answer, including nested blocks and many equal blocks."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/2/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Try 1101001100 by hand."
+        ]
+      },
+      "id": "approach:leetcode:761:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/2/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Enumerate all special strings up to length 12 and compare with BFS.",
+          "Check the input string is unchanged."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:761:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_761_official_approach-native_v1.json",
+        "sha256": "cb9f787e15118789f69f1315c5a042f040f45903aa6173100956f3eabb47574b",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/2/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Strings with only one top-level block still change if their interior can be reordered."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/2/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "How do you check the maximality claim?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/2/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "The recursion relies on a structural argument; a brute-force oracle checks it directly."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/2/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/761/approach/stages/2/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/761",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with exhaustive search"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/761/approach/title",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/761",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+      }
+    ],
+    "status": "present",
+    "value": "Recursive decomposition into blocks, sorted descending"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/761/approach/tradeoffs",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/761",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/761.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "62878d2e7f25473352ed1e983a5fd55763f9394d23f5a309816172583181442a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/761.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "cf6ed83feb0d3929bf9ca1bebc0f522466317aa134817c7c7d3bb91304225037"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Searching over all reachable strings (BFS) is a correct oracle but exponential.",
+      "The recursion copies substrings, giving O(n^2) characters plus sorting; acceptable for n <= 50.",
+      "Plain descending string sort is safe for concatenation here because no primitive block is a proper prefix of another (a block's balance first returns to zero at its own end), so comparing blocks decides the order of their concatenations."
+    ]
+  },
+  "version": 1
+}

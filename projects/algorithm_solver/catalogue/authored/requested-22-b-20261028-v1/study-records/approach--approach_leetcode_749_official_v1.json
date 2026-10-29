@@ -1,0 +1,1104 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/749/approach/chooseWhen",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/749",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The rules describe a deterministic process with no cheaper closed form.",
+      "The grid is small (at most 2500 cells) so repeating a full flood fill per day is affordable.",
+      "Correctness hinges on following the rules exactly, including the cell-versus-wall distinction."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:749:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/contract--contract_leetcode_749_official_authored-v1.json",
+    "sha256": "776cddd30395e785258e9c99c3ef0a43a078e35f374d93ef213c13acd8bd6f43",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/749/approach/explanation",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/749",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+      }
+    ],
+    "status": "present",
+    "value": "Simulate the process literally. Work on a copy of the grid using 0 = healthy, 1 = active infection, 2 = walled. Each day, flood-fill every active region and record its cells, the set of distinct healthy cells it threatens and the number of walls (healthy neighbour sides). Pick the region with the largest threatened set, add its wall count to the answer and mark its cells 2. Every other region then turns its threatened cells to 1. Stop when there are no regions or the best region threatens nothing."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/749/approach/hints",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/749",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Follow the rules literally; the grid is small.",
+      "Each day you need, per region, its cells, its distinct threatened cells and its wall count.",
+      "Threat is a set of cells; walls are counted per adjacent side, with repeats.",
+      "Mark the chosen region with a third value so it never spreads or merges again, then spread every other region at once."
+    ]
+  },
+  "id": "approach:leetcode:749:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/749/approach/invariants",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/749",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "At the start of each day, value 1 marks exactly the cells of uncontained regions, and 2 marks contained cells.",
+      "The answer equals the walls built for all regions contained so far.",
+      "Each day the number of active regions or healthy cells strictly decreases, so the loop terminates within m*n days."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:749:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_749_official_approach-native_v1.json",
+    "sha256": "42b8b6c394d9fa33d8e8c7c1e79938b855742f94343b68ec40c30f6f422f3c38",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/749",
+      "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+    }
+  ],
+  "problemId": "leetcode:749",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/0/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "The choice of region uses distinct threatened cells; the cost uses adjacent sides. A healthy cell in a corner of an L-shaped region counts once for threat but twice for walls."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/0/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Use a set for one count and a counter for the other."
+        ]
+      },
+      "id": "approach:leetcode:749:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/0/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Draw the ring example and count threat and walls separately.",
+          "Write down what changes on the grid at the end of a day."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:749:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_749_official_approach-native_v1.json",
+        "sha256": "42b8b6c394d9fa33d8e8c7c1e79938b855742f94343b68ec40c30f6f422f3c38",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/0/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The grid evolves only through two operations: quarantine one region and spread the others."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/0/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "For one region, what is the difference between the cells it threatens and the walls it needs?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/0/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "Mixing the two counts is the most common bug in this problem."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/0/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/0/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "Separate the three per-region quantities"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:749:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_749_official_python_v1.json",
+          "sha256": "d5180b24a1ab514f5d6d8bc66cf483db6f4db2de9b607b78e625cb1f34a49c67",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:749:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_749_official_javascript_v1.json",
+          "sha256": "5cb8f5425dd82fddb548c78e266e29b7dc3a74c70541175f77c4159e98b15601",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/1/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "Copy the grid. Loop: reset a seen matrix; for every unseen cell with value 1, run an iterative DFS collecting cells, adding each healthy neighbour to a threatened set and incrementing walls for every healthy-neighbour side. If there are no regions or the best one threatens nothing, return the total. Otherwise add its walls, set its cells to 2, and set every other region's threatened cells to 1."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/1/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Spread uses the threatened sets computed before any changes that day.",
+          "Return as soon as nothing is threatened."
+        ]
+      },
+      "id": "approach:leetcode:749:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/1/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Copy the input rows so the caller's grid is not changed.",
+          "Use an explicit stack to avoid recursion depth limits on a 50x50 grid.",
+          "Select the region with the maximum threatened-set size.",
+          "Apply quarantine before spreading the remaining regions."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:749:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_749_official_approach-native_v1.json",
+        "sha256": "42b8b6c394d9fa33d8e8c7c1e79938b855742f94343b68ec40c30f6f422f3c38",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/1/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Value 2 cells are neither healthy nor active, so they block both spreading and connectivity.",
+          "JavaScript encodes a threatened cell as row*cols+col in a Set."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/1/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "How do you find all regions and their statistics each day, then apply the day's changes?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/1/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "Recomputing from scratch each day keeps the simulation faithful and simple."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/1/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5",
+          "R6"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/1/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "Simulate days with flood fill"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/2/explanation",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "Use a ring around one healthy cell (walls exceed threat), a grid with two regions over several days, a fully infected grid (answer 0) and a grid with no infection (answer 0). Avoid inputs with ties, which are outside the domain."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/2/hints",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Count each day's choice by hand for the third example."
+        ]
+      },
+      "id": "approach:leetcode:749:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/2/instructions",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the three examples.",
+          "Check that the input grid is unchanged after the call.",
+          "Compare against an edge-set simulation on random small grids without ties."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:749:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-records/artifact--artifact_leetcode_749_official_approach-native_v1.json",
+        "sha256": "42b8b6c394d9fa33d8e8c7c1e79938b855742f94343b68ec40c30f6f422f3c38",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/2/observations",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A grid already fully infected threatens nothing and costs nothing."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/2/question",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "Which grids check the cell/wall distinction, multiple days and termination?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/2/rationale",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "Small hand-checkable grids cover each rule; larger random ones can be compared with an independent simulation that stores wall edges explicitly."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/2/requirementIds",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R3",
+          "R4",
+          "R5",
+          "R6"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/749/approach/stages/2/title",
+            "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/749",
+            "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+          }
+        ],
+        "status": "present",
+        "value": "Test against hand simulations"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/749/approach/title",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/749",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+      }
+    ],
+    "status": "present",
+    "value": "Day-by-day simulation with a flood fill per region"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/749/approach/tradeoffs",
+        "sha256": "a0b6a8b261ffe14096a3a5195ba8ad88152648e59b04afe38d389de6715b2d5d"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/749",
+        "sha256": "d4006aae15330303c102443724e0d1c2658b1bc2a4f2dada5f86eb56f9c7f600"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/python/749.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a4cdd2a70c7d1cb22761b89634d7ed6dc14d9870f9649cbcfda44ea80b434c53"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-b-20261028-v1/javascript/749.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0474b9d7df50d6fe06406d0cd3705c1f49b9c04ac706b19391e5e15cdd868462"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Recomputing regions every day costs O(m*n) per day; incremental region maintenance is faster but much harder to get right.",
+      "Keeping threatened cells in a set is needed to count distinct cells, while walls are counted with repetition.",
+      "Marking walled cells with a third state avoids storing wall edges explicitly."
+    ]
+  },
+  "version": 1
+}
