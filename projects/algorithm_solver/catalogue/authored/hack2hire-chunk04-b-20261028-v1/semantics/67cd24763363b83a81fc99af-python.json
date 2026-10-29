@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67cd24763363b83a81fc99af",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "newPasswords",
+  "oldPasswords"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "checkSimilarity",
+  "params": [
+   {
+    "name": "newPasswords",
+    "type": "string[]"
+   },
+   {
+    "name": "oldPasswords",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "prefix DP over old positions for every character of new",
+  "candidate_design": "greedy two pointers: advance in old when new[i] or its successor equals the next old char",
+  "complexity_target": "O(total length) time/O(1) extra space"
+ },
+ "source_sha256": "bbdf02d51e970b60dcc12b2b9a1ba5436a2fdecad60d2f6dfd37e1c7be92a100",
+ "wrapper": "Solution.checkSimilarity"
+}

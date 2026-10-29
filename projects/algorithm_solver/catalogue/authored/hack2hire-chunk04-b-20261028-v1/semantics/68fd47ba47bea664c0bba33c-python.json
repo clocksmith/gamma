@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68fd47ba47bea664c0bba33c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "isCircularPrime",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "deterministic Miller-Rabin with bases 2, 3, 5, 7 on every rotation",
+  "candidate_design": "rotate with arithmetic; 6k+-1 trial division up to sqrt per rotation",
+  "complexity_target": "O(d * sqrt(n)) time/O(1) space"
+ },
+ "source_sha256": "c2b7c752457902f0bebae393e754ac1475dcac435f55affa6177a22555fac9be",
+ "wrapper": "Solution.isCircularPrime"
+}

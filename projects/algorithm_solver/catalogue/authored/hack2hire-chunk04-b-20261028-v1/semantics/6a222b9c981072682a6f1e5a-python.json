@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a222b9c981072682a6f1e5a",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "logs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "buildTransitionGraph",
+  "params": [
+   {
+    "name": "logs",
+    "type": "list<[string,string,string]>"
+   }
+  ],
+  "return": {
+   "type": "list<[string,string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "group by user, sort, count with a dictionary",
+  "candidate_design": "hash map user->entries, sort each user by integer timestamp, hash map of edge counts, final sort",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "4fe782d195946a2825dcdbc91c5ab6b001f3b4c9a2cf413f6c49eba9e3c69d87",
+ "wrapper": "Solution.buildTransitionGraph"
+}

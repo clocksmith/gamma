@@ -1,0 +1,1085 @@
+{
+ "schema": "gamma.hack2hire-chunk04-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-28",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:67955715010c9ed2f849b1f7": {
+   "constraints": [
+    "0 <= arr.length <= 1e5",
+    "-1e9 <= arr[i], target <= 1e9",
+    "arr sorted non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "When the target is absent and the floor value repeats, which index is wanted?",
+    "What should be returned if every element is larger than target?",
+    "Can the array be empty?"
+   ],
+   "hints": [
+    "Both answers are determined by the first index whose value is >= target.",
+    "Maintain a half-open range [lo, hi) and move lo past values smaller than target.",
+    "At the end lo is the lower bound: return lo if arr[lo]==target, otherwise lo-1."
+   ],
+   "invariants": [
+    "every index < lo holds a value < target",
+    "every index >= hi holds a value >= target"
+   ],
+   "chooseWhen": [
+    "The array is sorted and many lookups or large inputs make O(n) scans too slow"
+   ],
+   "tradeoffs": [
+    "Binary search needs random access; a linear scan is simpler for tiny arrays"
+   ],
+   "variantLabel": "Inferred: first occurrence, else floor index",
+   "examples": [
+    {
+     "input": [
+      [],
+      0
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       0,
+       3
+      ],
+      7
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68f012a4742c37be9dc830dd": {
+   "constraints": [
+    "0 <= s.length <= 1e5",
+    "s contains only 'A'-'Z' and 'a'-'z'",
+    "at most 52 leaves, so depth <= 51"
+   ],
+   "clarifyingQuestions": [
+    "Is any valid tree accepted, or a specific shape?",
+    "How are equal counts ordered?",
+    "What is returned for an empty string?"
+   ],
+   "hints": [
+    "The leaf counts are just character frequencies.",
+    "Every merge creates a parent whose count is the sum of two nodes; merging the two smallest gives a Huffman tree.",
+    "Key a min-heap by (count, creation id) so ties break the same way in every language."
+   ],
+   "invariants": [
+    "each pool entry is the root of a valid subtree",
+    "creation ids are unique and increasing"
+   ],
+   "chooseWhen": [
+    "A deterministic frequency tree is needed, for example as a prefix-code tree"
+   ],
+   "tradeoffs": [
+    "A heap costs O(log d) per merge; with d <= 52 even repeated sorting is cheap"
+   ],
+   "variantLabel": "Inferred: Huffman-style merge tree with deterministic ties",
+   "examples": [
+    {
+     "input": [
+      ""
+     ],
+     "output": null,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "a"
+     ],
+     "output": {
+      "ch": "a",
+      "count": 1,
+      "left": null,
+      "right": null
+     },
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a222b9c981072682a6f1e5a": {
+   "constraints": [
+    "0 <= logs.length <= 1e5",
+    "timestamps are decimal strings without leading zeros, below 2**53",
+    "resource names are not 'START' or 'END'"
+   ],
+   "clarifyingQuestions": [
+    "Should the result be a nested map or a list of edges?",
+    "Are timestamps compared numerically or as strings?",
+    "Does a user with one entry produce START->r and r->END?"
+   ],
+   "hints": [
+    "Each user contributes an independent path.",
+    "Sort each user path by numeric timestamp, not by string.",
+    "Add virtual START and END around every path and count adjacent pairs in a map keyed by (from, to)."
+   ],
+   "invariants": [
+    "every user contributes exactly len(path)+1 transitions",
+    "edge counts only increase"
+   ],
+   "chooseWhen": [
+    "Logs are unordered and grouped per user"
+   ],
+   "tradeoffs": [
+    "Sorting per user costs O(n log n); bucketed timestamps would need a bounded range"
+   ],
+   "variantLabel": "Inferred: transition counts as sorted triples",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "5",
+        "u1",
+        "/a"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "/a",
+       "END",
+       1
+      ],
+      [
+       "START",
+       "/a",
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67c7604e6c89e288437c3024": {
+   "constraints": [
+    "0 <= orders.length <= 1e5",
+    "0 <= stock[i], order[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are orders processed in input order?",
+    "Is a partly satisfiable order skipped entirely?",
+    "Should the answer be a count or per-order flags?"
+   ],
+   "hints": [
+    "Each order only depends on the stock left by earlier orders.",
+    "Check all three types before deducting anything.",
+    "Keep three counters; deduct only when all three checks pass."
+   ],
+   "invariants": [
+    "remaining stock is never negative"
+   ],
+   "chooseWhen": [
+    "Orders must be served in arrival order"
+   ],
+   "tradeoffs": [
+    "Greedy arrival order does not maximise the number of fulfilled orders"
+   ],
+   "variantLabel": "Inferred: per-order all-or-nothing fulfilment flags",
+   "examples": [
+    {
+     "input": [
+      [
+       0,
+       0,
+       0
+      ],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       4,
+       7,
+       6
+      ],
+      [
+       [
+        0,
+        1,
+        2
+       ]
+      ]
+     ],
+     "output": [
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68811ae3f96758aa78e1d687": {
+   "constraints": [
+    "up to 20000 assignments, each with at most 8 terms",
+    "literals 0..999999, variable names 1-10 characters starting with a letter",
+    "every value stays within 1e15 in magnitude"
+   ],
+   "clarifyingQuestions": [
+    "Which operators may appear in an expression?",
+    "Can an assignment reference a variable defined later in the array?",
+    "What if a variable is undefined or defined in terms of itself?"
+   ],
+   "hints": [
+    "Treat the assignments as a dependency graph.",
+    "Evaluate a variable only after all variables it references.",
+    "Use an explicit stack for the DFS: chains can be 20000 deep."
+   ],
+   "invariants": [
+    "a memoised value never changes",
+    "a variable is evaluated once"
+   ],
+   "chooseWhen": [
+    "Only one target value is needed from many assignments"
+   ],
+   "tradeoffs": [
+    "DFS evaluates only what the target needs; topological order evaluates everything"
+   ],
+   "variantLabel": "Inferred level 1: sums of literals and variables",
+   "examples": [
+    {
+     "input": [
+      [
+       "x",
+       "x = 5"
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "v0",
+       "v0 = 0 + 7"
+      ]
+     ],
+     "output": 7,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68811dddf96758aa78e1d688": {
+   "constraints": [
+    "up to 20000 assignments, each with at most 8 terms",
+    "literals 0..999999, variable names 1-10 characters starting with a letter",
+    "every value stays within 1e15 in magnitude"
+   ],
+   "clarifyingQuestions": [
+    "Which operators may appear in an expression?",
+    "Can an assignment reference a variable defined later in the array?",
+    "What if a variable is undefined or defined in terms of itself?"
+   ],
+   "hints": [
+    "Store each operand with its sign.",
+    "Left-to-right + and - equals summing signed operands.",
+    "Reuse the iterative memoised DFS from level 1."
+   ],
+   "invariants": [
+    "a memoised value never changes",
+    "partial sums stay below 2**53"
+   ],
+   "chooseWhen": [
+    "Expressions mix addition and subtraction only"
+   ],
+   "tradeoffs": [
+    "No precedence handling is needed; multiplication would require a real parser"
+   ],
+   "variantLabel": "Inferred level 2: addition and subtraction",
+   "examples": [
+    {
+     "input": [
+      [
+       "x",
+       "x = 5"
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "v0",
+       "v0 = 1"
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68813e86f96758aa78e1d69b": {
+   "constraints": [
+    "up to 20000 assignments, each with at most 8 terms",
+    "literals 0..999999, variable names 1-10 characters starting with a letter",
+    "every value stays within 1e15 in magnitude"
+   ],
+   "clarifyingQuestions": [
+    "Which operators may appear in an expression?",
+    "Can an assignment reference a variable defined later in the array?",
+    "What if a variable is undefined or defined in terms of itself?",
+    "Is a cycle that the target does not use an error?"
+   ],
+   "hints": [
+    "A failure anywhere below the target makes the target fail.",
+    "Colour nodes white/grey/black; meeting a grey node means a cycle.",
+    "Record failure as a memoised state so shared subgraphs are not re-explored."
+   ],
+   "invariants": [
+    "grey nodes are exactly the current DFS path",
+    "black nodes have a final value or a final failure"
+   ],
+   "chooseWhen": [
+    "Inputs may be malformed and must be rejected without crashing"
+   ],
+   "tradeoffs": [
+    "Three-colour DFS detects cycles in one pass; fixed-point iteration is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred level 3: detect undefined and cyclic references",
+   "examples": [
+    {
+     "input": [
+      [
+       "x"
+      ]
+     ],
+     "output": null,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "x",
+       "x = 5"
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6796f907b10bc587828f27b2": {
+   "constraints": [
+    "0 <= arr.length <= 1e5",
+    "1 <= arr[i] <= 1e4",
+    "the result stays below 2**53"
+   ],
+   "clarifyingQuestions": [
+    "Is waiting time measured from time 0 until completion minus own work?",
+    "Do all tasks arrive at time 0?",
+    "Is the answer a total or a per-task list?"
+   ],
+   "hints": [
+    "Simulation is too slow when hours are large: count instead.",
+    "Before task i starts its last hour, every task j has run min(a_j, a_i - 1) hours.",
+    "In the last round, task i also waits for earlier tasks with a_j >= a_i; count them with a Fenwick tree."
+   ],
+   "invariants": [
+    "Fenwick prefix sums equal counts of already-seen tasks by value rank"
+   ],
+   "chooseWhen": [
+    "Many tasks with large hour counts"
+   ],
+   "tradeoffs": [
+    "O(n log n) with sorting; the literal simulation is O(sum of hours)"
+   ],
+   "variantLabel": "Inferred: total round-robin waiting time",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       2,
+       2
+      ]
+     ],
+     "output": 3,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:690cf5190a0bc710235894b8": {
+   "constraints": [
+    "0 <= elevators.length <= 1e5",
+    "floors 0..999999999 as decimal strings",
+    "states up/down/idle; directions up/down"
+   ],
+   "clarifyingQuestions": [
+    "May a moving elevator take a call in the opposite direction?",
+    "Is an elevator at the passenger floor eligible?",
+    "How are ties broken?"
+   ],
+   "hints": [
+    "Decide eligibility independently for each elevator.",
+    "A moving elevator only helps if it has not passed the passenger yet in the call direction.",
+    "Track the smallest distance, updating only on strict improvement so the lowest index wins ties."
+   ],
+   "invariants": [
+    "best holds the lowest-index eligible elevator with minimal distance so far"
+   ],
+   "chooseWhen": [
+    "One request against a snapshot of elevator states"
+   ],
+   "tradeoffs": [
+    "Per-request scan is O(n); many requests would call for indexing by floor"
+   ],
+   "variantLabel": "Inferred: nearest eligible elevator index",
+   "examples": [
+    {
+     "input": [
+      [],
+      [
+       "0",
+       "up"
+      ]
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "1",
+        "up"
+       ],
+       [
+        "5",
+        "up"
+       ]
+      ],
+      [
+       "6",
+       "up"
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a579fe2665efda9311f9375": {
+   "constraints": [
+    "1 <= m <= 1e9",
+    "timestamps 0..1e9, non-decreasing across all calls",
+    "per-user event timestamps strictly increasing",
+    "up to 30000 calls"
+   ],
+   "clarifyingQuestions": [
+    "Are query timestamps non-decreasing too?",
+    "Can different users record at the same second?",
+    "What does a query for an unknown user or chat return?"
+   ],
+   "hints": [
+    "Only the last m seconds matter for any future query.",
+    "Because time never goes back, expired events can be dropped forever.",
+    "Keep a queue per user and pop its front while it is older than timestamp-m+1."
+   ],
+   "invariants": [
+    "each user queue is sorted and contains only events that may still count"
+   ],
+   "chooseWhen": [
+    "Long-running counters with monotone time"
+   ],
+   "tradeoffs": [
+    "Queues store each event once; bucketed counters would bound memory by m"
+   ],
+   "variantLabel": "Inferred level 1: per-user trailing-window counts",
+   "examples": [
+    {
+     "input": [
+      [
+       "ChatEventAggregator"
+      ],
+      [
+       [
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ChatEventAggregator",
+       "getUserCount"
+      ],
+      [
+       [
+        2
+       ],
+       [
+        5,
+        "zz"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a579fe4665efda9311f9376": {
+   "constraints": [
+    "1 <= m <= 1e9",
+    "timestamps 0..1e9, non-decreasing across all calls",
+    "per-user event timestamps strictly increasing",
+    "up to 30000 calls"
+   ],
+   "clarifyingQuestions": [
+    "Are query timestamps non-decreasing too?",
+    "Can different users record at the same second?",
+    "What does a query for an unknown user or chat return?",
+    "Do chat counts include every user?"
+   ],
+   "hints": [
+    "A chat is just another key with its own queue.",
+    "Chat queues may hold equal timestamps from different users.",
+    "Evict with the same rule as user queues."
+   ],
+   "invariants": [
+    "each queue is non-decreasing and holds only possibly-counting events"
+   ],
+   "chooseWhen": [
+    "Several independent rolling counts over one event stream"
+   ],
+   "tradeoffs": [
+    "Two queues double memory; a single event log would need per-key scans"
+   ],
+   "variantLabel": "Inferred level 2: per-chat trailing-window counts",
+   "examples": [
+    {
+     "input": [
+      [
+       "ChatEventAggregator"
+      ],
+      [
+       [
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ChatEventAggregator",
+       "getUserCount"
+      ],
+      [
+       [
+        2
+       ],
+       [
+        4,
+        "bo"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a579fe5665efda9311f9377": {
+   "constraints": [
+    "1 <= m <= 1e9",
+    "timestamps 0..1e9, non-decreasing across all calls",
+    "per-user event timestamps strictly increasing",
+    "up to 30000 calls"
+   ],
+   "clarifyingQuestions": [
+    "Are query timestamps non-decreasing too?",
+    "Can different users record at the same second?",
+    "What does a query for an unknown user or chat return?",
+    "Is a user with several events in the window counted once?"
+   ],
+   "hints": [
+    "Distinct counting needs multiplicities, not just a set.",
+    "When an event leaves the window decrement its user; delete at zero.",
+    "The answer is the size of the multiplicity map after eviction."
+   ],
+   "invariants": [
+    "map size equals the number of distinct users with events in the chat queue"
+   ],
+   "chooseWhen": [
+    "Distinct counts over sliding windows"
+   ],
+   "tradeoffs": [
+    "Exact multiplicity maps use O(window) memory; sketches would be approximate"
+   ],
+   "variantLabel": "Inferred level 3: distinct active users per chat",
+   "examples": [
+    {
+     "input": [
+      [
+       "ChatEventAggregator"
+      ],
+      [
+       [
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ChatEventAggregator",
+       "getUserCount"
+      ],
+      [
+       [
+        2
+       ],
+       [
+        4,
+        "bo"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67cd24763363b83a81fc99af": {
+   "constraints": [
+    "up to 1e4 pairs",
+    "lowercase strings of length 1..1e5",
+    "total length <= 4e5"
+   ],
+   "clarifyingQuestions": [
+    "Is the input a single pair or a batch?",
+    "Does z wrap to a?",
+    "Can each character be incremented at most once?"
+   ],
+   "hints": [
+    "Each character of new can stand for itself or its successor.",
+    "Matching the next old character as early as possible never hurts.",
+    "Walk new once with a pointer into old."
+   ],
+   "invariants": [
+    "old[:j] is matched within the scanned prefix of new"
+   ],
+   "chooseWhen": [
+    "Subsequence checks with per-character alternatives"
+   ],
+   "tradeoffs": [
+    "Greedy is linear; the DP is quadratic but checks the greedy argument"
+   ],
+   "variantLabel": "Inferred: batch YES/NO subsequence-with-increment check",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "a"
+      ],
+      [
+       "a"
+      ]
+     ],
+     "output": [
+      "YES"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68fd47ba47bea664c0bba33c": {
+   "constraints": [
+    "1 <= n <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is 1 prime?",
+    "How are rotations with a leading zero read?",
+    "What is the bound on n?"
+   ],
+   "hints": [
+    "A number with any even digit or 5 (beyond one digit) cannot qualify; not required but a quick filter.",
+    "Rotate by moving the top digit: r = (r mod 10^(d-1)) * 10 + leading digit.",
+    "Trial division up to sqrt(r) is fast enough for r < 1e9."
+   ],
+   "invariants": [
+    "each rotation is tested exactly once"
+   ],
+   "chooseWhen": [
+    "Single numbers below about 1e12"
+   ],
+   "tradeoffs": [
+    "Trial division is simple; Miller-Rabin is faster for large n"
+   ],
+   "variantLabel": "Inferred: single circular-prime test",
+   "examples": [
+    {
+     "input": [
+      1
+     ],
+     "output": false,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      2
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1f2f7c8b879849ebc10f9a": {
+   "constraints": [
+    "1 <= totalSlots <= 2000",
+    "up to 2000 requests",
+    "1 <= numberOfSlots <= totalSlots, 0 <= startIndex < totalSlots"
+   ],
+   "clarifyingQuestions": [
+    "What does the second request type look like and return?",
+    "May a block wrap past the last slot?",
+    "Is the scan order startIndex, startIndex+1, ...?"
+   ],
+   "hints": [
+    "A block may wrap around the end.",
+    "Scan offsets from startIndex while counting consecutive free slots.",
+    "When the run reaches numberOfSlots, the block starts numberOfSlots-1 offsets back."
+   ],
+   "invariants": [
+    "run = number of consecutive free slots ending at the current offset, counted from startIndex"
+   ],
+   "chooseWhen": [
+    "Small circular buffers with first-fit placement"
+   ],
+   "tradeoffs": [
+    "Linear scans are simple; interval trees would help for huge slot counts"
+   ],
+   "variantLabel": "Inferred: circular first-fit store and range free",
+   "examples": [
+    {
+     "input": [
+      1,
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      3,
+      [
+       [
+        "store",
+        "1",
+        "2"
+       ]
+      ]
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a4ffdfb665efda9311f57f2": {
+   "constraints": [
+    "1 <= n <= 700",
+    "0 <= energy[i] <= 1e4, 0 <= coins[i] <= 1e9",
+    "0 <= initialEnergy <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "How much energy does moving to the next house cost?",
+    "Does house 0 also cost energy?",
+    "Can Alex stop before the last house?"
+   ],
+   "hints": [
+    "Energy above the number of remaining moves is useless, so cap it.",
+    "State = energy after the choice at house i; value = best coins.",
+    "Transition both choices, then pay 1 energy to move; the answer is the best value at any house."
+   ],
+   "invariants": [
+    "dp[e] is the best coin total with exactly e (capped) energy at the current house"
+   ],
+   "chooseWhen": [
+    "Small n with large energies"
+   ],
+   "tradeoffs": [
+    "O(n^2) DP; enumeration is exponential"
+   ],
+   "variantLabel": "Inferred: maximise coins with 1 energy per move",
+   "examples": [
+    {
+     "input": [
+      0,
+      [
+       5
+      ],
+      [
+       7
+      ]
+     ],
+     "output": 7,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      3,
+      [
+       1
+      ],
+      [
+       3
+      ]
+     ],
+     "output": 3,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68d833b5ae12841706c1fc58": {
+   "constraints": [
+    "1 <= n <= 1e7",
+    "every trajectory value stays below 2**53"
+   ],
+   "clarifyingQuestions": [
+    "Is the step count or the sequence wanted?",
+    "Are there many queries (memoisation)?",
+    "What is the bound on n?"
+   ],
+   "hints": [
+    "Count transitions, not visited values.",
+    "Trajectory values can exceed n by far; check they stay exact.",
+    "For many queries, memoise steps of values below a limit."
+   ],
+   "invariants": [
+    "steps counts applied transitions"
+   ],
+   "chooseWhen": [
+    "Single queries"
+   ],
+   "tradeoffs": [
+    "A memo table speeds repeated queries at memory cost"
+   ],
+   "variantLabel": "Inferred: Collatz step count for one n",
+   "examples": [
+    {
+     "input": [
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      2
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6818d209aa9eb23a3dba07f0": {
+   "constraints": [
+    "1 <= n, k <= 1e9",
+    "0 <= colours < k",
+    "answer modulo 1000000007"
+   ],
+   "clarifyingQuestions": [
+    "Is the answer taken modulo a prime?",
+    "What if n = 1 and the colours differ?",
+    "Can k be 1?"
+   ],
+   "hints": [
+    "Only whether the current house has the last colour matters.",
+    "Two-state recurrence: A' = B, B' = (k-1)A + (k-2)B.",
+    "Solving it gives a closed form with (k-1)^(n-1) and (-1)^(n-1), divided by k."
+   ],
+   "invariants": [
+    "A_i + B_i = (k-1)^(i-1)"
+   ],
+   "chooseWhen": [
+    "Huge n where linear DP is too slow"
+   ],
+   "tradeoffs": [
+    "Closed form needs a modular inverse; matrix power avoids division"
+   ],
+   "variantLabel": "Inferred: fixed-endpoint proper colourings mod 1e9+7",
+   "examples": [
+    {
+     "input": [
+      1,
+      1,
+      0,
+      0
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      2,
+      2,
+      0,
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69753e2817272b5c868d5eb3": {
+   "constraints": [
+    "up to 1000 servers with unique ids",
+    "up to 1e5 requests",
+    "times 0..86399 seconds"
+   ],
+   "clarifyingQuestions": [
+    "What exactly are the three stress categories?",
+    "Are requests sorted by time?",
+    "What happens to requests for unknown servers?"
+   ],
+   "hints": [
+    "Volume and intensity are per-request constants.",
+    "Burst only depends on the same server's request times.",
+    "Sort each server's times; a request bursts if its predecessor is within 60 s or an equal time follows it."
+   ],
+   "invariants": [
+    "each request contributes exactly once to exactly one server"
+   ],
+   "chooseWhen": [
+    "Per-key scoring with a time-window rule"
+   ],
+   "tradeoffs": [
+    "Sorting per server is O(n log n); bucketing by second would be O(n + 86400)"
+   ],
+   "variantLabel": "Inferred: three-part load score per server",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "s1",
+        0
+       ]
+      ],
+      []
+     ],
+     "output": [
+      [
+       "s1",
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69e8f141fbaf3da641828530": {
+   "constraints": [
+    "up to 1e4 listings",
+    "descriptions are printable ASCII, at most 500 characters",
+    "numBedrooms values are 0 or 1"
+   ],
+   "clarifyingQuestions": [
+    "Which phrases indicate each type?",
+    "What if both or neither appear?",
+    "Should the corrected array or the number of corrections be returned?"
+   ],
+   "hints": [
+    "Normalise case and split into words first.",
+    "'1-bedroom' becomes the words '1' and 'bedroom'.",
+    "Check single words and adjacent word pairs, then apply the exactly-one rule."
+   ],
+   "invariants": [
+    "the result has the same length as the input"
+   ],
+   "chooseWhen": [
+    "Rule-based text normalisation"
+   ],
+   "tradeoffs": [
+    "Keyword rules are brittle; a classifier would need training data"
+   ],
+   "variantLabel": "Inferred: keyword-based studio/1-bedroom correction",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "1-"
+      ],
+      [
+       1
+      ]
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

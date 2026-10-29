@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68813e86f96758aa78e1d69b",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "calculate",
+  "params": [
+   {
+    "name": "arr",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer|null"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "fixed-point passes evaluating every assignment whose operands are known (Kahn order for large inputs)",
+  "candidate_design": "iterative three-colour DFS from the target; a grey hit or missing name marks failure and propagates",
+  "complexity_target": "O(total terms) time/O(variables) space"
+ },
+ "source_sha256": "b5c5cc0eb7aa7a821bea42ff28bb42b4e45d828097e822a0f8997eea09b6579b",
+ "wrapper": "Solution.calculate"
+}

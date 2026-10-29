@@ -1,0 +1,98 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6a579fe4665efda9311f9376",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "ChatEventAggregator",
+  "constructor": {
+   "params": [
+    {
+     "name": "m",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "recordEvent",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "userId",
+      "type": "string"
+     },
+     {
+      "name": "chatId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getUserCount",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "userId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "getChatCount",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "chatId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep every event and count matches by a full scan per query",
+  "candidate_design": "per-user and per-chat timestamp queues with front eviction",
+  "complexity_target": "amortised O(1) per call; O(events inside the window) memory"
+ },
+ "source_sha256": "1f40eb8b358a09268edbbb47418fca7ea7cb46720df11ed162fad4ef45ab9a9a",
+ "native_class": "ChatEventAggregator",
+ "native_symbol": "module global ChatEventAggregator",
+ "void_methods": [
+  "recordEvent"
+ ]
+}

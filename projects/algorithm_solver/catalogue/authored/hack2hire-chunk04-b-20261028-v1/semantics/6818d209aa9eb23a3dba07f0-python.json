@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6818d209aa9eb23a3dba07f0",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "k",
+  "firstHouseColor",
+  "lastHouseColor"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "countWays",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   },
+   {
+    "name": "firstHouseColor",
+    "type": "integer"
+   },
+   {
+    "name": "lastHouseColor",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "2x2 matrix power over (ends in last colour, ends elsewhere) states, checked against exhaustive enumeration",
+  "candidate_design": "closed form ((k-1)^(n-1) + (k-1)(-1)^(n-1))/k (same colours) or ((k-1)^(n-1) - (-1)^(n-1))/k, with modular inverse; BigInt in JavaScript",
+  "complexity_target": "O(log n) time/O(1) space"
+ },
+ "source_sha256": "2e523956f98b7073f9503dbf95f5048959b0892c21983cfce23772a626a69f58",
+ "wrapper": "Solution.countWays"
+}

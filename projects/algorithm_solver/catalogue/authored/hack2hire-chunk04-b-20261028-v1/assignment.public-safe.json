@@ -1,0 +1,1054 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk04-b (16 Hack2Hire groups, 20 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:67955715010c9ed2f849b1f7",
+   "title": "Binary Search Variation",
+   "variant_ordinal": 1,
+   "group_post_id": "6795546b010c9ed2f849b1f6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "binarySearch",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      },
+      {
+       "name": "target",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "linear scans for the first equal index and the last smaller index",
+    "candidate_design": "one lower-bound binary search; return it if arr[lb]==target else lb-1",
+    "complexity_target": "O(log n) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a3422110af08e694e8717d038394eea6cafbb5b455261711f8074cc7f46458db",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68f012a4742c37be9dc830dd",
+   "title": "Build Binary Tree From Character Counts",
+   "variant_ordinal": 1,
+   "group_post_id": "68f0129c742c37be9dc830dc",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "buildTree",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "node|null (node = {ch, count, left, right})"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "re-sort the whole pool by (count, creation id) before every merge",
+    "candidate_design": "count characters, then a binary min-heap keyed by (count, creation id); merge two at a time",
+    "complexity_target": "O(n + d log d) time/O(d) space, d <= 52 distinct characters"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3c3a238e19aa6b0cb669d6d458baa37a614ba147da00bca21cc629a329b32752",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a222b9c981072682a6f1e5a",
+   "title": "Build Transition Graph",
+   "variant_ordinal": 1,
+   "group_post_id": "6a221ee6981072682a6f1e06",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "buildTransitionGraph",
+     "params": [
+      {
+       "name": "logs",
+       "type": "list<[string,string,string]>"
+      }
+     ],
+     "return": {
+      "type": "list<[string,string,integer]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "group by user, sort, count with a dictionary",
+    "candidate_design": "hash map user->entries, sort each user by integer timestamp, hash map of edge counts, final sort",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "09a7a06cd5719d498836f7bfcc320ddece96de3fb66ad339075ae6f8a67140be",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67c7604e6c89e288437c3024",
+   "title": "Cake Order Fulfillment Check",
+   "variant_ordinal": 1,
+   "group_post_id": "67c75ead6c89e288437c301f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "checkOrders",
+     "params": [
+      {
+       "name": "stock",
+       "type": "integer[3]"
+      },
+      {
+       "name": "orders",
+       "type": "list<integer[3]>"
+      }
+     ],
+     "return": {
+      "type": "boolean[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "copy stock and test each order literally",
+    "candidate_design": "single pass with three running counters",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "29fe1f546fbc25aa80c17304c959f9bf0bcf352a4544e1ba8a274747be505868",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68811ae3f96758aa78e1d687",
+   "title": "Calculate Equation Expression",
+   "variant_ordinal": 1,
+   "group_post_id": "68811adbf96758aa78e1d686",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "calculate",
+     "params": [
+      {
+       "name": "arr",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "fixed-point passes evaluating every assignment whose operands are known (Kahn order for large inputs)",
+    "candidate_design": "parse into name->terms; iterative post-order DFS from the target with memoised values",
+    "complexity_target": "O(total terms) time/O(variables) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "aeb7d76505a681f285c7b28384b4627882b404c47be3d92291e6f95b6694d615",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68811dddf96758aa78e1d688",
+   "title": "Calculate Equation Expression",
+   "variant_ordinal": 2,
+   "group_post_id": "68811adbf96758aa78e1d686",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "calculate",
+     "params": [
+      {
+       "name": "arr",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "fixed-point passes evaluating every assignment whose operands are known (Kahn order for large inputs)",
+    "candidate_design": "parse into name->signed terms; iterative post-order DFS from the target with memoised values",
+    "complexity_target": "O(total terms) time/O(variables) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "aeb7d76505a681f285c7b28384b4627882b404c47be3d92291e6f95b6694d615",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68813e86f96758aa78e1d69b",
+   "title": "Calculate Equation Expression",
+   "variant_ordinal": 3,
+   "group_post_id": "68811adbf96758aa78e1d686",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "calculate",
+     "params": [
+      {
+       "name": "arr",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer|null"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "fixed-point passes evaluating every assignment whose operands are known (Kahn order for large inputs)",
+    "candidate_design": "iterative three-colour DFS from the target; a grey hit or missing name marks failure and propagates",
+    "complexity_target": "O(total terms) time/O(variables) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "aeb7d76505a681f285c7b28384b4627882b404c47be3d92291e6f95b6694d615",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6796f907b10bc587828f27b2",
+   "title": "Calculate Total Waiting Time",
+   "variant_ordinal": 1,
+   "group_post_id": "6796f78bb10bc587828f27b1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "totalWaitingTime",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "literal queue simulation hour by hour",
+    "candidate_design": "completion of task i = sum_j min(a_j, a_i - 1) + #{j <= i : a_j >= a_i}; sorted prefix sums plus a Fenwick tree over value ranks",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6b907c81fda99d4cf989bd4b6ac2035f572a633e57f5646468ee51f5068f58e0",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:690cf5190a0bc710235894b8",
+   "title": "Call Elevator",
+   "variant_ordinal": 1,
+   "group_post_id": "690cf50e0a0bc710235894b7",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "callElevator",
+     "params": [
+      {
+       "name": "elevators",
+       "type": "list<[string,string]>"
+      },
+      {
+       "name": "request",
+       "type": "[string,string]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan every elevator with the eligibility predicate",
+    "candidate_design": "single scan keeping the best (distance, index)",
+    "complexity_target": "O(n) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "29bb5611de9a4821a777eafafba9aec3c411ed3560d647d61092a3ec0e21c324",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a579fe2665efda9311f9375",
+   "title": "Chat Message Events Aggregation",
+   "variant_ordinal": 1,
+   "group_post_id": "6a579fda665efda9311f9374",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "ChatEventAggregator",
+     "constructor": {
+      "params": [
+       {
+        "name": "m",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "recordEvent",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        },
+        {
+         "name": "chatId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getUserCount",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "ChatEventAggregator"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep every event and count matches by a full scan per query",
+    "candidate_design": "per-user queue of timestamps; evict entries below timestamp-m+1 before answering",
+    "complexity_target": "amortised O(1) per call; O(events inside the window) memory"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "1611e3c39de7838ca33368946eac31b0a5cdd8cc0d01e29c13afc675b27c852e",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a579fe4665efda9311f9376",
+   "title": "Chat Message Events Aggregation",
+   "variant_ordinal": 2,
+   "group_post_id": "6a579fda665efda9311f9374",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "ChatEventAggregator",
+     "constructor": {
+      "params": [
+       {
+        "name": "m",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "recordEvent",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        },
+        {
+         "name": "chatId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getUserCount",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getChatCount",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "chatId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "ChatEventAggregator"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep every event and count matches by a full scan per query",
+    "candidate_design": "per-user and per-chat timestamp queues with front eviction",
+    "complexity_target": "amortised O(1) per call; O(events inside the window) memory"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "1611e3c39de7838ca33368946eac31b0a5cdd8cc0d01e29c13afc675b27c852e",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a579fe5665efda9311f9377",
+   "title": "Chat Message Events Aggregation",
+   "variant_ordinal": 3,
+   "group_post_id": "6a579fda665efda9311f9374",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "ChatEventAggregator",
+     "constructor": {
+      "params": [
+       {
+        "name": "m",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "recordEvent",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        },
+        {
+         "name": "chatId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getUserCount",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "userId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getChatCount",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "chatId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getChatUserCount",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "chatId",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "ChatEventAggregator"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep every event and count matches by a full scan per query",
+    "candidate_design": "per-chat queue of (timestamp, user) plus a per-chat user->multiplicity map; evict and decrement",
+    "complexity_target": "amortised O(1) per call; O(events inside the window) memory"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "1611e3c39de7838ca33368946eac31b0a5cdd8cc0d01e29c13afc675b27c852e",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67cd24763363b83a81fc99af",
+   "title": "Check Password Similarity",
+   "variant_ordinal": 1,
+   "group_post_id": "67ccfab13363b83a81fc999e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "checkSimilarity",
+     "params": [
+      {
+       "name": "newPasswords",
+       "type": "string[]"
+      },
+      {
+       "name": "oldPasswords",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "prefix DP over old positions for every character of new",
+    "candidate_design": "greedy two pointers: advance in old when new[i] or its successor equals the next old char",
+    "complexity_target": "O(total length) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6c933d332ad48201776a564fb3e3c631379bd8ca91363c4c735873e56136ede4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68fd47ba47bea664c0bba33c",
+   "title": "Circular Prime Number Check",
+   "variant_ordinal": 1,
+   "group_post_id": "68fd473647bea664c0bba33b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "isCircularPrime",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "deterministic Miller-Rabin with bases 2, 3, 5, 7 on every rotation",
+    "candidate_design": "rotate with arithmetic; 6k+-1 trial division up to sqrt per rotation",
+    "complexity_target": "O(d * sqrt(n)) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "75029e04710c90a50d34ffadf17984ef8dd5d8884545c14dd0ae550a8ced2aa2",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a1f2f7c8b879849ebc10f9a",
+   "title": "Circular Storage Allocator",
+   "variant_ordinal": 1,
+   "group_post_id": "6a1f2f5a8b879849ebc10f99",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "processRequests",
+     "params": [
+      {
+       "name": "totalSlots",
+       "type": "integer"
+      },
+      {
+       "name": "requests",
+       "type": "list<[string,string,string]>"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "check every candidate position slot by slot",
+    "candidate_design": "boolean slot array; single scan with a running free-run length over offsets 0..T+k-2; free-count shortcut",
+    "complexity_target": "O(T + k) per store, O(k) per free"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "168e0d54ad18b743e51b43d29827b4c2e1ee8b7f4db18df53c5661559a902944",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a4ffdfb665efda9311f57f2",
+   "title": "Coins and Energy",
+   "variant_ordinal": 1,
+   "group_post_id": "6a4ffdd9665efda9311f57f1",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxCoins",
+     "params": [
+      {
+       "name": "initialEnergy",
+       "type": "integer"
+      },
+      {
+       "name": "energy",
+       "type": "integer[]"
+      },
+      {
+       "name": "coins",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "exhaustive enumeration of all choice vectors with simulation",
+    "candidate_design": "DP over (house, energy capped at n) with max coins; -1 marks unreachable",
+    "complexity_target": "O(n^2) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "7a19f9b5ff4434004a4e513c12e60183c5f2340d5628f45752f148ac78a92f43",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68d833b5ae12841706c1fc58",
+   "title": "Collatz Sequence Steps",
+   "variant_ordinal": 1,
+   "group_post_id": "68d833adae12841706c1fc57",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "collatzSteps",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "direct loop",
+    "candidate_design": "direct loop with exact integer halving; values stay below 2**53 for n <= 1e7",
+    "complexity_target": "O(steps) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "d509c576e25106031ecdc69319e469eaf0c03e4a475dd51b1806c1a75a4b84d1",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6818d209aa9eb23a3dba07f0",
+   "title": "Color a Row of Houses",
+   "variant_ordinal": 1,
+   "group_post_id": "6818cc0233adaac2299bc9f0",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countWays",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      },
+      {
+       "name": "firstHouseColor",
+       "type": "integer"
+      },
+      {
+       "name": "lastHouseColor",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "2x2 matrix power over (ends in last colour, ends elsewhere) states, checked against exhaustive enumeration",
+    "candidate_design": "closed form ((k-1)^(n-1) + (k-1)(-1)^(n-1))/k (same colours) or ((k-1)^(n-1) - (-1)^(n-1))/k, with modular inverse; BigInt in JavaScript",
+    "complexity_target": "O(log n) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "09cc977079c6bbacdfea9acbd60a67af424158384a6f7e4bca35b111f1652e29",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69753e2817272b5c868d5eb3",
+   "title": "Compute Server Load Scores",
+   "variant_ordinal": 1,
+   "group_post_id": "69753e1a17272b5c868d5eb2",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "computeLoadScores",
+     "params": [
+      {
+       "name": "servers",
+       "type": "list<[string,integer]>"
+      },
+      {
+       "name": "requests",
+       "type": "list<[integer,string,string]>"
+      }
+     ],
+     "return": {
+      "type": "list<[string,integer]>"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "per-server pairwise scan for the burst rule",
+    "candidate_design": "hash map server->times; sort times; burst if previous time within 60 s or next time equal",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "de9c64d1582d9f6325642b7bb8ab65a45b6b125a11f05379ea83c3ec441cf6a8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69e8f141fbaf3da641828530",
+   "title": "Correct Bedroom Counts from Descriptions",
+   "variant_ordinal": 1,
+   "group_post_id": "69e8f13bfbaf3da64182852f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "correctBedrooms",
+     "params": [
+      {
+       "name": "descriptions",
+       "type": "string[]"
+      },
+      {
+       "name": "numBedrooms",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "lookaround regular expressions on the lower-cased text",
+    "candidate_design": "manual tokenisation into alphanumeric words, then word and bigram checks",
+    "complexity_target": "O(total text) time/O(longest description) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "897ee8573a5adb500d85965ad2ef051f69928ae14c130ef0dafe1fd551de364b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

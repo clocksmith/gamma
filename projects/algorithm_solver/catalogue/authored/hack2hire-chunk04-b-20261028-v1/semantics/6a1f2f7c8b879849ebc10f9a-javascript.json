@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1f2f7c8b879849ebc10f9a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "totalSlots",
+  "requests"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "processRequests",
+  "params": [
+   {
+    "name": "totalSlots",
+    "type": "integer"
+   },
+   {
+    "name": "requests",
+    "type": "list<[string,string,string]>"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "check every candidate position slot by slot",
+  "candidate_design": "boolean slot array; single scan with a running free-run length over offsets 0..T+k-2; free-count shortcut",
+  "complexity_target": "O(T + k) per store, O(k) per free"
+ },
+ "source_sha256": "e5be88779bfabfb112c345c26bae960719ca5752035e23535444dd28119d8e66",
+ "wrapper": "named export processRequests"
+}

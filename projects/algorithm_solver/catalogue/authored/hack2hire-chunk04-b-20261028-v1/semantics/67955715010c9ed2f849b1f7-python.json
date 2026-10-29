@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67955715010c9ed2f849b1f7",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr",
+  "target"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "binarySearch",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   },
+   {
+    "name": "target",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "linear scans for the first equal index and the last smaller index",
+  "candidate_design": "one lower-bound binary search; return it if arr[lb]==target else lb-1",
+  "complexity_target": "O(log n) time/O(1) space"
+ },
+ "source_sha256": "d3a1648d1551ba2b719b717e88120343816d30ef66a75d989b284599c144df4b",
+ "wrapper": "Solution.binarySearch"
+}

@@ -1,0 +1,1347 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:67955715010c9ed2f849b1f7",
+   "variant_id": "67955715010c9ed2f849b1f7",
+   "variant_ordinal": 1,
+   "title": "Binary Search Variation",
+   "source": {
+    "post_id": "6795546b010c9ed2f849b1f6",
+    "group_title": "Binary Search Variation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6795546b010c9ed2f849b1f6",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6795546b010c9ed2f849b1f6/practice?questionId=67955715010c9ed2f849b1f7",
+    "preview_response_sha256": "a3422110af08e694e8717d038394eea6cafbb5b455261711f8074cc7f46458db",
+    "preview_content_sha256": "35ff35234ef5546977d2a40030e64c332d09c56bdcd56873ee3822b83444f070",
+    "preview_characters": 300,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6795546b010c9ed2f849b1f6.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: first-occurrence and floor rules",
+    "algorithmTags: BINARY_SEARCH"
+   ],
+   "inferred_spec": "arr is sorted non-decreasing and may contain duplicates. If target occurs, return the index of its first occurrence. Otherwise return the index of the closest element below target, taken as the last index whose value is less than target (inference for duplicates of that value); return -1 when every element exceeds target or arr is empty.",
+   "inference_uncertainty": "medium: both rules are visible in the preview; which duplicate index to return in the absent case and the -1 sentinel are inferred",
+   "inferred_interface": {
+    "name": "binarySearch",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     },
+     {
+      "name": "target",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "BSV"
+  },
+  {
+   "uid": "hack2hire:68f012a4742c37be9dc830dd",
+   "variant_id": "68f012a4742c37be9dc830dd",
+   "variant_ordinal": 1,
+   "title": "Build Binary Tree From Character Counts",
+   "source": {
+    "post_id": "68f0129c742c37be9dc830dc",
+    "group_title": "Build Binary Tree From Character Counts",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f0129c742c37be9dc830dc",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f0129c742c37be9dc830dc/practice?questionId=68f012a4742c37be9dc830dd",
+    "preview_response_sha256": "3c3a238e19aa6b0cb669d6d458baa37a614ba147da00bca21cc629a329b32752",
+    "preview_content_sha256": "c44e05e5a13a4499092dcc502cf1d1a8e5f28482df7978206d5a34d079987aec",
+    "preview_characters": 622,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f0129c742c37be9dc830dc.json",
+    "algorithm_tags": [
+     "BINARY_TREE"
+    ],
+    "companies": [
+     "GOOGLE",
+     "SQUARE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: leaf and internal-node rules",
+    "title",
+    "algorithmTags: BINARY_TREE"
+   ],
+   "inferred_spec": "s contains only ASCII letters. Build a tree whose leaves are the distinct characters (node {ch, count, left: null, right: null}) and whose internal nodes have ch '#' and count equal to the sum of their two children. The construction is inferred to be Huffman-style: start with the leaves ordered by character code, repeatedly merge the two lowest-count nodes (ties broken by creation order, leaves first by character code, merged nodes numbered afterwards in creation order), the first removed becoming the left child. Return the root, or null for an empty string.",
+   "inference_uncertainty": "high: the preview lists leaf and internal-node invariants but stops before any shape rule; the merge order, tie-break and node encoding are inferred so that the output is unique",
+   "inferred_interface": {
+    "name": "buildTree",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "node|null (node = {ch, count, left, right})"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "BTC"
+  },
+  {
+   "uid": "hack2hire:6a222b9c981072682a6f1e5a",
+   "variant_id": "6a222b9c981072682a6f1e5a",
+   "variant_ordinal": 1,
+   "title": "Build Transition Graph",
+   "source": {
+    "post_id": "6a221ee6981072682a6f1e06",
+    "group_title": "Build Transition Graph",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a221ee6981072682a6f1e06",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a221ee6981072682a6f1e06/practice?questionId=6a222b9c981072682a6f1e5a",
+    "preview_response_sha256": "09a7a06cd5719d498836f7bfcc320ddece96de3fb66ad339075ae6f8a67140be",
+    "preview_content_sha256": "89cdfe2be584ae709c3d4e566af8da638657535350e98922e38a49df0dfe880c",
+    "preview_characters": 629,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a221ee6981072682a6f1e06.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "ATLASSIAN",
+     "WHATNOT"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: log shape, START/END transitions, accumulation",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "logs are unordered [timestamp, userId, resource] string triples; timestamps are decimal integer strings, distinct per user. For each user, sort their entries by numeric timestamp to get a path r1..rN and count the transitions START->r1, r_i->r_{i+1} and rN->END. Counts accumulate across users. Return [from, to, count] rows sorted by from then to in plain string (code-point) order (inferred output shape).",
+   "inference_uncertainty": "medium: the transition rules are in the preview; the output shape, ordering and numeric timestamp format are inferred",
+   "inferred_interface": {
+    "name": "buildTransitionGraph",
+    "params": [
+     {
+      "name": "logs",
+      "type": "list<[string,string,string]>"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string,integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "TRANS"
+  },
+  {
+   "uid": "hack2hire:67c7604e6c89e288437c3024",
+   "variant_id": "67c7604e6c89e288437c3024",
+   "variant_ordinal": 1,
+   "title": "Cake Order Fulfillment Check",
+   "source": {
+    "post_id": "67c75ead6c89e288437c301f",
+    "group_title": "Cake Order Fulfillment Check",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67c75ead6c89e288437c301f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67c75ead6c89e288437c301f/practice?questionId=67c7604e6c89e288437c3024",
+    "preview_response_sha256": "29fe1f546fbc25aa80c17304c959f9bf0bcf352a4544e1ba8a274747be505868",
+    "preview_content_sha256": "a8a0101decf4ed67fa61d8cceb2ad4a433a75177de9078459103b9f167d738ef",
+    "preview_characters": 303,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67c75ead6c89e288437c301f.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "AMAZON",
+     "GOOGLE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stock of three cake types, all-or-nothing orders",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "stock holds three non-negative counts. Process orders in the given order: an order [a, b, c] is fulfilled only if every requested count fits the remaining stock, in which case all three are deducted; otherwise nothing is deducted. Return one boolean per order (inferred output).",
+   "inference_uncertainty": "medium: the all-or-nothing rule is in the preview; processing in input order and the per-order boolean output are inferred (a count of fulfilled orders is an alternative)",
+   "inferred_interface": {
+    "name": "checkOrders",
+    "params": [
+     {
+      "name": "stock",
+      "type": "integer[3]"
+     },
+     {
+      "name": "orders",
+      "type": "list<integer[3]>"
+     }
+    ],
+    "return": {
+     "type": "boolean[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CAKE"
+  },
+  {
+   "uid": "hack2hire:68811ae3f96758aa78e1d687",
+   "variant_id": "68811ae3f96758aa78e1d687",
+   "variant_ordinal": 1,
+   "title": "Calculate Equation Expression",
+   "source": {
+    "post_id": "68811adbf96758aa78e1d686",
+    "group_title": "Calculate Equation Expression",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68811adbf96758aa78e1d686",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68811adbf96758aa78e1d686/practice?questionId=68811ae3f96758aa78e1d687",
+    "preview_response_sha256": "aeb7d76505a681f285c7b28384b4627882b404c47be3d92291e6f95b6694d615",
+    "preview_content_sha256": "94f767959241a9fa71f2c763afbb032f4899dbf9d1af1458e9b0ca8dabc850ba",
+    "preview_characters": 245,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68811adbf96758aa78e1d686.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "INSTACART"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: arr[0] is the target; other entries are variable = expression",
+    "algorithmTags: DEPTH_FIRST_SEARCH",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "arr[0] names the target variable; every other entry is 'name = expression' with single spaces between tokens. Level 1: an expression is one or more operands joined by ' + ', each operand a non-negative integer literal or a variable name. Assignments may appear in any order; every variable is assigned at most once, every referenced variable is assigned and there are no cycles. Return the integer value of the target.",
+   "inference_uncertainty": "high: the preview shows only the array layout; the expression grammar and the level split are inferred",
+   "inferred_interface": {
+    "name": "calculate",
+    "params": [
+     {
+      "name": "arr",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-3 (addition; addition and subtraction; undefined or cyclic references)",
+   "oracle_constant": "EQ1"
+  },
+  {
+   "uid": "hack2hire:68811dddf96758aa78e1d688",
+   "variant_id": "68811dddf96758aa78e1d688",
+   "variant_ordinal": 2,
+   "title": "Calculate Equation Expression",
+   "source": {
+    "post_id": "68811adbf96758aa78e1d686",
+    "group_title": "Calculate Equation Expression",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68811adbf96758aa78e1d686",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68811adbf96758aa78e1d686/practice?questionId=68811dddf96758aa78e1d688",
+    "preview_response_sha256": "aeb7d76505a681f285c7b28384b4627882b404c47be3d92291e6f95b6694d615",
+    "preview_content_sha256": "94f767959241a9fa71f2c763afbb032f4899dbf9d1af1458e9b0ca8dabc850ba",
+    "preview_characters": 245,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68811adbf96758aa78e1d686.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "INSTACART"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: arr[0] is the target; other entries are variable = expression",
+    "algorithmTags: DEPTH_FIRST_SEARCH",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "As level 1, but operators may be ' + ' or ' - ', applied left to right. Values may become negative. Every referenced variable is assigned and there are no cycles. Return the integer value of the target.",
+   "inference_uncertainty": "high: as level 1; subtraction as the level-2 extension is inferred",
+   "inferred_interface": {
+    "name": "calculate",
+    "params": [
+     {
+      "name": "arr",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-3 (addition; addition and subtraction; undefined or cyclic references)",
+   "oracle_constant": "EQ2"
+  },
+  {
+   "uid": "hack2hire:68813e86f96758aa78e1d69b",
+   "variant_id": "68813e86f96758aa78e1d69b",
+   "variant_ordinal": 3,
+   "title": "Calculate Equation Expression",
+   "source": {
+    "post_id": "68811adbf96758aa78e1d686",
+    "group_title": "Calculate Equation Expression",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68811adbf96758aa78e1d686",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68811adbf96758aa78e1d686/practice?questionId=68813e86f96758aa78e1d69b",
+    "preview_response_sha256": "aeb7d76505a681f285c7b28384b4627882b404c47be3d92291e6f95b6694d615",
+    "preview_content_sha256": "94f767959241a9fa71f2c763afbb032f4899dbf9d1af1458e9b0ca8dabc850ba",
+    "preview_characters": 245,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68811adbf96758aa78e1d686.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "INSTACART"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: arr[0] is the target; other entries are variable = expression",
+    "algorithmTags: DEPTH_FIRST_SEARCH",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "As level 2, but a referenced variable may be unassigned and assignments may form cycles. Return null when evaluating the target needs an unassigned variable or a variable on a cycle (including an unassigned target); otherwise return its integer value. Cycles that the target does not depend on are ignored.",
+   "inference_uncertainty": "very high: undefined/cyclic handling as the level-3 extension and the null result are inferred",
+   "inferred_interface": {
+    "name": "calculate",
+    "params": [
+     {
+      "name": "arr",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer|null"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-3 (addition; addition and subtraction; undefined or cyclic references)",
+   "oracle_constant": "EQ3"
+  },
+  {
+   "uid": "hack2hire:6796f907b10bc587828f27b2",
+   "variant_id": "6796f907b10bc587828f27b2",
+   "variant_ordinal": 1,
+   "title": "Calculate Total Waiting Time",
+   "source": {
+    "post_id": "6796f78bb10bc587828f27b1",
+    "group_title": "Calculate Total Waiting Time",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6796f78bb10bc587828f27b1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6796f78bb10bc587828f27b1/practice?questionId=6796f907b10bc587828f27b2",
+    "preview_response_sha256": "6b907c81fda99d4cf989bd4b6ac2035f572a633e57f5646468ee51f5068f58e0",
+    "preview_content_sha256": "fc2aaabd3cbb87c414f7b36ca6c646bcdc98af359f4c0b992286e392f1318df0",
+    "preview_characters": 490,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6796f78bb10bc587828f27b1.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: round-robin, one hour per cycle",
+    "title",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "arr[i] is the number of hours task i needs; all tasks are ready at time 0 and are served round-robin in index order, one hour per turn, with unfinished tasks re-queued. A task waits (completion time - arr[i]) hours. Return the total waiting time over all tasks (inferred definition).",
+   "inference_uncertainty": "medium-high: the scheduling rule is in the preview; the definition of waiting time and the single total are inferred",
+   "inferred_interface": {
+    "name": "totalWaitingTime",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "WAIT"
+  },
+  {
+   "uid": "hack2hire:690cf5190a0bc710235894b8",
+   "variant_id": "690cf5190a0bc710235894b8",
+   "variant_ordinal": 1,
+   "title": "Call Elevator",
+   "source": {
+    "post_id": "690cf50e0a0bc710235894b7",
+    "group_title": "Call Elevator",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/690cf50e0a0bc710235894b7",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/690cf50e0a0bc710235894b7/practice?questionId=690cf5190a0bc710235894b8",
+    "preview_response_sha256": "29bb5611de9a4821a777eafafba9aec3c411ed3560d647d61092a3ec0e21c324",
+    "preview_content_sha256": "d0e740e42a4a0fa193b13d01dca6e1ed559a8b99b8a7e696b049047a74b7d0df",
+    "preview_characters": 649,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/690cf50e0a0bc710235894b7.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: elevator and request shapes, idle rule",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "Each elevator is [floor, state] with floor a decimal string and state up/down/idle; the request is [floor, direction]. Eligible: an idle elevator; an elevator moving up at or below the passenger floor for an up call; an elevator moving down at or above the passenger floor for a down call (inferred). Return the index of the eligible elevator closest to the passenger floor, the lowest index on ties, or -1 if none.",
+   "inference_uncertainty": "high: only the idle rule is visible; the moving-elevator rules, nearest choice, tie-break and index result are inferred",
+   "inferred_interface": {
+    "name": "callElevator",
+    "params": [
+     {
+      "name": "elevators",
+      "type": "list<[string,string]>"
+     },
+     {
+      "name": "request",
+      "type": "[string,string]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "ELEV"
+  },
+  {
+   "uid": "hack2hire:6a579fe2665efda9311f9375",
+   "variant_id": "6a579fe2665efda9311f9375",
+   "variant_ordinal": 1,
+   "title": "Chat Message Events Aggregation",
+   "source": {
+    "post_id": "6a579fda665efda9311f9374",
+    "group_title": "Chat Message Events Aggregation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a579fda665efda9311f9374",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a579fda665efda9311f9374/practice?questionId=6a579fe2665efda9311f9375",
+    "preview_response_sha256": "1611e3c39de7838ca33368946eac31b0a5cdd8cc0d01e29c13afc675b27c852e",
+    "preview_content_sha256": "fe09c9388daf5026d09dc6d77c7b4a0937db5f26c01d43682e1bd5bfea44c475",
+    "preview_characters": 932,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a579fda665efda9311f9374.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: class name, constructor ChatEventAggregator(m), inclusive trailing window, per-user strictly increasing timestamps, memory efficiency",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions (variant count/order)",
+    "source-cited LeetCode 362 relationship"
+   ],
+   "inferred_spec": "ChatEventAggregator(m) with m >= 1. recordEvent(timestamp, userId, chatId) stores one event. getUserCount(timestamp, userId) returns the number of that user's events with time in [timestamp - m + 1, timestamp]. All calls have non-decreasing timestamps (inference) and each user's events strictly increase in time. History outside every future window may be discarded.",
+   "inference_uncertainty": "medium: the class, constructor, window and ordering are in the preview; method names, argument order and the global non-decreasing call order are inferred",
+   "inferred_interface": {
+    "classname": "ChatEventAggregator",
+    "constructor": {
+     "params": [
+      {
+       "name": "m",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "recordEvent",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "chatId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "getUserCount",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-3 (per-user counts; per-chat counts; distinct users per chat)",
+   "oracle_constant": "CHAT1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6a579fe4665efda9311f9376",
+   "variant_id": "6a579fe4665efda9311f9376",
+   "variant_ordinal": 2,
+   "title": "Chat Message Events Aggregation",
+   "source": {
+    "post_id": "6a579fda665efda9311f9374",
+    "group_title": "Chat Message Events Aggregation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a579fda665efda9311f9374",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a579fda665efda9311f9374/practice?questionId=6a579fe4665efda9311f9376",
+    "preview_response_sha256": "1611e3c39de7838ca33368946eac31b0a5cdd8cc0d01e29c13afc675b27c852e",
+    "preview_content_sha256": "fe09c9388daf5026d09dc6d77c7b4a0937db5f26c01d43682e1bd5bfea44c475",
+    "preview_characters": 932,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a579fda665efda9311f9374.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: class name, constructor ChatEventAggregator(m), inclusive trailing window, per-user strictly increasing timestamps, memory efficiency",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions (variant count/order)",
+    "source-cited LeetCode 362 relationship"
+   ],
+   "inferred_spec": "As level 1, plus getChatCount(timestamp, chatId): the number of events in that chat (from any user) with time in [timestamp - m + 1, timestamp]. Several users may record in the same chat at the same second.",
+   "inference_uncertainty": "high: as level 1; the per-chat query as the level-2 extension is inferred",
+   "inferred_interface": {
+    "classname": "ChatEventAggregator",
+    "constructor": {
+     "params": [
+      {
+       "name": "m",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "recordEvent",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "chatId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "getUserCount",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getChatCount",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "chatId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-3 (per-user counts; per-chat counts; distinct users per chat)",
+   "oracle_constant": "CHAT2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6a579fe5665efda9311f9377",
+   "variant_id": "6a579fe5665efda9311f9377",
+   "variant_ordinal": 3,
+   "title": "Chat Message Events Aggregation",
+   "source": {
+    "post_id": "6a579fda665efda9311f9374",
+    "group_title": "Chat Message Events Aggregation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a579fda665efda9311f9374",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a579fda665efda9311f9374/practice?questionId=6a579fe5665efda9311f9377",
+    "preview_response_sha256": "1611e3c39de7838ca33368946eac31b0a5cdd8cc0d01e29c13afc675b27c852e",
+    "preview_content_sha256": "fe09c9388daf5026d09dc6d77c7b4a0937db5f26c01d43682e1bd5bfea44c475",
+    "preview_characters": 932,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a579fda665efda9311f9374.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: class name, constructor ChatEventAggregator(m), inclusive trailing window, per-user strictly increasing timestamps, memory efficiency",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions (variant count/order)",
+    "source-cited LeetCode 362 relationship"
+   ],
+   "inferred_spec": "As level 2, plus getChatUserCount(timestamp, chatId): the number of distinct users with at least one event in that chat with time in [timestamp - m + 1, timestamp].",
+   "inference_uncertainty": "very high: as level 2; the distinct-user query as the level-3 extension is inferred",
+   "inferred_interface": {
+    "classname": "ChatEventAggregator",
+    "constructor": {
+     "params": [
+      {
+       "name": "m",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "recordEvent",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "chatId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "getUserCount",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getChatCount",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "chatId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getChatUserCount",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "chatId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-3 (per-user counts; per-chat counts; distinct users per chat)",
+   "oracle_constant": "CHAT3",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:67cd24763363b83a81fc99af",
+   "variant_id": "67cd24763363b83a81fc99af",
+   "variant_ordinal": 1,
+   "title": "Check Password Similarity",
+   "source": {
+    "post_id": "67ccfab13363b83a81fc999e",
+    "group_title": "Check Password Similarity",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ccfab13363b83a81fc999e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67ccfab13363b83a81fc999e/practice?questionId=67cd24763363b83a81fc99af",
+    "preview_response_sha256": "6c933d332ad48201776a564fb3e3c631379bd8ca91363c4c735873e56136ede4",
+    "preview_content_sha256": "785627fcd3d70b4c7b4a67350017a9ec088257c583d8bd6a9b1bdeb564eda5be",
+    "preview_characters": 367,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67ccfab13363b83a81fc999e.json",
+    "algorithm_tags": [
+     "TWO_POINTER"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: subsequence after next-cyclic-character changes",
+    "algorithmTags: TWO_POINTER"
+   ],
+   "inferred_spec": "For each pair (newPasswords[i], oldPasswords[i]) of lowercase strings: the pair is similar if old is a subsequence of new after changing any subset of new's characters to their next cyclic letter ('z' -> 'a'). Return 'YES' or 'NO' per pair (inferred batch shape).",
+   "inference_uncertainty": "medium: the similarity rule is in the preview; the paired-list interface and YES/NO strings are inferred",
+   "inferred_interface": {
+    "name": "checkSimilarity",
+    "params": [
+     {
+      "name": "newPasswords",
+      "type": "string[]"
+     },
+     {
+      "name": "oldPasswords",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PWD"
+  },
+  {
+   "uid": "hack2hire:68fd47ba47bea664c0bba33c",
+   "variant_id": "68fd47ba47bea664c0bba33c",
+   "variant_ordinal": 1,
+   "title": "Circular Prime Number Check",
+   "source": {
+    "post_id": "68fd473647bea664c0bba33b",
+    "group_title": "Circular Prime Number Check",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fd473647bea664c0bba33b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fd473647bea664c0bba33b/practice?questionId=68fd47ba47bea664c0bba33c",
+    "preview_response_sha256": "75029e04710c90a50d34ffadf17984ef8dd5d8884545c14dd0ae550a8ced2aa2",
+    "preview_content_sha256": "a58c3a071b36d0e927bbf2a83a5dc959e2a3bbc74ff48de6b40fa9f781af39fb",
+    "preview_characters": 307,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68fd473647bea664c0bba33b.json",
+    "algorithm_tags": [
+     "MATH"
+    ],
+    "companies": [
+     "ORACLE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: rotation definition",
+    "algorithmTags: MATH"
+   ],
+   "inferred_spec": "Given a positive integer n, return true iff every cyclic rotation of its decimal digits (moving the leading digit to the end, as many times as there are digits) is prime. Rotations are read as integers.",
+   "inference_uncertainty": "low: the definition is in the preview; only the bound n <= 1e9 is inferred",
+   "inferred_interface": {
+    "name": "isCircularPrime",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CPRIME"
+  },
+  {
+   "uid": "hack2hire:6a1f2f7c8b879849ebc10f9a",
+   "variant_id": "6a1f2f7c8b879849ebc10f9a",
+   "variant_ordinal": 1,
+   "title": "Circular Storage Allocator",
+   "source": {
+    "post_id": "6a1f2f5a8b879849ebc10f99",
+    "group_title": "Circular Storage Allocator",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1f2f5a8b879849ebc10f99",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1f2f5a8b879849ebc10f99/practice?questionId=6a1f2f7c8b879849ebc10f9a",
+    "preview_response_sha256": "168e0d54ad18b743e51b43d29827b4c2e1ee8b7f4db18df53c5661559a902944",
+    "preview_content_sha256": "3b6a05095aa6e4f18e9985079e6501706ecf9f1d1825fc44299aa7ef4ca08076",
+    "preview_characters": 992,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1f2f5a8b879849ebc10f99.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "SIMULATION"
+    ],
+    "companies": [
+     "EBAY"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: circular slots, store request rule",
+    "algorithmTags: ARRAY, SIMULATION",
+    "source-cited LeetCode 2502 relationship"
+   ],
+   "inferred_spec": "totalSlots slots in a circle start empty. requests are [type, startIndex, numberOfSlots] strings. store: from startIndex scan candidate positions circularly; the first position p whose numberOfSlots consecutive circular slots are all free is used and p returned; -1 if none of the totalSlots positions works. free (inferred second type): mark the numberOfSlots circular slots starting at startIndex free and return how many of them were in use.",
+   "inference_uncertainty": "medium-high: the store rule is in the preview; the second request type (name, arguments and result) is inferred from the LeetCode 2502 relationship",
+   "inferred_interface": {
+    "name": "processRequests",
+    "params": [
+     {
+      "name": "totalSlots",
+      "type": "integer"
+     },
+     {
+      "name": "requests",
+      "type": "list<[string,string,string]>"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "ALLOC"
+  },
+  {
+   "uid": "hack2hire:6a4ffdfb665efda9311f57f2",
+   "variant_id": "6a4ffdfb665efda9311f57f2",
+   "variant_ordinal": 1,
+   "title": "Coins and Energy",
+   "source": {
+    "post_id": "6a4ffdd9665efda9311f57f1",
+    "group_title": "Coins and Energy",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a4ffdd9665efda9311f57f1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a4ffdd9665efda9311f57f1/practice?questionId=6a4ffdfb665efda9311f57f2",
+    "preview_response_sha256": "7a19f9b5ff4434004a4e513c12e60183c5f2340d5628f45752f148ac78a92f43",
+    "preview_content_sha256": "5646f946525c97cc4e21f2b1d7db55046253d9e0193f577c1403f94644933ade",
+    "preview_characters": 408,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a4ffdd9665efda9311f57f1.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "POINT72"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: houses in a line, energy or coins per house, may stop",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "Alex starts at house 0 with initialEnergy and visits houses in order, choosing at each visited house either energy[i] (added to energy) or coins[i] (added to coins). Moving to the next house costs 1 energy and needs at least 1 energy (inferred cost rule). Alex may stop at any house. Return the maximum total coins.",
+   "inference_uncertainty": "high: the choice rule is in the preview; the movement cost (1 energy per move) is inferred because the preview stops before it",
+   "inferred_interface": {
+    "name": "maxCoins",
+    "params": [
+     {
+      "name": "initialEnergy",
+      "type": "integer"
+     },
+     {
+      "name": "energy",
+      "type": "integer[]"
+     },
+     {
+      "name": "coins",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "COINS"
+  },
+  {
+   "uid": "hack2hire:68d833b5ae12841706c1fc58",
+   "variant_id": "68d833b5ae12841706c1fc58",
+   "variant_ordinal": 1,
+   "title": "Collatz Sequence Steps",
+   "source": {
+    "post_id": "68d833adae12841706c1fc57",
+    "group_title": "Collatz Sequence Steps",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d833adae12841706c1fc57",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d833adae12841706c1fc57/practice?questionId=68d833b5ae12841706c1fc58",
+    "preview_response_sha256": "d509c576e25106031ecdc69319e469eaf0c03e4a475dd51b1806c1a75a4b84d1",
+    "preview_content_sha256": "1b00d16be98711aa1d4e5e15c1148ea4f3fa1fa65e8bbb6112480ddfa23865d8",
+    "preview_characters": 260,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68d833adae12841706c1fc57.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "MEMOIZATION"
+    ],
+    "companies": [
+     "AIRBNB",
+     "BLOOMBERG"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: Collatz rules",
+    "algorithmTags: DYNAMIC_PROGRAMMING, MEMOIZATION"
+   ],
+   "inferred_spec": "Given a positive integer n, apply n -> n/2 when even and n -> 3n+1 when odd until n is 1, and return the number of steps (0 for n = 1).",
+   "inference_uncertainty": "medium: the rules are in the preview; returning the step count for a single n is inferred (the memoisation tag hints at a multi-query follow-up)",
+   "inferred_interface": {
+    "name": "collatzSteps",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "COLLATZ"
+  },
+  {
+   "uid": "hack2hire:6818d209aa9eb23a3dba07f0",
+   "variant_id": "6818d209aa9eb23a3dba07f0",
+   "variant_ordinal": 1,
+   "title": "Color a Row of Houses",
+   "source": {
+    "post_id": "6818cc0233adaac2299bc9f0",
+    "group_title": "Color a Row of Houses",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6818cc0233adaac2299bc9f0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6818cc0233adaac2299bc9f0/practice?questionId=6818d209aa9eb23a3dba07f0",
+    "preview_response_sha256": "09cc977079c6bbacdfea9acbd60a67af424158384a6f7e4bca35b111f1652e29",
+    "preview_content_sha256": "8f745dc886a865d0fab16b5d103c343fdeea5445182f48909270d3009f696141",
+    "preview_characters": 416,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6818cc0233adaac2299bc9f0.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "GOOGLE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: n houses, k colours, adjacent differ, fixed first/last colours",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "Count colourings of n houses in a row with colours 0..k-1 where adjacent houses differ, house 1 has firstHouseColor and house n has lastHouseColor (for n = 1 they must match). Return the count modulo 1000000007 (inferred modulus).",
+   "inference_uncertainty": "medium: the rules are in the preview; the modulus and bounds are inferred",
+   "inferred_interface": {
+    "name": "countWays",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     },
+     {
+      "name": "firstHouseColor",
+      "type": "integer"
+     },
+     {
+      "name": "lastHouseColor",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "HOUSES"
+  },
+  {
+   "uid": "hack2hire:69753e2817272b5c868d5eb3",
+   "variant_id": "69753e2817272b5c868d5eb3",
+   "variant_ordinal": 1,
+   "title": "Compute Server Load Scores",
+   "source": {
+    "post_id": "69753e1a17272b5c868d5eb2",
+    "group_title": "Compute Server Load Scores",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69753e1a17272b5c868d5eb2",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69753e1a17272b5c868d5eb2/practice?questionId=69753e2817272b5c868d5eb3",
+    "preview_response_sha256": "de9c64d1582d9f6325642b7bb8ab65a45b6b125a11f05379ea83c3ec441cf6a8",
+    "preview_content_sha256": "fe58eeaf89699a2389710f17e3da7f9ff97a48a469676f3c5f323917acdbcaba",
+    "preview_characters": 566,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69753e1a17272b5c868d5eb2.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: servers with base loads, requests with a load rule, three independent stress categories",
+    "title",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "servers are [serverId, baseLoad]; requests are [timeSeconds (0..86399), serverId, rule] with rule LIGHT, STANDARD or HEAVY. Each request to a known server adds three independent components (all inferred): volume +1; intensity +0/+2/+5 for LIGHT/STANDARD/HEAVY; burst +3 when another request to the same server has a time in [t-60, t]. Requests for unknown servers are ignored. Return [serverId, score] in server input order.",
+   "inference_uncertainty": "very high: the preview names three stress categories but none of their rules; every category, constant and the request shape are the author's invention for a testable contract",
+   "inferred_interface": {
+    "name": "computeLoadScores",
+    "params": [
+     {
+      "name": "servers",
+      "type": "list<[string,integer]>"
+     },
+     {
+      "name": "requests",
+      "type": "list<[integer,string,string]>"
+     }
+    ],
+    "return": {
+     "type": "list<[string,integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LOAD"
+  },
+  {
+   "uid": "hack2hire:69e8f141fbaf3da641828530",
+   "variant_id": "69e8f141fbaf3da641828530",
+   "variant_ordinal": 1,
+   "title": "Correct Bedroom Counts from Descriptions",
+   "source": {
+    "post_id": "69e8f13bfbaf3da64182852f",
+    "group_title": "Correct Bedroom Counts from Descriptions",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e8f13bfbaf3da64182852f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e8f13bfbaf3da64182852f/practice?questionId=69e8f141fbaf3da641828530",
+    "preview_response_sha256": "897ee8573a5adb500d85965ad2ef051f69928ae14c130ef0dafe1fd551de364b",
+    "preview_content_sha256": "9b7ad3273581f15bcab23b81c620f14598ca91fc507e0d1b7b401a9df8373261",
+    "preview_characters": 438,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69e8f13bfbaf3da64182852f.json",
+    "algorithm_tags": [
+     "STRING",
+     "SIMULATION"
+    ],
+    "companies": [
+     "RAMP"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: studio/1-bedroom listings, correct counts from descriptions",
+    "algorithmTags: STRING, SIMULATION"
+   ],
+   "inferred_spec": "Words are maximal runs of ASCII letters and digits, compared case-insensitively. A description indicates a studio if it has the word 'studio'; it indicates one bedroom if it has the word '1br' or '1bd', or the word '1' or 'one' immediately followed by the word 'bedroom'. If exactly one kind is indicated, the corrected count is 0 (studio) or 1; otherwise the recorded count is kept. Return the corrected array (all keyword rules inferred).",
+   "inference_uncertainty": "very high: the preview gives the task but not the keyword rules or the output; the keyword set, word definition and conflict rule are inferred",
+   "inferred_interface": {
+    "name": "correctBedrooms",
+    "params": [
+     {
+      "name": "descriptions",
+      "type": "string[]"
+     },
+     {
+      "name": "numBedrooms",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "BED"
+  }
+ ]
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67c7604e6c89e288437c3024",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "stock",
+  "orders"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "checkOrders",
+  "params": [
+   {
+    "name": "stock",
+    "type": "integer[3]"
+   },
+   {
+    "name": "orders",
+    "type": "list<integer[3]>"
+   }
+  ],
+  "return": {
+   "type": "boolean[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "copy stock and test each order literally",
+  "candidate_design": "single pass with three running counters",
+  "complexity_target": "O(n) time/O(1) extra space"
+ },
+ "source_sha256": "bd64ad59287b4bb51d11657b13b7485eb53974dccb0b20bfbf21b190354a1580",
+ "wrapper": "named export checkOrders"
+}
