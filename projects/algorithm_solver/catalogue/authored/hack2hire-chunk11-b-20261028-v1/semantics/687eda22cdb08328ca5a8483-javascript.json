@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:687eda22cdb08328ca5a8483",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "routes",
+  "queries"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "routeLookup",
+  "params": [
+   {
+    "name": "routes",
+    "type": "string[][]"
+   },
+   {
+    "name": "queries",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every query scan all routes, comparing the first k characters of 32-character binary strings and keeping the longest (later on ties)",
+  "candidate_design": "one hash map per prefix length from the masked network number to the next hop (later entries overwrite); a query probes the present lengths from longest to shortest",
+  "complexity_target": "O(R + Q * L) time for L distinct lengths (<= 33)/O(R) space"
+ },
+ "source_sha256": "a25d4071e8a793136a67a679a599ff80475ac3fad97e708300c4f5ade8d794b5",
+ "wrapper": "named export routeLookup"
+}

@@ -1,0 +1,62 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:678dc780fa7ce9616e190fb7",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "FilterIterator",
+  "constructor": {
+   "params": [
+    {
+     "name": "nums",
+     "type": "integer[]"
+    },
+    {
+     "name": "filterName",
+     "type": "string"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "hasNext",
+    "params": [],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "next",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "materialise the filtered list eagerly in the constructor and walk it with an index",
+  "candidate_design": "lazy cursor: hasNext advances an index past rejected elements and caches the position of the next selected one; next returns it and moves on",
+  "complexity_target": "O(1) amortised per call/O(1) extra space"
+ },
+ "source_sha256": "ce2ce449e24ef9d2ad29a994ec4d5111cab98321a57eacff0d8a41d7eb1c0cad",
+ "native_class": "FilterIterator",
+ "native_symbol": "module global FilterIterator",
+ "void_methods": []
+}

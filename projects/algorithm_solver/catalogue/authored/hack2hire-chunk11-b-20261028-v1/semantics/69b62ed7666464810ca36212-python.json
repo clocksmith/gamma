@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69b62ed7666464810ca36212",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "points"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "largestRectangleArea",
+  "params": [
+   {
+    "name": "points",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every point p and every two other points q and r with (q - p) perpendicular to (r - p), check whether q + r - p is a point",
+  "candidate_design": "group all point pairs by (midpoint sum, squared length): two diagonals in the same group form a rectangle, scored as the absolute cross product of the sides from one corner",
+  "complexity_target": "O(n^2 + sum over groups of size^2) time/O(n^2) space"
+ },
+ "source_sha256": "56767c761b8d50dd8e90f5847acedf97ef92644729995dec8615a56b8adb10b5",
+ "wrapper": "Solution.largestRectangleArea"
+}

@@ -1,0 +1,1334 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:68e6bf5c605ab8e954684812",
+   "variant_id": "68e6bf5c605ab8e954684812",
+   "variant_ordinal": 1,
+   "title": "Friendship and Balance Tracker",
+   "source": {
+    "post_id": "68e6bf53605ab8e954684811",
+    "group_title": "Friendship and Balance Tracker",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68e6bf53605ab8e954684811",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68e6bf53605ab8e954684811/practice?questionId=68e6bf5c605ab8e954684812",
+    "preview_response_sha256": "b43d5ae68ec939dce07b86b9daf4e77be2d96f255fd44687becff60415c86c84",
+    "preview_content_sha256": "de67c2522438a83aa7b073b8e184842785bcc43eb964d9315ed2601b7afc4f01",
+    "preview_characters": 742,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68e6bf53605ab8e954684811.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: requests are [sequenceNumber, requestString] pairs; request strings v1/REGISTER/{user}/{initialBalance} and v1/FRIEND_REQUEST/{fromUser}/{toUser} (a pending request stored under its sequence number); further request types and the output format are cut off",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "requests is a list of [sequenceNumber, requestString] pairs with unique sequence numbers. Process them in order and return one response string per request. \"v1/REGISTER/{user}/{initialBalance}\" registers user with that balance and answers \"OK\", or \"ERROR\" when user already exists. \"v1/FRIEND_REQUEST/{fromUser}/{toUser}\" answers \"ERROR\" when either user is unregistered, the users are equal or already friends; otherwise it stores a pending request under this request's sequence number and answers \"OK\". \"v1/ACCEPT_FRIEND_REQUEST/{requestSequenceNumber}\" answers \"OK\" and makes the two users of that request friends when the number names a still-pending friend request (the request is then no longer pending, and accepting it when the users are already friends through another request is still \"OK\"); otherwise \"ERROR\". \"v1/TRANSFER/{fromUser}/{toUser}/{amount}\" moves amount from fromUser to toUser and answers \"OK\" when both are registered, distinct, friends, and fromUser's balance is at least amount; otherwise \"ERROR\" with no change. \"v1/BALANCE/{user}\" answers the user's balance in decimal, or \"ERROR\" when unregistered.",
+   "inference_uncertainty": "very high: the request pair shape, REGISTER and pending FRIEND_REQUEST keyed by sequence number are in the preview; the accept, transfer and balance request formats, the friendship requirement for transfers, the \"OK\"/\"ERROR\" response strings and all failure rules are inferred",
+   "inferred_interface": {
+    "name": "processRequests",
+    "params": [
+     {
+      "name": "requests",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FBT"
+  },
+  {
+   "uid": "hack2hire:69c7f82d21f6ab4226966a80",
+   "variant_id": "69c7f82d21f6ab4226966a80",
+   "variant_ordinal": 1,
+   "title": "Fuel Station Queue Simulation",
+   "source": {
+    "post_id": "69c7f82821f6ab4226966a7f",
+    "group_title": "Fuel Station Queue Simulation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69c7f82821f6ab4226966a7f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69c7f82821f6ab4226966a7f/practice?questionId=69c7f82d21f6ab4226966a80",
+    "preview_response_sha256": "16b9dc211cd83a2be56d057dc584fd22c8922536258cb7bb89b05d47b7c04598",
+    "preview_content_sha256": "0495bbcd129ac49d6d6de5e2232f77a79cd077bbc6c7646ccc1211e6d53ea908",
+    "preview_characters": 482,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69c7f82821f6ab4226966a7f.json",
+    "algorithm_tags": [
+     "SIMULATION"
+    ],
+    "companies": [
+     "TESLA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: three dispensers X, Y and Z with known fuel; a queue of N cars, each with a demand D; a dispenser is free when not serving a car; the car at the front may choose any free dispenser that still holds at least D liters (the remaining rules and the requested output are cut off)",
+    "algorithmTags: SIMULATION"
+   ],
+   "inferred_spec": "demands lists the cars in queue order; x, y and z are the liters initially in dispensers X, Y and Z. Refuelling one liter takes one second and cars are served strictly in queue order, starting at time 0. When a car is at the front at time t it starts at the earliest time s >= t at which some dispenser holding at least its demand is free; among such dispensers free at s it takes the first of X, Y, Z. The dispenser then holds demand fewer liters and is busy until s + demand (free again at that instant), and the next car reaches the front at s. A car's waiting time is s. Return the largest waiting time over all cars (0 for no cars), or -1 when some car finds no dispenser with enough fuel left, because then the queue never empties.",
+   "inference_uncertainty": "medium: dispensers, demands, freeness and the enough-fuel rule are in the preview, which matches a well-known simulation exercise; one second per liter, the X-Y-Z tie order, the maximum-waiting-time output and -1 for a blocked queue are inferred from that exercise, not from visible text",
+   "inferred_interface": {
+    "name": "maxWaitingTime",
+    "params": [
+     {
+      "name": "demands",
+      "type": "integer[]"
+     },
+     {
+      "name": "x",
+      "type": "integer"
+     },
+     {
+      "name": "y",
+      "type": "integer"
+     },
+     {
+      "name": "z",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FSQ"
+  },
+  {
+   "uid": "hack2hire:699bb8776e73e4abccc9aa11",
+   "variant_id": "699bb8776e73e4abccc9aa11",
+   "variant_ordinal": 1,
+   "title": "Generate Unique Usernames",
+   "source": {
+    "post_id": "699b53306e73e4abccc9a85a",
+    "group_title": "Generate Unique Usernames",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/699b53306e73e4abccc9a85a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/699b53306e73e4abccc9a85a/practice?questionId=699bb8776e73e4abccc9aa11",
+    "preview_response_sha256": "000d1db8ef8bd40203c7eac36ad6b0482e2454b0645828205b9c231b319169c3",
+    "preview_content_sha256": "b4f350524dbb1f2c45f408047edd6c3dd15af19e873b1d7c129ab9573c2816d9",
+    "preview_characters": 679,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/699b53306e73e4abccc9a85a.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "SQUAREPOINT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: names are full names \"<Given> <Middle...> <Family>\"; return one username per name; usernames unique within the list, only lowercase letters and digits, at most 8 characters (the construction rule is cut off)",
+    "algorithmTags: STRING"
+   ],
+   "inferred_spec": "names is a list of full names, each two or more words of ASCII letters separated by single spaces; the first word is the given name and the last the family name. The base of a name is the lowercase first letter of the given name followed by the lowercase family name, truncated to 8 characters. Process names in order: a name gets its base when no earlier name received that username; otherwise it gets, for the smallest k = 1, 2, ... whose result is unused so far, the base truncated to 8 - (number of digits of k) characters followed by the decimal k. Return the usernames in input order.",
+   "inference_uncertainty": "high: uniqueness, the character set and the 8-character limit are in the preview; the base (given-name initial plus family name), ignoring middle names and the numeric-suffix collision rule with truncation are inferred",
+   "inferred_interface": {
+    "name": "generateUsernames",
+    "params": [
+     {
+      "name": "names",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "GUU"
+  },
+  {
+   "uid": "hack2hire:67fda0b6d2adf72ba62b0ed9",
+   "variant_id": "67fda0b6d2adf72ba62b0ed9",
+   "variant_ordinal": 1,
+   "title": "Gift Delivery Scheduler",
+   "source": {
+    "post_id": "67fc81bc216af53465a72220",
+    "group_title": "Gift Delivery Scheduler",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67fc81bc216af53465a72220",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67fc81bc216af53465a72220/practice?questionId=67fda0b6d2adf72ba62b0ed9",
+    "preview_response_sha256": "b0becc49f7cae140e3a2e64c5f559bcb7b8b5d1192197867c07d1350a7bb528c",
+    "preview_content_sha256": "e0ce7d29455f4e2dbedde2b886d8a02d906fb7b5bbf68eb770cfa8889da8a532",
+    "preview_characters": 454,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67fc81bc216af53465a72220.json",
+    "algorithm_tags": [
+     "HEAP",
+     "GREEDY"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: intervals [start, end] give the hours (9:00 to 17:00) when each recipient is in the office; n delivery agents; a delivery needs the recipient present, takes exactly one hour, and at most n deliveries happen in the same hour (the requested output is cut off)",
+    "algorithmTags: HEAP, GREEDY"
+   ],
+   "inferred_spec": "intervals[i] = [start, end] are whole hours with 9 <= start < end <= 17; recipient i can receive a delivery in any one-hour slot [h, h + 1] with start <= h and h + 1 <= end. Each recipient receives at most one gift, each slot holds at most n deliveries, and deliveries happen only in the slots 9 to 16. Return the maximum number of recipients that can receive their gift.",
+   "inference_uncertainty": "high: hours, one-hour deliveries and n parallel agents are in the preview; whole-hour slot boundaries, end being exclusive of a slot starting at end, and the maximum-count output (rather than a feasibility flag or a schedule) are inferred",
+   "inferred_interface": {
+    "name": "maxDeliveries",
+    "params": [
+     {
+      "name": "intervals",
+      "type": "integer[][]"
+     },
+     {
+      "name": "n",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "GDS"
+  },
+  {
+   "uid": "hack2hire:68c4834e97640ed3834dc7ca",
+   "variant_id": "68c4834e97640ed3834dc7ca",
+   "variant_ordinal": 1,
+   "title": "Hopscotch",
+   "source": {
+    "post_id": "68c4834997640ed3834dc7c9",
+    "group_title": "Hopscotch",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c4834997640ed3834dc7c9",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c4834997640ed3834dc7c9/practice?questionId=68c4834e97640ed3834dc7ca",
+    "preview_response_sha256": "bf0b5d6e62887d6bcd51df930888cb165fe04ac0c946da057659c1693336a3cc",
+    "preview_content_sha256": "c38c9bcff233fe17ca6a6ec587d39236fce5973390367a7761e685240a96760b",
+    "preview_characters": 999,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68c4834997640ed3834dc7c9.json",
+    "algorithm_tags": [
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "ATLASSIAN"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: follow-up of LeetCode 1306 (Jump Game III); board s of strings; \"X\" is an obstacle that cannot be started from, stepped on or landed on; other cells list directives L or R with an optional positive step (default 1), concatenated like \"L3R2\" (start cell, target and output are cut off)",
+    "algorithmTags: BREADTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "s is the board; s[i] is \"X\" (an obstacle) or a concatenation of directives, each \"L\" or \"R\" optionally followed by a positive decimal step without leading zeros (default 1). From cell i a directive Lk moves to i - k and Rk to i + k; a move is allowed only when it lands inside the board on a non-obstacle cell. Starting from cell start, return the minimum number of moves needed to land on the last cell n - 1, 0 when start is n - 1, or -1 when the last cell cannot be reached or start is an obstacle.",
+   "inference_uncertainty": "very high: the board, obstacles and the directive syntax are in the preview; the start index, the last cell as the target and the minimum-move output are inferred (Jump Game III itself asks for reachability of a zero cell)",
+   "inferred_interface": {
+    "name": "minJumps",
+    "params": [
+     {
+      "name": "s",
+      "type": "string[]"
+     },
+     {
+      "name": "start",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "HOP"
+  },
+  {
+   "uid": "hack2hire:687eda22cdb08328ca5a8483",
+   "variant_id": "687eda22cdb08328ca5a8483",
+   "variant_ordinal": 1,
+   "title": "IP Routing Lookup",
+   "source": {
+    "post_id": "687eda1bcdb08328ca5a8482",
+    "group_title": "IP Routing Lookup",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/687eda1bcdb08328ca5a8482",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/687eda1bcdb08328ca5a8482/practice?questionId=687eda22cdb08328ca5a8483",
+    "preview_response_sha256": "74b6495c311aa13f0aba6f2fa3b4671a0b2614769ec2a2102df1149ef472a1ca",
+    "preview_content_sha256": "7e68f092226019e0373083f008924b8303204eb1c6234fbc9053a51ce3201e5e",
+    "preview_characters": 1278,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/687eda1bcdb08328ca5a8482.json",
+    "algorithm_tags": [
+     "TRIE",
+     "BIT_MANIPULATION"
+    ],
+    "companies": [
+     "SNOWFLAKE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: IPv4 dotted quads as 32-bit integers; CIDR blocks base/k covering all addresses sharing the first k bits; routing entries (prefix, nextHop); queries are IPv4 addresses (the selection rule and output are cut off)",
+    "algorithmTags: TRIE, BIT_MANIPULATION"
+   ],
+   "inferred_spec": "routes is a list of [prefix, nextHop] where prefix is \"a.b.c.d/k\" (0 <= k <= 32; host bits of the base may be non-zero and are ignored) and queries a list of IPv4 addresses. For each query return the nextHop of the matching route with the longest prefix length; when several routes have the same prefix length and the same first k bits, the one listed last wins. Return \"\" for a query no route covers. Answers are in query order.",
+   "inference_uncertainty": "medium: address and CIDR semantics, routes and queries are in the preview; longest-prefix matching is the standard routing rule and strongly suggested by the trie tag; the last-listed tie rule and the empty-string miss value are inferred",
+   "inferred_interface": {
+    "name": "routeLookup",
+    "params": [
+     {
+      "name": "routes",
+      "type": "string[][]"
+     },
+     {
+      "name": "queries",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "IPR"
+  },
+  {
+   "uid": "hack2hire:6a1a0cc4c81f779dc6a2376b",
+   "variant_id": "6a1a0cc4c81f779dc6a2376b",
+   "variant_ordinal": 1,
+   "title": "Implement Dataset Join Operation",
+   "source": {
+    "post_id": "6a1a0cb8c81f779dc6a2376a",
+    "group_title": "Implement Dataset Join Operation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0cb8c81f779dc6a2376a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0cb8c81f779dc6a2376a/practice?questionId=6a1a0cc4c81f779dc6a2376b",
+    "preview_response_sha256": "c5d20af773953721d9d16e796eaa798b2e530c2fd7e019d8cdb3939df62ebf76",
+    "preview_content_sha256": "544f17bc223ca6a6c5a846a124c9a9f36ab9372d860a77fcbd3cb627a7e7ec51",
+    "preview_characters": 887,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1a0cb8c81f779dc6a2376a.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two CSV datasets customerFile and processorFile as lists of strings (header first); both contain the column fieldName; values have no commas or quotes; joinDataSet performs an inner join, each output row being all customer values followed by all processor values, comma-separated (header handling and duplicates cut off)",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "customerFile and processorFile are CSV datasets: element 0 is the header (distinct column names), every other element a data row with exactly one value per column; values contain no commas or quotes and may be empty. fieldName is a column of both. Return the inner join on equal fieldName values (empty values match each other). The output starts with a header made of the customer header followed by the processor header (both copies of the key column kept), then the data rows, each being the customer values followed by the processor values joined with commas. Customer rows are taken in order and, for each, every matching processor row in order. Customer rows without a match are dropped.",
+   "inference_uncertainty": "medium: the inner join, the input format and the output row layout are in the preview; including the joined header, keeping every processor match and the row order are inferred",
+   "inferred_interface": {
+    "name": "joinDataSet",
+    "params": [
+     {
+      "name": "customerFile",
+      "type": "string[]"
+     },
+     {
+      "name": "processorFile",
+      "type": "string[]"
+     },
+     {
+      "name": "fieldName",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four levels: 1 = inner join from the preview, 2 = left join padding missing processor values, 3 = full outer join, 4 = inner join on several key columns; only level 1 has public text",
+   "oracle_constant": "DSJ1"
+  },
+  {
+   "uid": "hack2hire:6a1a0ed3c81f779dc6a2377c",
+   "variant_id": "6a1a0ed3c81f779dc6a2377c",
+   "variant_ordinal": 2,
+   "title": "Implement Dataset Join Operation",
+   "source": {
+    "post_id": "6a1a0cb8c81f779dc6a2376a",
+    "group_title": "Implement Dataset Join Operation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0cb8c81f779dc6a2376a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0cb8c81f779dc6a2376a/practice?questionId=6a1a0ed3c81f779dc6a2377c",
+    "preview_response_sha256": "c5d20af773953721d9d16e796eaa798b2e530c2fd7e019d8cdb3939df62ebf76",
+    "preview_content_sha256": "544f17bc223ca6a6c5a846a124c9a9f36ab9372d860a77fcbd3cb627a7e7ec51",
+    "preview_characters": 887,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1a0cb8c81f779dc6a2376a.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two CSV datasets customerFile and processorFile as lists of strings (header first); both contain the column fieldName; values have no commas or quotes; joinDataSet performs an inner join, each output row being all customer values followed by all processor values, comma-separated (header handling and duplicates cut off)",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "customerFile and processorFile are CSV datasets: element 0 is the header (distinct column names), every other element a data row with exactly one value per column; values contain no commas or quotes and may be empty. fieldName is a column of both. Return the left join on equal fieldName values (empty values match each other). The output starts with a header made of the customer header followed by the processor header (both copies of the key column kept), then the data rows, each being the customer values followed by the processor values joined with commas. Customer rows are taken in order and, for each, every matching processor row in order. A customer row without a match is still output once, followed by one empty value per processor column.",
+   "inference_uncertainty": "very high: no public text for this level; the left join and the empty-value padding are inferred as the natural follow-up of the level-1 inner join",
+   "inferred_interface": {
+    "name": "joinDataSet",
+    "params": [
+     {
+      "name": "customerFile",
+      "type": "string[]"
+     },
+     {
+      "name": "processorFile",
+      "type": "string[]"
+     },
+     {
+      "name": "fieldName",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four levels: 1 = inner join from the preview, 2 = left join padding missing processor values, 3 = full outer join, 4 = inner join on several key columns; only level 1 has public text",
+   "oracle_constant": "DSJ2"
+  },
+  {
+   "uid": "hack2hire:6a1a0ee5c81f779dc6a2377d",
+   "variant_id": "6a1a0ee5c81f779dc6a2377d",
+   "variant_ordinal": 3,
+   "title": "Implement Dataset Join Operation",
+   "source": {
+    "post_id": "6a1a0cb8c81f779dc6a2376a",
+    "group_title": "Implement Dataset Join Operation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0cb8c81f779dc6a2376a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0cb8c81f779dc6a2376a/practice?questionId=6a1a0ee5c81f779dc6a2377d",
+    "preview_response_sha256": "c5d20af773953721d9d16e796eaa798b2e530c2fd7e019d8cdb3939df62ebf76",
+    "preview_content_sha256": "544f17bc223ca6a6c5a846a124c9a9f36ab9372d860a77fcbd3cb627a7e7ec51",
+    "preview_characters": 887,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1a0cb8c81f779dc6a2376a.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two CSV datasets customerFile and processorFile as lists of strings (header first); both contain the column fieldName; values have no commas or quotes; joinDataSet performs an inner join, each output row being all customer values followed by all processor values, comma-separated (header handling and duplicates cut off)",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "customerFile and processorFile are CSV datasets: element 0 is the header (distinct column names), every other element a data row with exactly one value per column; values contain no commas or quotes and may be empty. fieldName is a column of both. Return the full outer join on equal fieldName values (empty values match each other). The output starts with a header made of the customer header followed by the processor header (both copies of the key column kept), then the data rows, each being the customer values followed by the processor values joined with commas. Customer rows are taken in order and, for each, every matching processor row in order. A customer row without a match is output once followed by one empty value per processor column. After all customer-driven rows, every processor row that matched no customer row is output, in processor order, preceded by one empty value per customer column.",
+   "inference_uncertainty": "very high: no public text for this level; the full outer join, padding and the position of unmatched processor rows are inferred",
+   "inferred_interface": {
+    "name": "joinDataSet",
+    "params": [
+     {
+      "name": "customerFile",
+      "type": "string[]"
+     },
+     {
+      "name": "processorFile",
+      "type": "string[]"
+     },
+     {
+      "name": "fieldName",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four levels: 1 = inner join from the preview, 2 = left join padding missing processor values, 3 = full outer join, 4 = inner join on several key columns; only level 1 has public text",
+   "oracle_constant": "DSJ3"
+  },
+  {
+   "uid": "hack2hire:6a1a0f0dc81f779dc6a2377e",
+   "variant_id": "6a1a0f0dc81f779dc6a2377e",
+   "variant_ordinal": 4,
+   "title": "Implement Dataset Join Operation",
+   "source": {
+    "post_id": "6a1a0cb8c81f779dc6a2376a",
+    "group_title": "Implement Dataset Join Operation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0cb8c81f779dc6a2376a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1a0cb8c81f779dc6a2376a/practice?questionId=6a1a0f0dc81f779dc6a2377e",
+    "preview_response_sha256": "c5d20af773953721d9d16e796eaa798b2e530c2fd7e019d8cdb3939df62ebf76",
+    "preview_content_sha256": "544f17bc223ca6a6c5a846a124c9a9f36ab9372d860a77fcbd3cb627a7e7ec51",
+    "preview_characters": 887,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1a0cb8c81f779dc6a2376a.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two CSV datasets customerFile and processorFile as lists of strings (header first); both contain the column fieldName; values have no commas or quotes; joinDataSet performs an inner join, each output row being all customer values followed by all processor values, comma-separated (header handling and duplicates cut off)",
+    "algorithmTags: HASH_TABLE",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "customerFile and processorFile are CSV datasets: element 0 is the header (distinct column names), every other element a data row with exactly one value per column; values contain no commas or quotes and may be empty. fieldNames lists 1 to 3 distinct columns present in both headers. Return the inner join on the composite key: a customer row and a processor row match when they agree on every listed column (empty values match each other). The output starts with a header made of the customer header followed by the processor header (both copies of the key column kept), then the data rows, each being the customer values followed by the processor values joined with commas. Customer rows are taken in order and, for each, every matching processor row in order. Customer rows without a match are dropped.",
+   "inference_uncertainty": "very high: no public text for this level; the composite-key join and the list argument are inferred",
+   "inferred_interface": {
+    "name": "joinDataSet",
+    "params": [
+     {
+      "name": "customerFile",
+      "type": "string[]"
+     },
+     {
+      "name": "processorFile",
+      "type": "string[]"
+     },
+     {
+      "name": "fieldNames",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as four levels: 1 = inner join from the preview, 2 = left join padding missing processor values, 3 = full outer join, 4 = inner join on several key columns; only level 1 has public text",
+   "oracle_constant": "DSJ4"
+  },
+  {
+   "uid": "hack2hire:68a61ebd3a368733bb10424d",
+   "variant_id": "68a61ebd3a368733bb10424d",
+   "variant_ordinal": 1,
+   "title": "Incremental Task Scheduler",
+   "source": {
+    "post_id": "68a61c743a368733bb10424b",
+    "group_title": "Incremental Task Scheduler",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a61c743a368733bb10424b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a61c743a368733bb10424b/practice?questionId=68a61ebd3a368733bb10424d",
+    "preview_response_sha256": "42d062f611ea34f1f2d156fc1a247461140b34deb3ce3d8ce9157fba6af801ea",
+    "preview_content_sha256": "05e2ad11295089577cce21cf418b88c85ff92a882595479084cb2dbe3dcf59c6",
+    "preview_characters": 227,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68a61c743a368733bb10424b.json",
+    "algorithm_tags": [
+     "GRAPH",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "LINKEDIN"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: project task scheduler; each task has a unique string id and a list of prerequisite task ids that must complete first (the operations are cut off)",
+    "algorithmTags: GRAPH, DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "TaskScheduler() starts empty. addTask(id, dependencies) adds a task whose prerequisites are the listed ids (distinct; they may name tasks not added yet). It returns false and changes nothing when id was already added or when the new task would close a dependency cycle (including depending on itself); otherwise true. getExecutionOrder() returns every added task that can run, i.e. whose prerequisites are all added and can run, in the topological order that always picks the smallest id (by code point) among the tasks whose prerequisites are already listed. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "very high: unique ids and prerequisite lists are in the preview; incremental addTask with cycle rejection, tolerance of not-yet-added prerequisites, the executable-only order and the smallest-id tie rule are inferred from the title and tags",
+   "inferred_interface": {
+    "classname": "TaskScheduler",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addTask",
+      "params": [
+       {
+        "name": "id",
+        "type": "string"
+       },
+       {
+        "name": "dependencies",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getExecutionOrder",
+      "params": [],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "ITS",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:678dc780fa7ce9616e190fb7",
+   "variant_id": "678dc780fa7ce9616e190fb7",
+   "variant_ordinal": 1,
+   "title": "Iterator with Filter",
+   "source": {
+    "post_id": "678dc014fa7ce9616e190fb6",
+    "group_title": "Iterator with Filter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678dc014fa7ce9616e190fb6",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678dc014fa7ce9616e190fb6/practice?questionId=678dc780fa7ce9616e190fb7",
+    "preview_response_sha256": "081dd5feace5126282c703c88987e0397d1b6827d07851dfa5c9a54e213b38bc",
+    "preview_content_sha256": "877012fd6f41dca9fec65a25e26545638eb0145b7487c7884e75f015edd81ba6",
+    "preview_characters": 257,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/678dc014fa7ce9616e190fb6.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "COINBASE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: custom iterator over a list that returns only the elements satisfying a filter function F(n), preserving order (method names cut off)",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "Because a function cannot travel in JSON, the filter is a name. FilterIterator(nums, filterName) iterates over nums, where filterName is one of \"even\", \"odd\", \"positive\", \"negative\" or \"nonzero\" and selects the elements satisfying that predicate. hasNext() returns whether a selected element remains; next() returns the next selected element in original order and moves past it. next() is only called when hasNext() would return true. The iterator never changes nums. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: a filtering iterator preserving order is in the preview; the predicate passed as a name (in place of a callable), the method names hasNext/next and the precondition on next are inferred",
+   "inferred_interface": {
+    "classname": "FilterIterator",
+    "constructor": {
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      },
+      {
+       "name": "filterName",
+       "type": "string"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "hasNext",
+      "params": [],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "next",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "IWF",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6a14d69a7b0582b352787fa8",
+   "variant_id": "6a14d69a7b0582b352787fa8",
+   "variant_ordinal": 1,
+   "title": "Jumping by Height",
+   "source": {
+    "post_id": "6a14d6957b0582b352787fa7",
+    "group_title": "Jumping by Height",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a14d6957b0582b352787fa7",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a14d6957b0582b352787fa7/practice?questionId=6a14d69a7b0582b352787fa8",
+    "preview_response_sha256": "d0f9395dfa47e876267f6403a83e439ef17161baf2299c1084f79b0b106f8372",
+    "preview_content_sha256": "15404daffde4d8671dc18bdc09080b20af902cbb52c52bfb0bfb9c7d36892200",
+    "preview_characters": 389,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a14d6957b0582b352787fa7.json",
+    "algorithm_tags": [
+     "SIMULATION",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "VERKADA"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: array nums, starting position index; currentHeight starts as nums[index]; jumps alternate direction, the first going left (how far a jump goes, how the height changes and the output are cut off)",
+    "algorithmTags: SIMULATION, HASH_TABLE"
+   ],
+   "inferred_spec": "nums holds non-negative integers and index is the start. currentHeight starts as nums[index] and the first jump goes left. A jump moves exactly currentHeight cells in the current direction; it succeeds when the target index is inside the array, and then the position becomes the target, currentHeight becomes nums[target] and the direction flips. The walk stops at the first jump whose target is outside the array. Return the number of successful jumps, or -1 when the walk never stops (a jump of 0 lands in place, so a zero height never stops).",
+   "inference_uncertainty": "very high: the start, currentHeight initialisation and alternating directions starting left are in the preview; the jump length equal to currentHeight, the height update, the stop rule and returning the jump count (with -1 for an endless walk, suggested by the hash-table tag) are inferred",
+   "inferred_interface": {
+    "name": "countJumps",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "index",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "JBH"
+  },
+  {
+   "uid": "hack2hire:68099e1fcbb5948f87732b56",
+   "variant_id": "68099e1fcbb5948f87732b56",
+   "variant_ordinal": 1,
+   "title": "KV Store with Prefix Search",
+   "source": {
+    "post_id": "6809998fcbb5948f87732b53",
+    "group_title": "KV Store with Prefix Search",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6809998fcbb5948f87732b53",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6809998fcbb5948f87732b53/practice?questionId=68099e1fcbb5948f87732b56",
+    "preview_response_sha256": "baab970ad4c6357ed32021f2f43dccff1fb8cc467bc75db8b2f4c2ca93bcc6ab",
+    "preview_content_sha256": "29f355b197c6d1428a8eb35b50ab614eb7e28e31547af25134548959abdf716f",
+    "preview_characters": 562,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6809998fcbb5948f87732b53.json",
+    "algorithm_tags": [
+     "TRIE",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "SNOWFLAKE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: KVStore with set (error when the key exists), get (-1 when absent), update (error when missing) and deleteKey; efficient lookup of values by key prefix (the prefix method is cut off)",
+    "algorithmTags: TRIE, HASH_TABLE"
+   ],
+   "inferred_spec": "KVStore() starts empty. set(key, value) inserts a new key; update(key, value) overwrites an existing key; get(key) returns the value or -1 when absent; deleteKey(key) removes the key when present (no effect otherwise). The preview's error cases are excluded from the domain: set is only called for absent keys and update only for present keys. prefixSearch(prefix) returns the values of all present keys starting with prefix (the empty prefix matches every key), ordered by key in ascending code-point order. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: set, get, update and deleteKey with their -1 and error rules are in the preview; prefixSearch's name, returning values ordered by key, and replacing the thrown errors by domain preconditions (a throw cannot be expressed in a JSON trace) are inferred",
+   "inferred_interface": {
+    "classname": "KVStore",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "set",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "update",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "deleteKey",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "prefixSearch",
+      "params": [
+       {
+        "name": "prefix",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "KVP",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:67e3915487527b3f41af78b6",
+   "variant_id": "67e3915487527b3f41af78b6",
+   "variant_ordinal": 1,
+   "title": "Keypad Letter Combination",
+   "source": {
+    "post_id": "67e38ccf87527b3f41af78b5",
+    "group_title": "Keypad Letter Combination",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e38ccf87527b3f41af78b5",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67e38ccf87527b3f41af78b5/practice?questionId=67e3915487527b3f41af78b6",
+    "preview_response_sha256": "14c8c064a4a39085f145f3a6f706fab5efb8d773df1f9794da372c24e9075302",
+    "preview_content_sha256": "9ef82277ff056c03b96d9175df6198acc145a635eb1b70b4f11db802e03da959",
+    "preview_characters": 899,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67e38ccf87527b3f41af78b5.json",
+    "algorithm_tags": [
+     "BACKTRACKING"
+    ],
+    "companies": [
+     "META",
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 17; digits 0-9 map to letters (1 -> ABC, 2 -> DEF, 3 -> GHI, 4 -> JKL, 5 -> MNO, 6 -> PQR, 7 -> ST, 8 -> UVW, 9 -> XY, 0 -> Z); consecutive identical digits may be separate presses or grouped, the group size choosing the letter (output format cut off)",
+    "algorithmTags: BACKTRACKING"
+   ],
+   "inferred_spec": "digits is a string of 0-9 with the keypad 1 -> ABC, 2 -> DEF, 3 -> GHI, 4 -> JKL, 5 -> MNO, 6 -> PQR, 7 -> ST, 8 -> UVW, 9 -> XY, 0 -> Z. Each maximal run of one digit is split into consecutive groups, each of size 1 up to the number of letters of that digit; a group of size g produces the g-th letter. Return every distinct string obtainable this way, in ascending lexicographic order. An empty digits string returns an empty list.",
+   "inference_uncertainty": "medium: the keypad and the run-grouping rule are in the preview; the sorted order, the treatment of the empty string and the cap of a group at the number of letters are inferred",
+   "inferred_interface": {
+    "name": "letterCombinations",
+    "params": [
+     {
+      "name": "digits",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "KLC"
+  },
+  {
+   "uid": "hack2hire:67709b6d366afdc1233e4ffc",
+   "variant_id": "67709b6d366afdc1233e4ffc",
+   "variant_ordinal": 1,
+   "title": "Largest Common BST Value",
+   "source": {
+    "post_id": "67708803366afdc1233e4ffa",
+    "group_title": "Largest Common BST Value",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67708803366afdc1233e4ffa",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67708803366afdc1233e4ffa/practice?questionId=67709b6d366afdc1233e4ffc",
+    "preview_response_sha256": "b22072432bc7f783b8025da5d7806d5858cb17871212c7ba3fe69cccce112f64",
+    "preview_content_sha256": "138f273cdabc301fdd12cff2808b1bc48dc3dfc153cc040457af9f5cb7d22a2b",
+    "preview_characters": 337,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67708803366afdc1233e4ffa.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH_TREE"
+    ],
+    "companies": [
+     "AMAZON",
+     "GOOGLE",
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: roots of two binary search trees of integers; return the greatest integer present in both, or -1; 1 to 1e5 nodes per tree; values between -1e9 and 1e9; both trees valid BSTs",
+    "algorithmTags: BINARY_SEARCH_TREE"
+   ],
+   "inferred_spec": "root1 and root2 are binary search trees given in LeetCode level order (null for a missing child, trailing nulls omitted), each with 1 to 1e5 nodes and distinct values in [-1e9, 1e9] (left subtree smaller, right subtree larger). Return the largest value present in both trees, or -1 when they share none.",
+   "inference_uncertainty": "low: the problem, the -1 result and the bounds are in the preview; the level-order input encoding and strictly distinct values within a tree are inferred",
+   "inferred_interface": {
+    "name": "largestCommonValue",
+    "params": [
+     {
+      "name": "root1",
+      "type": "(integer|null)[]"
+     },
+     {
+      "name": "root2",
+      "type": "(integer|null)[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LCB"
+  },
+  {
+   "uid": "hack2hire:69ae2fec4b133b6a8f3a7345",
+   "variant_id": "69ae2fec4b133b6a8f3a7345",
+   "variant_ordinal": 1,
+   "title": "Largest Group of Mutual Strangers",
+   "source": {
+    "post_id": "69ae2fa04b133b6a8f3a7343",
+    "group_title": "Largest Group of Mutual Strangers",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69ae2fa04b133b6a8f3a7343",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69ae2fa04b133b6a8f3a7343/practice?questionId=69ae2fec4b133b6a8f3a7345",
+    "preview_response_sha256": "4571864667dd9fd3e280645b3369beaf0c4330d0ba5617ec841fb8c0c1256586",
+    "preview_content_sha256": "fc6d951d00cc809109448dbc8553a8beeaab28bb7847f9efe9cb5e2de430f373",
+    "preview_characters": 286,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69ae2fa04b133b6a8f3a7343.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING",
+     "GRAPH"
+    ],
+    "companies": [
+     "MICROSOFT",
+     "TWOSIGMA"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n people 0..n-1; connections [a, b] mean a and b know each other directly; the relationships satisfy conditions that are cut off",
+    "algorithmTags: DYNAMIC_PROGRAMMING, GRAPH"
+   ],
+   "inferred_spec": "n people are labelled 0 to n - 1 and connections lists undirected pairs [a, b] (a != b, no repeated pair) of people who know each other. The relationships contain no cycle, so they form a forest. Return the size of the largest group of people in which no two know each other directly.",
+   "inference_uncertainty": "high: people, connections and the mutual-strangers goal are in the preview; the hidden conditions are inferred to make the acquaintance graph a forest (the general problem is NP-hard, and the dynamic-programming tag fits tree DP)",
+   "inferred_interface": {
+    "name": "largestStrangerGroup",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "connections",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LGS"
+  },
+  {
+   "uid": "hack2hire:6910e7e971ea59cda5a81ac4",
+   "variant_id": "6910e7e971ea59cda5a81ac4",
+   "variant_ordinal": 1,
+   "title": "Largest K Elements in Sliding Window",
+   "source": {
+    "post_id": "6907c9e9e1919109b6df11b7",
+    "group_title": "Largest K Elements in Sliding Window",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6907c9e9e1919109b6df11b7",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6907c9e9e1919109b6df11b7/practice?questionId=6910e7e971ea59cda5a81ac4",
+    "preview_response_sha256": "fdf51dfcd26b5b50daa0c285bcdd4eeddb73f06fdcde6cfee09577918c690c9b",
+    "preview_content_sha256": "ab406a3a08b22def0aa34cc3ac65aeb79b3a0c11c4a96d65d9168215a1782084",
+    "preview_characters": 574,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6907c9e9e1919109b6df11b7.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "CITADEL"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 239; integers nums of size n, k and window size w; find the k largest elements in each window of size w as it slides left to right one step at a time (output format cut off)",
+    "algorithmTags: SLIDING_WINDOW"
+   ],
+   "inferred_spec": "nums is a list of integers, and 1 <= k <= w <= nums.length. For each window nums[i .. i + w - 1], i = 0 .. n - w, return its k largest elements (with repetitions, as a multiset) in descending order. The result is the list of these lists in window order.",
+   "inference_uncertainty": "medium: k largest per window of size w is in the preview; the descending order inside each window's list, keeping duplicates and the k <= w precondition are inferred",
+   "inferred_interface": {
+    "name": "largestKInWindows",
+    "params": [
+     {
+      "name": "nums",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     },
+     {
+      "name": "w",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LKW"
+  },
+  {
+   "uid": "hack2hire:69a4fb4e3d95612a1782bbd2",
+   "variant_id": "69a4fb4e3d95612a1782bbd2",
+   "variant_ordinal": 1,
+   "title": "Largest Rectangle Area",
+   "source": {
+    "post_id": "69a4fb493d95612a1782bbd1",
+    "group_title": "Largest Rectangle Area",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a4fb493d95612a1782bbd1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a4fb493d95612a1782bbd1/practice?questionId=69a4fb4e3d95612a1782bbd2",
+    "preview_response_sha256": "dabef99c011457eaf4433b689fb696cb3cf391a7ab33295ee632dd70b1feb27e",
+    "preview_content_sha256": "19fe7e15857a63dae2dcf2295e3254d73fab18a9c2fa9e8302c5e65ba06a03b1",
+    "preview_characters": 601,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a4fb493d95612a1782bbd1.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "WAYMO"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 939; distinct integer lattice points; find the largest area of an axis-aligned rectangle using exactly four of the points as vertices (empty-result value cut off)",
+    "algorithmTags: ARRAY",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "points is a list of distinct [x, y] integer points. Return the largest area of a rectangle with sides parallel to the axes and positive area whose four corners are all in points, or 0 when there is none.",
+   "inference_uncertainty": "low: the axis-aligned largest-area task is in the preview; returning 0 when no rectangle exists (as LeetCode 939 does) and the bounds are inferred",
+   "inferred_interface": {
+    "name": "largestRectangleArea",
+    "params": [
+     {
+      "name": "points",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = axis-aligned rectangles from the preview, 2 = rectangles in any orientation (as in LeetCode 963); only level 1 has public text",
+   "oracle_constant": "LRA1"
+  },
+  {
+   "uid": "hack2hire:69b62ed7666464810ca36212",
+   "variant_id": "69b62ed7666464810ca36212",
+   "variant_ordinal": 2,
+   "title": "Largest Rectangle Area",
+   "source": {
+    "post_id": "69a4fb493d95612a1782bbd1",
+    "group_title": "Largest Rectangle Area",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a4fb493d95612a1782bbd1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a4fb493d95612a1782bbd1/practice?questionId=69b62ed7666464810ca36212",
+    "preview_response_sha256": "dabef99c011457eaf4433b689fb696cb3cf391a7ab33295ee632dd70b1feb27e",
+    "preview_content_sha256": "19fe7e15857a63dae2dcf2295e3254d73fab18a9c2fa9e8302c5e65ba06a03b1",
+    "preview_characters": 601,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a4fb493d95612a1782bbd1.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "WAYMO"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 939; distinct integer lattice points; find the largest area of an axis-aligned rectangle using exactly four of the points as vertices (empty-result value cut off)",
+    "algorithmTags: ARRAY",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "points is a list of distinct [x, y] integer points. Return the largest area of a rectangle of positive area in any orientation whose four corners are all in points, or 0 when there is none. The area of such a rectangle is always an integer.",
+   "inference_uncertainty": "very high: no public text for this level; allowing any orientation (as LeetCode 963 does for the minimum) is inferred as the follow-up of the axis-aligned level",
+   "inferred_interface": {
+    "name": "largestRectangleArea",
+    "params": [
+     {
+      "name": "points",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as two levels: 1 = axis-aligned rectangles from the preview, 2 = rectangles in any orientation (as in LeetCode 963); only level 1 has public text",
+   "oracle_constant": "LRA2"
+  }
+ ]
+}

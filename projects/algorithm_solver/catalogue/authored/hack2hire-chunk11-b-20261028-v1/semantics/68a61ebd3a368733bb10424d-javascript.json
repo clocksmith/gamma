@@ -1,0 +1,62 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68a61ebd3a368733bb10424d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "TaskScheduler",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addTask",
+    "params": [
+     {
+      "name": "id",
+      "type": "string"
+     },
+     {
+      "name": "dependencies",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getExecutionOrder",
+    "params": [],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "edge list; cycle check by repeatedly removing tasks with no remaining prerequisites over the tentative graph; order by repeatedly scanning for the smallest ready id",
+  "candidate_design": "adjacency maps in both directions; addTask runs an iterative depth-first search from id over existing dependents and rejects when it reaches a prerequisite; getExecutionOrder runs Kahn's algorithm with a binary min-heap of ids, counting only added prerequisites as satisfiable",
+  "complexity_target": "O(reachable) per addTask, O((V + E) log V) per getExecutionOrder/O(V + E) space"
+ },
+ "source_sha256": "706af1458f6be63ab3f8df0286949a8d714b0e296ae639cf338efd58d8b4fb6f",
+ "native_class": "TaskScheduler",
+ "native_symbol": "property TaskScheduler of the CommonJS solve export",
+ "void_methods": []
+}

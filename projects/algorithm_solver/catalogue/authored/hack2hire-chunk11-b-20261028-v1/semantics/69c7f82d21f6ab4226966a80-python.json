@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69c7f82d21f6ab4226966a80",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "demands",
+  "x",
+  "y",
+  "z"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxWaitingTime",
+  "params": [
+   {
+    "name": "demands",
+    "type": "integer[]"
+   },
+   {
+    "name": "x",
+    "type": "integer"
+   },
+   {
+    "name": "y",
+    "type": "integer"
+   },
+   {
+    "name": "z",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "second-by-second clock: free finished dispensers, seat as many front cars as possible at this second, then advance the clock by one",
+  "candidate_design": "event arithmetic: keep each dispenser's free-at time and remaining fuel; a car starts at max(previous start, earliest free-at among dispensers with enough fuel) and picks the first such dispenser free at that time",
+  "complexity_target": "O(N) time/O(1) extra space"
+ },
+ "source_sha256": "bd8a28ccb372a41aa037c041bf4e4834aa4d4283a9fd0f46b5b26062b89033f0",
+ "wrapper": "Solution.maxWaitingTime"
+}

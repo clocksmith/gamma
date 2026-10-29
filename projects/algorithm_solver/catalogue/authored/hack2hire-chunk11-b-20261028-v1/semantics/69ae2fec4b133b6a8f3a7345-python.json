@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69ae2fec4b133b6a8f3a7345",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "connections"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "largestStrangerGroup",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "connections",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every subset of people and keep the largest one containing no connection (small n only)",
+  "candidate_design": "tree dynamic programming over an iterative depth-first order: for each person the best group size with and without that person, combined bottom-up per component",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "cd1bba40a5c5c75ae349719167a9d1ec1a75f01ffe921ed3db8a7edb8f5b464c",
+ "wrapper": "Solution.largestStrangerGroup"
+}

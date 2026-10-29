@@ -1,0 +1,437 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67fc81bc216af53465a72220:67fda0b6d2adf72ba62b0ed9:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+   "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+   "selector": "/problems/3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67fc81bc216af53465a72220.json",
+   "sha256": "2de60efafe50a8bbac7731691bf710a77d0a1a20be8188f9ac521d65783534c7",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:67fda0b6d2adf72ba62b0ed9"
+  }
+ ],
+ "problemId": "hack2hire:67fc81bc216af53465a72220",
+ "variantId": "67fda0b6d2adf72ba62b0ed9",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: maximum deliveries with n parallel one-hour slots",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:67fda0b6d2adf72ba62b0ed9/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "intervals[i] = [start, end] are whole hours with 9 <= start < end <= 17; recipient i can receive a delivery in any one-hour slot [h, h + 1] with start <= h and h + 1 <= end. Each recipient receives at most one gift, each slot holds at most n deliveries, and deliveries happen only in the slots 9 to 16. Return the maximum number of recipients that can receive their gift.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "intervals[i] = [start, end] are whole hours with 9 <= start < end <= 17; recipient i can receive a delivery in any one-hour slot [h, h + 1] with start <= h and h + 1 <= end.",
+   "Each recipient receives at most one gift, each slot holds at most n deliveries, and deliveries happen only in the slots 9 to 16.",
+   "Return the maximum number of recipients that can receive their gift."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= intervals.length <= 1e5",
+   "9 <= start < end <= 17",
+   "1 <= n <= 1e5"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:67fda0b6d2adf72ba62b0ed9/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: intervals [start, end] give the hours (9:00 to 17:00) when each recipient is in the office; n delivery agents; a delivery needs the recipient present, takes exactly one hour, and at most n deliveries happen in the same hour (the requested output is cut off); algorithmTags: HEAP, GREEDY; preview response sha256 b0becc49f7cae140e3a2e64c5f559bcb7b8b5d1192197867c07d1350a7bb528c"
+   },
+   {
+    "statement": "Uncertainty: high: hours, one-hour deliveries and n parallel agents are in the preview; whole-hour slot boundaries, end being exclusive of a slot starting at end, and the maximum-count output (rather than a feasibility flag or a schedule) are inferred",
+    "basis": "the public group preview is partial (454 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/3/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/3/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/3/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are hours whole numbers, and is end the last moment the recipient is present?",
+   "Does every recipient need a gift, or do we maximise the number served?",
+   "Should the schedule itself be returned?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:67fda0b6d2adf72ba62b0ed9/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     1
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       11,
+       14
+      ],
+      [
+       16,
+       17
+      ],
+      [
+       13,
+       15
+      ],
+      [
+       10,
+       13
+      ],
+      [
+       13,
+       15
+      ],
+      [
+       16,
+       17
+      ],
+      [
+       12,
+       14
+      ],
+      [
+       14,
+       17
+      ],
+      [
+       11,
+       13
+      ],
+      [
+       10,
+       12
+      ],
+      [
+       16,
+       17
+      ],
+      [
+       15,
+       16
+      ],
+      [
+       13,
+       14
+      ],
+      [
+       11,
+       12
+      ],
+      [
+       11,
+       15
+      ],
+      [
+       9,
+       13
+      ],
+      [
+       13,
+       16
+      ],
+      [
+       11,
+       14
+      ],
+      [
+       11,
+       13
+      ],
+      [
+       15,
+       16
+      ],
+      [
+       15,
+       17
+      ],
+      [
+       9,
+       10
+      ],
+      [
+       13,
+       15
+      ],
+      [
+       14,
+       15
+      ],
+      [
+       13,
+       15
+      ],
+      [
+       15,
+       17
+      ],
+      [
+       13,
+       16
+      ],
+      [
+       12,
+       13
+      ],
+      [
+       14,
+       17
+      ]
+     ],
+     2
+    ],
+    "output": 16,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:67fda0b6d2adf72ba62b0ed9/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/oracles.py",
+    "sha256": "537cdc3769fee5020247b958d8af2feccd49ef53d12161fdaa6fcf07138a0f6d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def maxDeliveries(intervals, n) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/67fda0b6d2adf72ba62b0ed9-python.json",
+     "inferredInterface": {
+      "name": "maxDeliveries",
+      "params": [
+       {
+        "name": "intervals",
+        "type": "integer[][]"
+       },
+       {
+        "name": "n",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/67fda0b6d2adf72ba62b0ed9-python.json",
+      "sha256": "9d2a554c08d6f1c046f065a206db225694ce9c5d0ae80085709690b664d93c9a",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function maxDeliveries(intervals, n) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/67fda0b6d2adf72ba62b0ed9-javascript.json",
+     "inferredInterface": {
+      "name": "maxDeliveries",
+      "params": [
+       {
+        "name": "intervals",
+        "type": "integer[][]"
+       },
+       {
+        "name": "n",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/67fda0b6d2adf72ba62b0ed9-javascript.json",
+      "sha256": "f73f68f0ee95183030d6295bbcac46fa116909727e11a2b1d900cb66dca7e5a3",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/3/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/3/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

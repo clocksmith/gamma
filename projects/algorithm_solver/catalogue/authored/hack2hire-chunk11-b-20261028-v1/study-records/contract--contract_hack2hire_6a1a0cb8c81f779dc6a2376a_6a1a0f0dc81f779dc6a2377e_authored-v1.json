@@ -1,0 +1,388 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a1a0cb8c81f779dc6a2376a:6a1a0f0dc81f779dc6a2377e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+   "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+   "selector": "/problems/9"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a1a0cb8c81f779dc6a2376a.json",
+   "sha256": "0968d9546616d177e46dd8b32dc92cedcebdcce6792703149655ce18f75d7fb7",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:6a1a0f0dc81f779dc6a2377e"
+  }
+ ],
+ "problemId": "hack2hire:6a1a0cb8c81f779dc6a2376a",
+ "variantId": "6a1a0f0dc81f779dc6a2377e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 4: inner join on a composite key",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:6a1a0f0dc81f779dc6a2377e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "customerFile and processorFile are CSV datasets: element 0 is the header (distinct column names), every other element a data row with exactly one value per column; values contain no commas or quotes and may be empty. fieldNames lists 1 to 3 distinct columns present in both headers. Return the inner join on the composite key: a customer row and a processor row match when they agree on every listed column (empty values match each other). The output starts with a header made of the customer header followed by the processor header (both copies of the key column kept), then the data rows, each being the customer values followed by the processor values joined with commas. Customer rows are taken in order and, for each, every matching processor row in order. Customer rows without a match are dropped.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "customerFile and processorFile are CSV datasets: element 0 is the header (distinct column names), every other element a data row with exactly one value per column; values contain no commas or quotes and may be empty.",
+   "fieldNames lists 1 to 3 distinct columns present in both headers.",
+   "Return the inner join on the composite key: a customer row and a processor row match when they agree on every listed column (empty values match each other).",
+   "The output starts with a header made of the customer header followed by the processor header (both copies of the key column kept), then the data rows, each being the customer values followed by the processor values joined with commas.",
+   "Customer rows are taken in order and, for each, every matching processor row in order.",
+   "Customer rows without a match are dropped."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= customerFile.length, processorFile.length <= 2e4 + 1",
+   "column names match [A-Za-z0-9_]{1,10}, at most 10 per file",
+   "1 <= fieldNames.length <= 3",
+   "values match [A-Za-z0-9_.-]{0,10}",
+   "at most 1e5 output rows"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:6a1a0f0dc81f779dc6a2377e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: two CSV datasets customerFile and processorFile as lists of strings (header first); both contain the column fieldName; values have no commas or quotes; joinDataSet performs an inner join, each output row being all customer values followed by all processor values, comma-separated (header handling and duplicates cut off); algorithmTags: HASH_TABLE; codingQuestions (variant count/order); preview response sha256 c5d20af773953721d9d16e796eaa798b2e530c2fd7e019d8cdb3939df62ebf76"
+   },
+   {
+    "statement": "Uncertainty: very high: no public text for this level; the composite-key join and the list argument are inferred",
+    "basis": "the public group preview is partial (887 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as four levels: 1 = inner join from the preview, 2 = left join padding missing processor values, 3 = full outer join, 4 = inner join on several key columns; only level 1 has public text",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/9/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/9/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/9/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the header part of the output?",
+   "What if a key matches several processor rows?",
+   "Is the key column repeated in the output?",
+   "What happens to rows without a match?",
+   "Can values be empty, and do empty keys match?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:6a1a0f0dc81f779dc6a2377e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "id"
+     ],
+     [
+      "id",
+      ""
+     ],
+     [
+      "id"
+     ]
+    ],
+    "output": [
+     "id,id"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "id,name,region",
+      ",b.o,eu",
+      ",b.o,us",
+      "1,,us",
+      ",b.o,us",
+      "2,b.o,eu",
+      "1,,eu",
+      "3,,eu",
+      ",ann,eu",
+      "1,ann,us"
+     ],
+     [
+      "amt,ok,id,region",
+      "7.5,y,3,us",
+      "7.5,n,,eu",
+      "7.5,y,,us",
+      "-1,n,3,us",
+      "-1,n,,us",
+      "7.5,n,2,us",
+      "-1,n,2,eu",
+      "-1,y,2,eu",
+      "5,y,1,us",
+      "7.5,n,,us",
+      "7.5,n,2,eu"
+     ],
+     [
+      "region",
+      "id"
+     ]
+    ],
+    "output": [
+     "id,name,region,amt,ok,id,region",
+     ",b.o,eu,7.5,n,,eu",
+     ",b.o,us,7.5,y,,us",
+     ",b.o,us,-1,n,,us",
+     ",b.o,us,7.5,n,,us",
+     "1,,us,5,y,1,us",
+     ",b.o,us,7.5,y,,us",
+     ",b.o,us,-1,n,,us",
+     ",b.o,us,7.5,n,,us",
+     "2,b.o,eu,-1,n,2,eu",
+     "2,b.o,eu,-1,y,2,eu",
+     "2,b.o,eu,7.5,n,2,eu",
+     ",ann,eu,7.5,n,,eu",
+     "1,ann,us,5,y,1,us"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:6a1a0f0dc81f779dc6a2377e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/oracles.py",
+    "sha256": "537cdc3769fee5020247b958d8af2feccd49ef53d12161fdaa6fcf07138a0f6d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def joinDataSet(customerFile, processorFile, fieldNames) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/6a1a0f0dc81f779dc6a2377e-python.json",
+     "inferredInterface": {
+      "name": "joinDataSet",
+      "params": [
+       {
+        "name": "customerFile",
+        "type": "string[]"
+       },
+       {
+        "name": "processorFile",
+        "type": "string[]"
+       },
+       {
+        "name": "fieldNames",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/6a1a0f0dc81f779dc6a2377e-python.json",
+      "sha256": "74b1e059e93f61cea55b73d229fd1304fa6fb271cbcb185f1e8bf7b181eb2929",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function joinDataSet(customerFile, processorFile, fieldNames) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/6a1a0f0dc81f779dc6a2377e-javascript.json",
+     "inferredInterface": {
+      "name": "joinDataSet",
+      "params": [
+       {
+        "name": "customerFile",
+        "type": "string[]"
+       },
+       {
+        "name": "processorFile",
+        "type": "string[]"
+       },
+       {
+        "name": "fieldNames",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/6a1a0f0dc81f779dc6a2377e-javascript.json",
+      "sha256": "113de8cdb51b2480e642e8ec37d64633959e66e795dd384c3219bc5744203081",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/9/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/9/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

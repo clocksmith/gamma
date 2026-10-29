@@ -1,0 +1,364 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:687eda1bcdb08328ca5a8482:687eda22cdb08328ca5a8483:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+   "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/687eda1bcdb08328ca5a8482.json",
+   "sha256": "002cdd77087bc1aed6d92b4880318d9849143c193b32abe0aa8e89bbb57ac091",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:687eda22cdb08328ca5a8483"
+  }
+ ],
+ "problemId": "hack2hire:687eda1bcdb08328ca5a8482",
+ "variantId": "687eda22cdb08328ca5a8483",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: longest-prefix-match routing table",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:687eda22cdb08328ca5a8483/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "routes is a list of [prefix, nextHop] where prefix is \"a.b.c.d/k\" (0 <= k <= 32; host bits of the base may be non-zero and are ignored) and queries a list of IPv4 addresses. For each query return the nextHop of the matching route with the longest prefix length; when several routes have the same prefix length and the same first k bits, the one listed last wins. Return \"\" for a query no route covers. Answers are in query order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "routes is a list of [prefix, nextHop] where prefix is \"a.b.c.d/k\" (0 <= k <= 32; host bits of the base may be non-zero and are ignored) and queries a list of IPv4 addresses.",
+   "For each query return the nextHop of the matching route with the longest prefix length; when several routes have the same prefix length and the same first k bits, the one listed last wins.",
+   "Return \"\" for a query no route covers.",
+   "Answers are in query order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= routes.length <= 2e4",
+   "0 <= queries.length <= 2e4",
+   "octets are 0..255 without leading zeros",
+   "nextHop matches [a-z0-9.-]{1,20}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:687eda22cdb08328ca5a8483/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: IPv4 dotted quads as 32-bit integers; CIDR blocks base/k covering all addresses sharing the first k bits; routing entries (prefix, nextHop); queries are IPv4 addresses (the selection rule and output are cut off); algorithmTags: TRIE, BIT_MANIPULATION; preview response sha256 74b6495c311aa13f0aba6f2fa3b4671a0b2614769ec2a2102df1149ef472a1ca"
+   },
+   {
+    "statement": "Uncertainty: medium: address and CIDR semantics, routes and queries are in the preview; longest-prefix matching is the standard routing rule and strongly suggested by the trie tag; the last-listed tie rule and the empty-string miss value are inferred",
+    "basis": "the public group preview is partial (1278 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "When several prefixes match, which one wins?",
+   "What is returned when no route matches?",
+   "Can the base address have bits set beyond the prefix length?",
+   "Can the same prefix appear twice?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:687eda22cdb08328ca5a8483/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "26.171.236.208/1",
+       "b.c"
+      ],
+      [
+       "191.111.32.148/32",
+       "b.c"
+      ],
+      [
+       "16.159.254.78/24",
+       "x9"
+      ],
+      [
+       "26.171.236.208/0",
+       "a"
+      ],
+      [
+       "166.16.66.168/32",
+       "b.c"
+      ],
+      [
+       "252.219.71.239/20",
+       "b.c"
+      ],
+      [
+       "26.171.236.209/24",
+       "hop-1"
+      ]
+     ],
+     [
+      "26.171.236.209",
+      "166.16.64.168",
+      "116.180.218.10",
+      "116.180.218.244",
+      "90.171.236.208"
+     ]
+    ],
+    "output": [
+     "hop-1",
+     "a",
+     "b.c",
+     "b.c",
+     "b.c"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:687eda22cdb08328ca5a8483/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/oracles.py",
+    "sha256": "537cdc3769fee5020247b958d8af2feccd49ef53d12161fdaa6fcf07138a0f6d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def routeLookup(routes, queries) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/687eda22cdb08328ca5a8483-python.json",
+     "inferredInterface": {
+      "name": "routeLookup",
+      "params": [
+       {
+        "name": "routes",
+        "type": "string[][]"
+       },
+       {
+        "name": "queries",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/687eda22cdb08328ca5a8483-python.json",
+      "sha256": "46bd25aeccc35cfba95440c74967ecdaf33b4de8913512b9ee3160e6ce780bab",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function routeLookup(routes, queries) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/687eda22cdb08328ca5a8483-javascript.json",
+     "inferredInterface": {
+      "name": "routeLookup",
+      "params": [
+       {
+        "name": "routes",
+        "type": "string[][]"
+       },
+       {
+        "name": "queries",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/687eda22cdb08328ca5a8483-javascript.json",
+      "sha256": "f21d4a8329796d439149735b2bed77d1232c6ff2101812760dd5a4e6b3be82bc",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

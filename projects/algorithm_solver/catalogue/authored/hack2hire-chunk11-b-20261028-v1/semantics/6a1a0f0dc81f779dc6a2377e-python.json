@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1a0f0dc81f779dc6a2377e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "customerFile",
+  "processorFile",
+  "fieldNames"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "joinDataSet",
+  "params": [
+   {
+    "name": "customerFile",
+    "type": "string[]"
+   },
+   {
+    "name": "processorFile",
+    "type": "string[]"
+   },
+   {
+    "name": "fieldNames",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "nested loops comparing the listed columns of every customer row with every processor row",
+  "candidate_design": "hash map from the tuple of key values (joined with a comma, which cannot occur in values) to the processor rows",
+  "complexity_target": "O(input + output) time/O(processor rows) space"
+ },
+ "source_sha256": "783f0e2bc760723052e3ba5e02276fa141d8a0ecad36d069a6f6558779f82c3d",
+ "wrapper": "Solution.joinDataSet"
+}

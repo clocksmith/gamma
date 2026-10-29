@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67709b6d366afdc1233e4ffc",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "root1",
+  "root2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "largestCommonValue",
+  "params": [
+   {
+    "name": "root1",
+    "type": "(integer|null)[]"
+   },
+   {
+    "name": "root2",
+    "type": "(integer|null)[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "collect all non-null values of each array into sets and take the maximum of the intersection (ignores the tree structure)",
+  "candidate_design": "decode each level-order array into child index arrays, then walk both trees in reverse in-order with explicit stacks, advancing the side holding the larger value until the values meet",
+  "complexity_target": "O(n1 + n2) time/O(n1 + n2) space for decoding plus O(h1 + h2) stacks"
+ },
+ "source_sha256": "193232884f3b2e979e0ca3534d975eb4b3c7a1c18191f54a825ac8f05be919c5",
+ "wrapper": "Solution.largestCommonValue"
+}

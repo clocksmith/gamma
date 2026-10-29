@@ -1,0 +1,455 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68a61c743a368733bb10424b:68a61ebd3a368733bb10424d:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+   "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68a61c743a368733bb10424b.json",
+   "sha256": "6455e914cd80d97f565445bce4c92f4765d0257b6d0ddb76b3b154a07a4aa464",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+   "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+   "selector": "/variants/hack2hire:68a61ebd3a368733bb10424d"
+  }
+ ],
+ "problemId": "hack2hire:68a61c743a368733bb10424b",
+ "variantId": "68a61ebd3a368733bb10424d",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: incremental DAG with cycle rejection and smallest-id order",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68a61ebd3a368733bb10424d/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "TaskScheduler() starts empty. addTask(id, dependencies) adds a task whose prerequisites are the listed ids (distinct; they may name tasks not added yet). It returns false and changes nothing when id was already added or when the new task would close a dependency cycle (including depending on itself); otherwise true. getExecutionOrder() returns every added task that can run, i.e. whose prerequisites are all added and can run, in the topological order that always picks the smallest id (by code point) among the tasks whose prerequisites are already listed. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "TaskScheduler() starts empty.",
+   "addTask(id, dependencies) adds a task whose prerequisites are the listed ids (distinct; they may name tasks not added yet).",
+   "It returns false and changes nothing when id was already added or when the new task would close a dependency cycle (including depending on itself); otherwise true.",
+   "getExecutionOrder() returns every added task that can run, i.e.",
+   "whose prerequisites are all added and can run, in the topological order that always picks the smallest id (by code point) among the tasks whose prerequisites are already listed.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 2500 calls",
+   "ids match [a-z0-9]{1,8}",
+   "each dependency list has 0 to 10 distinct ids"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68a61ebd3a368733bb10424d/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: project task scheduler; each task has a unique string id and a list of prerequisite task ids that must complete first (the operations are cut off); algorithmTags: GRAPH, DEPTH_FIRST_SEARCH; preview response sha256 42d062f611ea34f1f2d156fc1a247461140b34deb3ce3d8ce9157fba6af801ea"
+   },
+   {
+    "statement": "Uncertainty: very high: unique ids and prerequisite lists are in the preview; incremental addTask with cycle rejection, tolerance of not-yet-added prerequisites, the executable-only order and the smallest-id tie rule are inferred from the title and tags",
+    "basis": "the public group preview is partial (227 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Can a task list prerequisites that do not exist yet?",
+   "What happens when a new task would create a cycle?",
+   "Which order is returned when several are valid?",
+   "Are tasks with missing prerequisites included?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68a61ebd3a368733bb10424d/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "TaskScheduler"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "TaskScheduler",
+      "addTask",
+      "addTask",
+      "addTask",
+      "getExecutionOrder",
+      "addTask",
+      "addTask",
+      "getExecutionOrder",
+      "getExecutionOrder",
+      "addTask",
+      "getExecutionOrder"
+     ],
+     [
+      [],
+      [
+       "b",
+       []
+      ],
+      [
+       "c",
+       [
+        "b",
+        "f",
+        "c"
+       ]
+      ],
+      [
+       "b",
+       []
+      ],
+      [],
+      [
+       "c",
+       [
+        "c"
+       ]
+      ],
+      [
+       "b",
+       [
+        "f",
+        "e"
+       ]
+      ],
+      [],
+      [],
+      [
+       "g1",
+       [
+        "a",
+        "g1",
+        "b"
+       ]
+      ],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     true,
+     false,
+     false,
+     [
+      "b"
+     ],
+     false,
+     false,
+     [
+      "b"
+     ],
+     [
+      "b"
+     ],
+     false,
+     [
+      "b"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/study-content.json",
+    "sha256": "b53a7500452379b6f72a1af994dd1a4d1fa8d6a855db54aae246cffe44fda153",
+    "selector": "/variants/hack2hire:68a61ebd3a368733bb10424d/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/oracles.py",
+    "sha256": "537cdc3769fee5020247b958d8af2feccd49ef53d12161fdaa6fcf07138a0f6d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TaskScheduler:\n    def __init__(self)\n    def addTask(self, id, dependencies) -> boolean\n    def getExecutionOrder(self) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68a61ebd3a368733bb10424d-python.json",
+     "inferredInterface": {
+      "classname": "TaskScheduler",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addTask",
+        "params": [
+         {
+          "name": "id",
+          "type": "string"
+         },
+         {
+          "name": "dependencies",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getExecutionOrder",
+        "params": [],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68a61ebd3a368733bb10424d-python.json",
+      "sha256": "1fc38751bf2076d47467c11626a95559bca568f2d968fd6c503c6258f18f0063",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TaskScheduler {\n  constructor()\n  addTask(id, dependencies) /* -> boolean */\n  getExecutionOrder() /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+      "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68a61ebd3a368733bb10424d-javascript.json",
+     "inferredInterface": {
+      "classname": "TaskScheduler",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addTask",
+        "params": [
+         {
+          "name": "id",
+          "type": "string"
+         },
+         {
+          "name": "dependencies",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getExecutionOrder",
+        "params": [],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/semantics/68a61ebd3a368733bb10424d-javascript.json",
+      "sha256": "f9a86aff34d14708e6abeb91a45504feb3337854065aeb1668c1a589a2aef0cb",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk11-b-20261028-v1/contracts.json",
+    "sha256": "8e219fe25ded64f060df4d7ca59c7b71fe185e0429594a4a4fa37a7856ae7a92",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

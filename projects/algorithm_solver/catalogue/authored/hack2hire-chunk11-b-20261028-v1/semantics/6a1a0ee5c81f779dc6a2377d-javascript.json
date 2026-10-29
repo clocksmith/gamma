@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1a0ee5c81f779dc6a2377d",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "customerFile",
+  "processorFile",
+  "fieldName"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "joinDataSet",
+  "params": [
+   {
+    "name": "customerFile",
+    "type": "string[]"
+   },
+   {
+    "name": "processorFile",
+    "type": "string[]"
+   },
+   {
+    "name": "fieldName",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "nested loops for the left part, then a second scan of processor rows checking every customer row for a match",
+  "candidate_design": "hash map from key value to the list of processor rows (kept in input order), then one pass over the customer rows; a matched flag per processor row selects the unmatched ones appended at the end",
+  "complexity_target": "O(input + output) time/O(processor rows) space"
+ },
+ "source_sha256": "91f19effb82ee9a1b690cfa6ad74e58f927e756d509615d1118f3a17df49824e",
+ "wrapper": "named export joinDataSet"
+}

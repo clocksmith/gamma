@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6910e7e971ea59cda5a81ac4",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "k",
+  "w"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "largestKInWindows",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   },
+   {
+    "name": "w",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sort every window afresh and take its first k elements in descending order",
+  "candidate_design": "keep the window as a sorted array, inserting the entering element and removing the leaving one by binary search; read the last k entries backwards",
+  "complexity_target": "O(n * (log w + w_move) + output) time with array moves done by the runtime/O(w) space"
+ },
+ "source_sha256": "2607a6a8ca897be6943474b5e6bc56ce2192157541fe825291da193e6eaa5799",
+ "wrapper": "named export largestKInWindows"
+}

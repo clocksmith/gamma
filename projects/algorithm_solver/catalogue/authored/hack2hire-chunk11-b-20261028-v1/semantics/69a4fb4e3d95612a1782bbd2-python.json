@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a4fb4e3d95612a1782bbd2",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "points"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "largestRectangleArea",
+  "params": [
+   {
+    "name": "points",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every pair of points as opposite corners and look the other two corners up in the point list",
+  "candidate_design": "sort by x and sweep columns; for every pair of y values in a column, remember the first column containing both and score the rectangle from that column to the current one",
+  "complexity_target": "O(n log n + sum over columns of size^2) time/O(n^2) space"
+ },
+ "source_sha256": "554318ec82daadc90399fcc1e51861082e0ff2a62dd5efc7207080831da6e37c",
+ "wrapper": "Solution.largestRectangleArea"
+}

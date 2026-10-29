@@ -1,0 +1,104 @@
+{
+ "problems": {
+  "hack2hire:68e6bf5c605ab8e954684812": {
+   "reference": "replay with plain lists: users as a list of [name, balance] pairs searched linearly, friendships as a list of unordered pairs, pending requests as a list of [sequence, from, to]",
+   "candidate_design": "hash maps for balances and pending requests keyed by sequence number, and a set of canonical friend-pair keys; each request is parsed by splitting on \"/\"",
+   "complexity_target": "O(total request length) time/O(users + pending requests + friendships) space"
+  },
+  "hack2hire:69c7f82d21f6ab4226966a80": {
+   "reference": "second-by-second clock: free finished dispensers, seat as many front cars as possible at this second, then advance the clock by one",
+   "candidate_design": "event arithmetic: keep each dispenser's free-at time and remaining fuel; a car starts at max(previous start, earliest free-at among dispensers with enough fuel) and picks the first such dispenser free at that time",
+   "complexity_target": "O(N) time/O(1) extra space"
+  },
+  "hack2hire:699bb8776e73e4abccc9aa11": {
+   "reference": "for each name try k = 0, 1, 2, ... and test every candidate against a plain list of the usernames already issued",
+   "candidate_design": "set of issued usernames plus a per-base counter remembering the last suffix tried, so repeated bases resume where they stopped",
+   "complexity_target": "O(n * 8) expected time beyond suffix probing/O(n) space"
+  },
+  "hack2hire:67fda0b6d2adf72ba62b0ed9": {
+   "reference": "maximum flow by augmenting paths from recipients to hour slots of capacity n",
+   "candidate_design": "earliest-deadline-first sweep over the eight hours, using a count of available recipients per end hour as the priority queue (end hours take only nine values)",
+   "complexity_target": "O(m + 8 * 9) time/O(1) extra space for m recipients"
+  },
+  "hack2hire:68c4834e97640ed3834dc7ca": {
+   "reference": "parse every cell with a regular expression, then relax all edges repeatedly (Bellman-Ford style) until no distance changes",
+   "candidate_design": "breadth-first search from start, parsing each cell's directives with a character scanner the first time the cell is dequeued",
+   "complexity_target": "O(n + total directive length) time/O(n) space"
+  },
+  "hack2hire:687eda22cdb08328ca5a8483": {
+   "reference": "for every query scan all routes, comparing the first k characters of 32-character binary strings and keeping the longest (later on ties)",
+   "candidate_design": "one hash map per prefix length from the masked network number to the next hop (later entries overwrite); a query probes the present lengths from longest to shortest",
+   "complexity_target": "O(R + Q * L) time for L distinct lengths (<= 33)/O(R) space"
+  },
+  "hack2hire:6a1a0cc4c81f779dc6a2376b": {
+   "reference": "nested loops comparing every customer row with every processor row",
+   "candidate_design": "hash map from key value to the list of processor rows (kept in input order), then one pass over the customer rows",
+   "complexity_target": "O(input + output) time/O(processor rows) space"
+  },
+  "hack2hire:6a1a0ed3c81f779dc6a2377c": {
+   "reference": "nested loops comparing every customer row with every processor row, padding when nothing matched",
+   "candidate_design": "hash map from key value to the list of processor rows (kept in input order), then one pass over the customer rows; unmatched customer rows are padded with empty processor values",
+   "complexity_target": "O(input + output) time/O(processor rows) space"
+  },
+  "hack2hire:6a1a0ee5c81f779dc6a2377d": {
+   "reference": "nested loops for the left part, then a second scan of processor rows checking every customer row for a match",
+   "candidate_design": "hash map from key value to the list of processor rows (kept in input order), then one pass over the customer rows; a matched flag per processor row selects the unmatched ones appended at the end",
+   "complexity_target": "O(input + output) time/O(processor rows) space"
+  },
+  "hack2hire:6a1a0f0dc81f779dc6a2377e": {
+   "reference": "nested loops comparing the listed columns of every customer row with every processor row",
+   "candidate_design": "hash map from the tuple of key values (joined with a comma, which cannot occur in values) to the processor rows",
+   "complexity_target": "O(input + output) time/O(processor rows) space"
+  },
+  "hack2hire:68a61ebd3a368733bb10424d": {
+   "reference": "edge list; cycle check by repeatedly removing tasks with no remaining prerequisites over the tentative graph; order by repeatedly scanning for the smallest ready id",
+   "candidate_design": "adjacency maps in both directions; addTask runs an iterative depth-first search from id over existing dependents and rejects when it reaches a prerequisite; getExecutionOrder runs Kahn's algorithm with a binary min-heap of ids, counting only added prerequisites as satisfiable",
+   "complexity_target": "O(reachable) per addTask, O((V + E) log V) per getExecutionOrder/O(V + E) space"
+  },
+  "hack2hire:678dc780fa7ce9616e190fb7": {
+   "reference": "materialise the filtered list eagerly in the constructor and walk it with an index",
+   "candidate_design": "lazy cursor: hasNext advances an index past rejected elements and caches the position of the next selected one; next returns it and moves on",
+   "complexity_target": "O(1) amortised per call/O(1) extra space"
+  },
+  "hack2hire:6a14d69a7b0582b352787fa8": {
+   "reference": "simulate at most 2n + 1 jumps; if the walk is still going it must have repeated a state, so answer -1",
+   "candidate_design": "simulate while recording visited (position, direction) states in a hash set; a repeated state means an endless walk",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:68099e1fcbb5948f87732b56": {
+   "reference": "dictionary of keys; prefixSearch sorts every key and filters with startswith",
+   "candidate_design": "trie with per-node live-key counts and pruning on delete, plus a hash map for get; prefixSearch walks to the prefix node and runs an iterative depth-first search visiting children in letter order",
+   "complexity_target": "O(|key|) per set/update/delete, O(1) per get, O(|prefix| + matched subtree) per prefixSearch/O(total key length) space"
+  },
+  "hack2hire:67e3915487527b3f41af78b6": {
+   "reference": "memoised recursion returning, for every suffix, the set of decodings, then one final sort",
+   "candidate_design": "iterative backtracking over positions that tries group sizes in increasing order; the letter grows with the group size, so the output comes out already sorted",
+   "complexity_target": "O(results * length) time/O(length) extra space beyond the output"
+  },
+  "hack2hire:67709b6d366afdc1233e4ffc": {
+   "reference": "collect all non-null values of each array into sets and take the maximum of the intersection (ignores the tree structure)",
+   "candidate_design": "decode each level-order array into child index arrays, then walk both trees in reverse in-order with explicit stacks, advancing the side holding the larger value until the values meet",
+   "complexity_target": "O(n1 + n2) time/O(n1 + n2) space for decoding plus O(h1 + h2) stacks"
+  },
+  "hack2hire:69ae2fec4b133b6a8f3a7345": {
+   "reference": "enumerate every subset of people and keep the largest one containing no connection (small n only)",
+   "candidate_design": "tree dynamic programming over an iterative depth-first order: for each person the best group size with and without that person, combined bottom-up per component",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6910e7e971ea59cda5a81ac4": {
+   "reference": "sort every window afresh and take its first k elements in descending order",
+   "candidate_design": "keep the window as a sorted array, inserting the entering element and removing the leaving one by binary search; read the last k entries backwards",
+   "complexity_target": "O(n * (log w + w_move) + output) time with array moves done by the runtime/O(w) space"
+  },
+  "hack2hire:69a4fb4e3d95612a1782bbd2": {
+   "reference": "try every pair of points as opposite corners and look the other two corners up in the point list",
+   "candidate_design": "sort by x and sweep columns; for every pair of y values in a column, remember the first column containing both and score the rectangle from that column to the current one",
+   "complexity_target": "O(n log n + sum over columns of size^2) time/O(n^2) space"
+  },
+  "hack2hire:69b62ed7666464810ca36212": {
+   "reference": "for every point p and every two other points q and r with (q - p) perpendicular to (r - p), check whether q + r - p is a point",
+   "candidate_design": "group all point pairs by (midpoint sum, squared length): two diagonals in the same group form a rectangle, scored as the absolute cross product of the sides from one corner",
+   "complexity_target": "O(n^2 + sum over groups of size^2) time/O(n^2) space"
+  }
+ }
+}
