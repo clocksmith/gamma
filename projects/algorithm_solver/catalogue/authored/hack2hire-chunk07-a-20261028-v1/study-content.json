@@ -1,0 +1,964 @@
+{
+ "schema": "gamma.hack2hire-chunk07-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-28",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:6a0237332608e589a944a2be": {
+   "constraints": [
+    "0 <= |x|, |y| <= 1000",
+    "lowercase English letters"
+   ],
+   "clarifyingQuestions": [
+    "Must the match in y be contiguous?",
+    "What is returned when nothing matches?",
+    "Can either string be empty?"
+   ],
+   "hints": [
+    "Fix where the substring of y ends; then it only grows to the left.",
+    "dp[i][j]: the longest substring of y ending at position j that is a subsequence of x[:i].",
+    "If x[i-1] = y[j-1], extend dp[i-1][j-1] by one; otherwise skip x[i-1] and keep dp[i-1][j]."
+   ],
+   "invariants": [
+    "dp[i][j] <= min(i, j)",
+    "dp[i][j] is non-decreasing in i"
+   ],
+   "chooseWhen": [
+    "One side must stay contiguous and the other may skip characters"
+   ],
+   "tradeoffs": [
+    "The quadratic table is simple but needs a rolling row to keep memory at O(|y|)"
+   ],
+   "variantLabel": "Inferred: subsequence of x matched against a substring of y",
+   "examples": [
+    {
+     "input": [
+      "",
+      ""
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "ab",
+      "ba"
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a351986e73e4abccc9bf81": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "-10^9 <= queries[i] <= 10^9",
+    "repeated points allowed (inferred: skipped)"
+   ],
+   "clarifyingQuestions": [
+    "What happens to a query whose point is occupied, or whose two neighbours are both occupied?",
+    "Is an answer reported after a skipped query?",
+    "Can positions be negative?"
+   ],
+   "hints": [
+    "A new house touches at most the run ending just left of it or the run starting just right of it; the build rule forbids touching both, so runs never merge.",
+    "Store run lengths at both endpoints of every run; interior points never need updating.",
+    "The longest run never shrinks, so keep a running maximum."
+   ],
+   "invariants": [
+    "for every maximal run [l, r], length[l] = length[r] = r - l + 1",
+    "the answer sequence is non-decreasing"
+   ],
+   "chooseWhen": [
+    "Points are sparse or unbounded, so an array indexed by position is impractical"
+   ],
+   "tradeoffs": [
+    "Union-find also works but needs path compression; endpoint lengths are O(1) per insertion without it"
+   ],
+   "variantLabel": "Inferred: running longest run with a skipped-query rule",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ]
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -3
+      ]
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6854ca09c201117d348a25d5": {
+   "constraints": [
+    "0 <= |s| <= 200000",
+    "printable ASCII characters"
+   ],
+   "clarifyingQuestions": [
+    "Is case significant?",
+    "What is returned for the empty string?"
+   ],
+   "hints": [
+    "A bad triple ends at index i when s[i] = s[i-1] = s[i-2].",
+    "No valid window may contain both i - 2 and i, so the next window starts at i - 1.",
+    "Track the start and update the best length at every index."
+   ],
+   "invariants": [
+    "the window [start, i] never contains three equal consecutive characters"
+   ],
+   "chooseWhen": [
+    "The forbidden pattern is local (a fixed-length run)"
+   ],
+   "tradeoffs": [
+    "A run-length view also works but needs more bookkeeping"
+   ],
+   "variantLabel": "Inferred: longest window without a triple",
+   "examples": [
+    {
+     "input": [
+      ""
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "a"
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a974f580ca9cc4e1c789f3b": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "1 <= a[i] <= 10^9",
+    "1 <= k <= 10^15"
+   ],
+   "clarifyingQuestions": [
+    "Are all elements positive?",
+    "What if no element fits?"
+   ],
+   "hints": [
+    "With positive elements, shrinking the window always lowers the sum.",
+    "For each right end, the best left end is the smallest one whose window sum is at most k.",
+    "That left end only moves right, so a two-pointer window is linear."
+   ],
+   "invariants": [
+    "window sum <= k after shrinking",
+    "left <= right + 1"
+   ],
+   "chooseWhen": [
+    "All elements are positive"
+   ],
+   "tradeoffs": [
+    "Fails for negative elements, where prefix sums plus a monotonic structure are needed"
+   ],
+   "variantLabel": "Inferred: longest window with bounded sum",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       6
+      ],
+      26
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67fbdd34216af53465a721a5": {
+   "constraints": [
+    "1 <= |s| <= 200000",
+    "s has only English letters"
+   ],
+   "clarifyingQuestions": [
+    "Do letters absent from s count?",
+    "Is a letter in only one case valid?"
+   ],
+   "hints": [
+    "Only the last lowercase and first uppercase occurrence of each letter matter.",
+    "A letter qualifies when it has no lowercase, no uppercase, or last lowercase < first uppercase.",
+    "Record both positions in one pass and count at the end."
+   ],
+   "invariants": [
+    "lastLower[c] and firstUpper[c] describe the scanned prefix"
+   ],
+   "chooseWhen": [
+    "Order constraints between two classes of occurrences"
+   ],
+   "tradeoffs": [
+    "Pairwise comparison is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred: count letters with lowercase strictly before uppercase",
+   "examples": [
+    {
+     "input": [
+      "a"
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "A"
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67d266555e44a1b0c201ee79": {
+   "constraints": [
+    "1 <= trades <= 1000",
+    "timestamps are digit strings with non-decreasing values",
+    "symbols [A-Z]{1,6} (level 3: [A-NP-Z]{1,5} optionally followed by \"O\")",
+    "1 <= quantity <= 1000, 1 <= price <= 10000"
+   ],
+   "clarifyingQuestions": [
+    "What is the output format?",
+    "What happens when a sell exceeds the holding?",
+    "Is cash allowed to go negative?"
+   ],
+   "hints": [
+    "Keep cash as an integer and holdings in a hash map.",
+    "Clamp a sell to the shares held and drop symbols that reach zero.",
+    "Sort the symbols only once, when building the output."
+   ],
+   "invariants": [
+    "cash = 1000 - total spent + total received",
+    "every stored holding is positive"
+   ],
+   "chooseWhen": [
+    "Replaying a ledger with keyed balances"
+   ],
+   "tradeoffs": [
+    "A sorted map would keep order continuously but costs log time per trade"
+   ],
+   "variantLabel": "Inferred level 1: replay trades into a portfolio",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "45",
+        "C",
+        "S",
+        "1",
+        "3"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "CASH",
+       "1000"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "1",
+        "A",
+        "B",
+        "10",
+        "50"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "CASH",
+       "500"
+      ],
+      [
+       "A",
+       "10"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67d2675b5e44a1b0c201ee7a": {
+   "constraints": [
+    "1 <= trades <= 1000",
+    "timestamps are digit strings with non-decreasing values",
+    "symbols [A-Z]{1,6} (level 3: [A-NP-Z]{1,5} optionally followed by \"O\")",
+    "1 <= quantity <= 1000, 1 <= price <= 10000"
+   ],
+   "clarifyingQuestions": [
+    "Which price does a margin sale use?",
+    "How are ties between equal prices broken?",
+    "What if selling everything does not cover the deficit?"
+   ],
+   "hints": [
+    "Margin selling never changes prices, so the chosen symbol stays best until it is exhausted or cash is covered.",
+    "Selling one share at a time from one symbol equals selling ceil(deficit / price) shares at once.",
+    "Use a heap keyed by (-latest price, symbol) and skip stale entries."
+   ],
+   "invariants": [
+    "heap entries whose price or holding no longer match are ignored",
+    "after a margin call, cash >= 0 or no shares are held"
+   ],
+   "chooseWhen": [
+    "Repeated greedy picks of a maximum under updates"
+   ],
+   "tradeoffs": [
+    "A full rescan per margin sale is simpler but quadratic"
+   ],
+   "variantLabel": "Inferred level 2: greedy margin-call liquidation",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "1",
+        "A",
+        "B",
+        "10",
+        "50"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "CASH",
+       "500"
+      ],
+      [
+       "A",
+       "10"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "1",
+        "A",
+        "B",
+        "10",
+        "200"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "CASH",
+       "0"
+      ],
+      [
+       "A",
+       "5"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67d2675c5e44a1b0c201ee7b": {
+   "constraints": [
+    "1 <= trades <= 1000",
+    "timestamps are digit strings with non-decreasing values",
+    "symbols [A-Z]{1,6} (level 3: [A-NP-Z]{1,5} optionally followed by \"O\")",
+    "1 <= quantity <= 1000, 1 <= price <= 10000"
+   ],
+   "clarifyingQuestions": [
+    "Which symbols are options, and on which stock?",
+    "May collateral be sold during a margin call?",
+    "Does selling an option free stock shares immediately?"
+   ],
+   "hints": [
+    "A stock is sellable only above its option count; an option is always sellable.",
+    "If the best sellable symbol is an option whose stock has a higher (or equal) price, every option sale unlocks one stock share that is then sold next.",
+    "Sell options alone until both counts are equal, then alternate option and stock; compute how many of each in closed form."
+   ],
+   "invariants": [
+    "options sold during a margin call never leave a stock below zero sellable shares",
+    "the chosen best symbol stays best until exhausted, covered, or (for an option) its stock unlocks"
+   ],
+   "chooseWhen": [
+    "Greedy liquidation with coupled assets"
+   ],
+   "tradeoffs": [
+    "Share-by-share simulation is obviously right but costs O(shares) per call"
+   ],
+   "variantLabel": "Inferred level 3: margin calls with option collateral",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "14",
+        "A",
+        "S",
+        "2",
+        "1"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "CASH",
+       "1000"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "1",
+        "A",
+        "B",
+        "10",
+        "50"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "CASH",
+       "500"
+      ],
+      [
+       "A",
+       "10"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a1c7cfc8b879849ebc0f85d": {
+   "constraints": [
+    "1 <= m, n <= 100",
+    "1 <= frameSize <= min(m, n)",
+    "-10^6 <= matrix[i][j] <= 10^6"
+   ],
+   "clarifyingQuestions": [
+    "Are repeated values counted once?",
+    "What is the frame of a 2 x 2 square?",
+    "Can values be negative?"
+   ],
+   "hints": [
+    "Only the border cells of each square matter; inner cells are ignored.",
+    "Each frame has 4k - 4 cells for k >= 2 and one cell for k = 1.",
+    "Walk the border directly instead of filtering the whole square."
+   ],
+   "invariants": [
+    "each frame visit adds each border cell exactly once to the set"
+   ],
+   "chooseWhen": [
+    "Square windows with border-only aggregation"
+   ],
+   "tradeoffs": [
+    "Distinctness prevents sliding-window sums; recomputing each frame is simplest at these bounds"
+   ],
+   "variantLabel": "Inferred: best frame by sum of distinct border values",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        5
+       ]
+      ],
+      1
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        1
+       ]
+      ],
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6827f7c3f13ac663af91d7a5": {
+   "constraints": [
+    "0 <= n <= 100000",
+    "0 <= start < end <= 10^9"
+   ],
+   "clarifyingQuestions": [
+    "Do tasks that touch at an endpoint overlap?",
+    "Can a task have zero length?"
+   ],
+   "hints": [
+    "Finishing early leaves the most room for later tasks.",
+    "Sort by end time.",
+    "Take a task whenever it starts no earlier than the end of the last taken task."
+   ],
+   "invariants": [
+    "the taken tasks are pairwise non-overlapping",
+    "lastEnd is the smallest possible end of any optimal prefix"
+   ],
+   "chooseWhen": [
+    "Maximising a count of compatible intervals"
+   ],
+   "tradeoffs": [
+    "Sorting costs O(n log n); weighted versions need DP instead"
+   ],
+   "variantLabel": "Inferred: interval scheduling by earliest end",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        2
+       ]
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69e933bdfbaf3da641828694": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "1 <= values[i] <= 10^9",
+    "1 <= costs[i] <= 10^4",
+    "0 <= totalCost <= 10^9"
+   ],
+   "clarifyingQuestions": [
+    "How much does one upgrade raise the value?",
+    "Can upgrades be partial?",
+    "Must the whole budget be spent?"
+   ],
+   "hints": [
+    "Feasibility is monotone: if a floor is affordable, every lower floor is too.",
+    "Lifting every asset to floor T costs the sum of (T - values[i]) * costs[i] over assets below T.",
+    "Binary search T; stop summing as soon as the cost exceeds the budget."
+   ],
+   "invariants": [
+    "lo is always affordable, hi + 1 never is"
+   ],
+   "chooseWhen": [
+    "Maximising a minimum under a monotone budget"
+   ],
+   "tradeoffs": [
+    "The early exit keeps sums small (exact in JavaScript) but makes the check data-dependent"
+   ],
+   "variantLabel": "Inferred: binary search on the achievable floor",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ],
+      [
+       1
+      ],
+      0
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5
+      ],
+      [
+       3
+      ],
+      10
+     ],
+     "output": 8,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a725ef948af2ae18e995ee1": {
+   "constraints": [
+    "1 <= lo < hi <= 10^9",
+    "1 <= k <= 2^31 - 1",
+    "some pair has XOR <= k"
+   ],
+   "clarifyingQuestions": [
+    "Must a and b be distinct?",
+    "How large can the range be?"
+   ],
+   "hints": [
+    "The range can be huge, so enumerate bits rather than numbers.",
+    "Choose the bits of a and b from the top, tracking whether each is still tight against lo and hi, whether the XOR is still tight against k, and whether a < b is decided.",
+    "A higher XOR bit beats all lower bits, so try XOR bit 1 first and memoise feasibility per state."
+   ],
+   "invariants": [
+    "a state is feasible iff some completion satisfies every bound"
+   ],
+   "chooseWhen": [
+    "Bounded pair problems over huge integer ranges"
+   ],
+   "tradeoffs": [
+    "Exhaustive search is simple but only works for tiny ranges"
+   ],
+   "variantLabel": "Inferred: digit DP over bit tightness flags",
+   "examples": [
+    {
+     "input": [
+      1,
+      2,
+      3
+     ],
+     "output": 3,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      2,
+      3,
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:676efc4fb2c9d428b406a287": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "1 <= health[i] <= 10^6",
+    "series[i] matches [a-z0-9]{1,8}",
+    "1 <= k <= 100000"
+   ],
+   "clarifyingQuestions": [
+    "What exactly is combined, and what is the diversity limit?",
+    "Can health be zero or negative?",
+    "Is k the number of distinct series?"
+   ],
+   "hints": [
+    "With positive health, taking every server of a chosen series never hurts.",
+    "So the task reduces to picking at most k series with the largest totals.",
+    "Keep a size-k min-heap of series totals."
+   ],
+   "invariants": [
+    "the heap holds the k largest totals seen so far"
+   ],
+   "chooseWhen": [
+    "Top-k selection after aggregation"
+   ],
+   "tradeoffs": [
+    "Sorting all totals is simpler; the heap saves memory when k is small"
+   ],
+   "variantLabel": "Inferred: top-k series by total health",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ],
+      [
+       "a"
+      ],
+      1
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5
+      ],
+      [
+       "a"
+      ],
+      4
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a724c9748af2ae18e995e5e": {
+   "constraints": [
+    "2 <= n <= 100000",
+    "-10^9 <= arr[i] <= 10^9"
+   ],
+   "clarifyingQuestions": [
+    "What is the score of a split?",
+    "Must both parts be non-empty?"
+   ],
+   "hints": [
+    "The distinct count of a prefix only grows as the prefix grows.",
+    "Precompute distinct counts for every suffix from the right.",
+    "Combine prefix count at i with suffix count at i + 1."
+   ],
+   "invariants": [
+    "prefix[i] counts distinct values in arr[0..i]"
+   ],
+   "chooseWhen": [
+    "Two-sided aggregate over every split point"
+   ],
+   "tradeoffs": [
+    "Two passes and an O(n) array"
+   ],
+   "variantLabel": "Inferred: maximise left plus right distinct counts",
+   "examples": [
+    {
+     "input": [
+      [
+       1,
+       1
+      ]
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       2
+      ]
+     ],
+     "output": 2,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c2e2221f64f4312b0a3df8": {
+   "constraints": [
+    "0 <= n <= 100000",
+    "taskName matches [A-Za-z0-9_]{1,10}",
+    "0 <= deadline <= 10^9",
+    "0 <= profit <= 10^6"
+   ],
+   "clarifyingQuestions": [
+    "Is the answer the total profit or the chosen task list?",
+    "Does a deadline of 0 allow any task?",
+    "Are names unique?"
+   ],
+   "hints": [
+    "Only how many tasks finish by each deadline matters, not which second each runs.",
+    "Process tasks by increasing deadline, tentatively taking each one.",
+    "When more tasks are taken than the current deadline allows, drop the least profitable (min-heap)."
+   ],
+   "invariants": [
+    "the heap is always a schedulable set of maximum profit among the processed tasks"
+   ],
+   "chooseWhen": [
+    "Unit-length jobs with deadlines"
+   ],
+   "tradeoffs": [
+    "Non-unit durations make this NP-hard; the heap only works for unit times"
+   ],
+   "variantLabel": "Inferred: unit-time job sequencing with deadlines",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "a",
+        "1",
+        "5"
+       ]
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a8664a4701a76fc6843b36e": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "0 <= arrivalTime[i] <= 10^9",
+    "times are unsorted and may repeat"
+   ],
+   "clarifyingQuestions": [
+    "How is efficiency defined?",
+    "Can the window be empty or of zero length?",
+    "Do equal arrival times count separately?"
+   ],
+   "hints": [
+    "An optimal window starts and ends on arrival times.",
+    "Group equal times and sort them.",
+    "Like Kadane: extending the best window ending at the previous time costs the gap; restart when that is worse than starting fresh."
+   ],
+   "invariants": [
+    "best[j] is the best efficiency of a window ending exactly at the j-th distinct time"
+   ],
+   "chooseWhen": [
+    "Maximum-score interval on a timeline"
+   ],
+   "tradeoffs": [
+    "Sorting dominates; the DP itself is linear"
+   ],
+   "variantLabel": "Inferred: tests executed minus active duration",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       9
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a361ab6e73e4abccc9bfd0": {
+   "constraints": [
+    "1 <= m, n <= 300",
+    "cells are \"0\"-\"9\", \"+\" or \"-\"",
+    "at least one digit cell"
+   ],
+   "clarifyingQuestions": [
+    "How is the expression evaluated?",
+    "Is a single digit valid?",
+    "What if there is no digit?"
+   ],
+   "hints": [
+    "Since + and - are applied left to right, the value is the previous value plus or minus the last digit.",
+    "For both operators the best predecessor value is the maximum one.",
+    "Keep best[digit cell]; an operator cell stores the maximum best of its up/left digit neighbours."
+   ],
+   "invariants": [
+    "best[i][j] is the maximum value of a valid expression ending at digit cell (i, j)"
+   ],
+   "chooseWhen": [
+    "Grid paths with additive scores"
+   ],
+   "tradeoffs": [
+    "If multiplication were allowed, both minimum and maximum would be needed"
+   ],
+   "variantLabel": "Inferred: maximum alternating expression path",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "7"
+       ]
+      ]
+     ],
+     "output": 7,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "1"
+       ]
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67d33f6a488516fd8ad5a064": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "-10^9 <= arr[i] <= 10^9",
+    "positions may repeat"
+   ],
+   "clarifyingQuestions": [
+    "Can boards overlap?",
+    "Is L at least 1 even if all holes coincide?"
+   ],
+   "hints": [
+    "After sorting, one board covers a prefix and the other the remaining suffix.",
+    "For a split after index i, L must reach max(a[i] - a[0], a[n-1] - a[i+1]).",
+    "Take the minimum over splits, and at least 1 because L is positive."
+   ],
+   "invariants": [
+    "a prefix/suffix split exists in some optimal cover"
+   ],
+   "chooseWhen": [
+    "Covering points with a fixed number of equal intervals"
+   ],
+   "tradeoffs": [
+    "Binary search on L also works; the direct split formula avoids it"
+   ],
+   "variantLabel": "Inferred: two equal boards over sorted holes",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       8
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

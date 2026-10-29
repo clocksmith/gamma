@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/design.json",
+   "sha256": "9884ec27d8077fb5ad74cdb1c6aa9cff2da1b774f1978348b81bea56afb2e6de",
+   "selector": "/problems/hack2hire:69a351986e73e4abccc9bf81"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+   "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+   "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81"
+  }
+ ],
+ "problemId": "hack2hire:69a351856e73e4abccc9bf80",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-records/contract--contract_hack2hire_69a351856e73e4abccc9bf80_69a351986e73e4abccc9bf81_authored-v1.json",
+  "sha256": "23cd2140591a7b63ea6d31272f485b7f126fc8ca3de730126ee66fa5fa0d456e"
+ },
+ "title": {
+  "status": "present",
+  "value": "hash map from each run endpoint to its run length; a built house extends the run ending at p - 1 or the run starting at p + 1 (never both, by the build rule)",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/design.json",
+    "sha256": "9884ec27d8077fb5ad74cdb1c6aa9cff2da1b774f1978348b81bea56afb2e6de",
+    "selector": "/problems/hack2hire:69a351986e73e4abccc9bf81/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "hash map from each run endpoint to its run length; a built house extends the run ending at p - 1 or the run starting at p + 1 (never both, by the build rule). Complexity target: O(n) expected time.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/design.json",
+    "sha256": "9884ec27d8077fb5ad74cdb1c6aa9cff2da1b774f1978348b81bea56afb2e6de",
+    "selector": "/problems/hack2hire:69a351986e73e4abccc9bf81"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Points are sparse or unbounded, so an array indexed by position is impractical"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+    "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+    "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Union-find also works but needs path compression; endpoint lengths are O(1) per insertion without it"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+    "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+    "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "for every maximal run [l, r], length[l] = length[r] = r - l + 1",
+   "the answer sequence is non-decreasing"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+    "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+    "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "A new house touches at most the run ending just left of it or the run starting just right of it; the build rule forbids touching both, so runs never merge.",
+   "Store run lengths at both endpoints of every run; interior points never need updating.",
+   "The longest run never shrinks, so keep a running maximum."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+    "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+    "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "hash map from each run endpoint to its run length; a built house extends the run ending at p - 1 or the run starting at p + 1 (never both, by the build rule)",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/design.json",
+      "sha256": "9884ec27d8077fb5ad74cdb1c6aa9cff2da1b774f1978348b81bea56afb2e6de",
+      "selector": "/problems/hack2hire:69a351986e73e4abccc9bf81/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) expected time; the independent reference (keep the occupied set; after every query sort it and scan for the longest run) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/design.json",
+      "sha256": "9884ec27d8077fb5ad74cdb1c6aa9cff2da1b774f1978348b81bea56afb2e6de",
+      "selector": "/problems/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "A new house touches at most the run ending just left of it or the run starting just right of it; the build rule forbids touching both, so runs never merge.",
+     "Store run lengths at both endpoints of every run; interior points never need updating."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-records/artifact--artifact_hack2hire_69a351856e73e4abccc9bf80_69a351986e73e4abccc9bf81_approach-native_v1.json",
+    "sha256": "42cfdd2f3316cf00f693391366731371bea05e5dcb27d68107553fec6f014243"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper longestSegments, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+      "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/design.json",
+      "sha256": "9884ec27d8077fb5ad74cdb1c6aa9cff2da1b774f1978348b81bea56afb2e6de",
+      "selector": "/problems/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer (or BigInt) arithmetic for every count and amount."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "The longest run never shrinks, so keep a running maximum."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-records/artifact--artifact_hack2hire_69a351856e73e4abccc9bf80_69a351986e73e4abccc9bf81_python_v1.json",
+     "sha256": "64b52886cfa5e351de0d996bd798998323be1e2453c8ebfb3f6991fea42e7269"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-records/artifact--artifact_hack2hire_69a351856e73e4abccc9bf80_69a351986e73e4abccc9bf81_javascript_v1.json",
+     "sha256": "febe2b1114eec5832a65931ee1087c73bf1ceb1052837a602be13849179828e5"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-records/artifact--artifact_hack2hire_69a351856e73e4abccc9bf80_69a351986e73e4abccc9bf81_approach-native_v1.json",
+    "sha256": "42cfdd2f3316cf00f693391366731371bea05e5dcb27d68107553fec6f014243"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (keep the occupied set; after every query sort it and scan for the longest run) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/design.json",
+      "sha256": "9884ec27d8077fb5ad74cdb1c6aa9cff2da1b774f1978348b81bea56afb2e6de",
+      "selector": "/problems/hack2hire:69a351986e73e4abccc9bf81/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+      "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+      "selector": "/problems/1/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "Compare outputs exactly, including JSON types and list order.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/test_oracles.py",
+      "sha256": "7d3d47718cb11be0cb11ec60fbf16995590fcb92a47840fa62f81c65cfd46cc4",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+      "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+      "selector": "/variants/hack2hire:69a351986e73e4abccc9bf81"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-records/artifact--artifact_hack2hire_69a351856e73e4abccc9bf80_69a351986e73e4abccc9bf81_approach-native_v1.json",
+    "sha256": "42cfdd2f3316cf00f693391366731371bea05e5dcb27d68107553fec6f014243"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:69a351856e73e4abccc9bf80:69a351986e73e4abccc9bf81:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-records/artifact--artifact_hack2hire_69a351856e73e4abccc9bf80_69a351986e73e4abccc9bf81_approach-native_v1.json",
+  "sha256": "42cfdd2f3316cf00f693391366731371bea05e5dcb27d68107553fec6f014243"
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67d2675c5e44a1b0c201ee7b",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "trades"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "marginCall",
+  "params": [
+   {
+    "name": "trades",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "after each trade, while cash < 0, recompute every sellable share and sell exactly one share of the best symbol",
+  "candidate_design": "heap as in level 2; when the best is an option whose stock is better, sell in closed form: options alone until the counts are equal, then option/stock pairs",
+  "complexity_target": "O(T log T)"
+ },
+ "source_sha256": "115f0981eb19271d26e7e041248ea2dfe4e2883484553fe99de19a998fc3a4ec",
+ "wrapper": "named export marginCall"
+}

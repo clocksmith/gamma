@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a724c9748af2ae18e995e5e",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxDistinctSplitSum",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every split, build both sets from scratch",
+  "candidate_design": "prefix distinct counts left to right and suffix distinct counts right to left",
+  "complexity_target": "O(n)"
+ },
+ "source_sha256": "5ddb06521c00a13391586d6d52f6c1fdac4972a60a0c47dfffd2ca4eefb8104f",
+ "wrapper": "Solution.maxDistinctSplitSum"
+}

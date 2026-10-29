@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:676efc4fb2c9d428b406a287",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "health",
+  "series",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxCombinationHealth",
+  "params": [
+   {
+    "name": "health",
+    "type": "integer[]"
+   },
+   {
+    "name": "series",
+    "type": "string[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every set of at most k series and sum their servers",
+  "candidate_design": "hash map series -> total health; a min-heap of size k keeps the k largest totals",
+  "complexity_target": "O(n + s log k)"
+ },
+ "source_sha256": "87bfce8977b8174f010e4086ff3e5c78709bd65f166132b7058fb913c029428d",
+ "wrapper": "named export maxCombinationHealth"
+}

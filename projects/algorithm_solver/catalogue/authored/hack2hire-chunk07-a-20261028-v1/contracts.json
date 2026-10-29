@@ -1,0 +1,1049 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:6a0237332608e589a944a2be",
+   "variant_id": "6a0237332608e589a944a2be",
+   "variant_ordinal": 1,
+   "title": "Longest Common Subsequence-Substring",
+   "source": {
+    "post_id": "6a0236a62608e589a944a2b9",
+    "group_title": "Longest Common Subsequence-Substring",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a0236a62608e589a944a2b9",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a0236a62608e589a944a2b9/practice?questionId=6a0237332608e589a944a2be",
+    "preview_response_sha256": "b064c3661a7b402c3500d77436b571f2f87bb69e2571fbd00e0a67b102582f8a",
+    "preview_content_sha256": "e64e2b6cd99aa8a9a5d2bfef915ffa4d0201ee9b042be00d5eb29ad654ce7d08",
+    "preview_characters": 414,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a0236a62608e589a944a2b9.json",
+    "algorithm_tags": [
+     "STRING",
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "EXPEDIA",
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: two strings, longest subsequence of x that is a substring of y, 0 when none",
+    "algorithmTags: STRING, DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "Return the largest length L such that some length-L subsequence of x (characters of x in order, not necessarily adjacent) is equal to some contiguous substring of y. Return 0 when no character of y occurs in x.",
+   "inference_uncertainty": "low: the task is stated in the preview; the character set and bounds are inferred",
+   "inferred_interface": {
+    "name": "longestSubsequenceSubstring",
+    "params": [
+     {
+      "name": "x",
+      "type": "string"
+     },
+     {
+      "name": "y",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "LCSS"
+  },
+  {
+   "uid": "hack2hire:69a351986e73e4abccc9bf81",
+   "variant_id": "69a351986e73e4abccc9bf81",
+   "variant_ordinal": 1,
+   "title": "Longest Consecutive Segment After Insertions",
+   "source": {
+    "post_id": "69a351856e73e4abccc9bf80",
+    "group_title": "Longest Consecutive Segment After Insertions",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a351856e73e4abccc9bf80",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a351856e73e4abccc9bf80/practice?questionId=69a351986e73e4abccc9bf81",
+    "preview_response_sha256": "fefa4f36c47bef27fbf02afcc7426a3ebc91b1820cda25ac07b093e9e8a70363",
+    "preview_content_sha256": "1a0a5e5337f8088463dca3fbbdd8f45fa82df7db96c26e193e93cbc992b2f899",
+    "preview_characters": 544,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a351856e73e4abccc9bf80.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "CAPITAL_ONE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: houses on integer points, build order from queries, the neighbour-emptiness build rule, longest contiguous segment after each build",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "Houses are built on integer points of a line, initially empty, in the order of queries. A query at point p builds a house only when p is still empty and at least one of p - 1 and p + 1 is empty; otherwise the query builds nothing. After every query (built or not) record the length of the longest run of consecutive occupied points (0 while no house exists). Return the recorded lengths.",
+   "inference_uncertainty": "medium: the build rule is in the preview; whether a forbidden or repeated query is skipped (rather than excluded from the input) and the per-query output are inferred",
+   "inferred_interface": {
+    "name": "longestSegments",
+    "params": [
+     {
+      "name": "queries",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "HOUSES"
+  },
+  {
+   "uid": "hack2hire:6854ca09c201117d348a25d5",
+   "variant_id": "6854ca09c201117d348a25d5",
+   "variant_ordinal": 1,
+   "title": "Longest Semi-Alternating Substring",
+   "source": {
+    "post_id": "6854c50ec201117d348a25d4",
+    "group_title": "Longest Semi-Alternating Substring",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6854c50ec201117d348a25d4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6854c50ec201117d348a25d4/practice?questionId=6854ca09c201117d348a25d5",
+    "preview_response_sha256": "89896bcb3b2899bdbae4158d201f7c36b7ae8d9440c7be67abb9e26bc91cdcec",
+    "preview_content_sha256": "be41dd4a96a16b003ba13563d18668c144e1b9278f8a79daf40785131e760ac4",
+    "preview_characters": 343,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6854c50ec201117d348a25d4.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "MICROSOFT",
+     "TIKTOK"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: definition of semi-alternating (no three equal consecutive characters), longest substring length",
+    "algorithmTags: SLIDING_WINDOW"
+   ],
+   "inferred_spec": "A string is semi-alternating when no three consecutive characters are equal. Return the length of the longest semi-alternating substring of s (0 for the empty string).",
+   "inference_uncertainty": "low: definition and task are in the preview; the alphabet, bounds and the empty-string answer are inferred",
+   "inferred_interface": {
+    "name": "longestSemiAlternating",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "SEMI"
+  },
+  {
+   "uid": "hack2hire:6a974f580ca9cc4e1c789f3b",
+   "variant_id": "6a974f580ca9cc4e1c789f3b",
+   "variant_ordinal": 1,
+   "title": "Longest Subarray Under Limit",
+   "source": {
+    "post_id": "6a974d070ca9cc4e1c789f24",
+    "group_title": "Longest Subarray Under Limit",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a974d070ca9cc4e1c789f24",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a974d070ca9cc4e1c789f24/practice?questionId=6a974f580ca9cc4e1c789f3b",
+    "preview_response_sha256": "4ba4962da70084a2b0b5a006f856430c9523b7b60abde20af2cbc7d5030fab16",
+    "preview_content_sha256": "9d916541c33a582e5ba60d992e6209892a9b54e993fc9585cb5b3bada56e02cb",
+    "preview_characters": 592,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a974d070ca9cc4e1c789f24.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "GOLDMAN_SACHS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: positive integers, sum at most k, maximum length, 0 when none",
+    "algorithmTags: SLIDING_WINDOW"
+   ],
+   "inferred_spec": "a holds positive integers. Return the maximum length of a non-empty contiguous subarray whose sum is at most k, or 0 when every element exceeds k.",
+   "inference_uncertainty": "low: the task is stated in the preview; only bounds are inferred",
+   "inferred_interface": {
+    "name": "longestSubarrayUnderLimit",
+    "params": [
+     {
+      "name": "a",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "UNDER"
+  },
+  {
+   "uid": "hack2hire:67fbdd34216af53465a721a5",
+   "variant_id": "67fbdd34216af53465a721a5",
+   "variant_ordinal": 1,
+   "title": "Lowercase Before Uppercase Count",
+   "source": {
+    "post_id": "67fbd93f216af53465a721a1",
+    "group_title": "Lowercase Before Uppercase Count",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67fbd93f216af53465a721a1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67fbd93f216af53465a721a1/practice?questionId=67fbdd34216af53465a721a5",
+    "preview_response_sha256": "94171022a32076cd74600465a2bf82f10407a71fc05bb12cb808b5a03f5f82ed",
+    "preview_content_sha256": "eca25a32c96f6270cfd3d744b5518667fe21119ff3d30b015d931c5e297f2789",
+    "preview_characters": 358,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67fbd93f216af53465a721a1.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: rule that all lowercase occurrences precede uppercase ones, single-case letters qualify",
+    "algorithmTags: STRING"
+   ],
+   "inferred_spec": "Count the distinct letters (case-insensitive) that occur in s and whose every lowercase occurrence comes before every uppercase occurrence. A letter occurring in only one case counts.",
+   "inference_uncertainty": "low: the rule is in the preview; the letters-only alphabet and bounds are inferred",
+   "inferred_interface": {
+    "name": "countLowerBeforeUpper",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "CASE"
+  },
+  {
+   "uid": "hack2hire:67d266555e44a1b0c201ee79",
+   "variant_id": "67d266555e44a1b0c201ee79",
+   "variant_ordinal": 1,
+   "title": "Margin Call",
+   "source": {
+    "post_id": "67d25b3c5e44a1b0c201ee78",
+    "group_title": "Margin Call",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d25b3c5e44a1b0c201ee78",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d25b3c5e44a1b0c201ee78/practice?questionId=67d266555e44a1b0c201ee79",
+    "preview_response_sha256": "601c49c63a456c322dfe5473ea6625d1faade23587d53a58c70e7650748d971c",
+    "preview_content_sha256": "7e00ca129992d73d55c9d91893bfda89707e052d532b4cc37d23e2f4484f3fe4",
+    "preview_characters": 783,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67d25b3c5e44a1b0c201ee78.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "GREEDY"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: trade record format, B/S directions, ordered timestamps, initial cash 1000, buy/sell cash and share effects, removal of zero holdings",
+    "algorithmTags: HASH_TABLE, GREEDY",
+    "codingQuestions (three variants, order)"
+   ],
+   "inferred_spec": "trades are records [timestamp, symbol, direction, quantity, price] of strings, in time order; direction is \"B\" or \"S\"; quantity and price are positive integers. Cash starts at 1000. A buy subtracts quantity * price from cash and adds the shares; a sell adds q * price to cash and removes q shares, where q is the quantity clamped to the shares currently held (inferred). Every trade sets the latest price of its symbol. Return [[\"CASH\", cash], [symbol, shares], ...] with numbers as decimal strings, holdings with zero shares removed, symbols in ascending order. Level 1: cash may become negative.",
+   "inference_uncertainty": "medium: the replay rules are in the preview; the output shape, sell clamping and decimal-string numbers are inferred",
+   "inferred_interface": {
+    "name": "marginCall",
+    "params": [
+     {
+      "name": "trades",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants inferred as cumulative levels (portfolio, margin call, collateral); the visible preview covers only level 1",
+   "oracle_constant": "MARGIN1"
+  },
+  {
+   "uid": "hack2hire:67d2675b5e44a1b0c201ee7a",
+   "variant_id": "67d2675b5e44a1b0c201ee7a",
+   "variant_ordinal": 2,
+   "title": "Margin Call",
+   "source": {
+    "post_id": "67d25b3c5e44a1b0c201ee78",
+    "group_title": "Margin Call",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d25b3c5e44a1b0c201ee78",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d25b3c5e44a1b0c201ee78/practice?questionId=67d2675b5e44a1b0c201ee7a",
+    "preview_response_sha256": "601c49c63a456c322dfe5473ea6625d1faade23587d53a58c70e7650748d971c",
+    "preview_content_sha256": "7e00ca129992d73d55c9d91893bfda89707e052d532b4cc37d23e2f4484f3fe4",
+    "preview_characters": 783,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67d25b3c5e44a1b0c201ee78.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "GREEDY"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: trade record format, B/S directions, ordered timestamps, initial cash 1000, buy/sell cash and share effects, removal of zero holdings",
+    "algorithmTags: HASH_TABLE, GREEDY",
+    "codingQuestions (three variants, order)"
+   ],
+   "inferred_spec": "trades are records [timestamp, symbol, direction, quantity, price] of strings, in time order; direction is \"B\" or \"S\"; quantity and price are positive integers. Cash starts at 1000. A buy subtracts quantity * price from cash and adds the shares; a sell adds q * price to cash and removes q shares, where q is the quantity clamped to the shares currently held (inferred). Every trade sets the latest price of its symbol. Return [[\"CASH\", cash], [symbol, shares], ...] with numbers as decimal strings, holdings with zero shares removed, symbols in ascending order. Level 2 adds margin calls: whenever cash is negative after a trade, sell one share at a time of the held symbol with the highest latest price (ties: smallest symbol), at that price, until cash >= 0 or nothing is held.",
+   "inference_uncertainty": "high: the margin-call rule (highest latest price, smallest-symbol tie, share-by-share sales) is inferred from the title and level structure, not visible text",
+   "inferred_interface": {
+    "name": "marginCall",
+    "params": [
+     {
+      "name": "trades",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants inferred as cumulative levels (portfolio, margin call, collateral); the visible preview covers only level 1",
+   "oracle_constant": "MARGIN2"
+  },
+  {
+   "uid": "hack2hire:67d2675c5e44a1b0c201ee7b",
+   "variant_id": "67d2675c5e44a1b0c201ee7b",
+   "variant_ordinal": 3,
+   "title": "Margin Call",
+   "source": {
+    "post_id": "67d25b3c5e44a1b0c201ee78",
+    "group_title": "Margin Call",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d25b3c5e44a1b0c201ee78",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d25b3c5e44a1b0c201ee78/practice?questionId=67d2675c5e44a1b0c201ee7b",
+    "preview_response_sha256": "601c49c63a456c322dfe5473ea6625d1faade23587d53a58c70e7650748d971c",
+    "preview_content_sha256": "7e00ca129992d73d55c9d91893bfda89707e052d532b4cc37d23e2f4484f3fe4",
+    "preview_characters": 783,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67d25b3c5e44a1b0c201ee78.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "GREEDY"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: trade record format, B/S directions, ordered timestamps, initial cash 1000, buy/sell cash and share effects, removal of zero holdings",
+    "algorithmTags: HASH_TABLE, GREEDY",
+    "codingQuestions (three variants, order)"
+   ],
+   "inferred_spec": "trades are records [timestamp, symbol, direction, quantity, price] of strings, in time order; direction is \"B\" or \"S\"; quantity and price are positive integers. Cash starts at 1000. A buy subtracts quantity * price from cash and adds the shares; a sell adds q * price to cash and removes q shares, where q is the quantity clamped to the shares currently held (inferred). Every trade sets the latest price of its symbol. Return [[\"CASH\", cash], [symbol, shares], ...] with numbers as decimal strings, holdings with zero shares removed, symbols in ascending order. Levels 2 and 3 add margin calls: whenever cash is negative after a trade, sell one share at a time of the held symbol with the highest latest price (ties: smallest symbol), at that price, until cash >= 0 or nothing is held. Level 3 adds collateral: a symbol made of a stock symbol followed by \"O\" is an option on that stock. During a margin call, a stock share is sellable only while the stock has more shares than its option has; options are always sellable. Shares freed by option sales become sellable at once.",
+   "inference_uncertainty": "very high: the collateral rule (symbol + \"O\" is an option, stock shares locked up to the option count, freed shares sellable at once) is inferred from the level structure only",
+   "inferred_interface": {
+    "name": "marginCall",
+    "params": [
+     {
+      "name": "trades",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "three variants inferred as cumulative levels (portfolio, margin call, collateral); the visible preview covers only level 1",
+   "oracle_constant": "MARGIN3"
+  },
+  {
+   "uid": "hack2hire:6a1c7cfc8b879849ebc0f85d",
+   "variant_id": "6a1c7cfc8b879849ebc0f85d",
+   "variant_ordinal": 1,
+   "title": "Max Matrix Border Distinct Sum",
+   "source": {
+    "post_id": "6a1c7cf98b879849ebc0f85c",
+    "group_title": "Max Matrix Border Distinct Sum",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1c7cf98b879849ebc0f85c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a1c7cf98b879849ebc0f85c/practice?questionId=6a1c7cfc8b879849ebc0f85d",
+    "preview_response_sha256": "2ff1a80107d7dad050c0c7df89e65f7b398812b96c9bf130f7ee3c2ed2b799f3",
+    "preview_content_sha256": "b90f57fba2ff6063cc36c8d7c61f36a7efe396a6b4ded486f6fc776c8cd291a7",
+    "preview_characters": 465,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a1c7cf98b879849ebc0f85c.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "MATRIX"
+    ],
+    "companies": [
+     "EBAY"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: m x n matrix, frameSize, the frame definition including frameSize = 1",
+    "algorithmTags: ARRAY, MATRIX"
+   ],
+   "inferred_spec": "For every frameSize x frameSize square of the m x n matrix take its frame (first and last row, first and last column of the square; the whole cell when frameSize = 1). The score of a frame is the sum of the distinct values among its cells. Return the maximum score.",
+   "inference_uncertainty": "medium: the frame is defined in the preview; the score (sum of distinct values) and the maximum are inferred from the title",
+   "inferred_interface": {
+    "name": "maxFrameDistinctSum",
+    "params": [
+     {
+      "name": "matrix",
+      "type": "integer[][]"
+     },
+     {
+      "name": "frameSize",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FRAME"
+  },
+  {
+   "uid": "hack2hire:6827f7c3f13ac663af91d7a5",
+   "variant_id": "6827f7c3f13ac663af91d7a5",
+   "variant_ordinal": 1,
+   "title": "Max Non-overlapping Tasks",
+   "source": {
+    "post_id": "6827f586f13ac663af91d7a4",
+    "group_title": "Max Non-overlapping Tasks",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6827f586f13ac663af91d7a4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6827f586f13ac663af91d7a4/practice?questionId=6827f7c3f13ac663af91d7a5",
+    "preview_response_sha256": "91ea98ab863eb1dc7bb5f3a8497ac3350d3f18193e75fbcec38619d9dc87160d",
+    "preview_content_sha256": "1aa594c8cefce7c2b9306319cab7ad195c0c0aa33ff5bf05f43b24903234be75",
+    "preview_characters": 563,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6827f586f13ac663af91d7a4.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "SORTING"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: [start, end] pairs, overlap definition, maximum count",
+    "algorithmTags: GREEDY, SORTING"
+   ],
+   "inferred_spec": "tasks holds pairs [start, end] with start < end. Two tasks overlap when each starts before the other ends (touching endpoints do not overlap). Return the maximum number of pairwise non-overlapping tasks.",
+   "inference_uncertainty": "low: task and overlap rule are in the preview; start < end and bounds are inferred",
+   "inferred_interface": {
+    "name": "maxNonOverlappingTasks",
+    "params": [
+     {
+      "name": "tasks",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "NONOVER"
+  },
+  {
+   "uid": "hack2hire:69e933bdfbaf3da641828694",
+   "variant_id": "69e933bdfbaf3da641828694",
+   "variant_ordinal": 1,
+   "title": "Maximize Portfolio Floor Value",
+   "source": {
+    "post_id": "69e933affbaf3da641828693",
+    "group_title": "Maximize Portfolio Floor Value",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e933affbaf3da641828693",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e933affbaf3da641828693/practice?questionId=69e933bdfbaf3da641828694",
+    "preview_response_sha256": "ca02c9ce503ba342953bf94c15d85fe00bba569cd1079f101a585b6c122bbdfb",
+    "preview_content_sha256": "da1b3bee21e180862fb4f3c9d2566f33110c7894e4b886b18ca24f4670028878",
+    "preview_characters": 445,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69e933affbaf3da641828693.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: values, per-upgrade costs, total budget, maximise the minimum value",
+    "algorithmTags: BINARY_SEARCH"
+   ],
+   "inferred_spec": "Asset i has value values[i]; one upgrade of asset i costs costs[i] and raises its value by 1 (inferred). Spending at most totalCost, return the largest achievable minimum value over all assets.",
+   "inference_uncertainty": "high: the preview truncates before the upgrade amount; an increase of 1 per upgrade is inferred",
+   "inferred_interface": {
+    "name": "maxPortfolioFloor",
+    "params": [
+     {
+      "name": "values",
+      "type": "integer[]"
+     },
+     {
+      "name": "costs",
+      "type": "integer[]"
+     },
+     {
+      "name": "totalCost",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FLOOR"
+  },
+  {
+   "uid": "hack2hire:6a725ef948af2ae18e995ee1",
+   "variant_id": "6a725ef948af2ae18e995ee1",
+   "variant_ordinal": 1,
+   "title": "Maximum Bounded XOR",
+   "source": {
+    "post_id": "6a725eef48af2ae18e995ee0",
+    "group_title": "Maximum Bounded XOR",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a725eef48af2ae18e995ee0",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a725eef48af2ae18e995ee0/practice?questionId=6a725ef948af2ae18e995ee1",
+    "preview_response_sha256": "acfc849026a62c73361fff8f62e2bca19e5346ed664ef49e9e9266842c5c70ee",
+    "preview_content_sha256": "7f730f49d6603f5b9784afd9d5034ed65c418b5841cfb4b1034435913ac2dff9",
+    "preview_characters": 261,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a725eef48af2ae18e995ee0.json",
+    "algorithm_tags": [
+     "BIT_MANIPULATION",
+     "MATH"
+    ],
+    "companies": [
+     "IBM"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: lo, hi, k, distinct pair in range, XOR at most k, maximum, guaranteed existence",
+    "algorithmTags: BIT_MANIPULATION, MATH"
+   ],
+   "inferred_spec": "Return the maximum of a XOR b over integers lo <= a < b <= hi with a XOR b <= k. The input guarantees a valid pair.",
+   "inference_uncertainty": "low: the task is stated in the preview; the bounds are inferred",
+   "inferred_interface": {
+    "name": "maxBoundedXor",
+    "params": [
+     {
+      "name": "lo",
+      "type": "integer"
+     },
+     {
+      "name": "hi",
+      "type": "integer"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "BXOR"
+  },
+  {
+   "uid": "hack2hire:676efc4fb2c9d428b406a287",
+   "variant_id": "676efc4fb2c9d428b406a287",
+   "variant_ordinal": 1,
+   "title": "Maximum Combination Health",
+   "source": {
+    "post_id": "676efae4b2c9d428b406a286",
+    "group_title": "Maximum Combination Health",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/676efae4b2c9d428b406a286",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/676efae4b2c9d428b406a286/practice?questionId=676efc4fb2c9d428b406a287",
+    "preview_response_sha256": "f1cf5c5cf8d0d80fd8f56bce1ad7d9496c35cc33943e0078cbf3e69137b34ce2",
+    "preview_content_sha256": "3b81ee7af68a1dc23b6a0e4be46cf69bc162420b98202ad74e50bb5cb12b93a2",
+    "preview_characters": 437,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/676efae4b2c9d428b406a286.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: n servers with health rating and model series, limit on the number of distinct series used at once",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "Server i has positive health[i] and model series series[i]. Choose any set of servers using at most k distinct series; return the maximum total health. Since health is positive, the answer is the sum of the k largest per-series totals.",
+   "inference_uncertainty": "very high: the preview is only the story setup (servers, health, model series, a diversity limit); the objective, the parameter k and positivity of health are inferred",
+   "inferred_interface": {
+    "name": "maxCombinationHealth",
+    "params": [
+     {
+      "name": "health",
+      "type": "integer[]"
+     },
+     {
+      "name": "series",
+      "type": "string[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "HEALTH"
+  },
+  {
+   "uid": "hack2hire:6a724c9748af2ae18e995e5e",
+   "variant_id": "6a724c9748af2ae18e995e5e",
+   "variant_ordinal": 1,
+   "title": "Maximum Distinct Split Sum",
+   "source": {
+    "post_id": "6a724c9348af2ae18e995e5d",
+    "group_title": "Maximum Distinct Split Sum",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a724c9348af2ae18e995e5d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a724c9348af2ae18e995e5d/practice?questionId=6a724c9748af2ae18e995e5e",
+    "preview_response_sha256": "35582c1227644242ac0eee22b530e94b2dc2b969b73d13f818c0a8915b478054",
+    "preview_content_sha256": "6a9c1b7dff85c0c07ea35ece00bc78e82caa885ec0570daa5f5f447e1fa7b1fd",
+    "preview_characters": 456,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a724c9348af2ae18e995e5d.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "IBM"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: split into two non-empty contiguous parts, diversity of both sides",
+    "algorithmTags: ARRAY, HASH_TABLE"
+   ],
+   "inferred_spec": "Split arr into a non-empty prefix and a non-empty suffix. The score is the number of distinct values in the prefix plus the number of distinct values in the suffix. Return the maximum score over all splits.",
+   "inference_uncertainty": "medium: the split is in the preview; the objective (sum of distinct counts, maximised) is inferred from the title",
+   "inferred_interface": {
+    "name": "maxDistinctSplitSum",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "SPLIT"
+  },
+  {
+   "uid": "hack2hire:68c2e2221f64f4312b0a3df8",
+   "variant_id": "68c2e2221f64f4312b0a3df8",
+   "variant_ordinal": 1,
+   "title": "Maximum Task Rewards",
+   "source": {
+    "post_id": "68c2e21a1f64f4312b0a3df7",
+    "group_title": "Maximum Task Rewards",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c2e21a1f64f4312b0a3df7",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c2e21a1f64f4312b0a3df7/practice?questionId=68c2e2221f64f4312b0a3df8",
+    "preview_response_sha256": "4134a54255c6c8afb75da1d0a0f9dd5b473f25486cf7b8a9b1728f74cf7e56c7",
+    "preview_content_sha256": "a27f60d0c071ad73a3d46b146eeaf4db88c9aa33f0a8408d9e57361752ad4da4",
+    "preview_characters": 663,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68c2e21a1f64f4312b0a3df7.json",
+    "algorithm_tags": [
+     "GREEDY"
+    ],
+    "companies": [
+     "AIRBNB"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: [taskName, deadline, profit] strings, unit-time tasks, one per slot, finish by deadline",
+    "algorithmTags: GREEDY"
+   ],
+   "inferred_spec": "tasks holds [taskName, deadline, profit] with deadline and profit as non-negative decimal strings. Each task takes exactly one second and one task runs per second starting at time 0; a task counts only if it finishes at or before its deadline. Return the maximum total profit (inferred output).",
+   "inference_uncertainty": "high: the preview truncates before the objective and the output; maximum total profit is inferred, and the official problem may instead ask for the chosen task names in execution order",
+   "inferred_interface": {
+    "name": "maxTaskRewards",
+    "params": [
+     {
+      "name": "tasks",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "REWARD"
+  },
+  {
+   "uid": "hack2hire:6a8664a4701a76fc6843b36e",
+   "variant_id": "6a8664a4701a76fc6843b36e",
+   "variant_ordinal": 1,
+   "title": "Maximum Testing Efficiency",
+   "source": {
+    "post_id": "6a866493701a76fc6843b36d",
+    "group_title": "Maximum Testing Efficiency",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a866493701a76fc6843b36d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a866493701a76fc6843b36d/practice?questionId=6a8664a4701a76fc6843b36e",
+    "preview_response_sha256": "28df8bc7442db6c0740a937a349e29a6c12fef7fea785ae670f1b7aed1ca9976",
+    "preview_content_sha256": "56bb8aa457bdaea9d6b32895a57b12b05cf2ef5795d558bc54a6f58b48937b1f",
+    "preview_characters": 407,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a866493701a76fc6843b36d.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "IBM",
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: arrival times, one activation interval [t1, t2], inclusive execution, simultaneous arrivals",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "One activation window [t1, t2] (integers, t1 <= t2) executes every test whose arrival time lies in it. Its efficiency is the number of executed tests minus the active duration t2 - t1 (inferred). Return the maximum efficiency.",
+   "inference_uncertainty": "very high: the preview truncates before the efficiency formula; executed tests minus duration is inferred from the DP tag",
+   "inferred_interface": {
+    "name": "maxTestingEfficiency",
+    "params": [
+     {
+      "name": "arrivalTime",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "TESTEFF"
+  },
+  {
+   "uid": "hack2hire:69a361ab6e73e4abccc9bfd0",
+   "variant_id": "69a361ab6e73e4abccc9bfd0",
+   "variant_ordinal": 1,
+   "title": "Maximum Value of Valid Expression Path",
+   "source": {
+    "post_id": "69a361a36e73e4abccc9bfcf",
+    "group_title": "Maximum Value of Valid Expression Path",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a361a36e73e4abccc9bfcf",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a361a36e73e4abccc9bfcf/practice?questionId=69a361ab6e73e4abccc9bfd0",
+    "preview_response_sha256": "3a8fd216c0f36f2dc6f33be7e01a484d2be5f50721dbcd15fe150fb9bf6c5b8b",
+    "preview_content_sha256": "cc6294677626ff4b70d43a39cae985f903ffc17dd093725e345ab09c0635255b",
+    "preview_characters": 562,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a361a36e73e4abccc9bfcf.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "CAPITAL_ONE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: digit/operator matrix, right/down paths from any cell, alternation, start and end with a digit, single digit valid",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "Cells hold one character, a digit or \"+\" or \"-\". A path starts anywhere and moves only right or down. Its characters form an expression; it is valid when digits and operators alternate and it starts and ends with a digit (a single digit is valid). The value is the left-to-right evaluation. Return the maximum value over valid paths.",
+   "inference_uncertainty": "low: path and validity rules are in the preview; the left-to-right evaluation and the grid representation are inferred",
+   "inferred_interface": {
+    "name": "maxExpressionPathValue",
+    "params": [
+     {
+      "name": "matrix",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "EXPR"
+  },
+  {
+   "uid": "hack2hire:67d33f6a488516fd8ad5a064",
+   "variant_id": "67d33f6a488516fd8ad5a064",
+   "variant_ordinal": 1,
+   "title": "Minimal Board Length for Holes",
+   "source": {
+    "post_id": "67d33c395e44a1b0c201ee93",
+    "group_title": "Minimal Board Length for Holes",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d33c395e44a1b0c201ee93",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d33c395e44a1b0c201ee93/practice?questionId=67d33f6a488516fd8ad5a064",
+    "preview_response_sha256": "7c7186c6ea6a1a9023b310b20aa0d92cf97f7907d0510cd106842e3b39221015",
+    "preview_content_sha256": "247b04f60c3c048e487fc175205aedede6ea263a122e1d277d18d5bde2a21f49",
+    "preview_characters": 355,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67d33c395e44a1b0c201ee93.json",
+    "algorithm_tags": [
+     "BINARY_SEARCH",
+     "GREEDY"
+    ],
+    "companies": [
+     "META",
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: hole positions, exactly two boards of equal positive integer length, coverage [X, X + L]",
+    "algorithmTags: BINARY_SEARCH, GREEDY"
+   ],
+   "inferred_spec": "Cover every hole position in arr with exactly two boards of the same positive integer length L; a board at X covers [X, X + L]. Return the minimum L.",
+   "inference_uncertainty": "low: the covering rule is in the preview; bounds and handling of a single hole are inferred",
+   "inferred_interface": {
+    "name": "minimalBoardLength",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "BOARD"
+  }
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69e933bdfbaf3da641828694",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "values",
+  "costs",
+  "totalCost"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "maxPortfolioFloor",
+  "params": [
+   {
+    "name": "values",
+    "type": "integer[]"
+   },
+   {
+    "name": "costs",
+    "type": "integer[]"
+   },
+   {
+    "name": "totalCost",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "raise a target floor one unit at a time while the cost of lifting every asset to it stays within budget",
+  "candidate_design": "binary search the floor T in [min(values), min(values) + totalCost]; feasibility sums (T - v) * c with an early exit",
+  "complexity_target": "O(n log totalCost)"
+ },
+ "source_sha256": "d318d3189e26617e0f8d811e483d4849c275410a7a7a216cc478cbe48736fca9",
+ "wrapper": "named export maxPortfolioFloor"
+}

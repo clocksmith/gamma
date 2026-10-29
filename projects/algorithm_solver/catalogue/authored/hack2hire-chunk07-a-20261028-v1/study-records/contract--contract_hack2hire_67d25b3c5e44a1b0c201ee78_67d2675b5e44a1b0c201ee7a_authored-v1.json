@@ -1,0 +1,348 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67d25b3c5e44a1b0c201ee78:67d2675b5e44a1b0c201ee7a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+   "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67d25b3c5e44a1b0c201ee78.json",
+   "sha256": "75affe947ce2e75c957f0e5d1b59a4704b1d691ebcc06327fb9789d2301b5b49",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+   "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+   "selector": "/variants/hack2hire:67d2675b5e44a1b0c201ee7a"
+  }
+ ],
+ "problemId": "hack2hire:67d25b3c5e44a1b0c201ee78",
+ "variantId": "67d2675b5e44a1b0c201ee7a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: greedy margin-call liquidation",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+    "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+    "selector": "/variants/hack2hire:67d2675b5e44a1b0c201ee7a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "trades are records [timestamp, symbol, direction, quantity, price] of strings, in time order; direction is \"B\" or \"S\"; quantity and price are positive integers. Cash starts at 1000. A buy subtracts quantity * price from cash and adds the shares; a sell adds q * price to cash and removes q shares, where q is the quantity clamped to the shares currently held (inferred). Every trade sets the latest price of its symbol. Return [[\"CASH\", cash], [symbol, shares], ...] with numbers as decimal strings, holdings with zero shares removed, symbols in ascending order. Level 2 adds margin calls: whenever cash is negative after a trade, sell one share at a time of the held symbol with the highest latest price (ties: smallest symbol), at that price, until cash >= 0 or nothing is held.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+    "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "trades are records [timestamp, symbol, direction, quantity, price] of strings, in time order; direction is \"B\" or \"S\"; quantity and price are positive integers.",
+   "Cash starts at 1000.",
+   "A buy subtracts quantity * price from cash and adds the shares; a sell adds q * price to cash and removes q shares, where q is the quantity clamped to the shares currently held (inferred).",
+   "Every trade sets the latest price of its symbol.",
+   "Return [[\"CASH\", cash], [symbol, shares], ...] with numbers as decimal strings, holdings with zero shares removed, symbols in ascending order.",
+   "Level 2 adds margin calls: whenever cash is negative after a trade, sell one share at a time of the held symbol with the highest latest price (ties: smallest symbol), at that price, until cash >= 0 or nothing is held."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+    "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= trades <= 1000",
+   "timestamps are digit strings with non-decreasing values",
+   "symbols [A-Z]{1,6} (level 3: [A-NP-Z]{1,5} optionally followed by \"O\")",
+   "1 <= quantity <= 1000, 1 <= price <= 10000"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+    "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+    "selector": "/variants/hack2hire:67d2675b5e44a1b0c201ee7a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: trade record format, B/S directions, ordered timestamps, initial cash 1000, buy/sell cash and share effects, removal of zero holdings; algorithmTags: HASH_TABLE, GREEDY; codingQuestions (three variants, order); preview response sha256 601c49c63a456c322dfe5473ea6625d1faade23587d53a58c70e7650748d971c"
+   },
+   {
+    "statement": "Uncertainty: high: the margin-call rule (highest latest price, smallest-symbol tie, share-by-share sales) is inferred from the title and level structure, not visible text",
+    "basis": "the public group preview is partial (783 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: three variants inferred as cumulative levels (portfolio, margin call, collateral); the visible preview covers only level 1",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+    "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+    "selector": "/problems/6/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+    "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+    "selector": "/problems/6/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+    "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+    "selector": "/problems/6/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which price does a margin sale use?",
+   "How are ties between equal prices broken?",
+   "What if selling everything does not cover the deficit?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+    "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+    "selector": "/variants/hack2hire:67d2675b5e44a1b0c201ee7a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "1",
+       "A",
+       "B",
+       "10",
+       "50"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "CASH",
+      "500"
+     ],
+     [
+      "A",
+      "10"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "1",
+       "A",
+       "B",
+       "10",
+       "200"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "CASH",
+      "0"
+     ],
+     [
+      "A",
+      "5"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/study-content.json",
+    "sha256": "0136f214ca547ddbeb407d7e390b3c923cdbcf78ee886378fff50f47fb547f77",
+    "selector": "/variants/hack2hire:67d2675b5e44a1b0c201ee7a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/oracles.py",
+    "sha256": "a50b312b1f2daa9c30c78093b8c5027143116b6b8e89eb96905020bcc6a89f97",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def marginCall(trades) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+      "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/semantics/67d2675b5e44a1b0c201ee7a-python.json",
+     "inferredInterface": {
+      "name": "marginCall",
+      "params": [
+       {
+        "name": "trades",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/semantics/67d2675b5e44a1b0c201ee7a-python.json",
+      "sha256": "962911da535961ca8ec38693d630344074485c6185f0a555ff94c99c7040ebec",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function marginCall(trades) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+      "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/semantics/67d2675b5e44a1b0c201ee7a-javascript.json",
+     "inferredInterface": {
+      "name": "marginCall",
+      "params": [
+       {
+        "name": "trades",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/semantics/67d2675b5e44a1b0c201ee7a-javascript.json",
+      "sha256": "3a7c1c21949ff0069d2b924aad3247c37b7c11f01e13116ca63894c11aa8510f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+    "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+    "selector": "/problems/6/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk07-a-20261028-v1/contracts.json",
+    "sha256": "ae9ecd903dba32cfedb8007007f846e5ae5b6a7b215c8d67e2f3f23643f7d2fd",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

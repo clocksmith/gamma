@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a974f580ca9cc4e1c789f3b",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "a",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "longestSubarrayUnderLimit",
+  "params": [
+   {
+    "name": "a",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "prefix sums and a check of every (start, end) pair",
+  "candidate_design": "two-pointer window: extend right, shrink left while the sum exceeds k",
+  "complexity_target": "O(n)"
+ },
+ "source_sha256": "8d665f1ea4c810f459a10057424408f1fba5f362a900283160a182f64b332135",
+ "wrapper": "named export longestSubarrayUnderLimit"
+}
