@@ -1,0 +1,55 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "javascript",
+ "inferred_interface": {
+  "name": "closestCommonManager",
+  "params": [
+   {
+    "name": "relationships",
+    "type": "string[][]"
+   },
+   {
+    "name": "first",
+    "type": "string"
+   },
+   {
+    "name": "second",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "relationships",
+  "first",
+  "second"
+ ],
+ "uid": "hack2hire:6945ada2e85c245612a97880",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "intersection of the two full chains, last common element",
+  "candidate_design": "depths by upward walk, then lift the deeper one and step both upward together",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "d30855575a89a80c94b8bebd45634e028ee3beff9c596af995de768a928b2f97"
+}

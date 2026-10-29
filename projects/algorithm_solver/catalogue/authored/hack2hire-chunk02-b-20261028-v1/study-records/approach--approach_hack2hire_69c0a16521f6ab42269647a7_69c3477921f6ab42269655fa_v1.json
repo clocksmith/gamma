@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+   "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+   "selector": "/problems/hack2hire:69c3477921f6ab42269655fa"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+   "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+   "selector": "/variants/hack2hire:69c3477921f6ab42269655fa"
+  }
+ ],
+ "problemId": "hack2hire:69c0a16521f6ab42269647a7",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-records/contract--contract_hack2hire_69c0a16521f6ab42269647a7_69c3477921f6ab42269655fa_authored-v1.json",
+  "sha256": "c9b1e2ffe9bdaf63895b5d70e014a2ce2145b64feaad9c0d389291aaa996c704"
+ },
+ "title": {
+  "status": "present",
+  "value": "eight-direction ray walk with collection of bracketed cells",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+    "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+    "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "eight-direction ray walk with collection of bracketed cells. Complexity target: O(n) time/O(n^2) space for the copy.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+    "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+    "selector": "/problems/hack2hire:69c3477921f6ab42269655fa"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Single-move simulation"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69c3477921f6ab42269655fa/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Precomputing per-direction runs is unnecessary for one move"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69c3477921f6ab42269655fa/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "the input board is copied, never modified",
+   "only bracketed opponent runs flip"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69c3477921f6ab42269655fa/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "A move flips a direction only if opponents are closed off by the player's own piece.",
+   "Check all eight directions independently.",
+   "Walk each direction collecting opponent cells; keep them only when the walk ends on a player piece; place and flip if anything was kept."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69c3477921f6ab42269655fa/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every required operation cheap under the inferred contract?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "eight-direction ray walk with collection of bracketed cells",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n) time/O(n^2) space for the copy; the independent reference (per opponent cell: line-of-sight test from the move with a closing player piece) is only practical on small inputs.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it directly or incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "A move flips a direction only if opponents are closed off by the player's own piece.",
+     "Check all eight directions independently."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+      "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+      "selector": "/variants/hack2hire:69c3477921f6ab42269655fa/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-records/artifact--artifact_hack2hire_69c0a16521f6ab42269647a7_69c3477921f6ab42269655fa_approach-native_v1.json",
+    "sha256": "33f669c99da62d82d28a1dae4373a1b47184d5f06e82c05b579063c25cd79f86"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/candidate_design"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/candidate_design"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper reversiMove, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/candidate_design"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use iterative traversal where depth may be large."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/candidate_design"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Walk each direction collecting opponent cells; keep them only when the walk ends on a player piece; place and flip if anything was kept."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+      "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+      "selector": "/variants/hack2hire:69c3477921f6ab42269655fa/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-records/artifact--artifact_hack2hire_69c0a16521f6ab42269647a7_69c3477921f6ab42269655fa_python_v1.json",
+     "sha256": "ef68114daab21a570cd5375c8154231da4350af725290d07abc0ab5a1ed8beee"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-records/artifact--artifact_hack2hire_69c0a16521f6ab42269647a7_69c3477921f6ab42269655fa_javascript_v1.json",
+     "sha256": "c3eca74d4d66ea6edf498d34ee0ea53337500540542e777b2f182d8cad55bd69"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-records/artifact--artifact_hack2hire_69c0a16521f6ab42269647a7_69c3477921f6ab42269655fa_approach-native_v1.json",
+    "sha256": "33f669c99da62d82d28a1dae4373a1b47184d5f06e82c05b579063c25cd79f86"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/reference"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/reference"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (per opponent cell: line-of-sight test from the move with a closing player piece) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/reference"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, compare the native class and the trace adapter on every case.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/design.json",
+      "sha256": "111717a45fde23b65b7f5216348a810d2602bfd0b183116ee4a09e13e4b1d0d5",
+      "selector": "/problems/hack2hire:69c3477921f6ab42269655fa/reference"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+      "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+      "selector": "/variants/hack2hire:69c3477921f6ab42269655fa/validationHints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-records/artifact--artifact_hack2hire_69c0a16521f6ab42269647a7_69c3477921f6ab42269655fa_approach-native_v1.json",
+    "sha256": "33f669c99da62d82d28a1dae4373a1b47184d5f06e82c05b579063c25cd79f86"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:69c0a16521f6ab42269647a7:69c3477921f6ab42269655fa:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-records/artifact--artifact_hack2hire_69c0a16521f6ab42269647a7_69c3477921f6ab42269655fa_approach-native_v1.json",
+  "sha256": "33f669c99da62d82d28a1dae4373a1b47184d5f06e82c05b579063c25cd79f86"
+ }
+}

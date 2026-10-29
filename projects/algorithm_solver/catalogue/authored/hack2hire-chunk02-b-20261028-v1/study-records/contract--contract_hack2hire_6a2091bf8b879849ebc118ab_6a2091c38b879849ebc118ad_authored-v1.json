@@ -1,0 +1,301 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a2091bf8b879849ebc118ab:6a2091c38b879849ebc118ad:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+   "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+   "selector": "/problems/24"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a2091bf8b879849ebc118ab.json",
+   "sha256": "1324cbc46f6a00733f35e54fbfa11bcdbe965f91bd80bd9f17450c8f9359f65c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+   "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+   "selector": "/variants/hack2hire:6a2091c38b879849ebc118ad"
+  }
+ ],
+ "problemId": "hack2hire:6a2091bf8b879849ebc118ab",
+ "variantId": "6a2091c38b879849ebc118ad",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: user journey trie with per-node user counts",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:6a2091c38b879849ebc118ad/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Per user, order actions by the integer value of timestamp and insert the sequence into a trie; a node's count is the number of users whose journey passes through that prefix. Return one line per node (root excluded) in pre-order with children in ascending action order: two spaces per depth below the first level, then \"<action> (<count>)\".",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/24/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Per user, order actions by the integer value of timestamp and insert the sequence into a trie; a node's count is the number of users whose journey passes through that prefix.",
+   "Return one line per node (root excluded) in pre-order with children in ascending action order: two spaces per depth below the first level, then \"<action> (<count>)\"."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/24/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 20000 logs",
+   "timestamps are digit strings without leading zeros (up to 18 digits), distinct per user"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:6a2091c38b879849ebc118ad/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: payload.data.title; payload.data.contentPreview (partial public group preview); payload.data.algorithmTags; payload.data.codingQuestions (variant ids only); bank.json companies/tags/variants; preview response sha256 1b3e0a045eff6a538b5ede8518dff9bd69d723ddc5652de08cc97bcba4459f72"
+   },
+   {
+    "statement": "Uncertainty: Line format and child ordering are not visible (the preview ends at \"formatting rules\"); both are inferred.",
+    "basis": "the public group preview is partial and group-level, not a variant specification"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/24/inference"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/24/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is the exact line format?",
+   "How are children ordered?",
+   "Is the root printed?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:6a2091c38b879849ebc118ad/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "u4",
+       "2",
+       "buy"
+      ]
+     ]
+    ],
+    "output": [
+     "buy (1)"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:6a2091c38b879849ebc118ad/examples"
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def userJourneyTrie(logs) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+      "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+      "selector": "/problems/24/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/6a2091c38b879849ebc118ad-python.json",
+     "inferredInterface": {
+      "name": "userJourneyTrie",
+      "params": [
+       {
+        "name": "logs",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/6a2091c38b879849ebc118ad-python.json",
+      "sha256": "a30ed4f7c1195242d69429efb891a73afc3c025d2e6355679bf5093bf7e51979",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function userJourneyTrie(logs) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+      "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+      "selector": "/problems/24/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/6a2091c38b879849ebc118ad-javascript.json",
+     "inferredInterface": {
+      "name": "userJourneyTrie",
+      "params": [
+       {
+        "name": "logs",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/6a2091c38b879849ebc118ad-javascript.json",
+      "sha256": "e03b4633d29beb9b11149dcbb7abee788adc54680084e4bfda4350f8a42a647f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": {
+   "arguments": "unchanged",
+   "return": "fresh containers"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/24/mutation_alias_contract"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/24/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,364 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69c0a33d21f6ab42269647b9:69c7438121f6ab4226966890:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+   "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+   "selector": "/problems/21"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69c0a33d21f6ab42269647b9.json",
+   "sha256": "8495bba8f624684f0db822db9ff6cd8d9e0671431f08224eb4eeca0d3dfdbbc4",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+   "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+   "selector": "/variants/hack2hire:69c7438121f6ab4226966890"
+  }
+ ],
+ "problemId": "hack2hire:69c0a33d21f6ab42269647b9",
+ "variantId": "69c7438121f6ab4226966890",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 2: merge two row-encoded trees by sibling key",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69c7438121f6ab4226966890/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Both trees use the row format; sibling keys are unique and the roots share a key. Merge: matched nodes sum their values; children are A's children in order (each merged with B's same-key sibling if any) followed by B's unmatched children in order. Return the merged tree in the same row format, rows numbered in pre-order with the root at 0.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/21/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Both trees use the row format; sibling keys are unique and the roots share a key.",
+   "Merge: matched nodes sum their values; children are A's children in order (each merged with B's same-key sibling if any) followed by B's unmatched children in order.",
+   "Return the merged tree in the same row format, rows numbered in pre-order with the root at 0."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/21/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "each tree has 1..20000 rows",
+   "sibling keys are unique; both roots share a key"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69c7438121f6ab4226966890/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: payload.data.title; payload.data.contentPreview (partial public group preview); payload.data.algorithmTags; payload.data.codingQuestions (variant ids only); bank.json companies/tags/variants; preview response sha256 266b29f9678d2bfa8cbcb14901a30a8d6bf489cd608a298d99aa0414e3815384"
+   },
+   {
+    "statement": "Uncertainty: Matching rule (by key among siblings), value combination (sum) and output numbering are inferred.",
+    "basis": "the public group preview is partial and group-level, not a variant specification"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/21/inference"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/21/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How are nodes matched (sibling key assumed)?",
+   "How are values combined (sum assumed)?",
+   "How is the merged tree numbered?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69c7438121f6ab4226966890/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "r",
+       1
+      ]
+     ],
+     [
+      [
+       "r",
+       -1
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "r",
+      0
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "a",
+       -39
+      ]
+     ],
+     [
+      [
+       "a",
+       -25,
+       2
+      ],
+      [
+       "b",
+       38
+      ],
+      [
+       "c",
+       21,
+       3,
+       1
+      ],
+      [
+       "c",
+       -10
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "a",
+      -64,
+      1
+     ],
+     [
+      "c",
+      21,
+      2,
+      3
+     ],
+     [
+      "c",
+      -10
+     ],
+     [
+      "b",
+      38
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69c7438121f6ab4226966890/examples"
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def mergeTrees(nodesA, nodesB) -> list[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+      "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+      "selector": "/problems/21/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/69c7438121f6ab4226966890-python.json",
+     "inferredInterface": {
+      "name": "mergeTrees",
+      "params": [
+       {
+        "name": "nodesA",
+        "type": "list[]"
+       },
+       {
+        "name": "nodesB",
+        "type": "list[]"
+       }
+      ],
+      "return": {
+       "type": "list[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/69c7438121f6ab4226966890-python.json",
+      "sha256": "cf0e2ee485ec62ca3302e2a1caa8622fbe334a88f27a1995f4a3f107177f604f",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function mergeTrees(nodesA, nodesB) /* -> list[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+      "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+      "selector": "/problems/21/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/69c7438121f6ab4226966890-javascript.json",
+     "inferredInterface": {
+      "name": "mergeTrees",
+      "params": [
+       {
+        "name": "nodesA",
+        "type": "list[]"
+       },
+       {
+        "name": "nodesB",
+        "type": "list[]"
+       }
+      ],
+      "return": {
+       "type": "list[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/69c7438121f6ab4226966890-javascript.json",
+      "sha256": "2d5fbf370676a0cdc5bd589d5ed48d1c0197fe8071f0f240f3dab3839071bcb6",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": {
+   "arguments": "unchanged",
+   "return": "fresh containers"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/21/mutation_alias_contract"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/21/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,361 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6987d348dce67a3d5ecc12bc:6987d34fdce67a3d5ecc12bd:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+   "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6987d348dce67a3d5ecc12bc.json",
+   "sha256": "e71ba2586e3e836b2d67cdc584cbb5d1bd33ad9c017243bb3c93bdd2c8476fdd",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+   "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+   "selector": "/variants/hack2hire:6987d34fdce67a3d5ecc12bd"
+  }
+ ],
+ "problemId": "hack2hire:6987d348dce67a3d5ecc12bc",
+ "variantId": "6987d34fdce67a3d5ecc12bd",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: count nodes whose distances to x, y, z form a Pythagorean triple",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:6987d34fdce67a3d5ecc12bd/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Tree on nodes 0..n-1 given by edge arrays. Count nodes u whose distances to x, y and z, after sorting into a<=b<=c, satisfy a*a + b*b == c*c. Zero distances are allowed (so a=0, b=c counts).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Tree on nodes 0..n-1 given by edge arrays.",
+   "Count nodes u whose distances to x, y and z, after sorting into a<=b<=c, satisfy a*a + b*b == c*c.",
+   "Zero distances are allowed (so a=0, b=c counts)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n <= 100000; edges form a tree on 0..n-1",
+   "x, y, z are nodes (may repeat)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:6987d34fdce67a3d5ecc12bd/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: payload.data.title; payload.data.contentPreview (partial public group preview); payload.data.algorithmTags; payload.data.codingQuestions (variant ids only); bank.json companies/tags/variants; preview response sha256 2f7102d3508eb0fd0b1e99167282f14c0a7782616b3f14727188f92ef041181d"
+   },
+   {
+    "statement": "Uncertainty: The three query nodes x, y, z and the treatment of zero distances are inferred; the preview only defines the tree and dist.",
+    "basis": "the public group preview is partial and group-level, not a variant specification"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/6/inference"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/6/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are the three query nodes given as input?",
+   "Do zero distances count as a valid triple?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:6987d34fdce67a3d5ecc12bd/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     1,
+     [],
+     [],
+     0,
+     0,
+     0
+    ],
+    "output": 1,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     9,
+     [
+      1,
+      6,
+      0,
+      6,
+      7,
+      7,
+      3,
+      0
+     ],
+     [
+      5,
+      1,
+      4,
+      8,
+      2,
+      0,
+      1,
+      1
+     ],
+     5,
+     4,
+     1
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:6987d34fdce67a3d5ecc12bd/examples"
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def countPythagoreanNodes(n, treeFrom, treeTo, x, y, z) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+      "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/6987d34fdce67a3d5ecc12bd-python.json",
+     "inferredInterface": {
+      "name": "countPythagoreanNodes",
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       },
+       {
+        "name": "treeFrom",
+        "type": "integer[]"
+       },
+       {
+        "name": "treeTo",
+        "type": "integer[]"
+       },
+       {
+        "name": "x",
+        "type": "integer"
+       },
+       {
+        "name": "y",
+        "type": "integer"
+       },
+       {
+        "name": "z",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/6987d34fdce67a3d5ecc12bd-python.json",
+      "sha256": "2e37dec503eb052deb5141793488fda30e07d1bf41cde31e9ce9fc4e2116c02a",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function countPythagoreanNodes(n, treeFrom, treeTo, x, y, z) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+      "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/6987d34fdce67a3d5ecc12bd-javascript.json",
+     "inferredInterface": {
+      "name": "countPythagoreanNodes",
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       },
+       {
+        "name": "treeFrom",
+        "type": "integer[]"
+       },
+       {
+        "name": "treeTo",
+        "type": "integer[]"
+       },
+       {
+        "name": "x",
+        "type": "integer"
+       },
+       {
+        "name": "y",
+        "type": "integer"
+       },
+       {
+        "name": "z",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/6987d34fdce67a3d5ecc12bd-javascript.json",
+      "sha256": "96ed9345ed0a9bc58b5abdbd8e84fa5bd6f886eb6733d1400dedcf1eb25aad58",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": {
+   "arguments": "unchanged",
+   "return": "fresh containers"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/6/mutation_alias_contract"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

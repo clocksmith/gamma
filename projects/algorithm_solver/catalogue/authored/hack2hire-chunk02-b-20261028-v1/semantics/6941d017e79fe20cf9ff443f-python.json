@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "python",
+ "inferred_interface": {
+  "name": "printHierarchy",
+  "params": [
+   {
+    "name": "relationships",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "relationships"
+ ],
+ "uid": "hack2hire:6941d017e79fe20cf9ff443f",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "parent-chain sibling-position keys sorted lexicographically (no traversal)",
+  "candidate_design": "iterative explicit-stack pre-order DFS over a name->children map",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "d46b8376450b0b4b5de6e482a0984603667eed20f152f9f0e0fce44cff1d1747"
+}

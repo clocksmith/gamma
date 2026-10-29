@@ -1,0 +1,402 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:677b2d9378175fce2ecdfc0f:677b491778175fce2ecdfc10:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+   "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+   "selector": "/problems/25"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/677b2d9378175fce2ecdfc0f.json",
+   "sha256": "f74a4bc984a7e71180425159c0cc1bb0e23f24b02d7756b570f350f1546ac5df",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+   "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+   "selector": "/variants/hack2hire:677b491778175fce2ecdfc10"
+  }
+ ],
+ "problemId": "hack2hire:677b2d9378175fce2ecdfc0f",
+ "variantId": "677b491778175fce2ecdfc10",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: function library with variadic matching",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:677b491778175fce2ecdfc10/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Non-variadic functions match an argument type list exactly. A variadic function (at least one parameter) matches when the arguments start with its parameter list and every extra argument has the last parameter's type (its last parameter appears one or more times). findMatches returns matching names sorted ascending. Names are unique.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/25/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Non-variadic functions match an argument type list exactly.",
+   "A variadic function (at least one parameter) matches when the arguments start with its parameter list and every extra argument has the last parameter's type (its last parameter appears one or more times). findMatches returns matching names sorted ascending.",
+   "Names are unique."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/25/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 3000 operations; names unique",
+   "up to 8 parameter types and 12 query arguments, types are 1..6 lowercase letters"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:677b491778175fce2ecdfc10/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: payload.data.title; payload.data.contentPreview (partial public group preview); payload.data.algorithmTags; payload.data.codingQuestions (variant ids only); bank.json companies/tags/variants; preview response sha256 2b7647b3684ef3062058f8fbe64382449157bcc0d9493ff1f0af40e4753ab615"
+   },
+   {
+    "statement": "Uncertainty: Whether the variadic tail may be empty (chosen: no), result ordering and the register signature are inferred.",
+    "basis": "the public group preview is partial and group-level, not a variant specification"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/25/inference"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/25/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Can the variadic tail be empty?",
+   "In what order are matches returned?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:677b491778175fce2ecdfc10/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "FunctionLibrary",
+      "findMatches"
+     ],
+     [
+      [],
+      [
+       []
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "FunctionLibrary",
+      "register",
+      "findMatches"
+     ],
+     [
+      [],
+      [
+       "f",
+       [],
+       false
+      ],
+      [
+       []
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     [
+      "f"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:677b491778175fce2ecdfc10/examples"
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class FunctionLibrary: __init__(self); def register(self, name, argumentTypes, isVariadic) -> void; def findMatches(self, argumentTypes) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+      "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+      "selector": "/problems/25/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/677b491778175fce2ecdfc10-python.json",
+     "inferredInterface": {
+      "classname": "FunctionLibrary",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "register",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "argumentTypes",
+          "type": "string[]"
+         },
+         {
+          "name": "isVariadic",
+          "type": "boolean"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "findMatches",
+        "params": [
+         {
+          "name": "argumentTypes",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "solve(operation_names, argument_lists) is a separately declared trace adapter: one receiver per trace, null for construction and for void methods."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/677b491778175fce2ecdfc10-python.json",
+      "sha256": "b3ec0d9c6feed2fe25e96f60e20afd199ade07af6bec5bd5aad4f4f684eb5f18",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class FunctionLibrary { constructor(); register(name, argumentTypes, isVariadic) /* -> void */; findMatches(argumentTypes) /* -> string[] */; }",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+      "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+      "selector": "/problems/25/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/677b491778175fce2ecdfc10-javascript.json",
+     "inferredInterface": {
+      "classname": "FunctionLibrary",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "register",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "argumentTypes",
+          "type": "string[]"
+         },
+         {
+          "name": "isVariadic",
+          "type": "boolean"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "findMatches",
+        "params": [
+         {
+          "name": "argumentTypes",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "solve(operation_names, argument_lists) is a separately declared trace adapter: one receiver per trace, null for construction and for void methods."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/677b491778175fce2ecdfc10-javascript.json",
+      "sha256": "54fd655973d9f95b10c9556e2604d761289f4569f2cdf37feb5c06bc9ef0d5f3",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": {
+   "arguments": "unchanged",
+   "return": "fresh containers"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/25/mutation_alias_contract"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/25/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

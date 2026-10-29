@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "javascript",
+ "inferred_interface": {
+  "name": "printHierarchyWithCounts",
+  "params": [
+   {
+    "name": "relationships",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "relationships"
+ ],
+ "uid": "hack2hire:6945a3fbe85c245612a9786c",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "ancestor-chain membership count per employee pair",
+  "candidate_design": "iterative pre-order then reverse-order subtree size accumulation",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "7c0f45e78d77949c87d854d87a79d793c4a75f12eb97e6cca6d88ee01fcc6fd2"
+}

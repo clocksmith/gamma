@@ -1,0 +1,475 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69dd6cf295e80ae213e5b880:69dd8c3595e80ae213e5b9c7:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+   "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+   "selector": "/problems/18"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69dd6cf295e80ae213e5b880.json",
+   "sha256": "dab1fa53191d483640b7ced14f90fe79813795691100f3eaa40e6ca774aa0128",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+   "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+   "selector": "/variants/hack2hire:69dd8c3595e80ae213e5b9c7"
+  }
+ ],
+ "problemId": "hack2hire:69dd6cf295e80ae213e5b880",
+ "variantId": "69dd8c3595e80ae213e5b9c7",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 1: tasks with direct dependencies",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69dd8c3595e80ae213e5b9c7/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "add ignores an existing id. get returns [id, description, status] or []. updateStatus returns false for unknown ids. addDependency records that taskId requires dependsOnId; it returns false if either id is unknown, they are equal, or the edge already exists. getDependencies returns direct prerequisites in insertion order ([] if unknown).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/18/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "add ignores an existing id. get returns [id, description, status] or []. updateStatus returns false for unknown ids. addDependency records that taskId requires dependsOnId; it returns false if either id is unknown, they are equal, or the edge already exists. getDependencies returns direct prerequisites in insertion order ([] if unknown)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/18/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 3000 operations",
+   "ids are 1..8 lowercase letters or digits; statuses are uppercase words"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69dd8c3595e80ae213e5b9c7/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: payload.data.title; payload.data.contentPreview (partial public group preview); payload.data.algorithmTags; payload.data.codingQuestions (variant ids only); bank.json companies/tags/variants; preview response sha256 7dd6be4ef926ac662bb3d7ae8dd02763125d6439c01047a0f518475bb76ac6d7"
+   },
+   {
+    "statement": "Uncertainty: Only add/get are visible; updateStatus and the dependency methods with their return values are inferred.",
+    "basis": "the public group preview is partial and group-level, not a variant specification"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/18/inference"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/18/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does add do for an existing id?",
+   "What does addDependency return for unknown or duplicate edges?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69dd8c3595e80ae213e5b9c7/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ToDoList"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ToDoList",
+      "addDependency"
+     ],
+     [
+      [],
+      [
+       "t1",
+       "t2"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/study-content.json",
+    "sha256": "f288661963c6f18ed554f5b95b43d9b801e92201c487b699ca974e6f4c61c133",
+    "selector": "/variants/hack2hire:69dd8c3595e80ae213e5b9c7/examples"
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ToDoList: __init__(self); def add(self, taskId, description, status) -> void; def get(self, taskId) -> string[]; def updateStatus(self, taskId, status) -> boolean; def addDependency(self, taskId, dependsOnId) -> boolean; def getDependencies(self, taskId) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+      "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+      "selector": "/problems/18/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/69dd8c3595e80ae213e5b9c7-python.json",
+     "inferredInterface": {
+      "classname": "ToDoList",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "add",
+        "params": [
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "description",
+          "type": "string"
+         },
+         {
+          "name": "status",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "taskId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "updateStatus",
+        "params": [
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "status",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "addDependency",
+        "params": [
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "dependsOnId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getDependencies",
+        "params": [
+         {
+          "name": "taskId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "solve(operation_names, argument_lists) is a separately declared trace adapter: one receiver per trace, null for construction and for void methods."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/69dd8c3595e80ae213e5b9c7-python.json",
+      "sha256": "fa80319c3b695afaab4e10494d938d447088994e92ca1b2ce448765561c4c82c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ToDoList { constructor(); add(taskId, description, status) /* -> void */; get(taskId) /* -> string[] */; updateStatus(taskId, status) /* -> boolean */; addDependency(taskId, dependsOnId) /* -> boolean */; getDependencies(taskId) /* -> string[] */; }",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+      "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+      "selector": "/problems/18/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/69dd8c3595e80ae213e5b9c7-javascript.json",
+     "inferredInterface": {
+      "classname": "ToDoList",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "add",
+        "params": [
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "description",
+          "type": "string"
+         },
+         {
+          "name": "status",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "taskId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "updateStatus",
+        "params": [
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "status",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "addDependency",
+        "params": [
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "dependsOnId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getDependencies",
+        "params": [
+         {
+          "name": "taskId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "solve(operation_names, argument_lists) is a separately declared trace adapter: one receiver per trace, null for construction and for void methods."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/semantics/69dd8c3595e80ae213e5b9c7-javascript.json",
+      "sha256": "7969d02d8aa00244d9d37f7503b9f96ab36aa298957f3be644c17601bf9db5df",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": {
+   "arguments": "unchanged",
+   "return": "fresh containers"
+  },
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/18/mutation_alias_contract"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-b-20261028-v1/contracts.json",
+    "sha256": "b90b598fdea3a601c80e3a8ffe94ef080fc0a611142e961faa1e5418aee3ef02",
+    "selector": "/problems/18/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

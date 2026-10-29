@@ -1,0 +1,131 @@
+{
+ "comparison": "exact typed JSON result; trace result, no bool/int coercion",
+ "effects": {
+  "trace_inputs": "unchanged including nested argument lists",
+  "native_state": "changes only through declared mutators",
+  "returned_mutable_containers": "fresh"
+ },
+ "entrypoint": "solve",
+ "language": "python",
+ "inferred_interface": {
+  "classname": "ToDoList",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "add",
+    "params": [
+     {
+      "name": "taskId",
+      "type": "string"
+     },
+     {
+      "name": "description",
+      "type": "string"
+     },
+     {
+      "name": "status",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "get",
+    "params": [
+     {
+      "name": "taskId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "updateStatus",
+    "params": [
+     {
+      "name": "taskId",
+      "type": "string"
+     },
+     {
+      "name": "status",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "addDependency",
+    "params": [
+     {
+      "name": "taskId",
+      "type": "string"
+     },
+     {
+      "name": "dependsOnId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getDependencies",
+    "params": [
+     {
+      "name": "taskId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "getExecutionOrder",
+    "params": [],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "uid": "hack2hire:69dd8d2795e80ae213e5b9cf",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "source_reasoning": {
+  "reference": "transitive closure per addDependency; repeated min scan for the order",
+  "candidate_design": "DFS reachability check per edge; Kahn with a binary min-heap",
+  "complexity_target": "O(V+E) per addDependency; O((V+E) log V) per order"
+ },
+ "source_sha256": "9bf6b5740940cf02eb2c27334f187e7877738833910552bb9582495ecabd7f26",
+ "native_class": "ToDoList",
+ "native_symbol": "module global ToDoList"
+}

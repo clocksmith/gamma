@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "python",
+ "inferred_interface": {
+  "name": "minDrainageSplitDifference",
+  "params": [
+   {
+    "name": "parent",
+    "type": "integer[]"
+   },
+   {
+    "name": "input",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "parent",
+  "input"
+ ],
+ "uid": "hack2hire:6987a577fedd959e9aa444e4",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "for each cut, flood one side and sum",
+  "candidate_design": "iterative post-order subtree sums, min |total - 2*sub|",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "30bf03dff87b5fd9447359e7286b24855418a6342fea33dfed5c8b478578a554"
+}

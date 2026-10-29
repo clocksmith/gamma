@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "javascript",
+ "inferred_interface": {
+  "name": "matchQueryLogs",
+  "params": [
+   {
+    "name": "liveInputStream",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "liveInputStream"
+ ],
+ "uid": "hack2hire:695c6e4d68e2c0dd046c494f",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "for each log, test every earlier query word list against the log words",
+  "candidate_design": "inverted index word->query ids with per-log hit counters compared to distinct query word counts",
+  "complexity_target": "O(total words + postings touched) time/O(total words) space"
+ },
+ "source_sha256": "a355854ed2329478ba2ad0af24956a1ec0ed9a137d8141ebf4be9a930fe48838"
+}

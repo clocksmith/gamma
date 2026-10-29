@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "python",
+ "inferred_interface": {
+  "name": "priceAtPercentile",
+  "params": [
+   {
+    "name": "records",
+    "type": "string[]"
+   },
+   {
+    "name": "percentile",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "records",
+  "percentile"
+ ],
+ "uid": "hack2hire:6a4fb137665efda9311f561b",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "expand every transaction into a sorted list and index the nearest rank",
+  "candidate_design": "combine counts in a map, sort distinct prices, cumulative scan with exact integer comparison",
+  "complexity_target": "O(r log r) time/O(r) space"
+ },
+ "source_sha256": "2a26710a6d72939c68debaff10da01db149d2d4f2a4aa378355c468488e170de"
+}

@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "python",
+ "inferred_interface": {
+  "name": "mergeTrees",
+  "params": [
+   {
+    "name": "nodesA",
+    "type": "list[]"
+   },
+   {
+    "name": "nodesB",
+    "type": "list[]"
+   }
+  ],
+  "return": {
+   "type": "list[]"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "nodesA",
+  "nodesB"
+ ],
+ "uid": "hack2hire:69c7438121f6ab4226966890",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "recursive tuple merge then pre-order numbering",
+  "candidate_design": "explicit-stack pairwise merge emitting rows in pre-order",
+  "complexity_target": "O(n_A + n_B) time/O(n_A + n_B) space"
+ },
+ "source_sha256": "179ec3dda804bd371e1d8d6ab112900211d593d87de4a3a83da4e900d5474e38"
+}

@@ -1,0 +1,70 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "javascript",
+ "inferred_interface": {
+  "name": "countPythagoreanNodes",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "treeFrom",
+    "type": "integer[]"
+   },
+   {
+    "name": "treeTo",
+    "type": "integer[]"
+   },
+   {
+    "name": "x",
+    "type": "integer"
+   },
+   {
+    "name": "y",
+    "type": "integer"
+   },
+   {
+    "name": "z",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "n",
+  "treeFrom",
+  "treeTo",
+  "x",
+  "y",
+  "z"
+ ],
+ "uid": "hack2hire:6987d34fdce67a3d5ecc12bd",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "Floyd-Warshall all-pairs distances",
+  "candidate_design": "three BFS passes from x, y, z",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "63efd2c3c8adf4055d624fcf94f8781be570b56072692cccfedc6b6b4f7036eb"
+}
