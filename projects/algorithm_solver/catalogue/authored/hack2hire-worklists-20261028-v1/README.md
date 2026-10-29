@@ -6,7 +6,7 @@ All 604 Hack2Hire coding question groups (805 variants) from [bank.json](../../.
 |---|---:|---|
 | chunk01.txt | 32 | Committed: `hack2hire-chunk01-a/-b` |
 | chunk02.txt | 72 | Committed: `hack2hire-chunk02-a/-b/-c/-d` |
-| chunk03.txt, chunk04.txt | 64 | Being solved in `hack2hire-chunk03-a/-b`, `hack2hire-chunk04-a/-b` |
+| chunk03.txt, chunk04.txt | 64 | Committed: `hack2hire-chunk03-a/-b`, `hack2hire-chunk04-a/-b` |
 | chunk05.txt | 32 | Being solved by another session in `hack2hire-chunk05-v1` |
 | chunk06.txt to chunk18.txt | 404 | Unassigned (32 per file, 20 in the last) |
 
