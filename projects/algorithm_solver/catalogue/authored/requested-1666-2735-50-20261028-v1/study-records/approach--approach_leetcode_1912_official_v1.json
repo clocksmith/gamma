@@ -1,0 +1,751 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1912",
+        "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "When solving this pinned authored variant with its declared constraints."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:1912:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-records/contract--contract_leetcode_1912_official_authored-v1.json",
+    "sha256": "428671e7313540a836807cc4f23f272d113fda882e6ee74bfb827877cccd6671",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1912",
+        "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+      }
+    ],
+    "status": "present",
+    "value": "Track shop/movie availability and rental state; return at most five cheapest available shops or rented shop/movie pairs with required tie ordering. The approach is: per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports. Its target cost is amortized O(log(E+calls)) update/heap removal, top5 query plus cleanup; O(E+calls) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1912",
+        "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "level": "nudge",
+        "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+      },
+      {
+        "level": "concept",
+        "text": "Use this structural observation: per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports."
+      },
+      {
+        "level": "implementation",
+        "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+      }
+    ]
+  },
+  "id": "approach:leetcode:1912:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1912",
+        "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports",
+      "Caller-owned arguments remain unchanged."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:requested-1666-2735-50-20261028-v1:notes:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-records/artifact--artifact_requested-1666-2735-50-20261028-v1_notes_v1.json",
+    "sha256": "b7807c9408c6b401722a665930c64aff9148fdc715a339c96089614ccad858a7",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/1912",
+      "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+    },
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": null,
+      "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+    }
+  ],
+  "problemId": "leetcode:1912",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "Track shop/movie availability and rental state; return at most five cheapest available shops or rented shop/movie pairs with required tie ordering."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          {
+            "level": "nudge",
+            "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+          }
+        ]
+      },
+      "id": "reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Restate the required result and input effects.",
+          "Identify the structural observation: per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports"
+        ]
+      },
+      "native": {
+        "id": "artifact:requested-1666-2735-50-20261028-v1:notes:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-records/artifact--artifact_requested-1666-2735-50-20261028-v1_notes_v1.json",
+        "sha256": "b7807c9408c6b401722a665930c64aff9148fdc715a339c96089614ccad858a7",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": []
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "What must the result preserve?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "Separate problem reasoning, implementation and validation so an implementation is not mistaken for evidence."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "result",
+          "effects"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "Derive the representation"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:1912:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-records/artifact--artifact_leetcode_1912_official_python_v1.json",
+          "sha256": "7a5f0428a1ce2ee5bd75970af75717c7f1f7841ff1a65ffc33bc9bb2299cb64d",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:1912:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-records/artifact--artifact_leetcode_1912_official_javascript_v1.json",
+          "sha256": "41b84a9e2d8eeb14912715554fdf217c32e27762ea9c61b6d71bf1b68ea9a81d",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports"
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          {
+            "level": "concept",
+            "text": "Use this structural observation: per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports."
+          }
+        ]
+      },
+      "id": "coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Implement the stated algorithm in both languages using the official argument order.",
+          "Keep caller-owned inputs unchanged.",
+          "Target amortized O(log(E+calls)) update/heap removal, top5 query plus cleanup; O(E+calls) space"
+        ]
+      },
+      "native": {
+        "id": "artifact:requested-1666-2735-50-20261028-v1:notes:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-records/artifact--artifact_requested-1666-2735-50-20261028-v1_notes_v1.json",
+        "sha256": "b7807c9408c6b401722a665930c64aff9148fdc715a339c96089614ccad858a7",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": []
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "How does each update preserve the result?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "Separate problem reasoning, implementation and validation so an implementation is not mistaken for evidence."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "result",
+          "effects"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "Implement the invariant"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "Compare against the independent reference model and maximum constructions; local runs confer no qualification."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          {
+            "level": "implementation",
+            "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+          }
+        ]
+      },
+      "id": "validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run reference tests and candidate development checks.",
+          "Inspect output ordering, input effects and object freshness.",
+          "Review cases.py maximum rationales and any property-only maximum checks."
+        ]
+      },
+      "native": {
+        "id": "artifact:requested-1666-2735-50-20261028-v1:notes:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-records/artifact--artifact_requested-1666-2735-50-20261028-v1_notes_v1.json",
+        "sha256": "b7807c9408c6b401722a665930c64aff9148fdc715a339c96089614ccad858a7",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": []
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "Which boundary would falsify this approach?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "Separate problem reasoning, implementation and validation so an implementation is not mistaken for evidence."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "result",
+          "effects"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1912",
+            "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+          }
+        ],
+        "status": "present",
+        "value": "Check independent cases"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1912",
+        "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+      }
+    ],
+    "status": "present",
+    "value": "per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/study-notes.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1912",
+        "sha256": "d465b556d363bdd6fe9bd211f7bcb14ec8eb83dedf57a876bf6d54ba3e55f8cb"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-1666-2735-50-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "21f234d010a4db543ec04b0974c87f02d4b37fa0ecf4b681a0277e917056659e"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The chosen representation targets amortized O(log(E+calls)) update/heap removal, top5 query plus cleanup; O(E+calls) space.",
+      "Finite development cases do not establish universal correctness or independent qualification."
+    ]
+  },
+  "version": 1
+}

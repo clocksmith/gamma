@@ -1,0 +1,85 @@
+{
+  "candidate_design": "absolute expiration map; expiration at current time precedes renewal/counting",
+  "comparison": "development observer under construction; no qualification",
+  "complexity_target": "generate/renew expected O(1), count O(tokens), O(tokens) space",
+  "effects": "caller-owned inputs unchanged; owned class state may change; fresh nodes for structural transformations",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "manual_interface_note": null,
+  "official_interface": {
+    "classname": "AuthenticationManager",
+    "constructor": {
+      "params": [
+        {
+          "name": "timeToLive",
+          "type": "integer"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "name": "generate",
+        "params": [
+          {
+            "name": "tokenId",
+            "type": "string"
+          },
+          {
+            "name": "currentTime",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "renew",
+        "params": [
+          {
+            "name": "tokenId",
+            "type": "string"
+          },
+          {
+            "name": "currentTime",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "countUnexpiredTokens",
+        "params": [
+          {
+            "name": "currentTime",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 1797,
+  "qualification": {
+    "reason": "Draft checkpoint; candidate execution tests pending",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "absolute expiration map; expiration at current time precedes renewal/counting",
+    "complexity_target": "generate/renew expected O(1), count O(tokens), O(tokens) space"
+  },
+  "source_sha256": "771b0d07cf7a0f675aecbac24c58afe11f5a3ad072f06b0ab42eb32264672a15"
+}

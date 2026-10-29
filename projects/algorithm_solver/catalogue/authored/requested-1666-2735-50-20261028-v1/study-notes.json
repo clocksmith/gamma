@@ -1,0 +1,939 @@
+{
+  "problems": {
+    "1666": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1669": {
+      "candidate_design": "clone retained prefix/suffix and the inserted list into a fresh chain",
+      "complexity_target": "O(n+m) time/O(n+m) fresh output",
+      "constraints": [
+        {
+          "name": "list1Length",
+          "value": 10000
+        },
+        {
+          "name": "list2Length",
+          "value": 10000
+        }
+      ],
+      "explanation": "Replace the inclusive indexed segment of the first linked list with the second list, returning entirely fresh nodes. The approach is: clone retained prefix/suffix and the inserted list into a fresh chain. Its target cost is O(n+m) time/O(n+m) fresh output. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: clone retained prefix/suffix and the inserted list into a fresh chain."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "clone retained prefix/suffix and the inserted list into a fresh chain",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Replace the inclusive indexed segment of the first linked list with the second list, returning entirely fresh nodes."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Replace the inclusive indexed segment of the first linked list with the second list, returning entirely fresh nodes.",
+      "tradeoffs": [
+        "The chosen representation targets O(n+m) time/O(n+m) fresh output.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1670": {
+      "candidate_design": "two deques keep left size equal to right or one larger; left back is the frontmost middle",
+      "complexity_target": "O(1) expected per operation/O(n) space",
+      "constraints": [
+        {
+          "name": "calls",
+          "value": 1000
+        },
+        {
+          "name": "value",
+          "value": 1000000000
+        }
+      ],
+      "explanation": "Implement front, middle and back insertion/removal; when two middle positions exist, removal chooses the earlier one. The approach is: two deques keep left size equal to right or one larger; left back is the frontmost middle. Its target cost is O(1) expected per operation/O(n) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: two deques keep left size equal to right or one larger; left back is the frontmost middle."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "two deques keep left size equal to right or one larger; left back is the frontmost middle",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Implement front, middle and back insertion/removal; when two middle positions exist, removal chooses the earlier one."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Implement front, middle and back insertion/removal; when two middle positions exist, removal chooses the earlier one.",
+      "tradeoffs": [
+        "The chosen representation targets O(1) expected per operation/O(n) space.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1674": {
+      "candidate_design": "difference-array sweep of each mirrored pair zero/one/two-replacement cost intervals",
+      "complexity_target": "O(n+limit) time/O(limit) space",
+      "constraints": [
+        {
+          "name": "length",
+          "value": 100000
+        },
+        {
+          "name": "limit",
+          "value": 100000
+        }
+      ],
+      "explanation": "Minimize replacements by values within1..limit so every mirrored pair in the even-length array has the same sum. The approach is: difference-array sweep of each mirrored pair zero/one/two-replacement cost intervals. Its target cost is O(n+limit) time/O(limit) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: difference-array sweep of each mirrored pair zero/one/two-replacement cost intervals."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "difference-array sweep of each mirrored pair zero/one/two-replacement cost intervals",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Minimize replacements by values within1..limit so every mirrored pair in the even-length array has the same sum."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Minimize replacements by values within1..limit so every mirrored pair in the even-length array has the same sum.",
+      "tradeoffs": [
+        "The chosen representation targets O(n+limit) time/O(limit) space.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1676": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1682": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1692": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1712": {
+      "candidate_design": "nonnegative prefix sums permit two monotone second-split boundaries",
+      "complexity_target": "O(n) time/O(n) space",
+      "constraints": [
+        {
+          "name": "length",
+          "value": 100000
+        },
+        {
+          "name": "value",
+          "value": 10000
+        }
+      ],
+      "explanation": "Count splits into three nonempty contiguous subarrays whose sums are nondecreasing, modulo1000000007. The approach is: nonnegative prefix sums permit two monotone second-split boundaries. Its target cost is O(n) time/O(n) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: nonnegative prefix sums permit two monotone second-split boundaries."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "nonnegative prefix sums permit two monotone second-split boundaries",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Count splits into three nonempty contiguous subarrays whose sums are nondecreasing, modulo1000000007."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Count splits into three nonempty contiguous subarrays whose sums are nondecreasing, modulo1000000007.",
+      "tradeoffs": [
+        "The chosen representation targets O(n) time/O(n) space.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1714": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1718": {
+      "candidate_design": "descending choices at first empty position; first complete distance-valid sequence is lexicographically maximal",
+      "complexity_target": "exponential bounded backtracking/O(n) auxiliary, n<=20",
+      "constraints": [
+        {
+          "name": "n",
+          "value": 20
+        }
+      ],
+      "explanation": "Construct the lexicographically largest sequence with one1 and two copies of each2..n, separated by their own value. The approach is: descending choices at first empty position; first complete distance-valid sequence is lexicographically maximal. Its target cost is exponential bounded backtracking/O(n) auxiliary, n<=20. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: descending choices at first empty position; first complete distance-valid sequence is lexicographically maximal."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "descending choices at first empty position; first complete distance-valid sequence is lexicographically maximal",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Construct the lexicographically largest sequence with one1 and two copies of each2..n, separated by their own value."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Construct the lexicographically largest sequence with one1 and two copies of each2..n, separated by their own value.",
+      "tradeoffs": [
+        "The chosen representation targets exponential bounded backtracking/O(n) auxiliary, n<=20.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1728": {
+      "candidate_design": "retrograde finite-game winner propagation with minimax terminal distances; unresolved cycles lose for mouse under timeout",
+      "complexity_target": "O(V^2*J) time/O(V^2+V*J) space for V<=64 and directional move bound J",
+      "constraints": [
+        {
+          "name": "rows",
+          "value": 8
+        },
+        {
+          "name": "columns",
+          "value": 8
+        },
+        {
+          "name": "jump",
+          "value": 8
+        },
+        {
+          "name": "turnLimit",
+          "value": 1000
+        }
+      ],
+      "explanation": "Determine whether the mouse can force reaching food before capture or cat arrival, within1000 alternating turns, with bounded straight jumps and walls. The approach is: retrograde finite-game winner propagation with minimax terminal distances; unresolved cycles lose for mouse under timeout. Its target cost is O(V^2*J) time/O(V^2+V*J) space for V<=64 and directional move bound J. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: retrograde finite-game winner propagation with minimax terminal distances; unresolved cycles lose for mouse under timeout."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "retrograde finite-game winner propagation with minimax terminal distances; unresolved cycles lose for mouse under timeout",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Determine whether the mouse can force reaching food before capture or cat arrival, within1000 alternating turns, with bounded straight jumps and walls."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Determine whether the mouse can force reaching food before capture or cat arrival, within1000 alternating turns, with bounded straight jumps and walls.",
+      "tradeoffs": [
+        "The chosen representation targets O(V^2*J) time/O(V^2+V*J) space for V<=64 and directional move bound J.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1740": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1756": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1778": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1786": {
+      "candidate_design": "Dijkstra from final node followed by increasing-distance DAG path counting",
+      "complexity_target": "O((n+e) log n) time/O(n+e) space",
+      "constraints": [
+        {
+          "name": "nodes",
+          "value": 20000
+        },
+        {
+          "name": "edges",
+          "value": 40000
+        },
+        {
+          "name": "weight",
+          "value": 100000
+        }
+      ],
+      "explanation": "Count paths from node1 to node n whose successive nodes have strictly decreasing shortest-path distance to n, modulo1000000007. The approach is: Dijkstra from final node followed by increasing-distance DAG path counting. Its target cost is O((n+e) log n) time/O(n+e) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: Dijkstra from final node followed by increasing-distance DAG path counting."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "Dijkstra from final node followed by increasing-distance DAG path counting",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Count paths from node1 to node n whose successive nodes have strictly decreasing shortest-path distance to n, modulo1000000007."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Count paths from node1 to node n whose successive nodes have strictly decreasing shortest-path distance to n, modulo1000000007.",
+      "tradeoffs": [
+        "The chosen representation targets O((n+e) log n) time/O(n+e) space.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1794": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1797": {
+      "candidate_design": "absolute expiration map; expiration at current time precedes renewal/counting",
+      "complexity_target": "generate/renew expected O(1), count O(tokens), O(tokens) space",
+      "constraints": [
+        {
+          "name": "calls",
+          "value": 2000
+        },
+        {
+          "name": "ttl",
+          "value": 100000000
+        },
+        {
+          "name": "time",
+          "value": 100000000
+        },
+        {
+          "name": "tokenLength",
+          "value": 5
+        }
+      ],
+      "explanation": "Generate expiring tokens, renew only unexpired tokens, and count tokens whose expiration is strictly after the current time. The approach is: absolute expiration map; expiration at current time precedes renewal/counting. Its target cost is generate/renew expected O(1), count O(tokens), O(tokens) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: absolute expiration map; expiration at current time precedes renewal/counting."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "absolute expiration map; expiration at current time precedes renewal/counting",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Generate expiring tokens, renew only unexpired tokens, and count tokens whose expiration is strictly after the current time."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Generate expiring tokens, renew only unexpired tokens, and count tokens whose expiration is strictly after the current time.",
+      "tradeoffs": [
+        "The chosen representation targets generate/renew expected O(1), count O(tokens), O(tokens) space.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1804": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1810": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1820": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1825": {
+      "candidate_design": "sliding window with count/sum Fenwick trees; rank-prefix sums remove both tails including duplicate boundaries",
+      "complexity_target": "O(log U) per method/O(m+U) space, U=100000",
+      "constraints": [
+        {
+          "name": "m",
+          "value": 100000
+        },
+        {
+          "name": "calls",
+          "value": 100000
+        },
+        {
+          "name": "value",
+          "value": 100000
+        }
+      ],
+      "explanation": "For the latest m stream values, remove the k smallest and k largest occurrences and return the floor mean of the middle; return minus one before m values. The approach is: sliding window with count/sum Fenwick trees; rank-prefix sums remove both tails including duplicate boundaries. Its target cost is O(log U) per method/O(m+U) space, U=100000. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: sliding window with count/sum Fenwick trees; rank-prefix sums remove both tails including duplicate boundaries."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "sliding window with count/sum Fenwick trees; rank-prefix sums remove both tails including duplicate boundaries",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "For the latest m stream values, remove the k smallest and k largest occurrences and return the floor mean of the middle; return minus one before m values."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "For the latest m stream values, remove the k smallest and k largest occurrences and return the floor mean of the middle; return minus one before m values.",
+      "tradeoffs": [
+        "The chosen representation targets O(log U) per method/O(m+U) space, U=100000.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1826": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1840": {
+      "candidate_design": "two directional Lipschitz caps, then interval tent maxima and unrestricted tail",
+      "complexity_target": "O(r log r) time/O(r) space",
+      "constraints": [
+        {
+          "name": "n",
+          "value": 1000000000
+        },
+        {
+          "name": "restrictions",
+          "value": 100000
+        },
+        {
+          "name": "height",
+          "value": 1000000000
+        }
+      ],
+      "explanation": "Maximize a building height with nonnegative heights, building1 fixed at zero, adjacent differences at most one, and supplied upper restrictions. The approach is: two directional Lipschitz caps, then interval tent maxima and unrestricted tail. Its target cost is O(r log r) time/O(r) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: two directional Lipschitz caps, then interval tent maxima and unrestricted tail."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "two directional Lipschitz caps, then interval tent maxima and unrestricted tail",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Maximize a building height with nonnegative heights, building1 fixed at zero, adjacent differences at most one, and supplied upper restrictions."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Maximize a building height with nonnegative heights, building1 fixed at zero, adjacent differences at most one, and supplied upper restrictions.",
+      "tradeoffs": [
+        "The chosen representation targets O(r log r) time/O(r) space.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1845": {
+      "candidate_design": "next unused seat plus min-heap of released seats",
+      "complexity_target": "reserve/unreserve O(log n), O(number released) storage",
+      "constraints": [
+        {
+          "name": "n",
+          "value": 100000
+        },
+        {
+          "name": "calls",
+          "value": 100000
+        }
+      ],
+      "explanation": "Reserve the smallest currently free numbered seat and release valid previously reserved seats. The approach is: next unused seat plus min-heap of released seats. Its target cost is reserve/unreserve O(log n), O(number released) storage. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: next unused seat plus min-heap of released seats."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "next unused seat plus min-heap of released seats",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Reserve the smallest currently free numbered seat and release valid previously reserved seats."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Reserve the smallest currently free numbered seat and release valid previously reserved seats.",
+      "tradeoffs": [
+        "The chosen representation targets reserve/unreserve O(log n), O(number released) storage.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1865": {
+      "candidate_design": "frequency map of mutable owned second array; scan the smaller first array for complements",
+      "complexity_target": "add expected O(1), count O(n1), O(n1+n2) space",
+      "constraints": [
+        {
+          "name": "nums1Length",
+          "value": 1000
+        },
+        {
+          "name": "nums2Length",
+          "value": 100000
+        },
+        {
+          "name": "addCalls",
+          "value": 1000
+        },
+        {
+          "name": "countCalls",
+          "value": 1000
+        },
+        {
+          "name": "nums1Value",
+          "value": 1000000000
+        },
+        {
+          "name": "nums2Value",
+          "value": 100000
+        },
+        {
+          "name": "delta",
+          "value": 100000
+        },
+        {
+          "name": "total",
+          "value": 1000000000
+        }
+      ],
+      "explanation": "Update only an owned copy of the second array and count cross-array index pairs whose values sum to a requested total. The approach is: frequency map of mutable owned second array; scan the smaller first array for complements. Its target cost is add expected O(1), count O(n1), O(n1+n2) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: frequency map of mutable owned second array; scan the smaller first array for complements."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "frequency map of mutable owned second array; scan the smaller first array for complements",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Update only an owned copy of the second array and count cross-array index pairs whose values sum to a requested total."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Update only an owned copy of the second array and count cross-array index pairs whose values sum to a requested total.",
+      "tradeoffs": [
+        "The chosen representation targets add expected O(1), count O(n1), O(n1+n2) space.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1902": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1908": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1912": {
+      "candidate_design": "per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports",
+      "complexity_target": "amortized O(log(E+calls)) update/heap removal, top5 query plus cleanup; O(E+calls) space",
+      "constraints": [
+        {
+          "name": "shops",
+          "value": 300000
+        },
+        {
+          "name": "entries",
+          "value": 100000
+        },
+        {
+          "name": "calls",
+          "value": 100000
+        },
+        {
+          "name": "movie",
+          "value": 10000
+        },
+        {
+          "name": "price",
+          "value": 10000
+        }
+      ],
+      "explanation": "Track shop/movie availability and rental state; return at most five cheapest available shops or rented shop/movie pairs with required tie ordering. The approach is: per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports. Its target cost is amortized O(log(E+calls)) update/heap removal, top5 query plus cleanup; O(E+calls) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "per-movie available heaps and global rented heap; generation stamps invalidate stale entries without duplicate reports",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Track shop/movie availability and rental state; return at most five cheapest available shops or rented shop/movie pairs with required tie ordering."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Track shop/movie availability and rental state; return at most five cheapest available shops or rented shop/movie pairs with required tie ordering.",
+      "tradeoffs": [
+        "The chosen representation targets amortized O(log(E+calls)) update/heap removal, top5 query plus cleanup; O(E+calls) space.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "1918": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1924": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1933": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "1940": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2005": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2025": {
+      "candidate_design": "split-difference counters on each side of the changed index; query opposite delta signs",
+      "complexity_target": "O(n) expected time/O(n) space",
+      "constraints": [
+        {
+          "name": "length",
+          "value": 100000
+        },
+        {
+          "name": "absoluteValue",
+          "value": 100000
+        }
+      ],
+      "explanation": "Maximize equal-sum nonempty prefix/suffix partition boundaries after changing at most one entry to k. The approach is: split-difference counters on each side of the changed index; query opposite delta signs. Its target cost is O(n) expected time/O(n) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: split-difference counters on each side of the changed index; query opposite delta signs."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "split-difference counters on each side of the changed index; query opposite delta signs",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Maximize equal-sum nonempty prefix/suffix partition boundaries after changing at most one entry to k."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Maximize equal-sum nonempty prefix/suffix partition boundaries after changing at most one entry to k.",
+      "tradeoffs": [
+        "The chosen representation targets O(n) expected time/O(n) space.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "2031": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2060": {
+      "candidate_design": "memoized two-string positions plus unmatched wildcard-length balance; enumerate all digit-run partitions",
+      "complexity_target": "O(n*m*D) reachable states/time up to constant digit branching; O(n*m*D) space",
+      "constraints": [
+        {
+          "name": "length",
+          "value": 40
+        },
+        {
+          "name": "digitRun",
+          "value": 3
+        }
+      ],
+      "explanation": "Decide whether two encoded strings can represent a common original, allowing digit runs to split into positive wildcard lengths. The approach is: memoized two-string positions plus unmatched wildcard-length balance; enumerate all digit-run partitions. Its target cost is O(n*m*D) reachable states/time up to constant digit branching; O(n*m*D) space. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: memoized two-string positions plus unmatched wildcard-length balance; enumerate all digit-run partitions."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "memoized two-string positions plus unmatched wildcard-length balance; enumerate all digit-run partitions",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Decide whether two encoded strings can represent a common original, allowing digit runs to split into positive wildcard lengths."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Decide whether two encoded strings can represent a common original, allowing digit runs to split into positive wildcard lengths.",
+      "tradeoffs": [
+        "The chosen representation targets O(n*m*D) reachable states/time up to constant digit branching; O(n*m*D) space.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    },
+    "2093": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2098": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2128": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2168": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2174": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2189": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2254": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2313": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2464": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2590": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2674": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2689": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2728": {
+      "blocked_reason": "Official public response contains metadata but no statement. Full contract and implementation authoring await an accessible source; no solution inferred from the title."
+    },
+    "2735": {
+      "candidate_design": "enumerate rotation counts, maintain each type minimum acquisition price across seen rotations",
+      "complexity_target": "O(n^2) time/O(n) space; costs below2^53",
+      "constraints": [
+        {
+          "name": "length",
+          "value": 1000
+        },
+        {
+          "name": "value",
+          "value": 1000000000
+        },
+        {
+          "name": "x",
+          "value": 1000000000
+        }
+      ],
+      "explanation": "Minimize total chocolate acquisition and rotation cost, allowing each type to use its cheapest price among rotations performed. The approach is: enumerate rotation counts, maintain each type minimum acquisition price across seen rotations. Its target cost is O(n^2) time/O(n) space; costs below2^53. Treat the invariant underlying that approach as the reason each local update preserves the required result. Check it against an independent bounded reference before relying on large-domain constructions.",
+      "hints": [
+        {
+          "level": "nudge",
+          "text": "Identify the required output freedom, ordering and update rules before selecting a data structure."
+        },
+        {
+          "level": "concept",
+          "text": "Use this structural observation: enumerate rotation counts, maintain each type minimum acquisition price across seen rotations."
+        },
+        {
+          "level": "implementation",
+          "text": "Maintain the state described above explicitly; preserve caller-owned inputs and validate boundary transitions against the reference model."
+        }
+      ],
+      "invariants": [
+        "enumerate rotation counts, maintain each type minimum acquisition price across seen rotations",
+        "Caller-owned arguments remain unchanged."
+      ],
+      "requirements": [
+        {
+          "id": "result",
+          "text": "Minimize total chocolate acquisition and rotation cost, allowing each type to use its cheapest price among rotations performed."
+        },
+        {
+          "id": "effects",
+          "text": "Do not mutate caller-owned inputs; only owned per-instance state may change."
+        }
+      ],
+      "statement": "Minimize total chocolate acquisition and rotation cost, allowing each type to use its cheapest price among rotations performed.",
+      "tradeoffs": [
+        "The chosen representation targets O(n^2) time/O(n) space; costs below2^53.",
+        "Finite development cases do not establish universal correctness or independent qualification."
+      ]
+    }
+  },
+  "schema": "gamma.authored-study-notes.v1"
+}

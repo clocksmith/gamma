@@ -1,0 +1,42 @@
+{
+  "candidate_design": "cache API reads; binary-search peak, increasing half first, then decreasing half",
+  "comparison": "development observer under construction; no qualification",
+  "complexity_target": "O(log n) API calls/time/cache; fewer than100 gets at n<=10000",
+  "effects": "caller-owned inputs unchanged; owned class state may change; fresh nodes for structural transformations",
+  "entrypoint": "solve",
+  "language": "python",
+  "manual_interface_note": "For1095, native target,mountainArr order follows official language stubs rather than manual metadata transport order.",
+  "official_interface": {
+    "manual": true,
+    "name": "findInMountainArray",
+    "params": [
+      {
+        "name": "mountainArr",
+        "type": "integer[]"
+      },
+      {
+        "name": "target",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    },
+    "typescriptCustomType": "class MountainArray {\n    __secret: number[];\n    __N: number;\n    __guesses: number;\n    constructor(secret: number[]) {\n        this.__secret = secret;\n        this.__N = secret.length;\n        this.__guesses = 100;\n    }\n\n    get(index: number): number {\n        this.__guesses -= 1;\n        return this.__secret[index];\n    }\n\n    getGuesses(): number {\n        return this.__guesses;\n    }\n        \n    length(): number {\n        return this.__N;\n    }\n};\n"
+  },
+  "parameters": [
+    "target",
+    "mountainArr"
+  ],
+  "problem_id": 1095,
+  "qualification": {
+    "reason": "Draft checkpoint; candidate execution tests pending",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "cache API reads; binary-search peak, increasing half first, then decreasing half",
+    "complexity_target": "O(log n) API calls/time/cache; fewer than100 gets at n<=10000"
+  },
+  "source_sha256": "f823e281395c4e9762dd54bf43c3105e2e3b2c228f79555fe792eaf74c98bcd0"
+}

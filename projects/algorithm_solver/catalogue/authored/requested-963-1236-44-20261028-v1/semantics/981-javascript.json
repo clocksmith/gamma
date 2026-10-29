@@ -1,0 +1,72 @@
+{
+  "candidate_design": "append monotone timestamps per key; predecessor binary search",
+  "comparison": "development observer under construction; no qualification",
+  "complexity_target": "set amortized O(1), get O(log history), O(total sets) space",
+  "effects": "caller-owned inputs unchanged; owned class state may change; fresh nodes for structural transformations",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "manual_interface_note": null,
+  "official_interface": {
+    "classname": "TimeMap",
+    "constructor": {
+      "params": []
+    },
+    "methods": [
+      {
+        "name": "set",
+        "params": [
+          {
+            "name": "key",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "void"
+        }
+      },
+      {
+        "name": "get",
+        "params": [
+          {
+            "name": "key",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "string"
+        }
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "systemdesign": true
+  },
+  "parameters": [
+    "operations",
+    "arguments"
+  ],
+  "problem_id": 981,
+  "qualification": {
+    "reason": "Draft checkpoint; candidate execution tests pending",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-object-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "append monotone timestamps per key; predecessor binary search",
+    "complexity_target": "set amortized O(1), get O(log history), O(total sets) space"
+  },
+  "source_sha256": "a54596bd0fe2fcd19a4eee5a084f31d823debd37a6d64144d1eae87a5b44c571"
+}
