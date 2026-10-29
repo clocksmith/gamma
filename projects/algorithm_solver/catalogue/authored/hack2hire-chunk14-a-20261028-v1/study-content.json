@@ -1,0 +1,1862 @@
+{
+ "schema": "gamma.hack2hire-chunk14-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:68757267ab23078e4e46aa3c": {
+   "constraints": [
+    "1 <= text.length <= 2e5",
+    "text is printable ASCII (codes 32 to 126) with at least one non-space character",
+    "1 <= maxWidth <= 2e5"
+   ],
+   "clarifyingQuestions": [
+    "Can text contain several spaces in a row, or leading and trailing spaces?",
+    "Is an over-long word allowed only alone on its line?",
+    "Does the width count the separating spaces?"
+   ],
+   "hints": [
+    "Placing as many words as possible on each line never increases the number of lines.",
+    "Track the length of the current line; adding a word costs one space plus its length.",
+    "If the word does not fit (or the line is empty), start a new line with that word; an over-long word therefore always gets a line to itself."
+   ],
+   "invariants": [
+    "the current line length never exceeds maxWidth unless the line holds one over-long word",
+    "the line count is non-decreasing over the scan"
+   ],
+   "chooseWhen": [
+    "Minimum wrapped-line counts with uniform separators"
+   ],
+   "tradeoffs": [
+    "The greedy rule is optimal for counting lines but not for balanced (pretty) wrapping, which needs dynamic programming"
+   ],
+   "variantLabel": "Inferred single variant: minimum number of greedy-wrapped lines",
+   "examples": [
+    {
+     "input": [
+      "a",
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "cea bg   dd   eedahc   eacgdfec   dg   ecahgfb egagfchh acagecde b gehfec fhgaeah  ",
+      10
+     ],
+     "output": 8,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67eb34914c9bb801bfd0ef7d": {
+   "constraints": [
+    "0 <= house.length, street.length <= 5e4",
+    "each trade matches the four-field format"
+   ],
+   "clarifyingQuestions": [
+    "What is returned: the unmatched trades, the matched pairs, or counts?",
+    "In which order are unmatched trades listed?",
+    "When several trades could match, which pair is chosen?",
+    "Is there a further matching rule (for example house buys offsetting house sells)?"
+   ],
+   "hints": [
+    "Identical strings are interchangeable, so only their counts matter.",
+    "Count the street trades by string; each house trade consumes one count of its own string if available.",
+    "Unconsumed house trades and remaining street counts are the unmatched trades; sort the combined list."
+   ],
+   "invariants": [
+    "every matched pair has identical strings",
+    "the number of unmatched trades has the parity of h + s"
+   ],
+   "chooseWhen": [
+    "Reconciling two ledgers of identical records"
+   ],
+   "tradeoffs": [
+    "A sort-and-merge pass needs no hash map but sorts both lists first"
+   ],
+   "variantLabel": "Inferred level 1: exact one-to-one trade matching",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "  GE,B,0050,ID0001",
+       "MSFT,S,0050,ABC123",
+       " IBM,B,0200,ABC123",
+       "  GE,S,0050,ABC123",
+       " IBM,S,0050,ID0001"
+      ],
+      [
+       " IBM,S,0100,XYZ999",
+       "MSFT,S,0050,ABC123",
+       "MSFT,B,0050,ID0001",
+       "MSFT,B,0200,7Q7Q7Q",
+       "  GE,S,0050,ABC123",
+       " IBM,B,0200,ABC123",
+       "  GE,B,0050,7Q7Q7Q",
+       "MSFT,B,0200,7Q7Q7Q"
+      ]
+     ],
+     "output": [
+      "  GE,B,0050,7Q7Q7Q",
+      "  GE,B,0050,ID0001",
+      " IBM,S,0050,ID0001",
+      " IBM,S,0100,XYZ999",
+      "MSFT,B,0050,ID0001",
+      "MSFT,B,0200,7Q7Q7Q",
+      "MSFT,B,0200,7Q7Q7Q"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67eb3ff94c9bb801bfd0ef7e": {
+   "constraints": [
+    "0 <= house.length, street.length <= 5e4",
+    "each trade matches the four-field format"
+   ],
+   "clarifyingQuestions": [
+    "What is returned: the unmatched trades, the matched pairs, or counts?",
+    "In which order are unmatched trades listed?",
+    "When several trades could match, which pair is chosen?",
+    "Is there a further matching rule (for example house buys offsetting house sells)?"
+   ],
+   "hints": [
+    "Run the exact round first; it is the same multiset matching as level 1.",
+    "Group the leftovers by everything except the ID (the first three comma-separated fields).",
+    "Within a group, sort both sides and pair positions 0..min-1; the rest of the larger side stays unmatched."
+   ],
+   "invariants": [
+    "exact matches are never broken by the second round",
+    "within a group at most one side has leftovers"
+   ],
+   "chooseWhen": [
+    "Reconciliation with a fallback looser key"
+   ],
+   "tradeoffs": [
+    "Matching rules applied in rounds are easy to extend; a single weighted matching would be more general but costlier"
+   ],
+   "variantLabel": "Inferred level 2: exact matching, then attribute matching ignoring the ID",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "AAPL,B,0200,7Q7Q7Q",
+       "  GE,S,0100,7Q7Q7Q",
+       " IBM,S,0100,ABC123",
+       " IBM,S,0050,XYZ999",
+       "MSFT,B,0200,7Q7Q7Q",
+       "AAPL,S,0050,7Q7Q7Q",
+       " IBM,S,0100,7Q7Q7Q",
+       "MSFT,B,0100,7Q7Q7Q",
+       "  GE,B,0100,7Q7Q7Q"
+      ],
+      [
+       "MSFT,B,0200,7Q7Q7Q",
+       "  GE,B,0100,7Q7Q7Q",
+       " IBM,S,0100,ABC123",
+       "  GE,S,0100,7Q7Q7Q"
+      ]
+     ],
+     "output": [
+      " IBM,S,0050,XYZ999",
+      " IBM,S,0100,7Q7Q7Q",
+      "AAPL,B,0200,7Q7Q7Q",
+      "AAPL,S,0050,7Q7Q7Q",
+      "MSFT,B,0100,7Q7Q7Q"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69cd7029ff3ebde766cee760": {
+   "constraints": [
+    "0 <= codes.length <= 20",
+    "codes match [A-Z]{1,5}",
+    "0 <= records.length <= 5e4",
+    "0 <= timestamp <= 1e9",
+    "-1e9 <= value <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "What fills a cell whose code has no record at that timestamp?",
+    "Are records with an unknown code an error or ignored?",
+    "Can the stream arrive out of timestamp order?",
+    "Is the timestamp part of the row?"
+   ],
+   "hints": [
+    "Sort the registered codes once so each code has a fixed column.",
+    "Group the records by timestamp, keeping arrival order inside a group.",
+    "Sweep timestamps in increasing order with one current-value array: apply the group, then copy the array (with the timestamp in front) as the row."
+   ],
+   "invariants": [
+    "every row has 1 + codes.length cells",
+    "a cell is null only before the first record of its code"
+   ],
+   "chooseWhen": [
+    "Pivoting sparse event streams into dense snapshots"
+   ],
+   "tradeoffs": [
+    "Copying the full row per timestamp costs O(c) each; storing only changes is smaller but harder to read"
+   ],
+   "variantLabel": "Inferred single variant: carry-forward matrix rows per timestamp",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "C",
+       "B",
+       "EEE",
+       "DD"
+      ],
+      [
+       [
+        1,
+        "EEE",
+        5
+       ],
+       [
+        0,
+        "AB",
+        -3
+       ],
+       [
+        1,
+        "C",
+        5
+       ],
+       [
+        5,
+        "C",
+        -4
+       ],
+       [
+        1,
+        "AB",
+        -1
+       ],
+       [
+        0,
+        "EEE",
+        -1
+       ],
+       [
+        5,
+        "A",
+        1
+       ],
+       [
+        3,
+        "ZZ",
+        -1
+       ],
+       [
+        2,
+        "DD",
+        1
+       ],
+       [
+        3,
+        "DD",
+        1
+       ],
+       [
+        0,
+        "A",
+        0
+       ],
+       [
+        3,
+        "ZZ",
+        2
+       ]
+      ]
+     ],
+     "output": [
+      [
+       0,
+       null,
+       null,
+       null,
+       -1
+      ],
+      [
+       1,
+       null,
+       5,
+       null,
+       5
+      ],
+      [
+       2,
+       null,
+       5,
+       1,
+       5
+      ],
+      [
+       3,
+       null,
+       5,
+       1,
+       5
+      ],
+      [
+       5,
+       null,
+       -4,
+       1,
+       5
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a5019e9665efda9311f5903": {
+   "constraints": [
+    "0 <= stream.length <= 5e4",
+    "total length of all chunks <= 2e5",
+    "chunks are printable ASCII"
+   ],
+   "clarifyingQuestions": [
+    "Is the text of the token chunk before \"<END>\" kept, and is it kept when empty?",
+    "What if no stop token appears?",
+    "Which occurrence counts when \"<END>\" appears more than once?",
+    "Can the token span several chunks?"
+   ],
+   "hints": [
+    "Because the token is inside one chunk, each chunk can be searched on its own.",
+    "Copy chunks to the output until one contains \"<END>\".",
+    "From that chunk keep only the text before the token, and only when it is non-empty; then stop."
+   ],
+   "invariants": [
+    "output length <= input length",
+    "every output chunk except possibly the last is an unchanged input chunk"
+   ],
+   "chooseWhen": [
+    "Cutting model output at a sentinel while preserving chunk boundaries"
+   ],
+   "tradeoffs": [
+    "Searching chunk by chunk is simplest but misses tokens split across chunks, which level 2 handles"
+   ],
+   "variantLabel": "Inferred level 1: truncate at a stop token inside one chunk",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "N",
+       "<END",
+       "<EN",
+       "E <D",
+       "<DDDE",
+       "b>DD>",
+       "bba<END><<b"
+      ]
+     ],
+     "output": [
+      "N",
+      "<END",
+      "<EN",
+      "E <D",
+      "<DDDE",
+      "b>DD>",
+      "bba"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a501a01665efda9311f5906": {
+   "constraints": [
+    "0 <= stream.length <= 5e4",
+    "total length of all chunks <= 2e5",
+    "chunks are printable ASCII"
+   ],
+   "clarifyingQuestions": [
+    "Is the text of the token chunk before \"<END>\" kept, and is it kept when empty?",
+    "What if no stop token appears?",
+    "Which occurrence counts when \"<END>\" appears more than once?",
+    "Can the token span several chunks?"
+   ],
+   "hints": [
+    "Per-chunk search fails when \"<E\" ends one chunk and \"ND>\" starts the next.",
+    "Search the concatenation (or carry the last four characters of the previous text) to find where the token starts.",
+    "Convert that start offset to (chunk index, offset) by walking the chunk lengths; keep earlier chunks and the non-empty prefix of that chunk."
+   ],
+   "invariants": [
+    "the token start offset is the first in the concatenation",
+    "no output text overlaps the token"
+   ],
+   "chooseWhen": [
+    "Sentinel detection in streams split at arbitrary boundaries"
+   ],
+   "tradeoffs": [
+    "Joining costs O(total) memory; a rolling four-character carry would stream with O(1) extra memory"
+   ],
+   "variantLabel": "Inferred level 2: truncate at a stop token that may span chunks",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ab<END>a<b",
+       "aa<END>",
+       "aa E>",
+       "DDE<a",
+       "<b",
+       "baD",
+       "b",
+       "aDbEE"
+      ]
+     ],
+     "output": [
+      "ab"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a14eb4e7b0582b35278812d": {
+   "constraints": [
+    "1 <= m * n <= 1e5",
+    "matrix and s use lowercase letters",
+    "1 <= s.length <= 100"
+   ],
+   "clarifyingQuestions": [
+    "What is the third direction?",
+    "Is a one-character string counted once per direction?",
+    "Do overlapping occurrences count separately?"
+   ],
+   "hints": [
+    "Each direction turns the matrix into independent lines: rows, columns and diagonals.",
+    "A match from (cell, direction) is an occurrence of s starting at that cell on its line.",
+    "Count overlapping occurrences per line with a prefix-function (KMP) scan, so long repetitive lines stay linear."
+   ],
+   "invariants": [
+    "every cell belongs to exactly one line per direction",
+    "occurrences are counted at their starting index, so overlaps all count"
+   ],
+   "chooseWhen": [
+    "Word search along fixed directions"
+   ],
+   "tradeoffs": [
+    "Naive comparison is O(m n |s|); KMP is linear but needs the failure table"
+   ],
+   "variantLabel": "Inferred single variant: count right, down and diagonal occurrences",
+   "examples": [
+    {
+     "input": [
+      [
+       "a"
+      ],
+      "a"
+     ],
+     "output": 3,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "bababa",
+       "baaabb",
+       "abaaaa",
+       "baabbb",
+       "bbaaab",
+       "bbabbb"
+      ],
+      "ba"
+     ],
+     "output": 21,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6887e0fc6509c24ee64e4b21": {
+   "constraints": [
+    "1 <= s.length <= 1e5",
+    "s uses lowercase letters"
+   ],
+   "clarifyingQuestions": [
+    "Is any valid rearrangement accepted, or a particular one?",
+    "What is returned when no arrangement exists?",
+    "Should all arrangements be listed?"
+   ],
+   "hints": [
+    "An arrangement exists iff the most frequent letter appears at most ceil(n / 2) times.",
+    "Build the answer left to right, always trying the smallest letter that differs from the previous one.",
+    "A choice c is safe iff the rest (r letters) has max count <= ceil(r / 2) and, when r is odd and some letter needs every even slot, that letter is not c."
+   ],
+   "invariants": [
+    "the prefix built so far never has equal neighbours",
+    "after each step the remaining multiset stays arrangeable after the last letter"
+   ],
+   "chooseWhen": [
+    "Canonical answers for problems with many valid outputs"
+   ],
+   "tradeoffs": [
+    "Lexicographic greed needs a precise feasibility test; any-valid answers can use a simpler max-heap"
+   ],
+   "variantLabel": "Inferred single variant: lexicographically smallest valid rearrangement",
+   "examples": [
+    {
+     "input": [
+      "a"
+     ],
+     "output": "a",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "bcddabdb"
+     ],
+     "output": "abcdbdbd",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68c331ec1f64f4312b0a3e2d": {
+   "constraints": [
+    "plans has exactly 3 entries, names match [A-Za-z]{1,10}",
+    "1 <= monthlyPriceCents <= 1e6",
+    "0 <= events.length <= 366",
+    "years between 1900 and 2100 (leap years per the Gregorian rule)"
+   ],
+   "clarifyingQuestions": [
+    "What exactly is returned: a total, per-month totals or a per-day log?",
+    "Is the END day itself billed?",
+    "How is a fractional amount rounded?",
+    "Does an active plan bill through the end of the year?"
+   ],
+   "hints": [
+    "Within one month every day has the same divisor N, so the month total is (sum of price * days) / N.",
+    "Convert dates to day-of-year; consecutive events bound intervals with one plan (or none).",
+    "Split each interval by month lengths (February has 29 days in leap years), add price * days to the month numerator, and round numerator / N half up with integers."
+   ],
+   "invariants": [
+    "each billed day belongs to exactly one interval",
+    "numerators are integers; only the final division rounds"
+   ],
+   "chooseWhen": [
+    "Prorated billing that must stay exact"
+   ],
+   "tradeoffs": [
+    "Day-by-day simulation is simpler but O(365); interval splitting scales to long histories"
+   ],
+   "variantLabel": "Inferred single variant: monthly prorated statement in cents",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "Pro",
+        1717
+       ],
+       [
+        "Lite",
+        2866
+       ],
+       [
+        "Max",
+        300
+       ]
+      ],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "Max",
+        2897
+       ],
+       [
+        "Basic",
+        2899
+       ],
+       [
+        "Family",
+        1807
+       ]
+      ],
+      [
+       [
+        "2000-03-30",
+        "START",
+        "Basic"
+       ],
+       [
+        "2000-04-07",
+        "END",
+        null
+       ],
+       [
+        "2000-04-21",
+        "START",
+        "Max"
+       ],
+       [
+        "2000-09-16",
+        "SWITCH",
+        "Basic"
+       ],
+       [
+        "2000-10-13",
+        "SWITCH",
+        "Max"
+       ],
+       [
+        "2000-10-15",
+        "SWITCH",
+        "Basic"
+       ],
+       [
+        "2000-12-15",
+        "SWITCH",
+        "Family"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "2000-03",
+       187
+      ],
+      [
+       "2000-04",
+       1545
+      ],
+      [
+       "2000-05",
+       2897
+      ],
+      [
+       "2000-06",
+       2897
+      ],
+      [
+       "2000-07",
+       2897
+      ],
+      [
+       "2000-08",
+       2897
+      ],
+      [
+       "2000-09",
+       2898
+      ],
+      [
+       "2000-10",
+       2899
+      ],
+      [
+       "2000-11",
+       2899
+      ],
+      [
+       "2000-12",
+       2300
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68e870c780f69c7a0170688c": {
+   "constraints": [
+    "0 <= nums.length <= 200",
+    "1 <= nums[i] <= 1e4",
+    "0 <= target <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Are values distinct?",
+    "Is target 0 reachable with the empty subset?",
+    "Can target exceed the total?"
+   ],
+   "hints": [
+    "Track the set of sums reachable with the elements seen so far; it starts as {0}.",
+    "Adding element x makes every old sum s also reachable as s + x.",
+    "Store the set as bits of one integer: reach |= reach << x, keeping only bits up to target; answer whether bit target is set."
+   ],
+   "invariants": [
+    "bit 0 is always set",
+    "the bitset never holds sums above target"
+   ],
+   "chooseWhen": [
+    "Pseudo-polynomial decision problems with small targets"
+   ],
+   "tradeoffs": [
+    "A bitset is fast but O(target) memory; meet-in-the-middle suits few elements with huge values"
+   ],
+   "variantLabel": "Inferred single variant: 0/1 subset-sum decision",
+   "examples": [
+    {
+     "input": [
+      [],
+      0
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       9,
+       19,
+       15,
+       17,
+       7,
+       2,
+       17,
+       6,
+       16,
+       19,
+       15,
+       16
+      ],
+      105
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696a84b7cc483345efb1b23c": {
+   "constraints": [
+    "0 <= groups.length <= 1e4",
+    "total tags across groups <= 1e5",
+    "0 <= filter.length <= 50",
+    "tags match [a-z0-9_-]{1,20}"
+   ],
+   "clarifyingQuestions": [
+    "Is an empty filter matched by every group?",
+    "Can a tag repeat in a group?",
+    "Must the output be in a particular order?"
+   ],
+   "hints": [
+    "A hash set of each group answers \"contains every filter tag\" in O(|filter|).",
+    "Skip groups that miss any filter tag.",
+    "Collect the remaining tags of valid groups in a set, drop filter tags, then sort for a canonical answer."
+   ],
+   "invariants": [
+    "result tags are distinct and never in filter",
+    "each result tag occurs in some valid group"
+   ],
+   "chooseWhen": [
+    "Faceted tag search and co-occurrence queries"
+   ],
+   "tradeoffs": [
+    "An inverted index from tag to groups helps with many queries; one query needs only a scan"
+   ],
+   "variantLabel": "Inferred single variant: tags co-occurring with every filter tag",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "tag"
+       ],
+       [
+        "x-1",
+        "blue",
+        "x-1",
+        "blue",
+        "z9"
+       ],
+       [
+        "z9",
+        "x-1",
+        "tag"
+       ],
+       [
+        "x-1",
+        "red",
+        "x-1",
+        "z9",
+        "z9"
+       ],
+       [
+        "blue",
+        "blue",
+        "big_a",
+        "z9"
+       ],
+       [
+        "big_a",
+        "tag",
+        "blue",
+        "red"
+       ]
+      ],
+      [
+       "blue"
+      ]
+     ],
+     "output": [
+      "big_a",
+      "red",
+      "tag",
+      "x-1",
+      "z9"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677c6cdc5cbaff553b53b06c": {
+   "constraints": [
+    "0 <= text.length <= 2e5",
+    "text is printable ASCII plus \"\\n\"",
+    "0 <= n <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Is the input one string or a list of lines?",
+    "Is a final line without newline counted?",
+    "What does n = 0 return?",
+    "Should a missing final newline be added?"
+   ],
+   "hints": [
+    "A line starts at index 0 and after every \"\\n\" that is not the last character.",
+    "Keep only the most recent n line starts in a ring buffer (a queue of size n).",
+    "After the scan, return the suffix from the oldest start still in the buffer, or \"\" when n is 0."
+   ],
+   "invariants": [
+    "the buffer never holds more than n starts",
+    "the result is always a suffix of text"
+   ],
+   "chooseWhen": [
+    "Streaming last-k retention"
+   ],
+   "tradeoffs": [
+    "Scanning backward for n newlines is faster on large files with random access; the ring buffer works on a forward-only stream"
+   ],
+   "variantLabel": "Inferred single variant: last n lines of a text, tail -n semantics",
+   "examples": [
+    {
+     "input": [
+      "",
+      3
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "\n\n\nbab\n\nb\n\na\n\n\n\n \n\n\n\n\nab\n\n ",
+      2
+     ],
+     "output": "\n ",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d18cb017b72775cc49c0c4": {
+   "constraints": [
+    "0 <= text.length <= 1e5",
+    "0 <= keys.length <= 1000",
+    "values have length <= 20",
+    "plural values are decimal integers 0 to 1e6 without leading zeros"
+   ],
+   "clarifyingQuestions": [
+    "Which branch does 0 use?",
+    "Is \"#\" replaced in both branches?",
+    "What happens to an unknown name?",
+    "Can placeholders nest inside plural branches?"
+   ],
+   "hints": [
+    "Put keys and values into a hash map.",
+    "Scan the text; at \"{\" read the name up to \"}\" or \",\".",
+    "For a plural block, read the two branch texts between the fixed delimiters, choose by value == \"1\", and replace \"#\" with the value; copy unknown expressions unchanged."
+   ],
+   "invariants": [
+    "literal text is copied byte for byte",
+    "every expression is consumed exactly once"
+   ],
+   "chooseWhen": [
+    "Message formatting with simple pluralisation"
+   ],
+   "tradeoffs": [
+    "A hand-written parser is linear and precise; regular expressions are shorter but harder to extend to nesting"
+   ],
+   "variantLabel": "Inferred single variant: placeholders and ICU-style plural blocks",
+   "examples": [
+    {
+     "input": [
+      "",
+      [],
+      []
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "{b}{n, plural, one{one} other{# many}}Hi {c, plural, one{# cat} other{# cats}}{n, plural, one{one} other{# many}}{n, plural, one{one} other{# many}}",
+      [
+       "a",
+       "b",
+       "c"
+      ],
+      [
+       "1y#",
+       "2",
+       "1000000"
+      ]
+     ],
+     "output": "2{n, plural, one{one} other{# many}}Hi 1000000 cats{n, plural, one{one} other{# many}}{n, plural, one{one} other{# many}}",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68d56825569e57bd10bbd432": {
+   "constraints": [
+    "1 <= sentences.length <= 1000",
+    "1 <= sentences[i].length <= 100",
+    "printable ASCII"
+   ],
+   "clarifyingQuestions": [
+    "Which characters draw the borders?",
+    "Is there a space between the border and the text?",
+    "Do adjacent boxes share a border?",
+    "What happens when a sentence is longer than an allowed width?"
+   ],
+   "hints": [
+    "Find the inner width first: the maximum sentence length.",
+    "The border is \"+\" + \"-\" * width + \"+\".",
+    "Each content line is \"|\" + sentence padded to width + \"|\"; emit border, content, border per sentence."
+   ],
+   "invariants": [
+    "every output line has length width + 2",
+    "the output has exactly 3 lines per sentence"
+   ],
+   "chooseWhen": [
+    "Fixed-width text rendering"
+   ],
+   "tradeoffs": [
+    "Building strings with repeat and padding is linear; character loops are clearer for teaching but slower"
+   ],
+   "variantLabel": "Inferred level 1: one-line boxes at the longest sentence width",
+   "examples": [
+    {
+     "input": [
+      [
+       "a"
+      ]
+     ],
+     "output": [
+      "+-+",
+      "|a|",
+      "+-+"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "a|+|# +b -|",
+       " a ++b   |-",
+       " |--#a-",
+       " ab--a+aaa",
+       "-+#+aa|#"
+      ]
+     ],
+     "output": [
+      "+-----------+",
+      "|a|+|# +b -||",
+      "+-----------+",
+      "+-----------+",
+      "| a ++b   |-|",
+      "+-----------+",
+      "+-----------+",
+      "| |--#a-    |",
+      "+-----------+",
+      "+-----------+",
+      "| ab--a+aaa |",
+      "+-----------+",
+      "+-----------+",
+      "|-+#+aa|#   |",
+      "+-----------+"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68d5a07e569e57bd10bbd44d": {
+   "constraints": [
+    "1 <= sentences.length <= 1000",
+    "1 <= sentences[i].length <= 100",
+    "words are separated by single spaces with no leading or trailing space",
+    "1 <= maxWidth <= 100"
+   ],
+   "clarifyingQuestions": [
+    "Which characters draw the borders?",
+    "Is there a space between the border and the text?",
+    "Do adjacent boxes share a border?",
+    "What happens when a sentence is longer than an allowed width?"
+   ],
+   "hints": [
+    "Wrap each sentence on its own: keep adding words while line length + 1 + word length <= maxWidth.",
+    "An over-long word gets its own line; it may make the box wider than maxWidth.",
+    "Find the widest wrapped line over all sentences, then render every box with that inner width."
+   ],
+   "invariants": [
+    "wrapped lines of a sentence rejoin (with single spaces) into the sentence",
+    "all boxes share one inner width"
+   ],
+   "chooseWhen": [
+    "Word-wrapped fixed-width layouts"
+   ],
+   "tradeoffs": [
+    "Greedy wrapping is fast; minimum-raggedness wrapping needs dynamic programming"
+   ],
+   "variantLabel": "Inferred level 2: boxes with greedy word wrapping at maxWidth",
+   "examples": [
+    {
+     "input": [
+      [
+       "a"
+      ],
+      1
+     ],
+     "output": [
+      "+-+",
+      "|a|",
+      "+-+"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       ".,.bb bb..bba.. a, .,a.a, cc.a,b.,",
+       "bab.c.a bc.bcc..c",
+       "ca.bacc.. ,bc..b cabc. b ,c .,,,.c",
+       "c.aa.,c a,b,b .ccc,bc. a..b.a bc,a ..ca"
+      ],
+      11
+     ],
+     "output": [
+      "+-----------+",
+      "|.,.bb      |",
+      "|bb..bba..  |",
+      "|a, .,a.a,  |",
+      "|cc.a,b.,   |",
+      "+-----------+",
+      "+-----------+",
+      "|bab.c.a    |",
+      "|bc.bcc..c  |",
+      "+-----------+",
+      "+-----------+",
+      "|ca.bacc..  |",
+      "|,bc..b     |",
+      "|cabc. b ,c |",
+      "|.,,,.c     |",
+      "+-----------+",
+      "+-----------+",
+      "|c.aa.,c    |",
+      "|a,b,b      |",
+      "|.ccc,bc.   |",
+      "|a..b.a bc,a|",
+      "|..ca       |",
+      "+-----------+"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68d5a07f569e57bd10bbd44e": {
+   "constraints": [
+    "1 <= sentences.length <= 1000",
+    "1 <= sentences[i].length <= 100",
+    "words are separated by single spaces with no leading or trailing space",
+    "every word length <= maxWidth <= 100"
+   ],
+   "clarifyingQuestions": [
+    "Which characters draw the borders?",
+    "Is there a space between the border and the text?",
+    "Do adjacent boxes share a border?",
+    "What happens when a sentence is longer than an allowed width?"
+   ],
+   "hints": [
+    "Wrap greedily exactly as in level 2.",
+    "For a justified line with g gaps and e extra spaces, every gap gets e // g extra and the first e % g gaps get one more.",
+    "The last line of each sentence and any single-word line are left-aligned and padded; the inner width is maxWidth."
+   ],
+   "invariants": [
+    "every content line has inner length maxWidth",
+    "justified gaps differ by at most one and never increase left to right"
+   ],
+   "chooseWhen": [
+    "Justified fixed-width text"
+   ],
+   "tradeoffs": [
+    "Arithmetic gap sizes avoid quadratic space insertion"
+   ],
+   "variantLabel": "Inferred level 3: boxes with fully justified wrapped lines",
+   "examples": [
+    {
+     "input": [
+      [
+       "a"
+      ],
+      1
+     ],
+     "output": [
+      "+-+",
+      "|a|",
+      "+-+"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ca .,ca ..c,, .ab c,bb a.",
+       "c ,a,ac ccba bcab .b .a,",
+       ",, , b.bc ,cbc., abc.., cbaa,c",
+       "a,ccaa b a.c,.. cac.,a c"
+      ],
+      6
+     ],
+     "output": [
+      "+------+",
+      "|ca    |",
+      "|.,ca  |",
+      "|..c,, |",
+      "|.ab   |",
+      "|c,bb  |",
+      "|a.    |",
+      "+------+",
+      "+------+",
+      "|c     |",
+      "|,a,ac |",
+      "|ccba  |",
+      "|bcab  |",
+      "|.b .a,|",
+      "+------+",
+      "+------+",
+      "|,,   ,|",
+      "|b.bc  |",
+      "|,cbc.,|",
+      "|abc..,|",
+      "|cbaa,c|",
+      "+------+",
+      "+------+",
+      "|a,ccaa|",
+      "|b     |",
+      "|a.c,..|",
+      "|cac.,a|",
+      "|c     |",
+      "+------+"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68bad7afb5314dcd938cb9fe": {
+   "constraints": [
+    "0 <= s.length <= 2e5",
+    "s is printable ASCII plus newlines"
+   ],
+   "clarifyingQuestions": [
+    "Is the returned word lowercased?",
+    "Is each pair a string or a [word, count] list?",
+    "How are ties ordered?",
+    "For the stream version, can a word span two added texts?"
+   ],
+   "hints": [
+    "Scan characters, building a lowercase word while letters continue and counting it when a non-letter ends it.",
+    "Order is by (-count, word); only the 10 smallest keys are needed.",
+    "Keep a buffer of at most 10 entries sorted by that key and insert each distinct word if it beats the last."
+   ],
+   "invariants": [
+    "the buffer stays sorted and holds at most 10 entries",
+    "counts sum to the number of words"
+   ],
+   "chooseWhen": [
+    "Frequency top-k with a small fixed k"
+   ],
+   "tradeoffs": [
+    "A bounded buffer is O(U k); a heap is O(U log k) and better for large k"
+   ],
+   "variantLabel": "Inferred level 1: top 10 words of one paragraph",
+   "examples": [
+    {
+     "input": [
+      ""
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "Qqthe zetab42Theisn't isn't the 42yCAT-bisn't -  catThezetayCATQy\n ThezetaCATQQxCATythe the Q"
+     ],
+     "output": [
+      [
+       "t",
+       3
+      ],
+      [
+       "the",
+       2
+      ],
+      [
+       "bisn",
+       1
+      ],
+      [
+       "catthezetaycatqy",
+       1
+      ],
+      [
+       "isn",
+       1
+      ],
+      [
+       "q",
+       1
+      ],
+      [
+       "qqthe",
+       1
+      ],
+      [
+       "theisn",
+       1
+      ],
+      [
+       "thezetacatqqxcatythe",
+       1
+      ],
+      [
+       "ycat",
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68bad975b5314dcd938cb9ff": {
+   "constraints": [
+    "up to 2e4 calls",
+    "total added text length <= 2e5",
+    "texts are printable ASCII plus newlines"
+   ],
+   "clarifyingQuestions": [
+    "Is the returned word lowercased?",
+    "Is each pair a string or a [word, count] list?",
+    "How are ties ordered?",
+    "For the stream version, can a word span two added texts?"
+   ],
+   "hints": [
+    "Keep counts in a hash map as in level 1.",
+    "Counts only increase, so a word outside the top 10 can enter only when its own count grows.",
+    "After each increment, place the word into the cached sorted top-10 list (removing its old entry) and drop the 11th; getTop10 copies the cache."
+   ],
+   "invariants": [
+    "the cache equals the first 10 words by (-count, word)",
+    "a word appears in the cache at most once"
+   ],
+   "chooseWhen": [
+    "Leaderboards whose scores only increase"
+   ],
+   "tradeoffs": [
+    "The cache fails if counts could decrease; then a balanced tree or heap with lazy deletion is needed"
+   ],
+   "variantLabel": "Inferred level 2: streaming top 10 words tracker",
+   "examples": [
+    {
+     "input": [
+      [
+       "WordFrequencyTracker"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "WordFrequencyTracker",
+       "getTop10",
+       "getTop10",
+       "addText",
+       "getTop10",
+       "getTop10",
+       "addText",
+       "getTop10"
+      ],
+      [
+       [],
+       [],
+       [],
+       [
+        "The cat catxisn't xzetaisn't 42QThe-Thezeta\nisn't b--\nq-Qq42 CAT catTheThey zeta"
+       ],
+       [],
+       [],
+       [
+        "y42the Qx cat catQ catQ42 aCAT42\n\nCATqbqthe qisn't \nzetaxthe "
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      [],
+      null,
+      [
+       [
+        "t",
+        3
+       ],
+       [
+        "cat",
+        2
+       ],
+       [
+        "b",
+        1
+       ],
+       [
+        "catthethey",
+        1
+       ],
+       [
+        "catxisn",
+        1
+       ],
+       [
+        "isn",
+        1
+       ],
+       [
+        "q",
+        1
+       ],
+       [
+        "qq",
+        1
+       ],
+       [
+        "qthe",
+        1
+       ],
+       [
+        "the",
+        1
+       ]
+      ],
+      [
+       [
+        "t",
+        3
+       ],
+       [
+        "cat",
+        2
+       ],
+       [
+        "b",
+        1
+       ],
+       [
+        "catthethey",
+        1
+       ],
+       [
+        "catxisn",
+        1
+       ],
+       [
+        "isn",
+        1
+       ],
+       [
+        "q",
+        1
+       ],
+       [
+        "qq",
+        1
+       ],
+       [
+        "qthe",
+        1
+       ],
+       [
+        "the",
+        1
+       ]
+      ],
+      null,
+      [
+       [
+        "t",
+        4
+       ],
+       [
+        "cat",
+        3
+       ],
+       [
+        "catq",
+        2
+       ],
+       [
+        "the",
+        2
+       ],
+       [
+        "acat",
+        1
+       ],
+       [
+        "b",
+        1
+       ],
+       [
+        "catqbqthe",
+        1
+       ],
+       [
+        "catthethey",
+        1
+       ],
+       [
+        "catxisn",
+        1
+       ],
+       [
+        "isn",
+        1
+       ]
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:686751b9a2d59460201f2cdb": {
+   "constraints": [
+    "up to 2e4 calls",
+    "bookId matches [A-Za-z0-9]{1,10}",
+    "1 <= quantity <= 1e4",
+    "0 <= k <= 1e4"
+   ],
+   "clarifyingQuestions": [
+    "Do queries return ids only or ids with totals?",
+    "How are ties broken?",
+    "Can quantity be zero or negative (returns)?",
+    "What if k exceeds the number of books?"
+   ],
+   "hints": [
+    "Store each total in a hash map so a sale updates it in O(1).",
+    "Keep all books in one array ordered by (-total, id); totals only grow, so a book only moves toward the front.",
+    "Locate the old key and the new slot with binary search, splice the book, and answer getTopK with a slice."
+   ],
+   "invariants": [
+    "the array is always sorted by (-total, id)",
+    "map keys and array entries are the same set of books"
+   ],
+   "chooseWhen": [
+    "Leaderboards with many reads and monotone scores"
+   ],
+   "tradeoffs": [
+    "Array splicing is O(B) memmove per sale but has tiny constants; a balanced tree is O(log B) but not in the standard library"
+   ],
+   "variantLabel": "Inferred single variant: cumulative sales leaderboard",
+   "examples": [
+    {
+     "input": [
+      [
+       "BookSalesTracker"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "BookSalesTracker",
+       "recordSale",
+       "getTopK",
+       "recordSale",
+       "recordSale",
+       "recordSale",
+       "getTopK",
+       "getTopK",
+       "getTopK",
+       "getTopK",
+       "recordSale",
+       "recordSale",
+       "recordSale",
+       "getTopK"
+      ],
+      [
+       [],
+       [
+        "b2",
+        2
+       ],
+       [
+        2
+       ],
+       [
+        "a9",
+        1
+       ],
+       [
+        "B1",
+        2
+       ],
+       [
+        "b1",
+        2
+       ],
+       [
+        0
+       ],
+       [
+        5
+       ],
+       [
+        3
+       ],
+       [
+        1
+       ],
+       [
+        "a9",
+        1
+       ],
+       [
+        "zz",
+        3
+       ],
+       [
+        "zz",
+        4
+       ],
+       [
+        6
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      [
+       "b2"
+      ],
+      null,
+      null,
+      null,
+      [],
+      [
+       "B1",
+       "b1",
+       "b2",
+       "a9"
+      ],
+      [
+       "B1",
+       "b1",
+       "b2"
+      ],
+      [
+       "B1"
+      ],
+      null,
+      null,
+      null,
+      [
+       "zz",
+       "B1",
+       "a9",
+       "b1",
+       "b2"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a4813cd3588ba8acc69302a": {
+   "constraints": [
+    "0 <= nums.length <= 1e5",
+    "-1e9 <= nums[i] <= 1e9",
+    "0 <= k <= nums.length"
+   ],
+   "clarifyingQuestions": [
+    "In which order should the result be returned?",
+    "Are duplicates kept?",
+    "Can k be 0 or exceed the length?"
+   ],
+   "hints": [
+    "Only the k largest values matter; keep them in a min-heap whose root is the smallest kept value.",
+    "For each new value larger than the root, replace the root and sift down.",
+    "Sort the k kept values decreasingly for a canonical answer."
+   ],
+   "invariants": [
+    "the heap holds the k largest values seen so far",
+    "the root is the k-th largest so far"
+   ],
+   "chooseWhen": [
+    "Top-k selection when k is much smaller than n"
+   ],
+   "tradeoffs": [
+    "Quickselect is O(n) average but reorders a copy; a heap streams in O(n log k)"
+   ],
+   "variantLabel": "Inferred single variant: k largest values in non-increasing order",
+   "examples": [
+    {
+     "input": [
+      [],
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -2,
+       3,
+       -5,
+       -5,
+       2,
+       3,
+       -2,
+       -3,
+       5,
+       5,
+       -4,
+       -4
+      ],
+      10
+     ],
+     "output": [
+      5,
+      5,
+      3,
+      3,
+      2,
+      -2,
+      -2,
+      -3,
+      -4,
+      -4
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:681d10c6cc14e2629f006012": {
+   "constraints": [
+    "up to 2e4 calls",
+    "0 <= pinId <= 1e9",
+    "-1e9 <= score <= 1e9",
+    "pinType matches [a-z]{1,10}",
+    "0 <= k <= 1e4"
+   ],
+   "clarifyingQuestions": [
+    "Can a pin id be added twice (update)?",
+    "How are equal scores ordered?",
+    "What does an unknown type return?",
+    "Are ids or whole pins returned?"
+   ],
+   "hints": [
+    "Pins of different types never compete, so keep one structure per type.",
+    "Keep each type's pins sorted by (-score, id); insertion uses binary search.",
+    "getTopK returns the ids of the first k entries of that type's array."
+   ],
+   "invariants": [
+    "each per-type array is sorted by (-score, id)",
+    "every pin is stored exactly once"
+   ],
+   "chooseWhen": [
+    "Category-partitioned leaderboards with inserts only"
+   ],
+   "tradeoffs": [
+    "Sorted arrays make queries O(k); a heap per type makes inserts O(log P) but queries O(k log P)"
+   ],
+   "variantLabel": "Inferred single variant: per-type top k pins",
+   "examples": [
+    {
+     "input": [
+      [
+       "PinManager"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "PinManager",
+       "addPin",
+       "addPin",
+       "addPin",
+       "addPin",
+       "addPin",
+       "getTopK",
+       "getTopK",
+       "addPin",
+       "addPin",
+       "addPin",
+       "getTopK",
+       "addPin"
+      ],
+      [
+       [],
+       [
+        30,
+        -1,
+        "b"
+       ],
+       [
+        2,
+        1,
+        "a"
+       ],
+       [
+        35,
+        -1,
+        "a"
+       ],
+       [
+        19,
+        3,
+        "a"
+       ],
+       [
+        5,
+        2,
+        "b"
+       ],
+       [
+        "b",
+        0
+       ],
+       [
+        "c",
+        2
+       ],
+       [
+        0,
+        0,
+        "b"
+       ],
+       [
+        16,
+        1,
+        "b"
+       ],
+       [
+        9,
+        0,
+        "a"
+       ],
+       [
+        "b",
+        1
+       ],
+       [
+        14,
+        1,
+        "b"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      [],
+      [],
+      null,
+      null,
+      null,
+      [
+       5
+      ],
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

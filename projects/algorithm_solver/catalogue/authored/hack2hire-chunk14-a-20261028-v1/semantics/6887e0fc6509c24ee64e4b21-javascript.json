@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6887e0fc6509c24ee64e4b21",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "reorganize",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate distinct permutations of the sorted characters in lexicographic order and return the first valid one",
+  "candidate_design": "greedy with a feasibility test: at each position try letters in order, skipping the previous letter, and accept the first whose removal leaves a multiset that can still be arranged without the same letter first",
+  "complexity_target": "O(26 * n) time/O(26) extra space"
+ },
+ "source_sha256": "ee5b945d1783cead450fdc1aa88339b4021fdf295b6973b61befa4562e938775",
+ "wrapper": "named export reorganize"
+}

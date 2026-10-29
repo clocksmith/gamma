@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69d18cb017b72775cc49c0c4",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "text",
+  "keys",
+  "values"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "formatTemplate",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "keys",
+    "type": "string[]"
+   },
+   {
+    "name": "values",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "regular-expression substitution with one alternation for both forms and a lookup per match",
+  "candidate_design": "single left-to-right parser: copy literals, and at \"{\" read the name, then either \"}\" or the fixed plural syntax, emitting the substituted text",
+  "complexity_target": "O(len(text) + output) time/O(keys) space"
+ },
+ "source_sha256": "06ff5aee1a03389d6f332264d6ba6073d912affabfd7ef384878a86dd6ac57f3",
+ "wrapper": "named export formatTemplate"
+}

@@ -1,0 +1,1016 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk14-a (16 Hack2Hire groups, 21 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:68757267ab23078e4e46aa3c",
+   "title": "Split Text into Lines",
+   "variant_ordinal": 1,
+   "group_post_id": "68756b86ab23078e4e46aa30",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minLines",
+     "params": [
+      {
+       "name": "text",
+       "type": "string"
+      },
+      {
+       "name": "maxWidth",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "dynamic programming over word prefixes: the best count for the first i words tries every possible last line",
+    "candidate_design": "greedy single pass: keep the current line length and start a new line exactly when the next word does not fit",
+    "complexity_target": "O(len(text)) time/O(1) extra space beyond the word scan"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3c5de1c379b948a60e6b99ba4a1d3c096751d9214af483f5e9cfb19ecbf9f7a1",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67eb34914c9bb801bfd0ef7d",
+   "title": "Stock Trades Matching",
+   "variant_ordinal": 1,
+   "group_post_id": "67eb346a4c9bb801bfd0ef7c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "unmatchedTrades",
+     "params": [
+      {
+       "name": "house",
+       "type": "string[]"
+      },
+      {
+       "name": "street",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each house trade, scan the street list for an unused identical trade and mark it used",
+    "candidate_design": "count street trades in a hash map, consume a count for each identical house trade, then collect leftovers and sort",
+    "complexity_target": "O((h + s) log(h + s)) time/O(h + s) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "010bfe0c0c3d36d5520f2127ac959fce2adebbc8094de19c279174b072cde451",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67eb3ff94c9bb801bfd0ef7e",
+   "title": "Stock Trades Matching",
+   "variant_ordinal": 2,
+   "group_post_id": "67eb346a4c9bb801bfd0ef7c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "unmatchedTradesWithAttributes",
+     "params": [
+      {
+       "name": "house",
+       "type": "string[]"
+      },
+      {
+       "name": "street",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "two rounds of nested list scans: exact equality first, then (symbol, side, quantity) equality, each time pairing the smallest unused trades of a key",
+    "candidate_design": "hash-map exact round, then group leftovers by the first three fields, sort each group and pair house and street trades positionally; the excess of the larger side remains",
+    "complexity_target": "O((h + s) log(h + s)) time/O(h + s) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "010bfe0c0c3d36d5520f2127ac959fce2adebbc8094de19c279174b072cde451",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69cd7029ff3ebde766cee760",
+   "title": "Stream to Matrix Row Transformer",
+   "variant_ordinal": 1,
+   "group_post_id": "69cd701cff3ebde766cee75e",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "buildRows",
+     "params": [
+      {
+       "name": "codes",
+       "type": "string[]"
+      },
+      {
+       "name": "records",
+       "type": "(integer|string)[][]"
+      }
+     ],
+     "return": {
+      "type": "(integer|null)[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every row timestamp and every code, scan all records for the latest timestamp not after the row (last arrival wins on a tie)",
+    "candidate_design": "map each code to its column, bucket records by timestamp in a hash map, sort the distinct timestamps and sweep them carrying the current value of every column",
+    "complexity_target": "O(r log r + rows * c) time/O(r + rows * c) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3afa5f3a4ece5af5231f0195f8dc4d6415a974f5fc99bbe2ae79f56a1f7c77d5",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a5019e9665efda9311f5903",
+   "title": "Streaming Stop Token",
+   "variant_ordinal": 1,
+   "group_post_id": "6a5019e1665efda9311f5902",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "truncateAtStop",
+     "params": [
+      {
+       "name": "stream",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "build the concatenation, find the token by comparing every position, then map that position back to a chunk by walking cumulative lengths",
+    "candidate_design": "scan chunks in order and search each one for \"<END>\"; the first chunk that contains it ends the output with its prefix",
+    "complexity_target": "O(total length) time/O(output) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "2943932b7db5e4151b99c31016e74f348f46af23307189d6427083095df67fa8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a501a01665efda9311f5906",
+   "title": "Streaming Stop Token",
+   "variant_ordinal": 2,
+   "group_post_id": "6a5019e1665efda9311f5902",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "truncateAtSplitStop",
+     "params": [
+      {
+       "name": "stream",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "build the concatenation, compare every position against the token, then walk cumulative chunk lengths to find the chunk holding that position",
+    "candidate_design": "join the chunks once, find the first \"<END>\" with a substring search, then walk chunk offsets until the chunk that contains that start position",
+    "complexity_target": "O(total length) time/O(total length) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "2943932b7db5e4151b99c31016e74f348f46af23307189d6427083095df67fa8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a14eb4e7b0582b35278812d",
+   "title": "String Matches in Matrix",
+   "variant_ordinal": 1,
+   "group_post_id": "6a14eb417b0582b352788129",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countMatches",
+     "params": [
+      {
+       "name": "matrix",
+       "type": "string[]"
+      },
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every cell and direction compare characters one by one along the path",
+    "candidate_design": "extract every row, column and down-right diagonal as a string and count (overlapping) occurrences of s in each with the Knuth-Morris-Pratt automaton",
+    "complexity_target": "O(m * n + |s|) time/O(m + n + |s|) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6c8f69a1d189ae89a643e1c0cb3f539f23965d66f53db407ad30c0c2a5737e1d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6887e0fc6509c24ee64e4b21",
+   "title": "String Reorganization",
+   "variant_ordinal": 1,
+   "group_post_id": "6887e0ec6509c24ee64e4b20",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "reorganize",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate distinct permutations of the sorted characters in lexicographic order and return the first valid one",
+    "candidate_design": "greedy with a feasibility test: at each position try letters in order, skipping the previous letter, and accept the first whose removal leaves a multiset that can still be arranged without the same letter first",
+    "complexity_target": "O(26 * n) time/O(26) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0bc4b92d15944f97580b53ba1455a0bf78228a2f652b0365b287dc21e8be16a9",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68c331ec1f64f4312b0a3e2d",
+   "title": "Subscription Billing Statement",
+   "variant_ordinal": 1,
+   "group_post_id": "68c331e81f64f4312b0a3e2c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "billingStatement",
+     "params": [
+      {
+       "name": "plans",
+       "type": "(string|integer)[][]"
+      },
+      {
+       "name": "events",
+       "type": "(string|null)[][]"
+      }
+     ],
+     "return": {
+      "type": "(string|integer)[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "walk every day of the year with Python calendar dates, keeping the active plan, and sum exact fractions per month",
+    "candidate_design": "turn events into day-of-year intervals with a plan, split each interval at month boundaries and accumulate price * days per month; divide once per month with integer half-up rounding",
+    "complexity_target": "O(events + 12) time/O(12) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "861ce3adad2530239ccfccde2f79f88172b5eae77eb94d12893b2d433b38a214",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68e870c780f69c7a0170688c",
+   "title": "Subset Sum Target",
+   "variant_ordinal": 1,
+   "group_post_id": "68e870b380f69c7a0170688b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "canReachTarget",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      },
+      {
+       "name": "target",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate all subsets by bit masks and test each sum",
+    "candidate_design": "reachable-sum bitset as one big integer: shift by each value, OR, and mask to target + 1 bits",
+    "complexity_target": "O(n * target / word size) time/O(target) bits"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6d024fac091ea0ed61b61d687c2d9f727cd4787851f45b5033a5ab16c6ffcd0b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:696a84b7cc483345efb1b23c",
+   "title": "Tag Groups Complement Finder",
+   "variant_ordinal": 1,
+   "group_post_id": "696a75e5cc483345efb1b220",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "complementTags",
+     "params": [
+      {
+       "name": "groups",
+       "type": "string[][]"
+      },
+      {
+       "name": "filter",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every group, check each filter tag by a linear scan of the group, then collect tags by linear membership checks in the result and filter lists",
+    "candidate_design": "build a hash set per group, test filter containment, add the other tags to a result hash set, then sort",
+    "complexity_target": "O(total tags * log) time/O(total tags) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "1486e9111e53a90af259438f2a32a0bf67f229d4b1064dc2000f6918c8db7ca1",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:677c6cdc5cbaff553b53b06c",
+   "title": "Tail N Lines",
+   "variant_ordinal": 1,
+   "group_post_id": "677c6ae45cbaff553b53b06b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "tail",
+     "params": [
+      {
+       "name": "text",
+       "type": "string"
+      },
+      {
+       "name": "n",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "split the text into lines keeping their newlines and join the last n",
+    "candidate_design": "sliding window: scan once, pushing each line start onto a fixed-size ring buffer of the last n starts; the answer starts at the oldest kept start",
+    "complexity_target": "O(len(text)) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "1a6065aa8170e9f8fc0883a1357faecf3ce58e739019b94bbb9c07d037a6052e",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69d18cb017b72775cc49c0c4",
+   "title": "Template String Formatter II",
+   "variant_ordinal": 1,
+   "group_post_id": "6a0616e2e94b1341e4df5dd8",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "formatTemplate",
+     "params": [
+      {
+       "name": "text",
+       "type": "string"
+      },
+      {
+       "name": "keys",
+       "type": "string[]"
+      },
+      {
+       "name": "values",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "regular-expression substitution with one alternation for both forms and a lookup per match",
+    "candidate_design": "single left-to-right parser: copy literals, and at \"{\" read the name, then either \"}\" or the fixed plural syntax, emitting the substituted text",
+    "complexity_target": "O(len(text) + output) time/O(keys) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "13ee609813c03047b193fdb17a387c1ac3f571c95cef82859bcb6c24c796b1e1",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68d56825569e57bd10bbd432",
+   "title": "Text Box Formatter",
+   "variant_ordinal": 1,
+   "group_post_id": "68d566de569e57bd10bbd431",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "formatBoxes",
+     "params": [
+      {
+       "name": "sentences",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "build each box line by explicit character loops after finding the width with a nested comparison",
+    "candidate_design": "one pass for the maximum length, then three string concatenations per sentence with repeat/padding",
+    "complexity_target": "O(n * width) time/O(n * width) output"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c079e8b80a2d0e49e0af842e4e5896c525f72bc90bb2794e07b0f372666e98bd",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68d5a07e569e57bd10bbd44d",
+   "title": "Text Box Formatter",
+   "variant_ordinal": 2,
+   "group_post_id": "68d566de569e57bd10bbd431",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "formatWrappedBoxes",
+     "params": [
+      {
+       "name": "sentences",
+       "type": "string[]"
+      },
+      {
+       "name": "maxWidth",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "wrap by trying ever longer prefixes of the remaining words and keeping the longest that fits, then render boxes with character loops",
+    "candidate_design": "greedy single pass per sentence building lines word by word, then one pass for the maximum line length and padded rendering",
+    "complexity_target": "O(total characters + output) time/O(output) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c079e8b80a2d0e49e0af842e4e5896c525f72bc90bb2794e07b0f372666e98bd",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68d5a07f569e57bd10bbd44e",
+   "title": "Text Box Formatter",
+   "variant_ordinal": 3,
+   "group_post_id": "68d566de569e57bd10bbd431",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "formatJustifiedBoxes",
+     "params": [
+      {
+       "name": "sentences",
+       "type": "string[]"
+      },
+      {
+       "name": "maxWidth",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "wrap by longest fitting prefix, then justify by adding one space at a time to the leftmost smallest gap until the width is reached",
+    "candidate_design": "greedy wrap per sentence, then compute gap sizes arithmetically (base = spaces // gaps, the first spaces % gaps gaps get one more) and render",
+    "complexity_target": "O(total characters + output) time/O(output) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c079e8b80a2d0e49e0af842e4e5896c525f72bc90bb2794e07b0f372666e98bd",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68bad7afb5314dcd938cb9fe",
+   "title": "Top 10 Words",
+   "variant_ordinal": 1,
+   "group_post_id": "68ae903cc8631a6568126dd8",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "topTenWords",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "(string|integer)[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "count with a dictionary and sort every distinct word by (-count, word)",
+    "candidate_design": "count with a hash map, then keep a sorted buffer of at most 10 best entries by insertion while scanning the distinct words",
+    "complexity_target": "O(len(s) + U * 10) time/O(U) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3b3e867c1b02af6a322a9bc18e2ac7d60d99bc8e4ebcd85e8c4f3c23429def77",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68bad975b5314dcd938cb9ff",
+   "title": "Top 10 Words",
+   "variant_ordinal": 2,
+   "group_post_id": "68ae903cc8631a6568126dd8",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "WordFrequencyTracker",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addText",
+       "params": [
+        {
+         "name": "text",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getTop10",
+       "params": [],
+       "return": {
+        "type": "(string|integer)[][]"
+       }
+      }
+     ]
+    },
+    "native_class": "WordFrequencyTracker"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recount every added text from scratch and fully sort the distinct words at each query",
+    "candidate_design": "hash-map counts plus a cached top-10 list; because counts only grow, an incremented word can only move up, so each increment updates the cached list in O(10)",
+    "complexity_target": "O(10) per word occurrence, O(10) per getTop10/O(U) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3b3e867c1b02af6a322a9bc18e2ac7d60d99bc8e4ebcd85e8c4f3c23429def77",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:686751b9a2d59460201f2cdb",
+   "title": "Top K Book Sales",
+   "variant_ordinal": 1,
+   "group_post_id": "68674fd5a2d59460201f2cda",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "BookSalesTracker",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "recordSale",
+       "params": [
+        {
+         "name": "bookId",
+         "type": "string"
+        },
+        {
+         "name": "quantity",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getTopK",
+       "params": [
+        {
+         "name": "k",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "BookSalesTracker"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep a dictionary of totals and fully sort all books on every query",
+    "candidate_design": "hash map of totals plus one array of all books sorted by (-total, id); a sale removes the book at its binary-searched position and reinserts it at the new one; getTopK slices",
+    "complexity_target": "O(log B + B memmove) per sale, O(k) per getTopK/O(B) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "288b4a8479570954faa20f0ce22dcaf5bdf4e2bcd664240d2b09d5c2e7302fe5",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a4813cd3588ba8acc69302a",
+   "title": "Top K Largest Elements",
+   "variant_ordinal": 1,
+   "group_post_id": "6a4813c83588ba8acc693029",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "kLargest",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "sort a copy in decreasing order and take the first k",
+    "candidate_design": "binary min-heap of size k over the stream of values (replace the root when a larger value arrives), then sort the heap contents decreasingly",
+    "complexity_target": "O(n log k + k log k) time/O(k) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "65f368679aaba97316dff09c7fee4ebf1e7a3decfd489af6f7982a0bdf482ab7",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:681d10c6cc14e2629f006012",
+   "title": "Top K Pins",
+   "variant_ordinal": 1,
+   "group_post_id": "681d0fb5cc14e2629f006010",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "PinManager",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "addPin",
+       "params": [
+        {
+         "name": "pinId",
+         "type": "integer"
+        },
+        {
+         "name": "score",
+         "type": "integer"
+        },
+        {
+         "name": "pinType",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getTopK",
+       "params": [
+        {
+         "name": "pinType",
+         "type": "string"
+        },
+        {
+         "name": "k",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer[]"
+       }
+      }
+     ]
+    },
+    "native_class": "PinManager"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "store every pin in one list and, per query, filter by type and fully sort",
+    "candidate_design": "hash map from type to an array kept sorted by (-score, id) with binary-search insertion; getTopK slices the first k ids",
+    "complexity_target": "O(log P + P memmove) per addPin, O(k) per getTopK/O(P) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "4de6e994dedd464ba0e819b6b3aa9feecb118237780f21e3699a9d4b54e6d9e3",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68c331ec1f64f4312b0a3e2d",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "plans",
+  "events"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "billingStatement",
+  "params": [
+   {
+    "name": "plans",
+    "type": "(string|integer)[][]"
+   },
+   {
+    "name": "events",
+    "type": "(string|null)[][]"
+   }
+  ],
+  "return": {
+   "type": "(string|integer)[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "walk every day of the year with Python calendar dates, keeping the active plan, and sum exact fractions per month",
+  "candidate_design": "turn events into day-of-year intervals with a plan, split each interval at month boundaries and accumulate price * days per month; divide once per month with integer half-up rounding",
+  "complexity_target": "O(events + 12) time/O(12) space"
+ },
+ "source_sha256": "8057b50866ceb74e196f7fa84a2d0395119f0e06aeb32c7039adac41909ca183",
+ "wrapper": "Solution.billingStatement"
+}

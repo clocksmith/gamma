@@ -1,0 +1,343 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a0616e2e94b1341e4df5dd8:69d18cb017b72775cc49c0c4:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+   "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+   "selector": "/problems/12"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a0616e2e94b1341e4df5dd8.json",
+   "sha256": "12b6f282c3fedc1a3c1e6d3916132448f752ac108dde94087ceaca7d4c3da0cc",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+   "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+   "selector": "/variants/hack2hire:69d18cb017b72775cc49c0c4"
+  }
+ ],
+ "problemId": "hack2hire:6a0616e2e94b1341e4df5dd8",
+ "variantId": "69d18cb017b72775cc49c0c4",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: placeholders and ICU-style plural blocks",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:69d18cb017b72775cc49c0c4/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "text is printable ASCII made of literal characters other than \"{\" and \"}\", variable placeholders \"{name}\" and plural blocks \"{name, plural, one{A} other{B}}\" written with exactly that spacing, where name matches [A-Za-z_][A-Za-z0-9_]* and A and B contain no braces. keys and values are equal-length lists, keys distinct, values printable ASCII without braces. A placeholder becomes the value of its key. A plural block becomes A when the value is exactly \"1\" and B otherwise, with every \"#\" in the chosen branch replaced by the value; values used by plural blocks are decimal integers. An expression whose name is not in keys is left unchanged. Inserted values are not scanned again.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "text is printable ASCII made of literal characters other than \"{\" and \"}\", variable placeholders \"{name}\" and plural blocks \"{name, plural, one{A} other{B}}\" written with exactly that spacing, where name matches [A-Za-z_][A-Za-z0-9_]* and A and B contain no braces.",
+   "keys and values are equal-length lists, keys distinct, values printable ASCII without braces.",
+   "A placeholder becomes the value of its key.",
+   "A plural block becomes A when the value is exactly \"1\" and B otherwise, with every \"#\" in the chosen branch replaced by the value; values used by plural blocks are decimal integers.",
+   "An expression whose name is not in keys is left unchanged.",
+   "Inserted values are not scanned again."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= text.length <= 1e5",
+   "0 <= keys.length <= 1000",
+   "values have length <= 20",
+   "plural values are decimal integers 0 to 1e6 without leading zeros"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:69d18cb017b72775cc49c0c4/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: text contains variable placeholders {name} and plural blocks {name, plural, one{# singular text} other{# plural text}}; keys[i] maps to values[i]; placeholders are replaced by their value (the plural rule details are cut off); algorithmTags: STRING; preview response sha256 13ee609813c03047b193fdb17a387c1ac3f571c95cef82859bcb6c24c796b1e1"
+   },
+   {
+    "statement": "Uncertainty: high: both expression forms and value replacement are in the preview; choosing branch \"one\" exactly for \"1\", replacing every \"#\" by the value, leaving unknown names unchanged and the exact spacing are inferred",
+    "basis": "the public group preview is partial (420 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/12/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/12/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/12/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which branch does 0 use?",
+   "Is \"#\" replaced in both branches?",
+   "What happens to an unknown name?",
+   "Can placeholders nest inside plural branches?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:69d18cb017b72775cc49c0c4/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     "",
+     [],
+     []
+    ],
+    "output": "",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     "{b}{n, plural, one{one} other{# many}}Hi {c, plural, one{# cat} other{# cats}}{n, plural, one{one} other{# many}}{n, plural, one{one} other{# many}}",
+     [
+      "a",
+      "b",
+      "c"
+     ],
+     [
+      "1y#",
+      "2",
+      "1000000"
+     ]
+    ],
+    "output": "2{n, plural, one{one} other{# many}}Hi 1000000 cats{n, plural, one{one} other{# many}}{n, plural, one{one} other{# many}}",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:69d18cb017b72775cc49c0c4/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/oracles.py",
+    "sha256": "0354d35ba67d73d7c563067a0aa0586a66789f96ebf992e7938cab6e79df5b4a",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def formatTemplate(text, keys, values) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/69d18cb017b72775cc49c0c4-python.json",
+     "inferredInterface": {
+      "name": "formatTemplate",
+      "params": [
+       {
+        "name": "text",
+        "type": "string"
+       },
+       {
+        "name": "keys",
+        "type": "string[]"
+       },
+       {
+        "name": "values",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/69d18cb017b72775cc49c0c4-python.json",
+      "sha256": "f52c301dba37ae97be122ae1ca04b707c8815403f0e038d621fd522c1ccad6e7",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function formatTemplate(text, keys, values) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/69d18cb017b72775cc49c0c4-javascript.json",
+     "inferredInterface": {
+      "name": "formatTemplate",
+      "params": [
+       {
+        "name": "text",
+        "type": "string"
+       },
+       {
+        "name": "keys",
+        "type": "string[]"
+       },
+       {
+        "name": "values",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/69d18cb017b72775cc49c0c4-javascript.json",
+      "sha256": "0d52db35fdadf86301849ae2e0ccf1e7ed94213843b831fb5b38440ce266cca2",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/12/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/12/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a5019e9665efda9311f5903",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "stream"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "truncateAtStop",
+  "params": [
+   {
+    "name": "stream",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "build the concatenation, find the token by comparing every position, then map that position back to a chunk by walking cumulative lengths",
+  "candidate_design": "scan chunks in order and search each one for \"<END>\"; the first chunk that contains it ends the output with its prefix",
+  "complexity_target": "O(total length) time/O(output) space"
+ },
+ "source_sha256": "acfab7216985aa56bf8032d1a72afebaf27dd178cf816d4954726502d9ac62b3",
+ "wrapper": "Solution.truncateAtStop"
+}

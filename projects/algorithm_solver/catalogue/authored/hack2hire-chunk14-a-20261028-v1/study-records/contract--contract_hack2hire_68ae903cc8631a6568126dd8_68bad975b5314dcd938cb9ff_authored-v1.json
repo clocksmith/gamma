@@ -1,0 +1,524 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68ae903cc8631a6568126dd8:68bad975b5314dcd938cb9ff:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+   "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+   "selector": "/problems/17"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68ae903cc8631a6568126dd8.json",
+   "sha256": "634abff0dc8e6ddbf48053213fef735ae8408efabdb8a7a1540be0b459ea36ae",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+   "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+   "selector": "/variants/hack2hire:68bad975b5314dcd938cb9ff"
+  }
+ ],
+ "problemId": "hack2hire:68ae903cc8631a6568126dd8",
+ "variantId": "68bad975b5314dcd938cb9ff",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: streaming top 10 words tracker",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:68bad975b5314dcd938cb9ff/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "WordFrequencyTracker() starts with no words. addText(text) adds the words of text (maximal runs of ASCII letters, lowercased) to the running counts; a word never continues across two addText calls. getTop10() returns up to 10 pairs [word, count] for the counts so far, by descending count, ties by ascending word, and changes nothing. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "WordFrequencyTracker() starts with no words.",
+   "addText(text) adds the words of text (maximal runs of ASCII letters, lowercased) to the running counts; a word never continues across two addText calls.",
+   "getTop10() returns up to 10 pairs [word, count] for the counts so far, by descending count, ties by ascending word, and changes nothing.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 2e4 calls",
+   "total added text length <= 2e5",
+   "texts are printable ASCII plus newlines"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:68bad975b5314dcd938cb9ff/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: from a paragraph extract words (maximal runs of English letters, everything else a delimiter), compare case-insensitively, and return up to 10 [word, frequency] pairs by descending frequency, ties by ascending word; algorithmTags: DESIGN, HEAP; preview response sha256 3b3e867c1b02af6a322a9bc18e2ac7d60d99bc8e4ebcd85e8c4f3c23429def77"
+   },
+   {
+    "statement": "Uncertainty: very high: the second variant has no public text; the DESIGN tag suggests a streaming tracker, and the class name, method names, independent texts and the pair format are inferred",
+    "basis": "the public group preview is partial (667 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 2 of 2 turns the query into a streaming tracker",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/17/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/17/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/17/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the returned word lowercased?",
+   "Is each pair a string or a [word, count] list?",
+   "How are ties ordered?",
+   "For the stream version, can a word span two added texts?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:68bad975b5314dcd938cb9ff/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "WordFrequencyTracker"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "WordFrequencyTracker",
+      "getTop10",
+      "getTop10",
+      "addText",
+      "getTop10",
+      "getTop10",
+      "addText",
+      "getTop10"
+     ],
+     [
+      [],
+      [],
+      [],
+      [
+       "The cat catxisn't xzetaisn't 42QThe-Thezeta\nisn't b--\nq-Qq42 CAT catTheThey zeta"
+      ],
+      [],
+      [],
+      [
+       "y42the Qx cat catQ catQ42 aCAT42\n\nCATqbqthe qisn't \nzetaxthe "
+      ],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     [],
+     [],
+     null,
+     [
+      [
+       "t",
+       3
+      ],
+      [
+       "cat",
+       2
+      ],
+      [
+       "b",
+       1
+      ],
+      [
+       "catthethey",
+       1
+      ],
+      [
+       "catxisn",
+       1
+      ],
+      [
+       "isn",
+       1
+      ],
+      [
+       "q",
+       1
+      ],
+      [
+       "qq",
+       1
+      ],
+      [
+       "qthe",
+       1
+      ],
+      [
+       "the",
+       1
+      ]
+     ],
+     [
+      [
+       "t",
+       3
+      ],
+      [
+       "cat",
+       2
+      ],
+      [
+       "b",
+       1
+      ],
+      [
+       "catthethey",
+       1
+      ],
+      [
+       "catxisn",
+       1
+      ],
+      [
+       "isn",
+       1
+      ],
+      [
+       "q",
+       1
+      ],
+      [
+       "qq",
+       1
+      ],
+      [
+       "qthe",
+       1
+      ],
+      [
+       "the",
+       1
+      ]
+     ],
+     null,
+     [
+      [
+       "t",
+       4
+      ],
+      [
+       "cat",
+       3
+      ],
+      [
+       "catq",
+       2
+      ],
+      [
+       "the",
+       2
+      ],
+      [
+       "acat",
+       1
+      ],
+      [
+       "b",
+       1
+      ],
+      [
+       "catqbqthe",
+       1
+      ],
+      [
+       "catthethey",
+       1
+      ],
+      [
+       "catxisn",
+       1
+      ],
+      [
+       "isn",
+       1
+      ]
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:68bad975b5314dcd938cb9ff/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/oracles.py",
+    "sha256": "0354d35ba67d73d7c563067a0aa0586a66789f96ebf992e7938cab6e79df5b4a",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class WordFrequencyTracker:\n    def __init__(self)\n    def addText(self, text) -> void\n    def getTop10(self) -> (string|integer)[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/68bad975b5314dcd938cb9ff-python.json",
+     "inferredInterface": {
+      "classname": "WordFrequencyTracker",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addText",
+        "params": [
+         {
+          "name": "text",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getTop10",
+        "params": [],
+        "return": {
+         "type": "(string|integer)[][]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/68bad975b5314dcd938cb9ff-python.json",
+      "sha256": "5c0beb4a40f25b060a6ed9aa54eace44cf1db4337dc6f16c3b9dfff18f49c76a",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class WordFrequencyTracker {\n  constructor()\n  addText(text) /* -> void */\n  getTop10() /* -> (string|integer)[][] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/68bad975b5314dcd938cb9ff-javascript.json",
+     "inferredInterface": {
+      "classname": "WordFrequencyTracker",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addText",
+        "params": [
+         {
+          "name": "text",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getTop10",
+        "params": [],
+        "return": {
+         "type": "(string|integer)[][]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/68bad975b5314dcd938cb9ff-javascript.json",
+      "sha256": "617469fce5d72f0f9c31b9ed8aa01e07c07db4d8a38f617ced851008df607936",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/17/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/17/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

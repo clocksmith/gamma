@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68e870c780f69c7a0170688c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "target"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "canReachTarget",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "target",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate all subsets by bit masks and test each sum",
+  "candidate_design": "reachable-sum bitset as one big integer: shift by each value, OR, and mask to target + 1 bits",
+  "complexity_target": "O(n * target / word size) time/O(target) bits"
+ },
+ "source_sha256": "54b484456b166dbdf1d3f30376e16f5aeb71b24a50559e2b7ed11b0c8fd2f1d9",
+ "wrapper": "Solution.canReachTarget"
+}

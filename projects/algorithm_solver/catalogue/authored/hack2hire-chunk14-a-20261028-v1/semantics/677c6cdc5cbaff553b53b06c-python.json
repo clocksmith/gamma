@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:677c6cdc5cbaff553b53b06c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "text",
+  "n"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "tail",
+  "params": [
+   {
+    "name": "text",
+    "type": "string"
+   },
+   {
+    "name": "n",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "split the text into lines keeping their newlines and join the last n",
+  "candidate_design": "sliding window: scan once, pushing each line start onto a fixed-size ring buffer of the last n starts; the answer starts at the oldest kept start",
+  "complexity_target": "O(len(text)) time/O(n) space"
+ },
+ "source_sha256": "561080cd56c53e6e2413fd65dc7b881b03dad0d50619434f170b006848d0f573",
+ "wrapper": "Solution.tail"
+}

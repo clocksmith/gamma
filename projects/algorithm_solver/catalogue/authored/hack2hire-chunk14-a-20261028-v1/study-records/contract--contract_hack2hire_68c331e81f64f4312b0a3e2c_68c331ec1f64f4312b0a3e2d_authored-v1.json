@@ -1,0 +1,428 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68c331e81f64f4312b0a3e2c:68c331ec1f64f4312b0a3e2d:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+   "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+   "selector": "/problems/8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68c331e81f64f4312b0a3e2c.json",
+   "sha256": "3bd92114d57b58b65b119a5f8fb0bff108cb6db607b1dd1b24b1538c19700561",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+   "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+   "selector": "/variants/hack2hire:68c331ec1f64f4312b0a3e2d"
+  }
+ ],
+ "problemId": "hack2hire:68c331e81f64f4312b0a3e2c",
+ "variantId": "68c331ec1f64f4312b0a3e2d",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: monthly prorated statement in cents",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:68c331ec1f64f4312b0a3e2d/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "plans lists three [name, monthlyPriceCents] pairs with distinct names. events lists [date \"YYYY-MM-DD\", eventType, planName] in strictly increasing date order within one year: START (when no plan is active) and SWITCH (to a different plan, when one is active) name a plan, END (when active) has null. A change takes effect on its own day: START and SWITCH days are billed at the new plan, the END day is not billed. After the last event the state lasts until December 31. A day with plan p in a month of N days costs price(p) / N. Return one row [ \"YYYY-MM\", cents ] per month with at least one billed day, in month order, where cents is the exact month total rounded half up to an integer.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "plans lists three [name, monthlyPriceCents] pairs with distinct names.",
+   "events lists [date \"YYYY-MM-DD\", eventType, planName] in strictly increasing date order within one year: START (when no plan is active) and SWITCH (to a different plan, when one is active) name a plan, END (when active) has null.",
+   "A change takes effect on its own day: START and SWITCH days are billed at the new plan, the END day is not billed.",
+   "After the last event the state lasts until December 31.",
+   "A day with plan p in a month of N days costs price(p) / N.",
+   "Return one row [ \"YYYY-MM\", cents ] per month with at least one billed day, in month order, where cents is the exact month total rounded half up to an integer."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "plans has exactly 3 entries, names match [A-Za-z]{1,10}",
+   "1 <= monthlyPriceCents <= 1e6",
+   "0 <= events.length <= 366",
+   "years between 1900 and 2100 (leap years per the Gregorian rule)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:68c331ec1f64f4312b0a3e2d/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: three monthly plans with prices; START, SWITCH and END events take effect immediately; billing is daily with a charge of monthly price / days in the month; events are chronological within one year, at most one per day (the requested output is cut off); algorithmTags: ARRAY, SIMULATION; preview response sha256 861ce3adad2530239ccfccde2f79f88172b5eae77eb94d12893b2d433b38a214"
+   },
+   {
+    "statement": "Uncertainty: very high: the plans, the events and the daily-rate formula are in the preview; the input encoding, prices in cents, the END day not billed, billing through December 31, the per-month statement output and half-up rounding of each month total are inferred",
+    "basis": "the public group preview is partial (780 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/8/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/8/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/8/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What exactly is returned: a total, per-month totals or a per-day log?",
+   "Is the END day itself billed?",
+   "How is a fractional amount rounded?",
+   "Does an active plan bill through the end of the year?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:68c331ec1f64f4312b0a3e2d/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "Pro",
+       1717
+      ],
+      [
+       "Lite",
+       2866
+      ],
+      [
+       "Max",
+       300
+      ]
+     ],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "Max",
+       2897
+      ],
+      [
+       "Basic",
+       2899
+      ],
+      [
+       "Family",
+       1807
+      ]
+     ],
+     [
+      [
+       "2000-03-30",
+       "START",
+       "Basic"
+      ],
+      [
+       "2000-04-07",
+       "END",
+       null
+      ],
+      [
+       "2000-04-21",
+       "START",
+       "Max"
+      ],
+      [
+       "2000-09-16",
+       "SWITCH",
+       "Basic"
+      ],
+      [
+       "2000-10-13",
+       "SWITCH",
+       "Max"
+      ],
+      [
+       "2000-10-15",
+       "SWITCH",
+       "Basic"
+      ],
+      [
+       "2000-12-15",
+       "SWITCH",
+       "Family"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "2000-03",
+      187
+     ],
+     [
+      "2000-04",
+      1545
+     ],
+     [
+      "2000-05",
+      2897
+     ],
+     [
+      "2000-06",
+      2897
+     ],
+     [
+      "2000-07",
+      2897
+     ],
+     [
+      "2000-08",
+      2897
+     ],
+     [
+      "2000-09",
+      2898
+     ],
+     [
+      "2000-10",
+      2899
+     ],
+     [
+      "2000-11",
+      2899
+     ],
+     [
+      "2000-12",
+      2300
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:68c331ec1f64f4312b0a3e2d/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/oracles.py",
+    "sha256": "0354d35ba67d73d7c563067a0aa0586a66789f96ebf992e7938cab6e79df5b4a",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def billingStatement(plans, events) -> (string|integer)[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/68c331ec1f64f4312b0a3e2d-python.json",
+     "inferredInterface": {
+      "name": "billingStatement",
+      "params": [
+       {
+        "name": "plans",
+        "type": "(string|integer)[][]"
+       },
+       {
+        "name": "events",
+        "type": "(string|null)[][]"
+       }
+      ],
+      "return": {
+       "type": "(string|integer)[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/68c331ec1f64f4312b0a3e2d-python.json",
+      "sha256": "925577e6c2b47ef68eb0af53726701d6ff0f7d1e4f38e74848d27fb59d5afd56",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function billingStatement(plans, events) /* -> (string|integer)[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/68c331ec1f64f4312b0a3e2d-javascript.json",
+     "inferredInterface": {
+      "name": "billingStatement",
+      "params": [
+       {
+        "name": "plans",
+        "type": "(string|integer)[][]"
+       },
+       {
+        "name": "events",
+        "type": "(string|null)[][]"
+       }
+      ],
+      "return": {
+       "type": "(string|integer)[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/68c331ec1f64f4312b0a3e2d-javascript.json",
+      "sha256": "0361defc41520f5704009179cfddf49b082d828acaead77ab5a2befa89a7c021",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/8/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/8/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

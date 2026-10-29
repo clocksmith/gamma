@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:696a84b7cc483345efb1b23c",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "groups",
+  "filter"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "complementTags",
+  "params": [
+   {
+    "name": "groups",
+    "type": "string[][]"
+   },
+   {
+    "name": "filter",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every group, check each filter tag by a linear scan of the group, then collect tags by linear membership checks in the result and filter lists",
+  "candidate_design": "build a hash set per group, test filter containment, add the other tags to a result hash set, then sort",
+  "complexity_target": "O(total tags * log) time/O(total tags) space"
+ },
+ "source_sha256": "e0ac229f4cd667831552572e8d8471b2d809c5324313c726d875cf8f63539485",
+ "wrapper": "named export complementTags"
+}

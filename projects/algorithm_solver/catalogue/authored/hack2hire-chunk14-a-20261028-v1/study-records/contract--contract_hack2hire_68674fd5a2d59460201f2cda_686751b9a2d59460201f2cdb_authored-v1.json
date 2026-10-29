@@ -1,0 +1,486 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68674fd5a2d59460201f2cda:686751b9a2d59460201f2cdb:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+   "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+   "selector": "/problems/18"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68674fd5a2d59460201f2cda.json",
+   "sha256": "4c349cacd2e224fc508c55c0db0406c0002de5f489a50a580f527d29b31df4eb",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+   "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+   "selector": "/variants/hack2hire:686751b9a2d59460201f2cdb"
+  }
+ ],
+ "problemId": "hack2hire:68674fd5a2d59460201f2cda",
+ "variantId": "686751b9a2d59460201f2cdb",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: cumulative sales leaderboard",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:686751b9a2d59460201f2cdb/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "BookSalesTracker() starts empty. recordSale(bookId, quantity) adds quantity (positive) to the cumulative sales of bookId, creating it when new. getTopK(k) returns the ids of the min(k, number of books) books with the highest cumulative sales, highest first, ties by ascending id (code point), and changes nothing. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/18/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "BookSalesTracker() starts empty.",
+   "recordSale(bookId, quantity) adds quantity (positive) to the cumulative sales of bookId, creating it when new.",
+   "getTopK(k) returns the ids of the min(k, number of books) books with the highest cumulative sales, highest first, ties by ascending id (code point), and changes nothing.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/18/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 2e4 calls",
+   "bookId matches [A-Za-z0-9]{1,10}",
+   "1 <= quantity <= 1e4",
+   "0 <= k <= 1e4"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:686751b9a2d59460201f2cdb/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a tracker of cumulative book sales with a real-time leaderboard; BookSalesTracker() starts empty; it must return the top k best-selling books at any time (the remaining method signatures are cut off); algorithmTags: HASH_TABLE, HEAP; preview response sha256 288b4a8479570954faa20f0ce22dcaf5bdf4e2bcd664240d2b09d5c2e7302fe5"
+   },
+   {
+    "statement": "Uncertainty: high: the class, cumulative sales and top-k queries are in the preview; the method names recordSale and getTopK, positive quantities, string ids, id-only output and the tie rule are inferred",
+    "basis": "the public group preview is partial (342 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/18/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/18/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/18/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Do queries return ids only or ids with totals?",
+   "How are ties broken?",
+   "Can quantity be zero or negative (returns)?",
+   "What if k exceeds the number of books?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:686751b9a2d59460201f2cdb/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "BookSalesTracker"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "BookSalesTracker",
+      "recordSale",
+      "getTopK",
+      "recordSale",
+      "recordSale",
+      "recordSale",
+      "getTopK",
+      "getTopK",
+      "getTopK",
+      "getTopK",
+      "recordSale",
+      "recordSale",
+      "recordSale",
+      "getTopK"
+     ],
+     [
+      [],
+      [
+       "b2",
+       2
+      ],
+      [
+       2
+      ],
+      [
+       "a9",
+       1
+      ],
+      [
+       "B1",
+       2
+      ],
+      [
+       "b1",
+       2
+      ],
+      [
+       0
+      ],
+      [
+       5
+      ],
+      [
+       3
+      ],
+      [
+       1
+      ],
+      [
+       "a9",
+       1
+      ],
+      [
+       "zz",
+       3
+      ],
+      [
+       "zz",
+       4
+      ],
+      [
+       6
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     [
+      "b2"
+     ],
+     null,
+     null,
+     null,
+     [],
+     [
+      "B1",
+      "b1",
+      "b2",
+      "a9"
+     ],
+     [
+      "B1",
+      "b1",
+      "b2"
+     ],
+     [
+      "B1"
+     ],
+     null,
+     null,
+     null,
+     [
+      "zz",
+      "B1",
+      "a9",
+      "b1",
+      "b2"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/study-content.json",
+    "sha256": "5b5f8d0a30364fe19824f24085684badfeb7929fb66a39657360c26049f23b0c",
+    "selector": "/variants/hack2hire:686751b9a2d59460201f2cdb/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/oracles.py",
+    "sha256": "0354d35ba67d73d7c563067a0aa0586a66789f96ebf992e7938cab6e79df5b4a",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class BookSalesTracker:\n    def __init__(self)\n    def recordSale(self, bookId, quantity) -> void\n    def getTopK(self, k) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/18/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/686751b9a2d59460201f2cdb-python.json",
+     "inferredInterface": {
+      "classname": "BookSalesTracker",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "recordSale",
+        "params": [
+         {
+          "name": "bookId",
+          "type": "string"
+         },
+         {
+          "name": "quantity",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getTopK",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/686751b9a2d59460201f2cdb-python.json",
+      "sha256": "ddbfc3645b9ad84eb60b9646bda8af453f99e212c1d673d86064add8600057a9",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class BookSalesTracker {\n  constructor()\n  recordSale(bookId, quantity) /* -> void */\n  getTopK(k) /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+      "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+      "selector": "/problems/18/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/686751b9a2d59460201f2cdb-javascript.json",
+     "inferredInterface": {
+      "classname": "BookSalesTracker",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "recordSale",
+        "params": [
+         {
+          "name": "bookId",
+          "type": "string"
+         },
+         {
+          "name": "quantity",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getTopK",
+        "params": [
+         {
+          "name": "k",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/semantics/686751b9a2d59460201f2cdb-javascript.json",
+      "sha256": "392599657f7b07af85a81876ee9ecc5fd0899f4d86b7edac32b96ae4c1348d57",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/18/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk14-a-20261028-v1/contracts.json",
+    "sha256": "78954e15e638090f1f06f9e8e3688a1130bb91e936e35aa68d423469e614adf2",
+    "selector": "/problems/18/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
