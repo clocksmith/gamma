@@ -1,0 +1,484 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/assumptions",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/4",
+        "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ef54bc8d5c5242d2e57cc746535e13aecff3bec355cf3ccccb33b419dc4e26e4"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+        "basis": "contracts.json records the official response sha256 ca14fd7e581d50ce99840391d42303a62584e325b2c48bb8b6fa2c6890a5646e and statement content sha256 ea31a21ee20ea6908e727bc76be0e520b51ec69e3a57af1e8a8c02e22726d34e; the official text is not stored on this machine."
+      },
+      {
+        "assumption": "book returns an integer, despite the generic list<boolean> return in the official metaData.",
+        "basis": "README interpretation notes: the metaData top-level return does not match the class methods; 732's book returns an integer."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/clarifyingQuestions",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ef54bc8d5c5242d2e57cc746535e13aecff3bec355cf3ccccb33b419dc4e26e4"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "Over all time, so it never decreases between calls.",
+        "basis": "Cohort reference takes the maximum cover count over all accepted starts after each book.",
+        "question": "Is the answer the maximum over all time or only within the new interval?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/732-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6924891c390251f682e481beeda5d95080cd1a94a46457a9f5de48733ea5cccb"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/732-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5074fa9bb33b2272fc38a43944f0dc11c22ad711aef43749b8051ccbbaf7753b"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON trace result; no bool/int coercion"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/constraints",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c66c7fdce559c6312b230b0997eb61c1d484b4aa3cb13cb739d841e06634ecb7"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "0 <= startTime < endTime <= 10^9.",
+      "At most 400 calls to book per calendar.",
+      "A trace starts with exactly one MyCalendarThree constructor call with no arguments, followed only by book calls."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/732-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6924891c390251f682e481beeda5d95080cd1a94a46457a9f5de48733ea5cccb"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/732-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5074fa9bb33b2272fc38a43944f0dc11c22ad711aef43749b8051ccbbaf7753b"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "native_state": "changes only through book",
+      "returned_mutable_containers": "fresh trace list",
+      "trace_inputs": "unchanged including nested argument lists"
+    }
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/examples",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "argument_lists": [
+            [],
+            [
+              10,
+              20
+            ],
+            [
+              50,
+              60
+            ],
+            [
+              10,
+              40
+            ],
+            [
+              5,
+              15
+            ]
+          ],
+          "operation_names": [
+            "MyCalendarThree",
+            "book",
+            "book",
+            "book",
+            "book"
+          ]
+        },
+        "explanation": "After [5,15), the moment 10 is covered by [10,20), [10,40) and [5,15).",
+        "output": [
+          null,
+          1,
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "arguments": {
+          "argument_lists": [
+            [],
+            [
+              0,
+              5
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              4,
+              6
+            ]
+          ],
+          "operation_names": [
+            "MyCalendarThree",
+            "book",
+            "book",
+            "book"
+          ]
+        },
+        "explanation": "[0,5) and [5,10) only touch; [4,6) overlaps each of them but never both at the same moment.",
+        "output": [
+          null,
+          1,
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  "id": "contract:leetcode:732:official:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/interfaces/python/declaration",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          }
+        ],
+        "status": "present",
+        "value": "class MyCalendarThree: def __init__(self); def book(self, startTime: int, endTime: int) -> int; trace adapter def solve(operation_names: list[str], argument_lists: list[list[int]]) -> list"
+      },
+      "kind": "class",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/4/official_interface",
+            "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "MyCalendarThree",
+          "constructor": {
+            "params": []
+          },
+          "methods": [
+            {
+              "name": "book",
+              "params": [
+                {
+                  "name": "startTime",
+                  "type": "integer"
+                },
+                {
+                  "name": "endTime",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ],
+          "params": [
+            {
+              "name": "starts",
+              "type": "integer[]"
+            },
+            {
+              "name": "ends",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "dealloc": true,
+            "type": "list<boolean>"
+          },
+          "systemdesign": true
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/interfaces/javascript/declaration",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "class MyCalendarThree { constructor(); book(startTime, endTime) -> int }; module.exports = solve(operationNames, argumentLists) -> Array; module.exports.MyCalendarThree = MyCalendarThree"
+      },
+      "kind": "class",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/4/official_interface",
+            "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "MyCalendarThree",
+          "constructor": {
+            "params": []
+          },
+          "methods": [
+            {
+              "name": "book",
+              "params": [
+                {
+                  "name": "startTime",
+                  "type": "integer"
+                },
+                {
+                  "name": "endTime",
+                  "type": "integer"
+                }
+              ],
+              "return": {
+                "type": "integer"
+              }
+            }
+          ],
+          "params": [
+            {
+              "name": "starts",
+              "type": "integer[]"
+            },
+            {
+              "name": "ends",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "dealloc": true,
+            "type": "list<boolean>"
+          },
+          "systemdesign": true
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/4",
+      "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+    }
+  ],
+  "problemId": "leetcode:732",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/requirements",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/4",
+        "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/732-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6924891c390251f682e481beeda5d95080cd1a94a46457a9f5de48733ea5cccb"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/732-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5074fa9bb33b2272fc38a43944f0dc11c22ad711aef43749b8051ccbbaf7753b"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "Every booking is accepted; intervals are half-open, so touching intervals do not overlap."
+      },
+      {
+        "id": "R2",
+        "text": "After each book call, return the maximum, over all moments, of the number of accepted bookings covering it."
+      },
+      {
+        "id": "R3",
+        "text": "The trace adapter solve(operation_names, argument_lists) creates one MyCalendarThree and returns null followed by each book result."
+      },
+      {
+        "id": "R4",
+        "text": "Do not modify the trace input lists; return a fresh result list."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/statement",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/4",
+        "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+      }
+    ],
+    "status": "present",
+    "value": "Build a calendar that always accepts events, given as half-open intervals [startTime, endTime). After each booking, report the largest number of events that cover any single moment so far (the maximum k such that some moment is shared by k events)."
+  },
+  "variantId": "official",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/4",
+        "sha256": "6e0f8087bc8df67c31ab1a15b6d711f614dad8156ca8ad90aa852afb4284327c"
+      }
+    ],
+    "status": "present",
+    "value": "My Calendar III"
+  },
+  "version": 1
+}

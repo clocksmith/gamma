@@ -1,0 +1,1098 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/731/approach/chooseWhen",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/731",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The limit is a small fixed coverage count (here two), so tracking the level just below the limit is enough.",
+      "The number of calls is modest (about 1000), so O(q) per call is fine.",
+      "You want a short, easily verified solution rather than a coordinate-compressed or tree structure."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:731:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/contract--contract_leetcode_731_official_authored-v1.json",
+    "sha256": "639c8b95e8efd1ffa4054c436e9dfae67faf31ab23ca8c710586ab9a2bbc14f4",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/731/approach/explanation",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/731",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+      }
+    ],
+    "status": "present",
+    "value": "Keep every accepted booking and, separately, every region that is already covered twice. A new event causes a triple booking exactly when it overlaps some double-booked region, so check that list first and reject on any overlap. Otherwise the event is accepted, and its overlap with each existing booking becomes a new double-booked region. Those regions are pairwise disjoint, because if two of them overlapped the shared part would be triple-booked."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/731/approach/hints",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/731",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "When does a new event cause a triple booking?",
+      "It must overlap a region that is already covered twice.",
+      "Store the double-covered regions explicitly and test against them first.",
+      "Reject if any stored overlap intersects the new interval; otherwise add max(start)..min(end) with every intersecting booking to the overlaps, then store the booking."
+    ]
+  },
+  "id": "approach:leetcode:731:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/731/approach/invariants",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/731",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "bookings holds exactly the accepted intervals.",
+      "overlaps holds intervals that are covered by at least two accepted bookings, and their union is exactly the double-booked set.",
+      "No point is covered by three accepted bookings."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:731:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_731_official_approach-native_v1.json",
+    "sha256": "75a2ff6e6e2d5435e26e11c41ade7720b9adb409db95fbfc597cc5a4fd87a6ba",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/731",
+      "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+    }
+  ],
+  "problemId": "leetcode:731",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/0/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "A point becomes triple-booked iff it was double-booked and the new event covers it. So the double-booked set is all you need for the test; the bookings are needed to update that set after acceptance."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/0/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Track coverage level two, not every level."
+        ]
+      },
+      "id": "approach:leetcode:731:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/0/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Draw three events and mark coverage levels.",
+          "Express the triple-booked condition in terms of the double-booked set."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:731:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_731_official_approach-native_v1.json",
+        "sha256": "75a2ff6e6e2d5435e26e11c41ade7720b9adb409db95fbfc597cc5a4fd87a6ba",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/0/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The intersection of two half-open intervals is [max(starts), min(ends)) when non-empty."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/0/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "What information about the current calendar decides whether a new event would triple-book?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/0/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "This splits the problem into a check and an update, each a simple scan."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/0/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/0/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "Reduce triple booking to a simpler test"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:731:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_731_official_python_v1.json",
+          "sha256": "a2bafb670cd6d24ec119af6f06f62e6a2ffb9dcbe4e0fe36664958db3795be06",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:731:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_731_official_javascript_v1.json",
+          "sha256": "7f16f65bba855f68c73e1d75dc08c58edd847425c3f963b1e2fbfeb284d822e7",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/1/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "First scan overlaps; if any intersects [startTime, endTime) return false, changing nothing. Then scan bookings and append each non-empty intersection to overlaps, append the new booking and return true. The trace adapter replays operations on one instance."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/1/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Do not mutate anything until the overlap check has passed."
+        ]
+      },
+      "id": "approach:leetcode:731:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/1/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Keep two lists: bookings and overlaps.",
+          "Use start < endTime and startTime < end as the overlap test.",
+          "Append (max(start, startTime), min(end, endTime)) for each overlapping booking.",
+          "In solve, check the constructor, then collect results after a leading null."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:731:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_731_official_approach-native_v1.json",
+        "sha256": "75a2ff6e6e2d5435e26e11c41ade7720b9adb409db95fbfc597cc5a4fd87a6ba",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/1/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The newly added overlaps are disjoint from each other because the old bookings they come from never overlap each other within the new interval (otherwise that spot was double-booked and the check failed)."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/1/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "In which order should the check and the update happen?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/1/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "Checking before updating guarantees that a rejected call leaves the state untouched."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/1/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3",
+          "R4",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/1/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "Check overlaps, then record new ones"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/2/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "For each call, count how many accepted bookings cover the new start and each accepted start inside the new interval; the maximum coverage over the new interval occurs at one of these points. Reject when that count reaches two. Compare with the candidate on random traces."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/2/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Coverage inside an interval only changes at booking starts and ends."
+        ]
+      },
+      "id": "approach:leetcode:731:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/2/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Fuzz with small coordinates and repeated equal intervals.",
+          "Run a 1000-call trace to confirm time."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:731:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_731_official_approach-native_v1.json",
+        "sha256": "75a2ff6e6e2d5435e26e11c41ade7720b9adb409db95fbfc597cc5a4fd87a6ba",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/2/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Booking the same interval three times returns true, true, false."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/2/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "How can you check results independently?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/2/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "This is the cohort's reference method and does not share the overlap-list idea."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/2/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/731/approach/stages/2/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/731",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with direct coverage counting"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/731/approach/title",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/731",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+      }
+    ],
+    "status": "present",
+    "value": "Bookings plus a list of double-booked overlaps"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/731/approach/tradeoffs",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/731",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/731.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b8b09da2fdb9793b6849e5599d9ad38d803e14315e2e267a6e9ec56434cfe4c0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/731.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c89721ba6528359ce9aa71540b038ab6bc879d585443aa86da33aac2f5f88061"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A sweep over a sorted map of +1/-1 boundary deltas generalises to any k but costs O(q) per call plus sorting work.",
+      "A segment tree with range add and range max gives O(log C) per call but is much longer.",
+      "The overlap list can grow to O(q) entries, and each book is O(q)."
+    ]
+  },
+  "version": 1
+}

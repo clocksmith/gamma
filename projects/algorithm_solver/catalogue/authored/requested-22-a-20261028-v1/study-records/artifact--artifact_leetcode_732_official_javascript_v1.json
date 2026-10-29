@@ -1,0 +1,168 @@
+{
+  "approachId": "approach:leetcode:732:official:v1",
+  "complexityClaims": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/complexity/javascript",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/732/complexity_target",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/732-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5074fa9bb33b2272fc38a43944f0dc11c22ad711aef43749b8051ccbbaf7753b"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "bound": "O(log C) per book",
+        "resource": "time",
+        "where": "C = 10^9 is the coordinate range"
+      },
+      {
+        "bound": "O(q log C)",
+        "resource": "space",
+        "where": "nodes created over q bookings"
+      }
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:732:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/contract--contract_leetcode_732_official_authored-v1.json",
+    "sha256": "89443c97ce7206b1aac6ade4853cf77a375d9e6098869375185e28e86a9afdb5",
+    "version": 1
+  },
+  "documentSchema": null,
+  "executionKind": "code",
+  "externalLocator": {
+    "reason": "The source file is in this repository; no external locator.",
+    "status": "not-applicable"
+  },
+  "file": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "bytes": 1649,
+      "mediaType": "text/javascript",
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+      "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+    }
+  },
+  "id": "artifact:leetcode:732:official:javascript:v1",
+  "kind": "artifact",
+  "language": "javascript",
+  "nativeMetadata": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/732-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5074fa9bb33b2272fc38a43944f0dc11c22ad711aef43749b8051ccbbaf7753b"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "comparison": "exact typed JSON trace result; no bool/int coercion",
+      "effects": {
+        "native_state": "changes only through book",
+        "returned_mutable_containers": "fresh trace list",
+        "trace_inputs": "unchanged including nested argument lists"
+      },
+      "entrypoint": "solve",
+      "language": "javascript",
+      "native_class": "MyCalendarThree",
+      "native_symbol": "module.exports.MyCalendarThree",
+      "official_interface": {
+        "classname": "MyCalendarThree",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "book",
+            "params": [
+              {
+                "name": "startTime",
+                "type": "integer"
+              },
+              {
+                "name": "endTime",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "params": [
+          {
+            "name": "starts",
+            "type": "integer[]"
+          },
+          {
+            "name": "ends",
+            "type": "integer[]"
+          }
+        ],
+        "return": {
+          "dealloc": true,
+          "type": "list<boolean>"
+        },
+        "systemdesign": true
+      },
+      "parameters": [
+        "operationNames",
+        "argumentLists"
+      ],
+      "problem_id": 732,
+      "qualification": {
+        "reason": "Author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+        "status": "unknown"
+      },
+      "schema": "gamma.authored-native-trace-semantics.v1",
+      "source_reasoning": {
+        "candidate_design": "on-demand segment tree on [0,1e9) with range add and lazy subtree maximum",
+        "complexity_target": "O(log C) per book, C=1e9/O(q log C) nodes",
+        "reference": "after each book, maximum direct cover count over all accepted starts"
+      },
+      "source_sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+    }
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+      "repository": "gamma",
+      "revision": null,
+      "selector": null,
+      "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+    }
+  ],
+  "problemId": "leetcode:732",
+  "schema": "study.record.v1",
+  "title": "My Calendar III · javascript candidate (qualification unknown)",
+  "type": "implementation",
+  "version": 1
+}

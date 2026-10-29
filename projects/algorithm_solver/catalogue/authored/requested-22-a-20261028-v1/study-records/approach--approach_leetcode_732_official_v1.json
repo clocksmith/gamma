@@ -1,0 +1,1101 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/approach/chooseWhen",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/732",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Coordinates are huge but the number of updates is small, so most of the tree is never touched.",
+      "You need range add and a running global maximum after every update.",
+      "You want guaranteed O(log C) per update rather than O(q) per call."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:732:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/contract--contract_leetcode_732_official_authored-v1.json",
+    "sha256": "89443c97ce7206b1aac6ade4853cf77a375d9e6098869375185e28e86a9afdb5",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/approach/explanation",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/732",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+      }
+    ],
+    "status": "present",
+    "value": "Model time as the range [0, 10^9). A booking adds 1 to every moment in [start, end), and the answer is the global maximum. A segment tree supports range add and range maximum in O(log C), but a full tree over 10^9 points is impossible, so nodes are created only when an update descends into them. Each node stores added (how much was added to its whole range) and best (the maximum inside its range, including added). Fully covered nodes take +1 in both; partially covered nodes recurse and recompute best = added + max(best of children). The root's best is the answer."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/approach/hints",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/732",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Think of each booking as adding 1 to a range of times.",
+      "You need range add plus global maximum: what structure supports that?",
+      "The range is too large to allocate; create nodes only as updates reach them.",
+      "Keep added and best per node; on full cover increment both, otherwise recurse into the halves you overlap and set best = added + max(children)."
+    ]
+  },
+  "id": "approach:leetcode:732:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/approach/invariants",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/732",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "For every node, best equals added plus the maximum best of its children (absent children count as 0).",
+      "added at a node is the number of bookings that cover that node's whole range and were stopped there.",
+      "The root's best is the maximum coverage over [0, 10^9)."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:732:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_732_official_approach-native_v1.json",
+    "sha256": "42e02185d6b8555f99c69688488ad7cfe43396035cab2bfa20951ffa32438116",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/732",
+      "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+    }
+  ],
+  "problemId": "leetcode:732",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/0/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "Let cover(t) count bookings containing t. Each booking adds 1 to cover on [start, end) and the answer is max cover(t). That is a classic range-add, range-max problem on a very large domain."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/0/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare a difference-array sweep with a tree-based approach."
+        ]
+      },
+      "id": "approach:leetcode:732:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/0/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Sketch cover(t) for the first example after each booking.",
+          "Note that the maximum only changes inside the new interval."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:732:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_732_official_approach-native_v1.json",
+        "sha256": "42e02185d6b8555f99c69688488ad7cfe43396035cab2bfa20951ffa32438116",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/0/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The maximum never decreases.",
+          "Only interval endpoints matter for where cover changes."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/0/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "What does the reported number mean in terms of a coverage function over time?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/0/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "Naming the abstract operation points to segment trees or a difference sweep."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/0/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/0/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "Restate as range add with a maximum query"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:732:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_732_official_python_v1.json",
+          "sha256": "bb3a5483ab98eb9700c2755df8f4981727e589a3525f243acacab3a219f5ed80",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:732:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_732_official_javascript_v1.json",
+          "sha256": "47f7b9d0e229e6034a3639a2297cdd3a3a84af2eacf301eb0d861d32cdadf72f",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/1/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "Use parallel arrays left, right, added and best, with node 0 as a permanent empty child and node 1 as the root over [0, 10^9). update(node, low, high, start, end): if [low, high) lies inside [start, end), increment added and best. Otherwise split at middle, create a child if needed for each side the interval reaches, recurse, and recompute best. book returns best[1]."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/1/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Absent children read as best 0 when node 0 is used as the null child.",
+          "Half-open ranges make the split test start < middle and end > middle."
+        ]
+      },
+      "id": "approach:leetcode:732:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/1/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Initialise arrays with node 0 (absent) and node 1 (root).",
+          "Write a child allocator that appends a zeroed node and returns its index.",
+          "Recurse left only if start < middle and right only if end > middle.",
+          "Recompute best[node] = added[node] + max(best[left], best[right]).",
+          "Replay the trace in solve after verifying the constructor."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:732:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_732_official_approach-native_v1.json",
+        "sha256": "42e02185d6b8555f99c69688488ad7cfe43396035cab2bfa20951ffa32438116",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/1/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Recursion depth is about log2(10^9), roughly 30.",
+          "JavaScript can use the same layout with typed or plain arrays."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/1/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "How do you store nodes and keep best correct without pushing additions down?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/1/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "Additions stay at the highest fully covered node (no push-down needed) because best already includes them for every ancestor via recomputation."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/1/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/1/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "Implement the lazily allocated tree"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/2/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "After each book, compute the maximum, over all accepted starts, of the number of bookings covering that start; that is the true maximum because coverage peaks at some start. Compare on random traces, including nested, touching and identical intervals, and on intervals reaching 10^9."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/2/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Include [0, 10^9) itself to test the full-cover path at the root."
+        ]
+      },
+      "id": "approach:leetcode:732:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/2/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Fuzz with coordinates in a small range and in the full range.",
+          "Run 400 calls to check node count and time."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:732:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_732_official_approach-native_v1.json",
+        "sha256": "42e02185d6b8555f99c69688488ad7cfe43396035cab2bfa20951ffa32438116",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/2/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Identical bookings repeated k times return 1, 2, ..., k."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/2/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "How do you check the tree against an independent method?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/2/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "The direct count is simple and is the cohort's reference."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/2/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/732/approach/stages/2/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/732",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+          }
+        ],
+        "status": "present",
+        "value": "Compare with direct coverage counting"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/approach/title",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/732",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+      }
+    ],
+    "status": "present",
+    "value": "Dynamic segment tree with range add and subtree maximum"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/732/approach/tradeoffs",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/732",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/732.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "20f6aaf0131da4b5e16aed5faf6254dff3bca7cb100f1dd7d91a12bee5a88333"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/732.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1ceb8dbdbae503a8a8d7aa6a44564001496d30cf936b06a38f58735e283538ff"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A sorted boundary map with +1/-1 deltas and a sweep is simpler but O(q) per call (fine for 400 calls).",
+      "Coordinate compression needs all coordinates in advance; the online setting does not provide them.",
+      "The dynamic tree uses O(q log C) nodes; storing nodes in parallel arrays (with node 0 as an absent child of best 0) avoids object overhead."
+    ]
+  },
+  "version": 1
+}

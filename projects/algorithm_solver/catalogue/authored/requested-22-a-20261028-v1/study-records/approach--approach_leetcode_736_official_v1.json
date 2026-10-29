@@ -1,0 +1,1101 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/736/approach/chooseWhen",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/736",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Nesting can be deep and you want to avoid recursion limits.",
+      "Scopes nest strictly, so undoing bindings at scope exit is cheaper than copying environments.",
+      "You want O(L) total work for an expression of length L."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:736:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/contract--contract_leetcode_736_official_authored-v1.json",
+    "sha256": "297702231a3953c2353287d42cef2ad958cf847c89ccab03cff42a941a0d1abd",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/736/approach/explanation",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/736",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+      }
+    ],
+    "status": "present",
+    "value": "Tokenise by padding parentheses with spaces. Walk the tokens once, keeping a stack of frames, one per open form, recording the operator, operand values, a pending variable name for let, the names it bound, and its body value. Each completed value (a literal, a variable lookup or a closed form) is delivered to the frame on top: add/mult collect it as an operand; let either binds it to the pending name or takes it as the body. Shadowing is handled by a map from name to a stack of values: binding pushes, and closing a let pops each name it bound. Lookup reads the top of that name's stack."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/736/approach/hints",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/736",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Think of evaluation as values flowing up into the enclosing form.",
+      "Inside a let, how do you know whether a word is a variable being assigned or the body?",
+      "A word is a variable to assign when the frame has no pending name and the next token is not ')'.",
+      "Use a stack of frames for open forms and, for each variable name, a stack of values pushed by lets and popped when each let closes."
+    ]
+  },
+  "id": "approach:leetcode:736:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/736/approach/invariants",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/736",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "For every name, the top of bindings[name] is the value visible at the current position.",
+      "Each let frame lists exactly the names it has pushed, and closing it pops each one once.",
+      "A let frame with a pending name expects the next completed value to be that name's assignment."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:736:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_736_official_approach-native_v1.json",
+    "sha256": "4117f42d02db0cfdff175fc7c40acf36dfa422345eef4ff09e2a460c5902bc96",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/736",
+      "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+    }
+  ],
+  "problemId": "leetcode:736",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/0/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "The innermost let that has already assigned the name wins, and leaving the let restores the outer value. This is a stack discipline per name."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/0/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Model each variable's values as a stack."
+        ]
+      },
+      "id": "approach:leetcode:736:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/0/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Evaluate the second example by hand, writing the environment at each step.",
+          "Note the moments a binding is created and removed."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:736:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_736_official_approach-native_v1.json",
+        "sha256": "4117f42d02db0cfdff175fc7c40acf36dfa422345eef4ff09e2a460c5902bc96",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/0/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Bindings are removed in reverse order of creation.",
+          "Reassignment within one let pushes another value that is also popped at exit."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/0/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "Which binding does a variable reference see, and when do bindings disappear?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/0/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "Recognising the stack discipline lets you avoid copying environments."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/0/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/0/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "Pin down scoping"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:736:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_736_official_python_v1.json",
+          "sha256": "dde9827025aa8c2acddd814776862ae49773822f56acd076af527a9805919fc8",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:736:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_736_official_javascript_v1.json",
+          "sha256": "f425a010a45ad774190b915285a806d387754f5ab05e29db02b6ae2c6dbc1a71",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/1/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "'(' pushes a frame with the next token as operator. A word in a let frame with no pending name and not followed by ')' becomes the pending name. Otherwise a word is looked up and a numeral is parsed; ')' pops a frame and produces add/mult results or the let body after popping its bindings. A produced value goes to the parent frame: an operand for add/mult, a binding if a name is pending, else the let body. With no parent it is the final result."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/1/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Look ahead one token to distinguish a let variable from a let body.",
+          "Keep the result in a separate variable for the outermost value."
+        ]
+      },
+      "id": "approach:leetcode:736:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/1/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Tokenise with expression.replace('(', '( ').replace(')', ' )').split().",
+          "Represent a frame as op, values, name, bound list and body.",
+          "Implement value delivery to the parent frame as described.",
+          "On closing a let, pop bindings[name] for each name in bound."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:736:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_736_official_approach-native_v1.json",
+        "sha256": "4117f42d02db0cfdff175fc7c40acf36dfa422345eef4ff09e2a460c5902bc96",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/1/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A negative literal starts with '-', not a letter, so the alphabetic test separates names from numbers."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/1/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "How does each token type update the frames?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/1/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "Every token is handled in O(1) amortised, and the frame stack mirrors the expression tree without recursion."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/1/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/1/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "Drive frames from tokens"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/2/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "Test shadowing and restoration, reassignment in one let, a body that is a bare variable or number, negative numbers, deep nesting and a let whose assignment expression is itself a let. Compare with a recursive evaluator that copies scopes."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/2/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Bare-variable bodies like '(let x 3 x)' test the lookahead rule."
+        ]
+      },
+      "id": "approach:leetcode:736:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/2/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Generate random well-formed expressions with bound variables and compare.",
+          "Try nesting depth near the length limit."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:736:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_736_official_approach-native_v1.json",
+        "sha256": "4117f42d02db0cfdff175fc7c40acf36dfa422345eef4ff09e2a460c5902bc96",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/2/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "'(let x 1 (let x 2 x))' is 2, while '(let x 1 (add (let x 2 x) x))' is 3."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/2/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "Which expressions would break an incorrect scoping or parsing rule?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/2/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "The recursive evaluator is the cohort's reference and follows the definition directly."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/2/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/736/approach/stages/2/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/736",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+          }
+        ],
+        "status": "present",
+        "value": "Test scoping edge cases"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/736/approach/title",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/736",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+      }
+    ],
+    "status": "present",
+    "value": "Iterative token scan with explicit frames and per-name value stacks"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/736/approach/tradeoffs",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/736",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/736.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4028fb80d5a47b4879d08886bb5cda1100456580c98c605c5718252e8f1d6d85"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/736.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6f948043db0dbcba4068b456c0514ea5aec05149e7a4823ba042cd86a66d8a76"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A recursive evaluator with copied dictionaries mirrors the definition closely and is easy to verify, but copying scopes can cost O(L) per let.",
+      "The explicit frame machine is less readable; telling a let variable name apart from a body expression needs care.",
+      "Per-name value stacks share one table across scopes, so every binding must be popped exactly once on exit."
+    ]
+  },
+  "version": 1
+}

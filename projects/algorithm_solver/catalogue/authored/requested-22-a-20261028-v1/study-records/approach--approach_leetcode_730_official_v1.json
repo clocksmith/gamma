@@ -1,0 +1,1101 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/730/approach/chooseWhen",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/730",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "You must count distinct strings, so naive subsequence counting over-counts.",
+      "The alphabet is small and the answer for an interval depends on its outermost characters.",
+      "n is up to about 1000, so an O(n^2) table is affordable."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:730:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/contract--contract_leetcode_730_official_authored-v1.json",
+    "sha256": "d5824ee5330de838158f756af30f154b98ff32c3f554ba22dfd1de2009fb5343",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/730/approach/explanation",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/730",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+      }
+    ],
+    "status": "present",
+    "value": "Let dp[i][j] be the number of distinct non-empty palindromic subsequences inside s[i..j]. If s[i] != s[j], no palindrome uses both ends, so dp[i][j] = dp[i+1][j] + dp[i][j-1] - dp[i+1][j-1] by inclusion-exclusion. If s[i] == s[j] = x, every palindrome of the inside either stays as it is or gets wrapped as x...x, giving 2*dp[i+1][j-1], plus the new strings x and xx unless they already exist inside. Let low be the first x strictly inside and high the last. No x inside: add 2 (x and xx). Exactly one x inside: add 1 (only xx is new). Two or more: x and xx already exist, and the palindromes strictly between low and high were wrapped twice, so subtract dp[low+1][high-1]."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/730/approach/hints",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/730",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Define the answer for a substring s[i..j] and relate it to shorter substrings.",
+      "If the end letters differ, palindromes cannot use both ends; use inclusion-exclusion.",
+      "If they match, wrapping every inner palindrome doubles the count, but some strings get counted twice.",
+      "Find the nearest same letter inside from each end: none gives +2, one gives +1, otherwise subtract the count strictly between those two occurrences."
+    ]
+  },
+  "id": "approach:leetcode:730:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/730/approach/invariants",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/730",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "dp[i][j] equals the number of distinct non-empty palindromic subsequences of s[i..j] modulo 1e9+7, for every computed i <= j.",
+      "dp[i][i] = 1 and empty ranges contribute 0.",
+      "following[i] and preceding[j] give the next and previous occurrence of the same letter, so low and high are found in O(1)."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:730:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_730_official_approach-native_v1.json",
+    "sha256": "bd389ab886888abdbb7707375df99cc1e8824fe74a953813b74e5e63cbd28da7",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/730",
+      "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+    }
+  ],
+  "problemId": "leetcode:730",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/0/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "In 'aaa' there are several ways to pick 'aa' but it is one string. When both ends are x, wrapping inner palindromes with x...x may recreate strings that were already formed by an inner x pair; those come exactly from palindromes between the innermost x occurrences."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/0/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Consider where the inner occurrences of the end letter sit."
+        ]
+      },
+      "id": "approach:leetcode:730:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/0/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "List all distinct palindromic subsequences of 'abca' and 'aba' and 'aaa' by hand.",
+          "For s[i] == s[j], group them by whether they use both ends."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:730:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_730_official_approach-native_v1.json",
+        "sha256": "bd389ab886888abdbb7707375df99cc1e8824fe74a953813b74e5e63cbd28da7",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/0/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Wrapping is a bijection from inner palindromes onto wrapped ones, so the doubling is exact apart from x and xx and the overlap.",
+          "Duplicates appear only when an x occurs inside the range."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/0/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "How do distinct strings differ from distinct index choices, and how do equal end letters create duplicates?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/0/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "The duplicate analysis determines the three cases of the recurrence."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/0/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/0/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "Why plain counting over-counts"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:730:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_730_official_python_v1.json",
+          "sha256": "1692f37c5aa4ddd9a35fd9e9239151e79ae73d3f123badd8f4263bc78a5f8334",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:730:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_730_official_javascript_v1.json",
+          "sha256": "c8ba7667b87e39ab7262396f5e861a3ccedaafff7817b788d2cc8c5746018a14",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/1/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "Precompute following[i] (next index with the same letter) and preceding[j] (previous index with the same letter). Iterate i from n-1 down to 0 and j from i+1 up, using rows dp[i] and dp[i+1]. Apply the unequal-ends or equal-ends formula and reduce modulo 1e9+7. The answer is dp[0][n-1]."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/1/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "low = following[i], high = preceding[j]; compare them to choose the case.",
+          "Use the row below (i+1) as a separate reference for clarity."
+        ]
+      },
+      "id": "approach:leetcode:730:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/1/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Build following and preceding with one backward and one forward pass and a last-seen map.",
+          "Allocate an (n+1) x (n+1) table of zeros so dp[low+1][high-1] reads 0 for empty ranges.",
+          "Set dp[i][i] = 1 and apply the recurrence for j > i.",
+          "Reduce each value modulo 1e9+7, keeping it non-negative."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:730:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_730_official_approach-native_v1.json",
+        "sha256": "bd389ab886888abdbb7707375df99cc1e8824fe74a953813b74e5e63cbd28da7",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/1/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Cells with i > j stay 0, which handles adjacent equal letters (inner empty).",
+          "No products are needed, so intermediates stay small."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/1/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "In which order do you fill dp, and how do you get low and high quickly?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/1/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "Every value used (i+1 rows and j-1 columns) is computed before it is needed."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/1/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/1/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "Fill the table from short to long intervals"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/2/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "Enumerate the set of all palindromic subsequences for random strings of length up to about 12 and compare. Include strings with many repeats of one letter to hit the subtraction case, and a long string to check the modulus."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/2/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Strings over two letters create more equal ends and more duplicates."
+        ]
+      },
+      "id": "approach:leetcode:730:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/2/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Compare against brute force for random strings over 'abcd' and over 'ab'.",
+          "Run a length-1000 string to confirm time and the modulo reduction."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:730:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_730_official_approach-native_v1.json",
+        "sha256": "bd389ab886888abdbb7707375df99cc1e8824fe74a953813b74e5e63cbd28da7",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/2/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "'aaaa' gives 4 and 'abab' gives 6 (a, b, aa, bb, aba, bab)."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/2/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "How do you gain confidence in the three equal-end cases?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/2/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "Brute force is exact on small inputs and directly encodes the distinctness requirement."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/2/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/730/approach/stages/2/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/730",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+          }
+        ],
+        "status": "present",
+        "value": "Cross-check against brute force"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/730/approach/title",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/730",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+      }
+    ],
+    "status": "present",
+    "value": "Interval DP with duplicate correction at equal ends"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/730/approach/tradeoffs",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/730",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/730.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "387974318a66a7f1c3d12251444df4b4555087e4eeb0fd93b5f3f75ae777c21c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/730.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e98e1fb42ce77fddf9f871b39cfe7a2e72b83b13277b1b56d77872ae2995b189"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "An alternative 4 x n x n DP indexed by the outer letter is easier to argue about but uses more memory.",
+      "Enumerating the set of subsequences is only feasible for very short strings; it is the cohort's reference for n <= 12.",
+      "Subtraction under a modulus needs a final normalisation; Python's % already returns a non-negative value and JavaScript needs an explicit fix (the candidate stays exact because values stay below 2^35)."
+    ]
+  },
+  "version": 1
+}

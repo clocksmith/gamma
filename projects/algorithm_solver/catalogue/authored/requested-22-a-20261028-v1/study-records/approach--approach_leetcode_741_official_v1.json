@@ -1,0 +1,1100 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/741/approach/chooseWhen",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/741",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Two paths interact only through shared cells, and greedy single-path choices fail.",
+      "Moves are monotone, so both paths can be synchronised by step count.",
+      "n is up to 50, so O(n^3) states and work are cheap."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:741:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/contract--contract_leetcode_741_official_authored-v1.json",
+    "sha256": "ccace67305e368f42a6d4e48e965fc44180831c501204db188e0145e3f699edf",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/741/approach/explanation",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/741",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+      }
+    ],
+    "status": "present",
+    "value": "Reverse the return trip so it becomes a second top-left to bottom-right path. Move both walkers one step at a time; after step t each is on the anti-diagonal r + c = t, so the state is just (t, r1, r2). Both previous positions came from one of four combinations (each walker moved down or right). The value of a state is the best previous value plus the cherries on both cells, counted once if the walkers share a cell. Requiring r1 <= r2 halves the states without losing anything because the walkers are interchangeable. Thorn cells and unreachable states use a sentinel."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/741/approach/hints",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/741",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A return trip moving up/left is the same as another trip moving down/right.",
+      "If both walkers move at the same time, how are their positions related?",
+      "After t steps each walker is on r + c = t, so (t, r1, r2) is a full state.",
+      "Take the max over the four (down/right x down/right) predecessors, add both cells (once if equal), skip thorns, keep r1 <= r2 and answer max(0, final state)."
+    ]
+  },
+  "id": "approach:leetcode:741:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/741/approach/invariants",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/741",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "best[r1][r2] after step t is the maximum cherries collected by two partial paths ending at (r1, t-r1) and (r2, t-r2), or the sentinel if impossible.",
+      "Only states with r1 <= r2 are stored; the transitions keep that ordering.",
+      "A shared cell's cherry is added once."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:741:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_741_official_approach-native_v1.json",
+    "sha256": "0e72ece637e4ecf86628be6f29b0499b95dca9a5cbf5af4026c5e70687a09afb",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/741",
+      "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+    }
+  ],
+  "problemId": "leetcode:741",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/0/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "The two paths compete for the same cherries, so optimising them separately can be suboptimal. Treat them as two simultaneous forward walkers; synchronising by step means shared cells are reached at the same time, which makes the once-only rule easy to apply."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/0/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Paths can only share a cell at the same step count."
+        ]
+      },
+      "id": "approach:leetcode:741:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/0/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Find a grid where greedy first-then-second gives less than optimal.",
+          "Show that two walkers sharing a cell must reach it on the same step."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:741:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_741_official_approach-native_v1.json",
+        "sha256": "0e72ece637e4ecf86628be6f29b0499b95dca9a5cbf5af4026c5e70687a09afb",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/0/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A cell (r, c) is reached exactly at step r + c by any monotone path."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/0/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "Why does picking the best outbound path and then the best return path fail, and what replaces it?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/0/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "Synchronisation is what lets a polynomial DP handle the interaction."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/0/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/0/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "Turn a round trip into two forward paths"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:741:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_741_official_python_v1.json",
+          "sha256": "a0cabbb8ccbae81e667380b9822eaa2e0cb7139915300980588281c8d40ac375",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:741:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_741_official_javascript_v1.json",
+          "sha256": "e7f35066b8277bc07e6282e65a55c359cb5f35049ec871683d67374a20f8403d",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/1/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "best starts with best[0][0] = grid[0][0]. For each step from 1 to 2n-2, build a fresh table: for row1 from first to last valid row and row2 from row1 to last, skip thorns, take the maximum of best[row1][row2], best[row1-1][row2], best[row1][row2-1] (if row2 > row1) and best[row1-1][row2-1], skip if unreachable, and add the two cells (once if row1 == row2). The answer is max(0, best[n-1][n-1])."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/1/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Column of each walker is step - row.",
+          "Allocate the new table per step instead of updating in place."
+        ]
+      },
+      "id": "approach:leetcode:741:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/1/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Use -1 as the unreachable sentinel; real values are never negative.",
+          "Compute the valid row range for the step: max(0, step-n+1) to min(n-1, step).",
+          "Keep row2 >= row1 and guard index -1 accesses.",
+          "Return max(0, best[n-1][n-1])."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:741:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_741_official_approach-native_v1.json",
+        "sha256": "0e72ece637e4ecf86628be6f29b0499b95dca9a5cbf5af4026c5e70687a09afb",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/1/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The predecessor best[row1][row2-1] with row2-1 < row1 is never valid, hence the guard.",
+          "Totals are at most 2n - 1 cells times 2, well within integer ranges in both languages."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/1/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "How do you iterate the states and handle thorns and the sentinel?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/1/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "Each step only depends on the previous step, so two n x n tables suffice."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/1/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/1/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "Roll the step table"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/2/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "For n <= 6, enumerate every thorn-free monotone path, try every pair and count cherries on their union. Compare with the DP on random grids, including all-thorn interiors, blocked corners' neighbours, and single-cell grids. Also test n = 50 for time."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/2/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "When a path pair exists only through a single corridor, both walkers share every cell."
+        ]
+      },
+      "id": "approach:leetcode:741:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/2/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Fuzz random 1..6 grids with thorn probability around 0.2.",
+          "Run a 50 x 50 grid of all cherries; the answer must be 4*50 - 4 = 196 and the run must stay fast."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:741:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_741_official_approach-native_v1.json",
+        "sha256": "0e72ece637e4ecf86628be6f29b0499b95dca9a5cbf5af4026c5e70687a09afb",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/2/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "An all-ones n x n grid allows two disjoint paths except at the shared corners, giving 4n - 4 cherries for n >= 2."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/2/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "How do you make sure the once-only rule and thorn handling are right?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/2/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "Union counting directly encodes the rule that a cherry is picked once."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/2/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/741/approach/stages/2/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/741",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+          }
+        ],
+        "status": "present",
+        "value": "Check against exhaustive path pairs"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/741/approach/title",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/741",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+      }
+    ],
+    "status": "present",
+    "value": "Two walkers moving together, DP over step and rows"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/741/approach/tradeoffs",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/741",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/741.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "6db4f1b0ada2566a851d8be50eecfd4f4d2a56bbe64303876f4cedada63c41a9"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/741.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ff274cc283131e2db4c9bb4d0e6f3e8a5d37b8c18c96643038fe4555ad70248f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Running a best single path twice (greedy) is wrong: taking the best first path can block a better combined pair.",
+      "Enumerating all path pairs is only feasible for tiny grids (the cohort's reference for n <= 6).",
+      "Rolling one 2D table per step keeps memory O(n^2) but loses the ability to reconstruct paths."
+    ]
+  },
+  "version": 1
+}

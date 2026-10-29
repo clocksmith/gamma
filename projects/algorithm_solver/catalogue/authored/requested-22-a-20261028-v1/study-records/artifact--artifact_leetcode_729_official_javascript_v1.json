@@ -1,0 +1,168 @@
+{
+  "approachId": "approach:leetcode:729:official:v1",
+  "complexityClaims": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/729/complexity/javascript",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/729/complexity_target",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/729-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "60f075b85b43806018b168ebf70c92546e06f5cffc03942b41e754d3b8afb3e1"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "bound": "O(log q + q) per book",
+        "resource": "time",
+        "where": "q is the number of accepted bookings: binary search plus list insertion"
+      },
+      {
+        "bound": "O(q)",
+        "resource": "space",
+        "where": "two arrays of accepted starts and ends"
+      }
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:729:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/contract--contract_leetcode_729_official_authored-v1.json",
+    "sha256": "5afe92f95d518fca782d0809f90f7f03a9da697dc7303a72fa2d1a2bab13a8e4",
+    "version": 1
+  },
+  "documentSchema": null,
+  "executionKind": "code",
+  "externalLocator": {
+    "reason": "The source file is in this repository; no external locator.",
+    "status": "not-applicable"
+  },
+  "file": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "bytes": 1069,
+      "mediaType": "text/javascript",
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+      "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+    }
+  },
+  "id": "artifact:leetcode:729:official:javascript:v1",
+  "kind": "artifact",
+  "language": "javascript",
+  "nativeMetadata": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/semantics/729-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "60f075b85b43806018b168ebf70c92546e06f5cffc03942b41e754d3b8afb3e1"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "comparison": "exact typed JSON trace result; no bool/int coercion",
+      "effects": {
+        "native_state": "changes only through book",
+        "returned_mutable_containers": "fresh trace list",
+        "trace_inputs": "unchanged including nested argument lists"
+      },
+      "entrypoint": "solve",
+      "language": "javascript",
+      "native_class": "MyCalendar",
+      "native_symbol": "module.exports.MyCalendar",
+      "official_interface": {
+        "classname": "MyCalendar",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "book",
+            "params": [
+              {
+                "name": "startTime",
+                "type": "integer"
+              },
+              {
+                "name": "endTime",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "params": [
+          {
+            "name": "starts",
+            "type": "integer[]"
+          },
+          {
+            "name": "ends",
+            "type": "integer[]"
+          }
+        ],
+        "return": {
+          "dealloc": true,
+          "type": "list<boolean>"
+        },
+        "systemdesign": true
+      },
+      "parameters": [
+        "operationNames",
+        "argumentLists"
+      ],
+      "problem_id": 729,
+      "qualification": {
+        "reason": "Author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+        "status": "unknown"
+      },
+      "schema": "gamma.authored-native-trace-semantics.v1",
+      "source_reasoning": {
+        "candidate_design": "sorted disjoint starts/ends; binary search for successor booking, check predecessor end and successor start, sorted insertion",
+        "complexity_target": "O(log q) search plus O(q) insertion per book/O(q) space",
+        "reference": "pairwise overlap test against every accepted booking"
+      },
+      "source_sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+    }
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/729.js",
+      "repository": "gamma",
+      "revision": null,
+      "selector": null,
+      "sha256": "247cd67a3e17fae85c51eb9772c21f6cf41b9218c59e3320e93f50461fbd116d"
+    }
+  ],
+  "problemId": "leetcode:729",
+  "schema": "study.record.v1",
+  "title": "My Calendar I · javascript candidate (qualification unknown)",
+  "type": "implementation",
+  "version": 1
+}

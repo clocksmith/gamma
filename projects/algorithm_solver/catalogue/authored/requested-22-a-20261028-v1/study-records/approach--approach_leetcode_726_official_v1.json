@@ -1,0 +1,1104 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/726/approach/chooseWhen",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/726",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Counts follow the thing they multiply, so reading backwards lets you know each multiplier before you meet the atoms it scales.",
+      "You need only totals, not the structure of the formula.",
+      "Nesting depth can be large and you want to avoid recursion limits."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:726:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/contract--contract_leetcode_726_official_authored-v1.json",
+    "sha256": "80ebb69ecb26bdaa7e28770ba780155e7e434519d385f3a2d0516bd795998e0e",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/726/approach/explanation",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/726",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+      }
+    ],
+    "status": "present",
+    "value": "Read the formula backwards. Scanning from the right means a count is seen before the element or group it applies to, so it can be held as a pending number. A closing parenthesis (seen first when going right to left) opens a group: push the current multiplier times the pending count. An opening parenthesis closes the group: pop. An element name adds pending times the top multiplier to that element's total. One pass computes every total without building a tree, and a final sort produces the output."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/726/approach/hints",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/726",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Where does a count appear relative to the thing it multiplies?",
+      "If you read the string from the end, every count arrives before its element or group.",
+      "Keep a stack whose top is the product of the counts of every group you are currently inside.",
+      "On ')' push top*pending, on '(' pop, on an element add pending*top to its total, and reset pending to 1 after each use."
+    ]
+  },
+  "id": "approach:leetcode:726:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/726/approach/invariants",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/726",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The top of the multiplier stack is the product of the counts of all groups that enclose the current position.",
+      "pending holds the count that applies to the next element or group to the left, and is reset to 1 after use.",
+      "counts[name] equals the total contribution of all occurrences of name to the right of the scan position."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:726:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_726_official_approach-native_v1.json",
+    "sha256": "3bb530803181e0783b8b5666993524c15a92595d6c65cc13cd5dbac4967bf98e",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/726",
+      "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+    }
+  ],
+  "problemId": "leetcode:726",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/0/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "An atom contributes its own count times the count of every enclosing group. The difficulty is that those group counts appear after the group, to the right."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/0/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Try reading the formula from the end.",
+          "What changes when you cross a parenthesis going right to left?"
+        ]
+      },
+      "id": "approach:leetcode:726:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/0/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Take Fe((OH)2Cu)2 and write down the multiplier for each atom by hand.",
+          "Notice the order in which you had to read the digits to do it."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:726:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_726_official_approach-native_v1.json",
+        "sha256": "3bb530803181e0783b8b5666993524c15a92595d6c65cc13cd5dbac4967bf98e",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/0/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Each multiplier depends only on counts to the right of the atom.",
+          "Groups nest like a stack: the innermost group closes first."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/0/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "For a single atom occurrence, which numbers determine how much it contributes to the final total?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/0/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "Seeing the contribution as a product of enclosing counts turns the task into tracking one running product, rather than building and merging maps."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/0/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/0/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "Work out what multiplies each atom"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:726:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_726_official_python_v1.json",
+          "sha256": "719eba6b106d408510575a1f82482936e8cbe8808a97ca81ba2dec33a45e2c83",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:726:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_726_official_javascript_v1.json",
+          "sha256": "e5e5f1bce7f0868a86c4c0560f4a25653a293296e6712ee0e0cb14d4f555292b",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/1/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "Use an index i starting at the last character. A digit run is found by walking left while the previous character is a digit; a name by walking left while the character is lowercase, then including the uppercase letter. ')' pushes multipliers[-1]*pending, '(' pops, and each name adds pending*multipliers[-1] to its total. Both candidates then sort the names and print counts above 1."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/1/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "When a lowercase letter is found, keep moving left until you pass the uppercase letter that starts the name.",
+          "Reading a digit run backwards: find its left end first, then parse the slice."
+        ]
+      },
+      "id": "approach:leetcode:726:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/1/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Initialise counts as an empty map, multipliers as [1] and pending as 1.",
+          "While i >= 0, branch on digit, ')', '(' or letter as described, moving i left past the consumed token.",
+          "After any use of pending (by ')' or an element), reset it to 1.",
+          "Sort the names and join name plus count, omitting a count of 1."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:726:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_726_official_approach-native_v1.json",
+        "sha256": "3bb530803181e0783b8b5666993524c15a92595d6c65cc13cd5dbac4967bf98e",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/1/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The base multiplier 1 is never popped, because parentheses are balanced.",
+          "JavaScript Number is exact here because every product is bounded by a final 32-bit count."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/1/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "How do you extract numbers and names while scanning backwards, and keep the multiplier stack correct?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/1/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "Every character is consumed exactly once, and the stack mirrors the nesting, so the totals are correct after one pass."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/1/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/1/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "Implement the backward scan"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/2/explanation",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "Test multi-letter names, multi-digit counts, nested groups, a group with no count, and repeated elements across groups. Compare against a hand expansion or a forward parser on small inputs."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/2/hints",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Expand small formulas by hand into a flat atom list and count.",
+          "Include deep nesting to confirm the stack products."
+        ]
+      },
+      "id": "approach:leetcode:726:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/2/instructions",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples, then 'Mg(OH)2', 'K4(ON(SO3)2)2' and a formula with a 2-digit count such as 'H50'.",
+          "Check that an element appearing in several groups is summed once in the output.",
+          "Check that the output never contains a count of 1."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:726:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-records/artifact--artifact_leetcode_726_official_approach-native_v1.json",
+        "sha256": "3bb530803181e0783b8b5666993524c15a92595d6c65cc13cd5dbac4967bf98e",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/2/observations",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A missing reset of pending shows up as an inflated count for the element just left of a group."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/2/question",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "Which inputs exercise the parts of the scan that are easy to get wrong?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/2/rationale",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "Errors usually come from off-by-one token boundaries in the backward scan or from forgetting to reset pending."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/2/requirementIds",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/726/approach/stages/2/title",
+            "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/726",
+            "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+          }
+        ],
+        "status": "present",
+        "value": "Check the tricky cases"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/726/approach/title",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/726",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+      }
+    ],
+    "status": "present",
+    "value": "Right-to-left scan with a stack of group multipliers"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/726/approach/tradeoffs",
+        "sha256": "17ded56d73e6632f2c31132524dfa4960d77c0625b8cc4792ede04e2b652d028"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/726",
+        "sha256": "0dde6c45575f265ff0dd8894d3200e0facbf3ce975f33d6d599bebf3cad47948"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/python/726.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "92701d0b4c14d7cd6fea5482c56913f2e1c326abe291c107e1d93ae9ea26e575"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-a-20261028-v1/javascript/726.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0dbd05b28506d383195edca0750d036c048c24bbb0e7ba0ca4230af7cb2eb196"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "A forward recursive-descent parser is easier to relate to the grammar, but needs recursion or a stack of partial count maps that are merged on every ')'.",
+      "Backward scanning needs care when extracting multi-digit numbers and multi-letter names, because they are read from their last character.",
+      "Totals are accumulated once per atom occurrence, so merging work is avoided entirely."
+    ]
+  },
+  "version": 1
+}
