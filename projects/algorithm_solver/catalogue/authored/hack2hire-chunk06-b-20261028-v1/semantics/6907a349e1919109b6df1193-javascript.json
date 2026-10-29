@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6907a349e1919109b6df1193",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "start",
+  "end"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "knightPaths",
+  "params": [
+   {
+    "name": "start",
+    "type": "integer"
+   },
+   {
+    "name": "end",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every simple path by DFS and keep the shortest ones",
+  "candidate_design": "BFS distances from start, then DFS that only follows edges increasing the distance by one and ends at end",
+  "complexity_target": "O(number of shortest paths * path length)"
+ },
+ "source_sha256": "4a4e3c9cc8d5b2353bd9429cd955ad811d6b9554a630a4e1f191ba200d35523f",
+ "wrapper": "named export knightPaths"
+}

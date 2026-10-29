@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6ab470ffb8a9a175a39ba128",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "upperBound",
+  "delay",
+  "secret"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findSecretWithDelay",
+  "params": [
+   {
+    "name": "upperBound",
+    "type": "integer"
+   },
+   {
+    "name": "delay",
+    "type": "integer"
+   },
+   {
+    "name": "secret",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal server simulation with an explicit call log; feedback read back from the log",
+  "candidate_design": "interval arithmetic; delay + 1 calls per round",
+  "complexity_target": "O((delay + 1) log upperBound) calls"
+ },
+ "source_sha256": "ae80cacc2afeefeda3304def32eb915f153c2bc10f5dff62ccd5742c3a853e9e",
+ "wrapper": "Solution.findSecretWithDelay"
+}

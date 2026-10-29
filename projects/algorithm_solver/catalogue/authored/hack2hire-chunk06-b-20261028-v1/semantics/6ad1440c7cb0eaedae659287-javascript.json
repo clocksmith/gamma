@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6ad1440c7cb0eaedae659287",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "records"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "formatTasks",
+  "params": [
+   {
+    "name": "records",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive completion check per task (re-walks subtrees) plus recursive display with record rescans",
+  "candidate_design": "level 3 structure plus a post-order pass over the displayed forest that computes each task's shown completion from its children",
+  "complexity_target": "O(records + output characters)"
+ },
+ "source_sha256": "d36cf137d452c0ca765ef2c8250f123cfabacdd681edc2815dea0929eca68b8a",
+ "wrapper": "named export formatTasks"
+}

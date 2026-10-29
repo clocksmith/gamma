@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:679f09b9e818521cacd22471",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "jobs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "assignMachines",
+  "params": [
+   {
+    "name": "jobs",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan all machines in number order for each job",
+  "candidate_design": "min-heap of busy (end, machine) and min-heap of free machine numbers; release finished machines before each assignment",
+  "complexity_target": "O(n log n)"
+ },
+ "source_sha256": "05f6ed28ab7a9f595ecbb985557e702ca263b46f3758697e7a0962e1debe3beb",
+ "wrapper": "Solution.assignMachines"
+}

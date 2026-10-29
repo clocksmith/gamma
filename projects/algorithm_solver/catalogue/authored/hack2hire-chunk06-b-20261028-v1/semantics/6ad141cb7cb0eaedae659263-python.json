@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6ad141cb7cb0eaedae659263",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "records"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "formatTasks",
+  "params": [
+   {
+    "name": "records",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive display that rescans every record to find the children of each task",
+  "candidate_design": "hash map id -> ordered child list plus a root list; iterative DFS with an explicit stack",
+  "complexity_target": "O(records + output characters)"
+ },
+ "source_sha256": "fe1710b81449b36342616205a74feff8d7f871f0db9e376a7e83955c01aa34b6",
+ "wrapper": "Solution.formatTasks"
+}

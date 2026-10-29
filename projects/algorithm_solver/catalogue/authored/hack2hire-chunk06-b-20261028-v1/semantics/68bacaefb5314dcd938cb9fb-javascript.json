@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68bacaefb5314dcd938cb9fb",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "review",
+  "mapping"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "highlightReview",
+  "params": [
+   {
+    "name": "review",
+    "type": "string"
+   },
+   {
+    "name": "mapping",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "at each word start, compare every phrase directly (longest first)",
+  "candidate_design": "trie of lower-cased phrases holding the first category; walk the trie from each word start, remembering the last node that ends a phrase at a word boundary",
+  "complexity_target": "O(review length * longest phrase + total phrase length)"
+ },
+ "source_sha256": "863d6e21e1e112be2a1915841e54872a3f932ab01ec7d9645518e628f27f06aa",
+ "wrapper": "named export highlightReview"
+}

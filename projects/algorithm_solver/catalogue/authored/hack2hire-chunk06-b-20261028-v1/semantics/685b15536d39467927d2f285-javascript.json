@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:685b15536d39467927d2f285",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "root"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "flattenHtml",
+  "params": [
+   {
+    "name": "root",
+    "type": "HtmlNode"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive serialisation into one string, then split into tokens at each \"<\"",
+  "candidate_design": "explicit stack of (node, next child index); emit the open token on push and the close token on pop",
+  "complexity_target": "O(total nodes) time, O(depth) extra space"
+ },
+ "source_sha256": "2ee182827d3802ae1fed6058b0fce0826321f5c6bcd3a3bce869d32ada11c98d",
+ "wrapper": "named export flattenHtml"
+}

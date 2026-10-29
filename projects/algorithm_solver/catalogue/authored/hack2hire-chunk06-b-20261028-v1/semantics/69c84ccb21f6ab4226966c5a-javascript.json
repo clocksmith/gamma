@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69c84ccb21f6ab4226966c5a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "target"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "hotColdTranscript",
+  "params": [
+   {
+    "name": "target",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal game object and an explicit candidate set: every answer filters the remaining values one by one",
+  "candidate_design": "C is always an interval [lo, hi]; each answer cuts it at the midpoint of the last two queries and drops the queried end",
+  "complexity_target": "O(log 1000) queries per target, O(1) work per query"
+ },
+ "source_sha256": "e1743ddd2a4de51ee1fc81664b159327859ef43f8234593a499ed7277e1c4628",
+ "wrapper": "named export hotColdTranscript"
+}
