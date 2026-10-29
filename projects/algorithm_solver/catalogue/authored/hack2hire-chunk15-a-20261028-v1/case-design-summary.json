@@ -1,0 +1,41 @@
+{
+ "schema": "gamma.authored-case-design-summary.v1",
+ "domain_basis": "INFERRED bounds from the spec inference, not official constraints",
+ "include_maximum_counts": {
+  "hack2hire:67cf33498f73eb6319edd230": 262,
+  "hack2hire:685c61e88515b8a3b59d19f9": 259,
+  "hack2hire:68c86e64df5a6365aa774b11": 258,
+  "hack2hire:69b7856c8a0eeb9897a8d239": 258,
+  "hack2hire:69b785888a0eeb9897a8d23b": 262,
+  "hack2hire:69efd6f096981f58ae1f6dcf": 260,
+  "hack2hire:690425df4845d25b8e994896": 258,
+  "hack2hire:69c42c3e21f6ab4226965a1f": 259,
+  "hack2hire:6775b4fd0d31dc201f712039": 261,
+  "hack2hire:692fc0f4cd79766b0b3101a0": 256,
+  "hack2hire:67844afb0e1dbb6a0938577f": 265,
+  "hack2hire:678ec4943d1b82777aa24f9a": 258,
+  "hack2hire:696c54fe6b040fa4d120bca7": 259,
+  "hack2hire:696c5f906b040fa4d120bcbe": 259,
+  "hack2hire:68672293a2d59460201f2cae": 261,
+  "hack2hire:6913fb43fa8a311e42671e69": 260,
+  "hack2hire:69141530fa8a311e42671e8f": 262,
+  "hack2hire:69334452e8ebbb1c53caf2c4": 253,
+  "hack2hire:69bdbad91cbff60a929beb23": 254,
+  "hack2hire:69dd348b95e80ae213e5b702": 257
+ },
+ "total_rows_per_language": 5181,
+ "all_generated_arguments_domain_valid": true,
+ "unique_import_loader_collision_control": "file-local spec_from_file_location names prefixed gamma_h2h15a_",
+ "runtime_transport_assessment": "pending coordinator; unchanged resource limits; maximum JSON nesting of any argument is 5 (Count Intervals Covering Point traces), below the 200 cap",
+ "resource_note": "author-local peak RSS: 390 MB for the whole python3 test_oracles run including case generation; 540 MB for the whole python3 test_native_observer run; 146 MB for node --jitless on the heaviest single rows; largest argument JSON 6.3 MB",
+ "post_freeze_amendments": [
+  {
+   "file": "cases.py",
+   "from_sha256": "cb1fa284c5c69b6ef3ccbf91cd09f59dcc410e71a59fc212f6c14eb564e5f3ae",
+   "to_sha256": "d53eafea430a19ada8826c7a7436b66270ff4e836cfebbe7922bce18212937e0",
+   "after_candidate_runs": true,
+   "change": "Check Prefix Permutation analytic-maximum row (odd values ascending, then even values ascending, n = 200000) expected true only for k = 1 and k = n, but values 1..n - 1 occupy every position except the last, so k = n - 1 is also true; the row now expects true for k in {1, n - 1, n}",
+   "reason": "author arithmetic error in a hand-derived expectation; both candidates returned true for k = n - 1, and the independent reference gives the same pattern at n = 8 and n = 10; references, validators, contracts and the inferred spec are unchanged"
+  }
+ ]
+}

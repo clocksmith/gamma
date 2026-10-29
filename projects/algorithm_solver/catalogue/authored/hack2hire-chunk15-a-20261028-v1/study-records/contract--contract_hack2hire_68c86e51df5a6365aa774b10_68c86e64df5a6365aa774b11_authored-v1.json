@@ -1,0 +1,449 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68c86e51df5a6365aa774b10:68c86e64df5a6365aa774b11:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+   "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68c86e51df5a6365aa774b10.json",
+   "sha256": "eb44ec4aa34db4421a9fc00f11e81f07959f0ab21bd8ebcab368aa9c72f3b97b",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+   "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+   "selector": "/variants/hack2hire:68c86e64df5a6365aa774b11"
+  }
+ ],
+ "problemId": "hack2hire:68c86e51df5a6365aa774b10",
+ "variantId": "68c86e64df5a6365aa774b11",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: assign each friend to the first driver to pass their home",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:68c86e64df5a6365aa774b11/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "roads lists [from, to, duration] triples; every location has at most one outgoing road, \"Campground\" has none, and every route ends at \"Campground\". friends lists [name, home] pairs with distinct names. Driver 1 starts at start1 and driver 2 at start2 (different locations, neither the Campground) at time 0. A driver reaches a location after the sum of the durations along its route. Every friend's home lies on at least one route (never the Campground). A friend whose home is on one route rides with that driver; when the home is on both routes, the friend rides with the driver who reaches it first (driver 1 on a tie). Return [driver 1 passengers, driver 2 passengers], each in pickup order (friends at the same home in input order).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "roads lists [from, to, duration] triples; every location has at most one outgoing road, \"Campground\" has none, and every route ends at \"Campground\".",
+   "friends lists [name, home] pairs with distinct names.",
+   "Driver 1 starts at start1 and driver 2 at start2 (different locations, neither the Campground) at time 0.",
+   "A driver reaches a location after the sum of the durations along its route.",
+   "Every friend's home lies on at least one route (never the Campground).",
+   "A friend whose home is on one route rides with that driver; when the home is on both routes, the friend rides with the driver who reaches it first (driver 1 on a tie).",
+   "Return [driver 1 passengers, driver 2 passengers], each in pickup order (friends at the same home in input order)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= roads.length <= 1e5",
+   "1 <= duration <= 1e4",
+   "0 <= friends.length <= 1e5",
+   "location and friend names are 1 to 10 letters or digits"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:68c86e64df5a6365aa774b11/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: two drivers leave different locations at the same time; roads [from, to, duration] form non-branching directed paths that all reach the Campground; friends [name, home] wait somewhere along the routes (the question asked is cut off); algorithmTags: HASH_TABLE; preview response sha256 898970f6e0f3f824e9735c014065f67ba3f43e39e3a31c7c16438ba254553f85"
+   },
+   {
+    "statement": "Uncertainty: very high: the road and friend formats and the two simultaneous drivers are in the preview; the question itself is cut off, so the pickup assignment, the first-arrival rule, the tie rule and the output shape are inferred",
+    "basis": "the public group preview is partial (823 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is asked: who picks up whom, the arrival time, or the meeting point of the two routes?",
+   "If both drivers pass a home, who picks the friend up?",
+   "How are ties broken?",
+   "Can a friend live at a starting location?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:68c86e64df5a6365aa774b11/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       "P",
+       "Campground",
+       1
+      ],
+      [
+       "Q",
+       "P",
+       1
+      ]
+     ],
+     [
+      [
+       "f",
+       "P"
+      ]
+     ],
+     "P",
+     "Q"
+    ],
+    "output": [
+     [
+      "f"
+     ],
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "L5",
+       "Campground",
+       1
+      ],
+      [
+       "L0",
+       "L1",
+       3
+      ],
+      [
+       "L6",
+       "Campground",
+       1
+      ],
+      [
+       "L7",
+       "Campground",
+       2
+      ],
+      [
+       "L1",
+       "L7",
+       3
+      ],
+      [
+       "L3",
+       "Campground",
+       2
+      ],
+      [
+       "L4",
+       "Campground",
+       2
+      ],
+      [
+       "L2",
+       "Campground",
+       3
+      ]
+     ],
+     [
+      [
+       "F0",
+       "L7"
+      ],
+      [
+       "F1",
+       "L4"
+      ],
+      [
+       "F2",
+       "L4"
+      ],
+      [
+       "F3",
+       "L7"
+      ],
+      [
+       "F4",
+       "L4"
+      ],
+      [
+       "F5",
+       "L7"
+      ],
+      [
+       "F6",
+       "L4"
+      ]
+     ],
+     "L7",
+     "L4"
+    ],
+    "output": [
+     [
+      "F0",
+      "F3",
+      "F5"
+     ],
+     [
+      "F1",
+      "F2",
+      "F4",
+      "F6"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:68c86e64df5a6365aa774b11/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/oracles.py",
+    "sha256": "922bba2ff930131a3cb3a4b05eef99bb9ba04797f911b9637018c186d7a750ee",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def assignFriends(roads, friends, start1, start2) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/68c86e64df5a6365aa774b11-python.json",
+     "inferredInterface": {
+      "name": "assignFriends",
+      "params": [
+       {
+        "name": "roads",
+        "type": "(string|integer)[][]"
+       },
+       {
+        "name": "friends",
+        "type": "string[][]"
+       },
+       {
+        "name": "start1",
+        "type": "string"
+       },
+       {
+        "name": "start2",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/68c86e64df5a6365aa774b11-python.json",
+      "sha256": "1c07b129862cf798ddf4cde28bbcfdc085a7bb77e4429874bc56c173baa9eeae",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function assignFriends(roads, friends, start1, start2) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/68c86e64df5a6365aa774b11-javascript.json",
+     "inferredInterface": {
+      "name": "assignFriends",
+      "params": [
+       {
+        "name": "roads",
+        "type": "(string|integer)[][]"
+       },
+       {
+        "name": "friends",
+        "type": "string[][]"
+       },
+       {
+        "name": "start1",
+        "type": "string"
+       },
+       {
+        "name": "start2",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/68c86e64df5a6365aa774b11-javascript.json",
+      "sha256": "0eefeffd17d3efa46aa118c9ec66414ff5e65abb3085b2253798c08b0aca80c9",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

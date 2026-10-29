@@ -1,0 +1,566 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69bdbad51cbff60a929beb22:69dd348b95e80ae213e5b702:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+   "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+   "selector": "/problems/19"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69bdbad51cbff60a929beb22.json",
+   "sha256": "efe9b49e779fcf60cb5d5c774dc34ed64ce7cab1af18b60a038e5097323e24ca",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+   "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+   "selector": "/variants/hack2hire:69dd348b95e80ae213e5b702"
+  }
+ ],
+ "problemId": "hack2hire:69bdbad51cbff60a929beb22",
+ "variantId": "69dd348b95e80ae213e5b702",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: drops plus first-winner detection",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69dd348b95e80ae213e5b702/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "ConnectFourBoard(rows, cols) creates a rows x cols board of \"0\" cells; row 0 is the top row. drop(color, col) places a one-letter color in the lowest empty cell of column col (unchanged when the column is full) and returns a fresh copy of the whole board as rows of one-character strings. getWinner() returns the color of the first piece that completed four or more equal colors in a row horizontally, vertically or diagonally, or \"0\" when no line exists yet; the winner never changes afterwards and drops continue to work. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "ConnectFourBoard(rows, cols) creates a rows x cols board of \"0\" cells; row 0 is the top row.",
+   "drop(color, col) places a one-letter color in the lowest empty cell of column col (unchanged when the column is full) and returns a fresh copy of the whole board as rows of one-character strings.",
+   "getWinner() returns the color of the first piece that completed four or more equal colors in a row horizontally, vertically or diagonally, or \"0\" when no line exists yet; the winner never changes afterwards and drops continue to work.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= rows, cols <= 50",
+   "0 <= col < cols",
+   "color is one uppercase letter",
+   "total returned cells over a trace <= 1e6"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69dd348b95e80ae213e5b702/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: class ConnectFourBoard(rows, cols), cells start as \"0\"; drop(color, col) lets a piece fall to the lowest empty cell of the column and returns an independent copy of the board; a full column leaves the board unchanged (further methods are cut off); algorithmTags: MATRIX; preview response sha256 6777d6a19106b29ce0e1b7e5666162c5b82a083b58ca2babd7ea9792d51881ca"
+   },
+   {
+    "statement": "Uncertainty: very high: no text describes a second variant; winner detection is the natural Connect Four extension, but getWinner, its \"0\" result and the sticky first winner are inferred",
+    "basis": "the public group preview is partial (945 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 2 of 2 adds winner detection",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/19/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/19/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/19/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is row 0 the top or the bottom of the board?",
+   "Is the board returned as characters or strings?",
+   "What happens after a player has already won?",
+   "How is a winner reported when nobody has won?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69dd348b95e80ae213e5b702/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ConnectFourBoard",
+      "drop"
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      [
+       "Y",
+       0
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [
+      [
+       "0"
+      ],
+      [
+       "0"
+      ],
+      [
+       "Y"
+      ]
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ConnectFourBoard",
+      "drop",
+      "drop",
+      "drop",
+      "drop",
+      "drop",
+      "drop",
+      "drop",
+      "drop",
+      "getWinner",
+      "drop",
+      "getWinner",
+      "drop",
+      "drop",
+      "getWinner",
+      "drop"
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      [
+       "Y",
+       1
+      ],
+      [
+       "Y",
+       0
+      ],
+      [
+       "B",
+       0
+      ],
+      [
+       "R",
+       0
+      ],
+      [
+       "Y",
+       0
+      ],
+      [
+       "Y",
+       1
+      ],
+      [
+       "Y",
+       0
+      ],
+      [
+       "Y",
+       0
+      ],
+      [],
+      [
+       "Y",
+       1
+      ],
+      [],
+      [
+       "R",
+       0
+      ],
+      [
+       "R",
+       1
+      ],
+      [],
+      [
+       "B",
+       1
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [
+      [
+       "0",
+       "Y"
+      ]
+     ],
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ],
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ],
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ],
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ],
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ],
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ],
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ],
+     "0",
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ],
+     "0",
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ],
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ],
+     "0",
+     [
+      [
+       "Y",
+       "Y"
+      ]
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69dd348b95e80ae213e5b702/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/oracles.py",
+    "sha256": "922bba2ff930131a3cb3a4b05eef99bb9ba04797f911b9637018c186d7a750ee",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ConnectFourBoard:\n    def __init__(self, rows, cols)\n    def drop(self, color, col) -> string[][]\n    def getWinner(self) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69dd348b95e80ae213e5b702-python.json",
+     "inferredInterface": {
+      "classname": "ConnectFourBoard",
+      "constructor": {
+       "params": [
+        {
+         "name": "rows",
+         "type": "integer"
+        },
+        {
+         "name": "cols",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "drop",
+        "params": [
+         {
+          "name": "color",
+          "type": "string"
+         },
+         {
+          "name": "col",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[][]"
+        }
+       },
+       {
+        "name": "getWinner",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69dd348b95e80ae213e5b702-python.json",
+      "sha256": "5ce9968e21601141194b0d077392ad25a10f188c2ebf96abdf9c843ff8068423",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ConnectFourBoard {\n  constructor(rows, cols)\n  drop(color, col) /* -> string[][] */\n  getWinner() /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69dd348b95e80ae213e5b702-javascript.json",
+     "inferredInterface": {
+      "classname": "ConnectFourBoard",
+      "constructor": {
+       "params": [
+        {
+         "name": "rows",
+         "type": "integer"
+        },
+        {
+         "name": "cols",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "drop",
+        "params": [
+         {
+          "name": "color",
+          "type": "string"
+         },
+         {
+          "name": "col",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[][]"
+        }
+       },
+       {
+        "name": "getWinner",
+        "params": [],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69dd348b95e80ae213e5b702-javascript.json",
+      "sha256": "00fe2d98dcf03ac8f47bd3ba63d946e68949acb2a608be758ee9456f4277bf8e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/19/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/19/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

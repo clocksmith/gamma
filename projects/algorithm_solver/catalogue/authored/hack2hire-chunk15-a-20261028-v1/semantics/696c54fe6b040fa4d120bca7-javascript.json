@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:696c54fe6b040fa4d120bca7",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "datapoints",
+  "tag",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "windowSums",
+  "params": [
+   {
+    "name": "datapoints",
+    "type": "object[]"
+   },
+   {
+    "name": "tag",
+    "type": "string"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each tagged datapoint rescan all tagged datapoints in its window",
+  "candidate_design": "two-pointer sliding window over the tagged datapoints with a running sum",
+  "complexity_target": "O(total tags) time/O(n) space"
+ },
+ "source_sha256": "29480f4dfa14722763aef55e9bb78ad4957f045cef44c47d419e38c455d476e5",
+ "wrapper": "named export windowSums"
+}

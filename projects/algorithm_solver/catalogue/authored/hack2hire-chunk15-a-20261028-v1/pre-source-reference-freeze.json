@@ -1,0 +1,33 @@
+{
+ "schema": "gamma.hack2hire-chunk15-a-pre-source-freeze.v1",
+ "at": "2026-10-29T11:47:33.141677+00:00",
+ "files": {
+  "oracles.py": "922bba2ff930131a3cb3a4b05eef99bb9ba04797f911b9637018c186d7a750ee",
+  "test_oracles.py": "00225f180360216a57097aef5c109f03eea1507872846602fd74863f651b251e",
+  "cases.py": "cb1fa284c5c69b6ef3ccbf91cd09f59dcc410e71a59fc212f6c14eb564e5f3ae",
+  "contracts.json": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+  "design.json": "e18f8962f60a6de344879899b048182f27b3dda4ea6330b99b9933a6792adf81"
+ },
+ "candidate_sources_exist": false,
+ "candidate_executions": 0,
+ "source_free_tests_passed": 19,
+ "note": "References, inferred contracts, case generator and designs frozen before any candidate source was written.",
+ "spec_basis": "inferred (claude-opus-5-5 subagent, 2026-10-29)",
+ "amendments": [
+  {
+   "file": "cases.py",
+   "from_sha256": "cb1fa284c5c69b6ef3ccbf91cd09f59dcc410e71a59fc212f6c14eb564e5f3ae",
+   "to_sha256": "d53eafea430a19ada8826c7a7436b66270ff4e836cfebbe7922bce18212937e0",
+   "after_candidate_runs": true,
+   "change": "Check Prefix Permutation analytic-maximum row (odd values ascending, then even values ascending, n = 200000) expected true only for k = 1 and k = n, but values 1..n - 1 occupy every position except the last, so k = n - 1 is also true; the row now expects true for k in {1, n - 1, n}",
+   "reason": "author arithmetic error in a hand-derived expectation; both candidates returned true for k = n - 1, and the independent reference gives the same pattern at n = 8 and n = 10; references, validators, contracts and the inferred spec are unchanged"
+  }
+ ],
+ "current_sha256": {
+  "oracles.py": "922bba2ff930131a3cb3a4b05eef99bb9ba04797f911b9637018c186d7a750ee",
+  "test_oracles.py": "00225f180360216a57097aef5c109f03eea1507872846602fd74863f651b251e",
+  "cases.py": "d53eafea430a19ada8826c7a7436b66270ff4e836cfebbe7922bce18212937e0",
+  "contracts.json": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+  "design.json": "e18f8962f60a6de344879899b048182f27b3dda4ea6330b99b9933a6792adf81"
+ }
+}

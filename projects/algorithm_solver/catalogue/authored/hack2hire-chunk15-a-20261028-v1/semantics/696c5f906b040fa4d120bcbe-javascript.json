@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:696c5f906b040fa4d120bcbe",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "datapoints",
+  "tag",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "lastKSums",
+  "params": [
+   {
+    "name": "datapoints",
+    "type": "object[]"
+   },
+   {
+    "name": "tag",
+    "type": "string"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each tagged datapoint re-add its last k tagged values",
+  "candidate_design": "running sum over the filtered values, subtracting the value k positions back",
+  "complexity_target": "O(total tags) time/O(n) space"
+ },
+ "source_sha256": "44b8f6c30645b4c53d2ff85a44bb9e8f820065d8a8587456ff0ac0fbf35b6c27",
+ "wrapper": "named export lastKSums"
+}

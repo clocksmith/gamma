@@ -1,0 +1,337 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6913fa95fa8a311e42671e68:69141530fa8a311e42671e8f:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+   "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+   "selector": "/problems/16"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6913fa95fa8a311e42671e68.json",
+   "sha256": "09c2b109d21844ec8070dbdc3a86fd5fb2204447a32ca5c6c1519a11741b40be",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+   "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+   "selector": "/variants/hack2hire:69141530fa8a311e42671e8f"
+  }
+ ],
+ "problemId": "hack2hire:6913fa95fa8a311e42671e68",
+ "variantId": "69141530fa8a311e42671e8f",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: numeric version sort, then binary search",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69141530fa8a311e42671e8f/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Offline adaptation of the API task: versions lists distinct \"MAJOR.MINOR.PATCH\" strings in any order, and supported[i] is the VersionChecker answer for versions[i]; in numeric version order (compare MAJOR, then MINOR, then PATCH as integers) the answers are all false, then all true. Return the smallest version whose answer is true, or null when none is.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Offline adaptation of the API task: versions lists distinct \"MAJOR.MINOR.PATCH\" strings in any order, and supported[i] is the VersionChecker answer for versions[i]; in numeric version order (compare MAJOR, then MINOR, then PATCH as integers) the answers are all false, then all true.",
+   "Return the smallest version whose answer is true, or null when none is."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= versions.length <= 1e5",
+   "each component 0 to 1e6 without leading zeros",
+   "versions are distinct",
+   "supported is monotone in numeric version order"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69141530fa8a311e42671e8f/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: versions \"MAJOR.MINOR.PATCH\" sorted ascending; once a version supports a feature all later ones do; a VersionChecker API (its method is cut off) is used to find the first version with the feature; algorithmTags: BINARY_SEARCH; preview response sha256 05c998913fdec51355306405022d92eb1161735974786afd54ac4e3917e214ea"
+   },
+   {
+    "statement": "Uncertainty: very high: no text describes a second variant; unsorted input that must be ordered numerically first is an inferred extension, as is the boolean-list adaptation shared with variant 1",
+    "basis": "the public group preview is partial (576 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 2 of 2 receives unsorted versions that must be compared numerically",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/16/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/16/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/16/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does the VersionChecker method look like and is the number of calls limited?",
+   "What is returned when no version has the feature?",
+   "Are versions compared numerically per component?",
+   "Are the versions always given sorted?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69141530fa8a311e42671e8f/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": null,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "6.2.0",
+      "1.0.2",
+      "7.2.2",
+      "7.0.0",
+      "9.1.0",
+      "6.2.1",
+      "9.2.1"
+     ],
+     [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true
+     ]
+    ],
+    "output": "9.1.0",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69141530fa8a311e42671e8f/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/oracles.py",
+    "sha256": "922bba2ff930131a3cb3a4b05eef99bb9ba04797f911b9637018c186d7a750ee",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def firstSupportedUnsorted(versions, supported) -> string|null",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69141530fa8a311e42671e8f-python.json",
+     "inferredInterface": {
+      "name": "firstSupportedUnsorted",
+      "params": [
+       {
+        "name": "versions",
+        "type": "string[]"
+       },
+       {
+        "name": "supported",
+        "type": "boolean[]"
+       }
+      ],
+      "return": {
+       "type": "string|null"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69141530fa8a311e42671e8f-python.json",
+      "sha256": "f7e7e1832076ec766dab7b9ad837a6f380dd0a147477b11d6b5106e985624ed0",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function firstSupportedUnsorted(versions, supported) /* -> string|null */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69141530fa8a311e42671e8f-javascript.json",
+     "inferredInterface": {
+      "name": "firstSupportedUnsorted",
+      "params": [
+       {
+        "name": "versions",
+        "type": "string[]"
+       },
+       {
+        "name": "supported",
+        "type": "boolean[]"
+       }
+      ],
+      "return": {
+       "type": "string|null"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69141530fa8a311e42671e8f-javascript.json",
+      "sha256": "099b67dbab3c636bc9338cb7d2c31b9a6ff249656b600597f2cd8df9085e1b08",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/16/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/16/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

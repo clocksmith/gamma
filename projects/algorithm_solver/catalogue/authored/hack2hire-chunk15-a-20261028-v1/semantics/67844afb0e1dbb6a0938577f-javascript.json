@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67844afb0e1dbb6a0938577f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr",
+  "pattern"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countCombinations",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   },
+   {
+    "name": "pattern",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate all 2**q replacements of the question marks",
+  "candidate_design": "dynamic programming over (position, segments placed): place the next run at the current position when it fits and is followed by a non-\"1\", or skip a non-\"1\" character",
+  "complexity_target": "O(L * m) time with run checks by prefix counts/O(L * m) space"
+ },
+ "source_sha256": "18d51f87f38dea9973d302fdc63895ffc64bb40b4cf02caceb7ea2e64d10779c",
+ "wrapper": "named export countCombinations"
+}

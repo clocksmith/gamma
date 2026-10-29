@@ -1,0 +1,408 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:685c5fa78515b8a3b59d19f8:685c61e88515b8a3b59d19f9:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+   "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/685c5fa78515b8a3b59d19f8.json",
+   "sha256": "739ae2688fea317b1f4997ad68fe6c32cda347162683b727b6ca07190c2945cb",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+   "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+   "selector": "/variants/hack2hire:685c61e88515b8a3b59d19f9"
+  }
+ ],
+ "problemId": "hack2hire:685c5fa78515b8a3b59d19f8",
+ "variantId": "685c61e88515b8a3b59d19f9",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: chained 10-minute purchase groups with tiered discounts",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:685c61e88515b8a3b59d19f9/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "orders lists [fruit, quantity, timestamp] string triples (quantity and timestamp are decimal integer strings). prices lists [fruit, unitPrice] pairs (unitPrice an integer, one pair per fruit). tiers lists [minQuantity, discountPercent] pairs with strictly increasing minQuantity. For each fruit, sort its orders by timestamp; consecutive orders whose timestamps differ by at most 600000 belong to the same purchase group (chaining). A group with Q total units costs Q * unitPrice, reduced by the discount of the tier with the largest minQuantity <= Q when the group has at least two orders (no discount for single orders or when no tier applies): cost = floor(Q * unitPrice * (100 - discountPercent) / 100). Return the total cost of all groups.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "orders lists [fruit, quantity, timestamp] string triples (quantity and timestamp are decimal integer strings).",
+   "prices lists [fruit, unitPrice] pairs (unitPrice an integer, one pair per fruit).",
+   "tiers lists [minQuantity, discountPercent] pairs with strictly increasing minQuantity.",
+   "For each fruit, sort its orders by timestamp; consecutive orders whose timestamps differ by at most 600000 belong to the same purchase group (chaining).",
+   "A group with Q total units costs Q * unitPrice, reduced by the discount of the tier with the largest minQuantity <= Q when the group has at least two orders (no discount for single orders or when no tier applies): cost = floor(Q * unitPrice * (100 - discountPercent) / 100).",
+   "Return the total cost of all groups."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= orders.length <= 1e5",
+   "1 <= quantity <= 1000",
+   "0 <= timestamp <= 1e13",
+   "1 <= unitPrice <= 1e4",
+   "0 <= tiers.length <= 20",
+   "2 <= minQuantity <= 1e8",
+   "0 <= discountPercent <= 100"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:685c61e88515b8a3b59d19f9/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: each order is a string triple [fruit name, quantity, timestamp in milliseconds]; two or more orders of the same fruit within 10 minutes (600000 ms) of each other form one purchase group eligible for tiered pricing (the prices, the tier rule and the output are cut off); algorithmTags: HASH_TABLE, DYNAMIC_PROGRAMMING; preview response sha256 76f7504edba5f46a1ee44914c57a50e365e749d2239138a13015605b1dfd4fed"
+   },
+   {
+    "statement": "Uncertainty: very high: the order format and the 10-minute grouping are in the preview; chaining (each gap at most 600000, inclusive), the price and tier inputs, the per-group floor rounding and the total-cost output are all inferred",
+    "basis": "the public group preview is partial (643 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is \"within 10 minutes\" measured between consecutive orders (chaining) or from the first order of a group?",
+   "Where do unit prices and tier thresholds come from?",
+   "How is a fractional discounted price rounded?",
+   "Is the answer a total, a per-group list or a per-fruit breakdown?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:685c61e88515b8a3b59d19f9/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [
+      [
+       "apple",
+       23
+      ]
+     ],
+     []
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "apple",
+       "15",
+       "1800005"
+      ],
+      [
+       "apple",
+       "26",
+       "1200002"
+      ],
+      [
+       "apple",
+       "19",
+       "600001"
+      ],
+      [
+       "apple",
+       "9",
+       "1800002"
+      ],
+      [
+       "apple",
+       "25",
+       "900001"
+      ],
+      [
+       "apple",
+       "15",
+       "2"
+      ],
+      [
+       "apple",
+       "28",
+       "2"
+      ],
+      [
+       "apple",
+       "19",
+       "900002"
+      ],
+      [
+       "apple",
+       "1",
+       "600000"
+      ],
+      [
+       "apple",
+       "21",
+       "1"
+      ]
+     ],
+     [
+      [
+       "apple",
+       5
+      ]
+     ],
+     [
+      [
+       3,
+       46
+      ],
+      [
+       15,
+       10
+      ]
+     ]
+    ],
+    "output": 801,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:685c61e88515b8a3b59d19f9/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/oracles.py",
+    "sha256": "922bba2ff930131a3cb3a4b05eef99bb9ba04797f911b9637018c186d7a750ee",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def totalCost(orders, prices, tiers) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/685c61e88515b8a3b59d19f9-python.json",
+     "inferredInterface": {
+      "name": "totalCost",
+      "params": [
+       {
+        "name": "orders",
+        "type": "string[][]"
+       },
+       {
+        "name": "prices",
+        "type": "(string|integer)[][]"
+       },
+       {
+        "name": "tiers",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/685c61e88515b8a3b59d19f9-python.json",
+      "sha256": "15f5f42bf4f47b9782340d65e418e71c0a5b814b04d68a250b7101259b937966",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function totalCost(orders, prices, tiers) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/685c61e88515b8a3b59d19f9-javascript.json",
+     "inferredInterface": {
+      "name": "totalCost",
+      "params": [
+       {
+        "name": "orders",
+        "type": "string[][]"
+       },
+       {
+        "name": "prices",
+        "type": "(string|integer)[][]"
+       },
+       {
+        "name": "tiers",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/685c61e88515b8a3b59d19f9-javascript.json",
+      "sha256": "29d0098e48a3a9215ae626d9ad1206d121ddc58c2e60fcd4eab4f11883e6600a",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

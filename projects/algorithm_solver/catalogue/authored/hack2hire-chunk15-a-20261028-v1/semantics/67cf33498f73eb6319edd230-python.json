@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67cf33498f73eb6319edd230",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "words"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "longestPalindrome",
+  "params": [
+   {
+    "name": "words",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exhaustive search over every ordered selection of the words, checking each concatenation",
+  "candidate_design": "count words in a hash map, pair each word with its reverse, pair palindromic words with themselves and keep one leftover palindromic word for the middle",
+  "complexity_target": "O(n L) time/O(n L) space"
+ },
+ "source_sha256": "a1bb3fed2d8c60fb8c7f5fc6cc66fdd10c24b7fc5d3210cc4076ef3b6bf688de",
+ "wrapper": "Solution.longestPalindrome"
+}

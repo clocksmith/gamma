@@ -1,0 +1,397 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69c42bb321f6ab4226965a1b:69c42c3e21f6ab4226965a1f:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+   "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69c42bb321f6ab4226965a1b.json",
+   "sha256": "58031b0f20abc7f92fc0f7b15eaaa123a7e874fc92a482c602e863a34e30e187",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+   "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+   "selector": "/variants/hack2hire:69c42c3e21f6ab4226965a1f"
+  }
+ ],
+ "problemId": "hack2hire:69c42bb321f6ab4226965a1b",
+ "variantId": "69c42c3e21f6ab4226965a1f",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: positional merge of neighbor sums into the last tree",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69c42c3e21f6ab4226965a1f/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "trees lists binary trees, each in LeetCode level-order form (values and null placeholders, trailing nulls removed, [] for an empty tree). For each tree except the last, from left to right, and for every node position in it (the path from the root), compute the node's neighbor sum (its value plus the values of its existing children) and add it to the node at the same position in the last tree, creating that node with value 0 first when it is absent. Source trees are never changed. Return the resulting last tree in the same level-order form.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "trees lists binary trees, each in LeetCode level-order form (values and null placeholders, trailing nulls removed, [] for an empty tree).",
+   "For each tree except the last, from left to right, and for every node position in it (the path from the root), compute the node's neighbor sum (its value plus the values of its existing children) and add it to the node at the same position in the last tree, creating that node with value 0 first when it is absent.",
+   "Source trees are never changed.",
+   "Return the resulting last tree in the same level-order form."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= trees.length <= 10",
+   "each tree has at most 1e4 nodes",
+   "-1e4 <= node value <= 1e4",
+   "level-order lists use null for absent children and have no trailing null"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69c42c3e21f6ab4226965a1f/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a variation of LeetCode 617; trees is a list of binary trees; a node's neighbor sum is its value plus its children's values (absent = 0); every tree except the last adds, at each of its positions, the neighbor sum to the node at the same position of the last tree, creating the node when absent, from left to right (the encoding and output are cut off); algorithmTags: BINARY_TREE; preview response sha256 9e110a69fb7d2dbabb14a4c49485dd6283e365b704300d67bf906aee3d4937af"
+   },
+   {
+    "statement": "Uncertainty: medium: the merge rule is in the preview; the level-order input and output encoding and the trimming of trailing nulls are inferred from the LeetCode 617 reference",
+    "basis": "the public group preview is partial (828 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How are trees encoded?",
+   "Do later source trees see sums already added from earlier ones?",
+   "Is the result returned in level order with trailing nulls removed?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69c42c3e21f6ab4226965a1f/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      []
+     ]
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       -18,
+       12,
+       null,
+       null,
+       -3,
+       -3,
+       3,
+       -7,
+       null,
+       -20,
+       null,
+       null,
+       null,
+       -13
+      ],
+      [
+       2,
+       7,
+       4,
+       -8,
+       null,
+       null,
+       null,
+       -16,
+       null,
+       null,
+       -10,
+       null,
+       -16
+      ],
+      [
+       6,
+       -5,
+       -9,
+       16
+      ],
+      [
+       17,
+       -1,
+       -12,
+       -20,
+       null,
+       -4,
+       -14,
+       9,
+       null,
+       null,
+       null,
+       null,
+       null,
+       -14
+      ]
+     ]
+    ],
+    "output": [
+     16,
+     18,
+     -17,
+     -28,
+     -3,
+     -4,
+     -14,
+     -17,
+     null,
+     -10,
+     -17,
+     null,
+     null,
+     null,
+     null,
+     -14,
+     -26,
+     -7,
+     null,
+     -33,
+     null,
+     null,
+     null,
+     null,
+     -16,
+     null,
+     null,
+     -13
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:69c42c3e21f6ab4226965a1f/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/oracles.py",
+    "sha256": "922bba2ff930131a3cb3a4b05eef99bb9ba04797f911b9637018c186d7a750ee",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def copyNeighborSums(trees) -> (integer|null)[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69c42c3e21f6ab4226965a1f-python.json",
+     "inferredInterface": {
+      "name": "copyNeighborSums",
+      "params": [
+       {
+        "name": "trees",
+        "type": "(integer|null)[][]"
+       }
+      ],
+      "return": {
+       "type": "(integer|null)[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69c42c3e21f6ab4226965a1f-python.json",
+      "sha256": "bf542689850c5bfe8d5cb9828bfcbc6db7a08bb06b177f991161214ecb6721b0",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function copyNeighborSums(trees) /* -> (integer|null)[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69c42c3e21f6ab4226965a1f-javascript.json",
+     "inferredInterface": {
+      "name": "copyNeighborSums",
+      "params": [
+       {
+        "name": "trees",
+        "type": "(integer|null)[][]"
+       }
+      ],
+      "return": {
+       "type": "(integer|null)[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/69c42c3e21f6ab4226965a1f-javascript.json",
+      "sha256": "38481b03478d98ff46bd260f072dc3b351679540bb8602e1bc25f159814270f6",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

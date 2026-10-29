@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6913fb43fa8a311e42671e69",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "versions",
+  "supported"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "firstSupported",
+  "params": [
+   {
+    "name": "versions",
+    "type": "string[]"
+   },
+   {
+    "name": "supported",
+    "type": "boolean[]"
+   }
+  ],
+  "return": {
+   "type": "string|null"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "linear scan for the first true",
+  "candidate_design": "binary search for the first index whose checker answer is true",
+  "complexity_target": "O(log n) checker calls/O(1) extra space"
+ },
+ "source_sha256": "3d0efa3a00bad13e4bac4f5db108e064324d3f59f396c60ad3b05be894eb1eab",
+ "wrapper": "Solution.firstSupported"
+}

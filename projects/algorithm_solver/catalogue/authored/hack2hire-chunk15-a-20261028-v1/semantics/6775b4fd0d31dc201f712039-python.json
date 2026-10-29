@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6775b4fd0d31dc201f712039",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "intervals",
+  "goal"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "daysToGoal",
+  "params": [
+   {
+    "name": "intervals",
+    "type": "integer[]"
+   },
+   {
+    "name": "goal",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "day-by-day simulation adding the tasks due each day",
+  "candidate_design": "binary search on d over the monotone count sum(floor((d - 1) / interval) + 1), grouping equal intervals and stopping a sum early once it reaches goal",
+  "complexity_target": "O(u log(goal * max interval)) time for u distinct intervals/O(u) space"
+ },
+ "source_sha256": "f3a0f2f3920d624d2d947f03dd51cec580e4760dddd60ce534898c5ec3d2a02d",
+ "wrapper": "Solution.daysToGoal"
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69b785888a0eeb9897a8d23b",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "leases",
+  "cars"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "assignCarsLimited",
+  "params": [
+   {
+    "name": "leases",
+    "type": "integer[][]"
+   },
+   {
+    "name": "cars",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sort, then for each reservation scan the cars array for the first whose end <= start",
+  "candidate_design": "sort reservation indices by (start, index); min-heap of busy (end, id) and a min-heap of free ids seeded with 1..cars",
+  "complexity_target": "O((n + cars) log(n + cars)) time/O(n + cars) space"
+ },
+ "source_sha256": "6d7da11606511ba1eae133a465275f78f9b35d6bbee58d29913fe58af8ae06e6",
+ "wrapper": "Solution.assignCarsLimited"
+}

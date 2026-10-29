@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69efd6f096981f58ae1f6dcf",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "p"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "prefixPermutations",
+  "params": [
+   {
+    "name": "p",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "boolean[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each k, check every window of length k by sorting it",
+  "candidate_design": "record the position of every value; sweep k upward keeping the minimum and maximum position of 1..k; k holds when max - min + 1 == k",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "94519084c5b14b229196793eb31b3e2a228143fe76c22c2957465e7056d1e98e",
+ "wrapper": "named export prefixPermutations"
+}

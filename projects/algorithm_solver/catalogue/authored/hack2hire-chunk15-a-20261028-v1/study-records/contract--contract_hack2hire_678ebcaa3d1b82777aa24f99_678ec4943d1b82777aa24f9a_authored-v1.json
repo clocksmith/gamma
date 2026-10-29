@@ -1,0 +1,416 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:678ebcaa3d1b82777aa24f99:678ec4943d1b82777aa24f9a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+   "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+   "selector": "/problems/11"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/678ebcaa3d1b82777aa24f99.json",
+   "sha256": "df50c974fd4d14d3d70bd0400acc22fc29d54f37285edde1bc9878b5140fa22f",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+   "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+   "selector": "/variants/hack2hire:678ec4943d1b82777aa24f9a"
+  }
+ ],
+ "problemId": "hack2hire:678ebcaa3d1b82777aa24f99",
+ "variantId": "678ec4943d1b82777aa24f9a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: incoming orders against a resting book",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:678ec4943d1b82777aa24f9a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "buyPrices and sellPrices are the initial resting orders. orders lists incoming orders [side, price] with side \"buy\" or \"sell\", processed in order. An incoming buy matches the lowest resting sell with price <= its price; an incoming sell matches the highest resting buy with price >= its price. A matched resting order is removed; an unmatched incoming order rests on its side. Return, per incoming order, the price of the resting order it matched, or -1 when it rested.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "buyPrices and sellPrices are the initial resting orders.",
+   "orders lists incoming orders [side, price] with side \"buy\" or \"sell\", processed in order.",
+   "An incoming buy matches the lowest resting sell with price <= its price; an incoming sell matches the highest resting buy with price >= its price.",
+   "A matched resting order is removed; an unmatched incoming order rests on its side.",
+   "Return, per incoming order, the price of the resting order it matched, or -1 when it rested."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/11/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= buyPrices.length, sellPrices.length, orders.length <= 1e5",
+   "1 <= price <= 1e9",
+   "side is \"buy\" or \"sell\""
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:678ec4943d1b82777aa24f9a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a BTC trading platform starts with lists of buy and sell order prices; a buy order is the most a buyer pays and is matched with the lowest sell order below its price (the sell-side rule, the processing and the output are cut off); algorithmTags: HEAP, GREEDY; preview response sha256 acda565f5b00b0f85d02f39a7d3f950fcc517f51925c11cb06ce09204564ffef"
+   },
+   {
+    "statement": "Uncertainty: very high: only the buy-side rule (lowest qualifying sell) is in the preview; at-or-below matching, the symmetric sell rule, the stream of incoming orders, resting unmatched orders and the per-order output are inferred",
+    "basis": "the public group preview is partial (355 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/11/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/11/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/11/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does \"below\" include an equal price?",
+   "How is a sell order matched?",
+   "Are new orders streamed in or are only the initial lists matched?",
+   "What is returned: matches, totals or the final book?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:678ec4943d1b82777aa24f9a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      10,
+      11,
+      3,
+      11
+     ],
+     [
+      6,
+      4,
+      2,
+      6,
+      7
+     ],
+     [
+      [
+       "sell",
+       11
+      ],
+      [
+       "buy",
+       4
+      ],
+      [
+       "buy",
+       7
+      ],
+      [
+       "sell",
+       11
+      ],
+      [
+       "sell",
+       1
+      ],
+      [
+       "sell",
+       5
+      ],
+      [
+       "sell",
+       10
+      ],
+      [
+       "buy",
+       5
+      ],
+      [
+       "buy",
+       4
+      ],
+      [
+       "buy",
+       8
+      ],
+      [
+       "sell",
+       4
+      ],
+      [
+       "buy",
+       8
+      ],
+      [
+       "buy",
+       10
+      ],
+      [
+       "buy",
+       8
+      ]
+     ]
+    ],
+    "output": [
+     11,
+     2,
+     4,
+     11,
+     10,
+     -1,
+     -1,
+     5,
+     -1,
+     6,
+     4,
+     6,
+     7,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/study-content.json",
+    "sha256": "1ab20e99fd6662eab06c758d28feb35a2d8b232b0aaac1f3a20fa44ce40cc062",
+    "selector": "/variants/hack2hire:678ec4943d1b82777aa24f9a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/oracles.py",
+    "sha256": "922bba2ff930131a3cb3a4b05eef99bb9ba04797f911b9637018c186d7a750ee",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def matchOrders(buyPrices, sellPrices, orders) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/678ec4943d1b82777aa24f9a-python.json",
+     "inferredInterface": {
+      "name": "matchOrders",
+      "params": [
+       {
+        "name": "buyPrices",
+        "type": "integer[]"
+       },
+       {
+        "name": "sellPrices",
+        "type": "integer[]"
+       },
+       {
+        "name": "orders",
+        "type": "(string|integer)[][]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/678ec4943d1b82777aa24f9a-python.json",
+      "sha256": "acec429e39aa5b6a961f882463d136b2bf3a6958d8926e3d986a165f012bbac0",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function matchOrders(buyPrices, sellPrices, orders) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+      "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+      "selector": "/problems/11/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/678ec4943d1b82777aa24f9a-javascript.json",
+     "inferredInterface": {
+      "name": "matchOrders",
+      "params": [
+       {
+        "name": "buyPrices",
+        "type": "integer[]"
+       },
+       {
+        "name": "sellPrices",
+        "type": "integer[]"
+       },
+       {
+        "name": "orders",
+        "type": "(string|integer)[][]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/semantics/678ec4943d1b82777aa24f9a-javascript.json",
+      "sha256": "28e64ff37db4f7a056d2cd0443311c7f5817ccae3a702192b000f3ffa582adc5",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/11/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk15-a-20261028-v1/contracts.json",
+    "sha256": "a12f40f3018629eae286f8e7b5e5f591ebec92f0092c6126f007c1488aadd553",
+    "selector": "/problems/11/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

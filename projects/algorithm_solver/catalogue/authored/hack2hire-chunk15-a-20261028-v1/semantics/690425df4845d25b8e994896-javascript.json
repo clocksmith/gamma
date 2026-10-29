@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:690425df4845d25b8e994896",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "points"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "closestPair",
+  "params": [
+   {
+    "name": "points",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "float"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact JSON number; JavaScript cannot tag an integral float, so the JavaScript result is compared by numeric value (Python must return float)",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "all pairs",
+  "candidate_design": "divide and conquer on x-sorted points with a y-merge and a strip check of the next 7 neighbours, all in exact integer squared distances",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "bd9cd6bb00f075dfdcc77e13e38c65cde82c8755785d6fda90723c391be2dd37",
+ "wrapper": "named export closestPair"
+}

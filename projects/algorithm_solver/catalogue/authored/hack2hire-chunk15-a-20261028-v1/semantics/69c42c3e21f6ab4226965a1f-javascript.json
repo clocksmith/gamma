@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69c42c3e21f6ab4226965a1f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "trees"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "copyNeighborSums",
+  "params": [
+   {
+    "name": "trees",
+    "type": "(integer|null)[][]"
+   }
+  ],
+  "return": {
+   "type": "(integer|null)[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "a dictionary keyed by root-to-node path strings, filled from every tree and serialised by breadth-first search over paths",
+  "candidate_design": "decode each tree into child arrays, then a breadth-first walk over (source node, target node) pairs that creates missing target nodes, then level-order serialisation",
+  "complexity_target": "O(total nodes) time/O(total nodes) space"
+ },
+ "source_sha256": "63c539ffc6c784fe1446104edca926c8b6a3b0e9f4937bbf891ec9f2affe4c2a",
+ "wrapper": "named export copyNeighborSums"
+}

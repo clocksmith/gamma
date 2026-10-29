@@ -1,0 +1,104 @@
+{
+ "problems": {
+  "hack2hire:67cf33498f73eb6319edd230": {
+   "reference": "exhaustive search over every ordered selection of the words, checking each concatenation",
+   "candidate_design": "count words in a hash map, pair each word with its reverse, pair palindromic words with themselves and keep one leftover palindromic word for the middle",
+   "complexity_target": "O(n L) time/O(n L) space"
+  },
+  "hack2hire:685c61e88515b8a3b59d19f9": {
+   "reference": "connected components of the graph linking same-fruit orders at most 600000 ms apart, by repeated pairwise scans",
+   "candidate_design": "hash map fruit -> orders, sort each by timestamp, split at gaps above 600000, look up the tier by binary search",
+   "complexity_target": "O(n log n + g log t) time/O(n) space"
+  },
+  "hack2hire:68c86e64df5a6365aa774b11": {
+   "reference": "walk each route by scanning the whole road list for the next road at every step, then compare arrival times per friend",
+   "candidate_design": "hash map location -> outgoing road; walk each route once recording arrival times; assign each friend and sort by arrival",
+   "complexity_target": "O(r + f log f) time/O(r + f) space"
+  },
+  "hack2hire:69b7856c8a0eeb9897a8d239": {
+   "reference": "sort, then for each reservation scan all cars for the first whose end <= start",
+   "candidate_design": "sort reservation indices by (start, index); min-heap of (end, car id) for busy cars and a min-heap of free ids",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:69b785888a0eeb9897a8d23b": {
+   "reference": "sort, then for each reservation scan the cars array for the first whose end <= start",
+   "candidate_design": "sort reservation indices by (start, index); min-heap of busy (end, id) and a min-heap of free ids seeded with 1..cars",
+   "complexity_target": "O((n + cars) log(n + cars)) time/O(n + cars) space"
+  },
+  "hack2hire:69efd6f096981f58ae1f6dcf": {
+   "reference": "for each k, check every window of length k by sorting it",
+   "candidate_design": "record the position of every value; sweep k upward keeping the minimum and maximum position of 1..k; k holds when max - min + 1 == k",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:690425df4845d25b8e994896": {
+   "reference": "all pairs",
+   "candidate_design": "divide and conquer on x-sorted points with a y-merge and a strip check of the next 7 neighbours, all in exact integer squared distances",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:69c42c3e21f6ab4226965a1f": {
+   "reference": "a dictionary keyed by root-to-node path strings, filled from every tree and serialised by breadth-first search over paths",
+   "candidate_design": "decode each tree into child arrays, then a breadth-first walk over (source node, target node) pairs that creates missing target nodes, then level-order serialisation",
+   "complexity_target": "O(total nodes) time/O(total nodes) space"
+  },
+  "hack2hire:6775b4fd0d31dc201f712039": {
+   "reference": "day-by-day simulation adding the tasks due each day",
+   "candidate_design": "binary search on d over the monotone count sum(floor((d - 1) / interval) + 1), grouping equal intervals and stopping a sum early once it reaches goal",
+   "complexity_target": "O(u log(goal * max interval)) time for u distinct intervals/O(u) space"
+  },
+  "hack2hire:692fc0f4cd79766b0b3101a0": {
+   "reference": "scan every interval per query",
+   "candidate_design": "sorted starts and sorted ends; count = #(starts <= x) - #(ends < x) by two binary searches",
+   "complexity_target": "O(n log n) build, O(log n) per query/O(n) space"
+  },
+  "hack2hire:67844afb0e1dbb6a0938577f": {
+   "reference": "enumerate all 2**q replacements of the question marks",
+   "candidate_design": "dynamic programming over (position, segments placed): place the next run at the current position when it fits and is followed by a non-\"1\", or skip a non-\"1\" character",
+   "complexity_target": "O(L * m) time with run checks by prefix counts/O(L * m) space"
+  },
+  "hack2hire:678ec4943d1b82777aa24f9a": {
+   "reference": "sorted Python lists searched and edited linearly per order",
+   "candidate_design": "max-heap of resting buys and min-heap of resting sells; peek, compare and pop or push",
+   "complexity_target": "O((b + s + q) log(b + s + q)) time/O(b + s + q) space"
+  },
+  "hack2hire:696c54fe6b040fa4d120bca7": {
+   "reference": "for each tagged datapoint rescan all tagged datapoints in its window",
+   "candidate_design": "two-pointer sliding window over the tagged datapoints with a running sum",
+   "complexity_target": "O(total tags) time/O(n) space"
+  },
+  "hack2hire:696c5f906b040fa4d120bcbe": {
+   "reference": "for each tagged datapoint re-add its last k tagged values",
+   "candidate_design": "running sum over the filtered values, subtracting the value k positions back",
+   "complexity_target": "O(total tags) time/O(n) space"
+  },
+  "hack2hire:68672293a2d59460201f2cae": {
+   "reference": "build every remaining array and sum its even and odd positions",
+   "candidate_design": "prefix sums of even-index and odd-index values; the suffix after the removed block keeps its parity when k is even and swaps it when k is odd",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6913fb43fa8a311e42671e69": {
+   "reference": "linear scan for the first true",
+   "candidate_design": "binary search for the first index whose checker answer is true",
+   "complexity_target": "O(log n) checker calls/O(1) extra space"
+  },
+  "hack2hire:69141530fa8a311e42671e8f": {
+   "reference": "take the numerically smallest version among those answering true",
+   "candidate_design": "parse components, sort indices by (major, minor, patch), then binary search the sorted order for the first true answer",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:69334452e8ebbb1c53caf2c4": {
+   "reference": "replay: keep the full vote and flip logs, sort every article for each ranking query and scan the flip log backwards for flip queries",
+   "candidate_design": "vote map per (user, article); an array of article ids kept sorted by (-score, id) and updated by binary-search removal and insertion; per-user insertion-ordered maps of flipped articles",
+   "complexity_target": "O(log A + A) per vote (array shift), O(k) per ranking query, O(flipped articles of the user) per flip query"
+  },
+  "hack2hire:69bdbad91cbff60a929beb23": {
+   "reference": "keep columns as bottom-up stacks and render the full board from them on every drop",
+   "candidate_design": "grid plus a per-column count of filled cells; place at row rows - 1 - count and copy the grid",
+   "complexity_target": "O(1) placement plus O(rows * cols) per returned copy"
+  },
+  "hack2hire:69dd348b95e80ae213e5b702": {
+   "reference": "render the board from column stacks and rescan every line of four on the whole board after each drop until a winner appears",
+   "candidate_design": "after each successful drop, count equal colors through the new piece in the four directions; record the first winner",
+   "complexity_target": "O(1) per win check plus O(rows * cols) per returned copy"
+  }
+ }
+}
