@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6a7a3b72d713d873ca7aaf62",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "DomainRateLimiter",
+  "constructor": {
+   "params": [
+    {
+     "name": "maxRequests",
+     "type": "integer"
+    },
+    {
+     "name": "windowSize",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "allowRequest",
+    "params": [
+     {
+      "name": "domain",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "keep every accepted (second, domain) pair in a list and count the matching ones inside the window on every call",
+  "candidate_design": "hash map from domain to a deque of accepted seconds; pop seconds that left the window, then compare the deque length with maxRequests",
+  "complexity_target": "O(1) amortised per call/O(accepted requests) space"
+ },
+ "source_sha256": "8313abe6931259a3305a707354ed9938c056b0e2d187ac5049714f1709aa69ea",
+ "native_class": "DomainRateLimiter",
+ "native_symbol": "module global DomainRateLimiter",
+ "void_methods": []
+}

@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/design.json",
+   "sha256": "2073e55d9e83ede7a30ac3c3942a0de92f1cdf1cee58f11e78bee16f09e94065",
+   "selector": "/problems/hack2hire:67886e3c402dc47b67a14940"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+   "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+   "selector": "/variants/hack2hire:67886e3c402dc47b67a14940"
+  }
+ ],
+ "problemId": "hack2hire:67886cfb402dc47b67a1493f",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-records/contract--contract_hack2hire_67886cfb402dc47b67a1493f_67886e3c402dc47b67a14940_authored-v1.json",
+  "sha256": "af6714153a8a0425904b016ff30fd19b8bf86f8f22b67d0d05601ab44fb71fec"
+ },
+ "title": {
+  "status": "present",
+  "value": "two lazy-deletion heaps: a min-heap holding the k largest (value, index) entries of the window and a max-heap with the rest; a location array marks which heap owns each live index and running sums give each average in O(1)",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/design.json",
+    "sha256": "2073e55d9e83ede7a30ac3c3942a0de92f1cdf1cee58f11e78bee16f09e94065",
+    "selector": "/problems/hack2hire:67886e3c402dc47b67a14940/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "two lazy-deletion heaps: a min-heap holding the k largest (value, index) entries of the window and a max-heap with the rest; a location array marks which heap owns each live index and running sums give each average in O(1). Complexity target: O(n log n) time/O(n) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/design.json",
+    "sha256": "2073e55d9e83ede7a30ac3c3942a0de92f1cdf1cee58f11e78bee16f09e94065",
+    "selector": "/problems/hack2hire:67886e3c402dc47b67a14940"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Large windows where re-sorting every window is too slow"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:67886e3c402dc47b67a14940/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Lazy heaps keep stale entries until they surface, so memory is O(n) rather than O(windowSize)"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:67886e3c402dc47b67a14940/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "the top heap holds exactly the k largest (value, index) pairs of the window",
+   "topSum + restSum equals the window sum"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:67886e3c402dc47b67a14940/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Average of the rest = (window sum - sum of the k largest) / (windowSize - k).",
+   "Keep the k largest in one heap and the others in a second heap, each with a running sum.",
+   "Delete lazily: tag each entry with its index and skip entries that left the window or moved to the other heap."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:67886e3c402dc47b67a14940/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "two lazy-deletion heaps: a min-heap holding the k largest (value, index) entries of the window and a max-heap with the rest; a location array marks which heap owns each live index and running sums give each average in O(1)",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/design.json",
+      "sha256": "2073e55d9e83ede7a30ac3c3942a0de92f1cdf1cee58f11e78bee16f09e94065",
+      "selector": "/problems/hack2hire:67886e3c402dc47b67a14940/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(n log n) time/O(n) space; the independent reference (sort every window and sum all but its k largest values) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/design.json",
+      "sha256": "2073e55d9e83ede7a30ac3c3942a0de92f1cdf1cee58f11e78bee16f09e94065",
+      "selector": "/problems/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Average of the rest = (window sum - sum of the k largest) / (windowSize - k).",
+     "Keep the k largest in one heap and the others in a second heap, each with a running sum."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-records/artifact--artifact_hack2hire_67886cfb402dc47b67a1493f_67886e3c402dc47b67a14940_approach-native_v1.json",
+    "sha256": "5f3ebd24d49cfa46bd7b5b2347fcae0aaae11237e9ae8e83fa62eddb73bb6d8b"
+   }
+  },
+  {
+   "id": "approach:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper windowAverages, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/design.json",
+      "sha256": "2073e55d9e83ede7a30ac3c3942a0de92f1cdf1cee58f11e78bee16f09e94065",
+      "selector": "/problems/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Delete lazily: tag each entry with its index and skip entries that left the window or moved to the other heap."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-records/artifact--artifact_hack2hire_67886cfb402dc47b67a1493f_67886e3c402dc47b67a14940_python_v1.json",
+     "sha256": "87d304416945f2c9cc5c9f2dc690131904c36817131c1a12e0d5be4bc1cce47f"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-records/artifact--artifact_hack2hire_67886cfb402dc47b67a1493f_67886e3c402dc47b67a14940_javascript_v1.json",
+     "sha256": "5b38dd83b5e2d2774a65a23143a280d7fff871cf72f9f9284344caea3e92a530"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-records/artifact--artifact_hack2hire_67886cfb402dc47b67a1493f_67886e3c402dc47b67a14940_approach-native_v1.json",
+    "sha256": "5f3ebd24d49cfa46bd7b5b2347fcae0aaae11237e9ae8e83fa62eddb73bb6d8b"
+   }
+  },
+  {
+   "id": "approach:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (sort every window and sum all but its k largest values) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/design.json",
+      "sha256": "2073e55d9e83ede7a30ac3c3942a0de92f1cdf1cee58f11e78bee16f09e94065",
+      "selector": "/problems/hack2hire:67886e3c402dc47b67a14940/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/2/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/test_oracles.py",
+      "sha256": "6a8ede71260289382436a43eefd6aceeadb82b02f795cd0be346fcae01caf75f",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+      "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+      "selector": "/variants/hack2hire:67886e3c402dc47b67a14940"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-records/artifact--artifact_hack2hire_67886cfb402dc47b67a1493f_67886e3c402dc47b67a14940_approach-native_v1.json",
+    "sha256": "5f3ebd24d49cfa46bd7b5b2347fcae0aaae11237e9ae8e83fa62eddb73bb6d8b"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:67886cfb402dc47b67a1493f:67886e3c402dc47b67a14940:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-records/artifact--artifact_hack2hire_67886cfb402dc47b67a1493f_67886e3c402dc47b67a14940_approach-native_v1.json",
+  "sha256": "5f3ebd24d49cfa46bd7b5b2347fcae0aaae11237e9ae8e83fa62eddb73bb6d8b"
+ }
+}

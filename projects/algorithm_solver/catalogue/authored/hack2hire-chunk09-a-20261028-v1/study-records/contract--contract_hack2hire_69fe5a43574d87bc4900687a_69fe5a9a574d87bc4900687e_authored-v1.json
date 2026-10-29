@@ -1,0 +1,369 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69fe5a43574d87bc4900687a:69fe5a9a574d87bc4900687e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+   "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+   "selector": "/problems/8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69fe5a43574d87bc4900687a.json",
+   "sha256": "fe082b818e4b668a7cba7397934d35322198fcdea32429157ad0b35e63aa4214",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+   "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+   "selector": "/variants/hack2hire:69fe5a9a574d87bc4900687e"
+  }
+ ],
+ "problemId": "hack2hire:69fe5a43574d87bc4900687a",
+ "variantId": "69fe5a9a574d87bc4900687e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: duplicates after email and phone normalisation",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:69fe5a9a574d87bc4900687e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "As level 1, but identifiers are compared after normalisation. Email: lower-case it, then in the part before \"@\" drop everything from the first \"+\" and remove every \".\"; the part after \"@\" is kept (lower-cased). Phone: keep only its digits. Account i registers when neither normalised identifier is already claimed; return the ascending indices of the duplicates.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "As level 1, but identifiers are compared after normalisation.",
+   "Email: lower-case it, then in the part before \"@\" drop everything from the first \"+\" and remove every \".\"; the part after \"@\" is kept (lower-cased).",
+   "Phone: keep only its digits.",
+   "Account i registers when neither normalised identifier is already claimed; return the ascending indices of the duplicates."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= n <= 1e5",
+   "emails match [A-Za-z0-9._+]{1,20}@[A-Za-z0-9.]{1,20}",
+   "phones match [0-9 ()+-]{1,20} with at least one digit"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:69fe5a9a574d87bc4900687e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: parallel lists names, emails, phones; an account registers only if neither its email nor its phone is already claimed; failed accounts are duplicates and do not claim anything (the requested output is cut off); algorithmTags: HASH_TABLE; codingQuestions (variant count/order); preview response sha256 7c9c709016d090ce7cc8227b2ec42af4a92518ba49d310a7fc98432c41f62877"
+   },
+   {
+    "statement": "Uncertainty: very high: the second level is unseen; the email rules (case, \"+\" tags, dots) and digits-only phones are an inferred normalisation follow-up",
+    "basis": "the public group preview is partial (582 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = exact email and phone strings, 2 = normalised emails and phones",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/8/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/8/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/8/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which email rules apply: case, dots, \"+\" tags, and only for some providers?",
+   "Are phone country codes significant?",
+   "Is the part after \"@\" also normalised?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:69fe5a9a574d87bc4900687e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "Bo Li",
+      "Bo Li",
+      "Ann",
+      "Bo Li",
+      "Ann",
+      "Ann",
+      "Bo Li",
+      "x",
+      "Ann"
+     ],
+     [
+      "ab+@x.com",
+      "b.a@x.com",
+      "ab@y.com",
+      "A.B@x.com",
+      "ab@x.com",
+      "ab+@x.com",
+      "a.b+q@X.com",
+      "b.a@x.com",
+      "ab@y.com"
+     ],
+     [
+      "555-12",
+      "(555) 12",
+      "(555) 12",
+      "+55512",
+      "+55512",
+      "9",
+      "+55512",
+      "+55512",
+      "1 2"
+     ]
+    ],
+    "output": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:69fe5a9a574d87bc4900687e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/oracles.py",
+    "sha256": "5758fb17f0e309e79dd7f38ef9a01012c9b5391ffd06e413820e67a589173da3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def findDuplicateAccounts(names, emails, phones) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/69fe5a9a574d87bc4900687e-python.json",
+     "inferredInterface": {
+      "name": "findDuplicateAccounts",
+      "params": [
+       {
+        "name": "names",
+        "type": "string[]"
+       },
+       {
+        "name": "emails",
+        "type": "string[]"
+       },
+       {
+        "name": "phones",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/69fe5a9a574d87bc4900687e-python.json",
+      "sha256": "e141b2303f87462d94c95f2f65dccb81b86fc7c6444214660275045475d9f649",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function findDuplicateAccounts(names, emails, phones) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/69fe5a9a574d87bc4900687e-javascript.json",
+     "inferredInterface": {
+      "name": "findDuplicateAccounts",
+      "params": [
+       {
+        "name": "names",
+        "type": "string[]"
+       },
+       {
+        "name": "emails",
+        "type": "string[]"
+       },
+       {
+        "name": "phones",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/69fe5a9a574d87bc4900687e-javascript.json",
+      "sha256": "8750673dab544a119424b972201cfc74e74cddbd83793b62729bd6888cf801aa",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/8/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/8/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

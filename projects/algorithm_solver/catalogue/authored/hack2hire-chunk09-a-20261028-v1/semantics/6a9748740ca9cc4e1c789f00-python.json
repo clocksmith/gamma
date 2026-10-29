@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a9748740ca9cc4e1c789f00",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "words",
+  "queries"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findAnagrams",
+  "params": [
+   {
+    "name": "words",
+    "type": "string[]"
+   },
+   {
+    "name": "queries",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<string[]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every query, compare the sorted letters of every word with the sorted query",
+  "candidate_design": "hash map from the sorted-letter signature to the list of words in input order; each query looks up its signature and returns a fresh copy",
+  "complexity_target": "O(total characters * log(word length) + output) time/O(total characters) space"
+ },
+ "source_sha256": "9918b1fd09be57d5728b3cd89bb5ffbd1b3845a5799fbf082ec75b3a2cc123aa",
+ "wrapper": "Solution.findAnagrams"
+}

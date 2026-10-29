@@ -1,0 +1,436 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a7a3b62d713d873ca7aaf61:6a7a3b72d713d873ca7aaf62:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+   "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+   "selector": "/problems/9"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a7a3b62d713d873ca7aaf61.json",
+   "sha256": "46bfc15bc60d6543706f1d7ee2615f6872cbb6f1c84ac935e5216652ca8fdd1c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+   "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+   "selector": "/variants/hack2hire:6a7a3b72d713d873ca7aaf62"
+  }
+ ],
+ "problemId": "hack2hire:6a7a3b62d713d873ca7aaf61",
+ "variantId": "6a7a3b72d713d873ca7aaf62",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: per-domain sliding-window limit with implicit one-second clock",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6a7a3b72d713d873ca7aaf62/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "DomainRateLimiter(maxRequests, windowSize) starts with no history. Requests arrive one per second: the i-th call of allowRequest(domain) (i = 1, 2, ...) happens at second i. allowRequest(domain) returns true and records the request when that domain has fewer than maxRequests accepted requests at seconds s with s > i - windowSize; otherwise it returns false and records nothing (rejected requests never count).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "DomainRateLimiter(maxRequests, windowSize) starts with no history.",
+   "Requests arrive one per second: the i-th call of allowRequest(domain) (i = 1, 2, ...) happens at second i.",
+   "allowRequest(domain) returns true and records the request when that domain has fewer than maxRequests accepted requests at seconds s with s > i - windowSize; otherwise it returns false and records nothing (rejected requests never count)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/9/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= maxRequests <= 1e5",
+   "1 <= windowSize <= 1e9",
+   "up to 1e5 calls",
+   "domains match [a-z0-9.]{1,30}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6a7a3b72d713d873ca7aaf62/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: LeetCode 359 variation, one domain request per second, stateful DomainRateLimiter class (constructor and methods not visible); algorithmTags: HASH_TABLE, QUEUE; preview response sha256 41685c2e95d25730d319a3b3bcd20cdf14fb373185c3099d4353cf31df4a6bb3"
+   },
+   {
+    "statement": "Uncertainty: high: the class name, one request per second and statefulness are in the preview; the constructor parameters, the method name allowRequest, the sliding window (i - windowSize, i] and not counting rejections are inferred",
+    "basis": "the public group preview is partial (421 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/9/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/9/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/9/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What are the constructor parameters and the method name?",
+   "Is time implicit (one call per second) or passed in?",
+   "Do rejected requests count toward the limit?",
+   "Is the window half-open?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6a7a3b72d713d873ca7aaf62/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "DomainRateLimiter",
+      "allowRequest"
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      [
+       "c"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     true
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "DomainRateLimiter",
+      "allowRequest",
+      "allowRequest",
+      "allowRequest",
+      "allowRequest",
+      "allowRequest",
+      "allowRequest",
+      "allowRequest",
+      "allowRequest",
+      "allowRequest"
+     ],
+     [
+      [
+       1,
+       3
+      ],
+      [
+       "a.com"
+      ],
+      [
+       "c"
+      ],
+      [
+       "b.org"
+      ],
+      [
+       "b.org"
+      ],
+      [
+       "b.org"
+      ],
+      [
+       "b.org"
+      ],
+      [
+       "c"
+      ],
+      [
+       "a.com"
+      ],
+      [
+       "c"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     true,
+     true,
+     true,
+     false,
+     false,
+     true,
+     true,
+     true,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6a7a3b72d713d873ca7aaf62/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/oracles.py",
+    "sha256": "5758fb17f0e309e79dd7f38ef9a01012c9b5391ffd06e413820e67a589173da3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class DomainRateLimiter:\n    def __init__(self, maxRequests, windowSize)\n    def allowRequest(self, domain) -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6a7a3b72d713d873ca7aaf62-python.json",
+     "inferredInterface": {
+      "classname": "DomainRateLimiter",
+      "constructor": {
+       "params": [
+        {
+         "name": "maxRequests",
+         "type": "integer"
+        },
+        {
+         "name": "windowSize",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "allowRequest",
+        "params": [
+         {
+          "name": "domain",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6a7a3b72d713d873ca7aaf62-python.json",
+      "sha256": "12b0cc2fb4ad8bb0d0c41db83b0ba79eebc7ab9f736aeaa8ef685c0f26e7c3e1",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class DomainRateLimiter {\n  constructor(maxRequests, windowSize)\n  allowRequest(domain) /* -> boolean */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/9/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6a7a3b72d713d873ca7aaf62-javascript.json",
+     "inferredInterface": {
+      "classname": "DomainRateLimiter",
+      "constructor": {
+       "params": [
+        {
+         "name": "maxRequests",
+         "type": "integer"
+        },
+        {
+         "name": "windowSize",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "allowRequest",
+        "params": [
+         {
+          "name": "domain",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6a7a3b72d713d873ca7aaf62-javascript.json",
+      "sha256": "9e950fa4c6b40a4d419fc9220cc64f88cc34c2a0efff4051cef97e21100a8d8c",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/9/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/9/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

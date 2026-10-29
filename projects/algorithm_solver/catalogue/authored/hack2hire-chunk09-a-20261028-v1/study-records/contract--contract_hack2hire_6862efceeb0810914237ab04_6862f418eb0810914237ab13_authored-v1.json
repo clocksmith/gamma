@@ -1,0 +1,453 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6862efceeb0810914237ab04:6862f418eb0810914237ab13:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+   "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6862efceeb0810914237ab04.json",
+   "sha256": "c61d55e0d1c4e4715039c0e3b617528f7e8f87fe7f265021a6dd1a2c06590e07",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+   "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+   "selector": "/variants/hack2hire:6862f418eb0810914237ab13"
+  }
+ ],
+ "problemId": "hack2hire:6862efceeb0810914237ab04",
+ "variantId": "6862f418eb0810914237ab13",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: longest registered ancestor lookup",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6862f418eb0810914237ab13/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "APIMatchingSystem() starts empty. A path is \"/\" (the root) or \"/\" followed by one or more non-empty segments separated by single \"/\" with no trailing slash. registerPath(path, handler) stores handler for exactly that path, overwriting any earlier handler for it. matchPath(path) returns the handler of the registered path that is the longest segment-wise prefix of path (the path itself counts; \"/\" is a prefix of every path), or \"\" when no registered path is such a prefix.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "APIMatchingSystem() starts empty.",
+   "A path is \"/\" (the root) or \"/\" followed by one or more non-empty segments separated by single \"/\" with no trailing slash.",
+   "registerPath(path, handler) stores handler for exactly that path, overwriting any earlier handler for it.",
+   "matchPath(path) returns the handler of the registered path that is the longest segment-wise prefix of path (the path itself counts; \"/\" is a prefix of every path), or \"\" when no registered path is such a prefix."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "paths have at most 20 segments of [a-z0-9]{1,10}",
+   "handlers match [A-Za-z0-9_]{1,20}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6862f418eb0810914237ab13/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: APIMatchingSystem() class, void registerPath(path, handler) overwriting re-registrations, String matchPath(path) returning the handler of the closest registered ancestor (longest matching prefix) or \"\"; algorithmTags: TRIE, HASH_TABLE; preview response sha256 f447ced2e415b6b0fda6e122de9acf2ab62a4b2da658c021cfb909742ebe3af3"
+   },
+   {
+    "statement": "Uncertainty: medium: the class, method names, overwrite rule and \"\" fallback are in the preview; segment-wise (not character-wise) prefixes, the root \"/\" being an ancestor of everything, the absence of wildcards and the path syntax are inferred",
+    "basis": "the public group preview is partial (750 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/6/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/6/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/6/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is a prefix measured in whole segments or in characters?",
+   "Is \"/\" registrable, and is it an ancestor of every path?",
+   "Are wildcards or path parameters supported?",
+   "Does an exact match count as its own closest ancestor?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6862f418eb0810914237ab13/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "APIMatchingSystem",
+      "matchPath"
+     ],
+     [
+      [],
+      [
+       "/"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "APIMatchingSystem",
+      "matchPath",
+      "registerPath",
+      "registerPath",
+      "registerPath",
+      "matchPath",
+      "matchPath",
+      "registerPath",
+      "matchPath",
+      "matchPath",
+      "matchPath"
+     ],
+     [
+      [],
+      [
+       "/x9/b"
+      ],
+      [
+       "/",
+       "root"
+      ],
+      [
+       "/b",
+       "H_3"
+      ],
+      [
+       "/v1",
+       "H_3"
+      ],
+      [
+       "/"
+      ],
+      [
+       "/"
+      ],
+      [
+       "/v1/a/a",
+       "H_3"
+      ],
+      [
+       "/a"
+      ],
+      [
+       "/"
+      ],
+      [
+       "/x9/a"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     "",
+     null,
+     null,
+     null,
+     "root",
+     "root",
+     null,
+     "root",
+     "root",
+     "root"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/study-content.json",
+    "sha256": "d653a78a392991de502a91d2fb26511ed34e2eccd04fe0a893b90751fae3b95a",
+    "selector": "/variants/hack2hire:6862f418eb0810914237ab13/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/oracles.py",
+    "sha256": "5758fb17f0e309e79dd7f38ef9a01012c9b5391ffd06e413820e67a589173da3",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class APIMatchingSystem:\n    def __init__(self)\n    def registerPath(self, path, handler) -> void\n    def matchPath(self, path) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6862f418eb0810914237ab13-python.json",
+     "inferredInterface": {
+      "classname": "APIMatchingSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "registerPath",
+        "params": [
+         {
+          "name": "path",
+          "type": "string"
+         },
+         {
+          "name": "handler",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "matchPath",
+        "params": [
+         {
+          "name": "path",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6862f418eb0810914237ab13-python.json",
+      "sha256": "565c8d96c5b1652da834a7efea1c004dafd692abaea87dc56930d1d28e97066b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class APIMatchingSystem {\n  constructor()\n  registerPath(path, handler) /* -> void */\n  matchPath(path) /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+      "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6862f418eb0810914237ab13-javascript.json",
+     "inferredInterface": {
+      "classname": "APIMatchingSystem",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "registerPath",
+        "params": [
+         {
+          "name": "path",
+          "type": "string"
+         },
+         {
+          "name": "handler",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "matchPath",
+        "params": [
+         {
+          "name": "path",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/semantics/6862f418eb0810914237ab13-javascript.json",
+      "sha256": "dc562d53338fe19d154f8bbd467e51583053803774b226b7d3bd448f7f575f27",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/6/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk09-a-20261028-v1/contracts.json",
+    "sha256": "493e41591cde4fa663ad5d9429e9433beab48966b6374f37a53574426856842d",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

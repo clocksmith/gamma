@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1a06e9c81f779dc6a2373a",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "sessions",
+  "pricing"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "calculateMonthlySpend",
+  "params": [
+   {
+    "name": "sessions",
+    "type": "string[]"
+   },
+   {
+    "name": "pricing",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per user and plan, replay that pair's sessions in order with a literal allowance counter",
+  "candidate_design": "one pass with a hash map keyed by (user, plan) holding the remaining allowance; the fee is added the first time a pair is seen",
+  "complexity_target": "O(s + u log u) time/O(s + p) space"
+ },
+ "source_sha256": "203b2bc7c7d7c5ae5ec647e9503c1beb9993195404734e8d3608a3b64fac0783",
+ "wrapper": "Solution.calculateMonthlySpend"
+}

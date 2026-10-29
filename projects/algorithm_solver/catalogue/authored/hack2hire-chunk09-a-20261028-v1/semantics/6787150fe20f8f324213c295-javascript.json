@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6787150fe20f8f324213c295",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "logs"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "exclusiveTimes",
+  "params": [
+   {
+    "name": "logs",
+    "type": "list<[string,string,string]>"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "mark every unit of time between events with the running task by scanning the whole log for each gap",
+  "candidate_design": "stack of open task names; on each event add (timestamp - previous timestamp) to the task on top, then push or pop",
+  "complexity_target": "O(n + t log t) time/O(n) space"
+ },
+ "source_sha256": "2810bfbf71d42fe3596f05194d0a5debf8cde09e38f285d552827ca9184dab18",
+ "wrapper": "named export exclusiveTimes"
+}

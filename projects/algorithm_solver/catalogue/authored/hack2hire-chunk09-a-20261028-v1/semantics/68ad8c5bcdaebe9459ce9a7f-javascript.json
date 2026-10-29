@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68ad8c5bcdaebe9459ce9a7f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "numSongs",
+  "sequence"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "isShuffleSequence",
+  "params": [
+   {
+    "name": "numSongs",
+    "type": "integer"
+   },
+   {
+    "name": "sequence",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every offset, cut the sequence into pieces and test each piece with a set",
+  "candidate_design": "for each pair of consecutive equal plays at positions j < i with i - j < numSongs, the cut must fall in j+1..i, an arc of residues mod numSongs; add each arc to a difference array and accept when some residue is covered by every arc",
+  "complexity_target": "O(L + numSongs) time/O(L + numSongs) space"
+ },
+ "source_sha256": "0539515ea4316a44ebfeed8f2c8a76bd9b525bbe82259a2126a491a3cd33ee7a",
+ "wrapper": "named export isShuffleSequence"
+}

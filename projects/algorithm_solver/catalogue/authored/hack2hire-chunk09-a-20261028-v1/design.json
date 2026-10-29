@@ -1,0 +1,104 @@
+{
+ "problems": {
+  "hack2hire:69cb2283ff3ebde766cedbdd": {
+   "reference": "sort a copy and compare it with range(n)",
+   "candidate_design": "cyclic placement on a private copy: swap each in-range value into its own index; a value outside 0..n-1 or a second copy of a value already in place means false",
+   "complexity_target": "O(n) time/O(n) space for the copy (O(1) beyond it)"
+  },
+  "hack2hire:68ad8c5bcdaebe9459ce9a7f": {
+   "reference": "try every offset, cut the sequence into pieces and test each piece with a set",
+   "candidate_design": "for each pair of consecutive equal plays at positions j < i with i - j < numSongs, the cut must fall in j+1..i, an arc of residues mod numSongs; add each arc to a difference array and accept when some residue is covered by every arc",
+   "complexity_target": "O(L + numSongs) time/O(L + numSongs) space"
+  },
+  "hack2hire:67886e3c402dc47b67a14940": {
+   "reference": "sort every window and sum all but its k largest values",
+   "candidate_design": "two lazy-deletion heaps: a min-heap holding the k largest (value, index) entries of the window and a max-heap with the rest; a location array marks which heap owns each live index and running sums give each average in O(1)",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:6a1a06bfc81f779dc6a23737": {
+   "reference": "for every user, rescan all sessions and look the plan up by scanning the pricing rows",
+   "candidate_design": "parse pricing into a hash map once, accumulate per user in one pass, sort the user ids",
+   "complexity_target": "O(s + u log u) time/O(u + p) space"
+  },
+  "hack2hire:6a1a06e9c81f779dc6a2373a": {
+   "reference": "per user and plan, replay that pair's sessions in order with a literal allowance counter",
+   "candidate_design": "one pass with a hash map keyed by (user, plan) holding the remaining allowance; the fee is added the first time a pair is seen",
+   "complexity_target": "O(s + u log u) time/O(s + p) space"
+  },
+  "hack2hire:6a1a0712c81f779dc6a2373b": {
+   "reference": "per user and plan, replay that pair's sessions in order, then cap the usage sum",
+   "candidate_design": "one pass with a hash map keyed by (user, plan) holding remaining allowance and uncapped usage; cap and fee are applied per pair at the end",
+   "complexity_target": "O(s + u log u) time/O(s + p) space"
+  },
+  "hack2hire:6862f418eb0810914237ab13": {
+   "reference": "a dict of registered paths; each match scans every registered path and tests the segment prefix",
+   "candidate_design": "trie keyed by path segments with an optional handler per node; matchPath walks the segments and remembers the deepest handler seen",
+   "complexity_target": "O(segments) per operation/O(total registered segments) space"
+  },
+  "hack2hire:69fe5a7f574d87bc4900687d": {
+   "reference": "for each account, scan every earlier registered account for a matching email or phone",
+   "candidate_design": "two hash sets of claimed emails and claimed phones, one pass in index order",
+   "complexity_target": "O(total characters) time/O(n) space"
+  },
+  "hack2hire:69fe5a9a574d87bc4900687e": {
+   "reference": "for each account, normalise and compare against every earlier registered account",
+   "candidate_design": "normalise each identifier once (lower-case, cut at \"+\", drop dots; digits only) and use two hash sets",
+   "complexity_target": "O(total characters) time/O(n) space"
+  },
+  "hack2hire:6a7a3b72d713d873ca7aaf62": {
+   "reference": "keep every accepted (second, domain) pair in a list and count the matching ones inside the window on every call",
+   "candidate_design": "hash map from domain to a deque of accepted seconds; pop seconds that left the window, then compare the deque length with maxRequests",
+   "complexity_target": "O(1) amortised per call/O(accepted requests) space"
+  },
+  "hack2hire:679dc578996c3c60bd38b5bc": {
+   "reference": "repeatedly scan the row for the first adjacent right-then-left pair and resolve it, until none is left",
+   "candidate_design": "stack of survivors: a left-mover fights the right-movers on top of the stack until it dies or no right-mover remains",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6a9748740ca9cc4e1c789f00": {
+   "reference": "for every query, compare the sorted letters of every word with the sorted query",
+   "candidate_design": "hash map from the sorted-letter signature to the list of words in input order; each query looks up its signature and returns a fresh copy",
+   "complexity_target": "O(total characters * log(word length) + output) time/O(total characters) space"
+  },
+  "hack2hire:67775b978df5ec401f786db0": {
+   "reference": "memoised recursion over (left, right) returning the best score difference, with lru_cache-free dict memo",
+   "candidate_design": "bottom-up interval DP on the score difference by increasing length with prefix sums, keeping one row per length; first score = (total + difference) / 2",
+   "complexity_target": "O(n^2) time/O(n) space"
+  },
+  "hack2hire:6965d17bd0c1ba0f117959a2": {
+   "reference": "per country, collect all candidate dates and count participants available on each by scanning the participants",
+   "candidate_design": "one pass building a per-country hash map date -> count (deduplicating each participant's dates with a set), pick the best date per country, then one pass collecting attendees",
+   "complexity_target": "O(total dates + c log c) time/O(total dates) space"
+  },
+  "hack2hire:6a7fc7a7d713d873ca7ade7b": {
+   "reference": "copy the grid and, each round, mark cells by testing every bubble's four neighbours, then rebuild every column as a list of survivors padded with zeros",
+   "candidate_design": "same rounds on a flat row-major array: mark pass, then a two-pointer gravity pass per column writing from the bottom; stop when nothing is marked",
+   "complexity_target": "O(rounds * m * n) time/O(m * n) space"
+  },
+  "hack2hire:68dd8441fb98b196fa54054b": {
+   "reference": "sort a copy of the digits, move the first non-zero digit to the front",
+   "candidate_design": "count the digits (counting sort), write the smallest non-zero digit, then every remaining digit in increasing order",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:68dd8827fb98b196fa54054e": {
+   "reference": "try every permutation of the elements and keep the smallest valid string",
+   "candidate_design": "sort the strings with the comparator a + b < b + a; for each distinct non-zero value x, form x followed by the sorted rest with one x removed, and keep the smallest such string",
+   "complexity_target": "O(n log n * d + distinct * total digits) time/O(total digits) space"
+  },
+  "hack2hire:67d842e41989183df53824ed": {
+   "reference": "sort a copy and try every value as the peak, building the two sides greedily from distinct smaller values",
+   "candidate_design": "count values in a hash map; the maximum is the peak, every other value contributes min(count, 2)",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6787150fe20f8f324213c295": {
+   "reference": "mark every unit of time between events with the running task by scanning the whole log for each gap",
+   "candidate_design": "stack of open task names; on each event add (timestamp - previous timestamp) to the task on top, then push or pop",
+   "complexity_target": "O(n + t log t) time/O(n) space"
+  },
+  "hack2hire:699f73ca6e73e4abccc9b540": {
+   "reference": "rotate each letter by shift single steps modulo 26 using alphabet index lookups",
+   "candidate_design": "reduce shift modulo 26 once, build a 128-entry translation table, map every character through it",
+   "complexity_target": "O(n) time/O(n) space"
+  }
+ }
+}

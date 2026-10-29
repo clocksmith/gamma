@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a1a0712c81f779dc6a2373b",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "sessions",
+  "pricing"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "calculateMonthlySpend",
+  "params": [
+   {
+    "name": "sessions",
+    "type": "string[]"
+   },
+   {
+    "name": "pricing",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per user and plan, replay that pair's sessions in order, then cap the usage sum",
+  "candidate_design": "one pass with a hash map keyed by (user, plan) holding remaining allowance and uncapped usage; cap and fee are applied per pair at the end",
+  "complexity_target": "O(s + u log u) time/O(s + p) space"
+ },
+ "source_sha256": "c4c364152d035f6891d32c0d1218b7abddd56a290b3f1a3996757bd90e666b0d",
+ "wrapper": "Solution.calculateMonthlySpend"
+}

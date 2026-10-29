@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67775b978df5ec401f786db0",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "balls"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "firstPlayerScore",
+  "params": [
+   {
+    "name": "balls",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "memoised recursion over (left, right) returning the best score difference, with lru_cache-free dict memo",
+  "candidate_design": "bottom-up interval DP on the score difference by increasing length with prefix sums, keeping one row per length; first score = (total + difference) / 2",
+  "complexity_target": "O(n^2) time/O(n) space"
+ },
+ "source_sha256": "58ea43d8d68079c002073f405fabe9258b307e5b13c301b41bdb1888f4fd2837",
+ "wrapper": "Solution.firstPlayerScore"
+}
